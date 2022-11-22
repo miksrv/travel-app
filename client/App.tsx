@@ -1,20 +1,47 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import React from 'react';
+import { Provider } from 'react-redux'
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import { store } from './api/store';
+
+import {LocalMapScreen} from "./screens/local-map/LocalMapScreen";
+import {ListPlacesScreen} from "./screens/list-places/ListPlacesScreen";
+import {Text, Button, StatusBar} from "react-native";
+
+export type RootStackParamList = {
+    List: undefined;
+    Map: undefined;
+};
+
+const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.tsx to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+    React.useEffect(() => {
+        StatusBar.setHidden(false);
+    });
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+    return (
+        <Provider store={store}>
+            <NavigationContainer>
+                <Stack.Navigator>
+                    <Stack.Screen
+                        name="List"
+                        component={ListPlacesScreen}
+                        options={{
+                            headerTitle: (props) => <Text>List places</Text>,
+                            headerRight: () => (
+                                <Button
+                                    onPress={() => alert('This is a button!')}
+                                    title="Info"
+                                    color="#fff"
+                                />
+                            ),
+                        }}
+                    />
+                    <Stack.Screen name="Map" options={{title: 'Local Map'}} component={LocalMapScreen} />
+                </Stack.Navigator>
+            </NavigationContainer>
+        </Provider>
+    );
+}
