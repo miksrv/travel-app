@@ -1,0 +1,46 @@
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import {RootState} from "./store";
+
+export interface IRestResponse {
+    status: boolean
+    payload?: any
+    errorText?: string
+}
+
+export interface IRestPoi extends IRestResponse {
+    payload: any
+}
+
+export interface ICurrentLocation {
+    lat: number
+    lon: number
+}
+
+// Define a service using a base URL and expected endpoints
+export const poiApi = createApi({
+    reducerPath: 'poiApi',
+    baseQuery: fetchBaseQuery({
+        baseUrl: process.env.REACT_APP_API_HOST || 'http://travelapp.miksoft.pro/',
+        prepareHeaders: (headers, { getState }) => {
+            // By default, if we have a token in the store, let's use that for authenticated requests
+            //const token = (getState() as RootState).auth.token
+            // if (token) {
+            //     headers.set('AuthToken', token)
+            // }
+            return headers
+        }
+    }),
+    endpoints: (builder) => ({
+        postCurrentLocation: builder.mutation<IRestPoi, ICurrentLocation>({
+            query: (data) => ({
+                url: 'location/update',
+                method: 'POST',
+                body: data
+            }),
+        }),
+    }),
+})
+
+// Export hooks for usage in functional components, which are
+// auto-generated based on the defined endpoints
+export const { usePostCurrentLocationMutation } = poiApi

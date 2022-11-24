@@ -3,6 +3,7 @@ import MapView, { Circle, LatLng, Region } from 'react-native-maps';
 import { View } from 'react-native';
 
 import * as Location from 'expo-location';
+import {usePostCurrentLocationMutation} from "../../api/poiApi";
 
 import styles from "./styles.module";
 
@@ -10,6 +11,8 @@ export const LocalMapScreen: React.FC = () => {
     const [defaultLocation, setDefaultLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [currentLocation, setCurrentLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [errorMsg, setErrorMsg] = React.useState<string>('');
+
+    const [ postCurrentLocation, { isLoading, data } ] = usePostCurrentLocationMutation();
 
     const getMapBoundaries = (region: Region): [LatLng, LatLng] => {
         const northEast = {
@@ -36,11 +39,25 @@ export const LocalMapScreen: React.FC = () => {
 
             setDefaultLocation(location);
 
-            await Location.watchPositionAsync({}, (location) => {
+            await Location.watchPositionAsync({}, async (location) => {
                 setCurrentLocation(location);
+
+                // await postCurrentLocation({
+                //     lat: location.coords.latitude,
+                //     lon: location.coords.longitude,
+                // })
             });
         })();
     }, []);
+
+    console.log('data', data)
+
+    const handleUpdate = async (region: Region) => {
+        await postCurrentLocation({
+            lat: region.latitude,
+            lon: region.longitude,
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -58,6 +75,8 @@ export const LocalMapScreen: React.FC = () => {
                     minZoomLevel={10}
                     onRegionChangeComplete={(region) => {
                         const boundaries = getMapBoundaries(region);
+
+                        handleUpdate(region);
                     }}
                 >
                     {currentLocation && (

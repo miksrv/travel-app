@@ -1,7 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
+import {poiApi} from "./poiApi";
 
 export const store = configureStore({
-    reducer: {},
+    reducer: {
+        [poiApi.reducerPath]: poiApi.reducer
+    },
+
+    middleware: (getDefaultMiddleware) =>
+        getDefaultMiddleware().concat(poiApi.middleware),
 })
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
