@@ -38,6 +38,8 @@ $routes->set404Override();
 $routes->get('/', 'Home::index');
 
 $routes->post('location/update', 'Location::update');
+$routes->get('location/test', 'Location::test');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
