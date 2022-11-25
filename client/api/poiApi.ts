@@ -11,6 +11,12 @@ export interface IRestPoi extends IRestResponse {
     payload: any
 }
 
+export interface IRestPoiItem {
+    lat: number
+    lon: number
+    name: string
+}
+
 export interface ICurrentLocation {
     lat: number
     lon: number
@@ -31,9 +37,9 @@ export const poiApi = createApi({
         }
     }),
     endpoints: (builder) => ({
-        postCurrentLocation: builder.mutation<IRestPoi, ICurrentLocation>({
+        postCurrentLocation: builder.mutation<IRestPoiItem[], ICurrentLocation>({
             query: (data) => ({
-                url: 'location/update',
+                url: 'location/test',
                 method: 'POST',
                 body: data
             }),
