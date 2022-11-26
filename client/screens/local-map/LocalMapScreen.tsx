@@ -1,5 +1,5 @@
 import React from "react";
-import MapView, { Circle, LatLng, Region } from 'react-native-maps';
+import MapView, { Circle, Marker, LatLng, Region } from 'react-native-maps';
 import { View } from 'react-native';
 
 import * as Location from 'expo-location';
@@ -42,15 +42,13 @@ export const LocalMapScreen: React.FC = () => {
             await Location.watchPositionAsync({}, async (location) => {
                 setCurrentLocation(location);
 
-                // await postCurrentLocation({
-                //     lat: location.coords.latitude,
-                //     lon: location.coords.longitude,
-                // })
+                await postCurrentLocation({
+                    lat: location.coords.latitude,
+                    lon: location.coords.longitude,
+                })
             });
         })();
     }, []);
-
-    console.log('data', data)
 
     const handleUpdate = async (region: Region) => {
         await postCurrentLocation({
@@ -61,38 +59,57 @@ export const LocalMapScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
-            {defaultLocation && (
-                <MapView
-                    style={styles.map}
-                    showsUserLocation={true}
-                    initialRegion={{
-                        latitude: defaultLocation.coords.latitude,
-                        longitude: defaultLocation.coords.longitude,
-                        latitudeDelta: 10,
-                        longitudeDelta: 10,
-                    }}
-                    maxZoomLevel={17}
-                    minZoomLevel={10}
-                    onRegionChangeComplete={(region) => {
-                        const boundaries = getMapBoundaries(region);
+            <MapView
+                style={styles.map}
+                showsUserLocation={true}
+                initialRegion={{
+                    latitude: defaultLocation?.coords.latitude || 47,
+                    longitude: defaultLocation?.coords.longitude || 71,
+                    latitudeDelta: 10,
+                    longitudeDelta: 10,
+                }}
+                camera={{
+                    // altitude: 100,
+                    center: {
+                        latitude: defaultLocation?.coords.latitude || 47,
+                        longitude: defaultLocation?.coords.longitude || 71,
+                    },
+                    heading: 0, // Азимут
+                    pitch: 0, // Наклон карты
+                    zoom: 15
+                }}
+                followsUserLocation={true}
+                maxZoomLevel={17}
+                minZoomLevel={10}
+                onRegionChangeComplete={(region) => {
+                    const boundaries = getMapBoundaries(region);
 
-                        handleUpdate(region);
-                    }}
-                >
-                    {currentLocation && (
-                        <Circle
-                            center={{
-                                latitude: currentLocation.coords.latitude,
-                                longitude: currentLocation.coords.longitude,
-                            }}
-                            radius={500}
-                            strokeWidth={1}
-                            strokeColor={'#1a66ff'}
-                            fillColor={'rgba(230,238,255,0.5)'}
-                        />
-                    )}
-                </MapView>
-            )}
+                    // handleUpdate(region);
+                }}
+            >
+                {!!data?.length && data.map((poi) => (
+                    <Marker
+                        key={poi.lat + poi.lon}
+                        title={poi.name}
+                        coordinate={{
+                            latitude: poi.lat,
+                            longitude: poi.lon,
+                        }}
+                    />
+                ))}
+                {currentLocation && (
+                    <Circle
+                        center={{
+                            latitude: currentLocation.coords.latitude,
+                            longitude: currentLocation.coords.longitude,
+                        }}
+                        radius={500}
+                        strokeWidth={1}
+                        strokeColor={isLoading ? 'green' : '#1a66ff'}
+                        fillColor={'rgba(230,238,255,0.5)'}
+                    />
+                )}
+            </MapView>
         </View>
     )
 }
