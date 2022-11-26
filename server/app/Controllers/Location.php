@@ -1,75 +1,53 @@
-<?php
+<?php namespace App\Controllers;
 
-namespace App\Controllers;
+use CodeIgniter\API\ResponseTrait;
+use App\Libraries\OverpassAPI;
 
 class Location extends BaseController
 {
-    /**
-     * The array contains input data obtained via GET or POST
-     * @var array
-     */
-    protected $source;
+    use ResponseTrait;
+
+    protected OverpassAPI $OverpassAPI;
 
     /**
-     * Device data
-     * @var
+     * Gets the current coordinates of the user, depending on the detection radius, makes a request to the Overpass API
+     * to get new points. Returns only a list of those places that are not yet in the database.
+     * @return void
      */
-    protected array $rawData;
+    function discover() {
+        $data = $this->request->getJSON();
 
-    /**
-     * Device request source string
-     * @var
-     */
-    protected string $rawInput;
-
-
-    function update() {
-        $this->_select_source();
-
-        $data = [
-            'lat' => $this->source->lat,
-            'lon' => $this->source->lon,
-        ];
-
-        $response = ['state' => TRUE, 'data' => (object) $data];
-
-        $this->_response($response, 200);
-    }
-
-    function test() {
-        $lat = 42.746413;
-        $lon = 75.250034;
-
-        $bbox = $this->getBoundingBox($lat,$lon,10);
-
-        //$overpass = 'http://overpass-api.de/api/interpreter?data=[out:json];area(3600046663)->.searchArea;(node["amenity"="drinking_water"](area.searchArea););out;';
-
-        $overpass_bbox = "{$bbox[0]},{$bbox[2]},{$bbox[1]},{$bbox[3]}";
-        $overpass = 'http://overpass-api.de/api/interpreter?data=[out:json][timeout:25];(node[historic](' . $overpass_bbox . ');node[natural](' . $overpass_bbox . ');node[tourism](' . $overpass_bbox . '););out;';
-
-        $html = file_get_contents($overpass);
-        $result = json_decode($html, true); // "true" to get PHP array instead of an object
-
-        $data = $result['elements'];
-
-        var_dump(count($data));
-
-        foreach($data as $key => $row) {
-            $poi = (object) $row;
-
-            if ($poi->tags && $poi->tags['tourism'] === 'hotel') continue;
-            if ($poi->tags && $poi->tags['tourism'] === 'guest_house') continue;
-            if ($poi->tags && $poi->tags['natural'] === 'tree') continue;
-
-            echo '<pre>';
-            var_dump($poi);
-            echo '</pre>';
+        if (empty($data)) {
+            return $this->fail(['status' => 'Empty request']);
         }
+
+        if (!isset($data->lat) || !is_float($data->lat)) {
+            return $this->fail(['status' => 'The "lat" variable is required but is empty or missing']);
+        }
+
+        if (!isset($data->lon) || !is_float($data->lon)) {
+            return $this->fail(['status' => 'The "lon" variable is required but is empty or missing']);
+        }
+
+        // Contains coordinates [northmost, southmost, eastmost, westmost]
+        $boundigBox = $this->getBoundingBox($data->lat, $data->lon, 1.5);
+
+        $api = new OverpassAPI();
+        $poi = $api->get($boundigBox);
+
+        return $this->respond($poi, 200);
     }
 
-    function getBoundingBox($lat_degrees,$lon_degrees,$distance_in_miles) {
-
-        $radius = 3963.1; // of earth in miles
+    /**
+     * Returns the extreme points of the coordinates, finding them by the current coordinates and radius
+     * 
+     * @param float $lat
+     * @param float $lon
+     * @param float $distance_in_km
+     * @return array [northmost, southmost, eastmost, westmost]
+     */
+    function getBoundingBox(float $lat, float $lon, float $distance_in_km): array {
+        $radius = 6378.14; // of earth in kilometers
 
         // bearings - FIX
         $due_north = deg2rad(0);
@@ -78,18 +56,18 @@ class Location extends BaseController
         $due_west = deg2rad(270);
 
         // convert latitude and longitude into radians
-        $lat_r = deg2rad($lat_degrees);
-        $lon_r = deg2rad($lon_degrees);
+        $lat_r = deg2rad($lat);
+        $lon_r = deg2rad($lon);
 
-        // find the northmost, southmost, eastmost and westmost corners $distance_in_miles away
+        // find the northmost, southmost, eastmost and westmost corners $distance_in_km away
         // original formula from
         // http://www.movable-type.co.uk/scripts/latlong.html
 
-        $northmost  = asin(sin($lat_r) * cos($distance_in_miles/$radius) + cos($lat_r) * sin ($distance_in_miles/$radius) * cos($due_north));
-        $southmost  = asin(sin($lat_r) * cos($distance_in_miles/$radius) + cos($lat_r) * sin ($distance_in_miles/$radius) * cos($due_south));
+        $northmost = asin(sin($lat_r) * cos($distance_in_km/$radius) + cos($lat_r) * sin ($distance_in_km/$radius) * cos($due_north));
+        $southmost = asin(sin($lat_r) * cos($distance_in_km/$radius) + cos($lat_r) * sin ($distance_in_km/$radius) * cos($due_south));
 
-        $eastmost = $lon_r + atan2(sin($due_east)*sin($distance_in_miles/$radius)*cos($lat_r),cos($distance_in_miles/$radius)-sin($lat_r)*sin($lat_r));
-        $westmost = $lon_r + atan2(sin($due_west)*sin($distance_in_miles/$radius)*cos($lat_r),cos($distance_in_miles/$radius)-sin($lat_r)*sin($lat_r));
+        $eastmost = $lon_r + atan2(sin($due_east)*sin($distance_in_km/$radius)*cos($lat_r),cos($distance_in_km/$radius)-sin($lat_r)*sin($lat_r));
+        $westmost = $lon_r + atan2(sin($due_west)*sin($distance_in_km/$radius)*cos($lat_r),cos($distance_in_km/$radius)-sin($lat_r)*sin($lat_r));
 
 
         $northmost = rad2deg($northmost);
@@ -117,37 +95,6 @@ class Location extends BaseController
             $lon2 = $westmost;
         }
 
-        return array($lat1,$lat2,$lon1,$lon2);
-    }
-
-    /**
-     * The method defines a global variable as a data source
-     * @return mixed
-     */
-    protected function _select_source() {
-        if ( ! empty($this->request->getJSON())) {
-            return $this->source =$this->request->getJSON();
-        }
-
-        $response = array('state' => false, 'error' => 'Empty data input array');
-
-        log_message('error', '[' .  __METHOD__ . '] {error}', $response);
-
-        $this->_response($response);
-    }
-
-    /**
-     * Generates an answer for the client
-     * @param $data
-     * @param int $code
-     */
-    protected function _response($data, $code = 400)
-    {
-        $this->response
-            ->setStatusCode($code)
-            ->setJSON($data)
-            ->send();
-
-        exit();
+        return [$lat1, $lat2, $lon1, $lon2];
     }
 }
