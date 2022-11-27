@@ -30,10 +30,10 @@ class Location extends BaseController
         }
 
         // Contains coordinates [northmost, southmost, eastmost, westmost]
-        $boundigBox = $this->getBoundingBox($data->lat, $data->lon, 1.5);
+        $boundingBox = $this->getBoundingBox($data->lat, $data->lon, .5);
 
         $api = new OverpassAPI();
-        $poi = $api->get($boundigBox);
+        $poi = $api->get($boundingBox);
 
         return $this->respond($poi, 200);
     }
