@@ -44,32 +44,22 @@ class OverpassAPI {
 
             $findPOI = $POIModel->where('overpass_id', $item->id)->first();
 
-            if (!$findPOI) {
-                $POI = new POI();
-
-                $POI->id          = uniqid();
-                $POI->overpass_id = $item->id;
-                $POI->category    = $category;
-                $POI->subcategory = $item->tags[$category];
-                $POI->latitude    = $item->lat;
-                $POI->longitude   = $item->lon;
-
-                $POIModel->insert($POI);
-            } else {
-                $POI = $findPOI;
+            if ($findPOI) {
+                $result[] = $findPOI;
+                continue;
             }
 
+            $POI = new POI();
 
+            $POI->id          = uniqid();
+            $POI->overpass_id = $item->id;
+            $POI->category    = $category;
+            $POI->subcategory = $item->tags[$category];
+            $POI->latitude    = $item->lat;
+            $POI->longitude   = $item->lon;
+            $POI->tags        = $this->_cleanTags($item->tags, $category);
 
-//            $poi = [
-//                'overpass_api'  => $poi->id,
-//                'lat' => $poi->lat,
-//                'lon' => $poi->lon,
-//                'category' => $category,
-//                'subcategory' => $poi->tags[$category],
-//                'name' => $poi->tags['name'] ?? 'Не известно',
-//                'tags' => $this->_cleanTags($poi->tags, $category),
-//            ];
+            $POIModel->insert($POI);
 
             $result[] = $POI;
         }
@@ -86,11 +76,11 @@ class OverpassAPI {
         }
     }
 
-    protected function _cleanTags(array $tags, string $category): array {
+    protected function _cleanTags(array $tags, string $category): object {
         unset($tags[$category]);
         unset($tags['name']);
 
-        return $tags;
+        return (object) $tags;
     }
 
     protected function _defineCategory(array $tags): string {
