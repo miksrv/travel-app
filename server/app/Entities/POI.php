@@ -13,17 +13,15 @@ class POI extends Entity
         'tags'        => 'object',
     ];
 
-//    public function setTags(object $tags)
-//    {
-//        $this->attributes['tags'] = json_encode($tags);
-//
-//        return $this;
-//    }
+    public function setTags(object $tags)
+    {
+        $this->attributes['tags'] = json_encode($tags);
 
-//    public function getTags()
-//    {
-//        $this->attributes['tags'] = json_decode($this->attributes['tags'], true);
-//
-//        return $this;
-//    }
+        return $this;
+    }
+
+    public function getTags()
+    {
+        return json_decode($this->attributes['tags'], true);
+    }
 }

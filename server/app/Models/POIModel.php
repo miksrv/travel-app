@@ -32,30 +32,4 @@ class POIModel extends Model
     protected $skipValidation     = false;
 
     protected $returnType = \App\Entities\Poi::class;
-
-    protected $beforeInsert = ['tagsToJSON'];
-    protected $beforeUpdate = ['tagsToJSON'];
-    protected $afterFind = ['JSONToTags'];
-
-    protected function tagsToJSON(array $data): array
-    {
-        if (! isset($data['data']['tags'])) {
-            return $data;
-        }
-
-        $data['data']['tags'] = json_encode($data['data']['tags']);
-
-        return $data;
-    }
-
-    protected function JSONToTags(array $data)
-    {
-        if (! isset($data['data']->tags->scalar)) {
-            return $data;
-        }
-
-        $data['data']->tags = json_decode($data['data']->tags->scalar);
-
-        return $data;
-    }
 }

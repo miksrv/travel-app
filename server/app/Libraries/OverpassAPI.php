@@ -1,7 +1,12 @@
 <?php namespace App\Libraries;
 
 use App\Models\POIModel;
+use App\Models\CategoryModel;
+use App\Models\SubcategoryModel;
+
 use App\Entities\POI;
+use App\Entities\Category;
+use App\Entities\Subcategory;
 
 class OverpassAPI {
     protected string $url = 'http://overpass-api.de/api/interpreter';
@@ -31,6 +36,8 @@ class OverpassAPI {
         $result = [];
 
         $POIModel = new POIModel();
+        $CategoryModel = new CategoryModel();
+        $SubcategoryModel = new SubcategoryModel();
 
         foreach($data as $key => $row) {
             $item = (object) $row;
@@ -49,12 +56,26 @@ class OverpassAPI {
                 continue;
             }
 
+            $findCategory = $CategoryModel->where('name', $category)->first();
+
+            if (!$findCategory) {
+                $CategoryModel->insert(['name' => $category]);
+                $categoryId = $CategoryModel->getInsertID();
+            }
+
+            $findSubcategory = $SubcategoryModel->where('category', $findCategory ? $findCategory->id : $categoryId)->first();
+
+            if (!$findSubcategory) {
+                $SubcategoryModel->insert(['name' => $item->tags[$category], 'category' => $findCategory ? $findCategory->id : $categoryId]);
+                $subcategoryId = $SubcategoryModel->getInsertID();
+            }
+
             $POI = new POI();
 
             $POI->id          = uniqid();
             $POI->overpass_id = $item->id;
-            $POI->category    = $category;
-            $POI->subcategory = $item->tags[$category];
+            $POI->category    = $findCategory ? $findCategory->id : $categoryId;
+            $POI->subcategory = $findSubcategory ? $findSubcategory->id : $subcategoryId;
             $POI->latitude    = $item->lat;
             $POI->longitude   = $item->lon;
             $POI->tags        = $this->_cleanTags($item->tags, $category);

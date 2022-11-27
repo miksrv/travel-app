@@ -3,6 +3,8 @@
 use CodeIgniter\API\ResponseTrait;
 use App\Libraries\OverpassAPI;
 
+use App\Models\POIModel;
+
 class Location extends BaseController
 {
     use ResponseTrait;
@@ -34,6 +36,49 @@ class Location extends BaseController
 
         $api = new OverpassAPI();
         $poi = $api->get($boundingBox);
+
+        return $this->respond($poi, 200);
+    }
+
+    function poi() {
+        $data = $this->request->getJSON();
+
+        if (empty($data)) {
+            return $this->fail(['status' => 'Empty request']);
+        }
+
+        if (!isset($data->north) || !is_float($data->north)) {
+            return $this->fail(['status' => 'The "north" variable is required but is empty or missing']);
+        }
+
+        if (!isset($data->south) || !is_float($data->south)) {
+            return $this->fail(['status' => 'The "south" variable is required but is empty or missing']);
+        }
+
+        if (!isset($data->east) || !is_float($data->east)) {
+            return $this->fail(['status' => 'The "east" variable is required but is empty or missing']);
+        }
+
+        if (!isset($data->west) || !is_float($data->west)) {
+            return $this->fail(['status' => 'The "west" variable is required but is empty or missing']);
+        }
+
+        if ($data->north < $data->south) {
+            return $this->fail(['status' => 'Value "north" must be greater than value "south']);
+        }
+
+        if ($data->west < $data->east) {
+            return $this->fail(['status' => 'Value "west" must be greater than value "east']);
+        }
+
+        $POIModel = new POIModel();
+
+        $poi = $POIModel
+            ->where('latitude <=', $data->north)
+            ->where('latitude >=', $data->south)
+            ->where('longitude <=', $data->west)
+            ->where('longitude >=', $data->east)
+            ->findAll();
 
         return $this->respond($poi, 200);
     }
