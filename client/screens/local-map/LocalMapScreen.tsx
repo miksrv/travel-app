@@ -3,7 +3,7 @@ import MapView, { Circle, Marker, LatLng, Region } from 'react-native-maps';
 import { View } from 'react-native';
 
 import * as Location from 'expo-location';
-import {usePostCurrentLocationMutation} from "../../api/poiApi";
+import {usePostCurrentLocationMutation, usePostMapBoundariesMutation} from "../../api/poiApi";
 
 import styles from "./styles.module";
 
@@ -12,7 +12,8 @@ export const LocalMapScreen: React.FC = () => {
     const [currentLocation, setCurrentLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [errorMsg, setErrorMsg] = React.useState<string>('');
 
-    const [ postCurrentLocation, { isLoading, data } ] = usePostCurrentLocationMutation();
+    const [ postCurrentLocation, { isLoading, data, isError } ] = usePostCurrentLocationMutation();
+    const [ postMapBoundariesMutation, { data: poi } ] = usePostMapBoundariesMutation();
 
     const getMapBoundaries = (region: Region): [LatLng, LatLng] => {
         const northEast = {
@@ -50,12 +51,18 @@ export const LocalMapScreen: React.FC = () => {
         })();
     }, []);
 
-    const handleUpdate = async (region: Region) => {
-        await postCurrentLocation({
-            lat: region.latitude,
-            lon: region.longitude,
+    const handleUpdate = async (region: [LatLng, LatLng]) => {
+        console.log('handleUpdate', region)
+
+        await postMapBoundariesMutation({
+            north: region[0].latitude,
+            south: region[1].latitude,
+            west: region[0].longitude,
+            east: region[1].longitude
         })
     }
+
+    console.log('poi', poi)
 
     return (
         <View style={styles.container}>
@@ -83,17 +90,16 @@ export const LocalMapScreen: React.FC = () => {
                 minZoomLevel={10}
                 onRegionChangeComplete={(region) => {
                     const boundaries = getMapBoundaries(region);
-
-                    // handleUpdate(region);
+                    handleUpdate(boundaries);
                 }}
             >
-                {!!data?.length && data.map((poi) => (
+                {!!poi?.length && poi.map((item) => (
                     <Marker
-                        key={poi.lat + poi.lon}
-                        title={poi.name}
+                        key={item.latitude + item.longitude}
+                        title={item.name}
                         coordinate={{
-                            latitude: poi.lat,
-                            longitude: poi.lon,
+                            latitude: Number(item.latitude),
+                            longitude: Number(item.longitude),
                         }}
                     />
                 ))}

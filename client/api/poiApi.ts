@@ -12,14 +12,21 @@ export interface IRestPoi extends IRestResponse {
 }
 
 export interface IRestPoiItem {
-    lat: number
-    lon: number
+    latitude: number
+    longitude: number
     name: string
 }
 
 export interface ICurrentLocation {
     lat: number
     lon: number
+}
+
+export interface IMapBoundaries {
+    north: number,
+    south: number,
+    east: number,
+    west: number,
 }
 
 // Define a service using a base URL and expected endpoints
@@ -39,7 +46,15 @@ export const poiApi = createApi({
     endpoints: (builder) => ({
         postCurrentLocation: builder.mutation<IRestPoiItem[], ICurrentLocation>({
             query: (data) => ({
-                url: 'location/test',
+                url: 'location/discover',
+                method: 'POST',
+                body: data
+            }),
+        }),
+
+        postMapBoundaries: builder.mutation<IRestPoiItem[], IMapBoundaries>({
+            query: (data) => ({
+                url: 'location/poi',
                 method: 'POST',
                 body: data
             }),
@@ -49,4 +64,4 @@ export const poiApi = createApi({
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { usePostCurrentLocationMutation } = poiApi
+export const { usePostCurrentLocationMutation, usePostMapBoundariesMutation } = poiApi
