@@ -1,19 +1,24 @@
 import React from "react";
 import MapView, { Circle, Marker, LatLng, Region } from 'react-native-maps';
-import { View } from 'react-native';
+import { View, Image } from 'react-native';
 
 import * as Location from 'expo-location';
-import {usePostCurrentLocationMutation, usePostMapBoundariesMutation} from "../../api/poiApi";
+import {usePostCurrentLocationMutation, usePostMapBoundariesMutation, IRestPoiItem} from "../../api/poiApi";
 
 import styles from "./styles.module";
+
+import mapIcon from '../../assets/map/unknow.png';
 
 export const LocalMapScreen: React.FC = () => {
     const [defaultLocation, setDefaultLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [currentLocation, setCurrentLocation] = React.useState<Location.LocationObject | undefined>(undefined);
+    const [mapBoundaries, setMapBoundaries] = React.useState<[LatLng, LatLng] | undefined>(undefined);
     const [errorMsg, setErrorMsg] = React.useState<string>('');
 
     const [ postCurrentLocation, { isLoading, data, isError } ] = usePostCurrentLocationMutation();
     const [ postMapBoundariesMutation, { data: poi } ] = usePostMapBoundariesMutation();
+
+    const [ poiList, setPoiList ] = React.useState<IRestPoiItem[]>([]);
 
     const getMapBoundaries = (region: Region): [LatLng, LatLng] => {
         const northEast = {
@@ -51,9 +56,21 @@ export const LocalMapScreen: React.FC = () => {
         })();
     }, []);
 
-    const handleUpdate = async (region: [LatLng, LatLng]) => {
-        console.log('handleUpdate', region)
+    React.useEffect(() => {
+        setPoiList([
+            ...poiList.filter(({latitude, longitude}) =>
+                mapBoundaries &&
+                latitude <= mapBoundaries[0].latitude &&
+                latitude >= mapBoundaries[1].latitude &&
+                longitude <= mapBoundaries[0].longitude &&
+                longitude >= mapBoundaries[1].longitude
+            ),
+            ...data?.filter(({id}) => !poiList.find((p) => p.id === id)) || [],
+            ...poi?.filter(({id}) => !poiList.find((p) => p.id === id)) || [],
+        ]);
+    }, [data, poi, mapBoundaries])
 
+    const handleUpdate = async (region: [LatLng, LatLng]) => {
         await postMapBoundariesMutation({
             north: region[0].latitude,
             south: region[1].latitude,
@@ -61,8 +78,6 @@ export const LocalMapScreen: React.FC = () => {
             east: region[1].longitude
         })
     }
-
-    console.log('poi', poi)
 
     return (
         <View style={styles.container}>
@@ -90,18 +105,26 @@ export const LocalMapScreen: React.FC = () => {
                 minZoomLevel={10}
                 onRegionChangeComplete={(region) => {
                     const boundaries = getMapBoundaries(region);
+
+                    setMapBoundaries(boundaries);
                     handleUpdate(boundaries);
                 }}
             >
-                {!!poi?.length && poi.map((item) => (
+                {!!poiList?.length && poiList.map((item) => (
                     <Marker
-                        key={item.latitude + item.longitude}
+                        key={item.id}
                         title={item.name}
                         coordinate={{
                             latitude: Number(item.latitude),
                             longitude: Number(item.longitude),
                         }}
-                    />
+                    >
+                        <Image
+                            source={mapIcon}
+                            style={{width: 26, height: 28}}
+                            resizeMode="contain"
+                        />
+                    </Marker>
                 ))}
                 {currentLocation && (
                     <Circle

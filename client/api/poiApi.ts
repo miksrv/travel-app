@@ -12,6 +12,7 @@ export interface IRestPoi extends IRestResponse {
 }
 
 export interface IRestPoiItem {
+    id: string
     latitude: number
     longitude: number
     name: string
