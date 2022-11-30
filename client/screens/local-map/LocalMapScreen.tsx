@@ -1,6 +1,7 @@
 import React from "react";
-import MapView, { Circle, Marker, LatLng, Region } from 'react-native-maps';
-import { View, Image } from 'react-native';
+import { Circle, Marker, Callout, LatLng, Region } from 'react-native-maps';
+import MapView from "react-native-map-clustering";
+import { View, Image, Text, ActivityIndicator } from 'react-native';
 
 import * as Location from 'expo-location';
 import {usePostCurrentLocationMutation, usePostMapBoundariesMutation, IRestPoiItem} from "../../api/poiApi";
@@ -8,6 +9,7 @@ import {usePostCurrentLocationMutation, usePostMapBoundariesMutation, IRestPoiIt
 import styles from "./styles.module";
 
 import mapIcon from '../../assets/map/unknow.png';
+import noImage from '../../assets/noimage.jpg';
 
 export const LocalMapScreen: React.FC = () => {
     const [defaultLocation, setDefaultLocation] = React.useState<Location.LocationObject | undefined>(undefined);
@@ -16,7 +18,7 @@ export const LocalMapScreen: React.FC = () => {
     const [errorMsg, setErrorMsg] = React.useState<string>('');
 
     const [ postCurrentLocation, { isLoading, data, isError } ] = usePostCurrentLocationMutation();
-    const [ postMapBoundariesMutation, { data: poi } ] = usePostMapBoundariesMutation();
+    const [ postMapBoundariesMutation, { data: poi, isLoading: poiLoader } ] = usePostMapBoundariesMutation();
 
     const [ poiList, setPoiList ] = React.useState<IRestPoiItem[]>([]);
 
@@ -81,14 +83,24 @@ export const LocalMapScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            <Text style={styles.text}>
+                {'POI: '}
+                <Text style={styles.bold}>{poiList.length}</Text>
+            </Text>
+            <ActivityIndicator
+                animating={isLoading || poiLoader}
+                size={'small'}
+                color={'#0000ff'}
+                style={styles.loader}
+            />
             <MapView
                 style={styles.map}
                 showsUserLocation={true}
                 initialRegion={{
                     latitude: defaultLocation?.coords.latitude || 47,
                     longitude: defaultLocation?.coords.longitude || 71,
-                    latitudeDelta: 10,
-                    longitudeDelta: 10,
+                    latitudeDelta: 0.015,
+                    longitudeDelta: 0.0121,
                 }}
                 camera={{
                     // altitude: 100,
@@ -124,6 +136,21 @@ export const LocalMapScreen: React.FC = () => {
                             style={{width: 26, height: 28}}
                             resizeMode="contain"
                         />
+                        <Callout tooltip>
+                            <View>
+                                <View style={styles.bubble}>
+                                    <Text style={styles.name}>{item.name}</Text>
+                                    <Text>
+                                        <Image
+                                            style={styles.image}
+                                            source={noImage}
+                                        />
+                                    </Text>
+                                </View>
+                                <View style={styles.arrowBorder} />
+                                <View style={styles.arrow} />
+                            </View>
+                        </Callout>
                     </Marker>
                 ))}
                 {currentLocation && (
@@ -134,7 +161,7 @@ export const LocalMapScreen: React.FC = () => {
                         }}
                         radius={500}
                         strokeWidth={1}
-                        strokeColor={isLoading ? 'green' : '#1a66ff'}
+                        strokeColor={'#1a66ff'}
                         fillColor={'rgba(230,238,255,0.5)'}
                     />
                 )}
