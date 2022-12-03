@@ -1,7 +1,7 @@
 import React from "react";
 import { Circle, Marker, Callout, LatLng, Region } from 'react-native-maps';
 import MapView from "react-native-map-clustering";
-import { View, Image, Text, ActivityIndicator } from 'react-native';
+import { View, Image, Text, ActivityIndicator, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 
 import * as Location from 'expo-location';
 import {usePostCurrentLocationMutation, usePostMapBoundariesMutation, IRestPoiItem} from "../../api/poiApi";
@@ -10,8 +10,12 @@ import styles from "./styles.module";
 
 import mapIcon from '../../assets/map/unknow.png';
 import noImage from '../../assets/noimage.jpg';
+import {RootStackParamList} from "../../App";
+import type {DrawerScreenProps} from "@react-navigation/drawer";
 
-export const LocalMapScreen: React.FC = () => {
+type Props = DrawerScreenProps<RootStackParamList, 'Map'>;
+
+export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
     const [defaultLocation, setDefaultLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [currentLocation, setCurrentLocation] = React.useState<Location.LocationObject | undefined>(undefined);
     const [mapBoundaries, setMapBoundaries] = React.useState<[LatLng, LatLng] | undefined>(undefined);
@@ -83,6 +87,25 @@ export const LocalMapScreen: React.FC = () => {
 
     return (
         <View style={styles.container}>
+            <ScrollView style={{padding: 40}}>
+                <View
+                    style={{
+                        flexDirection: 'row',
+                        justifyContent: 'space-between',
+                        marginBottom: 20,
+                    }}>
+                    <Text style={{fontSize: 18, fontFamily: 'Roboto-Medium'}}>
+                        Hello John Doe
+                    </Text>
+                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
+                        <ImageBackground
+                            source={require('../../assets/images/user-profile.jpg')}
+                            style={{width: 35, height: 35}}
+                            imageStyle={{borderRadius: 25}}
+                        />
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
             <Text style={styles.text}>
                 {'POI: '}
                 <Text style={styles.bold}>{poiList.length}</Text>

@@ -1,15 +1,15 @@
 import React from "react";
 import {Text, View, Button} from 'react-native';
 import {StatusBar} from "expo-status-bar";
-import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type {DrawerScreenProps} from "@react-navigation/drawer";
 import {Link} from "@react-navigation/native";
 
 import styles from "./styles.module";
 import {RootStackParamList} from "../../App";
 
-type Props = NativeStackScreenProps<RootStackParamList, 'List'>;
+type Props = DrawerScreenProps<RootStackParamList, 'List'>;
 
-export const ListPlacesScreen: React.FC<Props> = ({ navigation, route }) => {
+export const ListPlacesScreen: React.FC<Props> = (props) => {
     return (
         <View style={styles.container}>
             <Text>Open up App.tsx to start working on your app!</Text>

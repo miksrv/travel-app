@@ -22,7 +22,7 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 export default function App() {
     React.useEffect(() => {
-        StatusBar.setHidden(false);
+        StatusBar.setHidden(true);
     });
 
     return (
