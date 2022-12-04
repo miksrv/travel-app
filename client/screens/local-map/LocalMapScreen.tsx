@@ -1,21 +1,247 @@
 import React from "react";
 import { Circle, Marker, Callout, LatLng, Region } from 'react-native-maps';
 import MapView from "react-native-map-clustering";
-import { View, Image, Text, ActivityIndicator, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
-
+import { View, Image, Text, ActivityIndicator} from 'react-native';
 import * as Location from 'expo-location';
+import WebView from "react-native-webview";
 import {usePostCurrentLocationMutation, usePostMapBoundariesMutation, IRestPoiItem} from "../../api/poiApi";
 
 import styles from "./styles.module";
 
 import mapIcon from '../../assets/map/unknow.png';
-import noImage from '../../assets/noimage.jpg';
 import {RootStackParamList} from "../../App";
 import type {DrawerScreenProps} from "@react-navigation/drawer";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import Header from "../../components/header/Header";
+import {debounce} from "lodash";
 
 type Props = DrawerScreenProps<RootStackParamList, 'Map'>;
+
+const mapStyle = [
+    {
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#ebe3cd"
+            }
+        ]
+    },
+    {
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#523735"
+            }
+        ]
+    },
+    {
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#f5f1e6"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#c9b2a6"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.land_parcel",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#dcd2be"
+            }
+        ]
+    },
+    {
+        "featureType": "administrative.land_parcel",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#ae9e90"
+            }
+        ]
+    },
+    {
+        "featureType": "landscape.natural",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#dfd2ae"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#dfd2ae"
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.icon",
+        "stylers": [
+            {
+                "visibility": "off"
+            },
+            {
+                "weight": 1
+            }
+        ]
+    },
+    {
+        "featureType": "poi",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#93817c"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#a5b076"
+            }
+        ]
+    },
+    {
+        "featureType": "poi.park",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#447530"
+            }
+        ]
+    },
+    {
+        "featureType": "road",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#f5f1e6"
+            }
+        ]
+    },
+    {
+        "featureType": "road.arterial",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#fdfcf8"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#f8c967"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#e9bc62"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway.controlled_access",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#e98d58"
+            }
+        ]
+    },
+    {
+        "featureType": "road.highway.controlled_access",
+        "elementType": "geometry.stroke",
+        "stylers": [
+            {
+                "color": "#db8555"
+            }
+        ]
+    },
+    {
+        "featureType": "road.local",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#806b63"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#dfd2ae"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#8f7d77"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.line",
+        "elementType": "labels.text.stroke",
+        "stylers": [
+            {
+                "color": "#ebe3cd"
+            }
+        ]
+    },
+    {
+        "featureType": "transit.station",
+        "elementType": "geometry",
+        "stylers": [
+            {
+                "color": "#dfd2ae"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "geometry.fill",
+        "stylers": [
+            {
+                "color": "#b9d3c2"
+            }
+        ]
+    },
+    {
+        "featureType": "water",
+        "elementType": "labels.text.fill",
+        "stylers": [
+            {
+                "color": "#92998d"
+            }
+        ]
+    }
+];
 
 export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
     const [defaultLocation, setDefaultLocation] = React.useState<Location.LocationObject | undefined>(undefined);
@@ -78,14 +304,16 @@ export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
         ]);
     }, [data, poi, mapBoundaries])
 
-    const handleUpdate = async (region: [LatLng, LatLng]) => {
-        await postMapBoundariesMutation({
-            north: region[0].latitude,
-            south: region[1].latitude,
-            west: region[0].longitude,
-            east: region[1].longitude
-        })
-    }
+    const getPoiList = React.useCallback(
+        debounce(async (region: [LatLng, LatLng]) => {
+            await postMapBoundariesMutation({
+                north: region[0].latitude,
+                south: region[1].latitude,
+                west: region[0].longitude,
+                east: region[1].longitude
+            })
+        }, 1000), []
+    )
 
     return (
         <View style={styles.container}>
@@ -119,6 +347,7 @@ export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
                     pitch: 0, // Наклон карты
                     zoom: 15
                 }}
+                customMapStyle={mapStyle}
                 followsUserLocation={true}
                 maxZoomLevel={17}
                 minZoomLevel={10}
@@ -126,7 +355,7 @@ export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
                     const boundaries = getMapBoundaries(region);
 
                     setMapBoundaries(boundaries);
-                    handleUpdate(boundaries);
+                    getPoiList(boundaries);
                 }}
             >
                 {!!poiList?.length && poiList.map((item) => (
@@ -146,13 +375,13 @@ export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
                         <Callout tooltip>
                             <View>
                                 <View style={styles.bubble}>
-                                    <Text style={styles.name}>{item.name}</Text>
-                                    <Text>
-                                        <Image
-                                            style={styles.image}
-                                            source={noImage}
-                                        />
-                                    </Text>
+                                    <WebView
+                                        style={styles.image}
+                                        source={{uri: 'https://greenexp.ru/uploads/places/1991618497/59f6b8ed8f3487d2d9679dfcc727a4bf.jpg'}}
+                                        resizeMode={'cover'}
+                                    />
+                                    <Text style={styles.photoCount}>{'23'}</Text>
+                                    <Text>{item.name}</Text>
                                 </View>
                                 <View style={styles.arrowBorder} />
                                 <View style={styles.arrow} />

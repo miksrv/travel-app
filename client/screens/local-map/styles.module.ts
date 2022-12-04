@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
         padding: 5,
         backgroundColor: '#ff6d6d',
         color: '#FFF',
-        top: 80,
+        top: 10,
         left: 10
     },
     bold: {
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     loader: {
         position: 'absolute',
         zIndex: 10,
-        top: 83,
+        top: 13,
         left: 70
     },
 
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
         backgroundColor: '#fff',
         borderRadius: 4,
         borderColor: '#ccc',
-        borderWidth: 0,
-        padding: 10,
+        borderWidth: 1,
+        padding: 2,
         width: 300,
     },
     // Arrow below the bubble
@@ -46,31 +46,34 @@ const styles = StyleSheet.create({
         backgroundColor: 'transparent',
         borderColor: 'transparent',
         borderTopColor: '#fff',
-        borderWidth: 16,
+        borderWidth: 17,
         alignSelf: 'center',
         marginTop: -32,
     },
     arrowBorder: {
         backgroundColor: 'transparent',
         borderColor: 'transparent',
-        borderTopColor: '#007a87',
-        borderWidth: 14,
+        borderTopColor: '#ccc',
+        borderWidth: 12,
         alignSelf: 'center',
-        marginTop: -0.5,
-        // marginBottom: -15
+        marginTop: 0,
+        marginBottom: 1.8
     },
-    // Character name
-    name: {
-        fontSize: 16,
-        marginBottom: 0,
-        backgroundColor: '#c92424'
-    },
-    // Character image
     image: {
         width: 300,
-        height: 300,
-        objectFit: 'cover'
+        height: 200,
     },
+    photoCount: {
+        position: 'absolute',
+        paddingTop: 3,
+        paddingBottom: 3,
+        paddingLeft: 10,
+        paddingRight: 10,
+        backgroundColor: '#ffffff',
+        color: '#000',
+        top: 10,
+        left: 10
+    }
 });
 
 export default styles;

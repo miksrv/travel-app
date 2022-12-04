@@ -26,10 +26,12 @@
     "react-native-screens": "~3.18.0",
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.9",
+    "react-native-webview": "11.23.1",
     "react-redux": "^8.0.5"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",
+    "@types/lodash.debounce": "^4.0.7",
     "@types/react": "~18.0.14",
     "@types/react-native": "~0.70.6",
     "@types/react-native-vector-icons": "^6.4.12",
