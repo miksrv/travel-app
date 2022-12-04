@@ -1,16 +1,16 @@
-import React from "react";
-import {Text, View, Button} from 'react-native';
-import {StatusBar} from "expo-status-bar";
-import type {DrawerScreenProps} from "@react-navigation/drawer";
-import {Link} from "@react-navigation/native";
+import React from 'react'
+import { Text, View, Button } from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import type { DrawerScreenProps } from '@react-navigation/drawer'
+import { Link } from '@react-navigation/native'
 
-import styles from "./styles.module";
-import {RootStackParamList} from "../../App";
+import styles from './styles.module'
+import { RootStackParamList } from '../../App'
 
-type Props = DrawerScreenProps<RootStackParamList, 'List'>;
+type Props = DrawerScreenProps<RootStackParamList, 'List'>
 
 export const ListPlacesScreen: React.FC<Props> = (props) => {
-    return (
+  return (
         <View style={styles.container}>
             <Text>Open up App.tsx to start working on your app!</Text>
             <Link to={{ screen: 'Map' }}>
@@ -18,5 +18,5 @@ export const ListPlacesScreen: React.FC<Props> = (props) => {
             </Link>
             <StatusBar style="light" hidden={false} translucent={true} />
         </View>
-    )
-};
+  )
+}
