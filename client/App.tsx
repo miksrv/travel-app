@@ -12,6 +12,8 @@ import {ListPlacesScreen} from "./screens/list-places/ListPlacesScreen";
 import {StatusBar} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomDrawer from "./components/custom-drawer/CustomDrawer";
+import Header from "./components/header/Header";
+import {Text} from "react-native";
 
 export type RootStackParamList = {
     List: undefined;
@@ -22,7 +24,7 @@ const Drawer = createDrawerNavigator<RootStackParamList>();
 
 export default function App() {
     React.useEffect(() => {
-        StatusBar.setHidden(true);
+        StatusBar.setHidden(false);
     });
 
     return (
@@ -31,7 +33,7 @@ export default function App() {
                 <Drawer.Navigator
                     drawerContent={props => <CustomDrawer {...props} />}
                     screenOptions={{
-                        headerShown: false,
+                        headerShown: true,
                         drawerActiveBackgroundColor: '#aa18ea',
                         drawerActiveTintColor: '#fff',
                         drawerInactiveTintColor: '#333',
@@ -51,6 +53,7 @@ export default function App() {
                                     color={color}
                                 />
                             ),
+                            header: Header
                         }}
                     />
                     <Drawer.Screen
@@ -64,6 +67,7 @@ export default function App() {
                                     color={color}
                                 />
                             ),
+                            header: Header
                         }}
                     />
                 </Drawer.Navigator>

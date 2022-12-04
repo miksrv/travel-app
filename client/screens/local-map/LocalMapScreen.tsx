@@ -12,6 +12,8 @@ import mapIcon from '../../assets/map/unknow.png';
 import noImage from '../../assets/noimage.jpg';
 import {RootStackParamList} from "../../App";
 import type {DrawerScreenProps} from "@react-navigation/drawer";
+import Ionicons from "react-native-vector-icons/Ionicons";
+import Header from "../../components/header/Header";
 
 type Props = DrawerScreenProps<RootStackParamList, 'Map'>;
 
@@ -87,25 +89,7 @@ export const LocalMapScreen: React.FC<Props> = ({navigation}) => {
 
     return (
         <View style={styles.container}>
-            <ScrollView style={{padding: 40}}>
-                <View
-                    style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        marginBottom: 20,
-                    }}>
-                    <Text style={{fontSize: 18, fontFamily: 'Roboto-Medium'}}>
-                        Hello John Doe
-                    </Text>
-                    <TouchableOpacity onPress={() => navigation.openDrawer()}>
-                        <ImageBackground
-                            source={require('../../assets/images/user-profile.jpg')}
-                            style={{width: 35, height: 35}}
-                            imageStyle={{borderRadius: 25}}
-                        />
-                    </TouchableOpacity>
-                </View>
-            </ScrollView>
+            {/*<Header navigation={navigation} />*/}
             <Text style={styles.text}>
                 {'POI: '}
                 <Text style={styles.bold}>{poiList.length}</Text>

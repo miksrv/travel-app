@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     },
     map: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height + 35,
+        height: Dimensions.get('window').height - 50,
     },
     text: {
         position: 'absolute',
