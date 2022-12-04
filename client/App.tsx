@@ -7,18 +7,20 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 
 import { store } from './api/store';
 
-import {LocalMapScreen} from "./screens/local-map/LocalMapScreen";
+import {MapScreen} from "./screens/map/MapScreen";
 import {ListPlacesScreen} from "./screens/list-places/ListPlacesScreen";
 import {StatusBar} from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import CustomDrawer from "./components/custom-drawer/CustomDrawer";
 import Header from "./components/header/Header";
-import {Text} from "react-native";
 
 export type RootStackParamList = {
-    List: undefined;
-    Map: undefined;
-};
+    List: undefined
+    Map: undefined
+    Registration: undefined
+    Login: undefined
+    Profile: undefined
+}
 
 const Drawer = createDrawerNavigator<RootStackParamList>();
 
@@ -58,7 +60,7 @@ export default function App() {
                     />
                     <Drawer.Screen
                         name={'Map'}
-                        component={LocalMapScreen}
+                        component={MapScreen}
                         options={{
                             drawerIcon: ({color}) => (
                                 <Ionicons
