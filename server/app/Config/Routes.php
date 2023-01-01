@@ -37,8 +37,9 @@ $routes->set404Override();
 // route since we don't have to scan directories.
 $routes->get('/', 'Home::index');
 
-$routes->get('location/discover', 'Location::discover');
-$routes->get('location/poi', 'Location::poi');
+$routes->post('location/discover', 'Location::discover');
+$routes->post('location/poi', 'Location::poi');
+$routes->get('location/points/(:any)', 'Location::points/$1');
 
 /*
  * --------------------------------------------------------------------

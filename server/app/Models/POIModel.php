@@ -19,7 +19,8 @@ class POIModel extends Model
         'subcategory',
         'latitude',
         'longitude',
-        'tags'
+        'tags',
+        'name'
     ];
 
     protected $useTimestamps = 'datetime';

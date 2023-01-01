@@ -83,6 +83,10 @@ class Location extends BaseController
         return $this->respond($poi, 200);
     }
 
+    function points($seg1 = false) {
+        return $this->respond(['test' => $seg1], 200);
+    }
+
     /**
      * Returns the extreme points of the coordinates, finding them by the current coordinates and radius
      * 

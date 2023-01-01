@@ -11,6 +11,7 @@ class POI extends Entity
         'longitude'   => 'float',
         'latitude'    => 'float',
         'tags'        => 'object',
+        'name'        => 'string'
     ];
 
     public function setTags(object $tags)

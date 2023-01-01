@@ -78,7 +78,8 @@ class OverpassAPI {
             $POI->subcategory = $findSubcategory ? $findSubcategory->id : $subcategoryId;
             $POI->latitude    = $item->lat;
             $POI->longitude   = $item->lon;
-            $POI->tags        = $this->_cleanTags($item->tags, $category);
+//            $POI->tags        = $this->_cleanTags($item->tags, $category);
+            $POI->name        = $item->tags['name'] ?? 'Не известно';
 
             $POIModel->insert($POI);
 
