@@ -1,47 +1,81 @@
-import React from 'react';
+import React from 'react'
 import { Provider } from 'react-redux'
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { registerRootComponent } from 'expo'
 
-import { store } from './api/store';
+import { NavigationContainer } from '@react-navigation/native'
+import { createDrawerNavigator } from '@react-navigation/drawer'
 
-import {LocalMapScreen} from "./screens/local-map/LocalMapScreen";
-import {ListPlacesScreen} from "./screens/list-places/ListPlacesScreen";
-import {Text, Button, StatusBar} from "react-native";
+import { store } from './api/store'
+
+import { MapScreen } from './screens/map/MapScreen'
+import { ListPlacesScreen } from './screens/list-places/ListPlacesScreen'
+import { StatusBar } from 'react-native'
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import CustomDrawer from './components/custom-drawer/CustomDrawer'
+import Header from './components/header/Header'
 
 export type RootStackParamList = {
-    List: undefined;
-    Map: undefined;
-};
+    List: undefined
+    Map: undefined
+    Registration: undefined
+    Login: undefined
+    Profile: undefined
+}
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+const Drawer = createDrawerNavigator<RootStackParamList>()
 
-export default function App() {
+export default function App (): any {
     React.useEffect(() => {
-        StatusBar.setHidden(false);
-    });
+        StatusBar.setHidden(false)
+    })
 
     return (
         <Provider store={store}>
             <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen
-                        name="List"
+                <Drawer.Navigator
+                    drawerContent={props => <CustomDrawer {...props} />}
+                    screenOptions={{
+                        headerShown: true,
+                        drawerActiveBackgroundColor: '#aa18ea',
+                        drawerActiveTintColor: '#fff',
+                        drawerInactiveTintColor: '#333',
+                        drawerLabelStyle: {
+                            marginLeft: -25,
+                            fontSize: 15
+                        }
+                    }}>
+                    <Drawer.Screen
+                        name={'List'}
                         component={ListPlacesScreen}
                         options={{
-                            headerTitle: (props) => <Text>List places</Text>,
-                            headerRight: () => (
-                                <Button
-                                    onPress={() => alert('This is a button!')}
-                                    title="Info"
-                                    color="#fff"
+                            drawerIcon: ({ color }) => (
+                                <Ionicons
+                                    name={'home-outline'}
+                                    size={22}
+                                    color={color}
                                 />
                             ),
+                            header: Header
                         }}
                     />
-                    <Stack.Screen name="Map" options={{title: 'Local Map'}} component={LocalMapScreen} />
-                </Stack.Navigator>
+                    <Drawer.Screen
+                        name={'Map'}
+                        component={MapScreen}
+                        options={{
+                            drawerIcon: ({ color }) => (
+                                <Ionicons
+                                    name={'person-outline'}
+                                    size={22}
+                                    color={color}
+                                />
+                            ),
+                            header: Header
+                        }}
+                    />
+                </Drawer.Navigator>
             </NavigationContainer>
         </Provider>
-    );
+    )
 }
+
+registerRootComponent(App)

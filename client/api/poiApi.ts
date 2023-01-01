@@ -1,5 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import {RootState} from "./store";
+import { RootState } from './store'
 
 export interface IRestResponse {
     status: boolean
@@ -12,14 +12,22 @@ export interface IRestPoi extends IRestResponse {
 }
 
 export interface IRestPoiItem {
-    lat: number
-    lon: number
+    id: string
+    latitude: number
+    longitude: number
     name: string
 }
 
 export interface ICurrentLocation {
     lat: number
     lon: number
+}
+
+export interface IMapBoundaries {
+    north: number
+    south: number
+    east: number
+    west: number
 }
 
 // Define a service using a base URL and expected endpoints
@@ -29,7 +37,7 @@ export const poiApi = createApi({
         baseUrl: process.env.REACT_APP_API_HOST || 'http://travelapp.miksoft.pro/',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
-            //const token = (getState() as RootState).auth.token
+            // const token = (getState() as RootState).auth.token
             // if (token) {
             //     headers.set('AuthToken', token)
             // }
@@ -39,14 +47,31 @@ export const poiApi = createApi({
     endpoints: (builder) => ({
         postCurrentLocation: builder.mutation<IRestPoiItem[], ICurrentLocation>({
             query: (data) => ({
-                url: 'location/test',
+                url: 'location/discover',
                 method: 'POST',
                 body: data
-            }),
+            })
         }),
-    }),
+
+        postMapBoundaries: builder.mutation<IRestPoiItem[], IMapBoundaries>({
+            query: (data) => ({
+                url: 'location/poi',
+                method: 'POST',
+                body: data
+            })
+        }),
+
+        getPoiById: builder.mutation<string, string>({
+            query: (id) => `location/points/${id}`,
+            // query: (data) => ({
+            //     url: 'location/points',
+            //     method: 'POST',
+            //     body: data
+            // })
+        }),
+    })
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { usePostCurrentLocationMutation } = poiApi
+export const { usePostCurrentLocationMutation, usePostMapBoundariesMutation, useGetPoiByIdMutation } = poiApi
