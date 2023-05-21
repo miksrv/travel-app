@@ -5,12 +5,6 @@ namespace Config;
 // Create a new instance of our RouteCollection class.
 $routes = Services::routes();
 
-// Load the system's routing file first, so that the app and ENVIRONMENT
-// can override as needed.
-if (is_file(SYSTEMPATH . 'Config/Routes.php')) {
-    require SYSTEMPATH . 'Config/Routes.php';
-}
-
 /*
  * --------------------------------------------------------------------
  * Router Setup
@@ -35,12 +29,24 @@ $routes->set404Override();
 
 // We get a performance increase by specifying the default
 // route since we don't have to scan directories.
-$routes->get('/', 'Home::index');
 
-$routes->post('location/discover', 'Location::discover');
-$routes->post('location/poi', 'Location::poi');
-$routes->get('location/points/(:any)', 'Location::points/$1');
+$routes->get('introduce', 'Introduce::hello');
+$routes->options('introduce)', 'Introduce');
 
+$routes->get('place', 'Place::list');
+$routes->post('place', 'Place::create');
+$routes->patch('place/(:alphanum)', 'Place::update/$1');
+$routes->delete('place/(:alphanum)', 'Place::delete/$1');
+$routes->options('place', 'Place');
+$routes->options('place/(:alphanum)', 'Place');
+
+$routes->get('photo', 'Photo::list');
+$routes->post('photo', 'Photo::create');
+$routes->post('photo/upload', 'Photo::upload');
+$routes->delete('photo/(:alphanum)', 'Photo::delete/$1');
+$routes->options('photo', 'Photo');
+$routes->options('photo/(:alphanum)', 'Photo');
+$routes->options('photo/upload', 'Photo');
 /*
  * --------------------------------------------------------------------
  * Additional Routing

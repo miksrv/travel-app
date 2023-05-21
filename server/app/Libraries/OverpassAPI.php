@@ -1,13 +1,5 @@
 <?php namespace App\Libraries;
 
-use App\Models\POIModel;
-use App\Models\CategoryModel;
-use App\Models\SubcategoryModel;
-
-use App\Entities\POI;
-use App\Entities\Category;
-use App\Entities\Subcategory;
-
 class OverpassAPI {
     protected string $url = 'http://overpass-api.de/api/interpreter';
 
@@ -28,16 +20,14 @@ class OverpassAPI {
 
         $overpass_url .= ');out;';
 
-        $html = file_get_contents($overpass_url);
+        $html   = file_get_contents($overpass_url);
         $result = json_decode($html, true);
-
-        $data = $result['elements'];
-
+        $data   = $result['elements'];
         $result = [];
 
-        $POIModel = new POIModel();
-        $CategoryModel = new CategoryModel();
-        $SubcategoryModel = new SubcategoryModel();
+//        $POIModel = new POIModel();
+//        $CategoryModel = new CategoryModel();
+//        $SubcategoryModel = new SubcategoryModel();
 
         foreach($data as $key => $row) {
             $item = (object) $row;
@@ -49,54 +39,53 @@ class OverpassAPI {
 
             $category = $this->_defineCategory($item->tags);
 
-            $findPOI = $POIModel->where('overpass_id', $item->id)->first();
+//            $findPOI = $POIModel->where('overpass_id', $item->id)->first();
 
-            if ($findPOI) {
-                $result[] = $findPOI;
-                continue;
-            }
+//            if ($findPOI) {
+//                $result[] = $findPOI;
+//                continue;
+//            }
 
-            $findCategory = $CategoryModel->where('name', $category)->first();
+//            $findCategory = $CategoryModel->where('name', $category)->first();
 
-            if (!$findCategory) {
-                $CategoryModel->insert(['name' => $category]);
-                $categoryId = $CategoryModel->getInsertID();
-            }
+//            if (!$findCategory) {
+//                $CategoryModel->insert(['name' => $category]);
+//                $categoryId = $CategoryModel->getInsertID();
+//            }
 
-            $findSubcategory = $SubcategoryModel->where('category', $findCategory ? $findCategory->id : $categoryId)->first();
+//            $findSubcategory = $SubcategoryModel->where('category', $findCategory ? $findCategory->id : $categoryId)->first();
+//
+//            if (!$findSubcategory) {
+//                $SubcategoryModel->insert(['name' => $item->tags[$category], 'category' => $findCategory ? $findCategory->id : $categoryId]);
+//                $subcategoryId = $SubcategoryModel->getInsertID();
+//            }
 
-            if (!$findSubcategory) {
-                $SubcategoryModel->insert(['name' => $item->tags[$category], 'category' => $findCategory ? $findCategory->id : $categoryId]);
-                $subcategoryId = $SubcategoryModel->getInsertID();
-            }
+//            $POI = new POI();
+//
+//            $POI->id          = uniqid();
+//            $POI->overpass_id = $item->id;
+//            $POI->category    = $category;
+//            $POI->latitude    = $item->lat;
+//            $POI->longitude   = $item->lon;
+////            $POI->tags        = $this->_cleanTags($item->tags, $category);
+//            $POI->name        = $item->tags['name'] ?? 'Не известно';
+//
+//            $POIModel->insert($POI);
 
-            $POI = new POI();
-
-            $POI->id          = uniqid();
-            $POI->overpass_id = $item->id;
-            $POI->category    = $findCategory ? $findCategory->id : $categoryId;
-            $POI->subcategory = $findSubcategory ? $findSubcategory->id : $subcategoryId;
-            $POI->latitude    = $item->lat;
-            $POI->longitude   = $item->lon;
-//            $POI->tags        = $this->_cleanTags($item->tags, $category);
-            $POI->name        = $item->tags['name'] ?? 'Не известно';
-
-            $POIModel->insert($POI);
-
-            $result[] = $POI;
+            $result[] = $item;
         }
 
         return $result;
     }
 
-    protected function _savePOI(POI $data) {
-        $POIModel = new POIModel();
-
-        if (!$POIModel->where('overpass_id', $data->overpass_id)->countAllResults()) {
-            $data->id = uniqid();
-            $POIModel->insert($data);
-        }
-    }
+//    protected function _savePOI(POI $data) {
+//        $POIModel = new POIModel();
+//
+//        if (!$POIModel->where('overpass_id', $data->overpass_id)->countAllResults()) {
+//            $data->id = uniqid();
+//            $POIModel->insert($data);
+//        }
+//    }
 
     protected function _cleanTags(array $tags, string $category): object {
         unset($tags[$category]);
@@ -113,5 +102,65 @@ class OverpassAPI {
         }
 
         return '';
+    }
+
+    /**
+     * Returns the extreme points of the coordinates, finding them by the current coordinates and radius
+     *
+     * @param float $lat
+     * @param float $lon
+     * @param float $distance_in_km
+     * @return array [northmost, southmost, eastmost, westmost]
+     */
+    function getBoundingBox(float $lat, float $lon, float $distance_in_km): array {
+        $radius = 6378.14; // of earth in kilometers
+
+        // bearings - FIX
+        $due_north = deg2rad(0);
+        $due_south = deg2rad(180);
+        $due_east = deg2rad(90);
+        $due_west = deg2rad(270);
+
+        // convert latitude and longitude into radians
+        $lat_r = deg2rad($lat);
+        $lon_r = deg2rad($lon);
+
+        // find the northmost, southmost, eastmost and westmost corners $distance_in_km away
+        // original formula from
+        // http://www.movable-type.co.uk/scripts/latlong.html
+
+        $northmost = asin(sin($lat_r) * cos($distance_in_km/$radius) + cos($lat_r) * sin ($distance_in_km/$radius) * cos($due_north));
+        $southmost = asin(sin($lat_r) * cos($distance_in_km/$radius) + cos($lat_r) * sin ($distance_in_km/$radius) * cos($due_south));
+
+        $eastmost = $lon_r + atan2(sin($due_east)*sin($distance_in_km/$radius)*cos($lat_r),cos($distance_in_km/$radius)-sin($lat_r)*sin($lat_r));
+        $westmost = $lon_r + atan2(sin($due_west)*sin($distance_in_km/$radius)*cos($lat_r),cos($distance_in_km/$radius)-sin($lat_r)*sin($lat_r));
+
+
+        $northmost = rad2deg($northmost);
+        $southmost = rad2deg($southmost);
+        $eastmost = rad2deg($eastmost);
+        $westmost = rad2deg($westmost);
+
+        // sort the lat and long so that we can use them for a between query
+        if ($northmost > $southmost) {
+            $lat1 = $southmost;
+            $lat2 = $northmost;
+
+        } else {
+            $lat1 = $northmost;
+            $lat2 = $southmost;
+        }
+
+
+        if ($eastmost > $westmost) {
+            $lon1 = $westmost;
+            $lon2 = $eastmost;
+
+        } else {
+            $lon1 = $eastmost;
+            $lon2 = $westmost;
+        }
+
+        return [$lat1, $lat2, $lon1, $lon2];
     }
 }

@@ -13,8 +13,10 @@
         "mikey179/vfsstream": "^1.6",
         "phpunit/phpunit": "^9.1"
     },
-    "suggest": {
-        "ext-fileinfo": "Improves mime type detection for files"
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
     },
     "autoload": {
         "exclude-from-classmap": [
@@ -27,10 +29,17 @@
         }
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpunit",
+        "serve": "php spark serve",
+        "kill": "pkill -9 php",
+        "migration:create": "php spark migrate:create",
+        "migration:status": "php spark migrate:status",
+        "migration:rollback": "php spark migrate:rollback",
+        "migration:run": "php spark migrate",
+        "routes": "php spark routes"
     },
     "support": {
-        "forum": "http://forum.codeigniter.com/",
+        "forum": "https://forum.codeigniter.com/",
         "source": "https://github.com/codeigniter4/CodeIgniter4",
         "slack": "https://codeigniterchat.slack.com"
     }
