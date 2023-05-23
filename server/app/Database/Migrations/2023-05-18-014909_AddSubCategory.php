@@ -11,28 +11,28 @@ class AddSubCategory extends Migration
                 'type'       => 'TINYINT',
                 'constraint' => 2,
                 'null'       => false,
-                'unique'     => true
+                'unique'     => true,
+                'auto_increment' => true
             ],
             'category' => [
                 'type'       => 'TINYINT',
                 'constraint' => 2,
-                'null'       => false,
+                'null'       => false
             ],
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-                'null'       => false,
-                'unique'     => true
+                'null'       => false
             ],
             'title' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-                'null'       => false,
+                'null'       => false
             ],
             'info' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
-                'null'       => true,
+                'null'       => true
             ],
         ]);
         $this->forge->addPrimaryKey('id');

@@ -13,6 +13,12 @@ class AddPlaces extends Migration
                 'null'       => false,
                 'unique'     => true
             ],
+            'overpass_id' => [
+                'type'       => 'BIGINT',
+                'constraint' => 15,
+                'null'       => true,
+                'unique'     => true
+            ],
             'category' => [
                 'type'       => 'TINYINT',
                 'constraint' => 2,
@@ -26,56 +32,54 @@ class AddPlaces extends Migration
             'title' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
-                'null'       => false,
+                'null'       => false
             ],
             'content' => [
                 'type' => 'TEXT',
-                'null' => true,
+                'null' => true
             ],
             'address' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 250,
-                'null'       => true,
+                'null'       => true
             ],
             'address_country' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => true,
+                'null'       => true
             ],
             'address_province' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => true,
+                'null'       => true
             ],
             'address_area' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => true,
+                'null'       => true
             ],
             'address_city' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => true,
+                'null'       => true
             ],
             'latitude' => [
-                'type'       => 'FLOAT',
-                'constraint' => 11,
-                'null'       => false,
+                'type'       => 'DECIMAL(16,12)',
+                'null'       => false
             ],
             'longitude' => [
-                'type'       => 'FLOAT',
-                'constraint' => 11,
-                'null'       => false,
+                'type'       => 'DECIMAL(16,12)',
+                'null'       => false
             ],
             'author' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 40,
-                'null'       => true,
+                'null'       => true
             ],
             'rating' => [
                 'type'       => 'TINYINT',
                 'constraint' => 2,
-                'null'       => true,
+                'null'       => true
             ],
             'views' => [
                 'type'       => 'MEDIUMINT',

@@ -1,4 +1,4 @@
-<?php namespace Models;
+<?php namespace App\Models;
 
 use CodeIgniter\Model;
 
@@ -14,6 +14,7 @@ class PlacesModel extends Model
 
     // The updatable fields
     protected $allowedFields = [
+        'overpass_id',
         'category',
         'subcategory',
         'title',
@@ -56,13 +57,13 @@ class PlacesModel extends Model
         'views'     => 'integer|max_length[5]|greater_than[0]'
     ];
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
-    protected $afterInsert    = ['beforeInsert'];
+    protected $beforeInsert   = ['beforeInsert'];
+    protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];

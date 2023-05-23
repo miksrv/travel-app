@@ -11,7 +11,8 @@ class AddCategory extends Migration
                 'type'       => 'TINYINT',
                 'constraint' => 2,
                 'null'       => false,
-                'unique'     => true
+                'unique'     => true,
+                'auto_increment' => true
             ],
             'name' => [
                 'type'       => 'VARCHAR',
@@ -22,12 +23,12 @@ class AddCategory extends Migration
             'title' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-                'null'       => false,
+                'null'       => false
             ],
             'info' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
-                'null'       => true,
+                'null'       => true
             ],
         ]);
         $this->forge->addPrimaryKey('id');

@@ -1,8 +1,10 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddSessions extends Migration
+class AddSessionHistory extends Migration
 {
     public function up()
     {
@@ -13,19 +15,9 @@ class AddSessions extends Migration
                 'null'       => false,
                 'unique'     => true
             ],
-            'ip' => [
+            'session' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 300,
-                'null'       => false,
-            ],
-            'user' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 40,
-                'null'       => true,
-            ],
-            'user_agent' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 300,
+                'constraint' => 32,
                 'null'       => false,
             ],
             'latitude' => [
@@ -37,19 +29,14 @@ class AddSessions extends Migration
                 'null'       => false,
             ],
             'created_at DATETIME default current_timestamp',
-            'updated_at DATETIME default current_timestamp',
-            'deleted_at' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ]
         ]);
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('user', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('sessions');
+        $this->forge->addForeignKey('session', 'sessions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('sessions_history');
     }
 
     public function down()
     {
-        $this->forge->dropTable('sessions');
+        $this->forge->dropTable('sessions_history');
     }
 }

@@ -19,13 +19,11 @@ class AddPhotos extends Migration
                 'null'       => false,
             ],
             'latitude' => [
-                'type'       => 'FLOAT',
-                'constraint' => 11,
+                'type'       => 'DECIMAL(16,12)',
                 'null'       => false,
             ],
             'longitude' => [
-                'type'       => 'FLOAT',
-                'constraint' => 11,
+                'type'       => 'DECIMAL(16,12)',
                 'null'       => false,
             ],
             'place' => [
