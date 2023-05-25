@@ -1,12 +1,17 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\OverpassAPI;
+use App\Models\AddressCity;
+use App\Models\AddressCountry;
+use App\Models\AddressDistrict;
+use App\Models\AddressRegion;
 use App\Models\CategoryModel;
 use App\Models\PlacesModel;
 use App\Models\SessionsHistoryModel;
 use App\Models\SessionsModel;
 use App\Models\SubcategoryModel;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET, POST, DELETE, PATCH');
@@ -18,6 +23,13 @@ if ('OPTIONS' === $_SERVER['REQUEST_METHOD']) {
 
 class Introduce extends ResourceController
 {
+
+    /**
+     * Пользователь представляется сервису, отправляя свои координаты.
+     * По координатам выполняется поиск новых мест в округе, сессия пользователя сохраняется в БД.
+     * @return void
+     * @throws ReflectionException
+     */
     public function hello()
     {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
@@ -37,6 +49,7 @@ class Introduce extends ResourceController
             'user_agent' => $ua->getAgentString()
         ])->first();
 
+        // Если сессия пользователя (на осное его IP и UserAgent новая) - она сохраняется в двух таблицах
         if (empty($findSession))
         {
             $newSession = [
@@ -59,6 +72,8 @@ class Introduce extends ResourceController
         }
         else
         {
+            // Если сессия уже есть в БД и положение сейчас отличается от того, что было сохранено,
+            // То создается новая запись в истории сессий
             if ($lat !== $findSession->latitude || $lon !== $findSession->longitude)
             {
                 $sessionHistoryModel = new SessionsHistoryModel();
@@ -70,6 +85,7 @@ class Introduce extends ResourceController
                 ]);
             }
 
+            // В любом случае обновляем текущую сессию
             $sessionModel->update($findSession->id, ['latitude' => $lat, 'longitude' => $lon]);
         }
     }
@@ -109,6 +125,30 @@ class Introduce extends ResourceController
                 $subcategoryId = $subcategoryModel->getInsertID();
             }
 
+            $httpClient = new \GuzzleHttp\Client();
+//            $provider = new \Geocoder\Provider\Yandex\Yandex($httpClient, null, '3362205e-cf74-4bc8-9abe-63ed80ec995b');
+            $provider = \Geocoder\Provider\Nominatim\Nominatim::withOpenStreetMapServer($httpClient, $this->request->getUserAgent());
+            $geocoder = new \Geocoder\StatefulGeocoder($provider, 'ru');
+
+//            $result = $geocoder->geocodeQuery(GeocodeQuery::create('Buckingham Palace, London'));
+            $result = $geocoder->reverseQuery(\Geocoder\Query\ReverseQuery::fromCoordinates($point->lat, $point->lon))->first();
+
+//            echo '<pre>';
+//            var_dump(count($result->getAdminLevels()));
+//
+//            var_dump($result->getCountry()->getName());
+//            var_dump($result->getAdminLevels()->get(1)->getName());
+//            var_dump($result->getAdminLevels()->get(2)->getName());
+//            var_dump($result->getLocality());
+//            exit();
+
+            $adminLevels = count($result->getAdminLevels());
+
+            $countryID  = $this->getCountry($result->getCountry()->getName());
+            $regionID   = $this->getRegion($result->getAdminLevels()->get(1)->getName(), $countryID);
+            $districtID = $adminLevels >= 2 ? $this->getDistrict($result->getAdminLevels()->get(2)->getName(), $countryID, $regionID) : null;
+            $cityID     = $this->getCity($result->getLocality(), $countryID, $regionID, $districtID);
+
             $place = new \App\Entities\Place();
 
             $place->overpass_id = $point->id;
@@ -117,7 +157,15 @@ class Introduce extends ResourceController
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
             $place->title       = $point->tags['name'] ?? 'Не известно';
-//            $place->tags        = $this->_cleanTags($point->tags, $point->category);
+            $place->content     = '';
+
+            $place->address          = $result->getStreetName() . ($result->getStreetNumber() ? ', ' . $result->getStreetNumber() : '');
+            $place->address_country  = $countryID;
+            $place->address_region   = $regionID;
+            $place->address_district = $districtID;
+            $place->address_city     = $cityID;
+
+            // $place->tags        = $this->_cleanTags($point->tags, $point->category);
 
             if ($placesModel->insert($place) === false) {
                 echo '<pre>';
@@ -132,5 +180,100 @@ class Introduce extends ResourceController
         unset($tags['name']);
 
         return (object) $tags;
+    }
+
+    /**
+     * Ищет страну по названию, если такой нет - добавляет. Возвращает ID страны из БД
+     * @param string $name
+     * @return int
+     * @throws ReflectionException
+     */
+    protected function getCountry(string $name): int
+    {
+        $countryModel = new AddressCountry();
+        $countryData  = $countryModel->where(['name' => $name])->first();
+
+        if ($countryData) {
+            return $countryData->id;
+        }
+
+        $country = new \App\Entities\AddressCountry();
+        $country->name = $name;
+
+        $countryModel->insert($country);
+
+        return $countryModel->getInsertID();
+    }
+
+    /**
+     * Возвращает ID региона
+     * @param string $name
+     * @param int $country
+     * @return int
+     * @throws ReflectionException
+     */
+    protected function getRegion(string $name, int $country): int
+    {
+        $regionModel = new AddressRegion();
+        $regionData  = $regionModel->where(['name' => $name, 'country' => $country])->first();
+
+        if ($regionData) {
+            return $regionData->id;
+        }
+
+        $region = new \App\Entities\AddressRegion();
+        $region->country = $country;
+        $region->name    = $name;
+
+        $regionModel->insert($region);
+
+        return $regionModel->getInsertID();
+    }
+
+    /**
+     * Возвращает ID региона
+     * @param string $name
+     * @param int $country
+     * @param int $region
+     * @return int
+     * @throws ReflectionException
+     */
+    protected function getDistrict(string $name, int $country, int $region): int
+    {
+        $districtModel = new AddressDistrict();
+        $districtData  = $districtModel->where(['name' => $name, 'country' => $country, 'region' => $region])->first();
+
+        if ($districtData) {
+            return $districtData->id;
+        }
+
+        $district = new \App\Entities\AddressDistrict();
+        $district->country = $country;
+        $district->region  = $region;
+        $district->name    = $name;
+
+        $districtModel->insert($district);
+
+        return $districtModel->getInsertID();
+    }
+
+    protected function getCity(string $name, int $country, int $region, $district = null): int
+    {
+        $cityModel = new AddressCity();
+        $cityData  = $cityModel->where(['name' => $name, 'country' => $country, 'region' => $region, 'district' => $district])->first();
+
+        if ($cityData) {
+            return $cityData->id;
+        }
+
+        $city = new \App\Entities\AddressCity();
+        $city->country  = $country;
+        $city->region   = $region;
+        $city->district = $district;
+        $city->name     = $name;
+
+        $cityModel->insert($city);
+
+        return $cityModel->getInsertID();
     }
 }

@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Entities\Place;
 use CodeIgniter\Model;
 
 class PlacesModel extends Model
@@ -9,7 +10,7 @@ class PlacesModel extends Model
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = \App\Entities\Place::class;
+    protected $returnType     = Place::class;
     protected $useSoftDeletes = true;
 
     // The updatable fields
@@ -21,8 +22,8 @@ class PlacesModel extends Model
         'content',
         'address',
         'address_country',
-        'address_province',
-        'address_area',
+        'address_region',
+        'address_district',
         'address_city',
         'latitude',
         'longitude',

@@ -9,7 +9,7 @@ class AddPlaces extends Migration
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => false,
                 'unique'     => true
             ],
@@ -48,19 +48,19 @@ class AddPlaces extends Migration
                 'constraint' => 5,
                 'null'       => true
             ],
-            'address_province' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
+            'address_region' => [
+                'type'       => 'INT',
+                'constraint' => 11,
                 'null'       => true
             ],
-            'address_area' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
+            'address_district' => [
+                'type'       => 'INT',
+                'constraint' => 11,
                 'null'       => true
             ],
             'address_city' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
+                'type'       => 'INT',
+                'constraint' => 11,
                 'null'       => true
             ],
             'latitude' => [
@@ -98,6 +98,10 @@ class AddPlaces extends Migration
         $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('category', 'category', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('subcategory', 'subcategory', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('address_country', 'address_country', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('address_region', 'address_region', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('address_district', 'address_district', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('address_city', 'address_city', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('places');
     }
 

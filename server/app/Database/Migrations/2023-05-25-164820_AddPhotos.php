@@ -9,7 +9,7 @@ class AddPhotos extends Migration
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => false,
                 'unique'     => true
             ],
@@ -28,7 +28,7 @@ class AddPhotos extends Migration
             ],
             'place' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => true,
             ],
             'author' => [
