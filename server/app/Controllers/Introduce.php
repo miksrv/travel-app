@@ -11,6 +11,11 @@ use App\Models\SessionsHistoryModel;
 use App\Models\SessionsModel;
 use App\Models\SubcategoryModel;
 use CodeIgniter\RESTful\ResourceController;
+use Geocoder\Exception\Exception;
+use Geocoder\Provider\Nominatim\Nominatim;
+use Geocoder\Query\ReverseQuery;
+use Geocoder\StatefulGeocoder;
+use GuzzleHttp\Client;
 use ReflectionException;
 
 header('Access-Control-Allow-Origin: *');
@@ -90,6 +95,10 @@ class Introduce extends ResourceController
         }
     }
 
+    /**
+     * @throws Exception
+     * @throws ReflectionException
+     */
     protected function _updatePlaces(float $lat, float $lon)
     {
         $overpassAPI = new OverpassAPI();
@@ -125,22 +134,10 @@ class Introduce extends ResourceController
                 $subcategoryId = $subcategoryModel->getInsertID();
             }
 
-            $httpClient = new \GuzzleHttp\Client();
-//            $provider = new \Geocoder\Provider\Yandex\Yandex($httpClient, null, '3362205e-cf74-4bc8-9abe-63ed80ec995b');
-            $provider = \Geocoder\Provider\Nominatim\Nominatim::withOpenStreetMapServer($httpClient, $this->request->getUserAgent());
-            $geocoder = new \Geocoder\StatefulGeocoder($provider, 'ru');
-
-//            $result = $geocoder->geocodeQuery(GeocodeQuery::create('Buckingham Palace, London'));
-            $result = $geocoder->reverseQuery(\Geocoder\Query\ReverseQuery::fromCoordinates($point->lat, $point->lon))->first();
-
-//            echo '<pre>';
-//            var_dump(count($result->getAdminLevels()));
-//
-//            var_dump($result->getCountry()->getName());
-//            var_dump($result->getAdminLevels()->get(1)->getName());
-//            var_dump($result->getAdminLevels()->get(2)->getName());
-//            var_dump($result->getLocality());
-//            exit();
+            $httpClient = new Client();
+            $provider = Nominatim::withOpenStreetMapServer($httpClient, $this->request->getUserAgent());
+            $geocoder = new StatefulGeocoder($provider, 'ru');
+            $result   = $geocoder->reverseQuery(ReverseQuery::fromCoordinates($point->lat, $point->lon))->first();
 
             $adminLevels = count($result->getAdminLevels());
 
@@ -164,8 +161,7 @@ class Introduce extends ResourceController
             $place->address_region   = $regionID;
             $place->address_district = $districtID;
             $place->address_city     = $cityID;
-
-            // $place->tags        = $this->_cleanTags($point->tags, $point->category);
+            $place->tags             = $this->cleanTags($point->tags, $point->category);
 
             if ($placesModel->insert($place) === false) {
                 echo '<pre>';
@@ -175,11 +171,15 @@ class Introduce extends ResourceController
         }
     }
 
-    protected function _cleanTags(array $tags, string $category): object {
+    protected function cleanTags(array $tags, string $category): ?string {
+        if (!$tags) {
+            return null;
+        }
+
         unset($tags[$category]);
         unset($tags['name']);
 
-        return (object) $tags;
+        return json_encode($tags);
     }
 
     /**
@@ -257,8 +257,12 @@ class Introduce extends ResourceController
         return $districtModel->getInsertID();
     }
 
-    protected function getCity(string $name, int $country, int $region, $district = null): int
+    protected function getCity(?string $name, int $country, int $region, $district = null): ?int
     {
+        if (!$name) {
+            return null;
+        }
+
         $cityModel = new AddressCity();
         $cityData  = $cityModel->where(['name' => $name, 'country' => $country, 'region' => $region, 'district' => $district])->first();
 

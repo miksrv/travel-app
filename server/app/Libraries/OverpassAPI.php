@@ -3,10 +3,15 @@
 class OverpassAPI {
     protected string $url = 'http://overpass-api.de/api/interpreter';
 
+    /**
+     * All categories: https://wiki.openstreetmap.org/wiki/Map_features
+     * @var array|string[]
+     */
     protected array $overpass_categories = [
         'historic',
         'natural',
-        'tourism'
+        'tourism',
+//        'landuse'
     ];
 
     function get(array $bbox): array {
@@ -39,13 +44,6 @@ class OverpassAPI {
         }
 
         return $result;
-    }
-
-    protected function _cleanTags(array $tags, string $category): object {
-        unset($tags[$category]);
-        unset($tags['name']);
-
-        return (object) $tags;
     }
 
     protected function _defineCategory(array $tags): string {

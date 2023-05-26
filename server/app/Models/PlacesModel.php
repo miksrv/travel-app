@@ -20,6 +20,7 @@ class PlacesModel extends Model
         'subcategory',
         'title',
         'content',
+        'tags',
         'address',
         'address_country',
         'address_region',

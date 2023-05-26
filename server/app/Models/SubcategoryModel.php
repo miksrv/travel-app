@@ -31,7 +31,7 @@ class SubcategoryModel extends Model
         'info'     => 'string|max_length[255]',
     ];
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     // Callbacks

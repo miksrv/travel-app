@@ -15,6 +15,7 @@ class Place extends Entity
         'longitude'        => 'float',
         'author'           => 'integer',
         'rating'           => 'integer',
-        'views'            => 'integer'
+        'views'            => 'integer',
+        'tags'             => 'json'
     ];
 }

@@ -38,6 +38,10 @@ class AddPlaces extends Migration
                 'type' => 'TEXT',
                 'null' => true
             ],
+            'tags' => [
+                'type' => 'TEXT',
+                'null' => true
+            ],
             'address' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 250,
