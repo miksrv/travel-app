@@ -1,3 +1,5 @@
+'use client'
+
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
@@ -30,9 +32,12 @@ const Page: NextPage = () => {
                         : DEFAULT_CENTER
                 }
                 zoom={12}
+                // whenReady={(e: any) => {
+                //     console.log('e', e)
+                // }}
             >
                 {/*@ts-ignore*/}
-                {({ TileLayer, Marker, Popup }) => (
+                {({ TileLayer, Marker, Popup, Circle }) => (
                     <>
                         <TileLayer
                             url={
@@ -56,6 +61,18 @@ const Page: NextPage = () => {
                                 A pretty CSS3 popup. <br /> Easily customizable.
                             </Popup>
                         </Marker>
+                        {location && (
+                            <Circle
+                                center={{
+                                    // @ts-ignore
+                                    lat: location?.latitude,
+                                    // @ts-ignore
+                                    lng: location.longitude
+                                }}
+                                fillColor='blue'
+                                radius={500}
+                            />
+                        )}
                     </>
                 )}
             </MyAwesomeMap>

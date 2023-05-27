@@ -11,6 +11,7 @@ class OverpassAPI {
         'historic',
         'natural',
         'tourism',
+        'man_made',
 //        'landuse'
     ];
 

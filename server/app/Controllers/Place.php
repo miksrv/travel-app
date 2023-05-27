@@ -1,6 +1,5 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\OverpassAPI;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -28,12 +27,8 @@ class Place extends ResourceController
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT);
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT);
 
-        $overpassAPI = new OverpassAPI();
-        $boundingBox = $overpassAPI->getBoundingBox(37.341021, -121.642181, 2);
-        $pointsList  = $overpassAPI->get($boundingBox);
-
         return $this->respond([
-            'items' => $pointsList,
+            'items' => [],
         ]);
     }
 }
