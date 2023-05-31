@@ -7,13 +7,6 @@ class AddCategory extends Migration
     public function up()
     {
         $this->forge->addField([
-            'id' => [
-                'type'       => 'TINYINT',
-                'constraint' => 2,
-                'null'       => false,
-                'unique'     => true,
-                'auto_increment' => true
-            ],
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
@@ -31,7 +24,7 @@ class AddCategory extends Migration
                 'null'       => true
             ],
         ]);
-        $this->forge->addPrimaryKey('id');
+        $this->forge->addPrimaryKey('name');
         $this->forge->createTable('category');
     }
 

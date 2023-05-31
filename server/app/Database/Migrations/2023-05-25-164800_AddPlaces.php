@@ -20,13 +20,13 @@ class AddPlaces extends Migration
                 'unique'     => true
             ],
             'category' => [
-                'type'       => 'TINYINT',
-                'constraint' => 2,
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
                 'null'       => true
             ],
             'subcategory' => [
-                'type'       => 'TINYINT',
-                'constraint' => 2,
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
                 'null'       => true
             ],
             'title' => [
@@ -100,8 +100,8 @@ class AddPlaces extends Migration
         ]);
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('category', 'category', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('subcategory', 'subcategory', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_country', 'address_country', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_region', 'address_region', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_district', 'address_district', 'id', 'CASCADE', 'CASCADE');

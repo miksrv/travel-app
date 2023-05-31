@@ -1,8 +1,10 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddSubCategory extends Migration
+class AddOverpassCategory extends Migration
 {
     public function up()
     {
@@ -11,6 +13,11 @@ class AddSubCategory extends Migration
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
                 'null'       => false
+            ],
+            'map_subcategory' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true
             ],
             'name' => [
                 'type'       => 'VARCHAR',
@@ -23,19 +30,15 @@ class AddSubCategory extends Migration
                 'constraint' => 50,
                 'null'       => false
             ],
-            'info' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 300,
-                'null'       => true
-            ],
         ]);
         $this->forge->addPrimaryKey('name');
         $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('subcategory');
+        $this->forge->addForeignKey('map_subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('overpass_category');
     }
 
     public function down()
     {
-        $this->forge->dropTable('subcategory');
+        $this->forge->dropTable('overpass_category');
     }
 }

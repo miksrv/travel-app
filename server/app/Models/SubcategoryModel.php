@@ -5,7 +5,7 @@ use CodeIgniter\Model;
 class SubcategoryModel extends Model
 {
     protected $table      = 'subcategory';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'name';
 
     protected $useAutoIncrement = true;
 
