@@ -162,7 +162,7 @@ class Introduce extends ResourceController
             $place->subcategory = $findOverpassCat->subcategory ?? null;
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
-            $place->title       = $point->tags['name'] ?? 'Не известно';
+            $place->title       = $point->tags['name'] ?? null;
             $place->content     = '';
 
             $place->address          = $result->getStreetName() . ($result->getStreetNumber() ? ', ' . $result->getStreetNumber() : '');

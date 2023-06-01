@@ -32,7 +32,7 @@ class AddPlaces extends Migration
             'title' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
-                'null'       => false
+                'null'       => true
             ],
             'content' => [
                 'type' => 'TEXT',
