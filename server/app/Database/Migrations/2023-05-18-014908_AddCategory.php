@@ -20,7 +20,7 @@ class AddCategory extends Migration
             ],
             'info' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 255,
+                'constraint' => 300,
                 'null'       => true
             ],
         ]);

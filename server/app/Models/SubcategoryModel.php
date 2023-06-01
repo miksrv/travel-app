@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Entities\Subcategory;
 use CodeIgniter\Model;
 
 class SubcategoryModel extends Model
@@ -7,9 +8,9 @@ class SubcategoryModel extends Model
     protected $table      = 'subcategory';
     protected $primaryKey = 'name';
 
-    protected $useAutoIncrement = true;
+    protected $useAutoIncrement = false;
 
-    protected $returnType     = \App\Entities\Subcategory::class;
+    protected $returnType     = Subcategory::class;
     protected $useSoftDeletes = false;
 
     // The updatable fields
@@ -26,10 +27,11 @@ class SubcategoryModel extends Model
     // Validation
     protected $validationRules = [
         'name'     => 'required|alpha_numeric_space|max_length[50]',
-        'category' => 'required|integer|max_length[2]',
+        'category' => 'required|alpha_numeric_space|max_length[50]',
         'title'    => 'string|max_length[50]',
-        'info'     => 'string|max_length[255]',
+        'info'     => 'string|max_length[300]',
     ];
+
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;

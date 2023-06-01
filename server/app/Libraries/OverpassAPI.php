@@ -34,9 +34,10 @@ class OverpassAPI {
         foreach($data as $row) {
             $item = (object) $row;
 
-            if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'hotel') continue;
-            if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'guest_house') continue;
-            if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'hostel') continue;
+            // if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'hotel') continue;
+            // if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'guest_house') continue;
+            // if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'hostel') continue;
+            if (isset($item->tags['tourism']) && $item->tags['tourism'] === 'yes') continue;
             if (isset($item->tags['natural']) && $item->tags['natural'] === 'tree') continue;
 
             $item->category = $this->_defineCategory($item->tags);

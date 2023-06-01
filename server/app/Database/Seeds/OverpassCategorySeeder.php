@@ -100,7 +100,7 @@ class OverpassCategorySeeder extends Seeder
         ['man_made', 'watermill', 'mill', 'Водяная мельница'],
         ['man_made', 'windmill', 'mill', 'Ветряная мельница'],
         ['man_made', 'windpump', 'water_tap', 'Водяной насос'],
-        ['man_made', 'works', 'Завод', 'Промышленные строения, заводы, фабрики'],
+        ['man_made', 'works', 'factory', 'Промышленные строения, заводы, фабрики'],
     ];
 
     /**
@@ -113,10 +113,10 @@ class OverpassCategorySeeder extends Seeder
 
         foreach ($this->insertData as $value) {
             $tempInsertData[] = [
-                'category'        => $value[0],
-                'map_subcategory' => $value[1],
-                'name'            => $value[2],
-                'title'           => $value[3]
+                'category'    => $value[0],
+                'name'        => $value[1],
+                'subcategory' => $value[2],
+                'title'       => $value[3]
             ];
         }
 

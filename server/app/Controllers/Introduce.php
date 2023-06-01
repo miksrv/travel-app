@@ -6,10 +6,11 @@ use App\Models\AddressCountry;
 use App\Models\AddressDistrict;
 use App\Models\AddressRegion;
 use App\Models\CategoryModel;
+use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
 use App\Models\SessionsHistoryModel;
 use App\Models\SessionsModel;
-use App\Models\SubcategoryModel;
+use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
 use Geocoder\Provider\Nominatim\Nominatim;
@@ -26,6 +27,8 @@ if ('OPTIONS' === $_SERVER['REQUEST_METHOD']) {
     die();
 }
 
+ignore_user_abort(true);
+
 class Introduce extends ResourceController
 {
 
@@ -35,7 +38,7 @@ class Introduce extends ResourceController
      * @return void
      * @throws ReflectionException
      */
-    public function hello()
+    public function hello(): ResponseInterface
     {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
@@ -43,9 +46,11 @@ class Introduce extends ResourceController
         $ip = $this->request->getIPAddress();
         $ua = $this->request->getUserAgent();
 
+        $pointAdded = [];
+
         if ($lat && $lon)
         {
-            $this->_updatePlaces($lat, $lon);
+            $pointAdded = $this->_updatePlaces($lat, $lon);
         }
 
         $sessionModel = new SessionsModel();
@@ -93,27 +98,31 @@ class Introduce extends ResourceController
             // В любом случае обновляем текущую сессию
             $sessionModel->update($findSession->id, ['latitude' => $lat, 'longitude' => $lon]);
         }
+
+        return $this->respond(['items' => $pointAdded]);
     }
 
     /**
      * @throws Exception
      * @throws ReflectionException
      */
-    protected function _updatePlaces(float $lat, float $lon)
+    protected function _updatePlaces(float $lat, float $lon): array
     {
         $overpassAPI = new OverpassAPI();
         $boundingBox = $overpassAPI->getBoundingBox($lat, $lon, .5);
         $pointsList  = $overpassAPI->get($boundingBox);
+        $pointAdded  = [];
 
-        if (!$pointsList) return ;
+        if (!$pointsList) {
+            return $pointAdded;
+        }
 
         $placesModel      = new PlacesModel();
         $categoryModel    = new CategoryModel();
-        $subcategoryModel = new SubcategoryModel();
+        $overpassCatModel = new OverpassCategoryModel();
 
         foreach ($pointsList as $point) {
-            if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first())
-            {
+            if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first()) {
                 continue;
             }
 
@@ -121,17 +130,17 @@ class Introduce extends ResourceController
 
             if (!$findCategory) {
                 $categoryModel->insert(['name' => $point->category]);
-                $categoryId = $categoryModel->getInsertID();
             }
 
-            $findSubcategory = $subcategoryModel->where('name', $point->tags[$point->category])->first();
+            $findOverpassCat = $overpassCatModel->where('name', $point->tags[$point->category])->first();
 
-            if (!$findSubcategory) {
-                $subcategoryModel->insert([
-                    'name'     => $point->tags[$point->category],
-                    'category' => $findCategory ? $findCategory->id : $categoryId
+            if (!$findOverpassCat) {
+                $overpassCatModel->insert([
+                    'name'        => $point->tags[$point->category],
+                    'category'    => $findCategory ? $findCategory->name : $point->category,
+                    'subcategory' => null,
+                    'title'       => ''
                 ]);
-                $subcategoryId = $subcategoryModel->getInsertID();
             }
 
             $httpClient = new Client();
@@ -142,15 +151,15 @@ class Introduce extends ResourceController
             $adminLevels = count($result->getAdminLevels());
 
             $countryID  = $this->getCountry($result->getCountry()->getName());
-            $regionID   = $this->getRegion($result->getAdminLevels()->get(1)->getName(), $countryID);
+            $regionID   = $adminLevels >= 1 ? $this->getRegion($result->getAdminLevels()->get(1)->getName(), $countryID) : null;
             $districtID = $adminLevels >= 2 ? $this->getDistrict($result->getAdminLevels()->get(2)->getName(), $countryID, $regionID) : null;
             $cityID     = $this->getCity($result->getLocality(), $countryID, $regionID, $districtID);
 
             $place = new \App\Entities\Place();
 
             $place->overpass_id = $point->id;
-            $place->category    = $findCategory->id ?? $categoryId;
-            $place->subcategory = $findSubcategory->id ?? $subcategoryId;
+            $place->category    = $findCategory->name ?? $point->category;
+            $place->subcategory = $findOverpassCat->subcategory ?? null;
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
             $place->title       = $point->tags['name'] ?? 'Не известно';
@@ -163,12 +172,16 @@ class Introduce extends ResourceController
             $place->address_city     = $cityID;
             $place->tags             = $this->cleanTags($point->tags, $point->category);
 
+            $pointAdded[] = $place->title;
+
             if ($placesModel->insert($place) === false) {
                 echo '<pre>';
                 var_dump($placesModel->errors());
                 exit();
             }
         }
+
+        return $pointAdded;
     }
 
     protected function cleanTags(array $tags, string $category): ?string {
@@ -234,11 +247,11 @@ class Introduce extends ResourceController
      * Возвращает ID региона
      * @param string $name
      * @param int $country
-     * @param int $region
+     * @param int|null $region
      * @return int
      * @throws ReflectionException
      */
-    protected function getDistrict(string $name, int $country, int $region): int
+    protected function getDistrict(string $name, int $country, ?int $region = null): int
     {
         $districtModel = new AddressDistrict();
         $districtData  = $districtModel->where(['name' => $name, 'country' => $country, 'region' => $region])->first();
@@ -257,7 +270,7 @@ class Introduce extends ResourceController
         return $districtModel->getInsertID();
     }
 
-    protected function getCity(?string $name, int $country, int $region, $district = null): ?int
+    protected function getCity(?string $name, int $country, ?int $region = null, ?int $district = null): ?int
     {
         if (!$name) {
             return null;

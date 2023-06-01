@@ -1,15 +1,16 @@
 <?php namespace App\Models;
 
+use App\Entities\OverpassCategory;
 use CodeIgniter\Model;
 
 class OverpassCategoryModel extends Model
 {
     protected $table      = 'overpass_category';
-    protected $primaryKey = 'name';
+    protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = \App\Entities\OverpassCategory::class;
+    protected $returnType     = OverpassCategory::class;
     protected $useSoftDeletes = false;
 
     // The updatable fields
@@ -25,8 +26,8 @@ class OverpassCategoryModel extends Model
 
     // Validation
     protected $validationRules = [
-        'category'    => 'required|integer|max_length[2]',
-        'subcategory' => 'required|integer|max_length[4]',
+        'category'    => 'required|alpha_numeric_space|max_length[50]',
+        'subcategory' => 'required|alpha_numeric_space|max_length[50]',
         'name'        => 'required|alpha_numeric_space|max_length[50]',
         'title'       => 'string|max_length[50]',
     ];

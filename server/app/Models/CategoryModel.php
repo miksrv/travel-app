@@ -1,5 +1,6 @@
 <?php namespace App\Models;
 
+use App\Entities\Category;
 use CodeIgniter\Model;
 
 class CategoryModel extends Model
@@ -7,9 +8,9 @@ class CategoryModel extends Model
     protected $table      = 'category';
     protected $primaryKey = 'name';
 
-    protected $useAutoIncrement = true;
+    protected $useAutoIncrement = false;
 
-    protected $returnType     = \App\Entities\Category::class;
+    protected $returnType     = Category::class;
     protected $useSoftDeletes = false;
 
     // The updatable fields
@@ -26,10 +27,11 @@ class CategoryModel extends Model
     protected $validationRules = [
         'name'  => 'required|alpha_numeric_space|max_length[50]',
         'title' => 'string|max_length[50]',
-        'info'  => 'string|max_length[255]',
+        'info'  => 'string|max_length[300]',
     ];
+
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     // Callbacks

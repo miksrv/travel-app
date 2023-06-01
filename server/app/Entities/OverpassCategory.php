@@ -5,6 +5,6 @@ use CodeIgniter\Entity\Entity;
 class OverpassCategory extends Entity
 {
     protected $casts = [
-        'category' => 'integer'
+        
     ];
 }

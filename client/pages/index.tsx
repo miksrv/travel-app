@@ -1,15 +1,31 @@
-'use client'
-
+import { LatLngBounds } from 'leaflet'
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { useEffect, useState } from 'react'
 
 const MyAwesomeMap = dynamic(() => import('@/components/map'), { ssr: false })
+const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
+    ssr: false
+})
+const MyPoint = dynamic(() => import('@/components/map/MyPoint'), {
+    ssr: false
+})
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
+type TLocation = {
+    latitude: number
+    longitude: number
+}
+
 const Page: NextPage = () => {
-    const [location, setLocation] = useState()
+    const [bounds, setBounds] = useState<string>('')
+    const [location, setLocation] = useState<TLocation>()
+
+    const handleChangeBounds = (bounds: LatLngBounds) => {
+        setBounds(bounds.toBBoxString())
+        // console.log('Changed bounds: ', )
+    }
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -23,21 +39,22 @@ const Page: NextPage = () => {
     }, [])
 
     return (
-        <div style={{ height: 500, width: 500 }}>
+        <div>
             <MyAwesomeMap
+                height={300}
+                width={500}
                 center={
                     location
-                        ? // @ts-ignore
-                          [location.latitude, location.longitude]
+                        ? [location.latitude, location.longitude]
                         : DEFAULT_CENTER
                 }
-                zoom={12}
+                zoom={15}
                 // whenReady={(e: any) => {
                 //     console.log('e', e)
                 // }}
             >
                 {/*@ts-ignore*/}
-                {({ TileLayer, Marker, Popup, Circle }) => (
+                {({ TileLayer }) => (
                     <>
                         <TileLayer
                             url={
@@ -49,33 +66,20 @@ const Page: NextPage = () => {
                         {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
                         {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
                         {/*/>*/}
-                        <Marker
-                            position={
-                                location
-                                    ? // @ts-ignore
-                                      [location.latitude, location.longitude]
-                                    : DEFAULT_CENTER
-                            }
-                        >
-                            <Popup>
-                                A pretty CSS3 popup. <br /> Easily customizable.
-                            </Popup>
-                        </Marker>
                         {location && (
-                            <Circle
-                                center={{
-                                    // @ts-ignore
-                                    lat: location?.latitude,
-                                    // @ts-ignore
-                                    lng: location.longitude
-                                }}
-                                fillColor='blue'
-                                radius={500}
+                            <MyPoint
+                                lat={location?.latitude}
+                                lon={location?.longitude}
                             />
                         )}
+                        <MyMapEvents onChangeBounds={handleChangeBounds} />
                     </>
                 )}
             </MyAwesomeMap>
+            <div>
+                My Location: {location?.latitude},{location?.longitude}
+            </div>
+            <div>Bounds: {bounds}</div>
         </div>
     )
 }

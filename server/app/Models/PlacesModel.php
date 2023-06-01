@@ -42,8 +42,8 @@ class PlacesModel extends Model
 
     // Validation
     protected $validationRules = [
-        'category'    => 'required|integer|max_length[2]|greater_than[0]',
-        'subcategory' => 'integer|max_length[2]|greater_than[0]',
+        'category'    => 'required|string|max_length[50]',
+        'subcategory' => 'string|max_length[50]',
         'title'       => 'required|string|min_length[3]|max_length[200]',
         'content'     => 'string',
         'address'     => 'string|max_length[250]',
