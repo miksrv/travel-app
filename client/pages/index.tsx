@@ -1,3 +1,4 @@
+import { useIntroduceMutation, usePlacesGetListMutation } from '@/api/api'
 import { LatLngBounds } from 'leaflet'
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
@@ -10,8 +11,14 @@ const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
 const MyPoint = dynamic(() => import('@/components/map/MyPoint'), {
     ssr: false
 })
+const Point = dynamic(() => import('@/components/map/Point'), {
+    ssr: false
+})
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
+
+const MYPOINT = [42.834944, 74.586949]
+// const MYPOINT = [51.775503, 55.167955]
 
 type TLocation = {
     latitude: number
@@ -19,21 +26,33 @@ type TLocation = {
 }
 
 const Page: NextPage = () => {
-    const [bounds, setBounds] = useState<string>('')
+    const [introduce, { isLoading }] = useIntroduceMutation()
+    const [getPlaces, { isLoading: placesLoading, data }] =
+        usePlacesGetListMutation()
+    const [mapBounds, setBounds] = useState<string>('')
     const [location, setLocation] = useState<TLocation>()
 
     const handleChangeBounds = (bounds: LatLngBounds) => {
-        setBounds(bounds.toBBoxString())
-        // console.log('Changed bounds: ', )
+        // left, top, right, bottom
+        const boundsString = bounds.toBBoxString()
+
+        if (boundsString !== mapBounds) {
+            setBounds(boundsString)
+            getPlaces({ bounds: boundsString })
+        }
     }
 
     useEffect(() => {
         if ('geolocation' in navigator) {
             // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
             navigator.geolocation.getCurrentPosition(({ coords }) => {
-                const { latitude, longitude } = coords
+                //const { latitude, longitude } = coords
+                const latitude = MYPOINT[0]
+                const longitude = MYPOINT[1]
+
                 // @ts-ignore
                 setLocation({ latitude, longitude })
+                introduce({ lat: latitude, lon: longitude })
             })
         }
     }, [])
@@ -72,14 +91,25 @@ const Page: NextPage = () => {
                                 lon={location?.longitude}
                             />
                         )}
+                        {data &&
+                            // @ts-ignore
+                            data?.items?.map((item, key) => (
+                                <Point
+                                    key={key}
+                                    lat={item?.latitude}
+                                    lon={item?.longitude}
+                                    title={item?.title}
+                                />
+                            ))}
                         <MyMapEvents onChangeBounds={handleChangeBounds} />
                     </>
                 )}
             </MyAwesomeMap>
+            <div>{(isLoading || placesLoading) && 'Загрузка...'}</div>
             <div>
                 My Location: {location?.latitude},{location?.longitude}
             </div>
-            <div>Bounds: {bounds}</div>
+            <div>Bounds: {mapBounds}</div>
         </div>
     )
 }

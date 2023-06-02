@@ -10,7 +10,7 @@ if ('OPTIONS' === $_SERVER['REQUEST_METHOD']) {
     die();
 }
 
-class Photo extends ResourceController
+class Photos extends ResourceController
 {
 
 }

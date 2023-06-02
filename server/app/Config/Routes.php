@@ -33,20 +33,20 @@ $routes->set404Override();
 $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce)', 'Introduce');
 
-$routes->get('place', 'Place::list');
-$routes->post('place', 'Place::create');
-$routes->patch('place/(:alphanum)', 'Place::update/$1');
-$routes->delete('place/(:alphanum)', 'Place::delete/$1');
-$routes->options('place', 'Place');
-$routes->options('place/(:alphanum)', 'Place');
+$routes->get('places', 'Places::list');
+$routes->post('places', 'Places::create');
+$routes->patch('places/(:alphanum)', 'Places::update/$1');
+$routes->delete('places/(:alphanum)', 'Places::delete/$1');
+$routes->options('places', 'Places');
+$routes->options('places/(:alphanum)', 'Places');
 
-$routes->get('photo', 'Photo::list');
-$routes->post('photo', 'Photo::create');
-$routes->post('photo/upload', 'Photo::upload');
-$routes->delete('photo/(:alphanum)', 'Photo::delete/$1');
-$routes->options('photo', 'Photo');
-$routes->options('photo/(:alphanum)', 'Photo');
-$routes->options('photo/upload', 'Photo');
+$routes->get('photos', 'Photos::list');
+$routes->post('photos', 'Photos::create');
+$routes->post('photos/upload', 'Photos::upload');
+$routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
+$routes->options('photos', 'Photos');
+$routes->options('photos/(:alphanum)', 'Photos');
+$routes->options('photos/upload', 'Photos');
 /*
  * --------------------------------------------------------------------
  * Additional Routing
