@@ -1,8 +1,9 @@
 import { useIntroduceMutation, usePlacesGetListMutation } from '@/api/api'
 import { LatLngBounds } from 'leaflet'
+import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const MyAwesomeMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
@@ -17,8 +18,8 @@ const Point = dynamic(() => import('@/components/map/Point'), {
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
-const MYPOINT = [42.834944, 74.586949]
-// const MYPOINT = [51.775503, 55.167955]
+// const MYPOINT = [42.834944, 74.586949]
+const MYPOINT = [51.775503, 55.167955]
 
 type TLocation = {
     latitude: number
@@ -29,18 +30,35 @@ const Page: NextPage = () => {
     const [introduce, { isLoading }] = useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
         usePlacesGetListMutation()
-    const [mapBounds, setBounds] = useState<string>('')
+    const [mapBounds, setBounds] = useState<LatLngBounds>()
     const [location, setLocation] = useState<TLocation>()
+    const [poiList, setPoiList] = useState<any[]>([])
 
     const handleChangeBounds = (bounds: LatLngBounds) => {
         // left, top, right, bottom
         const boundsString = bounds.toBBoxString()
 
-        if (boundsString !== mapBounds) {
-            setBounds(boundsString)
-            getPlaces({ bounds: boundsString })
+        if (boundsString !== mapBounds?.toBBoxString()) {
+            setBounds(bounds)
+            getPoiList(bounds)
         }
     }
+
+    const getPoiList = useCallback(
+        debounce(async (bounds: LatLngBounds) => {
+            await getPlaces({ bounds: bounds.toBBoxString() })
+        }, 1000),
+        []
+    )
+
+    const boundaryPoi = useMemo(
+        () =>
+            data?.items?.filter(
+                // @ts-ignore
+                (item) => poiList.find((p) => p.id === item.id) == null
+            ) || [],
+        [data?.items, poiList]
+    )
 
     useEffect(() => {
         if ('geolocation' in navigator) {
@@ -56,6 +74,20 @@ const Page: NextPage = () => {
             })
         }
     }, [])
+
+    useEffect(() => {
+        setPoiList([
+            ...poiList.filter(
+                ({ latitude, longitude }) =>
+                    mapBounds !== undefined &&
+                    longitude >= mapBounds.getWest() &&
+                    latitude <= mapBounds.getNorth() &&
+                    longitude <= mapBounds.getEast() &&
+                    latitude >= mapBounds.getSouth()
+            ),
+            ...boundaryPoi
+        ])
+    }, [data, mapBounds])
 
     return (
         <div>
@@ -91,9 +123,8 @@ const Page: NextPage = () => {
                                 lon={location?.longitude}
                             />
                         )}
-                        {data &&
-                            // @ts-ignore
-                            data?.items?.map((item, key) => (
+                        {!!poiList.length &&
+                            poiList.map((item, key) => (
                                 <Point
                                     key={key}
                                     lat={item?.latitude}
@@ -109,7 +140,7 @@ const Page: NextPage = () => {
             <div>
                 My Location: {location?.latitude},{location?.longitude}
             </div>
-            <div>Bounds: {mapBounds}</div>
+            <div>Bounds: {mapBounds?.toBBoxString()}</div>
         </div>
     )
 }
