@@ -5,8 +5,8 @@ use CodeIgniter\Entity\Entity;
 class Place extends Entity
 {
     protected $casts = [
-        'category'         => 'integer',
-        'subcategory'      => 'integer',
+        'category'         => 'string',
+        'subcategory'      => 'string',
         'address_country'  => 'integer',
         'address_province' => 'integer',
         'address_area'     => 'integer',

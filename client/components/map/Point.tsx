@@ -8,13 +8,14 @@ type TMyPointProps = {
     lat: number
     lon: number
     title?: string
+    category?: string
 }
 
-const Point: React.FC<TMyPointProps> = ({ lat, lon, title }) => {
+const Point: React.FC<TMyPointProps> = ({ lat, lon, title, category }) => {
     const myIcon = new Leaflet.Icon({
         iconAnchor: [icon.width - 20, icon.height - 20],
         iconSize: [icon.width - 10, icon.height - 12],
-        iconUrl: icon.src
+        iconUrl: category ? `/poi/${category}.png` : icon.src
         // popupAnchor: [-3, -76],
         // shadowAnchor: [22, 94],
         // shadowSize: [68, 95],

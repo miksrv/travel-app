@@ -19,7 +19,7 @@ const Point = dynamic(() => import('@/components/map/Point'), {
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
 // const MYPOINT = [42.834944, 74.586949]
-const MYPOINT = [51.775503, 55.167955]
+const MYPOINT = [42.877172, 74.593635]
 
 type TLocation = {
     latitude: number
@@ -130,6 +130,9 @@ const Page: NextPage = () => {
                                     lat={item?.latitude}
                                     lon={item?.longitude}
                                     title={item?.title}
+                                    category={
+                                        item?.subcategory ?? item?.category
+                                    }
                                 />
                             ))}
                         <MyMapEvents onChangeBounds={handleChangeBounds} />
