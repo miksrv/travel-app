@@ -1,4 +1,4 @@
-import { useIntroduceMutation, usePlacesGetListMutation } from '@/api/api'
+import { useIntroduceMutation, usePoiGetListMutation } from '@/api/api'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
@@ -19,7 +19,8 @@ const Point = dynamic(() => import('@/components/map/Point'), {
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
 // const MYPOINT = [42.834944, 74.586949]
-const MYPOINT = [42.877172, 74.593635]
+// const MYPOINT = [42.877172, 74.593635] // Bishkek
+const MYPOINT = [51.765445, 55.099745] // Orenburg
 
 type TLocation = {
     latitude: number
@@ -29,7 +30,7 @@ type TLocation = {
 const Page: NextPage = () => {
     const [introduce, { isLoading }] = useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
-        usePlacesGetListMutation()
+        usePoiGetListMutation()
     const [mapBounds, setBounds] = useState<LatLngBounds>()
     const [location, setLocation] = useState<TLocation>()
     const [poiList, setPoiList] = useState<any[]>([])
@@ -100,9 +101,6 @@ const Page: NextPage = () => {
                         : DEFAULT_CENTER
                 }
                 zoom={15}
-                // whenReady={(e: any) => {
-                //     console.log('e', e)
-                // }}
             >
                 {/*@ts-ignore*/}
                 {({ TileLayer }) => (
@@ -124,9 +122,10 @@ const Page: NextPage = () => {
                             />
                         )}
                         {!!poiList.length &&
-                            poiList.map((item, key) => (
+                            poiList.map((item) => (
                                 <Point
-                                    key={key}
+                                    key={item.id}
+                                    id={item.id}
                                     lat={item?.latitude}
                                     lon={item?.longitude}
                                     title={item?.title}

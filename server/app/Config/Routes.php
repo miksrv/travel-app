@@ -33,7 +33,12 @@ $routes->set404Override();
 $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce)', 'Introduce');
 
+$routes->get('poi', 'Poi::list');
+$routes->get('poi/(:alphanum)', 'Poi::show/$1');
+$routes->options('poi', 'Poi');
+
 $routes->get('places', 'Places::list');
+$routes->get('places/(:alphanum)', 'Places::show/$1');
 $routes->post('places', 'Places::create');
 $routes->patch('places/(:alphanum)', 'Places::update/$1');
 $routes->delete('places/(:alphanum)', 'Places::delete/$1');

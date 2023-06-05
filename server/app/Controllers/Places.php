@@ -45,4 +45,12 @@ class Places extends ResourceController
             'items' => $items,
         ]);
     }
+
+    public function show($id = null): ResponseInterface
+    {
+        $places = new PlacesModel();
+        $item = $places->find($id);
+
+        return $this->respond($item);
+    }
 }

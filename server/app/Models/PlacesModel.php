@@ -1,9 +1,8 @@
 <?php namespace App\Models;
 
 use App\Entities\Place;
-use CodeIgniter\Model;
 
-class PlacesModel extends Model
+class PlacesModel extends MyBaseModel
 {
     protected $table      = 'places';
     protected $primaryKey = 'id';
@@ -12,6 +11,8 @@ class PlacesModel extends Model
 
     protected $returnType     = Place::class;
     protected $useSoftDeletes = true;
+
+    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at', 'overpass_id'];
 
     // The updatable fields
     protected $allowedFields = [
@@ -69,7 +70,7 @@ class PlacesModel extends Model
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

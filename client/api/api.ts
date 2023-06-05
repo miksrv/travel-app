@@ -37,8 +37,11 @@ export const api = createApi({
         introduce: builder.mutation<any, Maybe<any>>({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
-        placesGetList: builder.mutation<any, Maybe<any>>({
-            query: (params) => `places${encodeQueryData(params)}`
+        poiGetItem: builder.mutation<any, string>({
+            query: (item) => `poi/${item}`
+        }),
+        poiGetList: builder.mutation<any, Maybe<any>>({
+            query: (params) => `poi${encodeQueryData(params)}`
         })
     }),
     extractRehydrationInfo(action, { reducerPath }) {
@@ -54,7 +57,8 @@ export const api = createApi({
 export const {
     useIntroduceMutation,
 
-    usePlacesGetListMutation,
+    usePoiGetItemMutation,
+    usePoiGetListMutation,
 
     util: { getRunningQueriesThunk }
 } = api
