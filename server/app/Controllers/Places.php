@@ -48,9 +48,31 @@ class Places extends ResourceController
 
     public function show($id = null): ResponseInterface
     {
-        $places = new PlacesModel();
-        $item = $places->find($id);
+        try {
+            $places = new PlacesModel();
+            $item = $places
+                ->select(
+                    'places.*, ' .
+                    'address_country.name as country_name, ' .
+                    'address_region.name as region_name, ' .
+                    'address_district.name as district_name, ' .
+                    'address_city.name as city_name'
+                )
+                ->join('address_country', 'address_country.id = places.address_country')
+                ->join('address_region', 'address_region.id = places.address_region')
+                ->join('address_district', 'address_district.id = places.address_district')
+                ->join('address_city', 'address_city.id = places.address_city')
+                ->find($id);
 
-        return $this->respond($item);
+            if ($item) {
+                return $this->respond($item);
+            }
+
+            return $this->failNotFound();
+        } catch (Exception $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return $this->failNotFound();
+        }
     }
 }

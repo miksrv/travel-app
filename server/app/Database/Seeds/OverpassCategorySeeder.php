@@ -2,7 +2,6 @@
 
 use App\Models\OverpassCategoryModel;
 use CodeIgniter\Database\Seeder;
-use App\Models\CategoryModel;
 use ReflectionException;
 
 class OverpassCategorySeeder extends Seeder
