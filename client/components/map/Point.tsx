@@ -1,16 +1,23 @@
 import { usePoiGetItemMutation } from '@/api/api'
 import Leaflet from 'leaflet'
+import Image from 'next/image'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
-import icon from '@/public/icons/memorial.png'
+import noPhoto from '@/public/images/nophoto.jpeg'
+import icon from '@/public/poi/aircraft.png'
+
+import styles from './styles.module.sass'
 
 type TMyPointProps = {
     id: string
     lat: number
     lon: number
     title?: string
+    content?: string
     category?: string
+    subcategory?: string
+    photo?: string
 }
 
 const Point: React.FC<TMyPointProps> = ({ id, lat, lon, title, category }) => {
@@ -40,7 +47,21 @@ const Point: React.FC<TMyPointProps> = ({ id, lat, lon, title, category }) => {
                 click: placeClickHandler
             }}
         >
-            <Popup>{placesLoading ? 'Loading' : data?.title}</Popup>
+            <Popup className={styles.popup}>
+                <Image
+                    className={styles.image}
+                    src={noPhoto}
+                    alt={''}
+                    width={300}
+                    height={200}
+                />
+                <div className={styles.title}>
+                    {placesLoading ? 'Loading' : data?.title || 'Нет данных'}
+                </div>
+                {data?.content && (
+                    <div className={styles.content}>{data.content}</div>
+                )}
+            </Popup>
         </Marker>
     )
 }

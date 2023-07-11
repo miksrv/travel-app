@@ -2,7 +2,7 @@ import Leaflet from 'leaflet'
 import React from 'react'
 import { Circle, Marker, Popup } from 'react-leaflet'
 
-import mypointer from '@/public/icons/mypoint.png'
+import mypointer from '@/public/poi/military_equipment.png'
 
 type TMyPointProps = {
     lat: number

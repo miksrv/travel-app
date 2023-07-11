@@ -36,9 +36,24 @@ class Poi extends ResourceController
 
     public function show($id = null): ResponseInterface
     {
-        $places = new PlacesModel();
-        $item = $places->find($id);
+        try {
+            $places = new PlacesModel();
+            $item = $places->find($id);
 
-        return $this->respond($item);
+            if ($item) {
+                unset(
+                    $item->tags, $item->address, $item->address_country,
+                    $item->address_region, $item->address_district, $item->address_city
+                );
+
+                return $this->respond($item);
+            }
+
+            return $this->failNotFound();
+        } catch (Exception $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return $this->failNotFound();
+        }
     }
 }
