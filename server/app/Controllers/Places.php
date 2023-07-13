@@ -65,6 +65,8 @@ class Places extends ResourceController
                 ->find($id);
 
             if ($item) {
+                $item->tags = json_decode($item->tags) ?? null;
+
                 return $this->respond($item);
             }
 
