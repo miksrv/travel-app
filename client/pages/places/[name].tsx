@@ -1,0 +1,28 @@
+import { usePlacesGetItemQuery } from '@/api/api'
+import { skipToken } from '@reduxjs/toolkit/query'
+import { NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+
+const Place: NextPage = () => {
+    const router = useRouter()
+    const routerObject = router.query.name
+    const objectName =
+        typeof routerObject === 'string' ? routerObject : skipToken
+
+    const { data, isLoading } = usePlacesGetItemQuery(
+        typeof objectName === 'string' ? objectName : '',
+        {
+            skip: router.isFallback || !routerObject
+        }
+    )
+
+    return (
+        <div>
+            {isLoading && <div>Loading....</div>}
+            {data && JSON.stringify(data)}
+            <div>{routerObject || '111'}</div>
+        </div>
+    )
+}
+
+export default Place

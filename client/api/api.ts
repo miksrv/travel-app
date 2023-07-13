@@ -37,6 +37,11 @@ export const api = createApi({
         introduce: builder.mutation<any, Maybe<any>>({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
+
+        placesGetItem: builder.query<any, string>({
+            query: (item) => `places/${item}`
+        }),
+
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
         }),
@@ -56,6 +61,8 @@ export const api = createApi({
 // Export hooks for usage in functional components
 export const {
     useIntroduceMutation,
+
+    usePlacesGetItemQuery,
 
     usePoiGetItemMutation,
     usePoiGetListMutation,
