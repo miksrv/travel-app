@@ -1,26 +1,31 @@
 <?php namespace App\Models;
 
-use App\Entities\Session;
-use CodeIgniter\Model;
+use App\Entities\Place;
 
-class SessionsModel extends Model
+class PhotosModel extends MyBaseModel
 {
-    protected $table      = 'sessions';
+    protected $table      = 'photos';
     protected $primaryKey = 'id';
 
-    protected $useAutoIncrement = true;
+    protected $useAutoIncrement = false;
 
-    protected $returnType     = Session::class;
-    protected $useSoftDeletes = false;
+    protected $returnType     = Place::class;
+    protected $useSoftDeletes = true;
+
+    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at', 'overpass_id'];
 
     // The updatable fields
     protected $allowedFields = [
-        'id',
-        'ip',
-        'user',
-        'user_agent',
+        'title',
         'latitude',
         'longitude',
+        'place',
+        'author',
+        'filename',
+        'extension',
+        'filesize',
+        'width',
+        'height',
     ];
 
     // Dates
@@ -31,21 +36,26 @@ class SessionsModel extends Model
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules = [
-
-    ];
+    protected $validationRules = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     // Callbacks
-    protected $allowCallbacks = false;
-    protected $beforeInsert   = [];
+    protected $allowCallbacks = true;
+    protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    protected function beforeInsert(array $data): array
+    {
+        $data['data']['id'] = uniqid();
+
+        return $data;
+    }
 }

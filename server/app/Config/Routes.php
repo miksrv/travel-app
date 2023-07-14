@@ -33,6 +33,8 @@ $routes->set404Override();
 $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce)', 'Introduce');
 
+$routes->get('migration', 'Migrate::init');
+
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/(:alphanum)', 'Poi::show/$1');
 $routes->options('poi', 'Poi');

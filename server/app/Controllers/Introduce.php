@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Geocoder;
 use App\Libraries\OverpassAPI;
 use App\Models\AddressCity;
 use App\Models\AddressCountry;
@@ -13,10 +14,6 @@ use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
-use Geocoder\Provider\Nominatim\Nominatim;
-use Geocoder\Query\ReverseQuery;
-use Geocoder\StatefulGeocoder;
-use GuzzleHttp\Client;
 use ReflectionException;
 
 header('Access-Control-Allow-Origin: *');
@@ -143,17 +140,7 @@ class Introduce extends ResourceController
                 ]);
             }
 
-            $httpClient = new Client();
-            $provider = Nominatim::withOpenStreetMapServer($httpClient, $this->request->getUserAgent());
-            $geocoder = new StatefulGeocoder($provider, 'ru');
-            $result   = $geocoder->reverseQuery(ReverseQuery::fromCoordinates($point->lat, $point->lon))->first();
-
-            $adminLevels = count($result->getAdminLevels());
-
-            $countryID  = $this->getCountry($result->getCountry()->getName());
-            $regionID   = $adminLevels >= 1 ? $this->getRegion($result->getAdminLevels()->get(1)->getName(), $countryID) : null;
-            $districtID = $adminLevels >= 2 ? $this->getDistrict($result->getAdminLevels()->get(2)->getName(), $countryID, $regionID) : null;
-            $cityID     = $this->getCity($result->getLocality(), $countryID, $regionID, $districtID);
+            $geocoder = new Geocoder($point->lat, $point->lon);
 
             $place = new \App\Entities\Place();
 
@@ -165,11 +152,11 @@ class Introduce extends ResourceController
             $place->title       = $point->tags['name'] ?? null;
             $place->content     = '';
 
-            $place->address          = $result->getStreetName() . ($result->getStreetNumber() ? ', ' . $result->getStreetNumber() : '');
-            $place->address_country  = $countryID;
-            $place->address_region   = $regionID;
-            $place->address_district = $districtID;
-            $place->address_city     = $cityID;
+            $place->address          = $geocoder->address;
+            $place->address_country  = $geocoder->countryID;
+            $place->address_region   = $geocoder->regionID;
+            $place->address_district = $geocoder->districtID;
+            $place->address_city     = $geocoder->cityID;
             $place->tags             = $this->cleanTags($point->tags, $point->category);
 
             $pointAdded[] = $place->title;
