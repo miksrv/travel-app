@@ -20,7 +20,7 @@ const Place: NextPage = () => {
         <div>
             {isLoading && <div>Loading....</div>}
             {data && JSON.stringify(data)}
-            <div>{routerObject || '111'}</div>
+            <div>{routerObject}</div>
         </div>
     )
 }
