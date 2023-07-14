@@ -11,10 +11,10 @@ use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client;
 
 class Geocoder {
-    public int $countryID;
-    public int $regionID;
-    public int $districtID;
-    public int $cityID;
+    public ?int $countryID;
+    public ?int $regionID;
+    public ?int $districtID;
+    public ?int $cityID;
 
     public string $address;
 
@@ -33,9 +33,9 @@ class Geocoder {
 
         $adminLevels = count($result->getAdminLevels());
 
-        $this->countryID  = $this->getCountry($result->getCountry()->getName());
+        $this->countryID = $this->getCountry($result->getCountry()->getName());
 
-        $this->regionID   = $adminLevels >= 1 ? $this->getRegion(
+        $this->regionID = $adminLevels >= 1 ? $this->getRegion(
             $result->getAdminLevels()->get(1)->getName(),
             $this->countryID
         ) : null;
@@ -46,7 +46,7 @@ class Geocoder {
             $this->regionID
         ) : null;
 
-        $this->cityID     = $this->getCity(
+        $this->cityID = $this->getCity(
             $result->getLocality(),
             $this->countryID,
             $this->regionID,
