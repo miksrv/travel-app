@@ -92,3 +92,6 @@ define('EVENT_PRIORITY_NORMAL', 100);
  * @deprecated Use \CodeIgniter\Events\Events::PRIORITY_HIGH instead.
  */
 define('EVENT_PRIORITY_HIGH', 10);
+
+defined('UPLOAD_PHOTOS') || define('UPLOAD_PHOTOS', FCPATH . 'photos/');
+defined('UPLOAD_TEMP') || define('UPLOAD_TEMP', FCPATH . 'temp/');

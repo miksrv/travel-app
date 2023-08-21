@@ -6,8 +6,10 @@ use App\Models\MigratePlacesModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Services;
 use Geocoder\Exception\Exception;
 
 class Migrate extends ResourceController
@@ -74,7 +76,7 @@ class Migrate extends ResourceController
             $place->category         = $mapCategories[$item->item_category][0];
             $place->subcategory      = $mapCategories[$item->item_category][1];
             $place->title            = $item->item_title;
-            $place->content          = $item->item_content;
+            $place->content          = strip_tags(html_entity_decode($item->item_content));
             $place->tags             = (object) ['hashcodes' => explode(',', $item->item_tags)];
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
@@ -109,10 +111,36 @@ class Migrate extends ResourceController
             $photos = json_decode($item->item_photos);
 
             if (is_array($photos)) {
+                if (!is_dir(UPLOAD_PHOTOS)) {
+                    mkdir(UPLOAD_PHOTOS,0777, TRUE);
+                }
+
                 foreach ($photos as $photoID) {
                     $currentPhoto = $migrateMedia->find($photoID);
 
+                    if ($photosModel->where(['filename' => $currentPhoto->item_filename])->withDeleted()->first()) {
+                        continue;
+                    }
+
                     if ($currentPhoto) {
+                        // Download photo
+                        $photoFilename  = $currentPhoto->item_filename . '.' . $currentPhoto->item_ext;
+                        $fileImageURL   = 'https://greenexp.ru/uploads/places/' . $item->item_directory . '/' . $photoFilename;
+                        $photoDirectory = UPLOAD_PHOTOS . '/' . $newPlaceId;
+                        if (!is_dir($photoDirectory)) {
+                            mkdir($photoDirectory,0777, TRUE);
+                        }
+
+                        file_put_contents($photoDirectory . '/' . $photoFilename, file_get_contents($fileImageURL));
+
+                        $file = new File($photoDirectory . '/' . $photoFilename);
+                        list($width, $height) = getimagesize($file->getRealPath());
+                        $image = Services::image('gd'); // imagick
+                        $image->withFile($file->getRealPath())
+                            ->fit(300, 270, 'center')
+                            ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
+
+                        // Save photo to DB
                         $photo = new \App\Entities\Photo();
                         $photo->title     = $place->title;
                         $photo->latitude  = $currentPhoto->item_latitude;
@@ -121,11 +149,11 @@ class Migrate extends ResourceController
                         $photo->author    = null;
                         $photo->filename  = $currentPhoto->item_filename;
                         $photo->extension = $currentPhoto->item_ext;
-                        $photo->filesize  = 0; // TODO
-                        $photo->width     = 0; // TODO
-                        $photo->height    = 0; // TODO
+                        $photo->filesize  = $file->getSize();
+                        $photo->width     = $width;
+                        $photo->height    = $height;
 
-                        $place->created_at = date($currentPhoto->item_timestamp);
+                        $photo->created_at = date($currentPhoto->item_timestamp);
                     }
 
                     $photosModel->insert($photo);
