@@ -1,5 +1,5 @@
 <?php namespace App\Controllers;
-;
+
 use App\Libraries\Geocoder;
 use App\Models\MigrateMediaModel;
 use App\Models\MigratePlacesModel;
@@ -81,11 +81,13 @@ class Migrate extends ResourceController
             $place->address_region   = $geocoder->regionID;
             $place->address_district = $geocoder->districtID;
             $place->address_city     = $geocoder->cityID;
+            $place->created_at       = date($item->item_datestamp);
 
             $placesModel->insert($place);
 
             $newPlaceId = $placesModel->getInsertID();
 
+            // Migrate Rating
             if (is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
                 foreach ($ratingData['scores'] as $score) {
                     if (!$score) {
@@ -103,9 +105,37 @@ class Migrate extends ResourceController
                 }
             }
 
+            // Migrate Photos
+            $photos = json_decode($item->item_photos);
+
+            if (is_array($photos)) {
+                foreach ($photos as $photoID) {
+                    $currentPhoto = $migrateMedia->find($photoID);
+
+                    if ($currentPhoto) {
+                        $photo = new \App\Entities\Photo();
+                        $photo->title     = $place->title;
+                        $photo->latitude  = $currentPhoto->item_latitude;
+                        $photo->longitude = $currentPhoto->item_longitude;
+                        $photo->place     = $newPlaceId;
+                        $photo->author    = null;
+                        $photo->filename  = $currentPhoto->item_filename;
+                        $photo->extension = $currentPhoto->item_ext;
+                        $photo->filesize  = 0; // TODO
+                        $photo->width     = 0; // TODO
+                        $photo->height    = 0; // TODO
+
+                        $place->created_at = date($currentPhoto->item_timestamp);
+                    }
+
+                    $photosModel->insert($photo);
+                }
+            }
+
             $inserted[] = $item->item_title;
 
             echo '<pre>';
+            var_dump($photos);
             var_dump($place);
             exit();
         }

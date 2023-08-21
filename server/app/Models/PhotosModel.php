@@ -26,6 +26,7 @@ class PhotosModel extends MyBaseModel
         'filesize',
         'width',
         'height',
+        'created_at',
     ];
 
     // Dates
