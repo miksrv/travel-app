@@ -1,31 +1,26 @@
 <?php namespace App\Models;
 
-use App\Entities\Photo;
+use App\Entities\User;
 
-class PhotosModel extends MyBaseModel
+class UsersModel extends MyBaseModel
 {
-    protected $table      = 'photos';
+    protected $table      = 'users';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = Photo::class;
+    protected $returnType     = User::class;
     protected $useSoftDeletes = true;
 
-    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at', 'overpass_id'];
+    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
 
     // The updatable fields
     protected $allowedFields = [
-        'title',
-        'latitude',
-        'longitude',
-        'place',
-        'author',
-        'filename',
-        'extension',
-        'filesize',
-        'width',
-        'height',
+        'name',
+        'email',
+        'password',
+        'level',
+        'reputation',
         'created_at',
     ];
 
