@@ -3,9 +3,11 @@
 use App\Libraries\Geocoder;
 use App\Models\MigrateMediaModel;
 use App\Models\MigratePlacesModel;
+use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -29,7 +31,7 @@ class Migrate extends ResourceController
             7 => ['tourism', 'camping'],        // Кемпинги
             8 => ['historic', 'fort'],          // Крепости
             9 => ['historic', 'religious'],     // Монастыри
-            10 => ['historic', 'tourism'],      // Музеи
+            10 => ['tourism', 'museum'],        // Музеи
             11 => ['historic', 'memorial'],     // Статуи
             12 => ['historic', 'manor'],        // Усадьбы
             13 => ['natural', 'cave_entrance'], // Пещеры
@@ -54,6 +56,7 @@ class Migrate extends ResourceController
                 continue;
             }
 
+            // Calculate rating
             $ratingSum  = 0;
             $ratingData = unserialize($item->item_rating);
 
@@ -65,12 +68,14 @@ class Migrate extends ResourceController
                 $ratingSum = $ratingSum / count($ratingData['scores']);
             }
 
+            $placeAuthor = $this->_migrate_user($item->item_author);
+
             $geocoder = new Geocoder($item->item_latitude, $item->item_longitude);
             $place    = new \App\Entities\Place();
 
             $place->latitude         = $item->item_latitude;
             $place->longitude        = $item->item_longitude;
-            $place->author           = null;
+            $place->author           = $placeAuthor;
             $place->rating           = $ratingSum === 0 ? null : $ratingSum;
             $place->views            = $item->item_count_views;
             $place->category         = $mapCategories[$item->item_category][0];
@@ -91,14 +96,16 @@ class Migrate extends ResourceController
 
             // Migrate Rating
             if (is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
-                foreach ($ratingData['scores'] as $score) {
+                foreach ($ratingData['scores'] as $index => $score) {
                     if (!$score) {
                         continue;
                     }
 
+                    $ratingAuthor = isset($ratingData['users'][$index]) ? $this->_migrate_user($item->item_author) : null;
+
                     $insertRating = [
                         'place'   => $newPlaceId,
-                        'author'  => null,
+                        'author'  => $ratingAuthor,
                         'session' => null,
                         'value'   => $score,
                     ];
@@ -140,13 +147,15 @@ class Migrate extends ResourceController
                             ->fit(300, 270, 'center')
                             ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
 
+                        $photoAuthor = $this->_migrate_user($item->item_author);
+
                         // Save photo to DB
                         $photo = new \App\Entities\Photo();
                         $photo->title     = $place->title;
                         $photo->latitude  = $currentPhoto->item_latitude;
                         $photo->longitude = $currentPhoto->item_longitude;
                         $photo->place     = $newPlaceId;
-                        $photo->author    = null;
+                        $photo->author    = $photoAuthor;
                         $photo->filename  = $currentPhoto->item_filename;
                         $photo->extension = $currentPhoto->item_ext;
                         $photo->filesize  = $file->getSize();
@@ -163,11 +172,34 @@ class Migrate extends ResourceController
             $inserted[] = $item->item_title;
 
             echo '<pre>';
-            var_dump($photos);
             var_dump($place);
             exit();
         }
 
         return $this->respond($inserted);
+    }
+
+    protected function _migrate_user(string $author_id): string {
+        $usersModel   = new UsersModel();
+        $migrateUsers = new MigrateUsersModel();
+
+        $userMigrateData = $migrateUsers->find($author_id);
+        $userData = $usersModel->where(['email' => $userMigrateData->user_email])->first();
+
+        if (!$userData) {
+            $user    = new \App\Entities\User();
+            $user->name       = $userMigrateData->user_name;
+            $user->password   = $userMigrateData->user_password;
+            $user->email      = $userMigrateData->user_email;
+            $user->level      = 0;
+            $user->reputation = $userMigrateData->user_rating;
+            $user->created_at = date($userMigrateData->user_regdate);
+
+            $usersModel->insert($user);
+
+            return $usersModel->getInsertID();
+        }
+
+        return $userData->id;
     }
 }
