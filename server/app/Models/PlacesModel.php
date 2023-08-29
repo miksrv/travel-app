@@ -19,8 +19,6 @@ class PlacesModel extends MyBaseModel
         'overpass_id',
         'category',
         'subcategory',
-        'title',
-        'content',
         'tags',
         'address',
         'address_country',

@@ -1,20 +1,17 @@
 <?php namespace App\Models;
 
-class UsersActivityModel extends MyBaseModel
+class TranslationsPlacesModel extends MyBaseModel
 {
-    protected $table            = 'users_activity';
+    protected $table            = 'translations_places';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
-
     protected $allowedFields = [
-        'user',
-        'type',
-        'photo',
         'place',
-        'rating',
-        'created_at'
+        'language',
+        'title',
+        'content'
     ];
 
     // Dates

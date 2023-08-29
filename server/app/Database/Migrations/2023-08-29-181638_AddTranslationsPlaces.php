@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddTranslations extends Migration {
+class AddTranslationsPlaces extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
@@ -12,6 +12,11 @@ class AddTranslations extends Migration {
                 'constraint' => 15,
                 'null'       => false,
                 'unique'     => true
+            ],
+            'place' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true,
             ],
             'language' => [
                 'type'       => 'ENUM("ru", "en")',
@@ -30,10 +35,11 @@ class AddTranslations extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('translations');
+        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('translations_places');
     }
 
     public function down() {
-        $this->forge->dropTable('translations');
+        $this->forge->dropTable('translations_places');
     }
 }

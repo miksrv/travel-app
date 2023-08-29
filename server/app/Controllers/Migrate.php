@@ -5,8 +5,10 @@ use App\Models\MigrateMediaModel;
 use App\Models\MigratePlacesModel;
 use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
+use App\Models\TranslationsPhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use App\Models\TranslationsPlacesModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -44,6 +46,9 @@ class Migrate extends ResourceController
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
 
+        $TranslationsPlacesModel = new TranslationsPlacesModel();
+        $TranslationsPhotosModel = new TranslationsPhotosModel();
+
         $migratePlaces = new MigratePlacesModel();
         $migrateMedia  = new MigrateMediaModel();
 
@@ -52,9 +57,13 @@ class Migrate extends ResourceController
         $inserted = [];
 
         foreach ($migratePlace as $item) {
-            if ($placesModel->where('title', $item->item_title)->withDeleted()->first()) {
-                continue;
-            }
+              if ($TranslationsPlacesModel
+                  ->where('title', $item->item_title)
+                  ->join('places', 'translations_places.place = places.id')
+                  ->first()
+              ) {
+                  continue;
+              }
 
             // Calculate rating
             $ratingSum  = 0;
@@ -68,6 +77,7 @@ class Migrate extends ResourceController
                 $ratingSum = $ratingSum / count($ratingData['scores']);
             }
 
+            // Add or update user
             $placeAuthor = $this->_migrate_user($item->item_author);
 
             $geocoder = new Geocoder($item->item_latitude, $item->item_longitude);
@@ -80,8 +90,6 @@ class Migrate extends ResourceController
             $place->views            = $item->item_count_views;
             $place->category         = $mapCategories[$item->item_category][0];
             $place->subcategory      = $mapCategories[$item->item_category][1];
-            $place->title            = $item->item_title;
-            $place->content          = strip_tags(html_entity_decode($item->item_content));
             $place->tags             = (object) ['hashcodes' => explode(',', $item->item_tags)];
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
@@ -93,6 +101,14 @@ class Migrate extends ResourceController
             $placesModel->insert($place);
 
             $newPlaceId = $placesModel->getInsertID();
+
+            // Make translation
+            $TranslationsPlacesModel->insert([
+                'place'    => $newPlaceId,
+                'language' => 'ru',
+                'title'    => $item->item_title,
+                'content'  => strip_tags(html_entity_decode($item->item_content))
+            ]);
 
             // Migrate Rating
             if (is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
@@ -147,25 +163,32 @@ class Migrate extends ResourceController
                             ->fit(300, 270, 'center')
                             ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
 
+                        // Add or update user
                         $photoAuthor = $this->_migrate_user($item->item_author);
 
                         // Save photo to DB
                         $photo = new \App\Entities\Photo();
-                        $photo->title     = $place->title;
-                        $photo->latitude  = $currentPhoto->item_latitude;
-                        $photo->longitude = $currentPhoto->item_longitude;
-                        $photo->place     = $newPlaceId;
-                        $photo->author    = $photoAuthor;
-                        $photo->filename  = $currentPhoto->item_filename;
-                        $photo->extension = $currentPhoto->item_ext;
-                        $photo->filesize  = $file->getSize();
-                        $photo->width     = $width;
-                        $photo->height    = $height;
+                        $photo->latitude    = $currentPhoto->item_latitude;
+                        $photo->longitude   = $currentPhoto->item_longitude;
+                        $photo->place       = $newPlaceId;
+                        $photo->author      = $photoAuthor;
+                        $photo->filename    = $currentPhoto->item_filename;
+                        $photo->extension   = $currentPhoto->item_ext;
+                        $photo->filesize    = $file->getSize();
+                        $photo->width       = $width;
+                        $photo->height      = $height;
 
                         $photo->created_at = date($currentPhoto->item_timestamp);
-                    }
 
-                    $photosModel->insert($photo);
+                        $photosModel->insert($photo);
+
+                        // Make translation
+                        $TranslationsPhotosModel->insert([
+                            'photo'    => $photosModel->getInsertID(),
+                            'language' => 'ru',
+                            'title'    => $item->item_title
+                        ]);
+                    }
                 }
             }
 

@@ -11,11 +11,6 @@ class AddPhotos extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'translation' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => true
-            ],
             'latitude' => [
                 'type'       => 'DECIMAL(16,12)',
                 'null'       => false,
@@ -69,7 +64,6 @@ class AddPhotos extends Migration {
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('translation', 'translations', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('photos');
     }
