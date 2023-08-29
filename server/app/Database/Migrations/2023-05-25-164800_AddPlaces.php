@@ -27,11 +27,6 @@ class AddPlaces extends Migration {
                 'constraint' => 50,
                 'null'       => true
             ],
-            'translation' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => true
-            ],
             'tags' => [
                 'type' => 'TEXT',
                 'null' => true
@@ -94,7 +89,6 @@ class AddPlaces extends Migration {
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('translation', 'translations', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_country', 'address_country', 'id', 'CASCADE', 'CASCADE');

@@ -1,19 +1,14 @@
-<?php
+<?php namespace App\Models;
 
-namespace App\Models;
-
-use CodeIgniter\Model;
-
-class TranslationsModel extends Model
+class TranslationsPhotosModel extends MyBaseModel
 {
-    protected $DBGroup          = 'default';
-    protected $table            = 'translations';
+    protected $table            = 'translations_photos';
     protected $primaryKey       = 'id';
-    protected $useAutoIncrement = true;
-    protected $returnType       = 'array';
+    protected $useAutoIncrement = false;
+    protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
-    protected $protectFields    = true;
     protected $allowedFields = [
+        'photo',
         'language',
         'title',
         'content'
@@ -29,17 +24,24 @@ class TranslationsModel extends Model
     // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = [];
+    protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    protected function beforeInsert(array $data): array
+    {
+        $data['data']['id'] = uniqid();
+
+        return $data;
+    }
 }
