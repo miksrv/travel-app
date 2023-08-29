@@ -4,10 +4,8 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddOverpassCategory extends Migration
-{
-    public function up()
-    {
+class AddOverpassCategory extends Migration {
+    public function up() {
         $this->forge->addField([
             'id' => [
                 'type'       => 'SMALLINT',
@@ -37,14 +35,14 @@ class AddOverpassCategory extends Migration
                 'null'       => false
             ],
         ]);
+
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
         $this->forge->createTable('overpass_category');
     }
 
-    public function down()
-    {
+    public function down() {
         $this->forge->dropTable('overpass_category');
     }
 }

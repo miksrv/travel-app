@@ -4,10 +4,8 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddAddressCountry extends Migration
-{
-    public function up()
-    {
+class AddAddressCountry extends Migration {
+    public function up() {
         $this->forge->addField([
             'id' => [
                 'type'           => 'SMALLINT',
@@ -23,12 +21,12 @@ class AddAddressCountry extends Migration
                 'unique'     => true
             ],
         ]);
+
         $this->forge->addPrimaryKey('id');
         $this->forge->createTable('address_country');
     }
 
-    public function down()
-    {
+    public function down() {
         $this->forge->dropTable('address_country');
     }
 }
