@@ -2,10 +2,8 @@
 
 use CodeIgniter\Database\Migration;
 
-class AddCategory extends Migration
-{
-    public function up()
-    {
+class AddCategory extends Migration {
+    public function up() {
         $this->forge->addField([
             'name' => [
                 'type'       => 'VARCHAR',
@@ -24,12 +22,12 @@ class AddCategory extends Migration
                 'null'       => true
             ],
         ]);
+
         $this->forge->addPrimaryKey('name');
         $this->forge->createTable('category');
     }
 
-    public function down()
-    {
+    public function down() {
         $this->forge->dropTable('category');
     }
 }

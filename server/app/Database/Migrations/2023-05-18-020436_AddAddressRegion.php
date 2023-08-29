@@ -4,10 +4,8 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddAddressRegion extends Migration
-{
-    public function up()
-    {
+class AddAddressRegion extends Migration {
+    public function up() {
         $this->forge->addField([
             'id' => [
                 'type'           => 'INT',
@@ -28,13 +26,13 @@ class AddAddressRegion extends Migration
                 'unique'     => true
             ],
         ]);
+
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('country', 'address_country', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('address_region');
     }
 
-    public function down()
-    {
+    public function down() {
         $this->forge->dropTable('address_region');
     }
 }

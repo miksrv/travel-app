@@ -2,10 +2,8 @@
 
 use CodeIgniter\Database\Migration;
 
-class AddPhotos extends Migration
-{
-    public function up()
-    {
+class AddPhotos extends Migration {
+    public function up() {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
@@ -68,14 +66,14 @@ class AddPhotos extends Migration
                 'null' => true
             ]
         ]);
+
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('photos');
     }
 
-    public function down()
-    {
+    public function down() {
         $this->forge->dropTable('photos');
     }
 }

@@ -4,34 +4,38 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddRating extends Migration {
+class AddUsersActivity extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 15,
+                'constraint' => 40,
                 'null'       => false,
                 'unique'     => true
+            ],
+            'user' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 40,
+                'null'       => false,
+            ],
+            'type' => [
+                'type'       => 'ENUM("photo", "place", "rating")',
+                'null'       => false,
+            ],
+            'photo' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true,
             ],
             'place' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
-                'null'       => false,
-            ],
-            'author' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 40,
                 'null'       => true,
             ],
-            'session' => [
+            'rating' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 32,
+                'constraint' => 15,
                 'null'       => true,
-            ],
-            'value' => [
-                'type'       => 'TINYINT',
-                'constraint' => 5,
-                'null'       => false,
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
@@ -42,13 +46,14 @@ class AddRating extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
+        $this->forge->addForeignKey('user', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('photo', 'photos', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('session', 'sessions', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('rating');
+        $this->forge->addForeignKey('rating', 'rating', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('users_activity');
     }
 
     public function down() {
-        $this->forge->dropTable('rating');
+        $this->forge->dropTable('users_activity');
     }
 }
