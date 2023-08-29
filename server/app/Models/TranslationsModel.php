@@ -4,23 +4,19 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UsersActivityModel extends Model
+class TranslationsModel extends Model
 {
     protected $DBGroup          = 'default';
-    protected $table            = 'users_activity';
+    protected $table            = 'translations';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = true;
     protected $returnType       = 'array';
     protected $useSoftDeletes   = false;
     protected $protectFields    = true;
-
     protected $allowedFields = [
-        'user',
-        'type',
-        'photo',
-        'place',
-        'rating',
-        'created_at'
+        'language',
+        'title',
+        'content'
     ];
 
     // Dates
