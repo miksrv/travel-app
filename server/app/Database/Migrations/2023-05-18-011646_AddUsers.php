@@ -25,8 +25,7 @@ class AddUsers extends Migration {
             'password'       => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
-                'null'       => false,
-                'unique'     => true
+                'null'       => false
             ],
             'level' => [
                 'type'       => 'TINYINT',

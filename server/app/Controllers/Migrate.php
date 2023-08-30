@@ -9,6 +9,7 @@ use App\Models\TranslationsPhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\TranslationsPlacesModel;
+use App\Models\UsersActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -48,6 +49,8 @@ class Migrate extends ResourceController
 
         $TranslationsPlacesModel = new TranslationsPlacesModel();
         $TranslationsPhotosModel = new TranslationsPhotosModel();
+
+        $userActivityModel = new UsersActivityModel();
 
         $migratePlaces = new MigratePlacesModel();
         $migrateMedia  = new MigrateMediaModel();
@@ -103,11 +106,19 @@ class Migrate extends ResourceController
             $newPlaceId = $placesModel->getInsertID();
 
             // Make translation
-            $TranslationsPlacesModel->insert([
+            $TranslationsPlacesModel->insert((object) [
                 'place'    => $newPlaceId,
                 'language' => 'ru',
                 'title'    => $item->item_title,
                 'content'  => strip_tags(html_entity_decode($item->item_content))
+            ]);
+
+            // Make user activity
+            $userActivityModel->insert((object) [
+                'user'       => $placeAuthor,
+                'type'       => 'place',
+                'place'      => $newPlaceId,
+                'created_at' => $place->created_at
             ]);
 
             // Migrate Rating
@@ -118,7 +129,6 @@ class Migrate extends ResourceController
                     }
 
                     $ratingAuthor = isset($ratingData['users'][$index]) ? $this->_migrate_user($item->item_author) : null;
-
                     $insertRating = [
                         'place'   => $newPlaceId,
                         'author'  => $ratingAuthor,
@@ -127,6 +137,16 @@ class Migrate extends ResourceController
                     ];
 
                     $ratingModel->insert($insertRating);
+
+                    // Make user activity
+                    if ($ratingAuthor) {
+                        $userActivityModel->insert((object) [
+                            'user'       => $ratingAuthor,
+                            'type'       => 'rating',
+                            'rating'     => $ratingModel->getInsertID(),
+                            'created_at' => $place->created_at
+                        ]);
+                    }
                 }
             }
 
@@ -187,6 +207,14 @@ class Migrate extends ResourceController
                             'photo'    => $photosModel->getInsertID(),
                             'language' => 'ru',
                             'title'    => $item->item_title
+                        ]);
+
+                        // Make user activity
+                        $userActivityModel->insert([
+                            'user'       => $placeAuthor,
+                            'type'       => 'photo',
+                            'photo'      => $photosModel->getInsertID(),
+                            'created_at' => $photo->created_at
                         ]);
                     }
                 }
