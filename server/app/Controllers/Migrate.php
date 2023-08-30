@@ -5,6 +5,8 @@ use App\Models\MigrateMediaModel;
 use App\Models\MigratePlacesModel;
 use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
+use App\Models\PlacesTagsModel;
+use App\Models\TagsModel;
 use App\Models\TranslationsPhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
@@ -93,7 +95,6 @@ class Migrate extends ResourceController
             $place->views            = $item->item_count_views;
             $place->category         = $mapCategories[$item->item_category][0];
             $place->subcategory      = $mapCategories[$item->item_category][1];
-            $place->tags             = (object) ['hashcodes' => explode(',', $item->item_tags)];
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
             $place->address_region   = $geocoder->regionID;
@@ -104,6 +105,14 @@ class Migrate extends ResourceController
             $placesModel->insert($place);
 
             $newPlaceId = $placesModel->getInsertID();
+
+            // Add new tags
+            $tagsArray = explode(',', $item->item_tags);
+            if (!empty($tagsArray)) {
+                foreach ($tagsArray as $tag) {
+                    $this->_migrate_tags($tag, $newPlaceId);
+                }
+            }
 
             // Make translation
             $TranslationsPlacesModel->insert((object) [
@@ -230,6 +239,36 @@ class Migrate extends ResourceController
         return $this->respond($inserted);
     }
 
+    protected function _migrate_tags(string $tag, string $placeId) {
+        if (!$tag || !$placeId) {
+            return ;
+        }
+
+        $tagsModel = new TagsModel();
+        $placesTagsModel = new PlacesTagsModel();
+
+        $tagData = $tagsModel->where(['title' => $tag])->first();
+
+        if (!$tagData) {
+            $tagsModel->insert([
+                'title'   => $tag,
+                'counter' => 1
+            ]);
+
+            $placesTagsModel->insert([
+                'tag'   => $tagsModel->getInsertID(),
+                'place' => $placeId
+            ]);
+
+        } else {
+            $tagsModel->update($tagData->id, ['counter' => $tagData->counter + 1]);
+            $placesTagsModel->insert([
+                'tag'   => $tagData->id,
+                'place' => $placeId
+            ]);
+        }
+    }
+
     protected function _migrate_user(string $author_id): string {
         $usersModel   = new UsersModel();
         $migrateUsers = new MigrateUsersModel();
@@ -238,12 +277,22 @@ class Migrate extends ResourceController
         $userData = $usersModel->where(['email' => $userMigrateData->user_email])->first();
 
         if (!$userData) {
-            $user    = new \App\Entities\User();
+            $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
+            $avatarDirectory = UPLOAD_AVATARS;
+            if (!is_dir($avatarDirectory)) {
+                mkdir($avatarDirectory,0777, TRUE);
+            }
+
+            file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
+
+            $user = new \App\Entities\User();
             $user->name       = $userMigrateData->user_name;
             $user->password   = $userMigrateData->user_password;
             $user->email      = $userMigrateData->user_email;
             $user->level      = 0;
             $user->reputation = $userMigrateData->user_rating;
+            $user->website    = $userMigrateData->user_website;
+            $user->avatar     = $userMigrateData->user_avatar;
             $user->created_at = date($userMigrateData->user_regdate);
 
             $usersModel->insert($user);

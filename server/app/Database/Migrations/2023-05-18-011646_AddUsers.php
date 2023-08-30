@@ -39,6 +39,16 @@ class AddUsers extends Migration {
                 'null'       => false,
                 'default'    => 0
             ],
+            'website' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true,
+            ],
+            'avatar' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true,
+            ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
             'deleted_at' => [

@@ -6,7 +6,7 @@ class TagsModel extends MyBaseModel
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
     protected $returnType       = 'object';
-    protected $useSoftDeletes   = true;
+    protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
         'title',
