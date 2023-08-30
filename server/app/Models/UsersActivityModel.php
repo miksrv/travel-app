@@ -6,7 +6,7 @@ class UsersActivityModel extends MyBaseModel
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
     protected $returnType       = 'object';
-    protected $useSoftDeletes   = false;
+    protected $useSoftDeletes   = true;
 
     protected $allowedFields = [
         'user',
@@ -18,7 +18,7 @@ class UsersActivityModel extends MyBaseModel
     ];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

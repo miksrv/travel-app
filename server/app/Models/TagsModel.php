@@ -1,44 +1,27 @@
 <?php namespace App\Models;
 
-use App\Entities\Photo;
-
-class PhotosModel extends MyBaseModel
+class TagsModel extends MyBaseModel
 {
-    protected $table      = 'photos';
-    protected $primaryKey = 'id';
-
+    protected $table            = 'tags';
+    protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
+    protected $returnType       = 'object';
+    protected $useSoftDeletes   = true;
 
-    protected $returnType     = Photo::class;
-    protected $useSoftDeletes = true;
-
-    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at', 'overpass_id'];
-
-    // The updatable fields
     protected $allowedFields = [
         'title',
-        'latitude',
-        'longitude',
-        'place',
-        'author',
-        'filename',
-        'extension',
-        'filesize',
-        'width',
-        'height',
-        'order',
-        'created_at',
+        'counter'
     ];
 
     // Dates
-    protected $useTimestamps = true;
+    protected $useTimestamps = false;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
     // Validation
-    protected $validationRules = [];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
