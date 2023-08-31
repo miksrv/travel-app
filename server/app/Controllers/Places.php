@@ -3,7 +3,6 @@
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
-use CodeIgniter\Database\RawSql;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -53,20 +52,47 @@ class Places extends ResourceController
      * @example http://localhost:8080/places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface
-    {
+    public function list(): ResponseInterface {
         $placesModel = new PlacesModel();
+        $photosModel = new PhotosModel();
         $placesModel->select(
                 'places.id, places.category, places.subcategory, places.latitude, places.longitude,
                 places.rating, places.views, translations_places.title, translations_places.content,
-                category.title as category_title, subcategory.title as subcategory_title,
-                photos.*')
+                category.title as category_title, subcategory.title as subcategory_title')
             ->join('category', 'places.category = category.name')
-            ->join('subcategory', 'places.subcategory = subcategory.name')
-            ->join('photos', 'places.id = photos.place', 'left');
+            ->join('subcategory', 'places.subcategory = subcategory.name');
+
+        // Find all places
+        $placesList = $this->_make_list_filters($placesModel)->get()->getResult();
+        $placesIds  = [];
+        $result     = [];
+        foreach ($placesList as $place) {
+            $placesIds[] = $place->id;
+        }
+
+        // Find all photos for all places
+        $photosData = $photosModel
+            ->havingIn('place', $placesIds)
+            ->orderBy('order', 'DESC')
+            ->findAll();
+
+        // Map photos and places
+        foreach ($placesList as $place) {
+            $photoId = array_search($place->id, array_column($photosData, 'place'));
+            $return  = [];
+
+            if (isset($photosData[$photoId])) {
+                $return['photo'] = (object) [
+                    'filename'  => $photosData[$photoId]->filename,
+                    'extension' => $photosData[$photoId]->extension,
+                    'width'     => $photosData[$photoId]->width,
+                    'height'    => $photosData[$photoId]->width,
+                ];
+            }
+        }
 
         return $this->respond([
-            'items'  => $this->_make_list_filters($placesModel)->groupBy('places.id')->get()->getResult(),
+            'items'  => $placesList,
             'count'  => $this->_make_list_filters($placesModel)->countAllResults(),
         ]);
     }
@@ -126,8 +152,7 @@ class Places extends ResourceController
         return $placesModel->limit($limit <= 0 || $limit > 20 ? 20 : $limit, $offset);
     }
 
-    public function show($id = null): ResponseInterface
-    {
+    public function show($id = null): ResponseInterface {
         try {
             $placesTagsModel = new PlacesTagsModel();
             $photosModel = new PhotosModel();

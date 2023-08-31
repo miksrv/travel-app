@@ -29,6 +29,7 @@ class PlacesModel extends MyBaseModel
         'longitude',
         'author',
         'rating',
+        'cover',
         'views',
         'created_at',
     ];

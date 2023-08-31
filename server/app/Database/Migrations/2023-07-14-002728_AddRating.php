@@ -20,7 +20,7 @@ class AddRating extends Migration {
             ],
             'author' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => true,
             ],
             'session' => [

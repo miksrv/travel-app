@@ -16,6 +16,7 @@ class Place extends Entity
         'author'           => 'string',
         'rating'           => 'integer',
         'views'            => 'integer',
+        'cover'            => 'string',
         'tags'             => 'json'
     ];
 }
