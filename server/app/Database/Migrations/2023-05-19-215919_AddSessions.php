@@ -18,7 +18,7 @@ class AddSessions extends Migration {
             ],
             'user' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => true,
             ],
             'user_agent' => [

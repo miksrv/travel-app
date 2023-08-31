@@ -9,13 +9,13 @@ class AddUsersActivity extends Migration {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => false,
                 'unique'     => true
             ],
             'user' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => false,
             ],
             'type' => [

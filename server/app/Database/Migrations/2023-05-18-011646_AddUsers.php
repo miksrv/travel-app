@@ -7,7 +7,7 @@ class AddUsers extends Migration {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
+                'constraint' => 15,
                 'null'       => false,
                 'unique'     => true
             ],

@@ -74,7 +74,7 @@ class Migrate extends ResourceController
             $ratingSum  = 0;
             $ratingData = unserialize($item->item_rating);
 
-            if (is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
+            if ($ratingData && is_array($ratingData['scores']) && isset($ratingData['scores'])) {
                 foreach ($ratingData['scores'] as $score) {
                     $ratingSum += $score;
                 }
