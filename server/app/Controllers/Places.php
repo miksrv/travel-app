@@ -16,38 +16,6 @@ if ('OPTIONS' === $_SERVER['REQUEST_METHOD']) {
 
 class Places extends ResourceController
 {
-//    public function list()
-//    {
-//        $filterCountry  = $this->request->getGet('country', FILTER_SANITIZE_NUMBER_INT);
-//        $filterProvince = $this->request->getGet('province', FILTER_SANITIZE_NUMBER_INT);
-//        $filterArea     = $this->request->getGet('area', FILTER_SANITIZE_NUMBER_INT);
-//        $filterCity     = $this->request->getGet('city', FILTER_SANITIZE_NUMBER_INT);
-//        $filterAuthor   = $this->request->getGet('author', FILTER_SANITIZE_NUMBER_INT);
-//
-//        $filterCategory    = $this->request->getGet('category', FILTER_SANITIZE_STRING);
-//        $filterSubCategory = $this->request->getGet('subcategory', FILTER_SANITIZE_STRING);
-//
-//        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
-//
-//        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT);
-//        $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT);
-//
-//        // left (lon), top (lat), right (lon), bottom (lat)
-//        $bounds = explode(',', $bounds);
-//
-//        $places = new PlacesModel();
-//        $items = $places->where([
-//            'longitude >=' => $bounds[0],
-//            'latitude >=' => $bounds[1],
-//            'longitude <=' =>  $bounds[2],
-//            'latitude <=' =>  $bounds[3],
-//        ])->findAll();
-//
-//        return $this->respond([
-//            'items' => $items,
-//        ]);
-//    }
-
     /**
      * @example http://localhost:8080/places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
@@ -57,7 +25,7 @@ class Places extends ResourceController
         $photosModel = new PhotosModel();
         $placesModel->select(
                 'places.id, places.category, places.subcategory, places.latitude, places.longitude,
-                places.rating, places.views, translations_places.title, translations_places.content,
+                places.rating, places.views, translations_places.title, SUBSTRING(translations_places.content, 1, 250) as content,
                 category.title as category_title, subcategory.title as subcategory_title')
             ->join('category', 'places.category = category.name', 'left')
             ->join('subcategory', 'places.subcategory = subcategory.name', 'left');
@@ -79,7 +47,15 @@ class Places extends ResourceController
         // Map photos and places
         foreach ($placesList as $place) {
             $photoId = array_search($place->id, array_column($photosData, 'place'));
-            $return  = [];
+            $return  = [
+                'id'        => $place->id,
+                'latitude'  => (float) $place->latitude,
+                'longitude' => (float) $place->longitude,
+                'rating'    => (int) $place->rating,
+                'views'     => (int) $place->views,
+                'title'     => $place->title,
+                'content'   => $place->content,
+            ];
 
             if (isset($photosData[$photoId])) {
                 $return['photo'] = (object) [
@@ -89,14 +65,20 @@ class Places extends ResourceController
                     'height'    => $photosData[$photoId]->width,
                 ];
             }
+
+            $result[] = $return;
         }
 
         return $this->respond([
-            'items'  => $placesList,
+            'items'  => $result,
             'count'  => $this->_makeListFilters($placesModel)->countAllResults(),
         ]);
     }
 
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
     public function show($id = null): ResponseInterface {
         try {
             $placesTagsModel = new PlacesTagsModel();
@@ -127,7 +109,7 @@ class Places extends ResourceController
 
             // Collect photos
             $placeData->photos = $photosModel
-                ->select('photos.id, photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title')
+                ->select('photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title')
                 ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
                 ->where(['place' => $placeData->id])
                 ->findAll();
@@ -138,8 +120,6 @@ class Places extends ResourceController
                 ->join('tags', 'tags.id = places_tags.tag')
                 ->where(['place' => $placeData->id])
                 ->findAll();
-
-//            return $this->respond($placeData);
 
             $response = [
                 'id'        => $placeData->id,
