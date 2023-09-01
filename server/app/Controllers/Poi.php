@@ -16,6 +16,7 @@ class Poi extends ResourceController
 {
     public function list(): ResponseInterface
     {
+        // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
         $bounds = explode(',', $bounds);
 
