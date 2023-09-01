@@ -1,11 +1,13 @@
 <?php namespace App\Models;
 
+use App\Entities\Tag;
+
 class TagsModel extends MyBaseModel
 {
     protected $table            = 'tags';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
-    protected $returnType       = 'object';
+    protected $returnType       = Tag::class;
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
