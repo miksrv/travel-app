@@ -59,11 +59,11 @@ class Places extends ResourceController
                 'places.id, places.category, places.subcategory, places.latitude, places.longitude,
                 places.rating, places.views, translations_places.title, translations_places.content,
                 category.title as category_title, subcategory.title as subcategory_title')
-            ->join('category', 'places.category = category.name')
-            ->join('subcategory', 'places.subcategory = subcategory.name');
+            ->join('category', 'places.category = category.name', 'left')
+            ->join('subcategory', 'places.subcategory = subcategory.name', 'left');
 
         // Find all places
-        $placesList = $this->_make_list_filters($placesModel)->get()->getResult();
+        $placesList = $this->_makeListFilters($placesModel)->get()->getResult();
         $placesIds  = [];
         $result     = [];
         foreach ($placesList as $place) {
@@ -93,11 +93,127 @@ class Places extends ResourceController
 
         return $this->respond([
             'items'  => $placesList,
-            'count'  => $this->_make_list_filters($placesModel)->countAllResults(),
+            'count'  => $this->_makeListFilters($placesModel)->countAllResults(),
         ]);
     }
 
-    protected function _make_list_filters(PlacesModel $placesModel): PlacesModel {
+    public function show($id = null): ResponseInterface {
+        try {
+            $placesTagsModel = new PlacesTagsModel();
+            $photosModel = new PhotosModel();
+            $placesModel = new PlacesModel();
+            $placeData   = $placesModel
+                ->select(
+                    'places.*, translations_places.title, translations_places.content,
+                    users.id as user_id, users.name as user_name, users.level as user_level, 
+                    users.reputation as user_reputation, users.avatar as user_avatar,
+                    address_country.name as country_name, address_region.name as region_name, 
+                    address_district.name as district_name, address_city.name as city_name,
+                    category.title as category_title, subcategory.title as subcategory_title'
+                )
+                ->join('users', 'places.author = users.id', 'left')
+                ->join('category', 'places.category = category.name', 'left')
+                ->join('subcategory', 'places.subcategory = subcategory.name', 'left')
+                ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
+                ->join('address_country', 'address_country.id = places.address_country', 'left')
+                ->join('address_region', 'address_region.id = places.address_region', 'left')
+                ->join('address_district', 'address_district.id = places.address_district', 'left')
+                ->join('address_city', 'address_city.id = places.address_city', 'left')
+                ->find($id);
+
+            if (!$placeData) {
+                return $this->failNotFound();
+            }
+
+            // Collect photos
+            $placeData->photos = $photosModel
+                ->select('photos.id, photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title')
+                ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+                ->where(['place' => $placeData->id])
+                ->findAll();
+
+            // Collect tags
+            $placeData->tags = $placesTagsModel
+                ->select('tags.id, tags.title, tags.counter')
+                ->join('tags', 'tags.id = places_tags.tag')
+                ->where(['place' => $placeData->id])
+                ->findAll();
+
+//            return $this->respond($placeData);
+
+            $response = [
+                'id'        => $placeData->id,
+                'latitude'  => (float) $placeData->latitude,
+                'longitude' => (float) $placeData->longitude,
+                'rating'    => (int) $placeData->rating,
+                'views'     => (int) $placeData->views,
+                'title'     => $placeData->title,
+                'content'   => $placeData->content,
+                'author'    => [
+                    'id'         => $placeData->user_id,
+                    'name'       => $placeData->user_name,
+                    'level'      => (int) $placeData->user_level,
+                    'reputation' => (int) $placeData->user_reputation,
+                    'avatar'     => $placeData->user_avatar
+                ],
+                'category'  => [
+                    'name'  => $placeData->category,
+                    'title' => $placeData->category_title,
+                ],
+                'subcategory' => $placeData->subcategory ? [
+                    'name'  => $placeData->subcategory,
+                    'title' => $placeData->subcategory_title,
+                ] : null,
+                'address'   => [],
+                'tags'      => $placeData->tags,
+                'photos'    => $placeData->photos,
+            ];
+
+            if ($placeData->address) {
+                $response['address']['street'] = $placeData->address;
+            }
+
+            if ($placeData->address_country) {
+                $response['address']['country'] = [
+                    'id'   => (int) $placeData->address_country,
+                    'name' => $placeData->country_name
+                ];
+            }
+
+            if ($placeData->address_region) {
+                $response['address']['region'] = [
+                    'id'   => (int) $placeData->address_region,
+                    'name' => $placeData->region_name
+                ];
+            }
+
+            if ($placeData->address_district) {
+                $response['address']['district'] = [
+                    'id'   => (int) $placeData->address_district,
+                    'name' => $placeData->district_name
+                ];
+            }
+
+            if ($placeData->address_city) {
+                $response['address']['city'] = [
+                    'id'   => (int) $placeData->address_city,
+                    'name' => $placeData->city_name
+                ];
+            }
+
+            return $this->respond((object) $response);
+        } catch (Exception $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return $this->failNotFound();
+        }
+    }
+
+    /**
+     * @param PlacesModel $placesModel
+     * @return PlacesModel
+     */
+    protected function _makeListFilters(PlacesModel $placesModel): PlacesModel {
         $orderDefault  = 'DESC';
         $sortingFields = ['views', 'rating', 'created', 'updated', 'title', 'category', 'subcategory', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
@@ -150,50 +266,5 @@ class Places extends ResourceController
         }
 
         return $placesModel->limit($limit <= 0 || $limit > 20 ? 20 : $limit, $offset);
-    }
-
-    public function show($id = null): ResponseInterface {
-        try {
-            $placesTagsModel = new PlacesTagsModel();
-            $photosModel = new PhotosModel();
-            $placesModel = new PlacesModel();
-            $placeData   = $placesModel
-                ->select(
-                    'places.*, ' .
-                    'address_country.name as country_name, ' .
-                    'address_region.name as region_name, ' .
-                    'address_district.name as district_name, ' .
-                    'address_city.name as city_name'
-                )
-                ->join('address_country', 'address_country.id = places.address_country')
-                ->join('address_region', 'address_region.id = places.address_region')
-                ->join('address_district', 'address_district.id = places.address_district')
-                ->join('address_city', 'address_city.id = places.address_city')
-                ->find($id);
-
-            if (!$placeData) {
-                return $this->failNotFound();
-            }
-
-            // Collect photos
-            $placeData->photos = $photosModel
-                ->select('photos.id, photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title')
-                ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"')
-                ->where(['place' => $placeData->id])
-                ->findAll();
-
-            // Collect tags
-            $placeData->tags = $placesTagsModel
-                ->select('tags.id, tags.title, tags.counter')
-                ->join('tags', 'tags.id = places_tags.tag')
-                ->where(['place' => $placeData->id])
-                ->findAll();
-
-            return $this->respond($placeData);
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failNotFound();
-        }
     }
 }

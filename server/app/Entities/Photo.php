@@ -9,6 +9,7 @@ class Photo extends Entity
         'latitude'    => 'float',
         'longitude'   => 'float',
         'place'       => 'string',
+        'order'       => 'integer',
         'author'      => 'string',
         'filename'    => 'string',
         'extension'   => 'string',

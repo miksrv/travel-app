@@ -20,6 +20,8 @@ class UsersModel extends MyBaseModel
         'email',
         'password',
         'level',
+        'avatar',
+        'website',
         'reputation',
         'created_at',
     ];
