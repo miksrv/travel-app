@@ -23,8 +23,8 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         place?.subcategory?.name || place?.category?.name
                     }.png`}
                     alt={''}
-                    width={26}
-                    height={30}
+                    width={22}
+                    height={26}
                 />
                 <Link
                     className={styles.link}
@@ -63,6 +63,11 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                                 )}
                             />
                             {place.rating || 0}
+                        </div>
+                    )}
+                    {place?.distance && (
+                        <div className={styles.element}>
+                            {place.distance || 0} км
                         </div>
                     )}
                 </div>

@@ -9,6 +9,7 @@ export type Place = {
     views: number
     title: string
     content: string
+    distance?: number
     author?: Author
     category?: Category
     subcategory?: Category
