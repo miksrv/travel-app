@@ -22,7 +22,7 @@ class Poi extends ResourceController
 
         $places = new PlacesModel();
         $items = $places
-            ->select('id, category, subcategory, title, latitude, longitude')
+            ->select('id, category, subcategory, latitude, longitude')
             ->where([
                 'longitude >=' => $bounds[0],
                 'latitude >=' => $bounds[1],
