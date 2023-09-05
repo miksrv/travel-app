@@ -47,6 +47,8 @@ class Places extends ResourceController
         // Map photos and places
         foreach ($placesList as $place) {
             $photoId = array_search($place->id, array_column($photosData, 'place'));
+            $counts  = array_count_values(array_column($photosData, 'place'))[$place->id] ?? 0;
+
             $return  = [
                 'id'        => $place->id,
                 'latitude'  => (float) $place->latitude,
@@ -54,11 +56,20 @@ class Places extends ResourceController
                 'rating'    => (int) $place->rating,
                 'views'     => (int) $place->views,
                 'title'     => html_entity_decode($place->title),
-                'content'   => html_entity_decode($place->content)
+                'content'   => html_entity_decode($place->content),
+                'category'  => [
+                    'name'  => $place->category,
+                    'title' => $place->category_title,
+                ],
+                'subcategory' => $place->subcategory ? [
+                    'name'  => $place->subcategory,
+                    'title' => $place->subcategory_title,
+                ] : null,
             ];
 
-            if (isset($photosData[$photoId])) {
-                $return['photos'] = [
+            if ($photoId && isset($photosData[$photoId])) {
+                $return['photosCount'] = $counts;
+                $return['photos']      = [
                     (object) [
                         'filename'  => $photosData[$photoId]->filename,
                         'extension' => $photosData[$photoId]->extension,

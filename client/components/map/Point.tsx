@@ -5,7 +5,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
-import noPhoto from '@/public/images/nophoto.jpeg'
+import noPhoto from '@/public/images/no-photo-available.png'
 import icon from '@/public/poi/aircraft.png'
 
 import styles from './styles.module.sass'
