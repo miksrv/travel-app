@@ -25,7 +25,7 @@ class Places extends ResourceController
         $photosModel = new PhotosModel();
         $placesModel->select(
                 'places.id, places.category, places.subcategory, places.latitude, places.longitude,
-                places.rating, places.views, translations_places.title, SUBSTRING(translations_places.content, 1, 250) as content,
+                places.rating, places.views, translations_places.title, SUBSTRING(translations_places.content, 1, 350) as content,
                 category.title as category_title, subcategory.title as subcategory_title')
             ->join('category', 'places.category = category.name', 'left')
             ->join('subcategory', 'places.subcategory = subcategory.name', 'left');
@@ -53,16 +53,18 @@ class Places extends ResourceController
                 'longitude' => (float) $place->longitude,
                 'rating'    => (int) $place->rating,
                 'views'     => (int) $place->views,
-                'title'     => $place->title,
-                'content'   => $place->content,
+                'title'     => html_entity_decode($place->title),
+                'content'   => html_entity_decode($place->content)
             ];
 
             if (isset($photosData[$photoId])) {
-                $return['photo'] = (object) [
-                    'filename'  => $photosData[$photoId]->filename,
-                    'extension' => $photosData[$photoId]->extension,
-                    'width'     => $photosData[$photoId]->width,
-                    'height'    => $photosData[$photoId]->width,
+                $return['photos'] = [
+                    (object) [
+                        'filename'  => $photosData[$photoId]->filename,
+                        'extension' => $photosData[$photoId]->extension,
+                        'width'     => $photosData[$photoId]->width,
+                        'height'    => $photosData[$photoId]->width
+                    ]
                 ];
             }
 
