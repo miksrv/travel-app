@@ -1,5 +1,4 @@
 .placesListItem
-  height: 400px
   position: relative
   display: flex
   flex-direction: column
@@ -13,11 +12,22 @@
   .header
     position: relative
     flex-shrink: 0
-    height: 200px
+    height: 160px
     border-radius: 3px 3px 0 0
     overflow: hidden
     width: 100%
     background-color: #D5E9CB
+
+    .categoryIcon
+      position: absolute
+      top: 5px
+      left: 5px
+
+    .icon
+      font-size: 12px
+      margin-right: 5px
+      vertical-align: middle
+      margin-top: -2px
 
     .link
       display: inline-block
@@ -26,22 +36,35 @@
 
     .photo
       width: 100%
-      height: 200px
+      height: inherit
       object-fit: cover
 
-    .photoCounter
+    .headerBottom
+      position: absolute
+      bottom: 5px
+      padding: 0 5px
+      display: flex
 
-    .rating
+      .element
+        color: white
+        padding: 0 4px
+        background: rgba(0, 0, 0, .3)
+        margin-right: 5px
 
-    .distance
+      .rating
+        color: rgb(250, 175, 0)
+        font-size: 15px
+
+      .distance
 
   .content
     padding: 0.4em 0.5em 0
     background: #FFF
-    height: 200px
+    height: 158px
 
     .title
       margin: 0 0 5px
+      font-weight: 600
 
     .description
       margin: 0
