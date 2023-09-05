@@ -1,4 +1,5 @@
 import { wrapper } from '@/api/store'
+import '@/styles/globals.sass'
 import { AppProps } from 'next/app'
 import { Montserrat } from 'next/font/google'
 import Head from 'next/head'
