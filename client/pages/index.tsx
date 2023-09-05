@@ -20,7 +20,7 @@ const DEFAULT_CENTER = [52.580517, 56.855385]
 
 // const MYPOINT = [42.834944, 74.586949]
 // const MYPOINT = [42.877172, 74.593635] // Bishkek
-const MYPOINT = [51.765445, 55.099745] // Orenburg
+export const MYPOINT = [51.765445, 55.099745] // Orenburg
 
 type TLocation = {
     latitude: number
@@ -65,11 +65,12 @@ const Page: NextPage = () => {
         if ('geolocation' in navigator) {
             // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
             navigator.geolocation.getCurrentPosition(({ coords }) => {
-                //const { latitude, longitude } = coords
                 const latitude = MYPOINT[0]
                 const longitude = MYPOINT[1]
 
-                // @ts-ignore
+                // const latitude = coords.latitude
+                // const longitude = coords.longitude
+
                 setLocation({ latitude, longitude })
                 introduce({ lat: latitude, lon: longitude })
             })

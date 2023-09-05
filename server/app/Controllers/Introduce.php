@@ -35,8 +35,7 @@ class Introduce extends ResourceController
      * @return void
      * @throws ReflectionException
      */
-    public function hello(): ResponseInterface
-    {
+    public function hello(): ResponseInterface {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
 
@@ -45,8 +44,7 @@ class Introduce extends ResourceController
 
         $pointAdded = [];
 
-        if ($lat && $lon)
-        {
+        if ($lat && $lon) {
             $pointAdded = $this->_updatePlaces($lat, $lon);
         }
 
@@ -57,8 +55,7 @@ class Introduce extends ResourceController
         ])->first();
 
         // Если сессия пользователя (на осное его IP и UserAgent новая) - она сохраняется в двух таблицах
-        if (empty($findSession))
-        {
+        if (empty($findSession)) {
             $newSession = [
                 'id'         => md5($ip . $ua->getAgentString()),
                 'ip'         => $ip,
@@ -76,13 +73,10 @@ class Introduce extends ResourceController
                 'latitude'   => $lat,
                 'longitude'  => $lon
             ]);
-        }
-        else
-        {
+        } else {
             // Если сессия уже есть в БД и положение сейчас отличается от того, что было сохранено,
             // То создается новая запись в истории сессий
-            if ($lat !== $findSession->latitude || $lon !== $findSession->longitude)
-            {
+            if ($lat !== $findSession->latitude || $lon !== $findSession->longitude) {
                 $sessionHistoryModel = new SessionsHistoryModel();
                 $sessionHistoryModel->insert([
                     'id'        => uniqid(),
@@ -103,8 +97,7 @@ class Introduce extends ResourceController
      * @throws Exception
      * @throws ReflectionException
      */
-    protected function _updatePlaces(float $lat, float $lon): array
-    {
+    protected function _updatePlaces(float $lat, float $lon): array {
         $overpassAPI = new OverpassAPI();
         $boundingBox = $overpassAPI->getBoundingBox($lat, $lon, .5);
         $pointsList  = $overpassAPI->get($boundingBox);

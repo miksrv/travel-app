@@ -33,14 +33,17 @@ export const api = createApi({
     }),
     endpoints: (builder) => ({
         introduce: builder.mutation<any, Maybe<any>>({
+            invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
         placesGetItem: builder.query<any, string>({
+            providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),
         placesGetList: builder.query<any, void>({
-            query: () => 'places'
+            providesTags: ['Places'],
+            query: () => 'places?sort=distance&order=ASC'
         }),
 
         poiGetItem: builder.mutation<any, string>({
@@ -56,7 +59,7 @@ export const api = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: []
+    tagTypes: ['Places']
 })
 
 // Export hooks for usage in functional components
