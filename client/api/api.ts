@@ -39,6 +39,9 @@ export const api = createApi({
         placesGetItem: builder.query<any, string>({
             query: (item) => `places/${item}`
         }),
+        placesGetList: builder.query<any, void>({
+            query: () => 'places'
+        }),
 
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
@@ -61,6 +64,7 @@ export const {
     useIntroduceMutation,
 
     usePlacesGetItemQuery,
+    usePlacesGetListQuery,
 
     usePoiGetItemMutation,
     usePoiGetListMutation,
