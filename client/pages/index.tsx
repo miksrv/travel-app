@@ -2,7 +2,9 @@ import { useIntroduceMutation, usePoiGetListMutation } from '@/api/api'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
+import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
@@ -24,20 +26,35 @@ const DEFAULT_CENTER = [52.580517, 56.855385]
 export const MYPOINT = [51.765445, 55.099745] // Orenburg
 
 const Page: NextPage = () => {
+    const searchParams = useSearchParams()
+    const router = useRouter()
     const [introduce, { isLoading }] = useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
         usePoiGetListMutation()
     const [mapBounds, setBounds] = useState<LatLngBounds>()
     const geolocation = useGeolocation()
+    const lat = searchParams.get('lat')
+    const lon = searchParams.get('lon')
     const [poiList, setPoiList] = useState<any[]>([])
 
-    const handleChangeBounds = (bounds: LatLngBounds) => {
+    const handleChangeBounds = async (bounds: LatLngBounds) => {
         // left, top, right, bottom
         const boundsString = bounds.toBBoxString()
+        const mapCenter = bounds.getCenter()
 
         if (boundsString !== mapBounds?.toBBoxString()) {
             setBounds(bounds)
             getPoiList(bounds)
+        }
+
+        if (mapCenter) {
+            await router.push(
+                `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
+                undefined,
+                {
+                    shallow: true
+                }
+            )
         }
     }
 
@@ -83,9 +100,11 @@ const Page: NextPage = () => {
                 height={300}
                 width={500}
                 center={
-                    geolocation.longitude && geolocation.longitude
-                        ? [geolocation.latitude, geolocation.longitude]
-                        : DEFAULT_CENTER
+                    !lat || !lon
+                        ? geolocation.longitude && geolocation.longitude
+                            ? [geolocation.latitude, geolocation.longitude]
+                            : DEFAULT_CENTER
+                        : [lat, lon]
                 }
                 zoom={15}
             >
