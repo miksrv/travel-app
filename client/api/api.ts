@@ -33,7 +33,7 @@ export const api = createApi({
     }),
     endpoints: (builder) => ({
         introduce: builder.mutation<any, Maybe<any>>({
-            invalidatesTags: ['Places'],
+            // invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
