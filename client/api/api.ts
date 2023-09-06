@@ -1,3 +1,4 @@
+import { API } from '@/api/types'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
@@ -41,9 +42,12 @@ export const api = createApi({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),
-        placesGetList: builder.query<any, void>({
+        placesGetList: builder.query<
+            API.ResponsePlacesGetList,
+            Maybe<API.RequestPlacesGetList>
+        >({
             providesTags: ['Places'],
-            query: () => 'places?sort=distance&order=ASC'
+            query: (params) => `places${encodeQueryData(params)}`
         }),
 
         poiGetItem: builder.mutation<any, string>({
