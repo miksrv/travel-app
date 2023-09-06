@@ -4,6 +4,7 @@ import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect, useMemo, useState } from 'react'
+import useGeolocation from 'react-hook-geolocation'
 
 const MyAwesomeMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
@@ -22,17 +23,12 @@ const DEFAULT_CENTER = [52.580517, 56.855385]
 // const MYPOINT = [42.877172, 74.593635] // Bishkek
 export const MYPOINT = [51.765445, 55.099745] // Orenburg
 
-type TLocation = {
-    latitude: number
-    longitude: number
-}
-
 const Page: NextPage = () => {
     const [introduce, { isLoading }] = useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
         usePoiGetListMutation()
     const [mapBounds, setBounds] = useState<LatLngBounds>()
-    const [location, setLocation] = useState<TLocation>()
+    const geolocation = useGeolocation()
     const [poiList, setPoiList] = useState<any[]>([])
 
     const handleChangeBounds = (bounds: LatLngBounds) => {
@@ -62,20 +58,10 @@ const Page: NextPage = () => {
     )
 
     useEffect(() => {
-        if ('geolocation' in navigator) {
-            // Retrieve latitude & longitude coordinates from `navigator.geolocation` Web API
-            navigator.geolocation.getCurrentPosition(({ coords }) => {
-                const latitude = MYPOINT[0]
-                const longitude = MYPOINT[1]
-
-                // const latitude = coords.latitude
-                // const longitude = coords.longitude
-
-                setLocation({ latitude, longitude })
-                introduce({ lat: latitude, lon: longitude })
-            })
+        if (geolocation?.latitude && geolocation?.longitude) {
+            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
         }
-    }, [])
+    }, [geolocation.latitude, geolocation.longitude])
 
     useEffect(() => {
         setPoiList([
@@ -97,8 +83,8 @@ const Page: NextPage = () => {
                 height={300}
                 width={500}
                 center={
-                    location
-                        ? [location.latitude, location.longitude]
+                    geolocation.longitude && geolocation.longitude
+                        ? [geolocation.latitude, geolocation.longitude]
                         : DEFAULT_CENTER
                 }
                 zoom={15}
@@ -116,10 +102,10 @@ const Page: NextPage = () => {
                         {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
                         {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
                         {/*/>*/}
-                        {location && (
+                        {geolocation.latitude && geolocation.longitude && (
                             <MyPoint
-                                lat={location?.latitude}
-                                lon={location?.longitude}
+                                lat={geolocation.latitude}
+                                lon={geolocation.longitude}
                             />
                         )}
                         {!!poiList.length &&
@@ -141,7 +127,7 @@ const Page: NextPage = () => {
             </MyAwesomeMap>
             <div>{(isLoading || placesLoading) && 'Загрузка...'}</div>
             <div>
-                My Location: {location?.latitude},{location?.longitude}
+                My Location: {geolocation?.latitude},{geolocation?.longitude}
             </div>
             <div>Bounds: {mapBounds?.toBBoxString()}</div>
         </div>
