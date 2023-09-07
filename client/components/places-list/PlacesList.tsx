@@ -4,8 +4,6 @@ import React from 'react'
 
 import PlacesListItem from '@/components/places-list-item'
 
-import styles from './styles.module.sass'
-
 interface PlacesListProps {
     places?: Place[]
 }
@@ -18,7 +16,8 @@ const PlacesList: React.FC<PlacesListProps> = ({ places }) => {
         >
             {places?.map((place) => (
                 <Grid
-                    md={3}
+                    lg={3}
+                    md={6}
                     xs={12}
                     key={place.id}
                 >

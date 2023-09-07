@@ -1,15 +1,19 @@
 import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
 import { API } from '@/api/types'
 import { Pagination } from '@mui/material'
+import Breadcrumbs from '@mui/material/Breadcrumbs'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
+import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Typography from '@mui/material/Typography'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
+import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import React from 'react'
+import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import PlacesList from '@/components/places-list'
@@ -23,40 +27,42 @@ type SortOptionsProps = {
 
 const SortOptions: SortOptionsProps[] = [
     {
-        key: 'views',
-        value: 'Просмотры'
+        key: API.SortFields.Views,
+        value: 'Количеству просмотров'
     },
     {
-        key: 'rating',
-        value: 'Рейтинг'
+        key: API.SortFields.Rating,
+        value: 'Рейтингу'
     },
     {
-        key: 'created_at',
-        value: 'Создано'
+        key: API.SortFields.Created,
+        value: 'Дате добавления'
     },
     {
-        key: 'updated_at',
-        value: 'Обновлено'
+        key: API.SortFields.Updated,
+        value: 'Дате обновления'
     },
     {
-        key: 'title',
-        value: 'Заголовок'
+        key: API.SortFields.Title,
+        value: 'Алфавиту'
     },
     {
-        key: 'distance',
-        value: 'Расстояние'
+        key: API.SortFields.Distance,
+        value: 'Расстоянию'
     }
 ]
 
 const Places: NextPage = () => {
     const searchParams = useSearchParams()
-    const router = useRouter()
-    const page = searchParams.get('page')
     const geolocation = useGeolocation()
-    const [introduce] = useIntroduceMutation()
-    const [sort, setSort] = React.useState<API.SortFields>()
-    const [order, setOrder] = React.useState<API.Order>()
+    const router = useRouter()
 
+    const [sort, setSort] = useState<API.SortFields>(API.SortFields.Created)
+    const [order, setOrder] = useState<API.SortOrder>(API.SortOrder.DESC)
+
+    const page = searchParams.get('page')
+
+    const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
         limit: POST_PER_PAGE,
         offset: ((Number(page) || 1) - 1) * POST_PER_PAGE,
@@ -69,7 +75,7 @@ const Places: NextPage = () => {
     }
 
     const handleChangeOrder = (event: SelectChangeEvent) => {
-        setOrder(event.target.value as API.Order)
+        setOrder(event.target.value as API.SortOrder)
     }
 
     const handlePaginationChange = async (
@@ -92,55 +98,81 @@ const Places: NextPage = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <div className={'wrapper'}>
-            <FormControl
-                sx={{ m: 1, minWidth: 220 }}
-                size='small'
-            >
-                <InputLabel id='demo-select-small-label'>Сортировка</InputLabel>
-                <Select
-                    labelId='demo-select-small-label'
-                    value={sort}
-                    label='Сортировка'
-                    onChange={handleChangeSort}
+        <>
+            <br />
+            <br />
+            <Breadcrumbs aria-label='breadcrumb'>
+                <Link
+                    color='inherit'
+                    href='/'
                 >
-                    {SortOptions.map((option) => (
-                        <MenuItem
-                            value={option.key}
-                            key={option.key}
-                        >
-                            {option.value}
-                        </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                    MUI
+                </Link>
+                <Link
+                    color='inherit'
+                    href='/material-ui/getting-started/installation/'
+                >
+                    Core
+                </Link>
+                <Typography color='text.primary'>Breadcrumbs</Typography>
+            </Breadcrumbs>
 
-            <FormControl
-                sx={{ m: 1, minWidth: 220 }}
-                size='small'
-            >
-                <InputLabel id='demo-select-small-label'>Порядок</InputLabel>
-                <Select
-                    labelId='demo-select-small-label'
-                    value={sort}
-                    label='Порядок'
-                    onChange={handleChangeOrder}
+            <Paper sx={{ mb: 2, mt: 2 }}>
+                <FormControl
+                    sx={{ m: 1, minWidth: 220 }}
+                    size='small'
                 >
-                    <MenuItem value='ASC'>По возрастанию</MenuItem>
-                    <MenuItem value='DESC'>По убыванию</MenuItem>
-                </Select>
-            </FormControl>
+                    <InputLabel id='demo-select-small-label'>
+                        Сортировка
+                    </InputLabel>
+                    <Select
+                        labelId='demo-select-small-label'
+                        value={sort}
+                        label='Сортировка'
+                        onChange={handleChangeSort}
+                    >
+                        {SortOptions.map((option) => (
+                            <MenuItem
+                                value={option.key}
+                                key={option.key}
+                            >
+                                {option.value}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl
+                    sx={{ m: 1, minWidth: 220 }}
+                    size='small'
+                >
+                    <InputLabel>Порядок</InputLabel>
+                    <Select
+                        value={order}
+                        label='Порядок'
+                        onChange={handleChangeOrder}
+                    >
+                        <MenuItem value={API.SortOrder.ASC}>
+                            По возрастанию
+                        </MenuItem>
+                        <MenuItem value={API.SortOrder.DESC}>
+                            По убыванию
+                        </MenuItem>
+                    </Select>
+                </FormControl>
+            </Paper>
 
             <PlacesList places={data?.items} />
-            <br />
+
             {data?.count && (
                 <Pagination
+                    sx={{ mt: 2 }}
                     count={Math.ceil(data?.count / POST_PER_PAGE)}
                     shape='rounded'
                     onChange={handlePaginationChange}
                 />
             )}
-        </div>
+        </>
     )
 }
 

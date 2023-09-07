@@ -1,7 +1,8 @@
-import { usePlacesGetItemQuery } from '@/api/api'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
+
+import { usePlacesGetItemQuery } from '@/api/api'
 
 const Place: NextPage = () => {
     const router = useRouter()

@@ -11,12 +11,12 @@
     "endOfLine": "lf",
     "singleAttributePerLine": true,
     "importOrder": [
+        "@/api",
         "@/types",
         "@/components/(.*)$",
         "@/public/(.*)$",
-        "@/update",
-        "@/data/(.*)$",
-        "^[./]"
+        "^[./]",
+        "@/@mui/(.*)$"
     ],
     "importOrderGroupNamespaceSpecifiers": true,
     "importOrderSeparation": true,

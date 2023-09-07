@@ -1,9 +1,10 @@
-import { usePoiGetItemMutation } from '@/api/api'
 import Leaflet from 'leaflet'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
+
+import { usePoiGetItemMutation } from '@/api/api'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 import icon from '@/public/poi/aircraft.png'
