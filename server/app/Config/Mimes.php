@@ -193,6 +193,8 @@ class Mimes
             'application/x-bmp',
             'application/x-win-bitmap',
         ],
+        'heic' => 'image/heic',
+        'heif' => 'image/heif',
         'gif' => 'image/gif',
         'jpg' => [
             'image/jpeg',
