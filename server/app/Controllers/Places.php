@@ -226,7 +226,7 @@ class Places extends ResourceController
      */
     protected function _makeListFilters(PlacesModel $placesModel): PlacesModel {
         $orderDefault  = 'DESC';
-        $sortingFields = ['views', 'rating', 'created', 'updated', 'title', 'category', 'subcategory', 'distance', 'created_at', 'updated_at'];
+        $sortingFields = ['views', 'rating', 'title', 'category', 'subcategory', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
 
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
