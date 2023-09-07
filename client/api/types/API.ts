@@ -1,10 +1,10 @@
 import { Place } from '@/api/types/Place'
 
+export type Order = 'ASC' | 'DESC'
+
 export type SortFields =
     | 'views'
     | 'rating'
-    | 'created'
-    | 'updated'
     | 'title'
     | 'category'
     | 'subcategory'
@@ -19,7 +19,7 @@ export interface ResponsePlacesGetList {
 
 export interface RequestPlacesGetList {
     sort?: SortFields
-    order?: 'ASC' | 'DESC'
+    order?: Order
     search?: string
     country?: number
     region?: number

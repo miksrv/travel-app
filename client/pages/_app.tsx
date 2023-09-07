@@ -1,11 +1,27 @@
 import { wrapper } from '@/api/store'
 import '@/styles/globals.sass'
+import { green, lightGreen } from '@mui/material/colors'
+import { ruRU } from '@mui/material/locale'
+import { ThemeProvider, createTheme } from '@mui/material/styles'
 import { AppProps } from 'next/app'
 import { Montserrat } from 'next/font/google'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
 
+import Header from '@/components/header'
+
 const montserrat = Montserrat({ subsets: ['latin'] })
+
+const theme = createTheme(
+    {
+        palette: {
+            mode: 'light',
+            primary: green,
+            secondary: lightGreen
+        }
+    },
+    ruRU
+)
 
 const App = ({ Component, pageProps }: AppProps) => {
     const { store, props } = wrapper.useWrappedStore(pageProps)
@@ -28,9 +44,12 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             </Head>
             <Provider store={store}>
-                <main className={montserrat.className}>
-                    <Component {...props.pageProps} />
-                </main>
+                <ThemeProvider theme={theme}>
+                    <main className={montserrat.className}>
+                        <Header />
+                        <Component {...props.pageProps} />
+                    </main>
+                </ThemeProvider>
             </Provider>
         </>
     )

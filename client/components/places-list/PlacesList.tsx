@@ -1,4 +1,5 @@
 import { Place } from '@/api/types/Place'
+import Grid from '@mui/material/Unstable_Grid2'
 import React from 'react'
 
 import PlacesListItem from '@/components/places-list-item'
@@ -11,14 +12,20 @@ interface PlacesListProps {
 
 const PlacesList: React.FC<PlacesListProps> = ({ places }) => {
     return (
-        <div className={styles.placesList}>
+        <Grid
+            container
+            spacing={2}
+        >
             {places?.map((place) => (
-                <PlacesListItem
-                    place={place}
+                <Grid
+                    md={3}
+                    xs={12}
                     key={place.id}
-                />
+                >
+                    <PlacesListItem place={place} />
+                </Grid>
             ))}
-        </div>
+        </Grid>
     )
 }
 
