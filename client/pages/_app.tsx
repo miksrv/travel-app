@@ -1,5 +1,7 @@
 import { wrapper } from '@/api/store'
 import '@/styles/globals.sass'
+import Container from '@mui/material/Container'
+import CssBaseline from '@mui/material/CssBaseline'
 import { green, lightGreen } from '@mui/material/colors'
 import { ruRU } from '@mui/material/locale'
 import { ThemeProvider, createTheme } from '@mui/material/styles'
@@ -14,10 +16,25 @@ const montserrat = Montserrat({ subsets: ['latin'] })
 
 const theme = createTheme(
     {
+        components: {
+            MuiChip: {
+                styleOverrides: {
+                    root: {
+                        borderRadius: 3
+                    }
+                }
+            }
+        },
         palette: {
             mode: 'light',
             primary: green,
             secondary: lightGreen
+        },
+        typography: {
+            fontSize: 12,
+            h3: {
+                fontSize: 14
+            }
         }
     },
     ruRU
@@ -45,10 +62,15 @@ const App = ({ Component, pageProps }: AppProps) => {
             </Head>
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
-                    <main className={montserrat.className}>
-                        <Header />
+                    <CssBaseline />
+                    <Container
+                        component='main'
+                        maxWidth='lg'
+                        className={montserrat.className}
+                    >
+                        {/*<Header />*/}
                         <Component {...props.pageProps} />
-                    </main>
+                    </Container>
                 </ThemeProvider>
             </Provider>
         </>

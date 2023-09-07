@@ -56,6 +56,7 @@
         "comma-dangle": ["warn", "never"],
         "eol-last": "error",
         "jsx-quotes": ["warn", "prefer-single"],
+        "no-redeclare": 1,
         "max-len": [
             "warn",
             {
