@@ -35,16 +35,18 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 width={22}
                 height={26}
             />
-            <CardMedia
-                component='img'
-                height='180'
-                image={
-                    place?.photos?.[0]?.filename
-                        ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
-                        : noPhoto.src
-                }
-                alt='green iguana'
-            />
+            <Link href={`/places/${place.id}`}>
+                <CardMedia
+                    component='img'
+                    height='180'
+                    image={
+                        place?.photos?.[0]?.filename
+                            ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
+                            : noPhoto.src
+                    }
+                    alt='green iguana'
+                />
+            </Link>
             <CardContent sx={{ height: 157, overflow: 'hidden' }}>
                 <Typography
                     gutterBottom

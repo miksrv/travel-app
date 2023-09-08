@@ -23,6 +23,8 @@ export interface ResponsePlacesGetList {
     count?: number
 }
 
+export interface ResponsePlacesGetItem extends Place {}
+
 export interface RequestPlacesGetList {
     sort?: SortFields
     order?: SortOrder

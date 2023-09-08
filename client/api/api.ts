@@ -1,7 +1,7 @@
+import { API } from '@/api/types'
+import { ResponsePlacesGetItem } from '@/api/types/API'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
-
-import { API } from '@/api/types'
 
 type Maybe<T> = T | void
 
@@ -39,7 +39,7 @@ export const api = createApi({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
-        placesGetItem: builder.query<any, string>({
+        placesGetItem: builder.query<API.ResponsePlacesGetItem, string>({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),

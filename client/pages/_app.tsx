@@ -32,6 +32,9 @@ const theme = createTheme(
         },
         typography: {
             fontSize: 12,
+            h1: {
+                fontSize: 20
+            },
             h3: {
                 fontSize: 14
             }
