@@ -21,12 +21,15 @@ const Place: NextPage = () => {
 
     return (
         <>
-            <Typography
-                variant='h1'
-                color='text.primary'
-            >
-                {data?.title}
-            </Typography>
+            <Typography variant='h1'>{data?.title}</Typography>
+            <Typography variant={'body1'}>{data?.content}</Typography>
+            <div>
+                <div>Просмотров: {data?.views}</div>
+                <div>Рейтинг: {data?.rating}</div>
+                <div>Фотографий: {data?.photosCount}</div>
+                <div>Расстояние: {data?.distance}</div>
+            </div>
+
             {isLoading && <div>Loading....</div>}
             {data && JSON.stringify(data)}
             <div>{routerObject}</div>

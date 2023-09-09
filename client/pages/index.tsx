@@ -9,7 +9,7 @@ import useGeolocation from 'react-hook-geolocation'
 
 import { useIntroduceMutation, usePoiGetListMutation } from '@/api/api'
 
-const MyAwesomeMap = dynamic(() => import('@/components/map'), { ssr: false })
+const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
     ssr: false
 })
@@ -45,7 +45,7 @@ const Page: NextPage = () => {
 
         if (boundsString !== mapBounds?.toBBoxString()) {
             setBounds(bounds)
-            getPoiList(bounds)
+            await getPoiList(bounds)
         }
 
         if (mapCenter) {
@@ -97,9 +97,7 @@ const Page: NextPage = () => {
 
     return (
         <div>
-            <MyAwesomeMap
-                height={300}
-                width={500}
+            <DynamicMap
                 center={
                     !lat || !lon
                         ? geolocation.longitude && geolocation.longitude
@@ -144,7 +142,7 @@ const Page: NextPage = () => {
                         <MyMapEvents onChangeBounds={handleChangeBounds} />
                     </>
                 )}
-            </MyAwesomeMap>
+            </DynamicMap>
             <div>{(isLoading || placesLoading) && 'Загрузка...'}</div>
             <div>
                 My Location: {geolocation?.latitude},{geolocation?.longitude}
