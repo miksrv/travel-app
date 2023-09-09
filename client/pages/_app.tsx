@@ -1,4 +1,3 @@
-import { wrapper } from '@/api/store'
 import '@/styles/globals.sass'
 import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
@@ -9,6 +8,8 @@ import { AppProps } from 'next/app'
 import { Montserrat } from 'next/font/google'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
+
+import { wrapper } from '@/api/store'
 
 import Header from '@/components/header'
 
@@ -33,7 +34,7 @@ const theme = createTheme(
         typography: {
             fontSize: 12,
             h1: {
-                fontSize: 20
+                fontSize: 24
             },
             h3: {
                 fontSize: 14
