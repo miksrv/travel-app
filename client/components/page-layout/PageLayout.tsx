@@ -4,7 +4,7 @@ import { ContainerTypeMap } from '@mui/material/Container/Container'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import React from 'react'
 
-// import Header from '@/components/header'
+import Header from '@/components/header'
 
 export interface PageLayoutProps
     extends OverridableComponent<ContainerTypeMap> {
@@ -12,13 +12,16 @@ export interface PageLayoutProps
 }
 
 const PageLayout: React.FC<any> = ({ children, ...props }) => (
-    <Container
-        {...props}
-        className={montserrat.className}
-        component='main'
-    >
-        {children}
-    </Container>
+    <>
+        <Header />
+        <Container
+            {...props}
+            className={montserrat.className}
+            component='main'
+        >
+            {children}
+        </Container>
+    </>
 )
 
 export default PageLayout

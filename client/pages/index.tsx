@@ -98,7 +98,10 @@ const Page: NextPage = () => {
     }, [data, mapBounds])
 
     return (
-        <PageLayout maxWidth={false}>
+        <PageLayout
+            maxWidth={false}
+            sx={{ height: '100vh' }}
+        >
             <DynamicMap
                 center={
                     !lat || !lon
@@ -145,11 +148,11 @@ const Page: NextPage = () => {
                     </>
                 )}
             </DynamicMap>
-            <div>{(isLoading || placesLoading) && 'Загрузка...'}</div>
-            <div>
-                My Location: {geolocation?.latitude},{geolocation?.longitude}
-            </div>
-            <div>Bounds: {mapBounds?.toBBoxString()}</div>
+            {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
+            {/*<div>*/}
+            {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
+            {/*</div>*/}
+            {/*<div>Bounds: {mapBounds?.toBBoxString()}</div>*/}
         </PageLayout>
     )
 }

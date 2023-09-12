@@ -24,9 +24,9 @@ const theme = createTheme(
             }
         },
         palette: {
-            mode: 'light',
-            primary: green,
-            secondary: lightGreen
+            mode: 'light'
+            // primary: green,
+            // secondary: lightGreen
         },
         typography: {
             fontSize: 12,

@@ -102,7 +102,6 @@ const Places: NextPage = () => {
     return (
         <PageLayout maxWidth={'lg'}>
             <br />
-            <br />
             <Breadcrumbs aria-label='breadcrumb'>
                 <Link
                     color='inherit'
