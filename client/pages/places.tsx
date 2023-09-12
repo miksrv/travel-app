@@ -1,5 +1,3 @@
-import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
-import { API } from '@/api/types'
 import { Pagination } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import FormControl from '@mui/material/FormControl'
@@ -16,6 +14,10 @@ import { useEffect } from 'react'
 import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
+import { API } from '@/api/types'
+
+import PageLayout from '@/components/page-layout'
 import PlacesList from '@/components/places-list'
 
 const POST_PER_PAGE = 8
@@ -98,7 +100,7 @@ const Places: NextPage = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <>
+        <PageLayout maxWidth={'lg'}>
             <br />
             <br />
             <Breadcrumbs aria-label='breadcrumb'>
@@ -172,7 +174,7 @@ const Places: NextPage = () => {
                     onChange={handlePaginationChange}
                 />
             )}
-        </>
+        </PageLayout>
     )
 }
 

@@ -1,5 +1,4 @@
 import '@/styles/globals.sass'
-import Container from '@mui/material/Container'
 import CssBaseline from '@mui/material/CssBaseline'
 import { green, lightGreen } from '@mui/material/colors'
 import { ruRU } from '@mui/material/locale'
@@ -11,9 +10,7 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
-import Header from '@/components/header'
-
-const montserrat = Montserrat({ subsets: ['latin'] })
+export const montserrat = Montserrat({ subsets: ['latin'] })
 
 const theme = createTheme(
     {
@@ -67,14 +64,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <Container
-                        component='main'
-                        maxWidth='lg'
-                        className={montserrat.className}
-                    >
-                        {/*<Header />*/}
-                        <Component {...props.pageProps} />
-                    </Container>
+                    <Component {...props.pageProps} />
                 </ThemeProvider>
             </Provider>
         </>

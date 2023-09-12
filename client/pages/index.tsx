@@ -9,6 +9,8 @@ import useGeolocation from 'react-hook-geolocation'
 
 import { useIntroduceMutation, usePoiGetListMutation } from '@/api/api'
 
+import PageLayout from '@/components/page-layout'
+
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
     ssr: false
@@ -96,7 +98,7 @@ const Page: NextPage = () => {
     }, [data, mapBounds])
 
     return (
-        <div>
+        <PageLayout maxWidth={false}>
             <DynamicMap
                 center={
                     !lat || !lon
@@ -148,7 +150,7 @@ const Page: NextPage = () => {
                 My Location: {geolocation?.latitude},{geolocation?.longitude}
             </div>
             <div>Bounds: {mapBounds?.toBBoxString()}</div>
-        </div>
+        </PageLayout>
     )
 }
 
