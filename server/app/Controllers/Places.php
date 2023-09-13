@@ -112,6 +112,19 @@ class Places extends ResourceController
      */
     public function show($id = null): ResponseInterface {
         try {
+            $ip = $this->request->getIPAddress();
+            $ua = $this->request->getUserAgent();
+
+            $sessionModel = new SessionsModel();
+            $findSession  = $sessionModel->where([
+                'ip'         => $ip,
+                'user_agent' => $ua->getAgentString()
+            ])->first();
+
+            $distanceSelect = $findSession
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$findSession->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$findSession->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$findSession->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+                : '';
+
             $placesTagsModel = new PlacesTagsModel();
             $photosModel = new PhotosModel();
             $placesModel = new PlacesModel();
@@ -122,7 +135,7 @@ class Places extends ResourceController
                     users.reputation as user_reputation, users.avatar as user_avatar,
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
-                    category.title as category_title, subcategory.title as subcategory_title'
+                    category.title as category_title, subcategory.title as subcategory_title' . $distanceSelect
                 )
                 ->join('users', 'places.author = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
@@ -177,11 +190,19 @@ class Places extends ResourceController
                 ] : null,
                 'address'   => [],
                 'tags'      => $placeData->tags,
-                'photos'    => $placeData->photos,
+                'photos'    => $placeData->photos
             ];
 
             if ($placeData->address) {
                 $response['address']['street'] = $placeData->address;
+            }
+
+            if ($placeData->photos) {
+                $response['photosCount'] = count($placeData->photos);
+            }
+
+            if ($findSession) {
+                $response['distance'] = round((float) $placeData->distance, 1);
             }
 
             if ($placeData->address_country) {
