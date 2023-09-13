@@ -1,5 +1,4 @@
 import { Pagination } from '@mui/material'
-import Breadcrumbs from '@mui/material/Breadcrumbs'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
@@ -99,23 +98,6 @@ const Places: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
-            {/*<br />*/}
-            {/*<Breadcrumbs aria-label='breadcrumb'>*/}
-            {/*    <Link*/}
-            {/*        color='inherit'*/}
-            {/*        href='/'*/}
-            {/*    >*/}
-            {/*        MUI*/}
-            {/*    </Link>*/}
-            {/*    <Link*/}
-            {/*        color='inherit'*/}
-            {/*        href='/material-ui/getting-started/installation/'*/}
-            {/*    >*/}
-            {/*        Core*/}
-            {/*    </Link>*/}
-            {/*    <Typography color='text.primary'>Breadcrumbs</Typography>*/}
-            {/*</Breadcrumbs>*/}
-
             <Paper sx={{ mb: 2, mt: 2 }}>
                 <FormControl
                     sx={{ m: 1, minWidth: 220 }}

@@ -75,7 +75,7 @@ const theme = createTheme(
                     {
                         props: { variant: 'body2' },
                         style: {
-                            fontWeight: 300
+                            fontWeight: 400
                         }
                     }
                 ]
@@ -87,10 +87,10 @@ const theme = createTheme(
         // shadows: ['none'] as unknown as Shadows,
         shadows: [
             'none',
+            '0 1px 2px rgba(0,0,0,.1)',
             '1px 1px 1px 0 rgba(0, 0, 0, 0.1)',
             '0px 2px 2px 0px rgba(0, 0, 0, 0.25)',
             '0px 6px 8px 0px rgba(0, 0, 0, 0.25)',
-            '0px 15px 52px 15px rgba(50, 59, 82, 0.15)',
             ...Array(20).fill('none')
         ] as unknown as Shadows,
         typography: {

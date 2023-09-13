@@ -52,68 +52,77 @@ const Place: NextPage = () => {
             </Breadcrumbs>
             <Card sx={{ mb: 2, mt: 2 }}>
                 <CardContent>
-                    <Typography variant={'body1'}>{data?.content}</Typography>
+                    <Typography
+                        variant={'body2'}
+                        sx={{ whiteSpace: 'break-spaces' }}
+                    >
+                        {data?.content}
+                    </Typography>
                 </CardContent>
             </Card>
             <Card sx={{ mb: 2 }}>
                 <CardContent>
-                    <div>Просмотров: {numberFormatter(data?.views || 0)}</div>
-                    <div>Рейтинг: {data?.rating}</div>
-                    <div>Фотографий: {data?.photosCount}</div>
-                    <div>Расстояние: {data?.distance} км</div>
-                    <div>Категория: {data?.category?.title}</div>
-                    <div>Подкатегория: {data?.subcategory?.title}</div>
-                    {data?.address?.country && (
+                    <Typography variant={'body2'}>
                         <div>
-                            Страна:{' '}
-                            <Link
-                                color='inherit'
-                                href={`/country/${data.address.country.id}`}
-                            >
-                                {data.address.country.name}
-                            </Link>
+                            Просмотров: {numberFormatter(data?.views || 0)}
                         </div>
-                    )}
-                    {data?.address?.region && (
-                        <div>
-                            Область:{' '}
-                            <Link
-                                color='inherit'
-                                href={`/region/${data.address.region.id}`}
-                            >
-                                {data.address.region.name}
-                            </Link>
-                        </div>
-                    )}
-                    {data?.address?.district && (
-                        <div>
-                            Район:{' '}
-                            <Link
-                                color='inherit'
-                                href={`/district/${data.address.district.id}`}
-                            >
-                                {data.address.district.name}
-                            </Link>
-                        </div>
-                    )}
-                    {data?.address?.city && (
-                        <div>
-                            Населенный пункт:{' '}
-                            <Link
-                                color='inherit'
-                                href={`/city/${data.address.city.id}`}
-                            >
-                                {data.address.city.name}
-                            </Link>
-                        </div>
-                    )}
+                        <div>Рейтинг: {data?.rating}</div>
+                        <div>Фотографий: {data?.photosCount}</div>
+                        <div>Расстояние: {data?.distance} км</div>
+                        <div>Категория: {data?.category?.title}</div>
+                        <div>Подкатегория: {data?.subcategory?.title}</div>
+                        {data?.address?.country && (
+                            <div>
+                                Страна:{' '}
+                                <Link
+                                    color='inherit'
+                                    href={`/country/${data.address.country.id}`}
+                                >
+                                    {data.address.country.name}
+                                </Link>
+                            </div>
+                        )}
+                        {data?.address?.region && (
+                            <div>
+                                Область:{' '}
+                                <Link
+                                    color='inherit'
+                                    href={`/region/${data.address.region.id}`}
+                                >
+                                    {data.address.region.name}
+                                </Link>
+                            </div>
+                        )}
+                        {data?.address?.district && (
+                            <div>
+                                Район:{' '}
+                                <Link
+                                    color='inherit'
+                                    href={`/district/${data.address.district.id}`}
+                                >
+                                    {data.address.district.name}
+                                </Link>
+                            </div>
+                        )}
+                        {data?.address?.city && (
+                            <div>
+                                Населенный пункт:{' '}
+                                <Link
+                                    color='inherit'
+                                    href={`/city/${data.address.city.id}`}
+                                >
+                                    {data.address.city.name}
+                                </Link>
+                            </div>
+                        )}
+                    </Typography>
                 </CardContent>
             </Card>
             {!!data?.photos?.length && (
                 <Card>
                     <CardContent>
                         <ImageList
-                            gap={3}
+                            gap={4}
                             cols={4}
                         >
                             {data.photos.map((photo) => (
