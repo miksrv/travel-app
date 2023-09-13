@@ -10,6 +10,10 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
+// https://vkcom.github.io/VKUI/#/SplitLayout
+// https://setproduct.com/material-x
+// https://www.atlasobscura.com/places/tunguska-event-epicenter
+
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
     return (
         <NextLink
@@ -87,7 +91,9 @@ const theme = createTheme(
                 '-apple-system,system-ui,"Helvetica Neue",Roboto,sans-serif',
             fontSize: 14,
             h1: {
-                fontSize: 24
+                fontSize: 24,
+                fontWeight: 600,
+                lineHeight: '28px'
             },
             h3: {
                 fontSize: 16,
