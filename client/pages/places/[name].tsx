@@ -1,12 +1,13 @@
 import { numberFormatter } from '@/functions/helpers'
 import { ImageList, ImageListItem } from '@mui/material'
+import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 import { usePlacesGetItemQuery } from '@/api/api'
@@ -30,11 +31,26 @@ const Place: NextPage = () => {
         <PageLayout>
             <Typography
                 variant='h1'
-                sx={{ mb: 1, mt: 2 }}
+                sx={{ mb: 0.5, mt: 2 }}
             >
                 {data?.title}
             </Typography>
-            <Card sx={{ mb: 2 }}>
+            <Breadcrumbs aria-label='breadcrumb'>
+                <Link
+                    color='inherit'
+                    href='/'
+                >
+                    Главная
+                </Link>
+                <Link
+                    color='inherit'
+                    href='/places/'
+                >
+                    Интересные места
+                </Link>
+                <Typography variant={'caption'}>{data?.title}</Typography>
+            </Breadcrumbs>
+            <Card sx={{ mb: 2, mt: 2 }}>
                 <CardContent>
                     <Typography variant={'body1'}>{data?.content}</Typography>
                 </CardContent>
@@ -47,6 +63,50 @@ const Place: NextPage = () => {
                     <div>Расстояние: {data?.distance} км</div>
                     <div>Категория: {data?.category?.title}</div>
                     <div>Подкатегория: {data?.subcategory?.title}</div>
+                    {data?.address?.country && (
+                        <div>
+                            Страна:{' '}
+                            <Link
+                                color='inherit'
+                                href={`/country/${data.address.country.id}`}
+                            >
+                                {data.address.country.name}
+                            </Link>
+                        </div>
+                    )}
+                    {data?.address?.region && (
+                        <div>
+                            Область:{' '}
+                            <Link
+                                color='inherit'
+                                href={`/region/${data.address.region.id}`}
+                            >
+                                {data.address.region.name}
+                            </Link>
+                        </div>
+                    )}
+                    {data?.address?.district && (
+                        <div>
+                            Район:{' '}
+                            <Link
+                                color='inherit'
+                                href={`/district/${data.address.district.id}`}
+                            >
+                                {data.address.district.name}
+                            </Link>
+                        </div>
+                    )}
+                    {data?.address?.city && (
+                        <div>
+                            Населенный пункт:{' '}
+                            <Link
+                                color='inherit'
+                                href={`/city/${data.address.city.id}`}
+                            >
+                                {data.address.city.name}
+                            </Link>
+                        </div>
+                    )}
                 </CardContent>
             </Card>
             {!!data?.photos?.length && (

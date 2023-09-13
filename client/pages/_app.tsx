@@ -35,6 +35,13 @@ const theme = createTheme(
                     }
                 }
             },
+            MuiBreadcrumbs: {
+                styleOverrides: {
+                    root: {
+                        fontSize: 12
+                    }
+                }
+            },
             MuiButtonBase: {
                 defaultProps: {
                     LinkComponent: LinkBehaviour
