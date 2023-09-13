@@ -1,40 +1,56 @@
 import '@/styles/globals.sass'
 import CssBaseline from '@mui/material/CssBaseline'
-import { green, lightGreen } from '@mui/material/colors'
 import { ruRU } from '@mui/material/locale'
-import { ThemeProvider, createTheme } from '@mui/material/styles'
+import { Shadows, ThemeProvider, createTheme } from '@mui/material/styles'
 import { AppProps } from 'next/app'
-import { Montserrat } from 'next/font/google'
 import Head from 'next/head'
 import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
-export const montserrat = Montserrat({ subsets: ['latin'] })
-
 const theme = createTheme(
     {
         components: {
+            MuiAppBar: {
+                styleOverrides: {
+                    root: {
+                        backgroundColor: '#FFF'
+                    }
+                }
+            },
             MuiChip: {
                 styleOverrides: {
                     root: {
-                        borderRadius: 3
+                        backgroundColor: '#f7f8fa',
+                        borderColor: 'rgba(0,0,0,.08)',
+                        borderRadius: 4,
+                        fontSize: 12,
+                        paddingLeft: 4
+                    }
+                }
+            },
+            MuiIcon: {
+                styleOverrides: {
+                    root: {
+                        color: '#99a2ad'
                     }
                 }
             }
         },
         palette: {
             mode: 'light'
-            // primary: green,
-            // secondary: lightGreen
         },
+        shadows: ['none'] as unknown as Shadows,
         typography: {
-            fontSize: 12,
+            fontFamily:
+                '-apple-system,system-ui,"Helvetica Neue",Roboto,sans-serif',
+            fontSize: 14,
             h1: {
                 fontSize: 24
             },
             h3: {
-                fontSize: 14
+                fontSize: 16,
+                fontWeight: 600
             }
         }
     },

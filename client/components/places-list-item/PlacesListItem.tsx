@@ -1,8 +1,8 @@
-import { Place } from '@/api/types/Place'
+import { numberFormatter } from '@/functions/helpers'
 import {
-    PhotoCamera,
-    RemoveRedEye,
-    Star,
+    PhotoCameraOutlined,
+    RemoveRedEyeOutlined,
+    StarOutline,
     Straighten
 } from '@mui/icons-material'
 import Card from '@mui/material/Card'
@@ -14,6 +14,8 @@ import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
+
+import { Place } from '@/api/types/Place'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 
@@ -38,7 +40,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
             <Link href={`/places/${place.id}`}>
                 <CardMedia
                     component='img'
-                    height='180'
+                    height={230}
                     image={
                         place?.photos?.[0]?.filename
                             ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
@@ -47,7 +49,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     alt='green iguana'
                 />
             </Link>
-            <CardContent sx={{ height: 157, overflow: 'hidden' }}>
+            <CardContent sx={{ height: 160, overflow: 'hidden' }}>
                 <Typography
                     gutterBottom
                     variant='h3'
@@ -56,7 +58,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </Typography>
                 <Typography
                     variant='body2'
-                    color='text.secondary'
+                    color='text.primary'
                 >
                     {place?.content}...
                 </Typography>
@@ -68,29 +70,33 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     sx={{ mb: -1 }}
                 >
                     <Chip
-                        icon={<RemoveRedEye />}
-                        label={place.views || 0}
+                        icon={<RemoveRedEyeOutlined />}
+                        label={numberFormatter(place.views || 0)}
                         size={'small'}
+                        variant='outlined'
                     />
                     {!!place.photosCount && (
                         <Chip
-                            icon={<PhotoCamera />}
+                            icon={<PhotoCameraOutlined />}
                             label={place.photosCount || 0}
                             size={'small'}
+                            variant='outlined'
                         />
                     )}
                     {place.rating > 0 && (
                         <Chip
-                            icon={<Star />}
+                            icon={<StarOutline />}
                             label={place.rating}
                             size={'small'}
+                            variant='outlined'
                         />
                     )}
                     {place.distance && (
                         <Chip
                             icon={<Straighten />}
-                            label={`${place.distance || 0}`}
+                            label={numberFormatter(place.distance || 0)}
                             size={'small'}
+                            variant='outlined'
                         />
                     )}
                 </Stack>

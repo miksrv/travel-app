@@ -1,6 +1,7 @@
-import { Place } from '@/api/types/Place'
 import Grid from '@mui/material/Unstable_Grid2'
 import React from 'react'
+
+import { Place } from '@/api/types/Place'
 
 import PlacesListItem from '@/components/places-list-item'
 

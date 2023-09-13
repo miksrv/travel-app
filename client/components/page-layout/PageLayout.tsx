@@ -1,4 +1,3 @@
-import { montserrat } from '@/pages/_app'
 import Container from '@mui/material/Container'
 import { ContainerTypeMap } from '@mui/material/Container/Container'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
@@ -16,7 +15,6 @@ const PageLayout: React.FC<any> = ({ children, ...props }) => (
         <Header />
         <Container
             {...props}
-            className={montserrat.className}
             component='main'
         >
             {children}
