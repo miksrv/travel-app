@@ -54,9 +54,16 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
     color: 'inherit'
 }))
 
-const Header: React.FC = () => {
+interface HeaderProps {
+    onMenuClick?: (event: React.KeyboardEvent | React.MouseEvent) => void
+}
+
+const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     return (
-        <AppBar position='static'>
+        <AppBar
+            position='static'
+            sx={{ boxShadow: 0 }}
+        >
             <Container
                 maxWidth='lg'
                 disableGutters
@@ -67,6 +74,7 @@ const Header: React.FC = () => {
                         edge='start'
                         color='inherit'
                         aria-label='open drawer'
+                        onClick={onMenuClick}
                         sx={{ mr: 2 }}
                     >
                         <MenuIcon />

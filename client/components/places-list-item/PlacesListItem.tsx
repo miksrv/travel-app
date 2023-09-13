@@ -40,7 +40,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
             <Link href={`/places/${place.id}`}>
                 <CardMedia
                     component='img'
-                    height={230}
+                    height={180}
                     image={
                         place?.photos?.[0]?.filename
                             ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
@@ -49,7 +49,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     alt='green iguana'
                 />
             </Link>
-            <CardContent sx={{ height: 160, overflow: 'hidden' }}>
+            <CardContent sx={{ height: 155, overflow: 'hidden', p: 1.5 }}>
                 <Typography
                     gutterBottom
                     variant='h3'
@@ -63,11 +63,11 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {place?.content}...
                 </Typography>
             </CardContent>
-            <CardContent>
+            <CardContent sx={{ p: 1.5 }}>
                 <Stack
                     direction='row'
                     spacing={1}
-                    sx={{ mb: -1 }}
+                    sx={{ mb: -1.5 }}
                 >
                     <Chip
                         icon={<RemoveRedEyeOutlined />}

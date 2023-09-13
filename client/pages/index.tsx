@@ -1,3 +1,4 @@
+import Card from '@mui/material/Card'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
@@ -98,61 +99,60 @@ const Page: NextPage = () => {
     }, [data, mapBounds])
 
     return (
-        <PageLayout
-            maxWidth={false}
-            sx={{ height: '100vh' }}
-        >
-            <DynamicMap
-                center={
-                    !lat || !lon
-                        ? geolocation.longitude && geolocation.longitude
-                            ? [geolocation.latitude, geolocation.longitude]
-                            : DEFAULT_CENTER
-                        : [lat, lon]
-                }
-                zoom={15}
-            >
-                {/*@ts-ignore*/}
-                {({ TileLayer }) => (
-                    <>
-                        <TileLayer
-                            url={
-                                'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
-                            }
-                            attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-                        />
-                        {/*<TileLayer*/}
-                        {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
-                        {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
-                        {/*/>*/}
-                        {geolocation.latitude && geolocation.longitude && (
-                            <MyPoint
-                                lat={geolocation.latitude}
-                                lon={geolocation.longitude}
+        <PageLayout>
+            <Card sx={{ height: '80vh', mt: 3 }}>
+                <DynamicMap
+                    center={
+                        !lat || !lon
+                            ? geolocation.longitude && geolocation.longitude
+                                ? [geolocation.latitude, geolocation.longitude]
+                                : DEFAULT_CENTER
+                            : [lat, lon]
+                    }
+                    zoom={15}
+                >
+                    {/*@ts-ignore*/}
+                    {({ TileLayer }) => (
+                        <>
+                            <TileLayer
+                                url={
+                                    'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
+                                }
+                                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
                             />
-                        )}
-                        {!!poiList.length &&
-                            poiList.map((item) => (
-                                <Point
-                                    key={item.id}
-                                    id={item.id}
-                                    lat={item?.latitude}
-                                    lon={item?.longitude}
-                                    title={item?.title}
-                                    category={
-                                        item?.subcategory ?? item?.category
-                                    }
+                            {/*<TileLayer*/}
+                            {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
+                            {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
+                            {/*/>*/}
+                            {geolocation.latitude && geolocation.longitude && (
+                                <MyPoint
+                                    lat={geolocation.latitude}
+                                    lon={geolocation.longitude}
                                 />
-                            ))}
-                        <MyMapEvents onChangeBounds={handleChangeBounds} />
-                    </>
-                )}
-            </DynamicMap>
-            {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
-            {/*<div>*/}
-            {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
-            {/*</div>*/}
-            {/*<div>Bounds: {mapBounds?.toBBoxString()}</div>*/}
+                            )}
+                            {!!poiList.length &&
+                                poiList.map((item) => (
+                                    <Point
+                                        key={item.id}
+                                        id={item.id}
+                                        lat={item?.latitude}
+                                        lon={item?.longitude}
+                                        title={item?.title}
+                                        category={
+                                            item?.subcategory ?? item?.category
+                                        }
+                                    />
+                                ))}
+                            <MyMapEvents onChangeBounds={handleChangeBounds} />
+                        </>
+                    )}
+                </DynamicMap>
+                {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
+                {/*<div>*/}
+                {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
+                {/*</div>*/}
+                {/*<div>Bounds: {mapBounds?.toBBoxString()}</div>*/}
+            </Card>
         </PageLayout>
     )
 }
