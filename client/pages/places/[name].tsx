@@ -12,6 +12,7 @@ import React from 'react'
 
 import { usePlacesGetItemQuery } from '@/api/api'
 
+import Carousel from '@/components/carousel/Carousel'
 import PageLayout from '@/components/page-layout'
 
 const Place: NextPage = () => {
@@ -60,85 +61,95 @@ const Place: NextPage = () => {
                     </Typography>
                 </CardContent>
             </Card>
-            <Card sx={{ mb: 2 }}>
-                <CardContent>
-                    <Typography variant={'body2'}>
-                        <div>
-                            Просмотров: {numberFormatter(data?.views || 0)}
-                        </div>
-                        <div>Рейтинг: {data?.rating}</div>
-                        <div>Фотографий: {data?.photosCount}</div>
-                        <div>Расстояние: {data?.distance} км</div>
-                        <div>Категория: {data?.category?.title}</div>
-                        <div>Подкатегория: {data?.subcategory?.title}</div>
-                        {data?.address?.country && (
-                            <div>
-                                Страна:{' '}
-                                <Link
-                                    color='inherit'
-                                    href={`/country/${data.address.country.id}`}
-                                >
-                                    {data.address.country.name}
-                                </Link>
-                            </div>
-                        )}
-                        {data?.address?.region && (
-                            <div>
-                                Область:{' '}
-                                <Link
-                                    color='inherit'
-                                    href={`/region/${data.address.region.id}`}
-                                >
-                                    {data.address.region.name}
-                                </Link>
-                            </div>
-                        )}
-                        {data?.address?.district && (
-                            <div>
-                                Район:{' '}
-                                <Link
-                                    color='inherit'
-                                    href={`/district/${data.address.district.id}`}
-                                >
-                                    {data.address.district.name}
-                                </Link>
-                            </div>
-                        )}
-                        {data?.address?.city && (
-                            <div>
-                                Населенный пункт:{' '}
-                                <Link
-                                    color='inherit'
-                                    href={`/city/${data.address.city.id}`}
-                                >
-                                    {data.address.city.name}
-                                </Link>
-                            </div>
-                        )}
-                    </Typography>
-                </CardContent>
-            </Card>
+
             {!!data?.photos?.length && (
-                <Card>
-                    <CardContent>
-                        <ImageList
-                            gap={4}
-                            cols={4}
-                        >
-                            {data.photos.map((photo) => (
-                                <ImageListItem key={photo.filename}>
-                                    <img
-                                        src={`http://localhost:8080/photos/${data.id}/${photo.filename}_thumb.${photo.extension}`}
-                                        alt={photo.title || ''}
-                                        width={photo.width}
-                                        height={photo.height}
-                                    />
-                                </ImageListItem>
-                            ))}
-                        </ImageList>
-                    </CardContent>
-                </Card>
+                <Carousel
+                    slides={data?.photos}
+                    placeId={data.id}
+                    options={{ containScroll: 'trimSnaps', dragFree: true }}
+                />
             )}
+
+            {/*<Card sx={{ mb: 2 }}>*/}
+            {/*    <CardContent>*/}
+            {/*        <Typography variant={'body2'}>*/}
+            {/*            <div>*/}
+            {/*                Просмотров: {numberFormatter(data?.views || 0)}*/}
+            {/*            </div>*/}
+            {/*            <div>Рейтинг: {data?.rating}</div>*/}
+            {/*            <div>Фотографий: {data?.photosCount}</div>*/}
+            {/*            <div>Расстояние: {data?.distance} км</div>*/}
+            {/*            <div>Категория: {data?.category?.title}</div>*/}
+            {/*            <div>Подкатегория: {data?.subcategory?.title}</div>*/}
+            {/*            {data?.address?.country && (*/}
+            {/*                <div>*/}
+            {/*                    Страна:{' '}*/}
+            {/*                    <Link*/}
+            {/*                        color='inherit'*/}
+            {/*                        href={`/country/${data.address.country.id}`}*/}
+            {/*                    >*/}
+            {/*                        {data.address.country.name}*/}
+            {/*                    </Link>*/}
+            {/*                </div>*/}
+            {/*            )}*/}
+            {/*            {data?.address?.region && (*/}
+            {/*                <div>*/}
+            {/*                    Область:{' '}*/}
+            {/*                    <Link*/}
+            {/*                        color='inherit'*/}
+            {/*                        href={`/region/${data.address.region.id}`}*/}
+            {/*                    >*/}
+            {/*                        {data.address.region.name}*/}
+            {/*                    </Link>*/}
+            {/*                </div>*/}
+            {/*            )}*/}
+            {/*            {data?.address?.district && (*/}
+            {/*                <div>*/}
+            {/*                    Район:{' '}*/}
+            {/*                    <Link*/}
+            {/*                        color='inherit'*/}
+            {/*                        href={`/district/${data.address.district.id}`}*/}
+            {/*                    >*/}
+            {/*                        {data.address.district.name}*/}
+            {/*                    </Link>*/}
+            {/*                </div>*/}
+            {/*            )}*/}
+            {/*            {data?.address?.city && (*/}
+            {/*                <div>*/}
+            {/*                    Населенный пункт:{' '}*/}
+            {/*                    <Link*/}
+            {/*                        color='inherit'*/}
+            {/*                        href={`/city/${data.address.city.id}`}*/}
+            {/*                    >*/}
+            {/*                        {data.address.city.name}*/}
+            {/*                    </Link>*/}
+            {/*                </div>*/}
+            {/*            )}*/}
+            {/*        </Typography>*/}
+            {/*    </CardContent>*/}
+            {/*</Card>*/}
+
+            {/*{!!data?.photos?.length && (*/}
+            {/*    <Card>*/}
+            {/*        <CardContent>*/}
+            {/*            <ImageList*/}
+            {/*                gap={4}*/}
+            {/*                cols={4}*/}
+            {/*            >*/}
+            {/*                {data.photos.map((photo) => (*/}
+            {/*                    <ImageListItem key={photo.filename}>*/}
+            {/*                        <img*/}
+            {/*                            src={`http://localhost:8080/photos/${data.id}/${photo.filename}_thumb.${photo.extension}`}*/}
+            {/*                            alt={photo.title || ''}*/}
+            {/*                            width={photo.width}*/}
+            {/*                            height={photo.height}*/}
+            {/*                        />*/}
+            {/*                    </ImageListItem>*/}
+            {/*                ))}*/}
+            {/*            </ImageList>*/}
+            {/*        </CardContent>*/}
+            {/*    </Card>*/}
+            {/*)}*/}
         </PageLayout>
     )
 }

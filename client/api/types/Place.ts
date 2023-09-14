@@ -2,7 +2,7 @@ import { Author } from './Author'
 import { Photo } from './Photo'
 
 export type Place = {
-    id: number
+    id: string
     latitude: number
     longitude: number
     rating: number

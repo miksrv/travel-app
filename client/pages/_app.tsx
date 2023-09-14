@@ -13,6 +13,7 @@ import { wrapper } from '@/api/store'
 // https://vkcom.github.io/VKUI/#/SplitLayout
 // https://setproduct.com/material-x
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
+// https://account.travel/things-to-do/california
 
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
     return (
