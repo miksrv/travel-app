@@ -1,12 +1,16 @@
 import { numberFormatter } from '@/functions/helpers'
+import places from '@/pages/places'
 import { ImageList, ImageListItem } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
+import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
@@ -14,6 +18,11 @@ import { usePlacesGetItemQuery } from '@/api/api'
 
 import Carousel from '@/components/carousel/Carousel'
 import PageLayout from '@/components/page-layout'
+
+const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
+const Point = dynamic(() => import('@/components/map/Point'), {
+    ssr: false
+})
 
 const Place: NextPage = () => {
     const router = useRouter()
@@ -51,6 +60,113 @@ const Place: NextPage = () => {
                 </Link>
                 <Typography variant={'caption'}>{data?.title}</Typography>
             </Breadcrumbs>
+            <Grid
+                container
+                spacing={2}
+            >
+                <Grid
+                    lg={8}
+                    md={8}
+                    xs={12}
+                >
+                    <Card sx={{ mb: 2, mt: 2 }}>
+                        <CardContent
+                            sx={{ height: 500, p: 0, position: 'relative' }}
+                        >
+                            {data?.photos?.[0] && (
+                                <Image
+                                    style={{
+                                        marginBottom: -30,
+                                        objectFit: 'cover'
+                                    }}
+                                    src={`http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`}
+                                    alt={data?.photos?.[0]?.title || ''}
+                                    width={data?.photos?.[0]?.width}
+                                    height={data?.photos?.[0]?.height}
+                                />
+                            )}
+
+                            {!!data?.photos?.length && (
+                                <div className={'photos'}>
+                                    <Carousel
+                                        slides={data?.photos}
+                                        placeId={data.id}
+                                        options={{
+                                            containScroll: 'trimSnaps',
+                                            dragFree: true
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                </Grid>
+                <Grid
+                    lg={4}
+                    md={4}
+                    xs={12}
+                >
+                    <Card sx={{ mb: 2, mt: 2 }}>
+                        <CardContent sx={{ height: '224px' }}>
+                            <div>
+                                Просмотров: {numberFormatter(data?.views || 0)}
+                            </div>
+                            <div>Рейтинг: {data?.rating}</div>
+                            <div>Фотографий: {data?.photosCount}</div>
+                            <div>Расстояние: {data?.distance} км</div>
+                            <div>Категория: {data?.category?.title}</div>
+                            <div>Подкатегория: {data?.subcategory?.title}</div>
+                            {data?.address?.country && (
+                                <div>
+                                    Страна:{' '}
+                                    <Link
+                                        color='inherit'
+                                        href={`/country/${data.address.country.id}`}
+                                    >
+                                        {data.address.country.name}
+                                    </Link>
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+                    <Card sx={{ mb: 2, mt: 2 }}>
+                        <CardContent sx={{ height: '260px', p: 0 }}>
+                            <DynamicMap
+                                center={
+                                    data?.latitude && data?.longitude
+                                        ? [data.latitude, data.longitude]
+                                        : [52.580517, 56.855385]
+                                }
+                                zoom={15}
+                            >
+                                {/*@ts-ignore*/}
+                                {({ TileLayer }) => (
+                                    <>
+                                        <TileLayer
+                                            url={
+                                                'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
+                                            }
+                                            attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+                                        />
+                                        {data?.latitude && data?.longitude && (
+                                            <Point
+                                                lat={data.latitude}
+                                                lon={data.longitude}
+                                                title={data?.title}
+                                                category={
+                                                    data?.subcategory?.name ??
+                                                    data?.category?.name
+                                                }
+                                            />
+                                        )}
+                                    </>
+                                )}
+                            </DynamicMap>
+                        </CardContent>
+                    </Card>
+                </Grid>
+            </Grid>
+
             <Card sx={{ mb: 2, mt: 2 }}>
                 <CardContent>
                     <Typography
@@ -61,14 +177,6 @@ const Place: NextPage = () => {
                     </Typography>
                 </CardContent>
             </Card>
-
-            {!!data?.photos?.length && (
-                <Carousel
-                    slides={data?.photos}
-                    placeId={data.id}
-                    options={{ containScroll: 'trimSnaps', dragFree: true }}
-                />
-            )}
 
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardContent>*/}

@@ -12,7 +12,7 @@ import icon from '@/public/poi/aircraft.png'
 import styles from './styles.module.sass'
 
 type TMyPointProps = {
-    id: string
+    id?: string
     lat: number
     lon: number
     title?: string
@@ -37,7 +37,9 @@ const Point: React.FC<TMyPointProps> = ({ id, lat, lon, title, category }) => {
     })
 
     const placeClickHandler = () => {
-        getPlaceItem(id)
+        if (id) {
+            getPlaceItem(id)
+        }
     }
 
     return (
