@@ -1,9 +1,12 @@
 import { numberFormatter } from '@/functions/helpers'
 import places from '@/pages/places'
+import { PhotoCameraOutlined } from '@mui/icons-material'
 import { ImageList, ImageListItem } from '@mui/material'
 import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Chip from '@mui/material/Chip'
+import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -167,7 +170,7 @@ const Place: NextPage = () => {
                 </Grid>
             </Grid>
 
-            <Card sx={{ mb: 2, mt: 2 }}>
+            <Card sx={{ mb: 2, mt: 0 }}>
                 <CardContent>
                     <Typography
                         variant={'body2'}
@@ -177,6 +180,29 @@ const Place: NextPage = () => {
                     </Typography>
                 </CardContent>
             </Card>
+
+            {!!data?.tags?.length && (
+                <Stack
+                    direction='row'
+                    spacing={1}
+                    sx={{ mb: -1, mt: 2 }}
+                >
+                    {data.tags.map((tag) => (
+                        <Chip
+                            sx={{ pl: 0 }}
+                            key={tag.id}
+                            label={tag.title}
+                            size={'small'}
+                            variant='outlined'
+                        />
+                    ))}
+                </Stack>
+            )}
+
+            <br />
+            <br />
+            <br />
+            <br />
 
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardContent>*/}
