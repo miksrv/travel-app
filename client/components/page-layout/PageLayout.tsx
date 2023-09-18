@@ -1,4 +1,4 @@
-import { MapOutlined, PlaceOutlined } from '@mui/icons-material'
+import { Home, MapOutlined, PlaceOutlined } from '@mui/icons-material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import { ContainerTypeMap } from '@mui/material/Container/Container'
@@ -55,6 +55,14 @@ const PageLayout: React.FC<any> = ({ children, ...props }) => {
                     <List>
                         <ListItem disablePadding>
                             <ListItemButton href={'/'}>
+                                <ListItemIcon>
+                                    <Home />
+                                </ListItemIcon>
+                                <ListItemText primary={'Главная'} />
+                            </ListItemButton>
+                        </ListItem>
+                        <ListItem disablePadding>
+                            <ListItemButton href={'/map'}>
                                 <ListItemIcon>
                                     <MapOutlined />
                                 </ListItemIcon>

@@ -93,25 +93,76 @@ const Place: NextPage = () => {
                 >
                     <Card sx={{ mb: 2, mt: 2 }}>
                         <CardContent sx={{ height: '224px' }}>
-                            <div>
+                            <Typography variant={'body2'}>
                                 Просмотров: {numberFormatter(data?.views || 0)}
-                            </div>
-                            <div>Рейтинг: {data?.rating}</div>
-                            <div>Фотографий: {data?.photosCount}</div>
-                            <div>Расстояние: {data?.distance} км</div>
-                            <div>Категория: {data?.category?.title}</div>
-                            <div>Подкатегория: {data?.subcategory?.title}</div>
-                            {data?.address?.country && (
-                                <div>
-                                    Страна:{' '}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Фотографий: {data?.photosCount}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Расстояние: {data?.distance} км
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Категория: {data?.category?.title}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Подкатегория: {data?.subcategory?.title}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Адрес: {data?.address?.street || '-'}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Страна:{' '}
+                                {data?.address?.country ? (
                                     <Link
                                         color='inherit'
                                         href={`/country/${data.address.country.id}`}
                                     >
                                         {data.address.country.name}
                                     </Link>
-                                </div>
-                            )}
+                                ) : (
+                                    '-'
+                                )}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Область:{' '}
+                                {data?.address?.region ? (
+                                    <Link
+                                        color='inherit'
+                                        href={`/region/${data.address.region.id}`}
+                                    >
+                                        {data.address.region.name}
+                                    </Link>
+                                ) : (
+                                    '-'
+                                )}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Район:{' '}
+                                {data?.address?.district ? (
+                                    <Link
+                                        color='inherit'
+                                        href={`/district/${data.address.district.id}`}
+                                    >
+                                        {data.address.district.name}
+                                    </Link>
+                                ) : (
+                                    '-'
+                                )}
+                            </Typography>
+                            <Typography variant={'body2'}>
+                                Населенный пункт:{' '}
+                                {data?.address?.city ? (
+                                    <Link
+                                        color='inherit'
+                                        href={`/city/${data.address.city.id}`}
+                                    >
+                                        {data.address.city.name}
+                                    </Link>
+                                ) : (
+                                    '-'
+                                )}
+                            </Typography>
                         </CardContent>
                     </Card>
                     <Card sx={{ mb: 2, mt: 2 }}>
@@ -185,65 +236,6 @@ const Place: NextPage = () => {
             <br />
             <br />
             <br />
-
-            {/*<Card sx={{ mb: 2 }}>*/}
-            {/*    <CardContent>*/}
-            {/*        <Typography variant={'body2'}>*/}
-            {/*            <div>*/}
-            {/*                Просмотров: {numberFormatter(data?.views || 0)}*/}
-            {/*            </div>*/}
-            {/*            <div>Рейтинг: {data?.rating}</div>*/}
-            {/*            <div>Фотографий: {data?.photosCount}</div>*/}
-            {/*            <div>Расстояние: {data?.distance} км</div>*/}
-            {/*            <div>Категория: {data?.category?.title}</div>*/}
-            {/*            <div>Подкатегория: {data?.subcategory?.title}</div>*/}
-            {/*            {data?.address?.country && (*/}
-            {/*                <div>*/}
-            {/*                    Страна:{' '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/country/${data.address.country.id}`}*/}
-            {/*                    >*/}
-            {/*                        {data.address.country.name}*/}
-            {/*                    </Link>*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*            {data?.address?.region && (*/}
-            {/*                <div>*/}
-            {/*                    Область:{' '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/region/${data.address.region.id}`}*/}
-            {/*                    >*/}
-            {/*                        {data.address.region.name}*/}
-            {/*                    </Link>*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*            {data?.address?.district && (*/}
-            {/*                <div>*/}
-            {/*                    Район:{' '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/district/${data.address.district.id}`}*/}
-            {/*                    >*/}
-            {/*                        {data.address.district.name}*/}
-            {/*                    </Link>*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*            {data?.address?.city && (*/}
-            {/*                <div>*/}
-            {/*                    Населенный пункт:{' '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/city/${data.address.city.id}`}*/}
-            {/*                    >*/}
-            {/*                        {data.address.city.name}*/}
-            {/*                    </Link>*/}
-            {/*                </div>*/}
-            {/*            )}*/}
-            {/*        </Typography>*/}
-            {/*    </CardContent>*/}
-            {/*</Card>*/}
 
             {/*{!!data?.photos?.length && (*/}
             {/*    <Card>*/}

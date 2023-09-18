@@ -1,15 +1,12 @@
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import AppBar from '@mui/material/AppBar'
-import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Container from '@mui/material/Container'
 import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
-import Link from 'next/link'
 import React from 'react'
 
 const Search = styled('div')(({ theme }) => ({
