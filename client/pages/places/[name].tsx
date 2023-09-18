@@ -1,8 +1,4 @@
 import { numberFormatter } from '@/functions/helpers'
-import places from '@/pages/places'
-import { PhotoCameraOutlined } from '@mui/icons-material'
-import { ImageList, ImageListItem } from '@mui/material'
-import Breadcrumbs from '@mui/material/Breadcrumbs'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
@@ -19,8 +15,10 @@ import React from 'react'
 
 import { usePlacesGetItemQuery } from '@/api/api'
 
-import Carousel from '@/components/carousel/Carousel'
+import Breadcrumbs from '@/components/breadcrumbs'
+import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
+import PageTitle from '@/components/page-title'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const Point = dynamic(() => import('@/components/map/Point'), {
@@ -42,27 +40,11 @@ const Place: NextPage = () => {
 
     return (
         <PageLayout>
-            <Typography
-                variant='h1'
-                sx={{ mb: 0.5, mt: 2 }}
-            >
-                {data?.title}
-            </Typography>
-            <Breadcrumbs aria-label='breadcrumb'>
-                <Link
-                    color='inherit'
-                    href='/'
-                >
-                    Главная
-                </Link>
-                <Link
-                    color='inherit'
-                    href='/places/'
-                >
-                    Интересные места
-                </Link>
-                <Typography variant={'caption'}>{data?.title}</Typography>
-            </Breadcrumbs>
+            <PageTitle title={data?.title || ''} />
+            <Breadcrumbs
+                currentPage={data?.title}
+                links={[{ link: '/places/', text: 'Интересные места' }]}
+            />
             <Grid
                 container
                 spacing={2}

@@ -1,14 +1,11 @@
 import { Pagination } from '@mui/material'
-import Breadcrumbs from '@mui/material/Breadcrumbs'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
-import Typography from '@mui/material/Typography'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import React, { useState } from 'react'
@@ -17,7 +14,9 @@ import useGeolocation from 'react-hook-geolocation'
 import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
 import { API } from '@/api/types'
 
+import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import PageTitle from '@/components/page-title'
 import PlacesList from '@/components/places-list'
 
 const POST_PER_PAGE = 8
@@ -101,21 +100,8 @@ const Places: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
-            <Typography
-                variant='h1'
-                sx={{ mb: 0.5, mt: 2 }}
-            >
-                {'Интересные места'}
-            </Typography>
-            <Breadcrumbs aria-label='breadcrumb'>
-                <Link
-                    color='inherit'
-                    href='/'
-                >
-                    Главная
-                </Link>
-                <Typography variant={'caption'}>Интересные места</Typography>
-            </Breadcrumbs>
+            <PageTitle title={'Интересные места'} />
+            <Breadcrumbs currentPage={'Интересные места'} />
             <Paper sx={{ mb: 2, mt: 2 }}>
                 <FormControl
                     sx={{ m: 1, minWidth: 220 }}
