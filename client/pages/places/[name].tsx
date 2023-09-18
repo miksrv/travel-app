@@ -61,8 +61,10 @@ const Place: NextPage = () => {
                             {data?.photos?.[0] && (
                                 <Image
                                     style={{
+                                        height: 'inherit',
                                         marginBottom: -30,
-                                        objectFit: 'cover'
+                                        objectFit: 'cover',
+                                        width: '100%    '
                                     }}
                                     src={`http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`}
                                     alt={data?.photos?.[0]?.title || ''}
@@ -71,18 +73,19 @@ const Place: NextPage = () => {
                                 />
                             )}
 
-                            {!!data?.photos?.length && (
-                                <div className={'photos'}>
-                                    <Carousel
-                                        slides={data?.photos}
-                                        placeId={data.id}
-                                        options={{
-                                            containScroll: 'trimSnaps',
-                                            dragFree: true
-                                        }}
-                                    />
-                                </div>
-                            )}
+                            {!!data?.photos?.length &&
+                                data.photos.length > 1 && (
+                                    <div className={'photos'}>
+                                        <Carousel
+                                            slides={data?.photos}
+                                            placeId={data.id}
+                                            options={{
+                                                containScroll: 'trimSnaps',
+                                                dragFree: true
+                                            }}
+                                        />
+                                    </div>
+                                )}
                         </CardContent>
                     </Card>
                 </Grid>
