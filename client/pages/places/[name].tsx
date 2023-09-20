@@ -97,76 +97,90 @@ const Place: NextPage = () => {
                 >
                     <Card sx={{ mb: 2, mt: 0 }}>
                         <CardContent sx={{ height: '224px' }}>
-                            <Typography variant={'body2'}>
-                                Просмотров: {numberFormatter(data?.views || 0)}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Фотографий: {data?.photosCount}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Расстояние: {data?.distance} км
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Категория: {data?.category?.title}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Подкатегория: {data?.subcategory?.title}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Адрес: {data?.address?.street || '-'}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Страна:{' '}
-                                {data?.address?.country ? (
-                                    <Link
-                                        color='inherit'
-                                        href={`/country/${data.address.country.id}`}
-                                    >
-                                        {data.address.country.name}
-                                    </Link>
-                                ) : (
-                                    '-'
-                                )}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Область:{' '}
-                                {data?.address?.region ? (
-                                    <Link
-                                        color='inherit'
-                                        href={`/region/${data.address.region.id}`}
-                                    >
-                                        {data.address.region.name}
-                                    </Link>
-                                ) : (
-                                    '-'
-                                )}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Район:{' '}
-                                {data?.address?.district ? (
-                                    <Link
-                                        color='inherit'
-                                        href={`/district/${data.address.district.id}`}
-                                    >
-                                        {data.address.district.name}
-                                    </Link>
-                                ) : (
-                                    '-'
-                                )}
-                            </Typography>
-                            <Typography variant={'body2'}>
-                                Населенный пункт:{' '}
-                                {data?.address?.city ? (
-                                    <Link
-                                        color='inherit'
-                                        href={`/city/${data.address.city.id}`}
-                                    >
-                                        {data.address.city.name}
-                                    </Link>
-                                ) : (
-                                    '-'
-                                )}
-                            </Typography>
+                            <StatisticLine
+                                title={'Просмотров:'}
+                                text={numberFormatter(data?.views || 0)}
+                            />
+                            <StatisticLine
+                                title={'Фотографий:'}
+                                text={data?.photosCount || 0}
+                            />
+                            <StatisticLine
+                                title={'Расстояние:'}
+                                text={`${data?.distance || 0} км`}
+                            />
+                            <StatisticLine
+                                title={'Категория:'}
+                                text={data?.category?.title}
+                            />
+                            <StatisticLine
+                                title={'Подкатегория:'}
+                                text={data?.subcategory?.title}
+                            />
+                            <StatisticLine
+                                title={'Адрес:'}
+                                text={data?.address?.street || '-'}
+                            />
+                            <StatisticLine
+                                title={'Страна:'}
+                                text={
+                                    data?.address?.country ? (
+                                        <Link
+                                            color='inherit'
+                                            href={`/country/${data.address.country.id}`}
+                                        >
+                                            {data.address.country.name}
+                                        </Link>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
+                            <StatisticLine
+                                title={'Область:'}
+                                text={
+                                    data?.address?.region ? (
+                                        <Link
+                                            color='inherit'
+                                            href={`/region/${data.address.region.id}`}
+                                        >
+                                            {data.address.region.name}
+                                        </Link>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
+                            <StatisticLine
+                                title={'Область:'}
+                                text={
+                                    data?.address?.district ? (
+                                        <Link
+                                            color='inherit'
+                                            href={`/district/${data.address.district.id}`}
+                                        >
+                                            {data.address.district.name}
+                                        </Link>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
+                            <StatisticLine
+                                title={'Область:'}
+                                text={
+                                    data?.address?.city ? (
+                                        <Link
+                                            color='inherit'
+                                            href={`/city/${data.address.city.id}`}
+                                        >
+                                            {data.address.city.name}
+                                        </Link>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
                         </CardContent>
                     </Card>
                     <Card sx={{ mb: 2, mt: 2 }}>
@@ -265,5 +279,30 @@ const Place: NextPage = () => {
         </PageLayout>
     )
 }
+
+interface StatisticLineProps {
+    title: string
+    text?: string | React.ReactNode
+}
+
+const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
+    <Stack
+        direction={'row'}
+        spacing={2}
+    >
+        <Typography
+            variant={'caption'}
+            sx={{ fontWeight: 300, width: 100 }}
+        >
+            {title}
+        </Typography>
+        <Typography
+            variant={'caption'}
+            sx={{ fontWeight: 600 }}
+        >
+            {text || '-'}
+        </Typography>
+    </Stack>
+)
 
 export default Place
