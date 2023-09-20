@@ -48,13 +48,14 @@ const Place: NextPage = () => {
             <Grid
                 container
                 spacing={2}
+                sx={{ mt: 1 }}
             >
                 <Grid
                     lg={8}
                     md={8}
                     xs={12}
                 >
-                    <Card sx={{ mb: 2, mt: 2 }}>
+                    <Card sx={{ mb: 2, mt: 0 }}>
                         <CardContent
                             sx={{ height: 500, p: 0, position: 'relative' }}
                         >
@@ -94,7 +95,7 @@ const Place: NextPage = () => {
                     md={4}
                     xs={12}
                 >
-                    <Card sx={{ mb: 2, mt: 2 }}>
+                    <Card sx={{ mb: 2, mt: 0 }}>
                         <CardContent sx={{ height: '224px' }}>
                             <Typography variant={'body2'}>
                                 Просмотров: {numberFormatter(data?.views || 0)}
