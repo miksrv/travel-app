@@ -1,4 +1,11 @@
 import { numberFormatter } from '@/functions/helpers'
+import {
+    PhotoCameraOutlined,
+    RemoveRedEyeOutlined,
+    StarOutline,
+    Straighten
+} from '@mui/icons-material'
+import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
@@ -98,6 +105,26 @@ const Place: NextPage = () => {
                     <Card sx={{ mb: 2, mt: 0 }}>
                         <CardContent sx={{ height: '224px' }}>
                             <StatisticLine
+                                title={'Автор материала:'}
+                                text={
+                                    <Stack
+                                        direction={'row'}
+                                        spacing={1}
+                                    >
+                                        <Avatar
+                                            alt={data?.author?.name || ''}
+                                            src={
+                                                data?.author?.avatar ||
+                                                undefined
+                                            }
+                                            sx={{ height: 18, width: 18 }}
+                                            variant={'rounded'}
+                                        />
+                                        <div>{data?.author?.name}</div>
+                                    </Stack>
+                                }
+                            />
+                            <StatisticLine
                                 title={'Просмотров:'}
                                 text={numberFormatter(data?.views || 0)}
                             />
@@ -137,7 +164,7 @@ const Place: NextPage = () => {
                                 }
                             />
                             <StatisticLine
-                                title={'Область:'}
+                                title={'Область / Край:'}
                                 text={
                                     data?.address?.region ? (
                                         <Link
@@ -152,7 +179,7 @@ const Place: NextPage = () => {
                                 }
                             />
                             <StatisticLine
-                                title={'Область:'}
+                                title={'Округ / Район:'}
                                 text={
                                     data?.address?.district ? (
                                         <Link
@@ -167,7 +194,7 @@ const Place: NextPage = () => {
                                 }
                             />
                             <StatisticLine
-                                title={'Область:'}
+                                title={'Населенный пункт:'}
                                 text={
                                     data?.address?.city ? (
                                         <Link
@@ -292,13 +319,13 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
     >
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 300, width: 100 }}
+            sx={{ fontWeight: 300, width: 120 }}
         >
             {title}
         </Typography>
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 600 }}
+            sx={{ fontWeight: 500 }}
         >
             {text || '-'}
         </Typography>
