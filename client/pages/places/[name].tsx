@@ -8,6 +8,7 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import dayjs from 'dayjs'
+import 'dayjs/locale/ru'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
@@ -23,6 +24,8 @@ import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
 import PageTitle from '@/components/page-title'
 import PlacesList from '@/components/places-list'
+
+dayjs.locale('ru')
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const Point = dynamic(() => import('@/components/map/Point'), {
@@ -44,6 +47,7 @@ const Place: NextPage = () => {
 
     const { data: nearPlacesData } = usePlacesGetListQuery(
         {
+            excludePlaces: data?.id ? [data.id] : undefined,
             latitude: data?.latitude,
             limit: 4,
             longitude: data?.longitude,
@@ -201,13 +205,13 @@ const Place: NextPage = () => {
                             <StatisticLine
                                 title={'Добавлено:'}
                                 text={dayjs(data?.created?.date).format(
-                                    'D.MM.YYYY, H:m'
+                                    'D MMMM YYYY, H:m'
                                 )}
                             />
                             <StatisticLine
                                 title={'Обновлено:'}
                                 text={dayjs(data?.updated?.date).format(
-                                    'D.MM.YYYY, H:m'
+                                    'D MMMM YYYY, H:m'
                                 )}
                             />
                         </CardContent>

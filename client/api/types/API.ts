@@ -45,4 +45,5 @@ export interface RequestPlacesGetList {
     offset?: number
     category?: string
     subcategory?: string
+    excludePlaces?: string[]
 }

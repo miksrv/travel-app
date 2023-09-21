@@ -260,6 +260,7 @@ class Places extends ResourceController
         $orderFields   = ['ASC', 'DESC'];
 
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
+        $exclude  = $this->request->getGet('excludePlaces', FILTER_SANITIZE_STRING);
         $order    = $this->request->getGet('order', FILTER_SANITIZE_STRING) ?? $orderDefault;
         $search   = $this->request->getGet('search', FILTER_SANITIZE_STRING);
         $country  = $this->request->getGet('country', FILTER_SANITIZE_NUMBER_INT);
@@ -300,6 +301,11 @@ class Places extends ResourceController
 
         if ($subcategory) {
             $placesModel->where(['places.subcategory' => $subcategory]);
+        }
+
+        if ($exclude) {
+            $exclude = explode(',', $exclude);
+            $placesModel->whereNotIn('places.id', $exclude);
         }
 
         if (in_array($sort, $sortingFields)) {
