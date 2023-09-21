@@ -116,6 +116,17 @@ const Place: NextPage = () => {
                                                 containScroll: 'trimSnaps',
                                                 dragFree: true
                                             }}
+                                            onClick={(fileName) => {
+                                                const findIndex =
+                                                    data?.photos?.findIndex(
+                                                        (photo) =>
+                                                            photo.filename ===
+                                                            fileName
+                                                    )
+
+                                                setCurrentIndex(findIndex || 0)
+                                                setShowLightbox(true)
+                                            }}
                                         />
                                     </div>
                                 )}

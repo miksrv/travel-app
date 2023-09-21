@@ -8,11 +8,12 @@ import styles from './styles.module.sass'
 interface CarouselProps {
     placeId: string
     slides: Photo[]
-    options: any
+    options?: any
+    onClick?: (fileName: string) => void
 }
 
 const Carousel: React.FC<CarouselProps> = (props) => {
-    const { placeId, slides, options } = props
+    const { placeId, slides, options, onClick } = props
     const [emblaRef] = useEmblaCarousel(options)
 
     return (
@@ -34,6 +35,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                                 className={styles.embla__slide__img}
                                 src={`http://localhost:8080/photos/${placeId}/${photo.filename}_thumb.${photo.extension}`}
                                 alt={photo.title || ''}
+                                onClick={() => onClick?.(photo.filename)}
                             />
                         </div>
                     ))}
