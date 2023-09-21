@@ -72,7 +72,7 @@ const Place: NextPage = () => {
                                         height: 'inherit',
                                         marginBottom: -30,
                                         objectFit: 'cover',
-                                        width: '100%    '
+                                        width: '100%'
                                     }}
                                     src={`http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`}
                                     alt={data?.photos?.[0]?.title || ''}
@@ -105,6 +105,60 @@ const Place: NextPage = () => {
                     <Card sx={{ mb: 2, mt: 0 }}>
                         <CardContent sx={{ height: '224px' }}>
                             <StatisticLine
+                                title={'Категория:'}
+                                text={
+                                    data?.category?.name ? (
+                                        <Stack
+                                            direction={'row'}
+                                            spacing={2}
+                                        >
+                                            <Image
+                                                style={{
+                                                    height: '18px',
+                                                    marginRight: '4px',
+                                                    objectFit: 'cover',
+                                                    width: '18px'
+                                                }}
+                                                src={`/poi/${data?.category?.name}.png`}
+                                                alt={data?.category?.title}
+                                                width={22}
+                                                height={26}
+                                            />
+                                            {data?.category?.title}
+                                        </Stack>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
+                            <StatisticLine
+                                title={'Подкатегория:'}
+                                text={
+                                    data?.subcategory?.name ? (
+                                        <Stack
+                                            direction={'row'}
+                                            spacing={2}
+                                        >
+                                            <Image
+                                                style={{
+                                                    height: '18px',
+                                                    marginRight: '4px',
+                                                    objectFit: 'cover',
+                                                    width: '18px'
+                                                }}
+                                                src={`/poi/${data?.subcategory?.name}.png`}
+                                                alt={data?.subcategory?.title}
+                                                width={22}
+                                                height={26}
+                                            />
+                                            {data?.subcategory?.title}
+                                        </Stack>
+                                    ) : (
+                                        '-'
+                                    )
+                                }
+                            />
+                            <StatisticLine
                                 title={'Автор материала:'}
                                 text={
                                     <Stack
@@ -129,84 +183,12 @@ const Place: NextPage = () => {
                                 text={numberFormatter(data?.views || 0)}
                             />
                             <StatisticLine
-                                title={'Фотографий:'}
-                                text={data?.photosCount || 0}
-                            />
-                            <StatisticLine
                                 title={'Расстояние:'}
                                 text={`${data?.distance || 0} км`}
                             />
                             <StatisticLine
-                                title={'Категория:'}
-                                text={data?.category?.title}
-                            />
-                            <StatisticLine
-                                title={'Подкатегория:'}
-                                text={data?.subcategory?.title}
-                            />
-                            <StatisticLine
-                                title={'Адрес:'}
-                                text={data?.address?.street || '-'}
-                            />
-                            <StatisticLine
-                                title={'Страна:'}
-                                text={
-                                    data?.address?.country ? (
-                                        <Link
-                                            color='inherit'
-                                            href={`/country/${data.address.country.id}`}
-                                        >
-                                            {data.address.country.name}
-                                        </Link>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
-                            />
-                            <StatisticLine
-                                title={'Область / Край:'}
-                                text={
-                                    data?.address?.region ? (
-                                        <Link
-                                            color='inherit'
-                                            href={`/region/${data.address.region.id}`}
-                                        >
-                                            {data.address.region.name}
-                                        </Link>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
-                            />
-                            <StatisticLine
-                                title={'Округ / Район:'}
-                                text={
-                                    data?.address?.district ? (
-                                        <Link
-                                            color='inherit'
-                                            href={`/district/${data.address.district.id}`}
-                                        >
-                                            {data.address.district.name}
-                                        </Link>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
-                            />
-                            <StatisticLine
-                                title={'Населенный пункт:'}
-                                text={
-                                    data?.address?.city ? (
-                                        <Link
-                                            color='inherit'
-                                            href={`/city/${data.address.city.id}`}
-                                        >
-                                            {data.address.city.name}
-                                        </Link>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
+                                title={'Координаты:'}
+                                text={`${data?.latitude}, ${data?.longitude}`}
                             />
                         </CardContent>
                     </Card>
@@ -248,22 +230,66 @@ const Place: NextPage = () => {
                 </Grid>
             </Grid>
 
-            <Card sx={{ mb: 2, mt: 0 }}>
-                <CardContent>
-                    <Typography
-                        variant={'body2'}
-                        sx={{ whiteSpace: 'break-spaces' }}
-                    >
-                        {data?.content}
-                    </Typography>
-                </CardContent>
-            </Card>
+            <div>
+                <Typography
+                    variant={'caption'}
+                    sx={{ fontWeight: 300 }}
+                >
+                    {data?.address?.country && (
+                        <Link
+                            color='inherit'
+                            href={`/country/${data.address.country.id}`}
+                        >
+                            {data.address.country.name}
+                        </Link>
+                    )}
+                    {data?.address?.region && (
+                        <>
+                            {data?.address?.country && ', '}
+                            <Link
+                                color='inherit'
+                                href={`/region/${data.address.region.id}`}
+                            >
+                                {data.address.region.name}
+                            </Link>
+                        </>
+                    )}
+                    {data?.address?.district && (
+                        <>
+                            {data?.address?.region && ', '}
+                            <Link
+                                color='inherit'
+                                href={`/district/${data.address.district.id}`}
+                            >
+                                {data.address.district.name}
+                            </Link>
+                        </>
+                    )}
+                    {data?.address?.city && (
+                        <>
+                            {data?.address?.district && ', '}
+                            <Link
+                                color='inherit'
+                                href={`/city/${data.address.city.id}`}
+                            >
+                                {data.address.city.name}
+                            </Link>
+                        </>
+                    )}
+                    {data?.address?.street && (
+                        <>
+                            {', '}
+                            {data?.address?.street}
+                        </>
+                    )}
+                </Typography>
+            </div>
 
             {!!data?.tags?.length && (
                 <Stack
                     direction='row'
                     spacing={1}
-                    sx={{ mb: -1, mt: 2 }}
+                    sx={{ mb: 3, mt: 1 }}
                 >
                     {data.tags.map((tag) => (
                         <Chip
@@ -277,10 +303,16 @@ const Place: NextPage = () => {
                 </Stack>
             )}
 
-            <br />
-            <br />
-            <br />
-            <br />
+            <Card sx={{ mb: 2, mt: 0 }}>
+                <CardContent>
+                    <Typography
+                        variant={'body2'}
+                        sx={{ whiteSpace: 'break-spaces' }}
+                    >
+                        {data?.content}
+                    </Typography>
+                </CardContent>
+            </Card>
 
             {/*{!!data?.photos?.length && (*/}
             {/*    <Card>*/}
@@ -316,6 +348,7 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
     <Stack
         direction={'row'}
         spacing={2}
+        sx={{ mb: 0.6 }}
     >
         <Typography
             variant={'caption'}
@@ -325,7 +358,7 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
         </Typography>
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 500 }}
+            sx={{ fontWeight: 400 }}
         >
             {text || '-'}
         </Typography>
