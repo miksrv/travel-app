@@ -167,6 +167,8 @@ class Places extends ResourceController
 
             $response = [
                 'id'        => $placeData->id,
+                'created'   => $placeData->created_at ?? null,
+                'updated'   => $placeData->updated_at ?? null,
                 'latitude'  => (float) $placeData->latitude,
                 'longitude' => (float) $placeData->longitude,
                 'rating'    => (int) $placeData->rating,

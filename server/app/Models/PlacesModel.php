@@ -12,7 +12,7 @@ class PlacesModel extends MyBaseModel
     protected $returnType     = Place::class;
     protected $useSoftDeletes = true;
 
-    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at', 'overpass_id'];
+    protected array $hiddenFields = ['deleted_at', 'overpass_id'];
 
     // The updatable fields
     protected $allowedFields = [

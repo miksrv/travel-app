@@ -1,10 +1,4 @@
 import { numberFormatter } from '@/functions/helpers'
-import {
-    PhotoCameraOutlined,
-    RemoveRedEyeOutlined,
-    StarOutline,
-    Straighten
-} from '@mui/icons-material'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -13,6 +7,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
+import dayjs from 'dayjs'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
@@ -189,6 +184,18 @@ const Place: NextPage = () => {
                             <StatisticLine
                                 title={'Координаты:'}
                                 text={`${data?.latitude}, ${data?.longitude}`}
+                            />
+                            <StatisticLine
+                                title={'Добавлено:'}
+                                text={dayjs(data?.created?.date).format(
+                                    'D.MM.YYYY, H:m'
+                                )}
+                            />
+                            <StatisticLine
+                                title={'Обновлено:'}
+                                text={dayjs(data?.updated?.date).format(
+                                    'D.MM.YYYY, H:m'
+                                )}
                             />
                         </CardContent>
                     </Card>

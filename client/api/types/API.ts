@@ -1,5 +1,11 @@
 import { Place } from '@/api/types/Place'
 
+export type DateTimeType = {
+    date: string
+    timezone_type: number
+    timezone: string
+}
+
 export const SortOrder = {
     ASC: 'ASC',
     DESC: 'DESC'
