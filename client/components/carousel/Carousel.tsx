@@ -1,3 +1,4 @@
+import classNames from 'classnames'
 import useEmblaCarousel from 'embla-carousel-react'
 import React from 'react'
 
@@ -28,11 +29,11 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                             className={styles.embla__slide}
                             key={photo.filename}
                         >
-                            {/*<div className={styles.embla__slide__number}>*/}
-                            {/*    <span>{photo.filename}</span>*/}
-                            {/*</div>*/}
                             <img
-                                className={styles.embla__slide__img}
+                                className={classNames(
+                                    styles.embla__slide__img,
+                                    onClick ? styles.point : undefined
+                                )}
                                 src={`http://localhost:8080/photos/${placeId}/${photo.filename}_thumb.${photo.extension}`}
                                 alt={photo.title || ''}
                                 onClick={() => onClick?.(photo.filename)}

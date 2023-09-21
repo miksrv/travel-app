@@ -90,6 +90,7 @@ const Place: NextPage = () => {
                             {data?.photos?.[0] && (
                                 <Image
                                     style={{
+                                        cursor: 'pointer',
                                         height: 'inherit',
                                         marginBottom: -30,
                                         objectFit: 'cover',
