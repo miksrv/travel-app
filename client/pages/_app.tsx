@@ -6,6 +6,7 @@ import { AppProps } from 'next/app'
 import Head from 'next/head'
 import NextLink from 'next/link'
 import { forwardRef } from 'react'
+import 'react-image-lightbox/style.css'
 import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'

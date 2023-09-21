@@ -3,6 +3,7 @@ import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Chip from '@mui/material/Chip'
+import Rating from '@mui/material/Rating'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -14,7 +15,8 @@ import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
+import Lightbox from 'react-image-lightbox'
 
 import { usePlacesGetItemQuery, usePlacesGetListQuery } from '@/api/api'
 import { API } from '@/api/types'
@@ -57,6 +59,13 @@ const Place: NextPage = () => {
         { skip: !data?.longitude || !data?.latitude }
     )
 
+    const [showLightbox, setShowLightbox] = useState<boolean>(false)
+    const [photoIndex, setCurrentIndex] = useState<number>(0)
+    const [photoList, setPhotoList] = useState<string[]>([])
+
+    const imageUrl = (index: number) =>
+        `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
+
     return (
         <PageLayout>
             <PageTitle title={data?.title || ''} />
@@ -67,7 +76,7 @@ const Place: NextPage = () => {
             <Grid
                 container
                 spacing={2}
-                sx={{ mt: 1 }}
+                sx={{ mb: -1.5, mt: 1 }}
             >
                 <Grid
                     lg={8}
@@ -90,6 +99,10 @@ const Place: NextPage = () => {
                                     alt={data?.photos?.[0]?.title || ''}
                                     width={data?.photos?.[0]?.width}
                                     height={data?.photos?.[0]?.height}
+                                    onClick={() => {
+                                        setCurrentIndex(0)
+                                        setShowLightbox(true)
+                                    }}
                                 />
                             )}
 
@@ -115,7 +128,7 @@ const Place: NextPage = () => {
                     xs={12}
                 >
                     <Card sx={{ mb: 2, mt: 0 }}>
-                        <CardContent sx={{ height: '224px' }}>
+                        <CardContent sx={{ height: '245px' }}>
                             <StatisticLine
                                 title={'Категория:'}
                                 text={
@@ -171,7 +184,7 @@ const Place: NextPage = () => {
                                 }
                             />
                             <StatisticLine
-                                title={'Автор материала:'}
+                                title={'Автор:'}
                                 text={
                                     <Stack
                                         direction={'row'}
@@ -214,10 +227,20 @@ const Place: NextPage = () => {
                                     'D MMMM YYYY, H:m'
                                 )}
                             />
+                            <StatisticLine
+                                title={'Рейтнг:'}
+                                text={
+                                    <Rating
+                                        name={'size-small'}
+                                        size={'small'}
+                                        value={data?.rating || 0}
+                                    />
+                                }
+                            />
                         </CardContent>
                     </Card>
                     <Card sx={{ mb: 2, mt: 2 }}>
-                        <CardContent sx={{ height: '260px', p: 0 }}>
+                        <CardContent sx={{ height: '239px', p: 0 }}>
                             <DynamicMap
                                 center={
                                     data?.latitude && data?.longitude
@@ -313,7 +336,7 @@ const Place: NextPage = () => {
                 <Stack
                     direction='row'
                     spacing={1}
-                    sx={{ mb: 3, mt: 1 }}
+                    sx={{ mb: 2, mt: 1 }}
                 >
                     {data.tags.map((tag) => (
                         <Chip
@@ -368,6 +391,32 @@ const Place: NextPage = () => {
             {/*        </CardContent>*/}
             {/*    </Card>*/}
             {/*)}*/}
+
+            {showLightbox && (
+                <Lightbox
+                    mainSrc={imageUrl(photoIndex)}
+                    nextSrc={imageUrl(
+                        (photoIndex + 1) % (data?.photos?.length || 0)
+                    )}
+                    imageTitle={data?.photos?.[photoIndex]?.title || ''}
+                    prevSrc={imageUrl(
+                        (photoIndex + (data?.photos?.length || 0) - 1) %
+                            (data?.photos?.length || 0)
+                    )}
+                    onCloseRequest={() => setShowLightbox(false)}
+                    onMovePrevRequest={() =>
+                        setCurrentIndex(
+                            (photoIndex + (data?.photos?.length || 0) - 1) %
+                                (data?.photos?.length || 0)
+                        )
+                    }
+                    onMoveNextRequest={() =>
+                        setCurrentIndex(
+                            (photoIndex + 1) % (data?.photos?.length || 0)
+                        )
+                    }
+                />
+            )}
         </PageLayout>
     )
 }
@@ -385,7 +434,7 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
     >
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 300, width: 120 }}
+            sx={{ fontWeight: 300, width: 100 }}
         >
             {title}
         </Typography>
