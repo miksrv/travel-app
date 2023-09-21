@@ -290,10 +290,7 @@ const Place: NextPage = () => {
             </Grid>
 
             <div>
-                <Typography
-                    variant={'caption'}
-                    sx={{ fontWeight: 300 }}
-                >
+                <Typography variant={'caption'}>
                     {data?.address?.country && (
                         <Link
                             color='inherit'
@@ -446,13 +443,13 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ title, text }) => (
     >
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 300, width: 100 }}
+            sx={{ width: 100 }}
         >
             {title}
         </Typography>
         <Typography
             variant={'caption'}
-            sx={{ fontWeight: 400 }}
+            sx={{ fontWeight: 500 }}
         >
             {text || '-'}
         </Typography>
