@@ -34,6 +34,8 @@ export interface ResponsePlacesGetItem extends Place {}
 export interface RequestPlacesGetList {
     sort?: SortFields
     order?: SortOrder
+    latitude?: number
+    longitude?: number
     search?: string
     country?: number
     region?: number

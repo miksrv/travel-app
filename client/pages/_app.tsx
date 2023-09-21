@@ -103,6 +103,11 @@ const theme = createTheme(
                 fontWeight: 600,
                 lineHeight: '28px'
             },
+            h2: {
+                fontSize: 19,
+                fontWeight: 600,
+                lineHeight: '24px'
+            },
             h3: {
                 fontSize: 16,
                 fontWeight: 600

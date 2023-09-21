@@ -15,12 +15,14 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { usePlacesGetItemQuery } from '@/api/api'
+import { usePlacesGetItemQuery, usePlacesGetListQuery } from '@/api/api'
+import { API } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
 import PageTitle from '@/components/page-title'
+import PlacesList from '@/components/places-list'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const Point = dynamic(() => import('@/components/map/Point'), {
@@ -38,6 +40,17 @@ const Place: NextPage = () => {
         {
             skip: router.isFallback || !routerObject
         }
+    )
+
+    const { data: nearPlacesData } = usePlacesGetListQuery(
+        {
+            latitude: data?.latitude,
+            limit: 4,
+            longitude: data?.longitude,
+            order: API.SortOrder.ASC,
+            sort: API.SortFields.Distance
+        },
+        { skip: !data?.longitude || !data?.latitude }
     )
 
     return (
@@ -320,6 +333,15 @@ const Place: NextPage = () => {
                     </Typography>
                 </CardContent>
             </Card>
+
+            <Typography
+                variant='h2'
+                sx={{ mb: 2, mt: 4 }}
+            >
+                {'Ближайшие интересные места'}
+            </Typography>
+
+            <PlacesList places={nearPlacesData?.items} />
 
             {/*{!!data?.photos?.length && (*/}
             {/*    <Card>*/}

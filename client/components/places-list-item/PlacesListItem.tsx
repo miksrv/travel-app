@@ -91,7 +91,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             variant='outlined'
                         />
                     )}
-                    {place.distance && (
+                    {!!place.distance && (
                         <Chip
                             icon={<Straighten />}
                             label={numberFormatter(place.distance || 0)}

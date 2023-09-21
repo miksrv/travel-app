@@ -22,18 +22,25 @@ class Places extends ResourceController
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $ip = $this->request->getIPAddress();
-        $ua = $this->request->getUserAgent();
+        $lat = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
+        $lon = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
 
-        $sessionModel = new SessionsModel();
-        $findSession  = $sessionModel->where([
-            'ip'         => $ip,
-            'user_agent' => $ua->getAgentString()
-        ])->first();
+        if ($lat && $lon) {
+            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
+        } else {
+            $ip = $this->request->getIPAddress();
+            $ua = $this->request->getUserAgent();
 
-        $distanceSelect = $findSession
-            ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$findSession->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$findSession->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$findSession->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
-            : '';
+            $sessionModel = new SessionsModel();
+            $findSession  = $sessionModel->where([
+                'ip'         => $ip,
+                'user_agent' => $ua->getAgentString()
+            ])->first();
+
+            $distanceSelect = $findSession
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$findSession->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$findSession->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$findSession->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+                : '';
+        }
 
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
@@ -81,7 +88,7 @@ class Places extends ResourceController
                 ] : null,
             ];
 
-            if ($findSession) {
+            if (isset($findSession) || ($lat && $lon)) {
                 $return['distance'] = round((float) $place->distance, 1);
             }
 
