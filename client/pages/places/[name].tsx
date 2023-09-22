@@ -1,4 +1,4 @@
-import { numberFormatter } from '@/functions/helpers'
+import { convertDMS, numberFormatter } from '@/functions/helpers'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -225,7 +225,28 @@ const Place: NextPage = () => {
                             />
                             <StatisticLine
                                 title={'Координаты:'}
-                                text={`${data?.latitude}, ${data?.longitude}`}
+                                text={
+                                    <>
+                                        {`${convertDMS(
+                                            data?.latitude || 0,
+                                            data?.longitude || 0
+                                        )}`}{' '}
+                                        <Link
+                                            color={'inherit'}
+                                            target={'_blank'}
+                                            href={`https://yandex.ru/maps/?pt=${data?.longitude},${data?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
+                                        >
+                                            {'Я'}
+                                        </Link>{' '}
+                                        <Link
+                                            target={'_blank'}
+                                            color={'inherit'}
+                                            href={`https://maps.google.com/maps?ll=${data?.latitude},${data?.longitude}&q=${data?.latitude},${data?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                                        >
+                                            {'G'}
+                                        </Link>
+                                    </>
+                                }
                             />
                             <StatisticLine
                                 title={'Добавлено:'}
