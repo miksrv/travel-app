@@ -24,6 +24,14 @@ export const SortFields = {
 } as const
 export type SortFields = (typeof SortFields)[keyof typeof SortFields]
 
+export const LocationType = {
+    City: 'city',
+    Country: 'country',
+    District: 'district',
+    Region: 'region'
+} as const
+export type LocationType = (typeof LocationType)[keyof typeof LocationType]
+
 export interface ResponsePlacesGetList {
     items?: Place[]
     count?: number

@@ -8,7 +8,6 @@ import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Unstable_Grid2'
 import { debounce } from '@mui/material/utils'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -63,6 +62,12 @@ const SortOptions: SortOptionsProps[] = [
     }
 ]
 
+type SearchByLocation = {
+    title: string
+    value: number
+    type: API.LocationType
+}
+
 const Places: NextPage = () => {
     const searchParams = useSearchParams()
     const geolocation = useGeolocation()
@@ -70,6 +75,7 @@ const Places: NextPage = () => {
 
     const [sort, setSort] = useState<API.SortFields>(API.SortFields.Created)
     const [order, setOrder] = useState<API.SortOrder>(API.SortOrder.DESC)
+    const [location, setLocation] = useState<SearchByLocation>()
 
     const page = searchParams.get('page')
 
@@ -80,9 +86,25 @@ const Places: NextPage = () => {
 
     const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
+        city:
+            location?.type === API.LocationType.City
+                ? location.value
+                : undefined,
+        country:
+            location?.type === API.LocationType.Country
+                ? location.value
+                : undefined,
+        district:
+            location?.type === API.LocationType.District
+                ? location.value
+                : undefined,
         limit: POST_PER_PAGE,
         offset: ((Number(page) || 1) - 1) * POST_PER_PAGE,
         order: order,
+        region:
+            location?.type === API.LocationType.Region
+                ? location.value
+                : undefined,
         sort: sort
     })
 
@@ -94,10 +116,7 @@ const Places: NextPage = () => {
         setOrder(event.target.value as API.SortOrder)
     }
 
-    const handlePaginationChange = async (
-        e: React.ChangeEvent<unknown>,
-        value: number
-    ) => {
+    const handlePaginationChange = async (_: any, value: number) => {
         await router.push(
             value === 1 ? 'places' : `places?page=${value}`,
             undefined,
@@ -123,36 +142,31 @@ const Places: NextPage = () => {
         }
     }, [geolocation.latitude, geolocation.longitude])
 
-    // useEffect(() => {
-    //
-    // }, [searchValue])
-
-    const AutocompleteData = useMemo(() => {
-        const result = [
-            ...(searchResult?.cities?.map((item) => ({
-                title: item.name,
-                type: 'city',
-                value: item.id
-            })) || []),
+    const AutocompleteData: SearchByLocation[] = useMemo(
+        () => [
             ...(searchResult?.countries?.map((item) => ({
                 title: item.name,
-                type: 'country',
-                value: item.id
-            })) || []),
-            ...(searchResult?.districts?.map((item) => ({
-                title: item.name,
-                type: 'district',
+                type: API.LocationType.Country,
                 value: item.id
             })) || []),
             ...(searchResult?.regions?.map((item) => ({
                 title: item.name,
-                type: 'region',
+                type: API.LocationType.Region,
+                value: item.id
+            })) || []),
+            ...(searchResult?.districts?.map((item) => ({
+                title: item.name,
+                type: API.LocationType.District,
+                value: item.id
+            })) || []),
+            ...(searchResult?.cities?.map((item) => ({
+                title: item.name,
+                type: API.LocationType.City,
                 value: item.id
             })) || [])
-        ]
-
-        return result
-    }, [searchResult])
+        ],
+        [searchResult]
+    )
 
     return (
         <PageLayout maxWidth={'lg'}>
@@ -220,8 +234,9 @@ const Places: NextPage = () => {
                         // value={value}
                         noOptionsText='Нет найденных локаций'
                         groupBy={(option) => option.type}
-                        onChange={(event: any, newValue: any) => {
-                            console.log('newValue', newValue)
+                        onChange={async (event, newValue) => {
+                            await handlePaginationChange(event, 1)
+                            setLocation(newValue || undefined)
                         }}
                         onInputChange={(event, newInputValue) => {
                             onSearchChange(newInputValue)

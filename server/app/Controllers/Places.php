@@ -60,10 +60,12 @@ class Places extends ResourceController
         }
 
         // Find all photos for all places
-        $photosData = $photosModel
-            ->havingIn('place', $placesIds)
-            ->orderBy('order', 'DESC')
-            ->findAll();
+        $photosData = $placesIds
+            ? $photosModel
+                ->havingIn('place', $placesIds)
+                ->orderBy('order', 'DESC')
+                ->findAll()
+            : $placesIds;
 
         // Map photos and places
         foreach ($placesList as $place) {
