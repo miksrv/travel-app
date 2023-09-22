@@ -1,4 +1,4 @@
-import { Place } from '@/api/types/Place'
+import { AddressObject, Place } from '@/api/types/Place'
 
 export type DateTimeType = {
     date: string
@@ -46,4 +46,11 @@ export interface RequestPlacesGetList {
     category?: string
     subcategory?: string
     excludePlaces?: string[]
+}
+
+export interface ResponseAddressGetSearch {
+    countries?: AddressObject[]
+    regions?: AddressObject[]
+    districts?: AddressObject[]
+    cities?: AddressObject[]
 }

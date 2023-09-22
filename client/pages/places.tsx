@@ -1,17 +1,27 @@
 import { Pagination } from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Unstable_Grid2'
+import { debounce } from '@mui/material/utils'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
-import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
+import {
+    useAddressGetSearchMutation,
+    useIntroduceMutation,
+    usePlacesGetListQuery
+} from '@/api/api'
 import { API } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -63,6 +73,11 @@ const Places: NextPage = () => {
 
     const page = searchParams.get('page')
 
+    const [searchAddress, { data: searchResult, isLoading: searchLoading }] =
+        useAddressGetSearchMutation()
+
+    const [searchValue, setSearchValue] = React.useState<string>('')
+
     const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
         limit: POST_PER_PAGE,
@@ -92,11 +107,52 @@ const Places: NextPage = () => {
         )
     }
 
+    const onSearchChange = useMemo(
+        () =>
+            debounce((search: string) => {
+                if (search.length > 3) {
+                    searchAddress(search)
+                }
+                // setSearchValue(search)
+            }, 1000),
+        []
+    )
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
             introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
+
+    // useEffect(() => {
+    //
+    // }, [searchValue])
+
+    const AutocompleteData = useMemo(() => {
+        const result = [
+            ...(searchResult?.cities?.map((item) => ({
+                title: item.name,
+                type: 'city',
+                value: item.id
+            })) || []),
+            ...(searchResult?.countries?.map((item) => ({
+                title: item.name,
+                type: 'country',
+                value: item.id
+            })) || []),
+            ...(searchResult?.districts?.map((item) => ({
+                title: item.name,
+                type: 'district',
+                value: item.id
+            })) || []),
+            ...(searchResult?.regions?.map((item) => ({
+                title: item.name,
+                type: 'region',
+                value: item.id
+            })) || [])
+        ]
+
+        return result
+    }, [searchResult])
 
     return (
         <PageLayout maxWidth={'lg'}>
@@ -144,6 +200,65 @@ const Places: NextPage = () => {
                             По убыванию
                         </MenuItem>
                     </Select>
+                </FormControl>
+
+                <FormControl
+                    sx={{ m: 1 }}
+                    size='small'
+                >
+                    <Autocomplete
+                        sx={{ width: 300 }}
+                        getOptionLabel={(option) =>
+                            typeof option === 'string' ? option : option.title
+                        }
+                        loading={searchLoading}
+                        filterOptions={(x) => x}
+                        options={AutocompleteData}
+                        autoComplete
+                        includeInputInList
+                        filterSelectedOptions
+                        // value={value}
+                        noOptionsText='Нет найденных локаций'
+                        groupBy={(option) => option.type}
+                        onChange={(event: any, newValue: any) => {
+                            console.log('newValue', newValue)
+                        }}
+                        onInputChange={(event, newInputValue) => {
+                            onSearchChange(newInputValue)
+                        }}
+                        renderOption={(props, option) => (
+                            <li {...props}>
+                                <Typography
+                                    variant='body2'
+                                    color='text.secondary'
+                                >
+                                    {option.title}
+                                </Typography>
+                            </li>
+                        )}
+                        renderInput={(params) => (
+                            <TextField
+                                {...params}
+                                label='Локация'
+                                variant='outlined'
+                                size='small'
+                                InputProps={{
+                                    ...params.InputProps,
+                                    endAdornment: (
+                                        <React.Fragment>
+                                            {searchLoading ? (
+                                                <CircularProgress
+                                                    color='inherit'
+                                                    size={20}
+                                                />
+                                            ) : null}
+                                            {params.InputProps.endAdornment}
+                                        </React.Fragment>
+                                    )
+                                }}
+                            />
+                        )}
+                    />
                 </FormControl>
             </Paper>
 

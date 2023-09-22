@@ -34,6 +34,13 @@ export const api = createApi({
         }
     }),
     endpoints: (builder) => ({
+        addressGetSearch: builder.mutation<
+            API.ResponseAddressGetSearch,
+            Maybe<string>
+        >({
+            query: (searchString) => `address?search=${searchString}`
+        }),
+
         introduce: builder.mutation<any, Maybe<any>>({
             // invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
@@ -69,6 +76,8 @@ export const api = createApi({
 
 // Export hooks for usage in functional components
 export const {
+    useAddressGetSearchMutation,
+
     useIntroduceMutation,
 
     usePlacesGetItemQuery,

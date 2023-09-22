@@ -41,3 +41,6 @@ $routes->options('districts', 'Districts');
 
 $routes->get('cities', 'Cities::list');
 $routes->options('cities', 'Cities');
+
+$routes->get('address', 'Address::search');
+$routes->options('address', 'Address');
