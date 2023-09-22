@@ -61,7 +61,6 @@ const Place: NextPage = () => {
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
-    const [photoList, setPhotoList] = useState<string[]>([])
 
     const imageUrl = (index: number) =>
         `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`

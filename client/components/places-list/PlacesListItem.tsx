@@ -39,33 +39,33 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
             />
             <Link href={`/places/${place.id}`}>
                 <CardMedia
-                    component='img'
+                    alt={place?.photos?.[0]?.title}
+                    component={'img'}
                     height={180}
                     image={
                         place?.photos?.[0]?.filename
                             ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
                             : noPhoto.src
                     }
-                    alt='green iguana'
                 />
             </Link>
             <CardContent sx={{ height: 155, overflow: 'hidden', p: 1.5 }}>
                 <Typography
                     gutterBottom
-                    variant='h3'
+                    variant={'h3'}
                 >
                     {place?.title}
                 </Typography>
                 <Typography
-                    variant='body2'
-                    color='text.primary'
+                    variant={'body1'}
+                    color={'text.primary'}
                 >
                     {place?.content}...
                 </Typography>
             </CardContent>
             <CardContent sx={{ p: 1.5 }}>
                 <Stack
-                    direction='row'
+                    direction={'row'}
                     spacing={1}
                     sx={{ mb: -1.5 }}
                 >
@@ -73,14 +73,14 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         icon={<RemoveRedEyeOutlined />}
                         label={numberFormatter(place.views || 0)}
                         size={'small'}
-                        variant='outlined'
+                        variant={'outlined'}
                     />
                     {!!place.photosCount && (
                         <Chip
                             icon={<PhotoCameraOutlined />}
                             label={place.photosCount || 0}
                             size={'small'}
-                            variant='outlined'
+                            variant={'outlined'}
                         />
                     )}
                     {place.rating > 0 && (
@@ -88,7 +88,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             icon={<StarOutline />}
                             label={place.rating}
                             size={'small'}
-                            variant='outlined'
+                            variant={'outlined'}
                         />
                     )}
                     {!!place.distance && (
@@ -96,7 +96,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             icon={<Straighten />}
                             label={numberFormatter(place.distance || 0)}
                             size={'small'}
-                            variant='outlined'
+                            variant={'outlined'}
                         />
                     )}
                 </Stack>

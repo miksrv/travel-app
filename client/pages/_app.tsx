@@ -73,10 +73,24 @@ const theme = createTheme(
                     component: LinkBehaviour
                 }
             },
-            MuiSelect: {
+            MuiListItemText: {
                 styleOverrides: {
                     root: {
-                        // fontSize: 12
+                        fontSize: 14
+                    }
+                }
+            },
+            MuiSelect: {
+                styleOverrides: {
+                    select: {
+                        fontSize: 14
+                    }
+                }
+            },
+            MuiTextField: {
+                styleOverrides: {
+                    root: {
+                        fontSize: 14
                     }
                 }
             },
@@ -104,9 +118,18 @@ const theme = createTheme(
             ...Array(20).fill('none')
         ] as unknown as Shadows,
         typography: {
+            body1: {
+                fontSize: 13
+            },
+            body2: {
+                fontSize: 14
+            },
+            caption: {
+                fontSize: 12
+            },
             fontFamily:
                 '-apple-system,system-ui,"Helvetica Neue",Roboto,sans-serif',
-            fontSize: 14,
+            fontSize: 12,
             h1: {
                 fontSize: 24,
                 fontWeight: 600,

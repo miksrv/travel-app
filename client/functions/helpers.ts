@@ -1,3 +1,14 @@
+export const encodeQueryData = (data: any): string => {
+    const ret = []
+    for (let d in data) {
+        if (d && data[d]) {
+            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
+        }
+    }
+
+    return ret.length ? '?' + ret.join('&') : ''
+}
+
 export const numberFormatter = (num: number, digits?: number) => {
     const lookup = [
         { symbol: '', value: 1 },

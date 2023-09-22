@@ -1,20 +1,10 @@
+import { encodeQueryData } from '@/functions/helpers'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { API } from '@/api/types'
 
 type Maybe<T> = T | void
-
-const encodeQueryData = (data: any): string => {
-    const ret = []
-    for (let d in data) {
-        if (d && data[d]) {
-            ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
-        }
-    }
-
-    return ret.length ? '?' + ret.join('&') : ''
-}
 
 export const imageHost =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST

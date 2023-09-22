@@ -1,3 +1,4 @@
+import { encodeQueryData } from '@/functions/helpers'
 import { Pagination } from '@mui/material'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -22,11 +23,20 @@ const Places: NextPage = () => {
     const geolocation = useGeolocation()
     const router = useRouter()
 
-    const [sort, setSort] = useState<API.SortFields>(API.SortFields.Created)
+    // const initPage = searchParams.get('page')
+    //     ? Number(searchParams.get('page'))
+    //     : 1
+    // const initSort = searchParams.get('sort')
+    //     ? (searchParams.get('sort') as API.SortFields)
+    //     : API.SortFields.Updated
+    // const initOrder = searchParams.get('order')
+    //     ? (searchParams.get('order') as API.SortOrder)
+    //     : API.SortOrder.DESC
+
+    const [page, setPage] = useState<number>(1)
+    const [sort, setSort] = useState<API.SortFields>(API.SortFields.Updated)
     const [order, setOrder] = useState<API.SortOrder>(API.SortOrder.DESC)
     const [location, setLocation] = useState<API.PlaceLocationType>()
-
-    const page = searchParams.get('page')
 
     const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
@@ -52,15 +62,31 @@ const Places: NextPage = () => {
         sort: sort
     })
 
-    const handlePaginationChange = async (_: any, value: number) => {
-        await router.push(
-            value === 1 ? 'places' : `places?page=${value}`,
-            undefined,
-            {
-                shallow: true
-            }
-        )
-    }
+    // useEffect(() => {
+    //     if (pageUrl) {
+    //         setPage(Number(pageUrl))
+    //     }
+    //
+    //     if (sortUrl) {
+    //         setSort(sortUrl as API.SortFields)
+    //     }
+    //
+    //     if (orderUrl) {
+    //         setOrder(orderUrl as API.SortOrder)
+    //     }
+    // })
+
+    useEffect(() => {
+        const urlParams = {
+            order: order !== API.SortOrder.DESC ? order : undefined,
+            page: page !== 1 ? page : undefined,
+            sort: sort !== API.SortFields.Updated ? sort : undefined
+        }
+
+        router.push(`places${encodeQueryData(urlParams)}`, undefined, {
+            shallow: true
+        })
+    }, [page, sort, order])
 
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
@@ -79,7 +105,7 @@ const Places: NextPage = () => {
                 onChangeSort={setSort}
                 onChangeOrder={setOrder}
                 onChangeLocation={async (location) => {
-                    await handlePaginationChange(undefined, 1)
+                    setPage(1)
                     setLocation(location)
                 }}
             />
@@ -89,11 +115,11 @@ const Places: NextPage = () => {
             />
             <Pagination
                 sx={{ mt: 2 }}
-                page={Number(page) || 1}
                 shape={'rounded'}
+                page={page}
                 hidden={!data?.count}
                 count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
-                onChange={handlePaginationChange}
+                onChange={(_, page) => setPage(page)}
             />
         </PageLayout>
     )

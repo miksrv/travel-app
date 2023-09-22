@@ -66,11 +66,10 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                 sx={{ m: 1, minWidth: 220 }}
                 size={'small'}
             >
-                <InputLabel id='demo-select-small-label'>Сортировка</InputLabel>
+                <InputLabel>Сортировка</InputLabel>
                 <Select
-                    labelId='demo-select-small-label'
                     value={sort}
-                    label='Сортировка'
+                    label={'Сортировка'}
                     onChange={(event: SelectChangeEvent) =>
                         onChangeSort?.(event.target.value as API.SortFields)
                     }
@@ -93,15 +92,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                 <InputLabel>Порядок</InputLabel>
                 <Select
                     value={order}
-                    label='Порядок'
+                    label={'Порядок'}
                     onChange={(event: SelectChangeEvent) => {
                         onChangeOrder?.(event.target.value as API.SortOrder)
                     }}
                 >
                     <MenuItem value={API.SortOrder.ASC}>
-                        По возрастанию
+                        {'По возрастанию'}
                     </MenuItem>
-                    <MenuItem value={API.SortOrder.DESC}>По убыванию</MenuItem>
+                    <MenuItem value={API.SortOrder.DESC}>
+                        {'По убыванию'}
+                    </MenuItem>
                 </Select>
             </FormControl>
 

@@ -111,7 +111,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                                     {searchLoading || locationLoading ? (
                                         <CircularProgress
                                             color='inherit'
-                                            size={20}
+                                            size={16}
                                         />
                                     ) : null}
                                     {params.InputProps.endAdornment}
