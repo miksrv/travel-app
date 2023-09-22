@@ -6,6 +6,12 @@ export type DateTimeType = {
     timezone: string
 }
 
+export type PlaceLocationType = {
+    title: string
+    value: number
+    type: LocationType
+}
+
 export const SortOrder = {
     ASC: 'ASC',
     DESC: 'DESC'

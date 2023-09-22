@@ -73,6 +73,13 @@ const theme = createTheme(
                     component: LinkBehaviour
                 }
             },
+            MuiSelect: {
+                styleOverrides: {
+                    root: {
+                        // fontSize: 12
+                    }
+                }
+            },
             MuiTypography: {
                 variants: [
                     {
