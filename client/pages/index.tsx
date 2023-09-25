@@ -1,7 +1,7 @@
 import { Card } from '@mui/material'
 import { NextPage } from 'next'
-import type { GetStaticProps, InferGetStaticPropsType } from 'next'
-import { Trans, useTranslation } from 'next-i18next'
+import type { GetStaticProps } from 'next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
 import PageLayout from '@/components/page-layout'

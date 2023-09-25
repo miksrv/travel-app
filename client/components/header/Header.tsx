@@ -57,7 +57,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
-    const { t } = useTranslation('header')
+    const { t } = useTranslation()
 
     return (
         <AppBar

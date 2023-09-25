@@ -1,6 +1,8 @@
 import { encodeQueryData } from '@/functions/helpers'
 import { Pagination } from '@mui/material'
-import { NextPage } from 'next'
+import { GetStaticProps, NextPage } from 'next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { useRouter } from 'next/dist/client/router'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
@@ -19,6 +21,8 @@ import PlacesList from '@/components/places-list'
 const POST_PER_PAGE = 8
 
 const Places: NextPage = () => {
+    const { t } = useTranslation('common', { keyPrefix: 'page.places' })
+
     const searchParams = useSearchParams()
     const geolocation = useGeolocation()
     const router = useRouter()
@@ -96,7 +100,7 @@ const Places: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
-            <PageTitle title={'Интересные места'} />
+            <PageTitle title={t('title')} />
             <Breadcrumbs currentPage={'Интересные места'} />
             <PlacesFilterPanel
                 sort={sort}
@@ -124,5 +128,11 @@ const Places: NextPage = () => {
         </PageLayout>
     )
 }
+
+export const getStaticProps: GetStaticProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale ?? 'ru'))
+    }
+})
 
 export default Places
