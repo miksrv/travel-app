@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
-import { API } from '@/api/types'
+import { API, Place } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
@@ -40,10 +40,12 @@ const Places: NextPage = () => {
     const [page, setPage] = useState<number>(1)
     const [sort, setSort] = useState<API.SortFields>(API.SortFields.Updated)
     const [order, setOrder] = useState<API.SortOrder>(API.SortOrder.DESC)
+    const [category, setCategory] = useState<Place.Category>()
     const [location, setLocation] = useState<API.PlaceLocationType>()
 
     const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
+        category: category?.name,
         city:
             location?.type === API.LocationType.City
                 ? location.value
@@ -100,17 +102,22 @@ const Places: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
-            <PageTitle title={t('title')} />
+            <PageTitle title={t('title', 'Интересные места')} />
             <Breadcrumbs currentPage={'Интересные места'} />
             <PlacesFilterPanel
                 sort={sort}
                 order={order}
                 location={location}
+                category={category}
                 onChangeSort={setSort}
                 onChangeOrder={setOrder}
                 onChangeLocation={async (location) => {
                     setPage(1)
                     setLocation(location)
+                }}
+                onChangeCategory={(category) => {
+                    setPage(1)
+                    setCategory(category)
                 }}
             />
             <PlacesList

@@ -65,7 +65,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
             size='small'
         >
             <Autocomplete
-                sx={{ width: 300 }}
+                sx={{ width: 200 }}
                 getOptionLabel={(option) =>
                     typeof option === 'string' ? option : option.title
                 }
@@ -90,20 +90,15 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                 }}
                 renderOption={(props, option) => (
                     <li {...props}>
-                        <Typography
-                            variant='body2'
-                            color='text.secondary'
-                        >
-                            {option.title}
-                        </Typography>
+                        <Typography variant='body1'>{option.title}</Typography>
                     </li>
                 )}
-                renderInput={(params) => (
+                renderInput={(params: any) => (
                     <TextField
                         {...params}
-                        label='Локация'
-                        variant='outlined'
-                        size='small'
+                        label={'Локация'}
+                        variant={'outlined'}
+                        size={'small'}
                         InputProps={{
                             ...params.InputProps,
                             endAdornment: (

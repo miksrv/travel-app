@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { API } from '@/api/types'
+import { ResponseCategoriesGetList } from '@/api/types/API'
 
 type Maybe<T> = T | void
 
@@ -29,6 +30,10 @@ export const api = createApi({
             Maybe<string>
         >({
             query: (searchString) => `address?search=${searchString}`
+        }),
+
+        categoriesGetList: builder.query<API.ResponseCategoriesGetList, void>({
+            query: () => 'categories'
         }),
 
         introduce: builder.mutation<any, Maybe<any>>({
@@ -67,6 +72,8 @@ export const api = createApi({
 // Export hooks for usage in functional components
 export const {
     useAddressGetSearchMutation,
+
+    useCategoriesGetListQuery,
 
     useIntroduceMutation,
 

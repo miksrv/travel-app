@@ -5,17 +5,20 @@ import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import React from 'react'
 
-import { API } from '@/api/types'
+import { API, Place } from '@/api/types'
 
+import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
 import PlacesLocationSelect from '@/components/places-filter-panel/PlacesLocationSelect'
 
 interface PlacesFilterPanelProps {
     sort?: API.SortFields
     order?: API.SortOrder
     location?: API.PlaceLocationType
+    category?: Place.Category
     onChangeSort?: (value: API.SortFields) => void
     onChangeOrder?: (value: API.SortOrder) => void
     onChangeLocation?: (value?: API.PlaceLocationType) => void
+    onChangeCategory?: (value?: Place.Category) => void
 }
 
 type SortOptionsProps = {
@@ -55,15 +58,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
         sort,
         order,
         location,
+        category,
         onChangeSort,
         onChangeOrder,
-        onChangeLocation
+        onChangeLocation,
+        onChangeCategory
     } = props
 
     return (
         <Paper sx={{ mb: 2, mt: 2 }}>
             <FormControl
-                sx={{ m: 1, minWidth: 220 }}
+                sx={{ m: 1, minWidth: 210 }}
                 size={'small'}
             >
                 <InputLabel>Сортировка</InputLabel>
@@ -86,7 +91,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
             </FormControl>
 
             <FormControl
-                sx={{ m: 1, minWidth: 220 }}
+                sx={{ m: 1, minWidth: 150 }}
                 size={'small'}
             >
                 <InputLabel>Порядок</InputLabel>
@@ -105,6 +110,11 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     </MenuItem>
                 </Select>
             </FormControl>
+
+            <PlacesCategorySelect
+                category={category}
+                onChangeCategory={onChangeCategory}
+            />
 
             <PlacesLocationSelect
                 location={location}
