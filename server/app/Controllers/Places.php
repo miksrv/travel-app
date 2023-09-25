@@ -94,7 +94,7 @@ class Places extends ResourceController
                 $return['distance'] = round((float) $place->distance, 1);
             }
 
-            if ($photoId && isset($photosData[$photoId])) {
+            if ($photoId !== false && isset($photosData[$photoId])) {
                 $return['photosCount'] = $counts;
                 $return['photos']      = [
                     (object) [

@@ -7,6 +7,7 @@ import InputBase from '@mui/material/InputBase'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
+import { useTranslation } from 'next-i18next'
 import React from 'react'
 
 const Search = styled('div')(({ theme }) => ({
@@ -56,6 +57,8 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+    const { t } = useTranslation('header')
+
     return (
         <AppBar
             position='static'
@@ -85,7 +88,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             flexGrow: 1
                         }}
                     >
-                        MUI
+                        {t('title')}
                     </Typography>
                     <Search>
                         <SearchIconWrapper>

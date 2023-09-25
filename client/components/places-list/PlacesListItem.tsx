@@ -25,84 +25,82 @@ interface PlacesListItemProps {
     place: Place
 }
 
-const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
-    return (
-        <Card className={styles.placesListItem}>
-            <Image
-                className={styles.categoryIcon}
-                src={`/poi/${
-                    place?.subcategory?.name || place?.category?.name
-                }.png`}
-                alt={''}
-                width={22}
-                height={26}
+const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
+    <Card className={styles.placesListItem}>
+        <Image
+            className={styles.categoryIcon}
+            src={`/poi/${
+                place?.subcategory?.name || place?.category?.name
+            }.png`}
+            alt={''}
+            width={22}
+            height={26}
+        />
+        <Link href={`/places/${place.id}`}>
+            <CardMedia
+                alt={place?.photos?.[0]?.title}
+                component={'img'}
+                height={180}
+                image={
+                    place?.photos?.[0]?.filename
+                        ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
+                        : noPhoto.src
+                }
             />
-            <Link href={`/places/${place.id}`}>
-                <CardMedia
-                    alt={place?.photos?.[0]?.title}
-                    component={'img'}
-                    height={180}
-                    image={
-                        place?.photos?.[0]?.filename
-                            ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
-                            : noPhoto.src
-                    }
+        </Link>
+        <CardContent sx={{ height: 155, overflow: 'hidden', p: 1.5 }}>
+            <Typography
+                gutterBottom
+                variant={'h3'}
+            >
+                {place?.title}
+            </Typography>
+            <Typography
+                variant={'body1'}
+                color={'text.primary'}
+            >
+                {place?.content}...
+            </Typography>
+        </CardContent>
+        <CardContent sx={{ p: 1.5 }}>
+            <Stack
+                direction={'row'}
+                spacing={1}
+                sx={{ mb: -1.5 }}
+            >
+                <Chip
+                    icon={<RemoveRedEyeOutlined />}
+                    label={numberFormatter(place.views || 0)}
+                    size={'small'}
+                    variant={'outlined'}
                 />
-            </Link>
-            <CardContent sx={{ height: 155, overflow: 'hidden', p: 1.5 }}>
-                <Typography
-                    gutterBottom
-                    variant={'h3'}
-                >
-                    {place?.title}
-                </Typography>
-                <Typography
-                    variant={'body1'}
-                    color={'text.primary'}
-                >
-                    {place?.content}...
-                </Typography>
-            </CardContent>
-            <CardContent sx={{ p: 1.5 }}>
-                <Stack
-                    direction={'row'}
-                    spacing={1}
-                    sx={{ mb: -1.5 }}
-                >
+                {!!place.photosCount && (
                     <Chip
-                        icon={<RemoveRedEyeOutlined />}
-                        label={numberFormatter(place.views || 0)}
+                        icon={<PhotoCameraOutlined />}
+                        label={place.photosCount || 0}
                         size={'small'}
                         variant={'outlined'}
                     />
-                    {!!place.photosCount && (
-                        <Chip
-                            icon={<PhotoCameraOutlined />}
-                            label={place.photosCount || 0}
-                            size={'small'}
-                            variant={'outlined'}
-                        />
-                    )}
-                    {place.rating > 0 && (
-                        <Chip
-                            icon={<StarOutline />}
-                            label={place.rating}
-                            size={'small'}
-                            variant={'outlined'}
-                        />
-                    )}
-                    {!!place.distance && (
-                        <Chip
-                            icon={<Straighten />}
-                            label={numberFormatter(place.distance || 0)}
-                            size={'small'}
-                            variant={'outlined'}
-                        />
-                    )}
-                </Stack>
-            </CardContent>
-        </Card>
-    )
-}
+                )}
+                {place.rating > 0 && (
+                    <Chip
+                        icon={<StarOutline />}
+                        label={place.rating}
+                        size={'small'}
+                        variant={'outlined'}
+                    />
+                )}
+                {!!place.distance && (
+                    <Chip
+                        icon={<Straighten />}
+                        label={numberFormatter(place.distance || 0)}
+                        size={'small'}
+                        variant={'outlined'}
+                    />
+                )}
+            </Stack>
+        </CardContent>
+    </Card>
+)
 
 export default PlacesListItem

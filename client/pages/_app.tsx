@@ -2,6 +2,7 @@ import '@/styles/globals.sass'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ruRU } from '@mui/material/locale'
 import { Shadows, ThemeProvider, createTheme } from '@mui/material/styles'
+import { appWithTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import NextLink from 'next/link'
@@ -179,4 +180,4 @@ const App = ({ Component, pageProps }: AppProps) => {
     )
 }
 
-export default App
+export default appWithTranslation(App)
