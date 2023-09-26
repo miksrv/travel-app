@@ -7,7 +7,7 @@ import { Marker, Popup } from 'react-leaflet'
 import { usePoiGetItemMutation } from '@/api/api'
 
 import noPhoto from '@/public/images/no-photo-available.png'
-import icon from '@/public/poi/aircraft.png'
+import icon from '@/public/poi/battlefield.png'
 
 import styles from './styles.module.sass'
 

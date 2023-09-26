@@ -23,8 +23,32 @@ export type Place = {
     photos?: Photo[]
 }
 
+export enum Categories {
+    battlefield = 'battlefield',
+    fort = 'fort',
+    transport = 'transport',
+    abandoned = 'abandoned',
+    mine = 'mine',
+    factory = 'factory',
+    construction = 'construction',
+    memorial = 'memorial',
+    monument = 'monument',
+    museum = 'museum',
+    castle = 'castle',
+    manor = 'manor',
+    religious = 'religious',
+    archeology = 'archeology',
+    cave = 'cave',
+    waterfall = 'waterfall',
+    spring = 'spring',
+    nature = 'nature',
+    water = 'water',
+    mountain = 'mountain',
+    camping = 'camping'
+}
+
 export type Category = {
-    name: string
+    name: Categories
     title: string
 }
 

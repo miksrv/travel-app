@@ -37,8 +37,8 @@ class AddOverpassCategory extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
+//        $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
+//        $this->forge->addForeignKey('subcategory', 'subcategory', 'name', 'CASCADE', 'CASCADE');
         $this->forge->createTable('overpass_category');
     }
 

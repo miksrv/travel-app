@@ -45,11 +45,10 @@ class Places extends ResourceController
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $placesModel->select(
-                'places.id, places.category, places.subcategory, places.latitude, places.longitude,
+                'places.id, places.category, places.latitude, places.longitude,
                 places.rating, places.views, translations_places.title, SUBSTRING(translations_places.content, 1, 350) as content,
-                category.title as category_title, subcategory.title as subcategory_title' . $distanceSelect)
-            ->join('category', 'places.category = category.name', 'left')
-            ->join('subcategory', 'places.subcategory = subcategory.name', 'left');
+                category.title as category_title' . $distanceSelect)
+            ->join('category', 'places.category = category.name', 'left');
 
         // Find all places
         $placesList = $this->_makeListFilters($placesModel)->get()->getResult();
@@ -83,11 +82,7 @@ class Places extends ResourceController
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->category_title,
-                ],
-                'subcategory' => $place->subcategory ? [
-                    'name'  => $place->subcategory,
-                    'title' => $place->subcategory_title,
-                ] : null,
+                ]
             ];
 
             if (isset($findSession) || ($lat && $lon)) {
@@ -144,11 +139,10 @@ class Places extends ResourceController
                     users.reputation as user_reputation, users.avatar as user_avatar,
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
-                    category.title as category_title, subcategory.title as subcategory_title' . $distanceSelect
+                    category.title as category_title' . $distanceSelect
                 )
                 ->join('users', 'places.author = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
-                ->join('subcategory', 'places.subcategory = subcategory.name', 'left')
                 ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
                 ->join('address_country', 'address_country.id = places.address_country', 'left')
                 ->join('address_region', 'address_region.id = places.address_region', 'left')
@@ -195,10 +189,6 @@ class Places extends ResourceController
                     'name'  => $placeData->category,
                     'title' => $placeData->category_title,
                 ],
-                'subcategory' => $placeData->subcategory ? [
-                    'name'  => $placeData->subcategory,
-                    'title' => $placeData->subcategory_title,
-                ] : null,
                 'address'   => [],
                 'tags'      => $placeData->tags,
                 'photos'    => $placeData->photos
@@ -258,7 +248,7 @@ class Places extends ResourceController
      */
     protected function _makeListFilters(PlacesModel $placesModel): PlacesModel {
         $orderDefault  = 'DESC';
-        $sortingFields = ['views', 'rating', 'title', 'category', 'subcategory', 'distance', 'created_at', 'updated_at'];
+        $sortingFields = ['views', 'rating', 'title', 'category', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
 
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
@@ -273,7 +263,6 @@ class Places extends ResourceController
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
         $category    = $this->request->getGet('category', FILTER_SANITIZE_STRING);
-        $subcategory = $this->request->getGet('subcategory', FILTER_SANITIZE_STRING);
 
         if ($search) {
             $search = " AND (translations_places.title LIKE '%{$search}%' OR translations_places.content LIKE '%{$search}%')";
@@ -299,10 +288,6 @@ class Places extends ResourceController
 
         if ($category) {
             $placesModel->where(['places.category' => $category]);
-        }
-
-        if ($subcategory) {
-            $placesModel->where(['places.subcategory' => $subcategory]);
         }
 
         if ($exclude) {

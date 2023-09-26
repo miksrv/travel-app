@@ -6,7 +6,6 @@ class Place extends Entity
 {
     protected $casts = [
         'category'         => 'string',
-        'subcategory'      => 'string',
         'address_country'  => 'integer',
         'address_region'   => 'integer',
         'address_district' => 'integer',

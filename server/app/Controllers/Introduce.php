@@ -139,7 +139,7 @@ class Introduce extends ResourceController
 
             $place->overpass_id = $point->id;
             $place->category    = $findCategory->name ?? $point->category;
-            $place->subcategory = $findOverpassCat->subcategory ?? null;
+//            $place->subcategory = $findOverpassCat->subcategory ?? null;
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
             $place->title       = $point->tags['name'] ?? null;

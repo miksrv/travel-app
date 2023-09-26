@@ -1,3 +1,4 @@
+import { categoryImage } from '@/functions/categories'
 import { numberFormatter } from '@/functions/helpers'
 import {
     PhotoCameraOutlined,
@@ -29,9 +30,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
     <Card className={styles.placesListItem}>
         <Image
             className={styles.categoryIcon}
-            src={`/poi/${
-                place?.subcategory?.name || place?.category?.name
-            }.png`}
+            src={categoryImage(place.category?.name).src}
             alt={''}
             width={22}
             height={26}

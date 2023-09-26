@@ -28,7 +28,7 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
             size='small'
         >
             <Autocomplete
-                sx={{ minWidth: 200 }}
+                sx={{ minWidth: 220 }}
                 getOptionLabel={(option) =>
                     typeof option === 'string' ? option : option.title
                 }

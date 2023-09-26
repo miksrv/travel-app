@@ -27,22 +27,22 @@ class Migrate extends ResourceController
     public function init(): ResponseInterface
     {
         $mapCategories = [
-            1 => ['man_made', 'ruins'],         // Заброшенные
-            2 => ['man_made', null],            // Техногенные
-            3 => ['natural', null],             // Природные
-            4 => ['man_made', 'mine'],          // Карьеры
-            5 => ['natural', 'water'],          // Водохранилища
-            6 => ['natural', 'spring'],         // Родники
-            7 => ['tourism', 'camping'],        // Кемпинги
-            8 => ['historic', 'fort'],          // Крепости
-            9 => ['historic', 'religious'],     // Монастыри
-            10 => ['tourism', 'museum'],        // Музеи
-            11 => ['historic', 'memorial'],     // Статуи
-            12 => ['historic', 'manor'],        // Усадьбы
-            13 => ['natural', 'cave_entrance'], // Пещеры
-            14 => ['historic', 'battlefield'],  // Доты
-            15 => ['natural', 'rock'],          // Горы
-            16 => ['tourism', null],            // Другое
+            1 => 'abandoned',     // Заброшенные
+            2 => 'construction',  // Техногенные
+            3 => 'nature',        // Природные
+            4 => 'mine',          // Карьеры
+            5 => 'water',         // Водохранилища
+            6 => 'spring',        // Родники
+            7 => 'camping',       // Кемпинги
+            8 => 'castle',        // Крепости
+            9 => 'religious',     // Монастыри
+            10 => 'museum',       // Музеи
+            11 => 'memorial',     // Статуи
+            12 => 'manor',        // Усадьбы
+            13 => 'cave',         // Пещеры
+            14 => 'fort',         // Доты
+            15 => 'mountain',     // Горы
+            16 => 'construction', // Другое
         ];
 
         $ratingModel = new RatingModel();
@@ -93,8 +93,7 @@ class Migrate extends ResourceController
             $place->author           = $placeAuthor;
             $place->rating           = $ratingSum === 0 ? null : $ratingSum;
             $place->views            = $item->item_count_views;
-            $place->category         = $mapCategories[$item->item_category][0];
-            $place->subcategory      = $mapCategories[$item->item_category][1];
+            $place->category         = $mapCategories[$item->item_category];
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
             $place->address_region   = $geocoder->regionID;
@@ -215,7 +214,7 @@ class Migrate extends ResourceController
                         $TranslationsPhotosModel->insert([
                             'photo'    => $photosModel->getInsertID(),
                             'language' => 'ru',
-                            'title'    => $item->item_title
+                            'title'    => $item->item_title ?? ''
                         ]);
 
                         // Make user activity

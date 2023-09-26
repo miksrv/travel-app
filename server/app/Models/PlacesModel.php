@@ -18,7 +18,6 @@ class PlacesModel extends MyBaseModel
     protected $allowedFields = [
         'overpass_id',
         'category',
-        'subcategory',
         'tags',
         'address',
         'address_country',
@@ -44,7 +43,6 @@ class PlacesModel extends MyBaseModel
     // Validation
     protected $validationRules = [
         'category'    => 'required|string|max_length[50]',
-        'subcategory' => 'string|max_length[50]',
         'title'       => 'required|string|min_length[3]|max_length[200]',
         'content'     => 'string',
         'address'     => 'string|max_length[250]',

@@ -1,3 +1,4 @@
+import { categoryImage } from '@/functions/categories'
 import { convertDMS, numberFormatter } from '@/functions/helpers'
 import Avatar from '@mui/material/Avatar'
 import Card from '@mui/material/Card'
@@ -155,39 +156,16 @@ const Place: NextPage = () => {
                                                     objectFit: 'cover',
                                                     width: '18px'
                                                 }}
-                                                src={`/poi/${data?.category?.name}.png`}
+                                                src={
+                                                    categoryImage(
+                                                        data.category?.name
+                                                    ).src
+                                                }
                                                 alt={data?.category?.title}
                                                 width={22}
                                                 height={26}
                                             />
                                             {data?.category?.title}
-                                        </Stack>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
-                            />
-                            <StatisticLine
-                                title={'Подкатегория:'}
-                                text={
-                                    data?.subcategory?.name ? (
-                                        <Stack
-                                            direction={'row'}
-                                            spacing={2}
-                                        >
-                                            <Image
-                                                style={{
-                                                    height: '18px',
-                                                    marginRight: '4px',
-                                                    objectFit: 'cover',
-                                                    width: '18px'
-                                                }}
-                                                src={`/poi/${data?.subcategory?.name}.png`}
-                                                alt={data?.subcategory?.title}
-                                                width={22}
-                                                height={26}
-                                            />
-                                            {data?.subcategory?.title}
                                         </Stack>
                                     ) : (
                                         '-'
