@@ -1,9 +1,9 @@
+import { categoryImage } from '@/functions/categories'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
-import { debounce } from '@mui/material/utils'
 import Image from 'next/image'
 import React, { useMemo, useState } from 'react'
 
@@ -19,8 +19,6 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
     const { category, onChangeCategory } = props
 
     const { data, isLoading } = useCategoriesGetListQuery()
-
-    const [locationLoading, setLocationLoading] = useState<boolean>(false)
 
     return (
         <FormControl
@@ -52,7 +50,7 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
                                 objectFit: 'cover',
                                 width: '15px'
                             }}
-                            src={`/poi/${option?.name}.png`}
+                            src={categoryImage(option.name).src}
                             alt={option?.title}
                             width={22}
                             height={26}
@@ -70,7 +68,7 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
                             ...params.InputProps,
                             endAdornment: (
                                 <React.Fragment>
-                                    {locationLoading ? (
+                                    {isLoading ? (
                                         <CircularProgress
                                             color='inherit'
                                             size={16}
@@ -89,7 +87,7 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
                                         objectFit: 'cover',
                                         width: '15px'
                                     }}
-                                    src={`/poi/${category?.name}.png`}
+                                    src={categoryImage(category.name).src}
                                     alt={category?.title}
                                     width={22}
                                     height={26}

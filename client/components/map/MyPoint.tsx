@@ -2,7 +2,9 @@ import Leaflet from 'leaflet'
 import React from 'react'
 import { Circle, Marker, Popup } from 'react-leaflet'
 
-import mypointer from '@/public/poi/military_equipment.png'
+import userAvatar from '@/public/images/no-avatar.jpeg'
+
+import styles from './styles.module.sass'
 
 type TMyPointProps = {
     lat: number
@@ -11,9 +13,10 @@ type TMyPointProps = {
 
 const MyPoint: React.FC<TMyPointProps> = ({ lat, lon }) => {
     const myIcon = new Leaflet.Icon({
-        iconAnchor: [mypointer.width - 20, mypointer.height - 20],
-        iconSize: [mypointer.width - 10, mypointer.height - 12],
-        iconUrl: mypointer.src
+        className: styles.userIcon,
+        iconAnchor: [15, 15],
+        iconSize: [30, 30],
+        iconUrl: userAvatar.src
         // popupAnchor: [-3, -76],
         // shadowAnchor: [22, 94],
         // shadowSize: [68, 95],
@@ -37,11 +40,7 @@ const MyPoint: React.FC<TMyPointProps> = ({ lat, lon }) => {
             <Marker
                 position={[lat, lon]}
                 icon={myIcon}
-            >
-                <Popup>
-                    A pretty CSS3 popup. <br /> Easily customizable.
-                </Popup>
-            </Marker>
+            />
         </>
     )
 }
