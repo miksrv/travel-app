@@ -182,7 +182,7 @@ const Place: NextPage = () => {
                                         <Avatar
                                             alt={data?.author?.name || ''}
                                             src={
-                                                data?.author?.avatar ||
+                                                `http://localhost:8080/avatars/${data?.author?.avatar}` ||
                                                 undefined
                                             }
                                             sx={{ height: 18, width: 18 }}
@@ -194,7 +194,7 @@ const Place: NextPage = () => {
                             />
                             <StatisticLine
                                 title={'Просмотров:'}
-                                text={numberFormatter(data?.views || 0)}
+                                text={data?.views || 0}
                             />
                             <StatisticLine
                                 title={'Расстояние:'}

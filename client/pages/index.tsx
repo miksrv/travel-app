@@ -7,7 +7,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import PageLayout from '@/components/page-layout'
 
 const Main: NextPage = () => {
-    const { t, i18n } = useTranslation('common')
+    const { t } = useTranslation('common')
 
     return (
         <PageLayout>

@@ -3,6 +3,7 @@
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
+use App\Models\RatingModel;
 use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -130,6 +131,7 @@ class Places extends ResourceController
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
+            $ratingModel = new RatingModel();
             $photosModel = new PhotosModel();
             $placesModel = new PlacesModel();
             $placeData   = $placesModel
@@ -233,6 +235,11 @@ class Places extends ResourceController
                     'name' => $placeData->city_name
                 ];
             }
+
+            // Update view counts
+//            $placesModel->update($placeData->id, [
+//                'views' => $placeData->views + 1
+//            ]);
 
             return $this->respond((object) $response);
         } catch (Exception $e) {

@@ -53,15 +53,15 @@ const Map: NextPage = () => {
             await getPoiList(bounds)
         }
 
-        if (mapCenter) {
-            await router.push(
-                `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
-                undefined,
-                {
-                    shallow: true
-                }
-            )
-        }
+        // if (mapCenter) {
+        //     await router.push(
+        //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
+        //         undefined,
+        //         {
+        //             shallow: true
+        //         }
+        //     )
+        // }
     }
 
     const getPoiList = useCallback(
