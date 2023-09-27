@@ -8,7 +8,7 @@ import Image from 'next/image'
 import React, { useMemo, useState } from 'react'
 
 import { useCategoriesGetListQuery } from '@/api/api'
-import { API, Place } from '@/api/types'
+import { ApiTypes, Place } from '@/api/types'
 
 interface PlacesCategorySelectProps {
     category?: Place.Category

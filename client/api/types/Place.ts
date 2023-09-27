@@ -1,12 +1,12 @@
-import { DateTimeType } from '@/api/types/API'
+import { ApiTypes } from '@/api/types'
 
 import { Author } from './Author'
 import { Photo } from './Photo'
 
 export type Place = {
     id: string
-    created?: DateTimeType
-    updated?: DateTimeType
+    created?: ApiTypes.DateTimeType
+    updated?: ApiTypes.DateTimeType
     latitude: number
     longitude: number
     rating: number

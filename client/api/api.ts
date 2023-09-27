@@ -2,11 +2,7 @@ import { encodeQueryData } from '@/functions/helpers'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
-import { API } from '@/api/types'
-import {
-    ResponseCategoriesGetList,
-    ResponseRatingGetList
-} from '@/api/types/API'
+import { ApiTypes } from '@/api/types'
 
 type Maybe<T> = T | void
 
@@ -29,13 +25,16 @@ export const api = createApi({
     }),
     endpoints: (builder) => ({
         addressGetSearch: builder.mutation<
-            API.ResponseAddressGetSearch,
+            ApiTypes.ResponseAddressGetSearch,
             Maybe<string>
         >({
             query: (searchString) => `address?search=${searchString}`
         }),
 
-        categoriesGetList: builder.query<API.ResponseCategoriesGetList, void>({
+        categoriesGetList: builder.query<
+            ApiTypes.ResponseCategoriesGetList,
+            void
+        >({
             query: () => 'categories'
         }),
 
@@ -44,14 +43,14 @@ export const api = createApi({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
-        placesGetItem: builder.query<API.ResponsePlacesGetItem, string>({
+        placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, string>({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),
 
         placesGetList: builder.query<
-            API.ResponsePlacesGetList,
-            Maybe<API.RequestPlacesGetList>
+            ApiTypes.ResponsePlacesGetList,
+            Maybe<ApiTypes.RequestPlacesGetList>
         >({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
@@ -64,7 +63,7 @@ export const api = createApi({
             query: (params) => `poi${encodeQueryData(params)}`
         }),
 
-        ratingGetList: builder.query<API.ResponseRatingGetList, string>({
+        ratingGetList: builder.query<ApiTypes.ResponseRatingGetList, string>({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         })

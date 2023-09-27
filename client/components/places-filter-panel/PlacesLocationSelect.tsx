@@ -7,11 +7,11 @@ import { debounce } from '@mui/material/utils'
 import React, { useMemo, useState } from 'react'
 
 import { useAddressGetSearchMutation } from '@/api/api'
-import { API } from '@/api/types'
+import { ApiTypes } from '@/api/types'
 
 interface PlacesLocationSelectProps {
-    location?: API.PlaceLocationType
-    onChangeLocation?: (value?: API.PlaceLocationType) => void
+    location?: ApiTypes.PlaceLocationType
+    onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
 const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
@@ -33,26 +33,26 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
         []
     )
 
-    const AutocompleteData: API.PlaceLocationType[] = useMemo(
+    const AutocompleteData: ApiTypes.PlaceLocationType[] = useMemo(
         () => [
             ...(searchResult?.countries?.map((item) => ({
                 title: item.name,
-                type: API.LocationType.Country,
+                type: ApiTypes.LocationType.Country,
                 value: item.id
             })) || []),
             ...(searchResult?.regions?.map((item) => ({
                 title: item.name,
-                type: API.LocationType.Region,
+                type: ApiTypes.LocationType.Region,
                 value: item.id
             })) || []),
             ...(searchResult?.districts?.map((item) => ({
                 title: item.name,
-                type: API.LocationType.District,
+                type: ApiTypes.LocationType.District,
                 value: item.id
             })) || []),
             ...(searchResult?.cities?.map((item) => ({
                 title: item.name,
-                type: API.LocationType.City,
+                type: ApiTypes.LocationType.City,
                 value: item.id
             })) || [])
         ],

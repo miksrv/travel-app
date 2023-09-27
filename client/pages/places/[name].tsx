@@ -36,7 +36,7 @@ import {
     usePlacesGetListQuery,
     useRatingGetListQuery
 } from '@/api/api'
-import { API } from '@/api/types'
+import { ApiTypes } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
@@ -72,8 +72,8 @@ const Place: NextPage = () => {
             latitude: data?.latitude,
             limit: 3,
             longitude: data?.longitude,
-            order: API.SortOrder.ASC,
-            sort: API.SortFields.Distance
+            order: ApiTypes.SortOrder.ASC,
+            sort: ApiTypes.SortFields.Distance
         },
         { skip: !data?.longitude || !data?.latitude }
     )

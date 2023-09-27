@@ -131,7 +131,6 @@ class Places extends ResourceController
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
-            $ratingModel = new RatingModel();
             $photosModel = new PhotosModel();
             $placesModel = new PlacesModel();
             $placeData   = $placesModel

@@ -6,50 +6,50 @@ import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
 import React from 'react'
 
-import { API, Place } from '@/api/types'
+import { ApiTypes, Place } from '@/api/types'
 
 import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
 import PlacesLocationSelect from '@/components/places-filter-panel/PlacesLocationSelect'
 
 interface PlacesFilterPanelProps {
-    sort?: API.SortFields
-    order?: API.SortOrder
-    location?: API.PlaceLocationType
+    sort?: ApiTypes.SortFields
+    order?: ApiTypes.SortOrder
+    location?: ApiTypes.PlaceLocationType
     category?: Place.Category
-    onChangeSort?: (value: API.SortFields) => void
-    onChangeOrder?: (value: API.SortOrder) => void
-    onChangeLocation?: (value?: API.PlaceLocationType) => void
+    onChangeSort?: (value: ApiTypes.SortFields) => void
+    onChangeOrder?: (value: ApiTypes.SortOrder) => void
+    onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
     onChangeCategory?: (value?: Place.Category) => void
 }
 
 type SortOptionsProps = {
-    key: API.SortFields
+    key: ApiTypes.SortFields
     value: string
 }
 
 const SortOptions: SortOptionsProps[] = [
     {
-        key: API.SortFields.Views,
+        key: ApiTypes.SortFields.Views,
         value: 'Количеству просмотров'
     },
     {
-        key: API.SortFields.Rating,
+        key: ApiTypes.SortFields.Rating,
         value: 'Рейтингу'
     },
     {
-        key: API.SortFields.Created,
+        key: ApiTypes.SortFields.Created,
         value: 'Дате добавления'
     },
     {
-        key: API.SortFields.Updated,
+        key: ApiTypes.SortFields.Updated,
         value: 'Дате обновления'
     },
     {
-        key: API.SortFields.Title,
+        key: ApiTypes.SortFields.Title,
         value: 'Алфавиту'
     },
     {
-        key: API.SortFields.Distance,
+        key: ApiTypes.SortFields.Distance,
         value: 'Расстоянию'
     }
 ]
@@ -84,7 +84,9 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         variant={'outlined'}
                         label={'Сортировка'}
                         onChange={(event: SelectChangeEvent) =>
-                            onChangeSort?.(event.target.value as API.SortFields)
+                            onChangeSort?.(
+                                event.target.value as ApiTypes.SortFields
+                            )
                         }
                     >
                         {SortOptions.map((option) => (
@@ -107,13 +109,15 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         value={order}
                         label={'Порядок'}
                         onChange={(event: SelectChangeEvent) => {
-                            onChangeOrder?.(event.target.value as API.SortOrder)
+                            onChangeOrder?.(
+                                event.target.value as ApiTypes.SortOrder
+                            )
                         }}
                     >
-                        <MenuItem value={API.SortOrder.ASC}>
+                        <MenuItem value={ApiTypes.SortOrder.ASC}>
                             {'По возрастанию'}
                         </MenuItem>
-                        <MenuItem value={API.SortOrder.DESC}>
+                        <MenuItem value={ApiTypes.SortOrder.DESC}>
                             {'По убыванию'}
                         </MenuItem>
                     </Select>

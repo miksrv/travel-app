@@ -14,7 +14,7 @@ import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
-import { API, Place } from '@/api/types'
+import { ApiTypes, Place } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
@@ -42,31 +42,35 @@ const Places: NextPage = () => {
     //     : API.SortOrder.DESC
 
     const [page, setPage] = useState<number>(1)
-    const [sort, setSort] = useState<API.SortFields>(API.SortFields.Updated)
-    const [order, setOrder] = useState<API.SortOrder>(API.SortOrder.DESC)
+    const [sort, setSort] = useState<ApiTypes.SortFields>(
+        ApiTypes.SortFields.Updated
+    )
+    const [order, setOrder] = useState<ApiTypes.SortOrder>(
+        ApiTypes.SortOrder.DESC
+    )
     const [category, setCategory] = useState<Place.Category>()
-    const [location, setLocation] = useState<API.PlaceLocationType>()
+    const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
 
     const [introduce] = useIntroduceMutation()
     const { data, isLoading } = usePlacesGetListQuery({
         category: category?.name,
         city:
-            location?.type === API.LocationType.City
+            location?.type === ApiTypes.LocationType.City
                 ? location.value
                 : undefined,
         country:
-            location?.type === API.LocationType.Country
+            location?.type === ApiTypes.LocationType.Country
                 ? location.value
                 : undefined,
         district:
-            location?.type === API.LocationType.District
+            location?.type === ApiTypes.LocationType.District
                 ? location.value
                 : undefined,
         limit: POST_PER_PAGE,
         offset: ((Number(page) || 1) - 1) * POST_PER_PAGE,
         order: order,
         region:
-            location?.type === API.LocationType.Region
+            location?.type === ApiTypes.LocationType.Region
                 ? location.value
                 : undefined,
         sort: sort
@@ -88,9 +92,9 @@ const Places: NextPage = () => {
 
     useEffect(() => {
         const urlParams = {
-            order: order !== API.SortOrder.DESC ? order : undefined,
+            order: order !== ApiTypes.SortOrder.DESC ? order : undefined,
             page: page !== 1 ? page : undefined,
-            sort: sort !== API.SortFields.Updated ? sort : undefined
+            sort: sort !== ApiTypes.SortFields.Updated ? sort : undefined
         }
 
         router.push(`places${encodeQueryData(urlParams)}`, undefined, {
