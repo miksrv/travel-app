@@ -17,7 +17,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places }) => (
     >
         {places?.map((place) => (
             <Grid
-                lg={3}
+                lg={4}
                 md={6}
                 xs={12}
                 key={place.id}

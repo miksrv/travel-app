@@ -62,7 +62,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     return (
         <AppBar
             position='static'
-            sx={{ boxShadow: 0 }}
+            sx={{ boxShadow: 0, mb: 2 }}
         >
             <Container
                 maxWidth='lg'

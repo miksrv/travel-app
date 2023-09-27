@@ -22,11 +22,10 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
 
     return (
         <FormControl
-            sx={{ m: 1 }}
+            sx={{ m: 1, minWidth: 220, width: 'auto' }}
             size='small'
         >
             <Autocomplete
-                sx={{ minWidth: 220 }}
                 getOptionLabel={(option) =>
                     typeof option === 'string' ? option : option.title
                 }
@@ -62,6 +61,7 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
                     <TextField
                         {...params}
                         label={'Категория'}
+                        placeholder={'Категория'}
                         variant={'outlined'}
                         size={'small'}
                         InputProps={{

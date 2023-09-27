@@ -3,6 +3,7 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Paper from '@mui/material/Paper'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
+import Stack from '@mui/material/Stack'
 import React from 'react'
 
 import { API, Place } from '@/api/types'
@@ -66,61 +67,69 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     } = props
 
     return (
-        <Paper sx={{ mb: 2, mt: 2 }}>
-            <FormControl
-                sx={{ m: 1, minWidth: 210 }}
-                size={'small'}
+        <div>
+            <Stack
+                direction={'row'}
+                justifyContent={'space-between'}
+                spacing={1}
+                sx={{ mb: 1, mt: 2 }}
             >
-                <InputLabel>Сортировка</InputLabel>
-                <Select
-                    value={sort}
-                    label={'Сортировка'}
-                    onChange={(event: SelectChangeEvent) =>
-                        onChangeSort?.(event.target.value as API.SortFields)
-                    }
+                <FormControl
+                    sx={{ m: 1, minWidth: 210, width: 'auto' }}
+                    size={'small'}
                 >
-                    {SortOptions.map((option) => (
-                        <MenuItem
-                            value={option.key}
-                            key={option.key}
-                        >
-                            {option.value}
+                    <InputLabel>Сортировка</InputLabel>
+                    <Select
+                        value={sort}
+                        variant={'outlined'}
+                        label={'Сортировка'}
+                        onChange={(event: SelectChangeEvent) =>
+                            onChangeSort?.(event.target.value as API.SortFields)
+                        }
+                    >
+                        {SortOptions.map((option) => (
+                            <MenuItem
+                                value={option.key}
+                                key={option.key}
+                            >
+                                {option.value}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <FormControl
+                    sx={{ m: 1, minWidth: 150, width: 'auto' }}
+                    size={'small'}
+                >
+                    <InputLabel>Порядок</InputLabel>
+                    <Select
+                        value={order}
+                        label={'Порядок'}
+                        onChange={(event: SelectChangeEvent) => {
+                            onChangeOrder?.(event.target.value as API.SortOrder)
+                        }}
+                    >
+                        <MenuItem value={API.SortOrder.ASC}>
+                            {'По возрастанию'}
                         </MenuItem>
-                    ))}
-                </Select>
-            </FormControl>
+                        <MenuItem value={API.SortOrder.DESC}>
+                            {'По убыванию'}
+                        </MenuItem>
+                    </Select>
+                </FormControl>
 
-            <FormControl
-                sx={{ m: 1, minWidth: 150 }}
-                size={'small'}
-            >
-                <InputLabel>Порядок</InputLabel>
-                <Select
-                    value={order}
-                    label={'Порядок'}
-                    onChange={(event: SelectChangeEvent) => {
-                        onChangeOrder?.(event.target.value as API.SortOrder)
-                    }}
-                >
-                    <MenuItem value={API.SortOrder.ASC}>
-                        {'По возрастанию'}
-                    </MenuItem>
-                    <MenuItem value={API.SortOrder.DESC}>
-                        {'По убыванию'}
-                    </MenuItem>
-                </Select>
-            </FormControl>
+                <PlacesCategorySelect
+                    category={category}
+                    onChangeCategory={onChangeCategory}
+                />
 
-            <PlacesCategorySelect
-                category={category}
-                onChangeCategory={onChangeCategory}
-            />
-
-            <PlacesLocationSelect
-                location={location}
-                onChangeLocation={onChangeLocation}
-            />
-        </Paper>
+                <PlacesLocationSelect
+                    location={location}
+                    onChangeLocation={onChangeLocation}
+                />
+            </Stack>
+        </div>
     )
 }
 

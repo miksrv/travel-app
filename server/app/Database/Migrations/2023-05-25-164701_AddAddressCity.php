@@ -17,23 +17,22 @@ class AddAddressCity extends Migration {
             'country' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => false,
+                'null'       => false
             ],
             'region' => [
                 'type'       => 'INT',
                 'constraint' => 11,
-                'null'       => true,
+                'null'       => true
             ],
             'district' => [
                 'type'       => 'INT',
                 'constraint' => 11,
-                'null'       => true,
+                'null'       => true
             ],
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
-                'null'       => false,
-                // 'unique'     => true
+                'null'       => false
             ],
         ]);
 

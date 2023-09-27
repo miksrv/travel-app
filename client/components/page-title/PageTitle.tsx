@@ -8,7 +8,7 @@ interface PageTitleProps {
 const PageTitle: React.FC<PageTitleProps> = ({ title }) => (
     <Typography
         variant='h1'
-        sx={{ mb: 0.5, mt: 2 }}
+        sx={{ m: 0 }}
     >
         {title}
     </Typography>

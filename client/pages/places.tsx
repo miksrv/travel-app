@@ -1,5 +1,9 @@
 import { encodeQueryData } from '@/functions/helpers'
 import { Pagination } from '@mui/material'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import CardHeader from '@mui/material/CardHeader'
+import Paper from '@mui/material/Paper'
 import { GetStaticProps, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -18,7 +22,7 @@ import PageTitle from '@/components/page-title'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import PlacesList from '@/components/places-list'
 
-const POST_PER_PAGE = 8
+const POST_PER_PAGE = 9
 
 const Places: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
@@ -102,36 +106,77 @@ const Places: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
-            <PageTitle title={t('title', 'Интересные места')} />
-            <Breadcrumbs currentPage={'Интересные места'} />
-            <PlacesFilterPanel
-                sort={sort}
-                order={order}
-                location={location}
-                category={category}
-                onChangeSort={setSort}
-                onChangeOrder={setOrder}
-                onChangeLocation={async (location) => {
-                    setPage(1)
-                    setLocation(location)
-                }}
-                onChangeCategory={(category) => {
-                    setPage(1)
-                    setCategory(category)
-                }}
-            />
+            <Card sx={{ mb: 2 }}>
+                <CardHeader
+                    title={t('title', 'Интересные места')}
+                    titleTypographyProps={{ component: 'h1' }}
+                    subheader={<Breadcrumbs currentPage={'Интересные места'} />}
+                    sx={{ mb: -0.5, mt: -0.5 }}
+                />
+                <CardContent sx={{ mb: -2, mt: -3 }}>
+                    <PlacesFilterPanel
+                        sort={sort}
+                        order={order}
+                        location={location}
+                        category={category}
+                        onChangeSort={setSort}
+                        onChangeOrder={setOrder}
+                        onChangeLocation={async (location) => {
+                            setPage(1)
+                            setLocation(location)
+                        }}
+                        onChangeCategory={(category) => {
+                            setPage(1)
+                            setCategory(category)
+                        }}
+                    />
+                </CardContent>
+            </Card>
+
+            {/*<Paper*/}
+            {/*    sx={{*/}
+            {/*        backgroundColor: '#f9f9f9',*/}
+            {/*        mb: 2,*/}
+            {/*        mt: 2,*/}
+            {/*        p: 2,*/}
+            {/*        pb: 1,*/}
+            {/*        pt: 1*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <PageTitle title={t('title', 'Интересные места')} />*/}
+            {/*    <Breadcrumbs currentPage={'Интересные места'} />*/}
+            {/*    <Divider sx={{ mt: 1 }} />*/}
+            {/*    <PlacesFilterPanel*/}
+            {/*        sort={sort}*/}
+            {/*        order={order}*/}
+            {/*        location={location}*/}
+            {/*        category={category}*/}
+            {/*        onChangeSort={setSort}*/}
+            {/*        onChangeOrder={setOrder}*/}
+            {/*        onChangeLocation={async (location) => {*/}
+            {/*            setPage(1)*/}
+            {/*            setLocation(location)*/}
+            {/*        }}*/}
+            {/*        onChangeCategory={(category) => {*/}
+            {/*            setPage(1)*/}
+            {/*            setCategory(category)*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*</Paper>*/}
             <PlacesList
                 loading={isLoading}
                 places={data?.items}
             />
-            <Pagination
-                sx={{ mt: 2 }}
-                shape={'rounded'}
-                page={page}
-                hidden={!data?.count}
-                count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
-                onChange={(_, page) => setPage(page)}
-            />
+            <Paper sx={{ mb: 2, mt: 2, p: 2, pt: 0.5 }}>
+                <Pagination
+                    sx={{ mt: 2 }}
+                    shape={'rounded'}
+                    page={page}
+                    hidden={!data?.count}
+                    count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
+                    onChange={(_, page) => setPage(page)}
+                />
+            </Paper>
         </PageLayout>
     )
 }

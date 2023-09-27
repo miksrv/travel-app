@@ -78,8 +78,8 @@ class Places extends ResourceController
                 'longitude' => (float) $place->longitude,
                 'rating'    => (int) $place->rating,
                 'views'     => (int) $place->views,
-                'title'     => html_entity_decode($place->title),
-                'content'   => html_entity_decode($place->content),
+                'title'     => strip_tags(html_entity_decode($place->title)),
+                'content'   => strip_tags(html_entity_decode($place->content)),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->category_title,
@@ -178,8 +178,8 @@ class Places extends ResourceController
                 'longitude' => (float) $placeData->longitude,
                 'rating'    => (int) $placeData->rating,
                 'views'     => (int) $placeData->views,
-                'title'     => $placeData->title,
-                'content'   => $placeData->content,
+                'title'     => strip_tags(html_entity_decode($placeData->title)),
+                'content'   => strip_tags(html_entity_decode($placeData->content)),
                 'author'    => [
                     'id'         => $placeData->user_id,
                     'name'       => $placeData->user_name,

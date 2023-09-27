@@ -1,4 +1,14 @@
-import { Home, MapOutlined, PlaceOutlined } from '@mui/icons-material'
+import {
+    ArticleOutlined,
+    BookmarkBorderOutlined,
+    Home,
+    LabelOutlined,
+    MapOutlined,
+    PeopleOutline,
+    PhotoOutlined,
+    PlaceOutlined,
+    TerrainOutlined
+} from '@mui/icons-material'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import { ContainerTypeMap } from '@mui/material/Container/Container'
@@ -10,6 +20,7 @@ import ListItemIcon from '@mui/material/ListItemIcon'
 import ListItemText from '@mui/material/ListItemText'
 import { OverridableComponent } from '@mui/material/OverridableComponent'
 import SwipeableDrawer from '@mui/material/SwipeableDrawer'
+import Grid from '@mui/material/Unstable_Grid2'
 import React from 'react'
 
 import Header from '@/components/header'
@@ -94,7 +105,42 @@ const PageLayout: React.FC<any> = ({ children, ...props }) => {
                 {...props}
                 component='main'
             >
-                {children}
+                <Grid
+                    container
+                    spacing={2}
+                >
+                    <Grid lg={2}>
+                        <div>
+                            <ArticleOutlined color={'primary'} /> Лента
+                            активностей
+                        </div>
+                        <div>
+                            <TerrainOutlined color={'primary'} /> Интересные
+                            места
+                        </div>
+                        <div>
+                            <PlaceOutlined color={'primary'} /> Населенные
+                            пункты
+                        </div>
+                        <div>
+                            <MapOutlined color={'primary'} /> Карта мест
+                        </div>
+                        <div>
+                            <LabelOutlined color={'primary'} /> Метки мест
+                        </div>
+                        <div>
+                            <PhotoOutlined color={'primary'} /> Фотографии
+                        </div>
+                        <div>
+                            <BookmarkBorderOutlined color={'primary'} />{' '}
+                            Категории
+                        </div>
+                        <div>
+                            <PeopleOutline color={'primary'} /> Пользователи
+                        </div>
+                    </Grid>
+                    <Grid lg={10}>{children}</Grid>
+                </Grid>
             </Container>
         </>
     )

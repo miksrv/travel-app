@@ -61,11 +61,10 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
 
     return (
         <FormControl
-            sx={{ m: 1 }}
+            sx={{ m: 1, minWidth: 200, width: '100%' }}
             size='small'
         >
             <Autocomplete
-                sx={{ width: 200 }}
                 getOptionLabel={(option) =>
                     typeof option === 'string' ? option : option.title
                 }
@@ -77,7 +76,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                 filterSelectedOptions
                 value={location}
                 noOptionsText='Нет найденных локаций'
-                groupBy={(option) => option.type}
+                // groupBy={(option) => option.type}
                 onChange={(event, newValue) => {
                     onChangeLocation?.(newValue || undefined)
                 }}
@@ -96,8 +95,8 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                 renderInput={(params: any) => (
                     <TextField
                         {...params}
-                        label={'Локация'}
                         variant={'outlined'}
+                        placeholder={'Поиск по локации'}
                         size={'small'}
                         InputProps={{
                             ...params.InputProps,

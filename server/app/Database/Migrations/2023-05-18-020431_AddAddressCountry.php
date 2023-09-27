@@ -17,8 +17,7 @@ class AddAddressCountry extends Migration {
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
-                'null'       => false,
-                'unique'     => true
+                'null'       => false
             ],
         ]);
 

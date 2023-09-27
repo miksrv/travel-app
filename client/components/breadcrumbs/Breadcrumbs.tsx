@@ -32,8 +32,9 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
             {!!links?.length &&
                 links.map(({ link, text }) => (
                     <Link
-                        color={'inherit'}
+                        key={link}
                         href={link}
+                        color={'inherit'}
                     >
                         {text}
                     </Link>

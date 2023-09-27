@@ -117,7 +117,7 @@ class Migrate extends ResourceController
             $TranslationsPlacesModel->insert((object) [
                 'place'    => $newPlaceId,
                 'language' => 'ru',
-                'title'    => $item->item_title,
+                'title'    => strip_tags(html_entity_decode($item->item_title)),
                 'content'  => strip_tags(html_entity_decode($item->item_content))
             ]);
 
@@ -130,7 +130,7 @@ class Migrate extends ResourceController
             ]);
 
             // Migrate Rating
-            if (is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
+            if (is_array($ratingData) &&  is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
                 foreach ($ratingData['scores'] as $index => $score) {
                     if (!$score) {
                         continue;
@@ -151,6 +151,7 @@ class Migrate extends ResourceController
                         $userActivityModel->insert((object) [
                             'user'       => $ratingAuthor,
                             'type'       => 'rating',
+                            'place'      => $newPlaceId,
                             'rating'     => $ratingModel->getInsertID(),
                             'created_at' => $place->created_at
                         ]);
@@ -214,13 +215,14 @@ class Migrate extends ResourceController
                         $TranslationsPhotosModel->insert([
                             'photo'    => $photosModel->getInsertID(),
                             'language' => 'ru',
-                            'title'    => $item->item_title ?? ''
+                            'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
                         ]);
 
                         // Make user activity
                         $userActivityModel->insert([
                             'user'       => $placeAuthor,
                             'type'       => 'photo',
+                            'place'      => $newPlaceId,
                             'photo'      => $photosModel->getInsertID(),
                             'created_at' => $photo->created_at
                         ]);

@@ -17,13 +17,12 @@ class AddAddressRegion extends Migration {
             'country' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
-                'null'       => false,
+                'null'       => false
             ],
             'name' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 100,
-                'null'       => false,
-                'unique'     => true
+                'null'       => false
             ],
         ]);
 
