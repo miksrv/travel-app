@@ -1,5 +1,7 @@
 import { AddressObject, Category, Place } from '@/api/types/Place'
 
+import { Author } from './Author'
+
 export type DateTimeType = {
     date: string
     timezone_type: number
@@ -71,4 +73,14 @@ export interface ResponseAddressGetSearch {
 
 export interface ResponseCategoriesGetList extends Place {
     items?: Category[]
+}
+
+export interface ResponseRatingGetList {
+    items?: {
+        created: DateTimeType
+        session: string
+        value: number
+        author?: Author
+    }[]
+    count?: number
 }

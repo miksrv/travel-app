@@ -31,7 +31,11 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 
-import { usePlacesGetItemQuery, usePlacesGetListQuery } from '@/api/api'
+import {
+    usePlacesGetItemQuery,
+    usePlacesGetListQuery,
+    useRatingGetListQuery
+} from '@/api/api'
 import { API } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -74,6 +78,10 @@ const Place: NextPage = () => {
         { skip: !data?.longitude || !data?.latitude }
     )
 
+    const { data: ratingData } = useRatingGetListQuery(data?.id || '', {
+        skip: !data?.id
+    })
+
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
 
@@ -111,98 +119,6 @@ const Place: NextPage = () => {
                     }}
                 />
             </Card>
-
-            {/*<Paper*/}
-            {/*    sx={{*/}
-            {/*        mb: 2,*/}
-            {/*        mt: 2,*/}
-            {/*        p: 2,*/}
-            {/*        pb: 1,*/}
-            {/*        pt: 1*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <PageTitle title={data?.title || ''} />*/}
-            {/*    <Breadcrumbs*/}
-            {/*        currentPage={data?.title}*/}
-            {/*        links={[{ link: '/places/', text: 'Интересные места' }]}*/}
-            {/*    />*/}
-            {/*    {data?.photos?.[0] && (*/}
-            {/*        <Box*/}
-            {/*            sx={{*/}
-            {/*                borderBottomLeftRadius: '4px',*/}
-            {/*                borderBottomRightRadius: '4px',*/}
-            {/*                mb: -2,*/}
-            {/*                ml: -2,*/}
-            {/*                mr: -2,*/}
-            {/*                mt: 1*/}
-            {/*            }}*/}
-            {/*        >*/}
-            {/*            <Image*/}
-            {/*                style={{*/}
-            {/*                    borderBottomLeftRadius: '4px',*/}
-            {/*                    borderBottomRightRadius: '4px',*/}
-            {/*                    cursor: 'pointer',*/}
-            {/*                    height: 300,*/}
-            {/*                    objectFit: 'cover',*/}
-            {/*                    objectPosition: 'center',*/}
-            {/*                    width: '100%'*/}
-            {/*                }}*/}
-            {/*                src={`http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`}*/}
-            {/*                alt={data?.photos?.[0]?.title || ''}*/}
-            {/*                width={data?.photos?.[0]?.width}*/}
-            {/*                height={data?.photos?.[0]?.height}*/}
-            {/*                onClick={() => {*/}
-            {/*                    setCurrentIndex(0)*/}
-            {/*                    setShowLightbox(true)*/}
-            {/*                }}*/}
-            {/*            />*/}
-            {/*        </Box>*/}
-            {/*    )}*/}
-            {/*</Paper>*/}
-            {/*<Card sx={{ mb: 2, mt: 0 }}>*/}
-            {/*    <CardContent sx={{ height: 500, p: 0, position: 'relative' }}>*/}
-            {/*        {data?.photos?.[0] && (*/}
-            {/*            <Image*/}
-            {/*                style={{*/}
-            {/*                    cursor: 'pointer',*/}
-            {/*                    height: 'inherit',*/}
-            {/*                    marginBottom: -30,*/}
-            {/*                    objectFit: 'cover',*/}
-            {/*                    width: '100%'*/}
-            {/*                }}*/}
-            {/*                src={`http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`}*/}
-            {/*                alt={data?.photos?.[0]?.title || ''}*/}
-            {/*                width={data?.photos?.[0]?.width}*/}
-            {/*                height={data?.photos?.[0]?.height}*/}
-            {/*                onClick={() => {*/}
-            {/*                    setCurrentIndex(0)*/}
-            {/*                    setShowLightbox(true)*/}
-            {/*                }}*/}
-            {/*            />*/}
-            {/*        )}*/}
-
-            {/*        {!!data?.photos?.length && data.photos.length > 1 && (*/}
-            {/*            <div className={'photos'}>*/}
-            {/*                <Carousel*/}
-            {/*                    slides={data?.photos}*/}
-            {/*                    placeId={data.id}*/}
-            {/*                    options={{*/}
-            {/*                        containScroll: 'trimSnaps',*/}
-            {/*                        dragFree: true*/}
-            {/*                    }}*/}
-            {/*                    onClick={(fileName) => {*/}
-            {/*                        const findIndex = data?.photos?.findIndex(*/}
-            {/*                            (photo) => photo.filename === fileName*/}
-            {/*                        )*/}
-
-            {/*                        setCurrentIndex(findIndex || 0)*/}
-            {/*                        setShowLightbox(true)*/}
-            {/*                    }}*/}
-            {/*                />*/}
-            {/*            </div>*/}
-            {/*        )}*/}
-            {/*    </CardContent>*/}
-            {/*</Card>*/}
 
             <Card sx={{ mb: 2, mt: 0 }}>
                 <CardContent sx={{ mb: -4 }}>
@@ -331,11 +247,24 @@ const Place: NextPage = () => {
                                 icon={<StarBorderOutlined color={'disabled'} />}
                                 title={'Рейтнг:'}
                                 text={
-                                    <Rating
-                                        name={'size-small'}
-                                        size={'medium'}
-                                        value={data?.rating || 0}
-                                    />
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            width: 200
+                                        }}
+                                    >
+                                        <Rating
+                                            name={'size-small'}
+                                            size={'medium'}
+                                            value={data?.rating || 0}
+                                        />
+                                        {ratingData?.count && (
+                                            <Box
+                                                sx={{ ml: 1 }}
+                                            >{`(${ratingData?.count})`}</Box>
+                                        )}
+                                    </Box>
                                 }
                             />
                         </Grid>
@@ -550,8 +479,13 @@ const StatisticLine: React.FC<StatisticLineProps> = ({ icon, title, text }) => (
         sx={{ mb: 0.6 }}
     >
         {icon}
-        <Typography sx={{ width: 140 }}>{title}</Typography>
-        <Typography sx={{ fontWeight: 500 }}>{text || '-'}</Typography>
+        <Typography
+            sx={{ color: '#818c99', width: 140 }}
+            variant={'body1'}
+        >
+            {title}
+        </Typography>
+        <Typography variant={'body1'}>{text || '-'}</Typography>
     </Stack>
 )
 

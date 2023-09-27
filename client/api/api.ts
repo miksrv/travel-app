@@ -3,7 +3,10 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { API } from '@/api/types'
-import { ResponseCategoriesGetList } from '@/api/types/API'
+import {
+    ResponseCategoriesGetList,
+    ResponseRatingGetList
+} from '@/api/types/API'
 
 type Maybe<T> = T | void
 
@@ -45,6 +48,7 @@ export const api = createApi({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),
+
         placesGetList: builder.query<
             API.ResponsePlacesGetList,
             Maybe<API.RequestPlacesGetList>
@@ -52,12 +56,17 @@ export const api = createApi({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
-
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
         }),
+
         poiGetList: builder.mutation<any, Maybe<any>>({
             query: (params) => `poi${encodeQueryData(params)}`
+        }),
+
+        ratingGetList: builder.query<API.ResponseRatingGetList, string>({
+            providesTags: ['Rating'],
+            query: (item) => `rating/${item}`
         })
     }),
     extractRehydrationInfo(action, { reducerPath }) {
@@ -66,7 +75,7 @@ export const api = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Places']
+    tagTypes: ['Places', 'Rating']
 })
 
 // Export hooks for usage in functional components
@@ -82,6 +91,8 @@ export const {
 
     usePoiGetItemMutation,
     usePoiGetListMutation,
+
+    useRatingGetListQuery,
 
     util: { getRunningQueriesThunk }
 } = api
