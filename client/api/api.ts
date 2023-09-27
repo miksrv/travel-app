@@ -66,6 +66,15 @@ export const api = createApi({
         ratingGetList: builder.query<ApiTypes.ResponseRatingGetList, string>({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
+        }),
+        ratingPutScore: builder.mutation<any, ApiTypes.RequestRatingSet>({
+            invalidatesTags: [{ type: 'Rating' }],
+            query: (data) => ({
+                body: data,
+                method: 'PATCH',
+                url: 'rating'
+            }),
+            transformErrorResponse: (response) => response.data
         })
     }),
     extractRehydrationInfo(action, { reducerPath }) {
@@ -92,6 +101,7 @@ export const {
     usePoiGetListMutation,
 
     useRatingGetListQuery,
+    useRatingPutScoreMutation,
 
     util: { getRunningQueriesThunk }
 } = api

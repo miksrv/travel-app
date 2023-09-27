@@ -34,7 +34,8 @@ import Lightbox from 'react-image-lightbox'
 import {
     usePlacesGetItemQuery,
     usePlacesGetListQuery,
-    useRatingGetListQuery
+    useRatingGetListQuery,
+    useRatingPutScoreMutation
 } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 
@@ -81,6 +82,9 @@ const Place: NextPage = () => {
     const { data: ratingData } = useRatingGetListQuery(data?.id || '', {
         skip: !data?.id
     })
+
+    const [setRating, { isLoading: setRatingLoading }] =
+        useRatingPutScoreMutation()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
@@ -258,6 +262,13 @@ const Place: NextPage = () => {
                                             name={'size-small'}
                                             size={'medium'}
                                             value={data?.rating || 0}
+                                            disabled={setRatingLoading}
+                                            onChange={(_, value) => {
+                                                setRating({
+                                                    place: data?.id!,
+                                                    score: value || 1
+                                                })
+                                            }}
                                         />
                                         {ratingData?.count && (
                                             <Box

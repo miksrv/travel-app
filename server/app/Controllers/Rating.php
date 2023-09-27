@@ -1,16 +1,10 @@
 <?php namespace App\Controllers;
 
+use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-
-header('Access-Control-Allow-Origin: *');
-header('Access-Control-Allow-Methods: GET, POST, DELETE, PATCH');
-header('Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization');
-
-if ('OPTIONS' === $_SERVER['REQUEST_METHOD']) {
-    die();
-}
 
 class Rating extends ResourceController
 {
@@ -53,6 +47,49 @@ class Rating extends ResourceController
                 'items' => $result,
                 'count' => count($result)]
             );
+        } catch (Exception $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return $this->failNotFound();
+        }
+    }
+
+    public function set(): ResponseInterface {
+        try {
+            $inputJSON = $this->request->getJSON();
+
+            if (empty($inputJSON) || !$inputJSON->place || !$inputJSON->score)
+            {
+                return $this->failValidationErrors();
+            }
+
+            $ratingModel = new RatingModel();
+            $placesModel = new PlacesModel();
+            $placesModel  = $placesModel->find($inputJSON->place);
+
+            if (!$placesModel) {
+                return $this->failNotFound();
+            }
+
+            $ip = $this->request->getIPAddress();
+            $ua = $this->request->getUserAgent();
+
+            $sessionModel = new SessionsModel();
+            $findSession  = $sessionModel->where([
+                'ip'         => $ip,
+                'user_agent' => $ua->getAgentString()
+            ])->first();
+
+            $insertRating = [
+                'place'   => $inputJSON->place,
+                'author'  => null,
+                'session' => $findSession->id ?? null,
+                'value'   => $inputJSON->score,
+            ];
+
+            $ratingModel->insert($insertRating);
+
+            return $this->respond((object) $insertRating);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 

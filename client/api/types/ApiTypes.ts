@@ -84,3 +84,8 @@ export interface ResponseRatingGetList {
     }[]
     count?: number
 }
+
+export interface RequestRatingSet {
+    place: string
+    score: number
+}
