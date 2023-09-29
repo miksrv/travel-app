@@ -83,7 +83,7 @@ const Place: NextPage = () => {
         skip: !data?.id
     })
 
-    const [setRating, { isLoading: setRatingLoading }] =
+    const [setRating, { data: newRating, isLoading: setRatingLoading }] =
         useRatingPutScoreMutation()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
@@ -261,16 +261,20 @@ const Place: NextPage = () => {
                                         <Rating
                                             name={'size-small'}
                                             size={'medium'}
-                                            value={data?.rating || 0}
+                                            value={
+                                                newRating?.rating ||
+                                                data?.rating ||
+                                                0
+                                            }
                                             disabled={setRatingLoading}
                                             onChange={(_, value) => {
                                                 setRating({
                                                     place: data?.id!,
-                                                    score: value || 1
+                                                    score: value || 5
                                                 })
                                             }}
                                         />
-                                        {ratingData?.count && (
+                                        {!!ratingData?.count && (
                                             <Box
                                                 sx={{ ml: 1 }}
                                             >{`(${ratingData?.count})`}</Box>

@@ -65,9 +65,9 @@ class Rating extends ResourceController
 
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
-            $placesModel  = $placesModel->find($inputJSON->place);
+            $placesData  = $placesModel->find($inputJSON->place);
 
-            if (!$placesModel) {
+            if (!$placesData) {
                 return $this->failNotFound();
             }
 
@@ -80,16 +80,34 @@ class Rating extends ResourceController
                 'user_agent' => $ua->getAgentString()
             ])->first();
 
+            $newScore = (int) $inputJSON->score < 1
+                ? 1
+                : ((int) $inputJSON->score > 5
+                    ? 5
+                    : (int) $inputJSON->score);
+
             $insertRating = [
                 'place'   => $inputJSON->place,
                 'author'  => null,
                 'session' => $findSession->id ?? null,
-                'value'   => $inputJSON->score,
+                'value'   => $newScore,
             ];
 
+            $placeRating  = $ratingModel->where('place', $placesData->id)->findAll();
+            $averageValue = 0;
+
+            if ($placeRating) {
+                foreach ($placeRating as $item) {
+                    $averageValue += $item->value;
+                }
+            }
+
+            $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 0);
+
+            $placesModel->update($placesData->id, ['rating' => $newPlaceVal]);
             $ratingModel->insert($insertRating);
 
-            return $this->respond((object) $insertRating);
+            return $this->respond((object) ['rating' => $newPlaceVal]);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 

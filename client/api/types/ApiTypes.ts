@@ -89,3 +89,7 @@ export interface RequestRatingSet {
     place: string
     score: number
 }
+
+export interface ResponseRatingSet {
+    rating: number
+}

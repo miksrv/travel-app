@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
+import { ResponseRatingSet } from '@/api/types/ApiTypes'
 
 type Maybe<T> = T | void
 
@@ -67,11 +68,14 @@ export const api = createApi({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         }),
-        ratingPutScore: builder.mutation<any, ApiTypes.RequestRatingSet>({
+        ratingPutScore: builder.mutation<
+            ApiTypes.ResponseRatingSet,
+            ApiTypes.RequestRatingSet
+        >({
             invalidatesTags: [{ type: 'Rating' }],
             query: (data) => ({
                 body: data,
-                method: 'PATCH',
+                method: 'PUT',
                 url: 'rating'
             }),
             transformErrorResponse: (response) => response.data

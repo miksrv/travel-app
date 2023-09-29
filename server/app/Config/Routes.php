@@ -6,7 +6,7 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 $routes->get('introduce', 'Introduce::hello');
-$routes->options('introduce)', 'Introduce');
+$routes->options('introduce', 'Introduce');
 
 $routes->get('migration', 'Migrate::init');
 
@@ -49,5 +49,5 @@ $routes->get('categories', 'Categories::list');
 $routes->options('categories', 'Categories');
 
 $routes->get('rating/(:alphanum)', 'Rating::show/$1');
-$routes->patch('rating', 'Rating::set');
+$routes->put('rating', 'Rating::set');
 $routes->options('rating', 'Rating');
