@@ -267,6 +267,7 @@ const Place: NextPage = () => {
                                                 0
                                             }
                                             disabled={setRatingLoading}
+                                            readOnly={!ratingData?.canVote}
                                             onChange={(_, value) => {
                                                 setRating({
                                                     place: data?.id!,

@@ -1,15 +1,22 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Session;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
-use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Rating extends ResourceController
 {
+    /**
+     * Список всех оценок для конкретного места
+     * @param $id
+     * @return ResponseInterface
+     */
     public function show($id = null): ResponseInterface {
         try {
+            $session     = new Session();
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel
                 ->select(
@@ -26,7 +33,7 @@ class Rating extends ResourceController
                      $tmpData = [
                          'created' => $item->created_at,
                          'session' => $item->session,
-                         'value'   => $item->value
+                         'value'   => (int) $item->value
                      ];
 
                      if ($item->user_id) {
@@ -44,9 +51,10 @@ class Rating extends ResourceController
             }
 
             return $this->respond([
-                'items' => $result,
-                'count' => count($result)]
-            );
+                'items'   => $result,
+                'count'   => count($result),
+                'canVote' => !array_search($session->id, array_column($result, 'session'))
+            ]);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
@@ -54,6 +62,11 @@ class Rating extends ResourceController
         }
     }
 
+    /**
+     * Добавление новой оценки
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
     public function set(): ResponseInterface {
         try {
             $inputJSON = $this->request->getJSON();
@@ -63,6 +76,7 @@ class Rating extends ResourceController
                 return $this->failValidationErrors();
             }
 
+            $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
             $placesData  = $placesModel->find($inputJSON->place);
@@ -71,30 +85,23 @@ class Rating extends ResourceController
                 return $this->failNotFound();
             }
 
-            $ip = $this->request->getIPAddress();
-            $ua = $this->request->getUserAgent();
-
-            $sessionModel = new SessionsModel();
-            $findSession  = $sessionModel->where([
-                'ip'         => $ip,
-                'user_agent' => $ua->getAgentString()
-            ])->first();
-
             $newScore = (int) $inputJSON->score < 1
                 ? 1
-                : ((int) $inputJSON->score > 5
-                    ? 5
-                    : (int) $inputJSON->score);
+                : min((int)$inputJSON->score, 5);
 
             $insertRating = [
                 'place'   => $inputJSON->place,
                 'author'  => null,
-                'session' => $findSession->id ?? null,
+                'session' => $session->id,
                 'value'   => $newScore,
             ];
 
             $placeRating  = $ratingModel->where('place', $placesData->id)->findAll();
             $averageValue = 0;
+
+            if (in_array($session->id, array_column($placeRating, 'session'))) {
+                return $this->failValidationErrors('The user has already voted for the material');
+            }
 
             if ($placeRating) {
                 foreach ($placeRating as $item) {

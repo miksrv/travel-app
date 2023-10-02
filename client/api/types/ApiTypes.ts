@@ -83,6 +83,7 @@ export interface ResponseRatingGetList {
         author?: Author
     }[]
     count?: number
+    canVote?: boolean
 }
 
 export interface RequestRatingSet {
