@@ -88,6 +88,23 @@ const theme = createTheme(
                     }
                 }
             },
+            MuiTab: {
+                styleOverrides: {
+                    root: {
+                        fontSize: 12,
+                        minHeight: 24,
+                        padding: '14px 20px',
+                        textTransform: 'none'
+                    }
+                }
+            },
+            MuiTabs: {
+                styleOverrides: {
+                    root: {
+                        minHeight: 30
+                    }
+                }
+            },
             MuiTextField: {
                 styleOverrides: {
                     root: {

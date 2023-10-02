@@ -1,9 +1,9 @@
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/helpers'
+import { TabPanel } from '@mui/base'
 import {
     AccessTimeOutlined,
     AccountCircleOutlined,
-    AddAlarmOutlined,
     BookmarkBorderOutlined,
     PlaceOutlined,
     RemoveRedEyeOutlined,
@@ -16,8 +16,11 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
+import Divider from '@mui/material/Divider'
 import Rating from '@mui/material/Rating'
 import Stack from '@mui/material/Stack'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -59,6 +62,12 @@ const Place: NextPage = () => {
     const routerObject = router.query.name
     const objectName =
         typeof routerObject === 'string' ? routerObject : skipToken
+
+    const [value, setValue] = React.useState<number>(1)
+
+    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+        setValue(newValue)
+    }
 
     const { data, isLoading } = usePlacesGetItemQuery(
         typeof objectName === 'string' ? objectName : '',
@@ -216,33 +225,28 @@ const Place: NextPage = () => {
                                             data?.latitude || 0,
                                             data?.longitude || 0
                                         )}`}{' '}
-                                        <Link
-                                            color={'inherit'}
-                                            target={'_blank'}
-                                            href={`https://yandex.ru/maps/?pt=${data?.longitude},${data?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
-                                        >
-                                            {'Я'}
-                                        </Link>{' '}
-                                        <Link
-                                            target={'_blank'}
-                                            color={'inherit'}
-                                            href={`https://maps.google.com/maps?ll=${data?.latitude},${data?.longitude}&q=${data?.latitude},${data?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
-                                        >
-                                            {'G'}
-                                        </Link>
+                                        <sup>
+                                            <Link
+                                                color={'inherit'}
+                                                target={'_blank'}
+                                                href={`https://yandex.ru/maps/?pt=${data?.longitude},${data?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
+                                            >
+                                                {'Я'}
+                                            </Link>{' '}
+                                            <Link
+                                                target={'_blank'}
+                                                color={'inherit'}
+                                                href={`https://maps.google.com/maps?ll=${data?.latitude},${data?.longitude}&q=${data?.latitude},${data?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                                            >
+                                                {'G'}
+                                            </Link>
+                                        </sup>
                                     </>
                                 }
                             />
                             <StatisticLine
-                                icon={<AddAlarmOutlined color={'disabled'} />}
-                                title={'Добавлено:'}
-                                text={dayjs(data?.created?.date).format(
-                                    'D MMMM YYYY, H:m'
-                                )}
-                            />
-                            <StatisticLine
                                 icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Обновлено:'}
+                                title={'Отредактировано:'}
                                 text={dayjs(data?.updated?.date).format(
                                     'D MMMM YYYY, H:m'
                                 )}
@@ -259,13 +263,8 @@ const Place: NextPage = () => {
                                         }}
                                     >
                                         <Rating
-                                            name={'size-small'}
                                             size={'medium'}
-                                            value={
-                                                newRating?.rating ||
-                                                data?.rating ||
-                                                0
-                                            }
+                                            value={5}
                                             disabled={setRatingLoading}
                                             readOnly={!ratingData?.canVote}
                                             onChange={(_, value) => {
@@ -339,87 +338,110 @@ const Place: NextPage = () => {
 
             <Card sx={{ mb: 2, mt: 0 }}>
                 <CardHeader
-                    title={`${data?.title} - описание`}
-                    titleTypographyProps={{ component: 'h2', fontSize: 18 }}
-                    sx={{ mb: -2 }}
-                    subheader={
-                        <Typography variant={'caption'}>
-                            {data?.address?.country && (
-                                <Link
-                                    color='inherit'
-                                    href={`/country/${data.address.country.id}`}
-                                >
-                                    {data.address.country.name}
-                                </Link>
-                            )}
-                            {data?.address?.region && (
-                                <>
-                                    {data?.address?.country && ', '}
-                                    <Link
-                                        color='inherit'
-                                        href={`/region/${data.address.region.id}`}
-                                    >
-                                        {data.address.region.name}
-                                    </Link>
-                                </>
-                            )}
-                            {data?.address?.district && (
-                                <>
-                                    {data?.address?.region && ', '}
-                                    <Link
-                                        color='inherit'
-                                        href={`/district/${data.address.district.id}`}
-                                    >
-                                        {data.address.district.name}
-                                    </Link>
-                                </>
-                            )}
-                            {data?.address?.city && (
-                                <>
-                                    {data?.address?.district && ', '}
-                                    <Link
-                                        color='inherit'
-                                        href={`/city/${data.address.city.id}`}
-                                    >
-                                        {data.address.city.name}
-                                    </Link>
-                                </>
-                            )}
-                            {data?.address?.street && (
-                                <>
-                                    {', '}
-                                    {data?.address?.street}
-                                </>
-                            )}
-                        </Typography>
+                    sx={{ p: 0 }}
+                    title={
+                        <Tabs
+                            value={value}
+                            onChange={handleChange}
+                            aria-label='basic tabs example'
+                        >
+                            <Tab label='Описание' />
+                            <Tab label='Фотографии' />
+                            <Tab label='Рейтинг' />
+                            <Tab label='Активность' />
+                        </Tabs>
                     }
                 />
-                <CardContent sx={{ mt: -3 }}>
-                    <Typography
-                        variant={'body2'}
-                        sx={{ whiteSpace: 'break-spaces' }}
-                    >
-                        {data?.content}
-                    </Typography>
+                <Divider />
+                {value === 0 && (
+                    <>
+                        <CardHeader
+                            title={`${data?.title} - описание`}
+                            titleTypographyProps={{
+                                component: 'h2',
+                                fontSize: 18
+                            }}
+                            sx={{ mb: -2 }}
+                            subheader={
+                                <Typography variant={'caption'}>
+                                    {data?.address?.country && (
+                                        <Link
+                                            color='inherit'
+                                            href={`/country/${data.address.country.id}`}
+                                        >
+                                            {data.address.country.name}
+                                        </Link>
+                                    )}
+                                    {data?.address?.region && (
+                                        <>
+                                            {data?.address?.country && ', '}
+                                            <Link
+                                                color='inherit'
+                                                href={`/region/${data.address.region.id}`}
+                                            >
+                                                {data.address.region.name}
+                                            </Link>
+                                        </>
+                                    )}
+                                    {data?.address?.district && (
+                                        <>
+                                            {data?.address?.region && ', '}
+                                            <Link
+                                                color='inherit'
+                                                href={`/district/${data.address.district.id}`}
+                                            >
+                                                {data.address.district.name}
+                                            </Link>
+                                        </>
+                                    )}
+                                    {data?.address?.city && (
+                                        <>
+                                            {data?.address?.district && ', '}
+                                            <Link
+                                                color='inherit'
+                                                href={`/city/${data.address.city.id}`}
+                                            >
+                                                {data.address.city.name}
+                                            </Link>
+                                        </>
+                                    )}
+                                    {data?.address?.street && (
+                                        <>
+                                            {', '}
+                                            {data?.address?.street}
+                                        </>
+                                    )}
+                                </Typography>
+                            }
+                        />
+                        <CardContent sx={{ mt: -3 }}>
+                            <Typography
+                                variant={'body2'}
+                                sx={{ whiteSpace: 'break-spaces' }}
+                            >
+                                {data?.content}
+                            </Typography>
 
-                    {!!data?.tags?.length && (
-                        <Stack
-                            direction='row'
-                            spacing={1}
-                            sx={{ mb: -1, mt: 1 }}
-                        >
-                            {data.tags.map((tag) => (
-                                <Link
-                                    key={tag.id}
-                                    color={'inherit'}
-                                    href={`/tags/${tag.id}`}
+                            {!!data?.tags?.length && (
+                                <Stack
+                                    direction='row'
+                                    spacing={1}
+                                    sx={{ mb: -1, mt: 1 }}
                                 >
-                                    {`#${tag.title}`}
-                                </Link>
-                            ))}
-                        </Stack>
-                    )}
-                </CardContent>
+                                    {data.tags.map((tag) => (
+                                        <Link
+                                            key={tag.id}
+                                            color={'inherit'}
+                                            href={`/tags/${tag.id}`}
+                                        >
+                                            {`#${tag.title}`}
+                                        </Link>
+                                    ))}
+                                </Stack>
+                            )}
+                        </CardContent>
+                    </>
+                )}
             </Card>
 
             <Typography
