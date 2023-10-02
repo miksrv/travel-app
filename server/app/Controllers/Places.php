@@ -1,9 +1,9 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
-use App\Models\RatingModel;
 use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -108,18 +108,11 @@ class Places extends ResourceController
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
+        $session = new Session();
+
         try {
-            $ip = $this->request->getIPAddress();
-            $ua = $this->request->getUserAgent();
-
-            $sessionModel = new SessionsModel();
-            $findSession  = $sessionModel->where([
-                'ip'         => $ip,
-                'user_agent' => $ua->getAgentString()
-            ])->first();
-
-            $distanceSelect = $findSession
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$findSession->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$findSession->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$findSession->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = ($session->longitude && $session->latitude)
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
@@ -195,7 +188,7 @@ class Places extends ResourceController
                 $response['photosCount'] = count($placeData->photos);
             }
 
-            if ($findSession) {
+            if ($session->longitude && $session->latitude) {
                 $response['distance'] = round((float) $placeData->distance, 1);
             }
 
@@ -228,9 +221,10 @@ class Places extends ResourceController
             }
 
             // Update view counts
-//            $placesModel->update($placeData->id, [
-//                'views' => $placeData->views + 1
-//            ]);
+            $placesModel->update($placeData->id, [
+                'views'      => $placeData->views + 1,
+                'updated_at' => $placeData->updated_at
+            ]);
 
             return $this->respond((object) $response);
         } catch (Exception $e) {

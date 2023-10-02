@@ -30,7 +30,8 @@ class PlacesModel extends MyBaseModel
         'rating',
         'cover',
         'views',
-        'created_at',
+        'updated_at',
+        'created_at'
     ];
 
     // Dates

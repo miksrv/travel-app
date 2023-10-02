@@ -2,7 +2,7 @@
 
 use CodeIgniter\Model;
 
-class SessionsHistoryModel extends Model
+class SessionsHistoryModel extends MyBaseModel
 {
     protected $table      = 'sessions_history';
     protected $primaryKey = 'id';
@@ -14,7 +14,6 @@ class SessionsHistoryModel extends Model
 
     // The updatable fields
     protected $allowedFields = [
-        'id',
         'session',
         'latitude',
         'longitude'
@@ -34,13 +33,19 @@ class SessionsHistoryModel extends Model
     protected $cleanValidationRules = true;
 
     // Callbacks
-    protected $allowCallbacks = false;
-    protected $beforeInsert   = [];
+    protected $allowCallbacks = true;
+    protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
+
+    protected function beforeInsert(array $data): array {
+        $data['data']['id'] = uniqid();
+
+        return $data;
+    }
 }
