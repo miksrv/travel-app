@@ -4,7 +4,6 @@ use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
-use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -21,17 +20,10 @@ class Places extends ResourceController
         if ($lat && $lon) {
             $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $ip = $this->request->getIPAddress();
-            $ua = $this->request->getUserAgent();
+            $session = new Session();
 
-            $sessionModel = new SessionsModel();
-            $findSession  = $sessionModel->where([
-                'ip'         => $ip,
-                'user_agent' => $ua->getAgentString()
-            ])->first();
-
-            $distanceSelect = $findSession
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$findSession->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$findSession->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$findSession->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = ($session->longitude && $session->latitude)
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
                 : '';
         }
 
@@ -253,8 +245,7 @@ class Places extends ResourceController
         $city     = $this->request->getGet('city', FILTER_SANITIZE_NUMBER_INT);
         $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
-
-        $category    = $this->request->getGet('category', FILTER_SANITIZE_STRING);
+        $category = $this->request->getGet('category', FILTER_SANITIZE_STRING);
 
         if ($search) {
             $search = " AND (translations_places.title LIKE '%{$search}%' OR translations_places.content LIKE '%{$search}%')";
