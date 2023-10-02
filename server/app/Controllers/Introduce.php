@@ -2,15 +2,10 @@
 
 use App\Libraries\Geocoder;
 use App\Libraries\OverpassAPI;
-use App\Models\AddressCity;
-use App\Models\AddressCountry;
-use App\Models\AddressDistrict;
-use App\Models\AddressRegion;
+use App\Libraries\Session;
 use App\Models\CategoryModel;
 use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
-use App\Models\SessionsHistoryModel;
-use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
@@ -20,66 +15,23 @@ ignore_user_abort(true);
 
 class Introduce extends ResourceController
 {
-
     /**
      * Пользователь представляется сервису, отправляя свои координаты.
      * По координатам выполняется поиск новых мест в округе, сессия пользователя сохраняется в БД.
      * @return void
      * @throws ReflectionException
+     * @throws Exception
      */
     public function hello(): ResponseInterface {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
 
-        $ip = $this->request->getIPAddress();
-        $ua = $this->request->getUserAgent();
+        new Session($lat, $lon);
 
         $pointAdded = [];
 
         if ($lat && $lon) {
             $pointAdded = $this->_updatePlaces($lat, $lon);
-        }
-
-        $sessionModel = new SessionsModel();
-        $findSession  = $sessionModel->where([
-            'ip'         => $ip,
-            'user_agent' => $ua->getAgentString()
-        ])->first();
-
-        // Если сессия пользователя (на осное его IP и UserAgent новая) - она сохраняется в двух таблицах
-        if (empty($findSession)) {
-            $newSession = [
-                'id'         => md5($ip . $ua->getAgentString()),
-                'ip'         => $ip,
-                'user_agent' => $ua->getAgentString(),
-                'latitude'   => $lat,
-                'longitude'  => $lon
-            ];
-
-            $sessionModel->insert($newSession);
-
-            $sessionHistoryModel = new SessionsHistoryModel();
-            $sessionHistoryModel->insert([
-                'id' => uniqid(),
-                'session' => $newSession['id'],
-                'latitude'   => $lat,
-                'longitude'  => $lon
-            ]);
-        } else {
-            // Если сессия уже есть в БД и положение сейчас отличается от того, что было сохранено,
-            // То создается новая запись в истории сессий
-            if ($lat !== $findSession->latitude || $lon !== $findSession->longitude) {
-                $sessionHistoryModel = new SessionsHistoryModel();
-                $sessionHistoryModel->insert([
-                    'id'        => uniqid(),
-                    'session'   => $findSession->id,
-                    'latitude'  => $lat,
-                    'longitude' => $lon
-                ]);
-            }
-
-            // В любом случае обновляем текущую сессию
-            $sessionModel->update($findSession->id, ['latitude' => $lat, 'longitude' => $lon]);
         }
 
         return $this->respond(['items' => $pointAdded]);
@@ -131,7 +83,6 @@ class Introduce extends ResourceController
 
             $place->overpass_id = $point->id;
             $place->category    = $findCategory->name ?? $point->category;
-//            $place->subcategory = $findOverpassCat->subcategory ?? null;
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
             $place->title       = $point->tags['name'] ?? null;
