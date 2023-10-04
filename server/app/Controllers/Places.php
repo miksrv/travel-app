@@ -6,6 +6,7 @@ use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Places extends ResourceController
 {
@@ -98,6 +99,7 @@ class Places extends ResourceController
     /**
      * @param $id
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
         $session = new Session();
@@ -117,8 +119,7 @@ class Places extends ResourceController
                     users.reputation as user_reputation, users.avatar as user_avatar,
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
-                    category.title as category_title' . $distanceSelect
-                )
+                    category.title as category_title' . $distanceSelect)
                 ->join('users', 'places.author = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
                 ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
@@ -134,7 +135,10 @@ class Places extends ResourceController
 
             // Collect photos
             $placeData->photos = $photosModel
-                ->select('photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title')
+                ->select(
+                    'photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title, photos.created_at,
+                    users.id as user_id, users.name as user_name, users.level as user_level, users.reputation as user_reputation, users.avatar as user_avatar')
+                ->join('users', 'photos.author = users.id', 'left')
                 ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
                 ->where(['place' => $placeData->id])
                 ->findAll();
@@ -169,7 +173,6 @@ class Places extends ResourceController
                 ],
                 'address'   => [],
                 'tags'      => $placeData->tags,
-                'photos'    => $placeData->photos
             ];
 
             if ($placeData->address) {
@@ -177,7 +180,28 @@ class Places extends ResourceController
             }
 
             if ($placeData->photos) {
+                $response['photos']      = [];
                 $response['photosCount'] = count($placeData->photos);
+
+                foreach ($placeData->photos as $photo) {
+                    $response['photos'][] = [
+                        'filename'  => $photo->filename,
+                        'extension' => $photo->extension,
+                        'filesize'  => $photo->filesize,
+                        'order'     => $photo->order,
+                        'width'     => $photo->width,
+                        'height'    => $photo->height,
+                        'title'     => $photo->title,
+                        'created'   => $photo->created_at,
+                        'author'    => $photo->user_id ? [
+                            'id'         => $photo->user_id,
+                            'name'       => $photo->user_name,
+                            'level'      => (int) $photo->user_level,
+                            'reputation' => (int) $photo->user_reputation,
+                            'avatar'     => $photo->user_avatar,
+                        ] : null
+                    ];
+                }
             }
 
             if ($session->longitude && $session->latitude) {

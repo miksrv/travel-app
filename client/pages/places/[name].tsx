@@ -9,7 +9,6 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
-import { ImageList, ImageListItem } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -101,6 +100,9 @@ const Place: NextPage = () => {
 
     const imageUrl = (index: number) =>
         `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
+
+    const thumbImageUrl = (index: number) =>
+        `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
 
     return (
         <PageLayout>
@@ -249,7 +251,7 @@ const Place: NextPage = () => {
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Отредактировано:'}
                                 text={dayjs(data?.updated?.date).format(
-                                    'D MMMM YYYY, H:m'
+                                    'D MMMM YYYY, HH:mm'
                                 )}
                             />
                             <StatisticLine
@@ -485,11 +487,56 @@ const Place: NextPage = () => {
                     nextSrc={imageUrl(
                         (photoIndex + 1) % (data?.photos?.length || 0)
                     )}
-                    imageTitle={data?.photos?.[photoIndex]?.title || ''}
                     prevSrc={imageUrl(
                         (photoIndex + (data?.photos?.length || 0) - 1) %
                             (data?.photos?.length || 0)
                     )}
+                    mainSrcThumbnail={thumbImageUrl(photoIndex)}
+                    prevSrcThumbnail={thumbImageUrl(
+                        (photoIndex + (data?.photos?.length || 0) - 1) %
+                            (data?.photos?.length || 0)
+                    )}
+                    nextSrcThumbnail={thumbImageUrl(
+                        (photoIndex + 1) % (data?.photos?.length || 0)
+                    )}
+                    imageTitle={data?.photos?.[photoIndex]?.title || ''}
+                    imageCaption={
+                        <Stack
+                            direction={'row'}
+                            spacing={1}
+                        >
+                            <Avatar
+                                alt={
+                                    data?.photos?.[photoIndex]?.author?.name ||
+                                    ''
+                                }
+                                src={
+                                    `http://localhost:8080/avatars/${data?.photos?.[photoIndex]?.author?.avatar}` ||
+                                    undefined
+                                }
+                                sx={{ height: 32, width: 32 }}
+                                variant={'rounded'}
+                            />
+                            <div>
+                                <div>
+                                    {data?.photos?.[photoIndex]?.author?.name}
+                                </div>
+                                <Typography
+                                    variant={'caption'}
+                                    sx={{
+                                        color: '#818c99',
+                                        display: 'block',
+                                        mt: '-4px'
+                                    }}
+                                >
+                                    {dayjs(
+                                        data?.photos?.[photoIndex]?.created
+                                            ?.date
+                                    ).format('D MMMM YYYY, HH:mm')}
+                                </Typography>
+                            </div>
+                        </Stack>
+                    }
                     onCloseRequest={() => setShowLightbox(false)}
                     onMovePrevRequest={() =>
                         setCurrentIndex(
