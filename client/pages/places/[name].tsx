@@ -1,6 +1,5 @@
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/helpers'
-import { TabPanel } from '@mui/base'
 import {
     AccessTimeOutlined,
     AccountCircleOutlined,
@@ -10,6 +9,7 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
+import { ImageList, ImageListItem } from '@mui/material'
 import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
@@ -33,6 +33,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import Lightbox from 'react-image-lightbox'
+import Gallery from 'react-photo-gallery'
 
 import {
     usePlacesGetItemQuery,
@@ -63,9 +64,9 @@ const Place: NextPage = () => {
     const objectName =
         typeof routerObject === 'string' ? routerObject : skipToken
 
-    const [value, setValue] = React.useState<number>(1)
+    const [value, setValue] = React.useState<number>(0)
 
-    const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue)
     }
 
@@ -343,10 +344,16 @@ const Place: NextPage = () => {
                         <Tabs
                             value={value}
                             onChange={handleChange}
-                            aria-label='basic tabs example'
+                            aria-label={'basic tabs example'}
                         >
-                            <Tab label='Описание' />
-                            <Tab label='Фотографии' />
+                            <Tab label={'Описание'} />
+                            <Tab
+                                label={`Фотографии ${
+                                    data?.photos?.length
+                                        ? `(${data.photos.length})`
+                                        : ''
+                                }`}
+                            />
                             <Tab label='Рейтинг' />
                             <Tab label='Активность' />
                         </Tabs>
@@ -442,6 +449,25 @@ const Place: NextPage = () => {
                         </CardContent>
                     </>
                 )}
+                {value === 1 && (
+                    <Card>
+                        <CardContent>
+                            {data?.photos?.length && (
+                                <Gallery
+                                    photos={data?.photos?.map((photo) => ({
+                                        height: photo.height,
+                                        src: `http://localhost:8080/photos/${data?.id}/${photo.filename}_thumb.${photo.extension}`,
+                                        width: photo.width
+                                    }))}
+                                    onClick={(event, photos) => {
+                                        setCurrentIndex(photos.index)
+                                        setShowLightbox(true)
+                                    }}
+                                />
+                            )}
+                        </CardContent>
+                    </Card>
+                )}
             </Card>
 
             <Typography
@@ -452,28 +478,6 @@ const Place: NextPage = () => {
             </Typography>
 
             <PlacesList places={nearPlacesData?.items} />
-
-            {/*{!!data?.photos?.length && (*/}
-            {/*    <Card>*/}
-            {/*        <CardContent>*/}
-            {/*            <ImageList*/}
-            {/*                gap={4}*/}
-            {/*                cols={4}*/}
-            {/*            >*/}
-            {/*                {data.photos.map((photo) => (*/}
-            {/*                    <ImageListItem key={photo.filename}>*/}
-            {/*                        <img*/}
-            {/*                            src={`http://localhost:8080/photos/${data.id}/${photo.filename}_thumb.${photo.extension}`}*/}
-            {/*                            alt={photo.title || ''}*/}
-            {/*                            width={photo.width}*/}
-            {/*                            height={photo.height}*/}
-            {/*                        />*/}
-            {/*                    </ImageListItem>*/}
-            {/*                ))}*/}
-            {/*            </ImageList>*/}
-            {/*        </CardContent>*/}
-            {/*    </Card>*/}
-            {/*)}*/}
 
             {showLightbox && (
                 <Lightbox
