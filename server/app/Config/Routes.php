@@ -51,3 +51,6 @@ $routes->options('categories', 'Categories');
 $routes->get('rating/(:alphanum)', 'Rating::show/$1');
 $routes->put('rating', 'Rating::set');
 $routes->options('rating', 'Rating');
+
+$routes->get('activity/(:alphanum)', 'Activity::show/$1');
+$routes->options('activity', 'Activity');

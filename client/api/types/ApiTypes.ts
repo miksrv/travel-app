@@ -1,6 +1,7 @@
 import { AddressObject, Category, Place } from '@/api/types/Place'
 
-import { Author } from './Author'
+import { Activity } from './Activity'
+import { Rating } from './Rating'
 
 export type DateTimeType = {
     date: string
@@ -76,12 +77,7 @@ export interface ResponseCategoriesGetList extends Place {
 }
 
 export interface ResponseRatingGetList {
-    items?: {
-        created: DateTimeType
-        session: string
-        value: number
-        author?: Author
-    }[]
+    items?: Rating[]
     count?: number
     canVote?: boolean
 }
@@ -93,4 +89,8 @@ export interface RequestRatingSet {
 
 export interface ResponseRatingSet {
     rating: number
+}
+
+export interface ResponseActivityGetItem {
+    items: Activity[]
 }

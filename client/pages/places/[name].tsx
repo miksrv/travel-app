@@ -35,12 +35,14 @@ import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
 
 import {
+    useActivityGetItemQuery,
     usePlacesGetItemQuery,
     usePlacesGetListQuery,
     useRatingGetListQuery,
     useRatingPutScoreMutation
 } from '@/api/api'
-import { ApiTypes } from '@/api/types'
+import { Activity, ApiTypes } from '@/api/types'
+import { ActivityTypes } from '@/api/types/Activity'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
@@ -89,6 +91,10 @@ const Place: NextPage = () => {
     )
 
     const { data: ratingData } = useRatingGetListQuery(data?.id || '', {
+        skip: !data?.id
+    })
+
+    const { data: activityData } = useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
     })
 
@@ -356,8 +362,14 @@ const Place: NextPage = () => {
                                         : ''
                                 }`}
                             />
-                            <Tab label='Рейтинг' />
-                            <Tab label='Активность' />
+                            {/*<Tab label='Рейтинг' />*/}
+                            <Tab
+                                label={`Активность ${
+                                    activityData?.items?.length
+                                        ? `(${activityData?.items?.length})`
+                                        : ''
+                                }`}
+                            />
                         </Tabs>
                     }
                 />
@@ -478,7 +490,7 @@ const Place: NextPage = () => {
                         </CardContent>
                     </>
                 )}
-                {value === 2 && (
+                {value === 22 && (
                     <>
                         <CardHeader
                             title={`${data?.title} - история рейтинга`}
@@ -513,9 +525,132 @@ const Place: NextPage = () => {
                                                 }}
                                             >
                                                 {dayjs(
-                                                    item.created.date
+                                                    item?.created?.date
                                                 ).format('D MMMM YYYY, HH:mm')}
                                             </Typography>
+                                            <div>
+                                                {item.author ? (
+                                                    <Stack
+                                                        direction={'row'}
+                                                        spacing={1}
+                                                    >
+                                                        <Avatar
+                                                            alt={
+                                                                item.author
+                                                                    .name || ''
+                                                            }
+                                                            src={
+                                                                `http://localhost:8080/avatars/${item.author.avatar}` ||
+                                                                undefined
+                                                            }
+                                                            sx={{
+                                                                height: 20,
+                                                                width: 20
+                                                            }}
+                                                            variant={'rounded'}
+                                                        />
+                                                        <div>
+                                                            {item.author.name}
+                                                        </div>
+                                                    </Stack>
+                                                ) : (
+                                                    <div>{'Гость'}</div>
+                                                )}
+                                            </div>
+                                        </Stack>
+                                    ))}
+                                </>
+                            ) : (
+                                <>{'Нет данных для отображения'}</>
+                            )}
+                        </CardContent>
+                    </>
+                )}
+                {value === 2 && (
+                    <>
+                        <CardHeader
+                            title={`${data?.title} - история активности`}
+                            titleTypographyProps={{
+                                component: 'h2',
+                                fontSize: 18
+                            }}
+                            sx={{ mb: -2 }}
+                        />
+                        <CardContent>
+                            {activityData?.items?.length ? (
+                                <>
+                                    {activityData.items.map((item, key) => (
+                                        <Stack
+                                            key={key}
+                                            direction='row'
+                                            spacing={4}
+                                            sx={{ pb: 1 }}
+                                        >
+                                            <Typography
+                                                variant={'body1'}
+                                                sx={{
+                                                    color: '#818c99',
+                                                    display: 'block',
+                                                    width: 160
+                                                }}
+                                            >
+                                                {dayjs(
+                                                    item?.created?.date
+                                                ).format('D MMMM YYYY, HH:mm')}
+                                            </Typography>
+                                            <Typography
+                                                variant={'body1'}
+                                                sx={{
+                                                    display: 'block',
+                                                    width: 160
+                                                }}
+                                            >
+                                                {
+                                                    {
+                                                        [Activity.ActivityTypes
+                                                            .Place]:
+                                                            'Редактирование',
+                                                        [Activity.ActivityTypes
+                                                            .Photo]:
+                                                            'Загрузка фотографии',
+                                                        [Activity.ActivityTypes
+                                                            .Rating]:
+                                                            'Выставление рейтинга'
+                                                    }[item.type]
+                                                }
+                                            </Typography>
+                                            <Box sx={{ width: 120 }}>
+                                                {item.type ===
+                                                    Activity.ActivityTypes
+                                                        .Place && <div> </div>}
+                                                {item.type ===
+                                                    Activity.ActivityTypes
+                                                        .Rating && (
+                                                    <Rating
+                                                        size={'medium'}
+                                                        value={
+                                                            item.rating?.value
+                                                        }
+                                                        readOnly={true}
+                                                    />
+                                                )}
+                                                {item.type ===
+                                                    Activity.ActivityTypes
+                                                        .Photo && (
+                                                    <Image
+                                                        style={{
+                                                            objectFit: 'cover'
+                                                        }}
+                                                        src={`http://localhost:8080/photos/${data?.id}/${item.photo?.filename}_thumb.${item.photo?.extension}`}
+                                                        alt={
+                                                            item.photo?.title ||
+                                                            ''
+                                                        }
+                                                        width={105}
+                                                        height={20}
+                                                    />
+                                                )}
+                                            </Box>
                                             <div>
                                                 {item.author ? (
                                                     <Stack

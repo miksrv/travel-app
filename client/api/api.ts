@@ -3,6 +3,7 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
+import { ResponseActivityGetItem } from '@/api/types/ApiTypes'
 
 type Maybe<T> = T | void
 
@@ -24,6 +25,14 @@ export const api = createApi({
         }
     }),
     endpoints: (builder) => ({
+        activityGetItem: builder.query<
+            ApiTypes.ResponseActivityGetItem,
+            string
+        >({
+            providesTags: ['Activity'],
+            query: (item) => `activity/${item}`
+        }),
+
         addressGetSearch: builder.mutation<
             ApiTypes.ResponseAddressGetSearch,
             Maybe<string>
@@ -71,7 +80,7 @@ export const api = createApi({
             ApiTypes.ResponseRatingSet,
             ApiTypes.RequestRatingSet
         >({
-            invalidatesTags: [{ type: 'Rating' }],
+            invalidatesTags: [{ type: 'Rating' }, { type: 'Activity' }],
             query: (data) => ({
                 body: data,
                 method: 'PUT',
@@ -86,11 +95,13 @@ export const api = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Places', 'Rating']
+    tagTypes: ['Activity', 'Places', 'Rating']
 })
 
 // Export hooks for usage in functional components
 export const {
+    useActivityGetItemQuery,
+
     useAddressGetSearchMutation,
 
     useCategoriesGetListQuery,

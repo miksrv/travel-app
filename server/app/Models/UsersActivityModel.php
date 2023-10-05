@@ -1,12 +1,16 @@
 <?php namespace App\Models;
 
+use App\Entities\UserActivity;
+
 class UsersActivityModel extends MyBaseModel
 {
     protected $table            = 'users_activity';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
-    protected $returnType       = 'object';
+    protected $returnType       = UserActivity::class;
     protected $useSoftDeletes   = true;
+
+    protected array $hiddenFields = ['id', 'updated_at', 'deleted_at'];
 
     protected $allowedFields = [
         'user',
