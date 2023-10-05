@@ -200,7 +200,7 @@ const Place: NextPage = () => {
                                                 `http://localhost:8080/avatars/${data?.author?.avatar}` ||
                                                 undefined
                                             }
-                                            sx={{ height: 18, width: 18 }}
+                                            sx={{ height: 20, width: 20 }}
                                             variant={'rounded'}
                                         />
                                         <div>{data?.author?.name}</div>
@@ -452,7 +452,15 @@ const Place: NextPage = () => {
                     </>
                 )}
                 {value === 1 && (
-                    <Card>
+                    <>
+                        <CardHeader
+                            title={`${data?.title} - фотографии`}
+                            titleTypographyProps={{
+                                component: 'h2',
+                                fontSize: 18
+                            }}
+                            sx={{ mb: -3 }}
+                        />
                         <CardContent>
                             {data?.photos?.length && (
                                 <Gallery
@@ -468,7 +476,83 @@ const Place: NextPage = () => {
                                 />
                             )}
                         </CardContent>
-                    </Card>
+                    </>
+                )}
+                {value === 2 && (
+                    <>
+                        <CardHeader
+                            title={`${data?.title} - история рейтинга`}
+                            titleTypographyProps={{
+                                component: 'h2',
+                                fontSize: 18
+                            }}
+                            sx={{ mb: -3 }}
+                        />
+                        <CardContent>
+                            {ratingData?.items?.length ? (
+                                <>
+                                    {ratingData.items.map((item, key) => (
+                                        <Stack
+                                            key={key}
+                                            direction='row'
+                                            spacing={4}
+                                            sx={{ pb: 1 }}
+                                        >
+                                            <Rating
+                                                size={'medium'}
+                                                value={item.value}
+                                                readOnly={true}
+                                            />
+                                            <Typography
+                                                variant={'caption'}
+                                                sx={{
+                                                    color: '#818c99',
+                                                    display: 'block',
+                                                    mt: '-4px',
+                                                    width: 160
+                                                }}
+                                            >
+                                                {dayjs(
+                                                    item.created.date
+                                                ).format('D MMMM YYYY, HH:mm')}
+                                            </Typography>
+                                            <div>
+                                                {item.author ? (
+                                                    <Stack
+                                                        direction={'row'}
+                                                        spacing={1}
+                                                    >
+                                                        <Avatar
+                                                            alt={
+                                                                item.author
+                                                                    .name || ''
+                                                            }
+                                                            src={
+                                                                `http://localhost:8080/avatars/${item.author.avatar}` ||
+                                                                undefined
+                                                            }
+                                                            sx={{
+                                                                height: 20,
+                                                                width: 20
+                                                            }}
+                                                            variant={'rounded'}
+                                                        />
+                                                        <div>
+                                                            {item.author.name}
+                                                        </div>
+                                                    </Stack>
+                                                ) : (
+                                                    <div>{'Гость'}</div>
+                                                )}
+                                            </div>
+                                        </Stack>
+                                    ))}
+                                </>
+                            ) : (
+                                <>{'Нет данных для отображения'}</>
+                            )}
+                        </CardContent>
+                    </>
                 )}
             </Card>
 
