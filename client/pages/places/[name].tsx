@@ -34,7 +34,7 @@ import React, { useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
 
-import { API } from '@/api/api'
+import { API, ImageHost } from '@/api/api'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -97,10 +97,10 @@ const Place: NextPage = () => {
     const [photoIndex, setCurrentIndex] = useState<number>(0)
 
     const imageUrl = (index: number) =>
-        `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
+        `${ImageHost}/photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
 
     const thumbImageUrl = (index: number) =>
-        `http://localhost:8080/photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
+        `${ImageHost}/photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
 
     return (
         <PageLayout>
@@ -125,7 +125,7 @@ const Place: NextPage = () => {
                     height={300}
                     image={
                         data?.photos?.[0]?.filename
-                            ? `http://localhost:8080/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
+                            ? `${ImageHost}/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
                             : noPhoto.src
                     }
                     onClick={() => {
@@ -197,7 +197,7 @@ const Place: NextPage = () => {
                                         <Avatar
                                             alt={data?.author?.name || ''}
                                             src={
-                                                `http://localhost:8080/avatars/${data?.author?.avatar}` ||
+                                                `${ImageHost}/avatars/${data?.author?.avatar}` ||
                                                 undefined
                                             }
                                             sx={{ height: 20, width: 20 }}
@@ -477,7 +477,7 @@ const Place: NextPage = () => {
                                 <Gallery
                                     photos={data?.photos?.map((photo) => ({
                                         height: photo.height,
-                                        src: `http://localhost:8080/photos/${data?.id}/${photo.filename}_thumb.${photo.extension}`,
+                                        src: `${ImageHost}/photos/${data?.id}/${photo.filename}_thumb.${photo.extension}`,
                                         width: photo.width
                                     }))}
                                     onClick={(event, photos) => {
@@ -565,7 +565,7 @@ const Place: NextPage = () => {
                                                         style={{
                                                             objectFit: 'cover'
                                                         }}
-                                                        src={`http://localhost:8080/photos/${data?.id}/${item.photo?.filename}_thumb.${item.photo?.extension}`}
+                                                        src={`${ImageHost}/photos/${data?.id}/${item.photo?.filename}_thumb.${item.photo?.extension}`}
                                                         alt={
                                                             item.photo?.title ||
                                                             ''
@@ -587,7 +587,7 @@ const Place: NextPage = () => {
                                                                     .name || ''
                                                             }
                                                             src={
-                                                                `http://localhost:8080/avatars/${item.author.avatar}` ||
+                                                                `${ImageHost}/avatars/${item.author.avatar}` ||
                                                                 undefined
                                                             }
                                                             sx={{
@@ -654,7 +654,7 @@ const Place: NextPage = () => {
                                     ''
                                 }
                                 src={
-                                    `http://localhost:8080/avatars/${data?.photos?.[photoIndex]?.author?.avatar}` ||
+                                    `${ImageHost}/avatars/${data?.photos?.[photoIndex]?.author?.avatar}` ||
                                     undefined
                                 }
                                 sx={{ height: 32, width: 32 }}
@@ -699,8 +699,8 @@ const Place: NextPage = () => {
 }
 
 interface StatisticLineProps {
-    icon?: React.ReactNode
     title: string
+    icon?: React.ReactNode
     text?: React.ReactNode
 }
 

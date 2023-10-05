@@ -1,13 +1,12 @@
+import { encodeQueryData } from '@/functions/helpers'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
 
-import { encodeQueryData } from '@/functions/helpers'
-
 type Maybe<T> = T | void
 
-export const imageHost =
+export const ImageHost =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
 export const API = createApi({
