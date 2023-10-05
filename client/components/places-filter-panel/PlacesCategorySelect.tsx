@@ -1,4 +1,3 @@
-import { categoryImage } from '@/functions/categories'
 import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
@@ -9,6 +8,8 @@ import React, { useMemo, useState } from 'react'
 
 import { useCategoriesGetListQuery } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
+
+import { categoryImage } from '@/functions/categories'
 
 interface PlacesCategorySelectProps {
     category?: Place.Category

@@ -18,32 +18,30 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     hideHomePage,
     links,
     currentPage
-}) => {
-    return (
-        <MuiBreadcrumbs aria-label={'breadcrumb'}>
-            {!hideHomePage && (
+}) => (
+    <MuiBreadcrumbs aria-label={'breadcrumb'}>
+        {!hideHomePage && (
+            <Link
+                color={'inherit'}
+                href={'/'}
+            >
+                Главная
+            </Link>
+        )}
+        {!!links?.length &&
+            links.map(({ link, text }) => (
                 <Link
+                    key={link}
+                    href={link}
                     color={'inherit'}
-                    href={'/'}
                 >
-                    Главная
+                    {text}
                 </Link>
-            )}
-            {!!links?.length &&
-                links.map(({ link, text }) => (
-                    <Link
-                        key={link}
-                        href={link}
-                        color={'inherit'}
-                    >
-                        {text}
-                    </Link>
-                ))}
-            {currentPage && (
-                <Typography variant={'caption'}>{currentPage}</Typography>
-            )}
-        </MuiBreadcrumbs>
-    )
-}
+            ))}
+        {currentPage && (
+            <Typography variant={'caption'}>{currentPage}</Typography>
+        )}
+    </MuiBreadcrumbs>
+)
 
 export default Breadcrumbs

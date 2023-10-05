@@ -1,5 +1,3 @@
-import { categoryImage } from '@/functions/categories'
-import { numberFormatter } from '@/functions/helpers'
 import {
     PhotoCameraOutlined,
     RemoveRedEyeOutlined,
@@ -17,6 +15,9 @@ import Link from 'next/link'
 import React from 'react'
 
 import { Place } from '@/api/types/Place'
+
+import { categoryImage } from '@/functions/categories'
+import { numberFormatter } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 

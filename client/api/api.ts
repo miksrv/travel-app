@@ -1,8 +1,9 @@
-import { encodeQueryData } from '@/functions/helpers'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
+
+import { encodeQueryData } from '@/functions/helpers'
 
 type Maybe<T> = T | void
 
@@ -55,7 +56,6 @@ export const API = createApi({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
         }),
-
         placesGetList: builder.query<
             ApiTypes.ResponsePlacesGetList,
             Maybe<ApiTypes.RequestPlacesGetList>
@@ -63,10 +63,10 @@ export const API = createApi({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
+
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
         }),
-
         poiGetList: builder.mutation<any, Maybe<any>>({
             query: (params) => `poi${encodeQueryData(params)}`
         }),

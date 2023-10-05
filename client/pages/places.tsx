@@ -1,4 +1,3 @@
-import { encodeQueryData } from '@/functions/helpers'
 import { Pagination } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -21,6 +20,8 @@ import PageLayout from '@/components/page-layout'
 import PageTitle from '@/components/page-title'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import PlacesList from '@/components/places-list'
+
+import { encodeQueryData } from '@/functions/helpers'
 
 const POST_PER_PAGE = 9
 

@@ -40,7 +40,6 @@ import { Activity, ApiTypes } from '@/api/types'
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
-import PageTitle from '@/components/page-title'
 import PlacesList from '@/components/places-list'
 
 import noPhoto from '@/public/images/no-photo-available.png'
@@ -363,7 +362,6 @@ const Place: NextPage = () => {
                                         : ''
                                 }`}
                             />
-                            {/*<Tab label='Рейтинг' />*/}
                             <Tab
                                 label={`Активность ${
                                     activityData?.items?.length
@@ -491,82 +489,7 @@ const Place: NextPage = () => {
                         </CardContent>
                     </>
                 )}
-                {value === 22 && (
-                    <>
-                        <CardHeader
-                            title={`${data?.title} - история рейтинга`}
-                            titleTypographyProps={{
-                                component: 'h2',
-                                fontSize: 18
-                            }}
-                            sx={{ mb: -3 }}
-                        />
-                        <CardContent>
-                            {ratingData?.items?.length ? (
-                                <>
-                                    {ratingData.items.map((item, key) => (
-                                        <Stack
-                                            key={key}
-                                            direction='row'
-                                            spacing={4}
-                                            sx={{ pb: 1 }}
-                                        >
-                                            <Rating
-                                                size={'medium'}
-                                                value={item.value}
-                                                readOnly={true}
-                                            />
-                                            <Typography
-                                                variant={'caption'}
-                                                sx={{
-                                                    color: '#818c99',
-                                                    display: 'block',
-                                                    mt: '-4px',
-                                                    width: 160
-                                                }}
-                                            >
-                                                {dayjs(
-                                                    item?.created?.date
-                                                ).format('D MMMM YYYY, HH:mm')}
-                                            </Typography>
-                                            <div>
-                                                {item.author ? (
-                                                    <Stack
-                                                        direction={'row'}
-                                                        spacing={1}
-                                                    >
-                                                        <Avatar
-                                                            alt={
-                                                                item.author
-                                                                    .name || ''
-                                                            }
-                                                            src={
-                                                                `http://localhost:8080/avatars/${item.author.avatar}` ||
-                                                                undefined
-                                                            }
-                                                            sx={{
-                                                                height: 20,
-                                                                width: 20
-                                                            }}
-                                                            variant={'rounded'}
-                                                        />
-                                                        <div>
-                                                            {item.author.name}
-                                                        </div>
-                                                    </Stack>
-                                                ) : (
-                                                    <div>{'Гость'}</div>
-                                                )}
-                                            </div>
-                                        </Stack>
-                                    ))}
-                                </>
-                            ) : (
-                                <>{'Нет данных для отображения'}</>
-                            )}
-                        </CardContent>
-                    </>
-                )}
+
                 {value === 2 && (
                     <>
                         <CardHeader

@@ -237,7 +237,8 @@ class Migrate extends ResourceController
         return $this->respond($inserted);
     }
 
-    protected function _migrate_tags(string $tag, string $placeId) {
+    protected function _migrate_tags(string $tag, string $placeId): void
+    {
         if (!$tag || !$placeId) {
             return ;
         }
