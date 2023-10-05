@@ -52,7 +52,7 @@ class Migrate extends ResourceController
         $TranslationsPlacesModel = new TranslationsPlacesModel();
         $TranslationsPhotosModel = new TranslationsPhotosModel();
 
-        $userActivityModel = new UsersActivityModel();
+        $activityModel = new UsersActivityModel();
 
         $migratePlaces = new MigratePlacesModel();
         $migrateMedia  = new MigrateMediaModel();
@@ -63,7 +63,7 @@ class Migrate extends ResourceController
 
         foreach ($migratePlace as $item) {
               if ($TranslationsPlacesModel
-                  ->where('title', $item->item_title)
+                  ->where('title', strip_tags(html_entity_decode($item->item_title)))
                   ->join('places', 'translations_places.place = places.id')
                   ->first()
               ) {
@@ -122,7 +122,7 @@ class Migrate extends ResourceController
             ]);
 
             // Make user activity
-            $userActivityModel->insert((object) [
+            $activityModel->insert((object) [
                 'user'       => $placeAuthor,
                 'type'       => 'place',
                 'place'      => $newPlaceId,
@@ -146,16 +146,13 @@ class Migrate extends ResourceController
 
                     $ratingModel->insert($insertRating);
 
-                    // Make user activity
-                    if ($ratingAuthor) {
-                        $userActivityModel->insert((object) [
-                            'user'       => $ratingAuthor,
-                            'type'       => 'rating',
-                            'place'      => $newPlaceId,
-                            'rating'     => $ratingModel->getInsertID(),
-                            'created_at' => $place->created_at
-                        ]);
-                    }
+                    $activityModel->insert((object) [
+                        'user'       => $ratingAuthor ?? null,
+                        'type'       => 'rating',
+                        'place'      => $newPlaceId,
+                        'rating'     => $ratingModel->getInsertID(),
+                        'created_at' => $place->created_at
+                    ]);
                 }
             }
 
@@ -189,7 +186,7 @@ class Migrate extends ResourceController
                         list($width, $height) = getimagesize($file->getRealPath());
                         $image = Services::image('gd'); // imagick
                         $image->withFile($file->getRealPath())
-                            ->fit(300, 270, 'center')
+                            ->fit(512, 384, 'center')
                             ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
 
                         // Add or update user
@@ -219,7 +216,7 @@ class Migrate extends ResourceController
                         ]);
 
                         // Make user activity
-                        $userActivityModel->insert([
+                        $activityModel->insert([
                             'user'       => $placeAuthor,
                             'type'       => 'photo',
                             'place'      => $newPlaceId,
@@ -232,9 +229,9 @@ class Migrate extends ResourceController
 
             $inserted[] = $item->item_title;
 
-            echo '<pre>';
-            var_dump($place);
-            exit();
+            if (count($inserted) >= 5) {
+                return $this->respond($inserted);
+            }
         }
 
         return $this->respond($inserted);

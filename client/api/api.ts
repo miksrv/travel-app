@@ -3,7 +3,6 @@ import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
-import { ResponseActivityGetItem } from '@/api/types/ApiTypes'
 
 type Maybe<T> = T | void
 
