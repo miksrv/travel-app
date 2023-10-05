@@ -10,7 +10,7 @@ type Maybe<T> = T | void
 export const imageHost =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
-export const api = createApi({
+export const API = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:8080/',
         prepareHeaders: (headers, { getState }) => {
@@ -118,7 +118,7 @@ export const {
     useRatingPutScoreMutation,
 
     util: { getRunningQueriesThunk }
-} = api
+} = API
 
 // export endpoints for use in SSR
 // export const {} = api.endpoints

@@ -16,7 +16,7 @@ class AddUsersActivity extends Migration {
             'user' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
-                'null'       => false,
+                'null'       => true,
             ],
             'type' => [
                 'type'       => 'ENUM("photo", "place", "rating")',

@@ -3,6 +3,7 @@
 use App\Libraries\Session;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
@@ -53,7 +54,7 @@ class Rating extends ResourceController
             return $this->respond([
                 'items'   => $result,
                 'count'   => count($result),
-                'canVote' => !array_search($session->id, array_column($result, 'session'))
+                'canVote' => !in_array($session->id, array_column($result, 'session'))
             ]);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
@@ -100,7 +101,7 @@ class Rating extends ResourceController
             $averageValue = 0;
 
             if (in_array($session->id, array_column($placeRating, 'session'))) {
-                return $this->failValidationErrors('The user has already voted for the material');
+                return $this->failValidationErrors('The user has already voted for this material');
             }
 
             if ($placeRating) {
@@ -113,6 +114,13 @@ class Rating extends ResourceController
 
             $placesModel->update($placesData->id, ['rating' => $newPlaceVal]);
             $ratingModel->insert($insertRating);
+
+            $activityModel = new UsersActivityModel();
+            $activityModel->insert([
+                'type'   => 'rating',
+                'place'  => $placesData->id,
+                'rating' => $ratingModel->getInsertID()
+            ]);
 
             return $this->respond((object) ['rating' => $newPlaceVal]);
         } catch (Exception $e) {

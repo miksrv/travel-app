@@ -1,13 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 
-import { api } from './api'
+import { API } from './api'
 
 export const store = () =>
     configureStore({
-        middleware: (gDM) => gDM().concat(api.middleware),
+        middleware: (gDM) => gDM().concat(API.middleware),
         reducer: {
-            [api.reducerPath]: api.reducer
+            [API.reducerPath]: API.reducer
         }
     })
 

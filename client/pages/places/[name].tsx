@@ -34,15 +34,8 @@ import React, { useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
 
-import {
-    useActivityGetItemQuery,
-    usePlacesGetItemQuery,
-    usePlacesGetListQuery,
-    useRatingGetListQuery,
-    useRatingPutScoreMutation
-} from '@/api/api'
+import { API } from '@/api/api'
 import { Activity, ApiTypes } from '@/api/types'
-import { ActivityTypes } from '@/api/types/Activity'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
@@ -71,14 +64,14 @@ const Place: NextPage = () => {
         setValue(newValue)
     }
 
-    const { data, isLoading } = usePlacesGetItemQuery(
+    const { data, isLoading } = API.usePlacesGetItemQuery(
         typeof objectName === 'string' ? objectName : '',
         {
             skip: router.isFallback || !routerObject
         }
     )
 
-    const { data: nearPlacesData } = usePlacesGetListQuery(
+    const { data: nearPlacesData } = API.usePlacesGetListQuery(
         {
             excludePlaces: data?.id ? [data.id] : undefined,
             latitude: data?.latitude,
@@ -90,16 +83,16 @@ const Place: NextPage = () => {
         { skip: !data?.longitude || !data?.latitude }
     )
 
-    const { data: ratingData } = useRatingGetListQuery(data?.id || '', {
+    const { data: ratingData } = API.useRatingGetListQuery(data?.id || '', {
         skip: !data?.id
     })
 
-    const { data: activityData } = useActivityGetItemQuery(data?.id || '', {
+    const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
     })
 
     const [setRating, { data: newRating, isLoading: setRatingLoading }] =
-        useRatingPutScoreMutation()
+        API.useRatingPutScoreMutation()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
@@ -128,6 +121,7 @@ const Place: NextPage = () => {
                 />
                 <CardMedia
                     alt={data?.photos?.[0]?.title}
+                    sx={{ cursor: 'pointer' }}
                     component={'img'}
                     height={300}
                     image={
@@ -171,6 +165,7 @@ const Place: NextPage = () => {
                                                 style={{
                                                     height: '18px',
                                                     marginRight: '4px',
+                                                    marginTop: '2px',
                                                     objectFit: 'cover',
                                                     width: '18px'
                                                 }}
@@ -255,7 +250,7 @@ const Place: NextPage = () => {
                             />
                             <StatisticLine
                                 icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Отредактировано:'}
+                                title={'Изменено:'}
                                 text={dayjs(data?.updated?.date).format(
                                     'D MMMM YYYY, HH:mm'
                                 )}
@@ -273,7 +268,13 @@ const Place: NextPage = () => {
                                     >
                                         <Rating
                                             size={'medium'}
-                                            value={5}
+                                            value={
+                                                data?.rating &&
+                                                data.rating > 0 &&
+                                                !newRating?.rating
+                                                    ? data?.rating
+                                                    : newRating?.rating ?? 0
+                                            }
                                             disabled={setRatingLoading}
                                             readOnly={!ratingData?.canVote}
                                             onChange={(_, value) => {
@@ -576,7 +577,7 @@ const Place: NextPage = () => {
                             }}
                             sx={{ mb: -2 }}
                         />
-                        <CardContent>
+                        <CardContent sx={{ mb: -2 }}>
                             {activityData?.items?.length ? (
                                 <>
                                     {activityData.items.map((item, key) => (
@@ -615,7 +616,7 @@ const Place: NextPage = () => {
                                                             'Загрузка фотографии',
                                                         [Activity.ActivityTypes
                                                             .Rating]:
-                                                            'Выставление рейтинга'
+                                                            'Оценка места'
                                                     }[item.type]
                                                 }
                                             </Typography>

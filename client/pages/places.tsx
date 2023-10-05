@@ -13,7 +13,7 @@ import { useEffect } from 'react'
 import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
-import { useIntroduceMutation, usePlacesGetListQuery } from '@/api/api'
+import { API } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -51,8 +51,8 @@ const Places: NextPage = () => {
     const [category, setCategory] = useState<Place.Category>()
     const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
 
-    const [introduce] = useIntroduceMutation()
-    const { data, isLoading } = usePlacesGetListQuery({
+    const [introduce] = API.useIntroduceMutation()
+    const { data, isLoading } = API.usePlacesGetListQuery({
         category: category?.name,
         city:
             location?.type === ApiTypes.LocationType.City

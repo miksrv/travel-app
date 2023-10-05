@@ -8,7 +8,7 @@ import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
-import { useIntroduceMutation, usePoiGetListMutation } from '@/api/api'
+import { API } from '@/api/api'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
@@ -34,9 +34,9 @@ export const MYPOINT = [51.765445, 55.099745] // Orenburg
 const Map: NextPage = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
-    const [introduce, { isLoading }] = useIntroduceMutation()
+    const [introduce, { isLoading }] = API.useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
-        usePoiGetListMutation()
+        API.usePoiGetListMutation()
     const [mapBounds, setBounds] = useState<LatLngBounds>()
     const geolocation = useGeolocation()
     const lat = searchParams.get('lat')
