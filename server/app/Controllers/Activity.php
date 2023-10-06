@@ -14,8 +14,7 @@ class Activity extends ResourceController
         $activityModel = new UsersActivityModel();
         $activityData  = $activityModel
             ->select(
-                'users_activity.*, users.id as user_id, users.name as user_name, rating.value,
-                users.level as user_level, users.reputation as user_reputation, users.avatar as user_avatar,
+                'users_activity.*, users.id as user_id, users.name as user_name, rating.value, users.avatar as user_avatar,
                 photos.filename, photos.extension, photos.filesize, photos.width, photos.height')
             ->join('rating', 'users_activity.rating = rating.id', 'left')
             ->join('photos', 'users_activity.photo = photos.id', 'left')
@@ -51,11 +50,9 @@ class Activity extends ResourceController
 
                 if ($item->user_id) {
                     $tmpData['author'] = [
-                        'id'         => $item->user_id,
-                        'name'       => $item->user_name,
-                        'level'      => (int) $item->user_level,
-                        'reputation' => (int) $item->user_reputation,
-                        'avatar'     => $item->user_avatar
+                        'id'     => $item->user_id,
+                        'name'   => $item->user_name,
+                        'avatar' => $item->user_avatar
                     ];
                 }
 

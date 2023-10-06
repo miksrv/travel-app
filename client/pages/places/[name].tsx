@@ -1,59 +1,33 @@
-import {
-    AccessTimeOutlined,
-    AccountCircleOutlined,
-    BookmarkBorderOutlined,
-    PlaceOutlined,
-    RemoveRedEyeOutlined,
-    StarBorderOutlined,
-    StraightenOutlined
-} from '@mui/icons-material'
-import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
-import Rating from '@mui/material/Rating'
-import Stack from '@mui/material/Stack'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
-import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import dynamic from 'next/dynamic'
-import Image from 'next/image'
-import Link from 'next/link'
 import React, { useMemo, useState } from 'react'
 import Lightbox from 'react-image-lightbox'
-import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
-import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
+import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
-import { categoryImage } from '@/functions/categories'
-import { convertDMS } from '@/functions/helpers'
-
 import noPhoto from '@/public/images/no-photo-available.png'
 
 dayjs.locale('ru')
-
-const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
-const Point = dynamic(() => import('@/components/map/Point'), {
-    ssr: false
-})
 
 const Place: NextPage = () => {
     const router = useRouter()
@@ -89,9 +63,6 @@ const Place: NextPage = () => {
     const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
     })
-
-    const [setRating, { data: newRating, isLoading: setRatingLoading }] =
-        API.useRatingPutScoreMutation()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
@@ -143,207 +114,10 @@ const Place: NextPage = () => {
                 />
             </Card>
 
-            <Card sx={{ mb: 2, mt: 0 }}>
-                <CardContent sx={{ mb: -4 }}>
-                    <Grid
-                        container
-                        spacing={2}
-                        sx={{ mb: 2 }}
-                    >
-                        <Grid
-                            lg={6}
-                            md={6}
-                            xs={6}
-                        >
-                            <StatisticLine
-                                icon={
-                                    <BookmarkBorderOutlined
-                                        color={'disabled'}
-                                    />
-                                }
-                                title={'Категория:'}
-                                text={
-                                    data?.category?.name ? (
-                                        <Stack
-                                            direction={'row'}
-                                            spacing={2}
-                                        >
-                                            <Image
-                                                style={{
-                                                    height: '18px',
-                                                    marginRight: '4px',
-                                                    marginTop: '2px',
-                                                    objectFit: 'cover',
-                                                    width: '18px'
-                                                }}
-                                                src={
-                                                    categoryImage(
-                                                        data.category?.name
-                                                    ).src
-                                                }
-                                                alt={data?.category?.title}
-                                                width={22}
-                                                height={26}
-                                            />
-                                            {data?.category?.title}
-                                        </Stack>
-                                    ) : (
-                                        '-'
-                                    )
-                                }
-                            />
-                            <StatisticLine
-                                icon={
-                                    <AccountCircleOutlined color={'disabled'} />
-                                }
-                                title={'Автор:'}
-                                text={
-                                    <Avatar
-                                        userName={data?.author?.name}
-                                        image={data?.author?.avatar}
-                                    />
-                                }
-                            />
-                            <StatisticLine
-                                icon={
-                                    <RemoveRedEyeOutlined color={'disabled'} />
-                                }
-                                title={'Просмотров:'}
-                                text={data?.views || 0}
-                            />
-                            <StatisticLine
-                                icon={<StraightenOutlined color={'disabled'} />}
-                                title={'Расстояние:'}
-                                text={`${data?.distance || 0} км`}
-                            />
-                            <StatisticLine
-                                icon={<PlaceOutlined color={'disabled'} />}
-                                title={'Координаты:'}
-                                text={
-                                    <>
-                                        {`${convertDMS(
-                                            data?.latitude || 0,
-                                            data?.longitude || 0
-                                        )}`}{' '}
-                                        <sup>
-                                            <Link
-                                                color={'inherit'}
-                                                target={'_blank'}
-                                                href={`https://yandex.ru/maps/?pt=${data?.longitude},${data?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
-                                            >
-                                                {'Я'}
-                                            </Link>{' '}
-                                            <Link
-                                                target={'_blank'}
-                                                color={'inherit'}
-                                                href={`https://maps.google.com/maps?ll=${data?.latitude},${data?.longitude}&q=${data?.latitude},${data?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
-                                            >
-                                                {'G'}
-                                            </Link>
-                                        </sup>
-                                    </>
-                                }
-                            />
-                            <StatisticLine
-                                icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Изменено:'}
-                                text={dayjs(data?.updated?.date).format(
-                                    'D MMMM YYYY, HH:mm'
-                                )}
-                            />
-                            <StatisticLine
-                                icon={<StarBorderOutlined color={'disabled'} />}
-                                title={'Рейтнг:'}
-                                text={
-                                    <Box
-                                        sx={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            width: 200
-                                        }}
-                                    >
-                                        <Rating
-                                            size={'medium'}
-                                            value={
-                                                data?.rating &&
-                                                data.rating > 0 &&
-                                                !newRating?.rating
-                                                    ? data?.rating
-                                                    : newRating?.rating ?? 0
-                                            }
-                                            disabled={setRatingLoading}
-                                            readOnly={
-                                                !data?.actions?.rating ||
-                                                !!newRating?.rating
-                                            }
-                                            onChange={(_, value) => {
-                                                setRating({
-                                                    place: data?.id!,
-                                                    score: value || 5
-                                                })
-                                            }}
-                                        />
-                                        {ratingCount && (
-                                            <Box
-                                                sx={{ ml: 1 }}
-                                            >{`(${ratingCount})`}</Box>
-                                        )}
-                                    </Box>
-                                }
-                            />
-                        </Grid>
-                        <Grid
-                            lg={6}
-                            md={6}
-                            xs={6}
-                        >
-                            <Box
-                                sx={{
-                                    border: '1px solid #CCC',
-                                    borderRadius: 1,
-                                    height: '100%',
-                                    overflow: 'hidden',
-                                    width: '100%'
-                                }}
-                            >
-                                <DynamicMap
-                                    center={
-                                        data?.latitude && data?.longitude
-                                            ? [data.latitude, data.longitude]
-                                            : [52.580517, 56.855385]
-                                    }
-                                    zoom={15}
-                                >
-                                    {/*@ts-ignore*/}
-                                    {({ TileLayer }) => (
-                                        <>
-                                            <TileLayer
-                                                url={
-                                                    'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
-                                                }
-                                                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-                                            />
-                                            {data?.latitude &&
-                                                data?.longitude && (
-                                                    <Point
-                                                        lat={data.latitude}
-                                                        lon={data.longitude}
-                                                        title={data?.title}
-                                                        category={
-                                                            data?.subcategory
-                                                                ?.name ??
-                                                            data?.category?.name
-                                                        }
-                                                    />
-                                                )}
-                                        </>
-                                    )}
-                                </DynamicMap>
-                            </Box>
-                        </Grid>
-                    </Grid>
-                </CardContent>
-            </Card>
+            <PlaceInformation
+                place={data}
+                ratingCount={ratingCount}
+            />
 
             <Card sx={{ mb: 2, mt: 0 }}>
                 <CardHeader
@@ -459,28 +233,5 @@ const Place: NextPage = () => {
         </PageLayout>
     )
 }
-
-interface StatisticLineProps {
-    title: string
-    icon?: React.ReactNode
-    text?: React.ReactNode
-}
-
-const StatisticLine: React.FC<StatisticLineProps> = ({ icon, title, text }) => (
-    <Stack
-        direction={'row'}
-        spacing={1}
-        sx={{ mb: 0.6 }}
-    >
-        {icon}
-        <Typography
-            sx={{ color: '#818c99', width: 140 }}
-            variant={'body1'}
-        >
-            {title}
-        </Typography>
-        <Typography variant={'body1'}>{text || '-'}</Typography>
-    </Stack>
-)
 
 export default Place

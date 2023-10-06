@@ -16,53 +16,51 @@ class Rating extends ResourceController
      * @param $id
      * @return ResponseInterface
      */
-    public function show($id = null): ResponseInterface {
-        try {
-            $session     = new Session();
-            $ratingModel = new RatingModel();
-            $ratingData  = $ratingModel
-                ->select(
-                    'rating.*, users.id as user_id, users.name as user_name,' .
-                    'users.level as user_level, users.reputation as user_reputation, users.avatar as user_avatar')
-                ->join('users', 'rating.author = users.id', 'left')
-                ->where('place', $id)
-                ->findAll();
-
-            $result = [];
-
-            if (!empty($ratingData)) {
-                foreach ($ratingData as $item) {
-                     $tmpData = [
-                         'created' => $item->created_at,
-                         'session' => $item->session,
-                         'value'   => (int) $item->value
-                     ];
-
-                     if ($item->user_id) {
-                         $tmpData['author'] = [
-                             'id'         => $item->user_id,
-                             'name'       => $item->user_name,
-                             'level'      => (int) $item->user_level,
-                             'reputation' => (int) $item->user_reputation,
-                             'avatar'     => $item->user_avatar
-                         ];
-                     }
-
-                     $result[] = $tmpData;
-                }
-            }
-
-            return $this->respond([
-                'items'   => $result,
-                'count'   => count($result),
-                'canVote' => !in_array($session->id, array_column($result, 'session'))
-            ]);
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failNotFound();
-        }
-    }
+//    public function show($id = null): ResponseInterface {
+//        try {
+//            $session     = new Session();
+//            $ratingModel = new RatingModel();
+//            $ratingData  = $ratingModel
+//                ->select('rating.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar')
+//                ->join('users', 'rating.author = users.id', 'left')
+//                ->where('place', $id)
+//                ->findAll();
+//
+//            $result = [];
+//
+//            if (!empty($ratingData)) {
+//                foreach ($ratingData as $item) {
+//                     $tmpData = [
+//                         'created' => $item->created_at,
+//                         'session' => $item->session,
+//                         'value'   => (int) $item->value
+//                     ];
+//
+//                     if ($item->user_id) {
+//                         $tmpData['author'] = [
+//                             'id'         => $item->user_id,
+//                             'name'       => $item->user_name,
+//                             'level'      => (int) $item->user_level,
+//                             'reputation' => (int) $item->user_reputation,
+//                             'avatar'     => $item->user_avatar
+//                         ];
+//                     }
+//
+//                     $result[] = $tmpData;
+//                }
+//            }
+//
+//            return $this->respond([
+//                'items'   => $result,
+//                'count'   => count($result),
+//                'canVote' => !in_array($session->id, array_column($result, 'session'))
+//            ]);
+//        } catch (Exception $e) {
+//            log_message('error', '{exception}', ['exception' => $e]);
+//
+//            return $this->failNotFound();
+//        }
+//    }
 
     /**
      * Добавление новой оценки

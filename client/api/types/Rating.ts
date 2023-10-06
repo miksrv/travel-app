@@ -1,10 +1,10 @@
 import { ApiTypes } from '@/api/types'
 
-import { Author } from './Author'
+import { User } from './User'
 
 export type Rating = {
     value: number
     session?: string
     created?: ApiTypes.DateTimeType
-    author?: Author
+    author?: User
 }

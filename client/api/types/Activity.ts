@@ -1,9 +1,9 @@
 import { ApiTypes } from '@/api/types'
 
-import { Author } from './Author'
 import { Photo } from './Photo'
 import { Place } from './Place'
 import { Rating } from './Rating'
+import { User } from './User'
 
 export const ActivityTypes = {
     Photo: 'photo',
@@ -17,6 +17,6 @@ export type Activity = {
     photo?: Photo
     place?: Place
     rating?: Rating
-    author?: Author
+    author?: User
     created?: ApiTypes.DateTimeType
 }

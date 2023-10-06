@@ -116,8 +116,7 @@ class Places extends ResourceController
             $placeData   = $placesModel
                 ->select(
                     'places.*, translations_places.title, translations_places.content,
-                    users.id as user_id, users.name as user_name, users.level as user_level, 
-                    users.reputation as user_reputation, users.avatar as user_avatar,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
                     category.title as category_title' . $distanceSelect)
@@ -137,8 +136,9 @@ class Places extends ResourceController
             // Collect photos
             $placeData->photos = $photosModel
                 ->select(
-                    'photos.author, photos.filename, photos.extension, photos.filesize, photos.width, photos.height, photos.order, translations_photos.title, photos.created_at,
-                    users.id as user_id, users.name as user_name, users.level as user_level, users.reputation as user_reputation, users.avatar as user_avatar')
+                    'photos.author, photos.filename, photos.extension, photos.filesize, photos.width, 
+                    photos.height, photos.order, translations_photos.title, photos.created_at,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
                 ->join('users', 'photos.author = users.id', 'left')
                 ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
                 ->where(['place' => $placeData->id])
@@ -169,11 +169,9 @@ class Places extends ResourceController
                 'title'     => strip_tags(html_entity_decode($placeData->title)),
                 'content'   => strip_tags(html_entity_decode($placeData->content)),
                 'author'    => [
-                    'id'         => $placeData->user_id,
-                    'name'       => $placeData->user_name,
-                    'level'      => (int) $placeData->user_level,
-                    'reputation' => (int) $placeData->user_reputation,
-                    'avatar'     => $placeData->user_avatar
+                    'id'     => $placeData->user_id,
+                    'name'   => $placeData->user_name,
+                    'avatar' => $placeData->user_avatar
                 ],
                 'category'  => [
                     'name'  => $placeData->category,
@@ -205,11 +203,9 @@ class Places extends ResourceController
                         'title'     => $photo->title,
                         'created'   => $photo->created_at,
                         'author'    => $photo->user_id ? [
-                            'id'         => $photo->user_id,
-                            'name'       => $photo->user_name,
-                            'level'      => (int) $photo->user_level,
-                            'reputation' => (int) $photo->user_reputation,
-                            'avatar'     => $photo->user_avatar,
+                            'id'     => $photo->user_id,
+                            'name'   => $photo->user_name,
+                            'avatar' => $photo->user_avatar,
                         ] : null
                     ];
                 }

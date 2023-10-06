@@ -1,7 +1,7 @@
 import { ApiTypes } from '@/api/types'
 
-import { Author } from './Author'
 import { Photo } from './Photo'
+import { User } from './User'
 
 export type Place = {
     id: string
@@ -14,7 +14,7 @@ export type Place = {
     title: string
     content: string
     distance?: number
-    author?: Author
+    author?: User
     category?: Category
     subcategory?: Category
     address?: Address
