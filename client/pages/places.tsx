@@ -17,7 +17,6 @@ import { ApiTypes, Place } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import PageTitle from '@/components/page-title'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import PlacesList from '@/components/places-list'
 
@@ -137,37 +136,6 @@ const Places: NextPage = () => {
                     />
                 </CardContent>
             </Card>
-
-            {/*<Paper*/}
-            {/*    sx={{*/}
-            {/*        backgroundColor: '#f9f9f9',*/}
-            {/*        mb: 2,*/}
-            {/*        mt: 2,*/}
-            {/*        p: 2,*/}
-            {/*        pb: 1,*/}
-            {/*        pt: 1*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <PageTitle title={t('title', 'Интересные места')} />*/}
-            {/*    <Breadcrumbs currentPage={'Интересные места'} />*/}
-            {/*    <Divider sx={{ mt: 1 }} />*/}
-            {/*    <PlacesFilterPanel*/}
-            {/*        sort={sort}*/}
-            {/*        order={order}*/}
-            {/*        location={location}*/}
-            {/*        category={category}*/}
-            {/*        onChangeSort={setSort}*/}
-            {/*        onChangeOrder={setOrder}*/}
-            {/*        onChangeLocation={async (location) => {*/}
-            {/*            setPage(1)*/}
-            {/*            setLocation(location)*/}
-            {/*        }}*/}
-            {/*        onChangeCategory={(category) => {*/}
-            {/*            setPage(1)*/}
-            {/*            setCategory(category)*/}
-            {/*        }}*/}
-            {/*    />*/}
-            {/*</Paper>*/}
             <PlacesList
                 loading={isLoading}
                 places={data?.items}

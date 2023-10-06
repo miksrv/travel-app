@@ -1,18 +1,18 @@
 import Card from '@mui/material/Card'
+import CardHeader from '@mui/material/CardHeader'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import { API } from '@/api/api'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import PageTitle from '@/components/page-title'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
@@ -102,8 +102,17 @@ const Map: NextPage = () => {
 
     return (
         <PageLayout>
-            <PageTitle title={'Карта интересных мест'} />
-            <Breadcrumbs currentPage={'Карта интересных мест'} />
+            <Card sx={{ mb: 2 }}>
+                <CardHeader
+                    title={'Карта интересных мест'}
+                    titleTypographyProps={{ component: 'h1' }}
+                    subheader={
+                        <Breadcrumbs currentPage={'Карта интересных мест'} />
+                    }
+                    sx={{ mb: -0.5, mt: -0.5 }}
+                />
+            </Card>
+
             <Card sx={{ height: '80vh', mt: 3 }}>
                 <DynamicMap
                     center={

@@ -7,7 +7,6 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
-import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -35,9 +34,13 @@ import Gallery from 'react-photo-gallery'
 import { API, ImageHost } from '@/api/api'
 import { Activity, ApiTypes } from '@/api/types'
 
+import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
+import PlaceTabActivity from '@/components/place-tab-activity'
+import PlaceTabDescription from '@/components/place-tab-description'
+import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
 import { categoryImage } from '@/functions/categories'
@@ -195,21 +198,10 @@ const Place: NextPage = () => {
                                 }
                                 title={'Автор:'}
                                 text={
-                                    <Stack
-                                        direction={'row'}
-                                        spacing={1}
-                                    >
-                                        <Avatar
-                                            alt={data?.author?.name || ''}
-                                            src={
-                                                `${ImageHost}/avatars/${data?.author?.avatar}` ||
-                                                undefined
-                                            }
-                                            sx={{ height: 20, width: 20 }}
-                                            variant={'rounded'}
-                                        />
-                                        <div>{data?.author?.name}</div>
-                                    </Stack>
+                                    <Avatar
+                                        userName={data?.author?.name}
+                                        image={data?.author?.avatar}
+                                    />
                                 }
                             />
                             <StatisticLine
@@ -381,250 +373,39 @@ const Place: NextPage = () => {
                     }
                 />
                 <Divider />
-                {value === 0 && (
-                    <>
-                        <CardHeader
-                            title={`${data?.title} - описание`}
-                            titleTypographyProps={{
-                                component: 'h2',
-                                fontSize: 18
-                            }}
-                            sx={{ mb: -2 }}
-                            subheader={
-                                <Typography variant={'caption'}>
-                                    {data?.address?.country && (
-                                        <Link
-                                            color='inherit'
-                                            href={`/country/${data.address.country.id}`}
-                                        >
-                                            {data.address.country.name}
-                                        </Link>
-                                    )}
-                                    {data?.address?.region && (
-                                        <>
-                                            {data?.address?.country && ', '}
-                                            <Link
-                                                color='inherit'
-                                                href={`/region/${data.address.region.id}`}
-                                            >
-                                                {data.address.region.name}
-                                            </Link>
-                                        </>
-                                    )}
-                                    {data?.address?.district && (
-                                        <>
-                                            {data?.address?.region && ', '}
-                                            <Link
-                                                color='inherit'
-                                                href={`/district/${data.address.district.id}`}
-                                            >
-                                                {data.address.district.name}
-                                            </Link>
-                                        </>
-                                    )}
-                                    {data?.address?.city && (
-                                        <>
-                                            {data?.address?.district && ', '}
-                                            <Link
-                                                color='inherit'
-                                                href={`/city/${data.address.city.id}`}
-                                            >
-                                                {data.address.city.name}
-                                            </Link>
-                                        </>
-                                    )}
-                                    {data?.address?.street && (
-                                        <>
-                                            {', '}
-                                            {data?.address?.street}
-                                        </>
-                                    )}
-                                </Typography>
-                            }
-                        />
-                        <CardContent sx={{ mt: -3 }}>
-                            <Typography
-                                variant={'body2'}
-                                sx={{ whiteSpace: 'break-spaces' }}
-                            >
-                                {data?.content}
-                            </Typography>
 
-                            {!!data?.tags?.length && (
-                                <Stack
-                                    direction='row'
-                                    spacing={1}
-                                    sx={{ mb: -1, mt: 1 }}
-                                >
-                                    {data.tags.map((tag) => (
-                                        <Link
-                                            key={tag.id}
-                                            color={'inherit'}
-                                            href={`/tags/${tag.id}`}
-                                        >
-                                            {`#${tag.title}`}
-                                        </Link>
-                                    ))}
-                                </Stack>
-                            )}
-                        </CardContent>
-                    </>
+                {value === 0 && (
+                    <PlaceTabDescription
+                        title={data?.title}
+                        address={data?.address}
+                        content={data?.content}
+                        tags={data?.tags}
+                    />
                 )}
+
                 {value === 1 && (
-                    <>
-                        <CardHeader
-                            title={`${data?.title} - фотографии`}
-                            titleTypographyProps={{
-                                component: 'h2',
-                                fontSize: 18
-                            }}
-                            sx={{ mb: -3 }}
-                        />
-                        <CardContent>
-                            {data?.photos?.length && (
-                                <Gallery
-                                    photos={data?.photos?.map((photo) => ({
-                                        height: photo.height,
-                                        src: `${ImageHost}/photos/${data?.id}/${photo.filename}_thumb.${photo.extension}`,
-                                        width: photo.width
-                                    }))}
-                                    onClick={(event, photos) => {
-                                        setCurrentIndex(photos.index)
-                                        setShowLightbox(true)
-                                    }}
-                                />
-                            )}
-                        </CardContent>
-                    </>
+                    <PlaceTabPhotos
+                        title={data?.title}
+                        placeId={data?.id}
+                        photos={data?.photos}
+                        onPhotoClick={(index) => {
+                            setCurrentIndex(index)
+                            setShowLightbox(true)
+                        }}
+                    />
                 )}
 
                 {value === 2 && (
-                    <>
-                        <CardHeader
-                            title={`${data?.title} - история активности`}
-                            titleTypographyProps={{
-                                component: 'h2',
-                                fontSize: 18
-                            }}
-                            sx={{ mb: -2 }}
-                        />
-                        <CardContent sx={{ mb: -2 }}>
-                            {activityData?.items?.length ? (
-                                <>
-                                    {activityData.items.map((item, key) => (
-                                        <Stack
-                                            key={key}
-                                            direction='row'
-                                            spacing={4}
-                                            sx={{ pb: 1 }}
-                                        >
-                                            <Typography
-                                                variant={'body1'}
-                                                sx={{
-                                                    color: '#818c99',
-                                                    display: 'block',
-                                                    width: 160
-                                                }}
-                                            >
-                                                {dayjs(
-                                                    item?.created?.date
-                                                ).format('D MMMM YYYY, HH:mm')}
-                                            </Typography>
-                                            <Typography
-                                                variant={'body1'}
-                                                sx={{
-                                                    display: 'block',
-                                                    width: 160
-                                                }}
-                                            >
-                                                {
-                                                    {
-                                                        [Activity.ActivityTypes
-                                                            .Place]:
-                                                            'Редактирование',
-                                                        [Activity.ActivityTypes
-                                                            .Photo]:
-                                                            'Загрузка фотографии',
-                                                        [Activity.ActivityTypes
-                                                            .Rating]:
-                                                            'Оценка места'
-                                                    }[item.type]
-                                                }
-                                            </Typography>
-                                            <Box sx={{ width: 120 }}>
-                                                {item.type ===
-                                                    Activity.ActivityTypes
-                                                        .Place && <div> </div>}
-                                                {item.type ===
-                                                    Activity.ActivityTypes
-                                                        .Rating && (
-                                                    <Rating
-                                                        size={'medium'}
-                                                        value={
-                                                            item.rating?.value
-                                                        }
-                                                        readOnly={true}
-                                                    />
-                                                )}
-                                                {item.type ===
-                                                    Activity.ActivityTypes
-                                                        .Photo && (
-                                                    <Image
-                                                        style={{
-                                                            objectFit: 'cover'
-                                                        }}
-                                                        src={`${ImageHost}/photos/${data?.id}/${item.photo?.filename}_thumb.${item.photo?.extension}`}
-                                                        alt={
-                                                            item.photo?.title ||
-                                                            ''
-                                                        }
-                                                        width={105}
-                                                        height={20}
-                                                    />
-                                                )}
-                                            </Box>
-                                            <div>
-                                                {item.author ? (
-                                                    <Stack
-                                                        direction={'row'}
-                                                        spacing={1}
-                                                    >
-                                                        <Avatar
-                                                            alt={
-                                                                item.author
-                                                                    .name || ''
-                                                            }
-                                                            src={
-                                                                `${ImageHost}/avatars/${item.author.avatar}` ||
-                                                                undefined
-                                                            }
-                                                            sx={{
-                                                                height: 20,
-                                                                width: 20
-                                                            }}
-                                                            variant={'rounded'}
-                                                        />
-                                                        <div>
-                                                            {item.author.name}
-                                                        </div>
-                                                    </Stack>
-                                                ) : (
-                                                    <div>{'Гость'}</div>
-                                                )}
-                                            </div>
-                                        </Stack>
-                                    ))}
-                                </>
-                            ) : (
-                                <>{'Нет данных для отображения'}</>
-                            )}
-                        </CardContent>
-                    </>
+                    <PlaceTabActivity
+                        title={data?.title}
+                        placeId={data?.id}
+                        activity={activityData?.items}
+                    />
                 )}
             </Card>
 
             <Typography
-                variant='h2'
+                variant={'h2'}
                 sx={{ mb: 2, mt: 4 }}
             >
                 {'Ближайшие интересные места'}
@@ -652,41 +433,14 @@ const Place: NextPage = () => {
                     )}
                     imageTitle={data?.photos?.[photoIndex]?.title || ''}
                     imageCaption={
-                        <Stack
-                            direction={'row'}
-                            spacing={1}
-                        >
-                            <Avatar
-                                alt={
-                                    data?.photos?.[photoIndex]?.author?.name ||
-                                    ''
-                                }
-                                src={
-                                    `${ImageHost}/avatars/${data?.photos?.[photoIndex]?.author?.avatar}` ||
-                                    undefined
-                                }
-                                sx={{ height: 32, width: 32 }}
-                                variant={'rounded'}
-                            />
-                            <div>
-                                <div>
-                                    {data?.photos?.[photoIndex]?.author?.name}
-                                </div>
-                                <Typography
-                                    variant={'caption'}
-                                    sx={{
-                                        color: '#818c99',
-                                        display: 'block',
-                                        mt: '-4px'
-                                    }}
-                                >
-                                    {dayjs(
-                                        data?.photos?.[photoIndex]?.created
-                                            ?.date
-                                    ).format('D MMMM YYYY, HH:mm')}
-                                </Typography>
-                            </div>
-                        </Stack>
+                        <Avatar
+                            size={'medium'}
+                            userName={data?.photos?.[photoIndex]?.author?.name}
+                            image={data?.photos?.[photoIndex]?.author?.avatar}
+                            text={dayjs(
+                                data?.photos?.[photoIndex]?.created?.date
+                            ).format('D MMMM YYYY, HH:mm')}
+                        />
                     }
                     onCloseRequest={() => setShowLightbox(false)}
                     onMovePrevRequest={() =>
