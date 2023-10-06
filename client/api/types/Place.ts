@@ -21,6 +21,9 @@ export type Place = {
     tags?: Tag[]
     photosCount?: number
     photos?: Photo[]
+    actions?: {
+        rating?: boolean
+    }
 }
 
 export enum Categories {

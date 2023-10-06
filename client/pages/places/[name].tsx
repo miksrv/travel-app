@@ -1,5 +1,3 @@
-import { categoryImage } from '@/functions/categories'
-import { convertDMS } from '@/functions/helpers'
 import {
     AccessTimeOutlined,
     AccountCircleOutlined,
@@ -30,7 +28,7 @@ import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
 
@@ -41,6 +39,9 @@ import Breadcrumbs from '@/components/breadcrumbs'
 import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
 import PlacesList from '@/components/places-list'
+
+import { categoryImage } from '@/functions/categories'
+import { convertDMS } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 
@@ -82,10 +83,6 @@ const Place: NextPage = () => {
         { skip: !data?.longitude || !data?.latitude }
     )
 
-    const { data: ratingData } = API.useRatingGetListQuery(data?.id || '', {
-        skip: !data?.id
-    })
-
     const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
     })
@@ -101,6 +98,14 @@ const Place: NextPage = () => {
 
     const thumbImageUrl = (index: number) =>
         `${ImageHost}/photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
+
+    const ratingCount = useMemo(
+        () =>
+            activityData?.items?.filter(
+                (item) => item.type === Activity.ActivityTypes.Rating
+            )?.length || undefined,
+        [activityData]
+    )
 
     return (
         <PageLayout>
@@ -275,7 +280,10 @@ const Place: NextPage = () => {
                                                     : newRating?.rating ?? 0
                                             }
                                             disabled={setRatingLoading}
-                                            readOnly={!ratingData?.canVote}
+                                            readOnly={
+                                                !data?.actions?.rating ||
+                                                !!newRating?.rating
+                                            }
                                             onChange={(_, value) => {
                                                 setRating({
                                                     place: data?.id!,
@@ -283,10 +291,10 @@ const Place: NextPage = () => {
                                                 })
                                             }}
                                         />
-                                        {!!ratingData?.count && (
+                                        {ratingCount && (
                                             <Box
                                                 sx={{ ml: 1 }}
-                                            >{`(${ratingData?.count})`}</Box>
+                                            >{`(${ratingCount})`}</Box>
                                         )}
                                     </Box>
                                 }

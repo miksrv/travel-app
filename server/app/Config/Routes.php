@@ -48,7 +48,7 @@ $routes->options('address', 'Address');
 $routes->get('categories', 'Categories::list');
 $routes->options('categories', 'Categories');
 
-$routes->get('rating/(:alphanum)', 'Rating::show/$1');
+$routes->get('rating/(:alphanum)', 'Rating::show/$1'); // !!NOT USED!!
 $routes->put('rating', 'Rating::set');
 $routes->options('rating', 'Rating');
 

@@ -143,7 +143,7 @@ class Migrate extends ResourceController
                     $rating->author     = $ratingAuthor;
                     $rating->value      = (int) $score;
                     $rating->created_at = $randomDate;
-                    
+
                     $ratingModel->insert($rating);
 
                     $activity = new \App\Entities\UserActivity();

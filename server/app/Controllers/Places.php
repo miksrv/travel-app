@@ -4,6 +4,7 @@ use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
+use App\Models\RatingModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
@@ -150,6 +151,13 @@ class Places extends ResourceController
                 ->where(['place' => $placeData->id])
                 ->findAll();
 
+            // Has the user already voted for this material or not?
+            $ratingModel = new RatingModel();
+            $ratingData  = $ratingModel
+                ->select('rating.id')
+                ->where(['place' => $placeData->id, 'session' => $session->id])
+                ->first();
+
             $response = [
                 'id'        => $placeData->id,
                 'created'   => $placeData->created_at ?? null,
@@ -170,6 +178,9 @@ class Places extends ResourceController
                 'category'  => [
                     'name'  => $placeData->category,
                     'title' => $placeData->category_title,
+                ],
+                'actions'   => [
+                    'rating' => !$ratingData
                 ],
                 'address'   => [],
                 'tags'      => $placeData->tags,

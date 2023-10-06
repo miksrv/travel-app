@@ -11,6 +11,7 @@ use ReflectionException;
 class Rating extends ResourceController
 {
     /**
+     * !!NOT USED!!
      * Список всех оценок для конкретного места
      * @param $id
      * @return ResponseInterface
