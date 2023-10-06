@@ -21,6 +21,7 @@ const Avatar: React.FC<AvatarProps> = ({ size, userName, text, image }) => (
         direction={'row'}
         spacing={1}
     >
+        {!userName && !image && <div>-</div>}
         {image && (
             <MuiAvatar
                 alt={userName || ''}

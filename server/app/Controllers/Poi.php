@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -30,16 +31,44 @@ class Poi extends ResourceController
     public function show($id = null): ResponseInterface
     {
         try {
-            $places = new PlacesModel();
-            $item = $places->find($id);
+            $photosModel = new PhotosModel();
+            $placesModel = new PlacesModel();
+            $placeData   = $placesModel
+                ->select('places.*, translations_places.title, translations_places.content')
+                ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
+                ->find($id);
 
-            if ($item) {
-                unset(
-                    $item->tags, $item->address, $item->address_country,
-                    $item->address_region, $item->address_district, $item->address_city
-                );
+            if ($placeData) {
+                $placeData->photos = $photosModel
+                    ->select(
+                        'photos.filename, photos.extension, photos.filesize, photos.width,
+                        photos.height, photos.order, translations_photos.title')
+                    ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+                    ->where(['place' => $placeData->id])
+                    ->orderBy('order', 'DESC')
+                    ->findAll();
 
-                return $this->respond($item);
+                $response = [
+                    'id'      => $placeData->id,
+                    'rating'  => (int) $placeData->rating,
+                    'views'   => (int) $placeData->views,
+                    'title'   => strip_tags(html_entity_decode($placeData->title)),
+                    'content' => strip_tags(html_entity_decode($placeData->content))
+                ];
+
+                if ($placeData->photos) {
+                    $response['photosCount'] = count($placeData->photos);
+                    $response['photos']      = [
+                        (object) [
+                            'filename'  => $placeData->photos[0]->filename,
+                            'extension' => $placeData->photos[0]->extension,
+                            'width'     => $placeData->photos[0]->width,
+                            'height'    => $placeData->photos[0]->width
+                        ]
+                    ];
+                }
+
+                return $this->respond($response);
             }
 
             return $this->failNotFound();

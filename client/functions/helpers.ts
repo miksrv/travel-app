@@ -1,3 +1,8 @@
+import dayjs from 'dayjs'
+import 'dayjs/locale/ru'
+
+dayjs.locale('ru')
+
 export const encodeQueryData = (data: any): string => {
     const ret = []
     for (let d in data) {
@@ -51,3 +56,11 @@ export const convertDMS = (lat: number, lng: number): string => {
 
     return `${latitude}${latitudeCardinal} ${longitude}${longitudeCardinal}`
 }
+
+export const formatDate = (
+    date?: string | Date,
+    format: string = 'D MMMM YYYY, HH:mm'
+): string => (date ? dayjs(date).format(format) : '')
+
+export const round = (value?: number, digits: number = 4): number | undefined =>
+    value ? Number(value.toFixed(digits)) : undefined

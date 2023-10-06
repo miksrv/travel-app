@@ -4,7 +4,6 @@ import CardHeader from '@mui/material/CardHeader'
 import Rating from '@mui/material/Rating'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import dayjs from 'dayjs'
 import Image from 'next/image'
 import React from 'react'
 
@@ -12,6 +11,8 @@ import { ImageHost } from '@/api/api'
 import { Activity, ActivityTypes } from '@/api/types/Activity'
 
 import Avatar from '@/components/avatar'
+
+import { formatDate } from '@/functions/helpers'
 
 interface PlaceTabActivityProps {
     title?: string
@@ -53,9 +54,7 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                                     width: 160
                                 }}
                             >
-                                {dayjs(item?.created?.date).format(
-                                    'D MMMM YYYY, HH:mm'
-                                )}
+                                {formatDate(item?.created?.date)}
                             </Typography>
                             <Typography
                                 variant={'body1'}

@@ -6,8 +6,6 @@ import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import { skipToken } from '@reduxjs/toolkit/query'
-import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo, useState } from 'react'
@@ -25,9 +23,9 @@ import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
-import noPhoto from '@/public/images/no-photo-available.png'
+import { formatDate } from '@/functions/helpers'
 
-dayjs.locale('ru')
+import noPhoto from '@/public/images/no-photo-available.png'
 
 const Place: NextPage = () => {
     const router = useRouter()
@@ -35,13 +33,13 @@ const Place: NextPage = () => {
     const objectName =
         typeof routerObject === 'string' ? routerObject : skipToken
 
-    const [value, setValue] = React.useState<number>(0)
+    const [activeTab, setActiveTab] = React.useState<number>(0)
 
-    const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-        setValue(newValue)
+    const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
+        setActiveTab(newTab)
     }
 
-    const { data, isLoading } = API.usePlacesGetItemQuery(
+    const { data } = API.usePlacesGetItemQuery(
         typeof objectName === 'string' ? objectName : '',
         {
             skip: router.isFallback || !routerObject
@@ -124,9 +122,8 @@ const Place: NextPage = () => {
                     sx={{ p: 0 }}
                     title={
                         <Tabs
-                            value={value}
-                            onChange={handleChange}
-                            aria-label={'basic tabs example'}
+                            tabIndex={activeTab}
+                            onChange={handleTabChange}
                         >
                             <Tab label={'Описание'} />
                             <Tab
@@ -148,7 +145,7 @@ const Place: NextPage = () => {
                 />
                 <Divider />
 
-                {value === 0 && (
+                {activeTab === 0 && (
                     <PlaceTabDescription
                         title={data?.title}
                         address={data?.address}
@@ -157,7 +154,7 @@ const Place: NextPage = () => {
                     />
                 )}
 
-                {value === 1 && (
+                {activeTab === 1 && (
                     <PlaceTabPhotos
                         title={data?.title}
                         placeId={data?.id}
@@ -169,7 +166,7 @@ const Place: NextPage = () => {
                     />
                 )}
 
-                {value === 2 && (
+                {activeTab === 2 && (
                     <PlaceTabActivity
                         title={data?.title}
                         placeId={data?.id}
@@ -211,9 +208,9 @@ const Place: NextPage = () => {
                             size={'medium'}
                             userName={data?.photos?.[photoIndex]?.author?.name}
                             image={data?.photos?.[photoIndex]?.author?.avatar}
-                            text={dayjs(
+                            text={formatDate(
                                 data?.photos?.[photoIndex]?.created?.date
-                            ).format('D MMMM YYYY, HH:mm')}
+                            )}
                         />
                     }
                     onCloseRequest={() => setShowLightbox(false)}

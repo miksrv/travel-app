@@ -12,9 +12,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Rating from '@mui/material/Rating'
 import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
-import dayjs from 'dayjs'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -24,9 +22,10 @@ import { API } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
 import Avatar from '@/components/avatar'
+import StatisticLine from '@/components/place-information/StatisticLine'
 
 import { categoryImage } from '@/functions/categories'
-import { convertDMS } from '@/functions/helpers'
+import { convertDMS, formatDate } from '@/functions/helpers'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const Point = dynamic(() => import('@/components/map/Point'), {
@@ -109,81 +108,91 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                         <StatisticLine
                             icon={<StraightenOutlined color={'disabled'} />}
                             title={'Расстояние:'}
-                            text={`${place?.distance || 0} км`}
+                            text={
+                                place?.distance
+                                    ? `${place?.distance || 0} км`
+                                    : '-'
+                            }
                         />
                         <StatisticLine
                             icon={<PlaceOutlined color={'disabled'} />}
                             title={'Координаты:'}
                             text={
-                                <>
-                                    {`${convertDMS(
-                                        place?.latitude || 0,
-                                        place?.longitude || 0
-                                    )}`}{' '}
-                                    <sup>
-                                        <Link
-                                            color={'inherit'}
-                                            target={'_blank'}
-                                            href={`https://yandex.ru/maps/?pt=${place?.longitude},${place?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
-                                        >
-                                            {'Я'}
-                                        </Link>{' '}
-                                        <Link
-                                            target={'_blank'}
-                                            color={'inherit'}
-                                            href={`https://maps.google.com/maps?ll=${place?.latitude},${place?.longitude}&q=${place?.latitude},${place?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
-                                        >
-                                            {'G'}
-                                        </Link>
-                                    </sup>
-                                </>
+                                place?.longitude && place?.latitude ? (
+                                    <>
+                                        {`${convertDMS(
+                                            place?.latitude || 0,
+                                            place?.longitude || 0
+                                        )}`}{' '}
+                                        <sup>
+                                            <Link
+                                                color={'inherit'}
+                                                target={'_blank'}
+                                                href={`https://yandex.ru/maps/?pt=${place?.longitude},${place?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
+                                            >
+                                                {'Я'}
+                                            </Link>{' '}
+                                            <Link
+                                                target={'_blank'}
+                                                color={'inherit'}
+                                                href={`https://maps.google.com/maps?ll=${place?.latitude},${place?.longitude}&q=${place?.latitude},${place?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                                            >
+                                                {'G'}
+                                            </Link>
+                                        </sup>
+                                    </>
+                                ) : (
+                                    <>-</>
+                                )
                             }
                         />
                         <StatisticLine
                             icon={<AccessTimeOutlined color={'disabled'} />}
                             title={'Изменено:'}
-                            text={dayjs(place?.updated?.date).format(
-                                'D MMMM YYYY, HH:mm'
-                            )}
+                            text={formatDate(place?.updated?.date)}
                         />
                         <StatisticLine
                             icon={<StarBorderOutlined color={'disabled'} />}
                             title={'Рейтнг:'}
                             text={
-                                <Box
-                                    sx={{
-                                        alignItems: 'center',
-                                        display: 'flex',
-                                        width: 200
-                                    }}
-                                >
-                                    <Rating
-                                        size={'medium'}
-                                        value={
-                                            place?.rating &&
-                                            place.rating > 0 &&
-                                            !newRating?.rating
-                                                ? place?.rating
-                                                : newRating?.rating ?? 0
-                                        }
-                                        disabled={setRatingLoading}
-                                        readOnly={
-                                            !place?.actions?.rating ||
-                                            !!newRating?.rating
-                                        }
-                                        onChange={(_, value) => {
-                                            setRating({
-                                                place: place?.id!,
-                                                score: value || 5
-                                            })
+                                place?.id ? (
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            width: 200
                                         }}
-                                    />
-                                    {ratingCount && (
-                                        <Box
-                                            sx={{ ml: 1 }}
-                                        >{`(${ratingCount})`}</Box>
-                                    )}
-                                </Box>
+                                    >
+                                        <Rating
+                                            size={'medium'}
+                                            value={
+                                                place?.rating &&
+                                                place.rating > 0 &&
+                                                !newRating?.rating
+                                                    ? place?.rating
+                                                    : newRating?.rating ?? 0
+                                            }
+                                            disabled={setRatingLoading}
+                                            readOnly={
+                                                !place?.actions?.rating ||
+                                                !!newRating?.rating
+                                            }
+                                            onChange={(_, value) => {
+                                                setRating({
+                                                    place: place?.id!,
+                                                    score: value || 5
+                                                })
+                                            }}
+                                        />
+                                        {ratingCount && (
+                                            <Box
+                                                sx={{ ml: 1 }}
+                                            >{`(${ratingCount})`}</Box>
+                                        )}
+                                    </Box>
+                                ) : (
+                                    <>-</>
+                                )
                             }
                         />
                     </Grid>
@@ -243,26 +252,3 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
 }
 
 export default PlaceInformation
-
-interface StatisticLineProps {
-    title: string
-    icon?: React.ReactNode
-    text?: React.ReactNode
-}
-
-const StatisticLine: React.FC<StatisticLineProps> = ({ icon, title, text }) => (
-    <Stack
-        direction={'row'}
-        spacing={1}
-        sx={{ mb: 0.6 }}
-    >
-        {icon}
-        <Typography
-            sx={{ color: '#818c99', width: 140 }}
-            variant={'body1'}
-        >
-            {title}
-        </Typography>
-        <Typography variant={'body1'}>{text || '-'}</Typography>
-    </Stack>
-)

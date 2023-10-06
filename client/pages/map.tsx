@@ -14,6 +14,8 @@ import { API } from '@/api/api'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 
+import { round } from '@/functions/helpers'
+
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
     ssr: false
@@ -31,9 +33,17 @@ const DEFAULT_CENTER = [52.580517, 56.855385]
 // const MYPOINT = [42.877172, 74.593635] // Bishkek
 export const MYPOINT = [51.765445, 55.099745] // Orenburg
 
+export type LatLngCoordinate = {
+    latitude: number
+    longitude: number
+}
+
 const Map: NextPage = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
+
+    const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
+
     const [introduce, { isLoading }] = API.useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
         API.usePoiGetListMutation()
@@ -67,7 +77,7 @@ const Map: NextPage = () => {
     const getPoiList = useCallback(
         debounce(async (bounds: LatLngBounds) => {
             await getPlaces({ bounds: bounds.toBBoxString() })
-        }, 1000),
+        }, 500),
         []
     )
 
@@ -81,8 +91,21 @@ const Map: NextPage = () => {
     )
 
     useEffect(() => {
-        if (geolocation?.latitude && geolocation?.longitude) {
-            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
+        const updateLatitude = round(geolocation?.latitude)
+        const updateLongitude = round(geolocation?.longitude)
+
+        if (
+            updateLatitude &&
+            updateLongitude &&
+            updateLatitude !== myCoordinates?.latitude &&
+            updateLongitude !== myCoordinates?.longitude
+        ) {
+            setMyCoordinates({
+                latitude: updateLatitude,
+                longitude: updateLongitude
+            })
+
+            introduce({ lat: updateLatitude, lon: updateLongitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
 
@@ -117,8 +140,11 @@ const Map: NextPage = () => {
                 <DynamicMap
                     center={
                         !lat || !lon
-                            ? geolocation.longitude && geolocation.longitude
-                                ? [geolocation.latitude, geolocation.longitude]
+                            ? myCoordinates?.latitude && myCoordinates.longitude
+                                ? [
+                                      myCoordinates.latitude,
+                                      myCoordinates.longitude
+                                  ]
                                 : DEFAULT_CENTER
                             : [lat, lon]
                     }
@@ -143,19 +169,16 @@ const Map: NextPage = () => {
                                     lon={geolocation.longitude}
                                 />
                             )}
-                            {!!poiList.length &&
-                                poiList.map((item) => (
-                                    <Point
-                                        key={item.id}
-                                        id={item.id}
-                                        lat={item?.latitude}
-                                        lon={item?.longitude}
-                                        title={item?.title}
-                                        category={
-                                            item?.subcategory ?? item?.category
-                                        }
-                                    />
-                                ))}
+                            {poiList?.map((item) => (
+                                <Point
+                                    key={item.id}
+                                    id={item.id}
+                                    lat={item?.latitude}
+                                    lon={item?.longitude}
+                                    title={item?.title}
+                                    category={item?.category}
+                                />
+                            ))}
                             <MyMapEvents onChangeBounds={handleChangeBounds} />
                         </>
                     )}

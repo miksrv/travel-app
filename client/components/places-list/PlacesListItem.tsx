@@ -14,6 +14,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import { ImageHost } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
@@ -43,7 +44,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 height={180}
                 image={
                     place?.photos?.[0]?.filename
-                        ? `http://localhost:8080/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
+                        ? `${ImageHost}/photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
                         : noPhoto.src
                 }
             />

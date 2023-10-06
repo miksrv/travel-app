@@ -85,7 +85,7 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = ({
                 variant={'body2'}
                 sx={{ whiteSpace: 'break-spaces' }}
             >
-                {content}
+                {content ? content : 'Нет данных для отображения'}
             </Typography>
 
             {!!tags?.length && (
