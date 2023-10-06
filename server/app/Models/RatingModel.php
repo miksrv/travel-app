@@ -1,6 +1,6 @@
 <?php namespace App\Models;
 
-use App\Entities\Place;
+use App\Entities\Rating;
 
 class RatingModel extends MyBaseModel
 {
@@ -9,7 +9,7 @@ class RatingModel extends MyBaseModel
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = Place::class;
+    protected $returnType     = Rating::class;
     protected $useSoftDeletes = true;
 
     protected array $hiddenFields = ['updated_at', 'deleted_at'];
@@ -20,6 +20,7 @@ class RatingModel extends MyBaseModel
         'author',
         'session',
         'value',
+        'created_at'
     ];
 
     // Dates

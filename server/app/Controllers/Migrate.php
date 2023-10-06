@@ -53,7 +53,6 @@ class Migrate extends ResourceController
         $TranslationsPhotosModel = new TranslationsPhotosModel();
 
         $activityModel = new UsersActivityModel();
-
         $migratePlaces = new MigratePlacesModel();
         $migrateMedia  = new MigrateMediaModel();
 
@@ -62,13 +61,13 @@ class Migrate extends ResourceController
         $inserted = [];
 
         foreach ($migratePlace as $item) {
-              if ($TranslationsPlacesModel
-                  ->where('title', strip_tags(html_entity_decode($item->item_title)))
-                  ->join('places', 'translations_places.place = places.id')
-                  ->first()
-              ) {
-                  continue;
-              }
+            if ($TranslationsPlacesModel
+                ->where('title', strip_tags(html_entity_decode($item->item_title)))
+                ->join('places', 'translations_places.place = places.id')
+                ->first()
+            ) {
+                continue;
+            }
 
             // Calculate rating
             $ratingSum  = 0;
@@ -99,7 +98,7 @@ class Migrate extends ResourceController
             $place->address_region   = $geocoder->regionID;
             $place->address_district = $geocoder->districtID;
             $place->address_city     = $geocoder->cityID;
-            $place->created_at       = date($item->item_datestamp);
+            $place->created_at       = $item->item_datestamp;
 
             $placesModel->insert($place);
 
@@ -113,6 +112,13 @@ class Migrate extends ResourceController
                 }
             }
 
+            // Make user activity
+            $activity = new \App\Entities\UserActivity();
+            $activity->user       = $placeAuthor;
+            $activity->type       = 'place';
+            $activity->place      = $newPlaceId;
+            $activity->created_at = $place->created_at;
+
             // Make translation
             $TranslationsPlacesModel->insert((object) [
                 'place'    => $newPlaceId,
@@ -120,14 +126,7 @@ class Migrate extends ResourceController
                 'title'    => strip_tags(html_entity_decode($item->item_title)),
                 'content'  => strip_tags(html_entity_decode($item->item_content))
             ]);
-
-            // Make user activity
-            $activityModel->insert((object) [
-                'user'       => $placeAuthor,
-                'type'       => 'place',
-                'place'      => $newPlaceId,
-                'created_at' => $place->created_at
-            ]);
+            $activityModel->insert($activity);
 
             // Migrate Rating
             if (is_array($ratingData) &&  is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
@@ -136,23 +135,25 @@ class Migrate extends ResourceController
                         continue;
                     }
 
+                    $randomDate   = mt_rand($item->item_datestamp, time());
                     $ratingAuthor = isset($ratingData['users'][$index]) ? $this->_migrate_user($item->item_author) : null;
-                    $insertRating = [
-                        'place'   => $newPlaceId,
-                        'author'  => $ratingAuthor,
-                        'session' => null,
-                        'value'   => $score,
-                    ];
 
-                    $ratingModel->insert($insertRating);
+                    $rating = new \App\Entities\Rating();
+                    $rating->place      = $newPlaceId;
+                    $rating->author     = $ratingAuthor;
+                    $rating->value      = (int) $score;
+                    $rating->created_at = $randomDate;
+                    
+                    $ratingModel->insert($rating);
 
-                    $activityModel->insert((object) [
-                        'user'       => $ratingAuthor ?? null,
-                        'type'       => 'rating',
-                        'place'      => $newPlaceId,
-                        'rating'     => $ratingModel->getInsertID(),
-                        'created_at' => $place->created_at
-                    ]);
+                    $activity = new \App\Entities\UserActivity();
+                    $activity->user       = $ratingAuthor ?? null;
+                    $activity->type       = 'rating';
+                    $activity->place      = $newPlaceId;
+                    $activity->rating     = $ratingModel->getInsertID();
+                    $activity->created_at = $randomDate;
+
+                    $activityModel->insert($activity);
                 }
             }
 
@@ -203,8 +204,7 @@ class Migrate extends ResourceController
                         $photo->filesize    = $file->getSize();
                         $photo->width       = $width;
                         $photo->height      = $height;
-
-                        $photo->created_at = date($currentPhoto->item_timestamp);
+                        $photo->created_at  = $currentPhoto->item_timestamp;
 
                         $photosModel->insert($photo);
 
@@ -215,21 +215,22 @@ class Migrate extends ResourceController
                             'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
                         ]);
 
+                        $activity = new \App\Entities\UserActivity();
+                        $activity->user       = $placeAuthor;
+                        $activity->type       = 'photo';
+                        $activity->place      = $newPlaceId;
+                        $activity->photo      = $photosModel->getInsertID();
+                        $activity->created_at = $photo->created_at;
+
                         // Make user activity
-                        $activityModel->insert([
-                            'user'       => $placeAuthor,
-                            'type'       => 'photo',
-                            'place'      => $newPlaceId,
-                            'photo'      => $photosModel->getInsertID(),
-                            'created_at' => $photo->created_at
-                        ]);
+                        $activityModel->insert($activity);
                     }
                 }
             }
 
             $inserted[] = $item->item_title;
 
-            if (count($inserted) >= 5) {
+            if (count($inserted) >= 1) {
                 return $this->respond($inserted);
             }
         }
