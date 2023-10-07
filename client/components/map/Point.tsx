@@ -24,17 +24,13 @@ type TMyPointProps = {
 }
 
 const Point: React.FC<TMyPointProps> = ({ id, lat, lon, title, category }) => {
-    const [getPlaceItem, { isLoading: placesLoading, data }] =
+    const [getPlaceItem, { isLoading: placesLoading, data: poiData }] =
         API.usePoiGetItemMutation()
 
     const myIcon = new Leaflet.Icon({
         iconAnchor: [icon.width - 20, icon.height - 20],
         iconSize: [icon.width - 10, icon.height - 12],
         iconUrl: categoryImage(category).src
-        // popupAnchor: [-3, -76],
-        // shadowAnchor: [22, 94],
-        // shadowSize: [68, 95],
-        // shadowUrl: 'my-icon-shadow.png'
     })
 
     const placeClickHandler = () => {
@@ -46,30 +42,33 @@ const Point: React.FC<TMyPointProps> = ({ id, lat, lon, title, category }) => {
             title={title}
             position={[lat, lon]}
             icon={myIcon}
+            autoPanOnFocus={false}
             eventHandlers={{
                 click: placeClickHandler
             }}
         >
             <Popup className={styles.popup}>
-                <Link
-                    href={`/places/${data?.id}`}
-                    title={data?.title}
-                    target={'_blank'}
-                >
-                    <Image
-                        className={styles.image}
-                        src={
-                            data?.photos?.[0]?.filename
-                                ? `${ImageHost}/photos/${id}/${data?.photos?.[0]?.filename}_thumb.${data?.photos?.[0]?.extension}`
-                                : noPhoto.src
-                        }
-                        alt={data?.title}
-                        width={300}
-                        height={200}
-                    />
-                </Link>
+                {poiData && (
+                    <Link
+                        href={`/places/${poiData?.id}`}
+                        title={poiData?.title}
+                        target={'_blank'}
+                    >
+                        <Image
+                            className={styles.image}
+                            src={
+                                poiData?.photos?.[0]?.filename
+                                    ? `${ImageHost}/photos/${id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
+                                    : noPhoto.src
+                            }
+                            alt={poiData?.title || ''}
+                            width={300}
+                            height={200}
+                        />
+                    </Link>
+                )}
                 <div className={styles.title}>
-                    {placesLoading ? 'Loading' : data?.title || 'Нет данных'}
+                    {placesLoading ? 'Loading' : poiData?.title || 'Нет данных'}
                 </div>
             </Popup>
         </Marker>

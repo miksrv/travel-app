@@ -138,16 +138,17 @@ const Map: NextPage = () => {
 
             <Card sx={{ height: '80vh', mt: 3 }}>
                 <DynamicMap
-                    center={
-                        !lat || !lon
-                            ? myCoordinates?.latitude && myCoordinates.longitude
-                                ? [
-                                      myCoordinates.latitude,
-                                      myCoordinates.longitude
-                                  ]
-                                : DEFAULT_CENTER
-                            : [lat, lon]
-                    }
+                    // center={
+                    //     !lat || !lon
+                    //         ? myCoordinates?.latitude && myCoordinates.longitude
+                    //             ? [
+                    //                   myCoordinates.latitude,
+                    //                   myCoordinates.longitude
+                    //               ]
+                    //             : DEFAULT_CENTER
+                    //         : [lat, lon]
+                    // }
+                    center={MYPOINT}
                     zoom={15}
                 >
                     {/*@ts-ignore*/}

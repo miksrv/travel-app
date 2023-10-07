@@ -162,9 +162,9 @@ const PageLayout: React.FC<any> = ({ children, ...props }) => {
                 >
                     <Grid lg={2}>
                         <MenuList>
-                            {menuItems.map((item) => (
+                            {menuItems.map((item, index) => (
                                 <Link
-                                    key={item.link}
+                                    key={index}
                                     href={item.link}
                                     title={item.text}
                                     sx={{
