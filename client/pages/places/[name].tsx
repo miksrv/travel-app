@@ -122,8 +122,11 @@ const Place: NextPage = () => {
                     sx={{ p: 0 }}
                     title={
                         <Tabs
+                            defaultValue={0}
+                            value={activeTab}
                             tabIndex={activeTab}
                             onChange={handleTabChange}
+                            aria-label={'basic tabs'}
                         >
                             <Tab label={'Описание'} />
                             <Tab

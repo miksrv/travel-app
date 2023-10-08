@@ -20,7 +20,7 @@ class Activity extends ResourceController
             ->join('photos', 'users_activity.photo = photos.id', 'left')
             ->join('users', 'users_activity.user = users.id', 'left')
             ->where('users_activity.place', $id)
-            ->orderBy('users_activity.created_at')
+            ->orderBy('users_activity.created_at', 'DESC')
             ->findAll();
 
         $result = [];

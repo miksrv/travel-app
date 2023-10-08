@@ -28,7 +28,7 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
             }}
             sx={{ mb: -3 }}
         />
-        <CardContent>
+        <CardContent sx={{ mt: 1 }}>
             {photos?.length && placeId ? (
                 <Gallery
                     photos={photos?.map((photo) => ({
