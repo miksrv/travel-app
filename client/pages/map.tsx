@@ -1,3 +1,4 @@
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import { LatLngBounds } from 'leaflet'
@@ -173,13 +174,16 @@ const Map: NextPage = () => {
                             {poiList?.map((item) => (
                                 <Point
                                     key={item.id}
-                                    id={item.id}
+                                    placeId={item.id}
                                     lat={item?.latitude}
                                     lon={item?.longitude}
                                     title={item?.title}
                                     category={item?.category}
                                 />
                             ))}
+                            {/*<div className='leaflet-control leaflet-bar'>*/}
+                            {/*    12414*/}
+                            {/*</div>*/}
                             <MyMapEvents onChangeBounds={handleChangeBounds} />
                         </>
                     )}

@@ -172,6 +172,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                                     ? place?.rating
                                                     : newRating?.rating ?? 0
                                             }
+                                            precision={0.5}
                                             disabled={setRatingLoading}
                                             readOnly={
                                                 !place?.actions?.rating ||
@@ -231,7 +232,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                             place?.longitude &&
                                             place?.category && (
                                                 <Point
-                                                    id={place?.id || ''}
                                                     lat={place.latitude}
                                                     lon={place.longitude}
                                                     title={place?.title}

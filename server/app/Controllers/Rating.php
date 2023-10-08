@@ -109,7 +109,7 @@ class Rating extends ResourceController
                 }
             }
 
-            $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 0);
+            $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 1);
 
             $placesModel->update($placesData->id, ['rating' => $newPlaceVal]);
             $ratingModel->insert($insertRating);
