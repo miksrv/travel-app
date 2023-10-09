@@ -2,6 +2,7 @@ import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
+import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
@@ -39,7 +40,7 @@ const Place: NextPage = () => {
         setActiveTab(newTab)
     }
 
-    const { data } = API.usePlacesGetItemQuery(
+    const { data, isLoading } = API.usePlacesGetItemQuery(
         typeof objectName === 'string' ? objectName : '',
         {
             skip: router.isFallback || !routerObject
@@ -83,38 +84,65 @@ const Place: NextPage = () => {
         <PageLayout>
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={data?.title || 'Загрузка...'}
+                    title={
+                        isLoading ? (
+                            <Skeleton
+                                variant={'text'}
+                                width={'40%'}
+                            />
+                        ) : (
+                            data?.title
+                        )
+                    }
                     titleTypographyProps={{ component: 'h1' }}
                     subheader={
-                        <Breadcrumbs
-                            currentPage={data?.title}
-                            links={[
-                                { link: '/places/', text: 'Интересные места' }
-                            ]}
-                        />
+                        isLoading ? (
+                            <Skeleton
+                                variant={'text'}
+                                width={'70%'}
+                            />
+                        ) : (
+                            <Breadcrumbs
+                                currentPage={data?.title}
+                                links={[
+                                    {
+                                        link: '/places/',
+                                        text: 'Интересные места'
+                                    }
+                                ]}
+                            />
+                        )
                     }
                     sx={{ mb: -0.5, mt: -0.5 }}
                 />
-                <CardMedia
-                    alt={data?.photos?.[0]?.title}
-                    sx={{ cursor: 'pointer' }}
-                    component={'img'}
-                    height={300}
-                    image={
-                        data?.photos?.[0]?.filename
-                            ? `${ImageHost}/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
-                            : noPhoto.src
-                    }
-                    onClick={() => {
-                        setCurrentIndex(0)
-                        setShowLightbox(true)
-                    }}
-                />
+                {isLoading ? (
+                    <Skeleton
+                        variant={'rectangular'}
+                        height={300}
+                    />
+                ) : (
+                    <CardMedia
+                        alt={data?.photos?.[0]?.title}
+                        sx={{ cursor: 'pointer' }}
+                        component={'img'}
+                        height={300}
+                        image={
+                            data?.photos?.[0]?.filename
+                                ? `${ImageHost}/photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
+                                : noPhoto.src
+                        }
+                        onClick={() => {
+                            setCurrentIndex(0)
+                            setShowLightbox(true)
+                        }}
+                    />
+                )}
             </Card>
 
             <PlaceInformation
                 place={data}
                 ratingCount={ratingCount}
+                loading={isLoading}
             />
 
             <Card sx={{ mb: 2, mt: 0 }}>

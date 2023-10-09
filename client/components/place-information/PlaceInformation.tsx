@@ -11,6 +11,7 @@ import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Rating from '@mui/material/Rating'
+import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Unstable_Grid2'
 import dynamic from 'next/dynamic'
@@ -35,12 +36,12 @@ const Point = dynamic(() => import('@/components/map/Point'), {
 interface PlaceInformationProps {
     place?: Place
     ratingCount?: number
+    loading?: boolean
 }
 
-const PlaceInformation: React.FC<PlaceInformationProps> = ({
-    place,
-    ratingCount
-}) => {
+const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
+    const { place, ratingCount, loading } = props
+
     const [setRating, { data: newRating, isLoading: setRatingLoading }] =
         API.useRatingPutScoreMutation()
 
@@ -61,33 +62,52 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                             icon={<BookmarkBorderOutlined color={'disabled'} />}
                             title={'Категория:'}
                             text={
-                                place?.category?.name ? (
-                                    <Stack
-                                        direction={'row'}
-                                        spacing={2}
-                                    >
-                                        <Image
-                                            style={{
-                                                height: '18px',
-                                                marginRight: '4px',
-                                                marginTop: '2px',
-                                                objectFit: 'cover',
-                                                width: '18px'
-                                            }}
-                                            src={
-                                                categoryImage(
-                                                    place.category?.name
-                                                ).src
-                                            }
-                                            alt={place?.category?.title}
-                                            width={22}
-                                            height={26}
-                                        />
-                                        {place?.category?.title}
-                                    </Stack>
-                                ) : (
-                                    '-'
-                                )
+                                <Stack
+                                    direction={'row'}
+                                    spacing={2}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <Skeleton
+                                                variant={'rectangular'}
+                                                width={18}
+                                                height={18}
+                                            />
+                                            <Skeleton
+                                                variant={'text'}
+                                                width={150}
+                                                sx={{
+                                                    marginLeft:
+                                                        '10px !important',
+                                                    marginTop: '-1px !important'
+                                                }}
+                                            />
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Image
+                                                style={{
+                                                    height: '18px',
+                                                    marginLeft: '2px',
+                                                    marginRight: '4px',
+                                                    marginTop: '2px',
+                                                    width: '16px'
+                                                }}
+                                                src={
+                                                    categoryImage(
+                                                        place?.category?.name
+                                                    ).src
+                                                }
+                                                alt={
+                                                    place?.category?.title || ''
+                                                }
+                                                width={22}
+                                                height={26}
+                                            />
+                                            {place?.category?.title}
+                                        </>
+                                    )}
+                                </Stack>
                             }
                         />
                         <StatisticLine
@@ -97,28 +117,50 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                 <Avatar
                                     userName={place?.author?.name}
                                     image={place?.author?.avatar}
+                                    loading={loading}
                                 />
                             }
                         />
                         <StatisticLine
                             icon={<RemoveRedEyeOutlined color={'disabled'} />}
                             title={'Просмотров:'}
-                            text={place?.views || 0}
+                            text={
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={150}
+                                    />
+                                ) : (
+                                    place?.views || 0
+                                )
+                            }
                         />
                         <StatisticLine
                             icon={<StraightenOutlined color={'disabled'} />}
                             title={'Расстояние:'}
                             text={
-                                place?.distance
-                                    ? `${place?.distance || 0} км`
-                                    : '-'
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={60}
+                                    />
+                                ) : place?.distance ? (
+                                    `${place?.distance || 0} км`
+                                ) : (
+                                    '-'
+                                )
                             }
                         />
                         <StatisticLine
                             icon={<PlaceOutlined color={'disabled'} />}
                             title={'Координаты:'}
                             text={
-                                place?.longitude && place?.latitude ? (
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={150}
+                                    />
+                                ) : (
                                     <>
                                         {`${convertDMS(
                                             place?.latitude || 0,
@@ -141,21 +183,33 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                             </Link>
                                         </sup>
                                     </>
-                                ) : (
-                                    <>-</>
                                 )
                             }
                         />
                         <StatisticLine
                             icon={<AccessTimeOutlined color={'disabled'} />}
                             title={'Изменено:'}
-                            text={formatDate(place?.updated?.date)}
+                            text={
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={150}
+                                    />
+                                ) : (
+                                    formatDate(place?.updated?.date)
+                                )
+                            }
                         />
                         <StatisticLine
                             icon={<StarBorderOutlined color={'disabled'} />}
                             title={'Рейтнг:'}
                             text={
-                                place?.id ? (
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={150}
+                                    />
+                                ) : (
                                     <Box
                                         sx={{
                                             alignItems: 'center',
@@ -191,8 +245,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                             >{`(${ratingCount})`}</Box>
                                         )}
                                     </Box>
-                                ) : (
-                                    <>-</>
                                 )
                             }
                         />
@@ -211,38 +263,45 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                 width: '100%'
                             }}
                         >
-                            <DynamicMap
-                                center={
-                                    place?.latitude && place?.longitude
-                                        ? [place.latitude, place.longitude]
-                                        : [52.580517, 56.855385]
-                                }
-                                zoom={15}
-                            >
-                                {/*@ts-ignore*/}
-                                {({ TileLayer }) => (
-                                    <>
-                                        <TileLayer
-                                            url={
-                                                'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
-                                            }
-                                            attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
-                                        />
-                                        {place?.latitude &&
-                                            place?.longitude &&
-                                            place?.category && (
-                                                <Point
-                                                    lat={place.latitude}
-                                                    lon={place.longitude}
-                                                    title={place?.title}
-                                                    category={
-                                                        place.category.name
-                                                    }
-                                                />
-                                            )}
-                                    </>
-                                )}
-                            </DynamicMap>
+                            {loading ? (
+                                <Skeleton
+                                    variant={'rounded'}
+                                    height={'100%'}
+                                />
+                            ) : (
+                                <DynamicMap
+                                    center={
+                                        place?.latitude && place?.longitude
+                                            ? [place.latitude, place.longitude]
+                                            : [52.580517, 56.855385]
+                                    }
+                                    zoom={15}
+                                >
+                                    {/*@ts-ignore*/}
+                                    {({ TileLayer }) => (
+                                        <>
+                                            <TileLayer
+                                                url={
+                                                    'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
+                                                }
+                                                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+                                            />
+                                            {place?.latitude &&
+                                                place?.longitude &&
+                                                place?.category && (
+                                                    <Point
+                                                        lat={place.latitude}
+                                                        lon={place.longitude}
+                                                        title={place?.title}
+                                                        category={
+                                                            place.category.name
+                                                        }
+                                                    />
+                                                )}
+                                        </>
+                                    )}
+                                </DynamicMap>
+                            )}
                         </Box>
                     </Grid>
                 </Grid>

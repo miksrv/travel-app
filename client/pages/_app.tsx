@@ -182,10 +182,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                     href='/favicon.png'
                     key='shortcutIcon'
                 />
-                <link
-                    rel='manifest'
-                    href='/manifest.json'
-                />
             </Head>
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
