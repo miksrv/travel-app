@@ -83,14 +83,14 @@ class Session {
      * @return string|null
      * @throws ReflectionException
      */
-    protected function _saveSessionHistory(string $session, float $latitude, float $longitude): ?string {
+    protected function _saveSessionHistory(string $session, float | null $latitude, float | null $longitude): ?string {
         try {
             $historyModel = new SessionsHistoryModel();
 
             $historyModel->insert([
                 'session'   => $session,
-                'latitude'  => $latitude,
-                'longitude' => $longitude
+                'latitude'  => $latitude ?? null,
+                'longitude' => $longitude ?? null
             ]);
 
             return $historyModel->getInsertID();

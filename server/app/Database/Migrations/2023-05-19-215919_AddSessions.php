@@ -28,11 +28,11 @@ class AddSessions extends Migration {
             ],
             'latitude' => [
                 'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
+                'null'       => true,
             ],
             'longitude' => [
                 'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
+                'null'       => true,
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',

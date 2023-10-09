@@ -5,6 +5,7 @@ import { API } from './api'
 
 export const store = () =>
     configureStore({
+        devTools: process.env.NODE_ENV !== 'production',
         middleware: (gDM) => gDM().concat(API.middleware),
         reducer: {
             [API.reducerPath]: API.reducer

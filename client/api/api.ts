@@ -1,8 +1,9 @@
-import { encodeQueryData } from '@/functions/helpers'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiTypes } from '@/api/types'
+
+import { encodeQueryData } from '@/functions/helpers'
 
 type Maybe<T> = T | void
 
@@ -21,7 +22,8 @@ export const API = createApi({
             // }
 
             return headers
-        }
+        },
+        responseHandler: 'content-type'
     }),
     endpoints: (builder) => ({
         activityGetItem: builder.query<
@@ -119,4 +121,4 @@ export const {
 } = API
 
 // export endpoints for use in SSR
-// export const {} = api.endpoints
+export const { placesGetItem, activityGetItem } = API.endpoints

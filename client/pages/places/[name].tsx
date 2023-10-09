@@ -7,12 +7,13 @@ import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import Typography from '@mui/material/Typography'
 import { skipToken } from '@reduxjs/toolkit/query'
-import { NextPage } from 'next'
+import { GetServerSideProps, GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo, useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 
 import { API, ImageHost } from '@/api/api'
+import { wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Avatar from '@/components/avatar'
@@ -28,17 +29,40 @@ import { formatDate } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 
-const Place: NextPage = () => {
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async (context): Promise<GetServerSidePropsResult<any>> => {
+            const name = context.params?.name
+
+            if (typeof name === 'string') {
+                const data: any = await store.dispatch(
+                    API.endpoints.placesGetItem.initiate(name)
+                )
+
+                store.dispatch(API.endpoints.activityGetItem.initiate(name))
+
+                await Promise.all(
+                    store.dispatch(API.util?.getRunningQueriesThunk())
+                )
+
+                if (data.error?.originalStatus === 404) {
+                    return { notFound: true }
+                }
+
+                return { props: { data } }
+            }
+
+            return { notFound: true }
+        }
+)
+
+const PageItem: NextPage = () => {
     const router = useRouter()
     const routerObject = router.query.name
     const objectName =
         typeof routerObject === 'string' ? routerObject : skipToken
 
     const [activeTab, setActiveTab] = React.useState<number>(0)
-
-    const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
-        setActiveTab(newTab)
-    }
 
     const { data, isLoading } = API.usePlacesGetItemQuery(
         typeof objectName === 'string' ? objectName : '',
@@ -71,6 +95,10 @@ const Place: NextPage = () => {
 
     const thumbImageUrl = (index: number) =>
         `${ImageHost}/photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
+
+    const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
+        setActiveTab(newTab)
+    }
 
     const ratingCount = useMemo(
         () =>
@@ -262,4 +290,5 @@ const Place: NextPage = () => {
     )
 }
 
-export default Place
+// export default connect((state: RootState) => state)(PlacePage)
+export default PageItem
