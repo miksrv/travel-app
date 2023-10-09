@@ -137,6 +137,7 @@ const Places: NextPage = () => {
                 </CardContent>
             </Card>
             <PlacesList
+                perPage={POST_PER_PAGE}
                 loading={isLoading}
                 places={data?.items}
             />

@@ -56,6 +56,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 )
 
+const PLACES_PER_PAGE = 3
+
 const PageItem: NextPage = () => {
     const router = useRouter()
     const routerObject = router.query.name
@@ -71,17 +73,18 @@ const PageItem: NextPage = () => {
         }
     )
 
-    const { data: nearPlacesData } = API.usePlacesGetListQuery(
-        {
-            excludePlaces: data?.id ? [data.id] : undefined,
-            latitude: data?.latitude,
-            limit: 3,
-            longitude: data?.longitude,
-            order: ApiTypes.SortOrder.ASC,
-            sort: ApiTypes.SortFields.Distance
-        },
-        { skip: !data?.longitude || !data?.latitude }
-    )
+    const { data: nearPlacesData, isLoading: nearPlacesLoading } =
+        API.usePlacesGetListQuery(
+            {
+                excludePlaces: data?.id ? [data.id] : undefined,
+                latitude: data?.latitude,
+                limit: PLACES_PER_PAGE,
+                longitude: data?.longitude,
+                order: ApiTypes.SortOrder.ASC,
+                sort: ApiTypes.SortFields.Distance
+            },
+            { skip: !data?.longitude || !data?.latitude }
+        )
 
     const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
@@ -241,7 +244,11 @@ const PageItem: NextPage = () => {
                 {'Ближайшие интересные места'}
             </Typography>
 
-            <PlacesList places={nearPlacesData?.items} />
+            <PlacesList
+                perPage={PLACES_PER_PAGE}
+                places={nearPlacesData?.items}
+                loading={nearPlacesLoading}
+            />
 
             {showLightbox && (
                 <Lightbox
