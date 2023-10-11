@@ -130,6 +130,10 @@ class Places extends ResourceController
     public function show($id = null): ResponseInterface {
         $session = new Session();
 
+        // Load translate library
+        $placeTranslate = new PlaceTranslation('ru');
+        $placeTranslate->translate([$id]);
+
         try {
             $distanceSelect = ($session->longitude && $session->latitude)
                 ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
@@ -140,21 +144,19 @@ class Places extends ResourceController
             $placesModel = new PlacesModel();
             $placeData   = $placesModel
                 ->select(
-                    'places.*, translations_places.title, translations_places.content,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar,
+                    'places.*,  users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
                     category.title as category_title' . $distanceSelect)
                 ->join('users', 'places.author = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
-                ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
                 ->join('address_country', 'address_country.id = places.address_country', 'left')
                 ->join('address_region', 'address_region.id = places.address_region', 'left')
                 ->join('address_district', 'address_district.id = places.address_district', 'left')
                 ->join('address_city', 'address_city.id = places.address_city', 'left')
                 ->find($id);
 
-            if (!$placeData) {
+            if (!$placeData || !$placeTranslate->title($id)) {
                 return $this->failNotFound();
             }
 
@@ -191,8 +193,8 @@ class Places extends ResourceController
                 'longitude' => (float) $placeData->longitude,
                 'rating'    => (float) $placeData->rating,
                 'views'     => (int) $placeData->views,
-                'title'     => strip_tags(html_entity_decode($placeData->title)),
-                'content'   => strip_tags(html_entity_decode($placeData->content)),
+                'title'     => $placeTranslate->title($id),
+                'content'   => $placeTranslate->content($id),
                 'author'    => [
                     'id'     => $placeData->user_id,
                     'name'   => $placeData->user_name,

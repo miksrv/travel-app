@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\PlaceTranslation;
 use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -19,24 +20,31 @@ class Activity extends ResourceController
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        // Load translate library
+        $placeTranslations = new PlaceTranslation('ru', 350);
+
         $activityModel = new UsersActivityModel();
         $activityData  = $activityModel
             ->select(
                 'users_activity.*, places.id as place_id, users.id as user_id, users.name as user_name,
-                users.avatar as user_avatar, translations_places.title, 
-                SUBSTRING(translations_places.content, 1, 350) as content, photos.filename, photos.extension, 
-                photos.filesize, photos.width, photos.height')
-            ->join('translations_places', 'users_activity.place = translations_places.place AND language = "ru"')
+                users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
             ->join('places', 'users_activity.place = places.id', 'left')
             ->join('photos', 'users_activity.photo = photos.id', 'left')
             ->join('users', 'users_activity.user = users.id', 'left')
             ->whereIn('users_activity.type', ['photo', 'place'])
-            ->orderBy('users_activity.created_at', 'DESC')
+            ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
             ->limit(80)
             ->get()
             ->getResult();
 
         $groupData = [];
+        $placesIds = [];
+
+        foreach ($activityData as $item) {
+            $placesIds[] = $item->place_id;
+        }
+
+        $placeTranslations->translate($placesIds);
 
         if (!empty($activityData)) {
             foreach ($activityData as $item) {
@@ -52,7 +60,7 @@ class Activity extends ResourceController
                 // одного места и с разницей не больше 5 минут
                 if (
                     $item->type === 'photo' &&
-                    $lastGroup &&
+                    $lastGroup->type === 'photo' &&
                     $lastGroup->place->id === $item->place &&
                     $lastGroup->author->id === $item->user &&
                     (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
@@ -72,9 +80,9 @@ class Activity extends ResourceController
                         'avatar' => $item->user_avatar
                     ],
                     'place'   => (object) [
-                        'id'        => $item->place,
-                        'title'     => strip_tags(html_entity_decode($item->title)),
-                        'content'   => strip_tags(html_entity_decode($item->content)),
+                        'id'      => $item->place,
+                        'title'   => $placeTranslations->title($item->place),
+                        'content' => $placeTranslations->content($item->place),
                     ],
                     'photos'  => []
                 ];

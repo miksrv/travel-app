@@ -20,6 +20,8 @@ use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use Geocoder\Exception\Exception;
 
+define('MAX_PLACES_PER_ITERATION', 1);
+
 class Migrate extends ResourceController
 {
     /**
@@ -86,6 +88,9 @@ class Migrate extends ResourceController
             // Add or update user
             $placeAuthor = $this->_migrate_user($item->item_author);
 
+            // Place version timestamp
+            $placeVersionDate = (int) $item->item_version_date !== 0 ? $item->item_version_date : $item->item_datestamp;
+
             $geocoder = new Geocoder($item->item_latitude, $item->item_longitude);
             $place    = new \App\Entities\Place();
 
@@ -101,7 +106,7 @@ class Migrate extends ResourceController
             $place->address_district = $geocoder->districtID;
             $place->address_city     = $geocoder->cityID;
             $place->created_at       = $item->item_datestamp;
-            $place->updated_at       = $item->item_version_date;
+            $place->updated_at       = $placeVersionDate;
 
             $placesModel->insert($place);
 
@@ -125,7 +130,7 @@ class Migrate extends ResourceController
             $translation->author     = $placeAuthor;
             $translation->title      = $placeTitle;
             $translation->content    = $placeContent;
-            $translation->created_at = $place->updated_at;
+            $translation->created_at = $placeVersionDate;
             $translationsPlacesModel->insert($translation);
 
             // Make user activity
@@ -133,7 +138,7 @@ class Migrate extends ResourceController
             $activity->user       = $placeAuthor;
             $activity->type       = 'place';
             $activity->place      = $newPlaceId;
-            $activity->created_at = $place->updated_at;
+            $activity->created_at = $placeVersionDate;
             $activityModel->insert($activity);
 
             // Migrate content history
@@ -220,56 +225,66 @@ class Migrate extends ResourceController
                             mkdir($photoDirectory,0777, TRUE);
                         }
 
-                        file_put_contents($photoDirectory . '/' . $photoFilename, file_get_contents($fileImageURL));
+                        try {
+                            $photoData = @file_get_contents($fileImageURL);
 
-                        $file = new File($photoDirectory . '/' . $photoFilename);
-                        list($width, $height) = getimagesize($file->getRealPath());
-                        $image = Services::image('gd'); // imagick
-                        $image->withFile($file->getRealPath())
-                            ->fit(512, 384, 'center')
-                            ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
+                            if (empty($photoData)) {
+                                continue;
+                            }
 
-                        // Add or update user
-                        $photoAuthor = $this->_migrate_user($item->item_author);
+                            file_put_contents($photoDirectory . '/' . $photoFilename, $photoData);
 
-                        // Save photo to DB
-                        $photo = new \App\Entities\Photo();
-                        $photo->latitude    = $currentPhoto->item_latitude;
-                        $photo->longitude   = $currentPhoto->item_longitude;
-                        $photo->place       = $newPlaceId;
-                        $photo->author      = $photoAuthor;
-                        $photo->filename    = $currentPhoto->item_filename;
-                        $photo->extension   = $currentPhoto->item_ext;
-                        $photo->filesize    = $file->getSize();
-                        $photo->width       = $width;
-                        $photo->height      = $height;
-                        $photo->created_at  = $currentPhoto->item_timestamp;
+                            $file = new File($photoDirectory . '/' . $photoFilename);
+                            list($width, $height) = getimagesize($file->getRealPath());
+                            $image = Services::image('gd'); // imagick
+                            $image->withFile($file->getRealPath())
+                                ->fit(512, 384, 'center')
+                                ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
 
-                        $photosModel->insert($photo);
+                            // Add or update user
+                            $photoAuthor = $this->_migrate_user($item->item_author);
 
-                        // Make translation
-                        $translationsPhotosModel->insert([
-                            'photo'    => $photosModel->getInsertID(),
-                            'language' => 'ru',
-                            'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
-                        ]);
+                            // Save photo to DB
+                            $photo = new \App\Entities\Photo();
+                            $photo->latitude    = $currentPhoto->item_latitude;
+                            $photo->longitude   = $currentPhoto->item_longitude;
+                            $photo->place       = $newPlaceId;
+                            $photo->author      = $photoAuthor;
+                            $photo->filename    = $currentPhoto->item_filename;
+                            $photo->extension   = $currentPhoto->item_ext;
+                            $photo->filesize    = $file->getSize();
+                            $photo->width       = $width;
+                            $photo->height      = $height;
+                            $photo->created_at  = $currentPhoto->item_timestamp;
 
-                        $activity = new \App\Entities\UserActivity();
-                        $activity->user       = $placeAuthor;
-                        $activity->type       = 'photo';
-                        $activity->place      = $newPlaceId;
-                        $activity->photo      = $photosModel->getInsertID();
-                        $activity->created_at = $photo->created_at;
+                            $photosModel->insert($photo);
 
-                        // Make user activity
-                        $activityModel->insert($activity);
+                            // Make translation
+                            $translationsPhotosModel->insert([
+                                'photo'    => $photosModel->getInsertID(),
+                                'language' => 'ru',
+                                'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
+                            ]);
+
+                            $activity = new \App\Entities\UserActivity();
+                            $activity->user       = $placeAuthor;
+                            $activity->type       = 'photo';
+                            $activity->place      = $newPlaceId;
+                            $activity->photo      = $photosModel->getInsertID();
+                            $activity->created_at = $photo->created_at;
+
+                            // Make user activity
+                            $activityModel->insert($activity);
+                        } catch (e) {
+                            continue;
+                        }
                     }
                 }
             }
 
             $inserted[] = $item->item_title;
 
-            if (count($inserted) >= 1) {
+            if (count($inserted) >= MAX_PLACES_PER_ITERATION) {
                 return $this->respond($inserted);
             }
         }
@@ -315,30 +330,30 @@ class Migrate extends ResourceController
         $userMigrateData = $migrateUsers->find($author_id);
         $userData = $usersModel->where(['email' => $userMigrateData->user_email])->first();
 
-        if (!$userData) {
-            $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
-            $avatarDirectory = UPLOAD_AVATARS;
-            if (!is_dir($avatarDirectory)) {
-                mkdir($avatarDirectory,0777, TRUE);
-            }
-
-            file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
-
-            $user = new \App\Entities\User();
-            $user->name       = $userMigrateData->user_name;
-            $user->password   = $userMigrateData->user_password;
-            $user->email      = $userMigrateData->user_email;
-            $user->level      = 0;
-            $user->reputation = $userMigrateData->user_rating;
-            $user->website    = $userMigrateData->user_website;
-            $user->avatar     = $userMigrateData->user_avatar;
-            $user->created_at = date($userMigrateData->user_regdate);
-
-            $usersModel->insert($user);
-
-            return $usersModel->getInsertID();
+        if ($userData && $userData->id) {
+            return $userData->id;
         }
 
-        return $userData->id;
+        $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
+        $avatarDirectory = UPLOAD_AVATARS;
+        if (!is_dir($avatarDirectory)) {
+            mkdir($avatarDirectory,0777, TRUE);
+        }
+
+        file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
+
+        $user = new \App\Entities\User();
+        $user->name       = $userMigrateData->user_name;
+        $user->password   = $userMigrateData->user_password;
+        $user->email      = $userMigrateData->user_email;
+        $user->level      = 0;
+        $user->reputation = $userMigrateData->user_rating;
+        $user->website    = $userMigrateData->user_website;
+        $user->avatar     = $userMigrateData->user_avatar;
+        $user->created_at = date($userMigrateData->user_regdate);
+
+        $usersModel->insert($user);
+
+        return $usersModel->getInsertID();
     }
 }
