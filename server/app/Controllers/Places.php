@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
@@ -16,8 +17,26 @@ class Places extends ResourceController
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $lat = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
-        $lon = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
+        $lat    = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
+        $lon    = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
+        $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
+
+        // Load translate library
+        $placeTranslations = new PlaceTranslation('ru', 350);
+
+        // When searching, we search by criteria in the translation array to return object IDs
+        if ($search) {
+            $placeTranslations->search($search);
+
+            // At the same time, if we did not find anything based on the search conditions,
+            // we immediately return an empty array and do not execute the code further
+            if (empty($placeTranslations->placeIds)) {
+                return $this->respond([
+                    'items'  => [],
+                    'count'  => 0,
+                ]);
+            }
+        }
 
         if ($lat && $lon) {
             $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
@@ -31,14 +50,14 @@ class Places extends ResourceController
 
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
-        $placesModel->select(
-                'places.id, places.category, places.latitude, places.longitude,
-                places.rating, places.views, translations_places.title, SUBSTRING(translations_places.content, 1, 350) as content,
-                category.title as category_title' . $distanceSelect)
+        $placesModel
+            ->select('places.id, places.category, places.latitude, places.longitude, places.rating, places.views, category.title as category_title' . $distanceSelect)
             ->join('category', 'places.category = category.name', 'left');
 
         // Find all places
-        $placesList = $this->_makeListFilters($placesModel)->get()->getResult();
+        // If a search was enabled, the second argument to the _makeListFilters function will contain the
+        // IDs of the places found using the search criteria
+        $placesList = $this->_makeListFilters($placesModel, $placeTranslations->placeIds)->get()->getResult();
         $placesIds  = [];
         $result     = [];
         foreach ($placesList as $place) {
@@ -53,6 +72,12 @@ class Places extends ResourceController
                 ->findAll()
             : $placesIds;
 
+        // We find translations for all objects if no search was used.
+        // When searching, we already know translations for all found objects
+        if (!$search) {
+            $placeTranslations->translate($placesIds);
+        }
+
         // Map photos and places
         foreach ($placesList as $place) {
             $photoId = array_search($place->id, array_column($photosData, 'place'));
@@ -64,8 +89,8 @@ class Places extends ResourceController
                 'longitude' => (float) $place->longitude,
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
-                'title'     => strip_tags(html_entity_decode($place->title)),
-                'content'   => strip_tags(html_entity_decode($place->content)),
+                'title'     => $placeTranslations->title($place->id),
+                'content'   => $placeTranslations->content($place->id),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->category_title,
@@ -93,7 +118,7 @@ class Places extends ResourceController
 
         return $this->respond([
             'items'  => $result,
-            'count'  => $this->_makeListFilters($placesModel)->countAllResults(),
+            'count'  => $this->_makeListFilters($placesModel, $placeTranslations->placeIds)->countAllResults(),
         ]);
     }
 
@@ -259,9 +284,10 @@ class Places extends ResourceController
 
     /**
      * @param PlacesModel $placesModel
+     * @param array $placeIds
      * @return PlacesModel
      */
-    protected function _makeListFilters(PlacesModel $placesModel): PlacesModel {
+    protected function _makeListFilters(PlacesModel $placesModel, array $placeIds = []): PlacesModel {
         $orderDefault  = 'DESC';
         $sortingFields = ['views', 'rating', 'title', 'category', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
@@ -269,7 +295,6 @@ class Places extends ResourceController
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
         $exclude  = $this->request->getGet('excludePlaces', FILTER_SANITIZE_STRING);
         $order    = $this->request->getGet('order', FILTER_SANITIZE_STRING) ?? $orderDefault;
-        $search   = $this->request->getGet('search', FILTER_SANITIZE_STRING);
         $country  = $this->request->getGet('country', FILTER_SANITIZE_NUMBER_INT);
         $region   = $this->request->getGet('region', FILTER_SANITIZE_NUMBER_INT);
         $district = $this->request->getGet('district', FILTER_SANITIZE_NUMBER_INT);
@@ -277,12 +302,6 @@ class Places extends ResourceController
         $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
         $category = $this->request->getGet('category', FILTER_SANITIZE_STRING);
-
-        if ($search) {
-            $search = " AND (translations_places.title LIKE '%{$search}%' OR translations_places.content LIKE '%{$search}%')";
-        }
-
-        $placesModel->join('translations_places', 'places.id = translations_places.place AND language = "ru"' . $search);
 
         if ($country) {
             $placesModel->where(['address_country' => $country]);
@@ -309,7 +328,13 @@ class Places extends ResourceController
             $placesModel->whereNotIn('places.id', $exclude);
         }
 
+        if ($placeIds && count($placeIds) >= 1) {
+            $placesModel->whereIn('places.id', $placeIds);
+        }
+
         if (in_array($sort, $sortingFields)) {
+            $sort = $sort === 'updated_at' ? 'places.updated_at' : $sort;
+
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 

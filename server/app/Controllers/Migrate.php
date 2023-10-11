@@ -50,8 +50,8 @@ class Migrate extends ResourceController
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
 
-        $TranslationsPlacesModel = new TranslationsPlacesModel();
-        $TranslationsPhotosModel = new TranslationsPhotosModel();
+        $translationsPlacesModel = new TranslationsPlacesModel();
+        $translationsPhotosModel = new TranslationsPhotosModel();
 
         $activityModel  = new UsersActivityModel();
         $migratePlaces  = new MigratePlacesModel();
@@ -63,7 +63,7 @@ class Migrate extends ResourceController
         $inserted = [];
 
         foreach ($migratePlace as $item) {
-            if ($TranslationsPlacesModel
+            if ($translationsPlacesModel
                 ->where('title', strip_tags(html_entity_decode($item->item_title)))
                 ->join('places', 'translations_places.place = places.id')
                 ->first()
@@ -126,7 +126,7 @@ class Migrate extends ResourceController
             $translation->title      = $placeTitle;
             $translation->content    = $placeContent;
             $translation->created_at = $place->updated_at;
-            $TranslationsPlacesModel->insert($translation);
+            $translationsPlacesModel->insert($translation);
 
             // Make user activity
             $activity = new \App\Entities\UserActivity();
@@ -156,7 +156,7 @@ class Migrate extends ResourceController
                     $translation->content    = $versionContent;
                     $translation->delta      = $versionDelta;
                     $translation->created_at = $placeVersionItem->item_datestamp;
-                    $TranslationsPlacesModel->insert($translation);
+                    $translationsPlacesModel->insert($translation);
 
                     $activity = new \App\Entities\UserActivity();
                     $activity->user       = $historyUser;
@@ -248,7 +248,7 @@ class Migrate extends ResourceController
                         $photosModel->insert($photo);
 
                         // Make translation
-                        $TranslationsPhotosModel->insert([
+                        $translationsPhotosModel->insert([
                             'photo'    => $photosModel->getInsertID(),
                             'language' => 'ru',
                             'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
