@@ -6,6 +6,8 @@ use App\Libraries\Session;
 use App\Models\CategoryModel;
 use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
+use App\Models\TranslationsPlacesModel;
+use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
@@ -52,29 +54,35 @@ class Introduce extends ResourceController
         }
 
         $placesModel      = new PlacesModel();
-        $categoryModel    = new CategoryModel();
+        $activityModel    = new UsersActivityModel();
         $overpassCatModel = new OverpassCategoryModel();
 
         foreach ($pointsList as $point) {
+            // Если такой overpass_id уже есть в БД, пропускаем
             if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first()) {
                 continue;
             }
 
-            $findCategory = $categoryModel->where('name', $point->category)->first();
-
-            if (!$findCategory) {
-                $categoryModel->insert(['name' => $point->category]);
+            // Если вообще нет никакого названия - пропускаем просто
+            if (!isset($point->tags['name:en']) && !isset($point->tags['name:ru']) && !isset($point->tags['name'])) {
+                continue;
             }
 
             $findOverpassCat = $overpassCatModel->where('name', $point->tags[$point->category])->first();
+            $newPoiName      = $point->tags['name:en'] ?? $point->tags['name:ru'] ?? $point->tags['name'];
 
             if (!$findOverpassCat) {
                 $overpassCatModel->insert([
                     'name'        => $point->tags[$point->category],
-                    'category'    => $findCategory ? $findCategory->name : $point->category,
+                    'category'    => $point->category,
                     'subcategory' => null,
                     'title'       => ''
                 ]);
+            }
+
+            // Если нет категории для маппинга, то пропускаем такой не известный тип POI
+            if (!$findOverpassCat->category_map || !$newPoiName) {
+                continue;
             }
 
             $geocoder = new Geocoder($point->lat, $point->lon);
@@ -82,26 +90,34 @@ class Introduce extends ResourceController
             $place = new \App\Entities\Place();
 
             $place->overpass_id = $point->id;
-            $place->category    = $findCategory->name ?? $point->category;
+            $place->category    = $findOverpassCat->category_map;
             $place->latitude    = $point->lat;
             $place->longitude   = $point->lon;
-            $place->title       = $point->tags['name'] ?? null;
-            $place->content     = '';
-
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
             $place->address_region   = $geocoder->regionID;
             $place->address_district = $geocoder->districtID;
             $place->address_city     = $geocoder->cityID;
             $place->tags             = $this->cleanTags($point->tags, $point->category);
+            $placesModel->insert($place);
 
-            $pointAdded[] = $place->title;
+            $newPlaceId = $placesModel->getInsertID();
 
-            if ($placesModel->insert($place) === false) {
-                echo '<pre>';
-                var_dump($placesModel->errors());
-                exit();
-            }
+            $translationsPlacesModel = new TranslationsPlacesModel();
+            $translation = new \App\Entities\TranslationPlace();
+            $translation->place      = $newPlaceId;
+            $translation->language   = 'ru';
+            $translation->title      = $newPoiName;
+            $translation->content    = '';
+            $translationsPlacesModel->insert($translation);
+
+            // Make user activity
+            $activity = new \App\Entities\UserActivity();
+            $activity->type       = 'place';
+            $activity->place      = $newPlaceId;
+            $activityModel->insert($activity);
+
+            $pointAdded[] = $newPoiName;
         }
 
         return $pointAdded;

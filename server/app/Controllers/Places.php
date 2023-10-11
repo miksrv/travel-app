@@ -21,6 +21,8 @@ class Places extends ResourceController
         $lon    = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
 
+        $session = new Session();
+
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 350);
 
@@ -41,8 +43,6 @@ class Places extends ResourceController
         if ($lat && $lon) {
             $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $session = new Session();
-
             $distanceSelect = ($session->longitude && $session->latitude)
                 ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
                 : '';
@@ -97,7 +97,7 @@ class Places extends ResourceController
                 ]
             ];
 
-            if (isset($findSession) || ($lat && $lon)) {
+            if ($distanceSelect) {
                 $return['distance'] = round((float) $place->distance, 1);
             }
 
@@ -118,7 +118,7 @@ class Places extends ResourceController
 
         return $this->respond([
             'items'  => $result,
-            'count'  => $this->_makeListFilters($placesModel, $placeTranslations->placeIds)->countAllResults(),
+            'count'  => $this->_makeListFilters($placesModel, !$search ? [] : $placeTranslations->placeIds)->countAllResults(),
         ]);
     }
 
@@ -156,7 +156,7 @@ class Places extends ResourceController
                 ->join('address_city', 'address_city.id = places.address_city', 'left')
                 ->find($id);
 
-            if (!$placeData || !$placeTranslate->title($id)) {
+            if (!$placeData) { //  || !$placeTranslate->title($id)
                 return $this->failNotFound();
             }
 

@@ -34,6 +34,11 @@ class AddOverpassCategory extends Migration {
                 'constraint' => 50,
                 'null'       => false
             ],
+            'category_map' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => true
+            ],
         ]);
 
         $this->forge->addPrimaryKey('id');

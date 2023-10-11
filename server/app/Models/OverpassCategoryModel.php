@@ -17,8 +17,8 @@ class OverpassCategoryModel extends Model
     protected $allowedFields = [
         'category',
         'subcategory',
-        'name',
-        'title'
+        'title',
+        'category_map'
     ];
 
     // Dates
