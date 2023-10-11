@@ -52,5 +52,6 @@ $routes->get('rating/(:alphanum)', 'Rating::show/$1'); // !!NOT USED!!
 $routes->put('rating', 'Rating::set');
 $routes->options('rating', 'Rating');
 
+$routes->get('activity', 'Activity::list');
 $routes->get('activity/(:alphanum)', 'Activity::show/$1');
 $routes->options('activity', 'Activity');

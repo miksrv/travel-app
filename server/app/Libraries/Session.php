@@ -78,8 +78,8 @@ class Session {
     /**
      * Сохраняем сессию в истории
      * @param string $session
-     * @param float $latitude
-     * @param float $longitude
+     * @param float|null $latitude
+     * @param float|null $longitude
      * @return string|null
      * @throws ReflectionException
      */
