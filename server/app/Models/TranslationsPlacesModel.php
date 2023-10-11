@@ -10,12 +10,15 @@ class TranslationsPlacesModel extends MyBaseModel
     protected $allowedFields = [
         'place',
         'language',
+        'author',
         'title',
-        'content'
+        'content',
+        'delta',
+        'created_at'
     ];
 
     // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';

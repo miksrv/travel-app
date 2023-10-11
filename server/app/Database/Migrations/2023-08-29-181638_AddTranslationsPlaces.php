@@ -23,6 +23,11 @@ class AddTranslationsPlaces extends Migration {
                 'default'    => 'ru',
                 'null'       => false,
             ],
+            'author' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true
+            ],
             'title' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
@@ -32,10 +37,23 @@ class AddTranslationsPlaces extends Migration {
                 'type' => 'TEXT',
                 'null' => true
             ],
+            'delta' => [
+                'type'       => 'SMALLINT',
+                'constraint' => 5,
+                'null'       => false,
+                'default'    => 0
+            ],
+            'created_at DATETIME default current_timestamp',
+            'updated_at DATETIME default current_timestamp',
+            'deleted_at' => [
+                'type' => 'DATETIME',
+                'null' => true
+            ]
         ]);
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('translations_places');
     }
 

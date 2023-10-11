@@ -4,9 +4,20 @@ use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
+/**
+ * User activity controller
+ * Show all user activity such as places, photos and rating
+ *
+ * GET / -> activity()
+ * GET /show/{id} -> show($id)
+ */
 class Activity extends ResourceController
 {
 
+    /**
+     * Show all activities for all users and all places, photos
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $activityModel = new UsersActivityModel();
         $activityData  = $activityModel
@@ -83,6 +94,7 @@ class Activity extends ResourceController
     }
 
     /**
+     * Show all activities for place by ID
      * @param $id
      * @return ResponseInterface
      */

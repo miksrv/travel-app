@@ -2,6 +2,7 @@
 
 use App\Libraries\Geocoder;
 use App\Models\MigrateMediaModel;
+use App\Models\MigratePlacesHistoryModel;
 use App\Models\MigratePlacesModel;
 use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
@@ -52,11 +53,12 @@ class Migrate extends ResourceController
         $TranslationsPlacesModel = new TranslationsPlacesModel();
         $TranslationsPhotosModel = new TranslationsPhotosModel();
 
-        $activityModel = new UsersActivityModel();
-        $migratePlaces = new MigratePlacesModel();
-        $migrateMedia  = new MigrateMediaModel();
+        $activityModel  = new UsersActivityModel();
+        $migratePlaces  = new MigratePlacesModel();
+        $migrateHistory = new MigratePlacesHistoryModel();
+        $migrateMedia   = new MigrateMediaModel();
 
-        $migratePlace = $migratePlaces->findAll();
+        $migratePlace = $migratePlaces->orderBy('item_id')->findAll();
 
         $inserted = [];
 
@@ -73,7 +75,7 @@ class Migrate extends ResourceController
             $ratingSum  = 0;
             $ratingData = unserialize($item->item_rating);
 
-            if ($ratingData && is_array($ratingData['scores']) && isset($ratingData['scores'])) {
+            if ($ratingData && is_array($ratingData['scores'])) {
                 foreach ($ratingData['scores'] as $score) {
                     $ratingSum += $score;
                 }
@@ -99,6 +101,7 @@ class Migrate extends ResourceController
             $place->address_district = $geocoder->districtID;
             $place->address_city     = $geocoder->cityID;
             $place->created_at       = $item->item_datestamp;
+            $place->updated_at       = $item->item_version_date;
 
             $placesModel->insert($place);
 
@@ -112,21 +115,57 @@ class Migrate extends ResourceController
                 }
             }
 
+            $placeTitle   = strip_tags(html_entity_decode($item->item_title));
+            $placeContent = strip_tags(html_entity_decode($item->item_content));
+
+            // Make translation for current version
+            $translation = new \App\Entities\TranslationPlace();
+            $translation->place      = $newPlaceId;
+            $translation->language   = 'ru';
+            $translation->author     = $placeAuthor;
+            $translation->title      = $placeTitle;
+            $translation->content    = $placeContent;
+            $translation->created_at = $place->updated_at;
+            $TranslationsPlacesModel->insert($translation);
+
             // Make user activity
             $activity = new \App\Entities\UserActivity();
             $activity->user       = $placeAuthor;
             $activity->type       = 'place';
             $activity->place      = $newPlaceId;
-            $activity->created_at = $place->created_at;
-
-            // Make translation
-            $TranslationsPlacesModel->insert((object) [
-                'place'    => $newPlaceId,
-                'language' => 'ru',
-                'title'    => strip_tags(html_entity_decode($item->item_title)),
-                'content'  => strip_tags(html_entity_decode($item->item_content))
-            ]);
+            $activity->created_at = $place->updated_at;
             $activityModel->insert($activity);
+
+            // Migrate content history
+            $placeVersions = $migrateHistory->where('item_object_id', $item->item_id)->findAll();
+            if (!empty($placeVersions)) {
+                foreach ($placeVersions as $placeVersionItem) {
+                    $versionContent = strip_tags(html_entity_decode($placeVersionItem->item_content));
+                    $versionDelta   = strcmp($placeContent, $versionContent);
+                    // If in version text nothing changed
+                    if ($versionDelta === 0) {
+                        continue ;
+                    }
+
+                    $historyUser = $this->_migrate_user($placeVersionItem->item_author);
+                    $translation = new \App\Entities\TranslationPlace();
+                    $translation->place      = $newPlaceId;
+                    $translation->language   = 'ru';
+                    $translation->author     = $historyUser;
+                    $translation->title      = $placeTitle;
+                    $translation->content    = $versionContent;
+                    $translation->delta      = $versionDelta;
+                    $translation->created_at = $placeVersionItem->item_datestamp;
+                    $TranslationsPlacesModel->insert($translation);
+
+                    $activity = new \App\Entities\UserActivity();
+                    $activity->user       = $historyUser;
+                    $activity->type       = 'place';
+                    $activity->place      = $newPlaceId;
+                    $activity->created_at = $placeVersionItem->item_datestamp;
+                    $activityModel->insert($activity);
+                }
+            }
 
             // Migrate Rating
             if (is_array($ratingData) &&  is_array($ratingData['scores']) && !empty($ratingData['scores'])) {
