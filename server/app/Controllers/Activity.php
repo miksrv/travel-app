@@ -74,11 +74,6 @@ class Activity extends ResourceController
                 $currentGroup = (object) [
                     'type'    => $item->type,
                     'created' => $item->created_at,
-                    'author'  => (object) [
-                        'id'     => $item->user_id,
-                        'name'   => $item->user_name,
-                        'avatar' => $item->user_avatar
-                    ],
                     'place'   => (object) [
                         'id'      => $item->place,
                         'title'   => $placeTranslations->title($item->place),
@@ -86,6 +81,14 @@ class Activity extends ResourceController
                     ],
                     'photos'  => []
                 ];
+
+                if ($item->user_id) {
+                    $currentGroup->author = (object) [
+                        'id'     => $item->user_id,
+                        'name'   => $item->user_name,
+                        'avatar' => $item->user_avatar
+                    ];
+                }
 
                 if ($item->type === 'photo') {
                     $currentGroup->photos[] = $itemPhoto;

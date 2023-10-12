@@ -60,7 +60,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 variant={'body1'}
                 color={'text.primary'}
             >
-                {place?.content}...
+                {place?.content || 'Нет данных для отображения'}
             </Typography>
         </CardContent>
         <CardContent sx={{ p: 1.5 }}>

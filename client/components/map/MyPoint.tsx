@@ -1,6 +1,6 @@
 import Leaflet from 'leaflet'
 import React from 'react'
-import { Circle, Marker, Popup } from 'react-leaflet'
+import { Circle, Marker } from 'react-leaflet'
 
 import userAvatar from '@/public/images/no-avatar.jpeg'
 

@@ -226,7 +226,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                                     ? place?.rating
                                                     : newRating?.rating ?? 0
                                             }
-                                            precision={0.5}
+                                            // precision={0.5}
                                             disabled={setRatingLoading}
                                             readOnly={
                                                 !place?.actions?.rating ||

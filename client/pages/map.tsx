@@ -1,6 +1,8 @@
-import Box from '@mui/material/Box'
+import { AccountCircleOutlined } from '@mui/icons-material'
+import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
+import IconButton from '@mui/material/IconButton'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
@@ -44,6 +46,7 @@ const Map: NextPage = () => {
     const router = useRouter()
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
+    const [mapCenter, setMapCenter] = useState<number[]>(MYPOINT)
 
     const [introduce, { isLoading }] = API.useIntroduceMutation()
     const [getPlaces, { isLoading: placesLoading, data }] =
@@ -91,6 +94,12 @@ const Map: NextPage = () => {
         [data?.items, poiList]
     )
 
+    const handleUserPosition = () => {
+        if (geolocation?.latitude && geolocation?.longitude) {
+            setMapCenter([geolocation.latitude, geolocation.longitude])
+        }
+    }
+
     useEffect(() => {
         const updateLatitude = round(geolocation?.latitude)
         const updateLongitude = round(geolocation?.longitude)
@@ -134,6 +143,15 @@ const Map: NextPage = () => {
                         <Breadcrumbs currentPage={'Карта интересных мест'} />
                     }
                     sx={{ mb: -0.5, mt: -0.5 }}
+                    action={
+                        <Button
+                            sx={{ mr: 1, mt: 1 }}
+                            size={'small'}
+                            variant={'contained'}
+                        >
+                            Добавить
+                        </Button>
+                    }
                 />
             </Card>
 
@@ -149,7 +167,7 @@ const Map: NextPage = () => {
                     //             : DEFAULT_CENTER
                     //         : [lat, lon]
                     // }
-                    center={MYPOINT}
+                    center={mapCenter}
                     zoom={15}
                 >
                     {/*@ts-ignore*/}
@@ -181,9 +199,22 @@ const Map: NextPage = () => {
                                     category={item?.category}
                                 />
                             ))}
-                            {/*<div className='leaflet-control leaflet-bar'>*/}
-                            {/*    12414*/}
-                            {/*</div>*/}
+                            <div className='leaflet-control'>
+                                <Button
+                                    variant={'contained'}
+                                    size={'small'}
+                                    sx={{
+                                        left: '10px',
+                                        minWidth: '26px',
+                                        mt: 9,
+                                        width: '26px'
+                                    }}
+                                    color={'primary'}
+                                    onClick={handleUserPosition}
+                                >
+                                    <AccountCircleOutlined fontSize={'small'} />
+                                </Button>
+                            </div>
                             <MyMapEvents onChangeBounds={handleChangeBounds} />
                         </>
                     )}

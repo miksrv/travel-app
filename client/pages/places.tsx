@@ -1,8 +1,7 @@
-import { Pagination } from '@mui/material'
+import { Button, Pagination } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import Paper from '@mui/material/Paper'
 import { GetStaticProps, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -116,6 +115,15 @@ const Places: NextPage = () => {
                     titleTypographyProps={{ component: 'h1' }}
                     subheader={<Breadcrumbs currentPage={'Интересные места'} />}
                     sx={{ mb: -0.5, mt: -0.5 }}
+                    action={
+                        <Button
+                            sx={{ mr: 1, mt: 1 }}
+                            size={'small'}
+                            variant={'contained'}
+                        >
+                            Добавить
+                        </Button>
+                    }
                 />
                 <CardContent sx={{ mb: -2, mt: -3 }}>
                     <PlacesFilterPanel
@@ -141,16 +149,14 @@ const Places: NextPage = () => {
                 loading={isLoading}
                 places={data?.items}
             />
-            <Paper sx={{ mb: 2, mt: 2, p: 2, pt: 0.5 }}>
-                <Pagination
-                    sx={{ mt: 2 }}
-                    shape={'rounded'}
-                    page={page}
-                    hidden={!data?.count}
-                    count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
-                    onChange={(_, page) => setPage(page)}
-                />
-            </Paper>
+            <Pagination
+                sx={{ mt: 2 }}
+                shape={'rounded'}
+                page={page}
+                hidden={!data?.count}
+                count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
+                onChange={(_, page) => setPage(page)}
+            />
         </PageLayout>
     )
 }
