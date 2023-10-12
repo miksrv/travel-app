@@ -37,7 +37,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
             width={22}
             height={26}
         />
-        <Link href={`/places/${place.id}`}>
+        <Link
+            href={`/places/${place.id}`}
+            title={place.title}
+        >
             <CardMedia
                 alt={place?.photos?.[0]?.title}
                 component={'img'}

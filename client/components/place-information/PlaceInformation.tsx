@@ -87,11 +87,9 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         <>
                                             <Image
                                                 style={{
-                                                    height: '18px',
                                                     marginLeft: '2px',
                                                     marginRight: '4px',
-                                                    marginTop: '2px',
-                                                    width: '16px'
+                                                    marginTop: '2px'
                                                 }}
                                                 src={
                                                     categoryImage(
@@ -101,8 +99,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                                 alt={
                                                     place?.category?.title || ''
                                                 }
-                                                width={22}
-                                                height={26}
+                                                width={16}
+                                                height={18}
                                             />
                                             {place?.category?.title}
                                         </>

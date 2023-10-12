@@ -38,7 +38,7 @@
     },
     "scripts": {
         "test": "phpunit",
-        "serve": "php spark serve",
+        "serve": "php spark serve --timeout 0",
         "kill": "pkill -9 php",
         "migration:create": "php spark migrate:create",
         "migration:status": "php spark migrate:status",

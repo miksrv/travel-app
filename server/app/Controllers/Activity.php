@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\PlaceTranslation;
+use App\Models\CategoryModel;
 use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -23,10 +24,13 @@ class Activity extends ResourceController
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 350);
 
+        $categoriesModel = new CategoryModel();
+        $categoriesData  = $categoriesModel->findAll();
+
         $activityModel = new UsersActivityModel();
         $activityData  = $activityModel
             ->select(
-                'users_activity.*, places.id as place_id, users.id as user_id, users.name as user_name,
+                'users_activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
                 users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
             ->join('places', 'users_activity.place = places.id', 'left')
             ->join('photos', 'users_activity.photo = photos.id', 'left')
@@ -69,13 +73,19 @@ class Activity extends ResourceController
                     continue;
                 }
 
+                $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
+
                 $currentGroup = (object) [
                     'type'    => $item->type,
                     'created' => $item->created_at,
                     'place'   => (object) [
-                        'id'      => $item->place,
-                        'title'   => $placeTranslations->title($item->place),
-                        'content' => $placeTranslations->content($item->place),
+                        'id'       => $item->place,
+                        'title'    => $placeTranslations->title($item->place),
+                        'content'  => $placeTranslations->content($item->place),
+                        'category' => (object) [
+                            'name'  => $categoriesData[$findCategory]->name,
+                            'title' => $categoriesData[$findCategory]->title,
+                        ]
                     ],
                     'photos'  => []
                 ];

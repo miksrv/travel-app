@@ -13,7 +13,7 @@ type SizeType = 'small' | 'medium'
 interface AvatarProps {
     size?: SizeType
     userName?: string
-    text?: string
+    text?: string | React.ReactNode
     image?: string
     loading?: boolean
 }
