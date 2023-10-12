@@ -12,9 +12,10 @@ export const ActivityTypes = {
 } as const
 export type ActivityTypes = (typeof ActivityTypes)[keyof typeof ActivityTypes]
 
-export type Activity = {
+export type Item = {
     type: ActivityTypes
     photo?: Photo
+    photos?: Photo[]
     place?: Place
     rating?: Rating
     author?: User

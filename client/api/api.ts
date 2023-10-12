@@ -27,11 +27,15 @@ export const API = createApi({
     }),
     endpoints: (builder) => ({
         activityGetItem: builder.query<
-            ApiTypes.ResponseActivityGetItem,
+            ApiTypes.ResponseActivityGetList,
             string
         >({
             providesTags: ['Activity'],
             query: (item) => `activity/${item}`
+        }),
+        activityGetList: builder.query<ApiTypes.ResponseActivityGetList, void>({
+            providesTags: ['Activity'],
+            query: () => 'activity'
         }),
 
         addressGetSearch: builder.mutation<

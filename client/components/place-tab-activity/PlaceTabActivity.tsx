@@ -8,7 +8,7 @@ import Image from 'next/image'
 import React from 'react'
 
 import { ImageHost } from '@/api/api'
-import { Activity, ActivityTypes } from '@/api/types/Activity'
+import { ActivityTypes, Item } from '@/api/types/Activity'
 
 import Avatar from '@/components/avatar'
 
@@ -17,7 +17,7 @@ import { formatDate } from '@/functions/helpers'
 interface PlaceTabActivityProps {
     title?: string
     placeId?: string
-    activity?: Activity[]
+    activity?: Item[]
 }
 
 const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
@@ -97,7 +97,7 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                                     )}
                             </Box>
                             <Avatar
-                                userName={item.author?.name || 'Гость'}
+                                userName={item.author?.name}
                                 image={item.author?.avatar}
                             />
                         </Stack>

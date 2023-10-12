@@ -6,6 +6,8 @@ import React from 'react'
 
 import { ImageHost } from '@/api/api'
 
+import userAvatar from '@/public/images/no-avatar.jpeg'
+
 type SizeType = 'small' | 'medium'
 
 interface AvatarProps {
@@ -45,20 +47,19 @@ const Avatar: React.FC<AvatarProps> = ({
             </>
         ) : (
             <>
-                {!userName && !image && <div>-</div>}
-                {image && (
-                    <MuiAvatar
-                        alt={userName || ''}
-                        src={`${ImageHost}/avatars/${image}` || undefined}
-                        sx={{
-                            height: getDimension(size),
-                            width: getDimension(size)
-                        }}
-                        variant={'rounded'}
-                    />
-                )}
+                <MuiAvatar
+                    alt={userName || ''}
+                    src={
+                        image ? `${ImageHost}/avatars/${image}` : userAvatar.src
+                    }
+                    sx={{
+                        height: getDimension(size),
+                        width: getDimension(size)
+                    }}
+                    variant={'rounded'}
+                />
                 <div>
-                    {userName && <div>{userName}</div>}
+                    <div>{userName || 'Гость'}</div>
                     {text && (
                         <Typography
                             variant={'caption'}

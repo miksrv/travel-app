@@ -2,7 +2,6 @@ import { AccountCircleOutlined } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import IconButton from '@mui/material/IconButton'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
@@ -95,8 +94,8 @@ const Map: NextPage = () => {
     )
 
     const handleUserPosition = () => {
-        if (geolocation?.latitude && geolocation?.longitude) {
-            setMapCenter([geolocation.latitude, geolocation.longitude])
+        if (myCoordinates?.latitude && myCoordinates?.longitude) {
+            setMapCenter([myCoordinates.latitude, myCoordinates.longitude])
         }
     }
 

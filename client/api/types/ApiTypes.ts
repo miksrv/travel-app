@@ -1,6 +1,6 @@
 import { AddressObject, Category, Place } from '@/api/types/Place'
 
-import { Activity } from './Activity'
+import { Item } from './Activity'
 import { Rating } from './Rating'
 
 export type DateTimeType = {
@@ -91,6 +91,6 @@ export interface ResponseRatingSet {
     rating: number
 }
 
-export interface ResponseActivityGetItem {
-    items: Activity[]
+export interface ResponseActivityGetList {
+    items: Item[]
 }

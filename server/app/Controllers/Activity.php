@@ -33,9 +33,7 @@ class Activity extends ResourceController
             ->join('users', 'users_activity.user = users.id', 'left')
             ->whereIn('users_activity.type', ['photo', 'place'])
             ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
-            ->limit(80)
-            ->get()
-            ->getResult();
+            ->findAll(80);
 
         $groupData = [];
         $placesIds = [];
