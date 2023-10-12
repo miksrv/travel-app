@@ -69,7 +69,7 @@ const Point: React.FC<TMyPointProps> = ({
                                     className={styles.image}
                                     src={
                                         poiData?.photos?.[0]?.filename
-                                            ? `${ImageHost}/photos/${placeId}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
+                                            ? `${ImageHost}photos/${placeId}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
                                             : noPhoto.src
                                     }
                                     alt={poiData?.title || ''}

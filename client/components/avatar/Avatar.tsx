@@ -50,7 +50,7 @@ const Avatar: React.FC<AvatarProps> = ({
                 <MuiAvatar
                     alt={userName || ''}
                     src={
-                        image ? `${ImageHost}/avatars/${image}` : userAvatar.src
+                        image ? `${ImageHost}avatars/${image}` : userAvatar.src
                     }
                     sx={{
                         height: getDimension(size),

@@ -33,7 +33,7 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
                 <Gallery
                     photos={photos?.map((photo) => ({
                         height: photo.height,
-                        src: `${ImageHost}/photos/${placeId}/${photo.filename}_thumb.${photo.extension}`,
+                        src: `${ImageHost}photos/${placeId}/${photo.filename}_thumb.${photo.extension}`,
                         width: photo.width
                     }))}
                     onClick={(event, photos) => {

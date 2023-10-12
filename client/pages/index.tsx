@@ -1,7 +1,6 @@
-import { Button, Card } from '@mui/material'
+import { Card } from '@mui/material'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import Divider from '@mui/material/Divider'
 import Typography from '@mui/material/Typography'
 import { NextPage } from 'next'
 import type { GetStaticProps } from 'next'
@@ -119,7 +118,7 @@ const Main: NextPage = () => {
                             <Gallery
                                 photos={item.photos?.map((photo) => ({
                                     height: photo.height,
-                                    src: `${ImageHost}/photos/${item.place?.id}/${photo.filename}.${photo.extension}`,
+                                    src: `${ImageHost}photos/${item.place?.id}/${photo.filename}.${photo.extension}`,
                                     width: photo.width
                                 }))}
                             />

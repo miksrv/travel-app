@@ -14,9 +14,8 @@ export type ActivityTypes = (typeof ActivityTypes)[keyof typeof ActivityTypes]
 
 export type Item = {
     type: ActivityTypes
-    photo?: Photo
-    photos?: Photo[]
     place?: Place
+    photos?: Photo[]
     rating?: Rating
     author?: User
     created?: ApiTypes.DateTimeType

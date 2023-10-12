@@ -37,9 +37,8 @@ class Activity extends ResourceController
             ->join('users', 'users_activity.user = users.id', 'left')
             ->whereIn('users_activity.type', ['photo', 'place'])
             ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
-            ->findAll(80);
+            ->findAll(40);
 
-        $groupData = [];
         $placesIds = [];
 
         foreach ($activityData as $item) {
@@ -48,68 +47,7 @@ class Activity extends ResourceController
 
         $placeTranslations->translate($placesIds);
 
-        if (!empty($activityData)) {
-            foreach ($activityData as $item) {
-                $lastGroup = end($groupData);
-                $itemPhoto = $item->type === 'photo' && $item->filename ? [
-                    'filename'  => $item->filename,
-                    'extension' => $item->extension,
-                    'width'     => (int) $item->width,
-                    'height'    => (int) $item->height
-                ] : null;
-
-                // Группируем активность по фотографиям одного пользователя, загруженных для
-                // одного места и с разницей не больше 5 минут
-                if (
-                    $item->type === 'photo' &&
-                    $lastGroup->type === 'photo' &&
-                    $lastGroup->place->id === $item->place &&
-                    $lastGroup->author->id === $item->user &&
-                    (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
-                ) {
-                    $lastGroup->created  = $item->created_at; // Каждый раз обновляем время загрузки последней фотографии
-                    $lastGroup->photos[] = $itemPhoto;
-
-                    continue;
-                }
-
-                $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
-
-                $currentGroup = (object) [
-                    'type'    => $item->type,
-                    'created' => $item->created_at,
-                    'place'   => (object) [
-                        'id'       => $item->place,
-                        'title'    => $placeTranslations->title($item->place),
-                        'content'  => $placeTranslations->content($item->place),
-                        'category' => (object) [
-                            'name'  => $categoriesData[$findCategory]->name,
-                            'title' => $categoriesData[$findCategory]->title,
-                        ]
-                    ],
-                    'photos'  => []
-                ];
-
-                if ($item->user_id) {
-                    $currentGroup->author = (object) [
-                        'id'     => $item->user_id,
-                        'name'   => $item->user_name,
-                        'avatar' => $item->user_avatar
-                    ];
-                }
-
-                if ($item->type === 'photo') {
-                    $currentGroup->photos[] = $itemPhoto;
-                }
-
-                $groupData[] = $currentGroup;
-            }
-
-        }
-    
-        return $this->respond([
-            'items'  => $groupData
-        ]);
+        return $this->respond(['items'  => $this->_groupSimilarActivities($activityData, $categoriesData, $placeTranslations)]);
     }
 
     /**
@@ -130,45 +68,95 @@ class Activity extends ResourceController
             ->orderBy('users_activity.created_at', 'DESC')
             ->findAll();
 
-        $result = [];
+        return $this->respond([
+            'items'  => $this->_groupSimilarActivities($activityData)
+        ]);
+    }
 
-        if (!empty($activityData)) {
-            foreach ($activityData as $item) {
-                $tmpData = [
-                    'created' => $item->created_at,
-                    'type'   => $item->type
-                ];
+    /**
+     * Группироуем похожие активности пользователей. Например, загруженные фотографии одного пользователя
+     * для одного места с интервалом 5 минут - объединяем в одну активность
+     * @param array $activityData
+     * @param PlaceTranslation|null $placeTranslations
+     * @param array|null $categoriesData
+     * @return array
+     */
+    protected function _groupSimilarActivities(
+        array $activityData,
+        array $categoriesData = null,
+        PlaceTranslation $placeTranslations = null
+    ): array {
+        $groupData = [];
 
-                if ($item->rating) {
-                    $tmpData['rating'] = [
-                        'value' => (int) $item->value
-                    ];
-                }
-
-                if ($item->filename) {
-                    $tmpData['photo'] = [
-                        'filename'  => $item->filename,
-                        'extension' => $item->extension,
-                        'filesize'  => (int) $item->filesize,
-                        'width'     => (int) $item->width,
-                        'height'    => (int) $item->height
-                    ];
-                }
-
-                if ($item->user_id) {
-                    $tmpData['author'] = [
-                        'id'     => $item->user_id,
-                        'name'   => $item->user_name,
-                        'avatar' => $item->user_avatar
-                    ];
-                }
-
-                $result[] = $tmpData;
-            }
+        if (empty($activityData)) {
+            return $groupData;
         }
 
-        return $this->respond([
-            'items'  => $result
-        ]);
+        foreach ($activityData as $item) {
+            $lastGroup = end($groupData);
+            $itemPhoto = $item->type === 'photo' && $item->filename ? [
+                'filename'  => $item->filename,
+                'extension' => $item->extension,
+                'width'     => (int) $item->width,
+                'height'    => (int) $item->height
+            ] : null;
+
+            // Группируем активность по фотографиям одного пользователя, загруженных для
+            // одного места и с разницей не больше 5 минут
+            if (
+                $item->type === 'photo' &&
+                $lastGroup->type === 'photo' &&
+                (!isset($lastGroup->place) || $lastGroup->place->id === $item->place) &&
+                $lastGroup->author->id === $item->user &&
+                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
+            ) {
+                $lastGroup->created  = $item->created_at; // Каждый раз обновляем время загрузки последней фотографии
+                $lastGroup->photos[] = $itemPhoto;
+
+                continue;
+            }
+
+            $currentGroup = (object) [
+                'type'    => $item->type,
+                'created' => $item->created_at,
+                'photos'  => []
+            ];
+
+            if ($placeTranslations && $categoriesData) {
+                $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
+
+                $currentGroup->place = (object) [
+                    'id'       => $item->place,
+                    'title'    => $placeTranslations->title($item->place),
+                    'content'  => $placeTranslations->content($item->place),
+                    'category' => (object) [
+                        'name'  => $categoriesData[$findCategory]->name,
+                        'title' => $categoriesData[$findCategory]->title,
+                    ]
+                ];
+            }
+
+            if ($item->user_id) {
+                $currentGroup->author = (object) [
+                    'id'     => $item->user_id,
+                    'name'   => $item->user_name,
+                    'avatar' => $item->user_avatar
+                ];
+            }
+
+            if ($item->type === 'photo') {
+                $currentGroup->photos[] = $itemPhoto;
+            }
+
+            if ($item->type === 'rating') {
+                $currentGroup->rating = (object) [
+                    'value' => $item->value
+                ];
+            }
+
+            $groupData[] = $currentGroup;
+        }
+
+        return $groupData;
     }
 }

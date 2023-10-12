@@ -1,13 +1,14 @@
+// import { ImageList, ImageListItem } from '@mui/material'
 import Box from '@mui/material/Box'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Rating from '@mui/material/Rating'
-import Stack from '@mui/material/Stack'
-import Typography from '@mui/material/Typography'
-import Image from 'next/image'
+// import Stack from '@mui/material/Stack'
+// import Typography from '@mui/material/Typography'
+// import Image from 'next/image'
 import React from 'react'
 
-import { ImageHost } from '@/api/api'
+// import { ImageHost } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
 
 import Avatar from '@/components/avatar'
@@ -22,7 +23,7 @@ interface PlaceTabActivityProps {
 
 const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
     title,
-    placeId,
+    // placeId,
     activity
 }) => (
     <>
@@ -37,32 +38,19 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
             sx={{ mb: -2 }}
         />
         <CardContent sx={{ mb: -2 }}>
-            {activity?.length ? (
-                <>
-                    {activity?.map((item, key) => (
-                        <Stack
-                            key={key}
-                            direction='row'
-                            spacing={4}
-                            sx={{ pb: 1 }}
-                        >
-                            <Typography
-                                variant={'body1'}
-                                sx={{
-                                    color: '#818c99',
-                                    display: 'block',
-                                    width: 160
-                                }}
-                            >
-                                {formatDate(item?.created?.date)}
-                            </Typography>
-                            <Typography
-                                variant={'body1'}
-                                sx={{
-                                    display: 'block',
-                                    width: 160
-                                }}
-                            >
+            {activity?.map((item, index) => (
+                <Box
+                    sx={{ mb: 2 }}
+                    key={index}
+                >
+                    <Avatar
+                        size={'medium'}
+                        userName={item.author?.name}
+                        image={item.author?.avatar}
+                        text={
+                            <>
+                                {formatDate(item.created?.date)}
+                                {' • '}
                                 {
                                     {
                                         [ActivityTypes.Place]: 'Редактирование',
@@ -71,41 +59,42 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                                         [ActivityTypes.Rating]: 'Оценка места'
                                     }[item.type]
                                 }
-                            </Typography>
-                            <Box sx={{ width: 120 }}>
-                                {item.type === ActivityTypes.Place && (
-                                    <div> </div>
-                                )}
                                 {item.type === ActivityTypes.Rating && (
                                     <Rating
-                                        size={'medium'}
+                                        sx={{
+                                            float: 'right',
+                                            marginLeft: '5px',
+                                            marginTop: '2px'
+                                        }}
+                                        size={'small'}
                                         value={item.rating?.value}
                                         readOnly={true}
                                     />
                                 )}
-                                {item.type === ActivityTypes.Photo &&
-                                    placeId && (
-                                        <Image
-                                            style={{
-                                                objectFit: 'cover'
-                                            }}
-                                            src={`${ImageHost}/photos/${placeId}/${item.photo?.filename}_thumb.${item.photo?.extension}`}
-                                            alt={item.photo?.title || ''}
-                                            width={105}
-                                            height={20}
-                                        />
-                                    )}
-                            </Box>
-                            <Avatar
-                                userName={item.author?.name}
-                                image={item.author?.avatar}
-                            />
-                        </Stack>
-                    ))}
-                </>
-            ) : (
-                <>{'Нет данных для отображения'}</>
-            )}
+                            </>
+                        }
+                    />
+
+                    {/*{!!item.photos?.length && (*/}
+                    {/*    <ImageList*/}
+                    {/*        cols={item.photos.length}*/}
+                    {/*        gap={1}*/}
+                    {/*        variant={'standard'}*/}
+                    {/*    >*/}
+                    {/*        {item.photos.map((photo, photoIndex) => (*/}
+                    {/*            <ImageListItem key={photoIndex}>*/}
+                    {/*                <Image*/}
+                    {/*                    src={`${ImageHost}photos/${placeId}/${photo.filename}_thumb.${photo.extension}`}*/}
+                    {/*                    alt={''}*/}
+                    {/*                    width={200}*/}
+                    {/*                    height={100}*/}
+                    {/*                />*/}
+                    {/*            </ImageListItem>*/}
+                    {/*        ))}*/}
+                    {/*    </ImageList>*/}
+                    {/*)}*/}
+                </Box>
+            ))}
         </CardContent>
     </>
 )
