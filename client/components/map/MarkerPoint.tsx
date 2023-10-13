@@ -24,8 +24,8 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
     const [getPlaceItem, { isLoading, data: poiData }] =
         API.usePoiGetItemMutation()
 
-    const myIcon = new Leaflet.Icon({
-        className: 'poiCategory',
+    const placeMarkerIcon = new Leaflet.Icon({
+        className: styles.markerPoint,
         iconAnchor: [icon.width - 20, icon.height - 20],
         iconSize: [icon.width - 10, icon.height - 12],
         iconUrl: categoryImage(place.category).src
@@ -40,7 +40,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
     return (
         <Marker
             position={[place.latitude, place.longitude]}
-            icon={myIcon}
+            icon={placeMarkerIcon}
             eventHandlers={{
                 click: placeClickHandler
             }}

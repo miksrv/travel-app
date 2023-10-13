@@ -5,13 +5,15 @@ import { Marker } from 'react-leaflet'
 import { ImageHost } from '@/api/api'
 import { Poi } from '@/api/types'
 
+import styles from './styles.module.sass'
+
 type MarkerPhotoProps = {
     photo: Poi.Photo
 }
 
 const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo }) => {
     const photoMarkerIcon = new Leaflet.Icon({
-        className: 'poiPhoto',
+        className: styles.markerPhoto,
         iconAnchor: [16, 16],
         iconSize: [32, 32],
         iconUrl: `${ImageHost}photo/${photo.place}/${photo.filename}_thumb.${photo.extension}`

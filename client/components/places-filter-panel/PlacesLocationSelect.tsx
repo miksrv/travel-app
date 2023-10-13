@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography'
 import { debounce } from '@mui/material/utils'
 import React, { useMemo, useState } from 'react'
 
-import { useAddressGetSearchMutation } from '@/api/api'
+import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 
 interface PlacesLocationSelectProps {
@@ -18,7 +18,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
     const { location, onChangeLocation } = props
 
     const [searchAddress, { data: searchResult, isLoading: searchLoading }] =
-        useAddressGetSearchMutation()
+        API.useAddressGetSearchMutation()
 
     const [locationLoading, setLocationLoading] = useState<boolean>(false)
 

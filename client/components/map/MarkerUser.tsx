@@ -6,21 +6,17 @@ import userAvatar from '@/public/images/no-avatar.jpeg'
 
 import styles from './styles.module.sass'
 
-type TMyPointProps = {
+type MarkerUser = {
     lat: number
     lon: number
 }
 
-const MyPoint: React.FC<TMyPointProps> = ({ lat, lon }) => {
-    const myIcon = new Leaflet.Icon({
-        className: styles.userIcon,
+const MarkerUser: React.FC<MarkerUser> = ({ lat, lon }) => {
+    const userMarkerIcon = new Leaflet.Icon({
+        className: styles.markerUser,
         iconAnchor: [15, 15],
         iconSize: [30, 30],
         iconUrl: userAvatar.src
-        // popupAnchor: [-3, -76],
-        // shadowAnchor: [22, 94],
-        // shadowSize: [68, 95],
-        // shadowUrl: 'my-icon-shadow.png'
     })
 
     return (
@@ -39,10 +35,10 @@ const MyPoint: React.FC<TMyPointProps> = ({ lat, lon }) => {
             />
             <Marker
                 position={[lat, lon]}
-                icon={myIcon}
+                icon={userMarkerIcon}
             />
         </>
     )
 }
 
-export default MyPoint
+export default MarkerUser

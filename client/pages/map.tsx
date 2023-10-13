@@ -22,7 +22,7 @@ const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
     ssr: false
 })
-const MyPoint = dynamic(() => import('@/components/map/MyPoint'), {
+const MarkerUser = dynamic(() => import('@/components/map/MarkerUser'), {
     ssr: false
 })
 const MarkerPoint = dynamic(() => import('@/components/map/MarkerPoint'), {
@@ -151,17 +151,13 @@ const MapPage: NextPage = () => {
                     {({ TileLayer }) => (
                         <>
                             <TileLayer
-                                url={
-                                    'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
-                                }
-                                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+                                url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
                             />
                             {/*<TileLayer*/}
                             {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
-                            {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
                             {/*/>*/}
                             {geolocation.latitude && geolocation.longitude && (
-                                <MyPoint
+                                <MarkerUser
                                     lat={geolocation.latitude}
                                     lon={geolocation.longitude}
                                 />
