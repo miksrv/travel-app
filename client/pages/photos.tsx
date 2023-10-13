@@ -27,7 +27,7 @@ const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
     ssr: false
 })
-const Point = dynamic(() => import('@/components/map/Point'), {
+const MarkerPhoto = dynamic(() => import('@/components/map/MarkerPhoto'), {
     ssr: false
 })
 
@@ -38,8 +38,8 @@ const PhotosPage: NextPage = () => {
 
     const router = useRouter()
 
-    const [mapBounds, setBounds] = useState<string>()
     const [page, setPage] = useState<number>(1)
+    const [mapBounds, setMapBounds] = useState<string>()
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
 
@@ -54,16 +54,16 @@ const PhotosPage: NextPage = () => {
         offset: ((Number(page) || 1) - 1) * PHOTOS_PER_PAGE
     })
 
-    const { data: poiPhotos } = API.usePoiGetPhotoListQuery(
+    const { data: poiList } = API.usePoiGetPhotoListQuery(
         {
             bounds: mapBounds
         },
         { skip: !mapBounds }
     )
 
-    const debounceSetBounds = useCallback(
+    const debounceSetMapBounds = useCallback(
         debounce((bounds: string) => {
-            setBounds(bounds)
+            setMapBounds(bounds)
         }, 500),
         []
     )
@@ -73,7 +73,7 @@ const PhotosPage: NextPage = () => {
         const boundsString = bounds.toBBoxString()
 
         if (boundsString !== mapBounds) {
-            debounceSetBounds(boundsString)
+            debounceSetMapBounds(boundsString)
         }
 
         // if (mapCenter) {
@@ -121,7 +121,7 @@ const PhotosPage: NextPage = () => {
                 />
             </Card>
 
-            <Card sx={{ height: '300px', mt: 3 }}>
+            <Card sx={{ height: '200px', mt: 3 }}>
                 {/*<CardContent>*/}
                 <DynamicMap
                     center={DEFAULT_CENTER}
@@ -140,14 +140,10 @@ const PhotosPage: NextPage = () => {
                             {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
                             {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
                             {/*/>*/}
-                            {poiPhotos?.items?.map((item) => (
-                                <Point
-                                    key={item.id}
-                                    placeId={item.place}
-                                    lat={item?.latitude}
-                                    lon={item?.longitude}
-                                    title={item?.title}
-                                    photo={`${item?.filename}_thumb.${item?.extension}`}
+                            {poiList?.items?.map((photo) => (
+                                <MarkerPhoto
+                                    key={photo.filename}
+                                    photo={photo}
                                 />
                             ))}
                             <MyMapEvents onChangeBounds={handleChangeBounds} />

@@ -8,7 +8,7 @@ import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useSearchParams } from 'next/navigation'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import { API } from '@/api/api'
@@ -25,7 +25,7 @@ const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
 const MyPoint = dynamic(() => import('@/components/map/MyPoint'), {
     ssr: false
 })
-const Point = dynamic(() => import('@/components/map/Point'), {
+const MarkerPoint = dynamic(() => import('@/components/map/MarkerPoint'), {
     ssr: false
 })
 
@@ -43,27 +43,28 @@ export type LatLngCoordinate = {
 const MapPage: NextPage = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
+    const geolocation = useGeolocation()
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
     const [mapCenter, setMapCenter] = useState<number[]>(MYPOINT)
+    const [mapBounds, setMapBounds] = useState<string>()
 
-    const [introduce, { isLoading }] = API.useIntroduceMutation()
-    const [getPlaces, { isLoading: placesLoading, data }] =
-        API.usePoiGetListMutation()
-    const [mapBounds, setBounds] = useState<LatLngBounds>()
-    const geolocation = useGeolocation()
     const lat = searchParams.get('lat')
     const lon = searchParams.get('lon')
-    const [poiList, setPoiList] = useState<any[]>([])
+
+    const [introduce] = API.useIntroduceMutation()
+    const { data: poiList } = API.usePoiGetListQuery(
+        { bounds: mapBounds },
+        { skip: !mapBounds }
+    )
 
     const handleChangeBounds = async (bounds: LatLngBounds) => {
         // left, top, right, bottom
         const boundsString = bounds.toBBoxString()
         const mapCenter = bounds.getCenter()
 
-        if (boundsString !== mapBounds?.toBBoxString()) {
-            setBounds(bounds)
-            await getPoiList(bounds)
+        if (boundsString !== mapBounds) {
+            debounceSetMapBounds(boundsString)
         }
 
         // if (mapCenter) {
@@ -77,20 +78,11 @@ const MapPage: NextPage = () => {
         // }
     }
 
-    const getPoiList = useCallback(
-        debounce(async (bounds: LatLngBounds) => {
-            await getPlaces({ bounds: bounds.toBBoxString() })
+    const debounceSetMapBounds = useCallback(
+        debounce((bounds: string) => {
+            setMapBounds(bounds)
         }, 500),
         []
-    )
-
-    const boundaryPoi = useMemo(
-        () =>
-            data?.items?.filter(
-                // @ts-ignore
-                (item) => poiList.find((p) => p.id === item.id) == null
-            ) || [],
-        [data?.items, poiList]
     )
 
     const handleUserPosition = () => {
@@ -117,20 +109,6 @@ const MapPage: NextPage = () => {
             introduce({ lat: updateLatitude, lon: updateLongitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
-
-    useEffect(() => {
-        setPoiList([
-            ...poiList.filter(
-                ({ latitude, longitude }) =>
-                    mapBounds !== undefined &&
-                    longitude >= mapBounds.getWest() &&
-                    latitude <= mapBounds.getNorth() &&
-                    longitude <= mapBounds.getEast() &&
-                    latitude >= mapBounds.getSouth()
-            ),
-            ...boundaryPoi
-        ])
-    }, [data, mapBounds])
 
     return (
         <PageLayout>
@@ -188,14 +166,10 @@ const MapPage: NextPage = () => {
                                     lon={geolocation.longitude}
                                 />
                             )}
-                            {poiList?.map((item) => (
-                                <Point
-                                    key={item.id}
-                                    placeId={item.id}
-                                    lat={item?.latitude}
-                                    lon={item?.longitude}
-                                    title={item?.title}
-                                    category={item?.category}
+                            {poiList?.items?.map((place) => (
+                                <MarkerPoint
+                                    key={place.id}
+                                    place={place}
                                 />
                             ))}
                             <div className='leaflet-control'>

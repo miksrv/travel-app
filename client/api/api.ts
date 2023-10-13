@@ -26,6 +26,7 @@ export const API = createApi({
         responseHandler: 'content-type'
     }),
     endpoints: (builder) => ({
+        /* Controller: Activity */
         activityGetItem: builder.query<
             ApiTypes.ResponseActivityGetList,
             string
@@ -38,9 +39,8 @@ export const API = createApi({
             Maybe<ApiTypes.RequestActivityGetList>
         >({
             // Refetch when the page arg changes
-            forceRefetch({ currentArg, previousArg }) {
-                return currentArg !== previousArg
-            },
+            forceRefetch: ({ currentArg, previousArg }) =>
+                currentArg !== previousArg,
             // Always merge incoming data to the cache entry
             merge: (currentCache, newItems) => {
                 currentCache.items.push(...newItems.items)
@@ -48,11 +48,10 @@ export const API = createApi({
             providesTags: ['Activity'],
             query: (params) => `activity${encodeQueryData(params)}`,
             // Only have one cache entry because the arg always maps to one string
-            serializeQueryArgs: ({ endpointName }) => {
-                return endpointName
-            }
+            serializeQueryArgs: ({ endpointName }) => endpointName
         }),
 
+        /* Controller: Address */
         addressGetSearch: builder.mutation<
             ApiTypes.ResponseAddressGetSearch,
             Maybe<string>
@@ -60,6 +59,7 @@ export const API = createApi({
             query: (searchString) => `address?search=${searchString}`
         }),
 
+        /* Controller: Categories */
         categoriesGetList: builder.query<
             ApiTypes.ResponseCategoriesGetList,
             void
@@ -67,11 +67,13 @@ export const API = createApi({
             query: () => 'categories'
         }),
 
+        /* Controller: Introduce */
         introduce: builder.mutation<any, Maybe<any>>({
             // invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
+        /* Controller: Photos */
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>
@@ -80,6 +82,7 @@ export const API = createApi({
             query: (params) => `photos${encodeQueryData(params)}`
         }),
 
+        /* Controller: Places */
         placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, string>({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
@@ -92,16 +95,24 @@ export const API = createApi({
             query: (params) => `places${encodeQueryData(params)}`
         }),
 
+        /* Controller: POI */
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
         }),
-        poiGetList: builder.mutation<any, Maybe<any>>({
+        poiGetList: builder.query<
+            ApiTypes.ResponsePoiPlacesList,
+            Maybe<ApiTypes.RequestPoiList>
+        >({
             query: (params) => `poi${encodeQueryData(params)}`
         }),
-        poiGetPhotoList: builder.query<any, Maybe<any>>({
+        poiGetPhotoList: builder.query<
+            ApiTypes.ResponsePoiPhotosList,
+            Maybe<ApiTypes.RequestPoiList>
+        >({
             query: (params) => `poi/photos${encodeQueryData(params)}`
         }),
 
+        /* Controller: Rating */
         ratingGetList: builder.query<ApiTypes.ResponseRatingGetList, string>({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
@@ -130,22 +141,9 @@ export const API = createApi({
 
 // Export hooks for usage in functional components
 export const {
-    useActivityGetItemQuery,
-
     useAddressGetSearchMutation,
 
     useCategoriesGetListQuery,
-
-    useIntroduceMutation,
-
-    usePlacesGetItemQuery,
-    usePlacesGetListQuery,
-
-    usePoiGetItemMutation,
-    usePoiGetListMutation,
-
-    useRatingGetListQuery,
-    useRatingPutScoreMutation,
 
     util: { getRunningQueriesThunk }
 } = API

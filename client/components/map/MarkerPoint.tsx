@@ -7,8 +7,7 @@ import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
 import { API, ImageHost } from '@/api/api'
-import { Photo } from '@/api/types/Photo'
-import { Categories } from '@/api/types/Place'
+import { Poi } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
 
@@ -17,63 +16,52 @@ import icon from '@/public/images/poi/battlefield.png'
 
 import styles from './styles.module.sass'
 
-type TMyPointProps = {
-    lat: number
-    lon: number
-    category?: Categories
-    photo?: string
-    placeId?: string
-    title?: string
+type MarkerPointProps = {
+    place: Poi.Place
 }
 
-const Point: React.FC<TMyPointProps> = (params) => {
-    const { placeId, lat, lon, title, category, photo } = params
+const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
     const [getPlaceItem, { isLoading, data: poiData }] =
         API.usePoiGetItemMutation()
 
     const myIcon = new Leaflet.Icon({
-        className: photo ? 'poiPhoto' : 'poiCategory',
-        iconAnchor: photo ? [16, 16] : [icon.width - 20, icon.height - 20],
-        iconSize: photo ? [32, 32] : [icon.width - 10, icon.height - 12],
-        iconUrl: photo
-            ? `${ImageHost}photo/${placeId}/${photo}`
-            : categoryImage(category).src
+        className: 'poiCategory',
+        iconAnchor: [icon.width - 20, icon.height - 20],
+        iconSize: [icon.width - 10, icon.height - 12],
+        iconUrl: categoryImage(place.category).src
     })
 
     const placeClickHandler = () => {
-        if (placeId && !photo) {
-            getPlaceItem(placeId)
+        if (place.id) {
+            getPlaceItem(place.id)
         }
     }
 
     return (
         <Marker
-            title={title}
-            position={[lat, lon]}
+            position={[place.latitude, place.longitude]}
             icon={myIcon}
             eventHandlers={{
                 click: placeClickHandler
             }}
         >
-            {placeId && (
+            {place.id && (
                 <Popup className={styles.popup}>
-                    {(!isLoading && poiData) || photo ? (
+                    {!isLoading && poiData ? (
                         <>
                             <Link
-                                href={`/places/${placeId}`}
-                                title={poiData?.title || title}
+                                href={`/places/${place.id}`}
+                                title={poiData?.title}
                                 target={'_blank'}
                             >
                                 <Image
                                     className={styles.image}
                                     src={
-                                        photo
-                                            ? `${ImageHost}photo/${placeId}/${photo}`
-                                            : poiData?.photos?.[0]?.filename
-                                            ? `${ImageHost}photo/${placeId}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
+                                        poiData?.photos?.[0]?.filename
+                                            ? `${ImageHost}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
                                             : noPhoto.src
                                     }
-                                    alt={poiData?.title || title}
+                                    alt={poiData?.title}
                                     width={300}
                                     height={200}
                                 />
@@ -83,7 +71,7 @@ const Point: React.FC<TMyPointProps> = (params) => {
                                 variant={'body2'}
                                 sx={{ m: 0, p: '5px' }}
                             >
-                                {poiData?.title || title}
+                                {poiData?.title}
                             </Typography>
                         </>
                     ) : (
@@ -106,4 +94,4 @@ const Point: React.FC<TMyPointProps> = (params) => {
     )
 }
 
-export default Point
+export default MarkerPoint

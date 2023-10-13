@@ -2,6 +2,7 @@ import { AddressObject, Category, Place } from '@/api/types/Place'
 
 import { Item } from './Activity'
 import { Photo } from './Photo'
+import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { Rating } from './Rating'
 
 export type DateTimeType = {
@@ -42,16 +43,7 @@ export const LocationType = {
 } as const
 export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
-export interface ResponsePlacesGetList {
-    items?: Place[]
-    count?: number
-}
-
-export interface ResponsePhotosGetList {
-    items?: Photo[]
-    count?: number
-}
-
+/* Controller: Places */
 export interface ResponsePlacesGetItem extends Place {}
 
 export interface RequestPlacesGetList {
@@ -71,11 +63,23 @@ export interface RequestPlacesGetList {
     excludePlaces?: string[]
 }
 
+export interface ResponsePlacesGetList {
+    items?: Place[]
+    count?: number
+}
+
+/* Controller: Photos */
+export interface ResponsePhotosGetList {
+    items?: Photo[]
+    count?: number
+}
+
 export interface RequestPhotosGetList {
     limit?: number
     offset?: number
 }
 
+/* Controller: Address */
 export interface ResponseAddressGetSearch {
     countries?: AddressObject[]
     regions?: AddressObject[]
@@ -83,10 +87,12 @@ export interface ResponseAddressGetSearch {
     cities?: AddressObject[]
 }
 
+/* Controller: Place */
 export interface ResponseCategoriesGetList extends Place {
     items?: Category[]
 }
 
+/* Controller: Rating */
 export interface ResponseRatingGetList {
     items?: Rating[]
     count?: number
@@ -102,10 +108,24 @@ export interface ResponseRatingSet {
     rating: number
 }
 
+/* Controller: Activity */
 export interface ResponseActivityGetList {
     items: Item[]
 }
 
 export interface RequestActivityGetList {
     date?: string
+}
+
+/* Controller: POI */
+export interface RequestPoiList {
+    bounds?: string
+}
+
+export interface ResponsePoiPlacesList {
+    items: poiPlace[]
+}
+
+export interface ResponsePoiPhotosList {
+    items: poiPhoto[]
 }

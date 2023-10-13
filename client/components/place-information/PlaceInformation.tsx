@@ -29,7 +29,7 @@ import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
-const Point = dynamic(() => import('@/components/map/Point'), {
+const MarkerPoint = dynamic(() => import('@/components/map/MarkerPoint'), {
     ssr: false
 })
 
@@ -287,13 +287,16 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                             {place?.latitude &&
                                                 place?.longitude &&
                                                 place?.category && (
-                                                    <Point
-                                                        lat={place.latitude}
-                                                        lon={place.longitude}
-                                                        title={place?.title}
-                                                        category={
-                                                            place.category.name
-                                                        }
+                                                    <MarkerPoint
+                                                        place={{
+                                                            category:
+                                                                place.category
+                                                                    .name,
+                                                            latitude:
+                                                                place.latitude,
+                                                            longitude:
+                                                                place.longitude
+                                                        }}
                                                     />
                                                 )}
                                         </>

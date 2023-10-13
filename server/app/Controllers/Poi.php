@@ -7,12 +7,9 @@ use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
     public function list(): ResponseInterface {
-        // left (lon), top (lat), right (lon), bottom (lat)
-        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
-        $bounds = explode(',', $bounds);
-
-        $places = new PlacesModel();
-        $items = $places
+        $bounds      = $this->_getBounds();
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel
             ->select('id, category, latitude, longitude')
             ->where([
                 'longitude >=' => $bounds[0],
@@ -22,25 +19,15 @@ class Poi extends ResourceController {
             ])->findAll();
 
         return $this->respond([
-            'items' => $items,
+            'items' => $placesData,
         ]);
     }
 
     public function photos(): ResponseInterface {
-        // left (lon), top (lat), right (lon), bottom (lat)
-        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
-
-        if (empty($bounds)) {
-            return $this->failValidationErrors('Empty map bound parameter');
-        }
-
-        $bounds = explode(',', $bounds);
-
+        $bounds      = $this->_getBounds();
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select(
-                'photos.place, photos.latitude, photos.longitude, photos.filename, photos.extension, photos.width, 
-                    photos.height, photos.order, translations_photos.title, photos.created_at')
+            ->select('photos.place, photos.latitude, photos.longitude, photos.filename, photos.extension, translations_photos.title')
             ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
             ->where([
                 'longitude >=' => $bounds[0],
@@ -104,5 +91,21 @@ class Poi extends ResourceController {
 
             return $this->failNotFound();
         }
+    }
+
+    /**
+     * Получаем границы карты из GET параметра
+     * @return array
+     */
+    protected function _getBounds(): array {
+        // left (lon), top (lat), right (lon), bottom (lat)
+        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
+        $bounds = explode(',', $bounds);
+
+        if (count($bounds) !== 4) {
+            return $this->failValidationErrors('Empty map bound parameter');
+        }
+
+        return $bounds;
     }
 }
