@@ -4,8 +4,7 @@ use App\Models\AddressDistrict;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Districts extends ResourceController
-{
+class Districts extends ResourceController {
     public function list(): ResponseInterface {
         $districtsModel = new AddressDistrict();
 

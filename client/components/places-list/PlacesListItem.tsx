@@ -47,7 +47,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 height={180}
                 image={
                     place?.photos?.[0]?.filename
-                        ? `${ImageHost}photos/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
+                        ? `${ImageHost}photo/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
                         : noPhoto.src
                 }
             />

@@ -13,8 +13,7 @@ use CodeIgniter\RESTful\ResourceController;
  * GET / -> activity()
  * GET /show/{id} -> show($id)
  */
-class Activity extends ResourceController
-{
+class Activity extends ResourceController {
 
     /**
      * Show all activities for all users and all places, photos

@@ -4,8 +4,7 @@ use App\Models\AddressCity;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Cities extends ResourceController
-{
+class Cities extends ResourceController {
     public function list(): ResponseInterface {
         $citiesModel = new AddressCity();
         $citiesData  = $citiesModel

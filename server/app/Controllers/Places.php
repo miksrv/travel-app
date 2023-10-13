@@ -10,8 +10,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
-class Places extends ResourceController
-{
+class Places extends ResourceController {
     /**
      * @example http://localhost:8080/places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface

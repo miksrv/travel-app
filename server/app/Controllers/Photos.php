@@ -1,14 +1,59 @@
 <?php namespace App\Controllers;
 
+use App\Models\PhotosModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 
-class Photos extends ResourceController
-{
-    public function upload(): ResponseInterface
-    {
+class Photos extends ResourceController {
+    public function list(): ResponseInterface {
+        $photosModel = new PhotosModel();
+        $photosData  = $photosModel
+            ->select(
+                'photos.place, photos.author, photos.filename, photos.extension, photos.filesize, photos.width, 
+                    photos.height, photos.order, translations_photos.title, photos.created_at,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
+            ->join('users', 'photos.author = users.id', 'left')
+            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+            ->orderBy('photos.created_at')
+            ->findAll();
+
+        if (empty($photosData)) {
+            return $this->respond([
+                'items' => $photosData,
+                'count' => 0
+            ]);
+        }
+
+        $result = [];
+
+        foreach ($photosData as $photo) {
+            $result[] = (object) [
+                'filename'  => $photo->filename,
+                'extension' => $photo->extension,
+                'filesize'  => $photo->filesize,
+                'order'     => $photo->order,
+                'width'     => $photo->width,
+                'height'    => $photo->height,
+                'title'     => $photo->title,
+                'placeId'   => $photo->place,
+                'created'   => $photo->created_at,
+                'author'    => $photo->user_id ? [
+                    'id'     => $photo->user_id,
+                    'name'   => $photo->user_name,
+                    'avatar' => $photo->user_avatar,
+                ] : null
+            ];
+        }
+
+        return $this->respond([
+            'items' => $result,
+            'count' => count($result)
+        ]);
+    }
+
+    public function upload(): ResponseInterface {
         $rules = [
             'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
         ];

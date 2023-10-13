@@ -8,8 +8,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
-class Rating extends ResourceController
-{
+class Rating extends ResourceController {
     /**
      * !!NOT USED!!
      * Список всех оценок для конкретного места

@@ -4,8 +4,7 @@ use App\Models\AddressRegion;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Regions extends ResourceController
-{
+class Regions extends ResourceController {
     public function list(): ResponseInterface {
         $regionsModel = new AddressRegion();
 

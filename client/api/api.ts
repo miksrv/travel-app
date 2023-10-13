@@ -72,6 +72,14 @@ export const API = createApi({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
+        photosGetList: builder.query<
+            ApiTypes.ResponsePhotosGetList,
+            Maybe<ApiTypes.RequestPlacesGetList>
+        >({
+            providesTags: ['Photos'],
+            query: (params) => `photos${encodeQueryData(params)}`
+        }),
+
         placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, string>({
             providesTags: ['Places'],
             query: (item) => `places/${item}`
@@ -114,7 +122,7 @@ export const API = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Activity', 'Places', 'Rating']
+    tagTypes: ['Activity', 'Places', 'Photos', 'Rating']
 })
 
 // Export hooks for usage in functional components

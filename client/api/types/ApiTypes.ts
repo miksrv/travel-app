@@ -1,6 +1,7 @@
 import { AddressObject, Category, Place } from '@/api/types/Place'
 
 import { Item } from './Activity'
+import { Photo } from './Photo'
 import { Rating } from './Rating'
 
 export type DateTimeType = {
@@ -43,6 +44,11 @@ export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
 export interface ResponsePlacesGetList {
     items?: Place[]
+    count?: number
+}
+
+export interface ResponsePhotosGetList {
+    items?: Photo[]
     count?: number
 }
 

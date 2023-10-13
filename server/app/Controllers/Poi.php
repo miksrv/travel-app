@@ -5,8 +5,7 @@ use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Poi extends ResourceController
-{
+class Poi extends ResourceController {
     public function list(): ResponseInterface
     {
         // left (lon), top (lat), right (lon), bottom (lat)

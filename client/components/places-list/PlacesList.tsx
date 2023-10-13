@@ -1,3 +1,5 @@
+import Card from '@mui/material/Card'
+import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Unstable_Grid2'
 import React from 'react'
 
@@ -43,6 +45,22 @@ const PlacesList: React.FC<PlacesListProps> = ({
                 <PlacesListItem place={place} />
             </Grid>
         ))}
+
+        {!places?.length && (
+            <Grid xs={12}>
+                <Card sx={{ p: 5 }}>
+                    <Typography
+                        variant={'body1'}
+                        color={'text.primary'}
+                        align={'center'}
+                    >
+                        {
+                            'Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.'
+                        }
+                    </Typography>
+                </Card>
+            </Grid>
+        )}
     </Grid>
 )
 

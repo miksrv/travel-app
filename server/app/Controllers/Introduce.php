@@ -15,8 +15,7 @@ use ReflectionException;
 
 ignore_user_abort(true);
 
-class Introduce extends ResourceController
-{
+class Introduce extends ResourceController {
     /**
      * Пользователь представляется сервису, отправляя свои координаты.
      * По координатам выполняется поиск новых мест в округе, сессия пользователя сохраняется в БД.

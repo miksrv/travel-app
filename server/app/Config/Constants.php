@@ -93,6 +93,6 @@ define('EVENT_PRIORITY_NORMAL', 100);
  */
 define('EVENT_PRIORITY_HIGH', 10);
 
-defined('UPLOAD_PHOTOS') || define('UPLOAD_PHOTOS', FCPATH . 'photos/');
-defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', FCPATH . 'avatars/');
+defined('UPLOAD_PHOTOS') || define('UPLOAD_PHOTOS', FCPATH . 'photo/');
+defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', FCPATH . 'avatar/');
 defined('UPLOAD_TEMP') || define('UPLOAD_TEMP', FCPATH . 'temp/');

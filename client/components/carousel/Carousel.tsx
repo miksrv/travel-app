@@ -34,7 +34,7 @@ const Carousel: React.FC<CarouselProps> = (props) => {
                                     styles.embla__slide__img,
                                     onClick ? styles.point : undefined
                                 )}
-                                src={`http://localhost:8080/photos/${placeId}/${photo.filename}_thumb.${photo.extension}`}
+                                src={`http://localhost:8080/photo/${placeId}/${photo.filename}_thumb.${photo.extension}`}
                                 alt={photo.title || ''}
                                 onClick={() => onClick?.(photo.filename)}
                             />

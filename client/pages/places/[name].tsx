@@ -94,10 +94,10 @@ const PageItem: NextPage = () => {
     const [photoIndex, setCurrentIndex] = useState<number>(0)
 
     const imageUrl = (index: number) =>
-        `${ImageHost}photos/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
+        `${ImageHost}photo/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
 
     const thumbImageUrl = (index: number) =>
-        `${ImageHost}photos/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
+        `${ImageHost}photo/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
@@ -159,7 +159,7 @@ const PageItem: NextPage = () => {
                         height={300}
                         image={
                             data?.photos?.[0]?.filename
-                                ? `${ImageHost}photos/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
+                                ? `${ImageHost}photo/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
                                 : noPhoto.src
                         }
                         onClick={() => {

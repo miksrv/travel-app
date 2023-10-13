@@ -22,8 +22,7 @@ use Geocoder\Exception\Exception;
 
 define('MAX_PLACES_PER_ITERATION', 1);
 
-class Migrate extends ResourceController
-{
+class Migrate extends ResourceController {
     /**
      * @throws Exception
      */

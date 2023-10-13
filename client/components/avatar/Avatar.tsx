@@ -49,9 +49,7 @@ const Avatar: React.FC<AvatarProps> = ({
             <>
                 <MuiAvatar
                     alt={userName || ''}
-                    src={
-                        image ? `${ImageHost}avatars/${image}` : userAvatar.src
-                    }
+                    src={image ? `${ImageHost}avatar/${image}` : userAvatar.src}
                     sx={{
                         height: getDimension(size),
                         width: getDimension(size)

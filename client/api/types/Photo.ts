@@ -12,4 +12,5 @@ export type Photo = {
     created?: ApiTypes.DateTimeType
     filesize?: number
     order?: number
+    placeId?: string
 }

@@ -7,8 +7,7 @@ use App\Models\AddressRegion;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Address extends ResourceController
-{
+class Address extends ResourceController {
     /**
      * @return ResponseInterface
      */
