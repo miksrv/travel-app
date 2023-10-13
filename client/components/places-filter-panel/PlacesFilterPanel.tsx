@@ -30,27 +30,27 @@ type SortOptionsProps = {
 const SortOptions: SortOptionsProps[] = [
     {
         key: ApiTypes.SortFields.Views,
-        value: 'Количеству просмотров'
+        value: 'Просмотры'
     },
     {
         key: ApiTypes.SortFields.Rating,
-        value: 'Рейтингу'
+        value: 'Рейтинг'
     },
     {
         key: ApiTypes.SortFields.Created,
-        value: 'Дате добавления'
+        value: 'Дата добавления'
     },
     {
         key: ApiTypes.SortFields.Updated,
-        value: 'Дате обновления'
+        value: 'Дата обновления'
     },
     {
         key: ApiTypes.SortFields.Title,
-        value: 'Алфавиту'
+        value: 'Заголовок'
     },
     {
         key: ApiTypes.SortFields.Distance,
-        value: 'Расстоянию'
+        value: 'Расстояние'
     }
 ]
 

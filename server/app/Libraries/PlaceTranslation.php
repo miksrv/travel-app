@@ -63,9 +63,12 @@ class PlaceTranslation {
         $this->_prepareOutput($data);
     }
 
-    public function translate(array $placeIds): void
-    {
+    public function translate(array $placeIds): void {
         $this->placeIds = $placeIds;
+
+        if (empty($placeIds)) {
+            return ;
+        }
 
         $data = $this->model
             ->whereIn('place', $placeIds)

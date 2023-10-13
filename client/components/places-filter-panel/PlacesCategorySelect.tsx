@@ -31,13 +31,12 @@ const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
                     typeof option === 'string' ? option : option.title
                 }
                 loading={isLoading}
-                filterOptions={(x) => x}
                 options={data?.items || []}
                 autoComplete
                 includeInputInList
                 filterSelectedOptions
                 value={category}
-                noOptionsText='Нет найденных локаций'
+                noOptionsText='Нет категорий'
                 onChange={(event, newValue) => {
                     onChangeCategory?.(newValue || undefined)
                 }}

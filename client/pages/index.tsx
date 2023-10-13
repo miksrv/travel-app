@@ -79,11 +79,11 @@ const Main: NextPage = () => {
                                     {
                                         {
                                             [ActivityTypes.Place]:
-                                                'Редактирование',
+                                                'Отредактировал(а) материал',
                                             [ActivityTypes.Photo]:
-                                                'Загрузка фотографии',
+                                                'Загрузил(а) фотографии',
                                             [ActivityTypes.Rating]:
-                                                'Оценка места'
+                                                'Поставил(а) оценку'
                                         }[item.type]
                                     }
                                 </>

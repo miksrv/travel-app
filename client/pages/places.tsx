@@ -117,15 +117,17 @@ const Places: NextPage = () => {
                     sx={{ mb: -0.5, mt: -0.5 }}
                     action={
                         <Button
-                            sx={{ mr: 1, mt: 1 }}
-                            size={'small'}
+                            sx={{ mr: 1, mt: 1.5 }}
+                            size={'medium'}
                             variant={'contained'}
                         >
                             Добавить
                         </Button>
                     }
                 />
-                <CardContent sx={{ mb: -2, mt: -3 }}>
+            </Card>
+            <Card sx={{ mb: 2 }}>
+                <CardContent sx={{ mb: -2, mt: -2 }}>
                     <PlacesFilterPanel
                         sort={sort}
                         order={order}

@@ -53,10 +53,12 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                                 {' • '}
                                 {
                                     {
-                                        [ActivityTypes.Place]: 'Редактирование',
+                                        [ActivityTypes.Place]:
+                                            'Отредактировал(а) материал',
                                         [ActivityTypes.Photo]:
-                                            'Загрузка фотографии',
-                                        [ActivityTypes.Rating]: 'Оценка места'
+                                            'Загрузил(а) фотографии',
+                                        [ActivityTypes.Rating]:
+                                            'Поставил(а) оценку'
                                     }[item.type]
                                 }
                                 {item.type === ActivityTypes.Rating && (
