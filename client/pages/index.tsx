@@ -8,7 +8,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
@@ -22,9 +22,30 @@ import { categoryImage } from '@/functions/categories'
 import { formatDate } from '@/functions/helpers'
 
 const Main: NextPage = () => {
+    const [lastDate, setLastDate] = useState<string>()
     const { t } = useTranslation('common')
 
-    const { data, isLoading } = API.useActivityGetListQuery()
+    const { data, isLoading, isFetching } = API.useActivityGetListQuery({
+        date: lastDate
+    })
+
+    useEffect(() => {
+        const onScroll = () => {
+            const scrolledToBottom =
+                window.innerHeight + window.scrollY >=
+                document.body.offsetHeight - 20
+
+            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
+                setLastDate(data.items[data.items?.length - 1].created?.date)
+            }
+        }
+
+        document.addEventListener('scroll', onScroll)
+
+        return function () {
+            document.removeEventListener('scroll', onScroll)
+        }
+    }, [lastDate, isFetching, data])
 
     return (
         <PageLayout>

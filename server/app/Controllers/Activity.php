@@ -21,6 +21,8 @@ class Activity extends ResourceController
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        $lastDate = $this->request->getGet('date', FILTER_SANITIZE_STRING);
+
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 350);
 
@@ -28,16 +30,22 @@ class Activity extends ResourceController
         $categoriesData  = $categoriesModel->findAll();
 
         $activityModel = new UsersActivityModel();
-        $activityData  = $activityModel
+        $activityModel
             ->select(
                 'users_activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
                 users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
             ->join('places', 'users_activity.place = places.id', 'left')
             ->join('photos', 'users_activity.photo = photos.id', 'left')
-            ->join('users', 'users_activity.user = users.id', 'left')
+            ->join('users', 'users_activity.user = users.id', 'left');
+
+        if ($lastDate) {
+            $activityModel->where('users_activity.created_at < ', $lastDate);
+        }
+
+        $activityData = $activityModel
             ->whereIn('users_activity.type', ['photo', 'place'])
             ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
-            ->findAll(40);
+            ->findAll(20);
 
         $placesIds = [];
 
@@ -47,7 +55,12 @@ class Activity extends ResourceController
 
         $placeTranslations->translate($placesIds);
 
-        return $this->respond(['items'  => $this->_groupSimilarActivities($activityData, $categoriesData, $placeTranslations)]);
+        $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeTranslations);
+
+        // Удаляем последнией объект в массиве, потому что он может быть сгруппирован не полностью
+        array_pop($response);
+
+        return $this->respond(['items'  => $response]);
     }
 
     /**
@@ -104,6 +117,7 @@ class Activity extends ResourceController
             // Группируем активность по фотографиям одного пользователя, загруженных для
             // одного места и с разницей не больше 5 минут
             if (
+                $lastGroup &&
                 $item->type === 'photo' &&
                 $lastGroup->type === 'photo' &&
                 (!isset($lastGroup->place) || $lastGroup->place->id === $item->place) &&

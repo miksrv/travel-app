@@ -94,3 +94,7 @@ export interface ResponseRatingSet {
 export interface ResponseActivityGetList {
     items: Item[]
 }
+
+export interface RequestActivityGetList {
+    date?: string
+}

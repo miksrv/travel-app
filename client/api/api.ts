@@ -33,9 +33,24 @@ export const API = createApi({
             providesTags: ['Activity'],
             query: (item) => `activity/${item}`
         }),
-        activityGetList: builder.query<ApiTypes.ResponseActivityGetList, void>({
+        activityGetList: builder.query<
+            ApiTypes.ResponseActivityGetList,
+            Maybe<ApiTypes.RequestActivityGetList>
+        >({
+            // Refetch when the page arg changes
+            forceRefetch({ currentArg, previousArg }) {
+                return currentArg !== previousArg
+            },
+            // Always merge incoming data to the cache entry
+            merge: (currentCache, newItems) => {
+                currentCache.items.push(...newItems.items)
+            },
             providesTags: ['Activity'],
-            query: () => 'activity'
+            query: (params) => `activity${encodeQueryData(params)}`,
+            // Only have one cache entry because the arg always maps to one string
+            serializeQueryArgs: ({ endpointName }) => {
+                return endpointName
+            }
         }),
 
         addressGetSearch: builder.mutation<
