@@ -7,42 +7,41 @@ import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
 import { API, ImageHost } from '@/api/api'
+import { Photo } from '@/api/types/Photo'
 import { Categories } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
 
 import noPhoto from '@/public/images/no-photo-available.png'
-import icon from '@/public/poi/battlefield.png'
+import icon from '@/public/images/poi/battlefield.png'
 
 import styles from './styles.module.sass'
 
 type TMyPointProps = {
-    category: Categories
     lat: number
     lon: number
+    category?: Categories
+    photo?: string
     placeId?: string
     title?: string
-    photo?: string
 }
 
-const Point: React.FC<TMyPointProps> = ({
-    placeId,
-    lat,
-    lon,
-    title,
-    category
-}) => {
+const Point: React.FC<TMyPointProps> = (params) => {
+    const { placeId, lat, lon, title, category, photo } = params
     const [getPlaceItem, { isLoading, data: poiData }] =
         API.usePoiGetItemMutation()
 
     const myIcon = new Leaflet.Icon({
-        iconAnchor: [icon.width - 20, icon.height - 20],
-        iconSize: [icon.width - 10, icon.height - 12],
-        iconUrl: categoryImage(category).src
+        className: photo ? 'poiPhoto' : 'poiCategory',
+        iconAnchor: photo ? [16, 16] : [icon.width - 20, icon.height - 20],
+        iconSize: photo ? [32, 32] : [icon.width - 10, icon.height - 12],
+        iconUrl: photo
+            ? `${ImageHost}photo/${placeId}/${photo}`
+            : categoryImage(category).src
     })
 
     const placeClickHandler = () => {
-        if (placeId) {
+        if (placeId && !photo) {
             getPlaceItem(placeId)
         }
     }
@@ -58,21 +57,23 @@ const Point: React.FC<TMyPointProps> = ({
         >
             {placeId && (
                 <Popup className={styles.popup}>
-                    {!isLoading && poiData ? (
+                    {(!isLoading && poiData) || photo ? (
                         <>
                             <Link
-                                href={`/places/${poiData?.id}`}
-                                title={poiData?.title}
+                                href={`/places/${placeId}`}
+                                title={poiData?.title || title}
                                 target={'_blank'}
                             >
                                 <Image
                                     className={styles.image}
                                     src={
-                                        poiData?.photos?.[0]?.filename
+                                        photo
+                                            ? `${ImageHost}photo/${placeId}/${photo}`
+                                            : poiData?.photos?.[0]?.filename
                                             ? `${ImageHost}photo/${placeId}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
                                             : noPhoto.src
                                     }
-                                    alt={poiData?.title || ''}
+                                    alt={poiData?.title || title}
                                     width={300}
                                     height={200}
                                 />
@@ -82,7 +83,7 @@ const Point: React.FC<TMyPointProps> = ({
                                 variant={'body2'}
                                 sx={{ m: 0, p: '5px' }}
                             >
-                                {poiData?.title}
+                                {poiData?.title || title}
                             </Typography>
                         </>
                     ) : (

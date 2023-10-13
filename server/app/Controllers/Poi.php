@@ -6,8 +6,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
-    public function list(): ResponseInterface
-    {
+    public function list(): ResponseInterface {
         // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
         $bounds = explode(',', $bounds);
@@ -27,8 +26,37 @@ class Poi extends ResourceController {
         ]);
     }
 
-    public function show($id = null): ResponseInterface
-    {
+    public function photos(): ResponseInterface {
+        // left (lon), top (lat), right (lon), bottom (lat)
+        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
+
+        if (empty($bounds)) {
+            return $this->failValidationErrors('Empty map bound parameter');
+        }
+
+        $bounds = explode(',', $bounds);
+
+        $photosModel = new PhotosModel();
+        $photosData  = $photosModel
+            ->select(
+                'photos.place, photos.latitude, photos.longitude, photos.filename, photos.extension, photos.width, 
+                    photos.height, photos.order, translations_photos.title, photos.created_at')
+            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+            ->where([
+                'longitude >=' => $bounds[0],
+                'latitude >=' => $bounds[1],
+                'longitude <=' =>  $bounds[2],
+                'latitude <=' =>  $bounds[3],
+            ])
+            ->groupBy('photos.longitude, photos.latitude')
+            ->findAll();
+
+        return $this->respond([
+            'items' => $photosData,
+        ]);
+    }
+
+    public function show($id = null): ResponseInterface {
         try {
             $photosModel = new PhotosModel();
             $placesModel = new PlacesModel();
@@ -40,7 +68,7 @@ class Poi extends ResourceController {
             if ($placeData) {
                 $placeData->photos = $photosModel
                     ->select(
-                        'photos.filename, photos.extension, photos.filesize, photos.width,
+                        'photos.filename, photos.extension, photos.width,
                         photos.height, photos.order, translations_photos.title')
                     ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
                     ->where(['place' => $placeData->id])

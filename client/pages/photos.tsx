@@ -2,10 +2,13 @@ import { Button, Pagination } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import { LatLngBounds } from 'leaflet'
+import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/dist/client/router'
-import { useEffect } from 'react'
+import dynamic from 'next/dynamic'
+import { useCallback, useEffect } from 'react'
 import React, { useState } from 'react'
 import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
@@ -18,13 +21,24 @@ import PageLayout from '@/components/page-layout'
 
 import { encodeQueryData, formatDate } from '@/functions/helpers'
 
-const POST_PER_PAGE = 30
+const PHOTOS_PER_PAGE = 30
+
+const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
+const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
+    ssr: false
+})
+const Point = dynamic(() => import('@/components/map/Point'), {
+    ssr: false
+})
+
+const DEFAULT_CENTER = [52.580517, 56.855385]
 
 const PhotosPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.photos' })
 
     const router = useRouter()
 
+    const [mapBounds, setBounds] = useState<string>()
     const [page, setPage] = useState<number>(1)
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
@@ -36,9 +50,42 @@ const PhotosPage: NextPage = () => {
         `${ImageHost}photo/${data?.items?.[index]?.placeId}/${data?.items?.[index]?.filename}_thumb.${data?.items?.[index]?.extension}`
 
     const { data } = API.usePhotosGetListQuery({
-        limit: POST_PER_PAGE,
-        offset: ((Number(page) || 1) - 1) * POST_PER_PAGE
+        limit: PHOTOS_PER_PAGE,
+        offset: ((Number(page) || 1) - 1) * PHOTOS_PER_PAGE
     })
+
+    const { data: poiPhotos } = API.usePoiGetPhotoListQuery(
+        {
+            bounds: mapBounds
+        },
+        { skip: !mapBounds }
+    )
+
+    const debounceSetBounds = useCallback(
+        debounce((bounds: string) => {
+            setBounds(bounds)
+        }, 500),
+        []
+    )
+
+    const handleChangeBounds = async (bounds: LatLngBounds) => {
+        // left, top, right, bottom
+        const boundsString = bounds.toBBoxString()
+
+        if (boundsString !== mapBounds) {
+            debounceSetBounds(boundsString)
+        }
+
+        // if (mapCenter) {
+        //     await router.push(
+        //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
+        //         undefined,
+        //         {
+        //             shallow: true
+        //         }
+        //     )
+        // }
+    }
 
     useEffect(() => {
         const urlParams = {
@@ -61,21 +108,57 @@ const PhotosPage: NextPage = () => {
                             currentPage={'Фотографии интересных мест'}
                         />
                     }
-                    sx={{ mb: -0.5, mt: -0.5 }}
+                    sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button
-                            sx={{ mr: 1, mt: 1.5 }}
+                            sx={{ mr: 1, mt: 1.4 }}
                             size={'medium'}
                             variant={'contained'}
                         >
-                            {'Загрузить'}
+                            Загрузить
                         </Button>
                     }
                 />
             </Card>
 
+            <Card sx={{ height: '300px', mt: 3 }}>
+                {/*<CardContent>*/}
+                <DynamicMap
+                    center={DEFAULT_CENTER}
+                    zoom={15}
+                >
+                    {/*@ts-ignore*/}
+                    {({ TileLayer }) => (
+                        <>
+                            <TileLayer
+                                url={
+                                    'https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibWlrc29mdCIsImEiOiJjbGFtY3d6dDkwZjA5M3lvYmxyY2kwYm5uIn0.j_wTLxCCsqAn9TJSHMvaJg'
+                                }
+                                attribution='Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery &copy; <a href="https://www.mapbox.com/">Mapbox</a>'
+                            />
+                            {/*<TileLayer*/}
+                            {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
+                            {/*    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'*/}
+                            {/*/>*/}
+                            {poiPhotos?.items?.map((item) => (
+                                <Point
+                                    key={item.id}
+                                    placeId={item.place}
+                                    lat={item?.latitude}
+                                    lon={item?.longitude}
+                                    title={item?.title}
+                                    photo={`${item?.filename}_thumb.${item?.extension}`}
+                                />
+                            ))}
+                            <MyMapEvents onChangeBounds={handleChangeBounds} />
+                        </>
+                    )}
+                </DynamicMap>
+                {/*</CardContent>*/}
+            </Card>
+
             {data?.items?.length ? (
-                <Card sx={{ mb: 2 }}>
+                <Card sx={{ mb: 2, mt: 2 }}>
                     <CardContent sx={{ m: -1.5, mb: -2.5 }}>
                         <Gallery
                             photos={data.items.map((photo) => ({
@@ -99,7 +182,7 @@ const PhotosPage: NextPage = () => {
                 shape={'rounded'}
                 page={page}
                 hidden={!data?.count}
-                count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
+                count={Math.ceil((data?.count || 0) / PHOTOS_PER_PAGE)}
                 onChange={(_, page) => setPage(page)}
             />
 

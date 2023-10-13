@@ -1,4 +1,4 @@
-import { Card } from '@mui/material'
+import { Button, Card } from '@mui/material'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Typography from '@mui/material/Typography'
@@ -59,7 +59,7 @@ const MainPage: NextPage = () => {
                             hideHomePage={true}
                         />
                     }
-                    sx={{ mb: -0.5, mt: -0.5 }}
+                    sx={{ mb: -1, mt: -1 }}
                 />
             </Card>
             {data?.items?.map((item, index) => (

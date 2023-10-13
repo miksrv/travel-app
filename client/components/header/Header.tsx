@@ -1,10 +1,15 @@
 'use client'
 
-import MenuIcon from '@mui/icons-material/Menu'
+// import MenuIcon from '@mui/icons-material/Menu'
+import {
+    AccountCircleOutlined,
+    NotificationsOutlined
+} from '@mui/icons-material'
 import SearchIcon from '@mui/icons-material/Search'
+import { Badge, IconButton } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
-import IconButton from '@mui/material/IconButton'
+// import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -70,17 +75,18 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 maxWidth='lg'
                 disableGutters
             >
-                <Toolbar>
-                    <IconButton
-                        size='large'
-                        edge='start'
-                        color='inherit'
-                        aria-label='open drawer'
-                        onClick={onMenuClick}
-                        sx={{ mr: 2 }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
+                <Toolbar
+                    sx={{ minHeight: '54px !important', ml: '8px', mr: '8px' }}
+                >
+                    {/*<IconButton*/}
+                    {/*    sx={{ fontSize: 2 }}*/}
+                    {/*    edge='start'*/}
+                    {/*    color='inherit'*/}
+                    {/*    aria-label='open drawer'*/}
+                    {/*    onClick={onMenuClick}*/}
+                    {/*>*/}
+                    {/*    <MenuIcon />*/}
+                    {/*</IconButton>*/}
                     <Typography
                         variant='h6'
                         noWrap
@@ -90,17 +96,40 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             flexGrow: 1
                         }}
                     >
-                        {t('title')}
+                        {t('Интересно')}
                     </Typography>
-                    <Search>
+                    <Search sx={{ mr: 2 }}>
                         <SearchIconWrapper>
                             <SearchIcon />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder='Search…'
+                            placeholder='Поиск…'
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
+                    <IconButton
+                        size='large'
+                        aria-label='show 17 new notifications'
+                        color='inherit'
+                    >
+                        <Badge
+                            badgeContent={17}
+                            color='error'
+                        >
+                            <NotificationsOutlined />
+                        </Badge>
+                    </IconButton>
+                    <IconButton
+                        size='large'
+                        edge='end'
+                        aria-label='account of current user'
+                        // aria-controls={menuId}
+                        aria-haspopup='true'
+                        // onClick={handleProfileMenuOpen}
+                        color='inherit'
+                    >
+                        <AccountCircleOutlined />
+                    </IconButton>
                 </Toolbar>
             </Container>
         </AppBar>

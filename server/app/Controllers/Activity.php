@@ -72,7 +72,7 @@ class Activity extends ResourceController {
         $activityData  = $activityModel
             ->select(
                 'users_activity.*, users.id as user_id, users.name as user_name, rating.value, users.avatar as user_avatar,
-                photos.filename, photos.extension, photos.filesize, photos.width, photos.height')
+                photos.filename, photos.extension, photos.width, photos.height')
             ->join('rating', 'users_activity.rating = rating.id', 'left')
             ->join('photos', 'users_activity.photo = photos.id', 'left')
             ->join('users', 'users_activity.user = users.id', 'left')

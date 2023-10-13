@@ -114,10 +114,10 @@ const PlacesPage: NextPage = () => {
                     title={t('title', 'Интересные места')}
                     titleTypographyProps={{ component: 'h1' }}
                     subheader={<Breadcrumbs currentPage={'Интересные места'} />}
-                    sx={{ mb: -0.5, mt: -0.5 }}
+                    sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button
-                            sx={{ mr: 1, mt: 1.5 }}
+                            sx={{ mr: 1, mt: 1.4 }}
                             size={'medium'}
                             variant={'contained'}
                         >

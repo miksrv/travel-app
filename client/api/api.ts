@@ -98,6 +98,9 @@ export const API = createApi({
         poiGetList: builder.mutation<any, Maybe<any>>({
             query: (params) => `poi${encodeQueryData(params)}`
         }),
+        poiGetPhotoList: builder.query<any, Maybe<any>>({
+            query: (params) => `poi/photos${encodeQueryData(params)}`
+        }),
 
         ratingGetList: builder.query<ApiTypes.ResponseRatingGetList, string>({
             providesTags: ['Rating'],

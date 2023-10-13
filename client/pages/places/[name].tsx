@@ -1,3 +1,4 @@
+import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
@@ -144,7 +145,16 @@ const PlaceItemPage: NextPage = () => {
                             />
                         )
                     }
-                    sx={{ mb: -0.5, mt: -0.5 }}
+                    sx={{ mb: -1, mt: -1 }}
+                    action={
+                        <Button
+                            sx={{ mr: 1, mt: 1.4 }}
+                            size={'medium'}
+                            variant={'contained'}
+                        >
+                            Добавить
+                        </Button>
+                    }
                 />
                 {isLoading ? (
                     <Skeleton

@@ -162,7 +162,7 @@ class Places extends ResourceController {
             // Collect photos
             $placeData->photos = $photosModel
                 ->select(
-                    'photos.author, photos.filename, photos.extension, photos.filesize, photos.width, 
+                    'photos.author, photos.filename, photos.extension, photos.width, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
                 ->join('users', 'photos.author = users.id', 'left')
@@ -222,7 +222,7 @@ class Places extends ResourceController {
                     $response['photos'][] = [
                         'filename'  => $photo->filename,
                         'extension' => $photo->extension,
-                        'filesize'  => $photo->filesize,
+                        // 'filesize'  => $photo->filesize,
                         'order'     => $photo->order,
                         'width'     => $photo->width,
                         'height'    => $photo->height,

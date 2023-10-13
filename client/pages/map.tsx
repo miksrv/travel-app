@@ -141,11 +141,11 @@ const MapPage: NextPage = () => {
                     subheader={
                         <Breadcrumbs currentPage={'Карта интересных мест'} />
                     }
-                    sx={{ mb: -0.5, mt: -0.5 }}
+                    sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button
-                            sx={{ mr: 1, mt: 1 }}
-                            size={'small'}
+                            sx={{ mr: 1, mt: 1.4 }}
+                            size={'medium'}
                             variant={'contained'}
                         >
                             Добавить
