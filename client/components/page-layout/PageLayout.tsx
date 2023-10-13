@@ -49,36 +49,36 @@ const menuItems: MenuItemsProps[] = [
         link: '/places',
         text: 'Интересные места'
     },
-    {
-        icon: <PlaceOutlined color={'primary'} />,
-        link: '/places',
-        text: 'Населенные пункты'
-    },
+    // {
+    //     icon: <PlaceOutlined color={'primary'} />,
+    //     link: '/places',
+    //     text: 'Населенные пункты'
+    // },
     {
         icon: <MapOutlined color={'primary'} />,
         link: '/map',
         text: 'Карта мест'
     },
-    {
-        icon: <LabelOutlined color={'primary'} />,
-        link: '/tags',
-        text: 'Метки мест'
-    },
+    // {
+    //     icon: <LabelOutlined color={'primary'} />,
+    //     link: '/tags',
+    //     text: 'Метки мест'
+    // },
     {
         icon: <PhotoOutlined color={'primary'} />,
         link: '/photos',
         text: 'Фотографии'
-    },
-    {
-        icon: <BookmarkBorderOutlined color={'primary'} />,
-        link: '/categories',
-        text: 'Категории'
-    },
-    {
-        icon: <PeopleOutline color={'primary'} />,
-        link: '/users',
-        text: 'Пользователи'
     }
+    // {
+    //     icon: <BookmarkBorderOutlined color={'primary'} />,
+    //     link: '/categories',
+    //     text: 'Категории'
+    // },
+    // {
+    //     icon: <PeopleOutline color={'primary'} />,
+    //     link: '/users',
+    //     text: 'Пользователи'
+    // }
 ]
 
 const PageLayout: React.FC<any> = ({ children, ...props }) => {

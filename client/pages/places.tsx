@@ -23,7 +23,7 @@ import { encodeQueryData } from '@/functions/helpers'
 
 const POST_PER_PAGE = 9
 
-const Places: NextPage = () => {
+const PlacesPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
     const searchParams = useSearchParams()
@@ -169,4 +169,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     }
 })
 
-export default Places
+export default PlacesPage

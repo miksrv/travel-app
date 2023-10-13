@@ -21,11 +21,11 @@ import PageLayout from '@/components/page-layout'
 import { categoryImage } from '@/functions/categories'
 import { formatDate } from '@/functions/helpers'
 
-const Main: NextPage = () => {
+const MainPage: NextPage = () => {
     const [lastDate, setLastDate] = useState<string>()
     const { t } = useTranslation('common')
 
-    const { data, isLoading, isFetching } = API.useActivityGetListQuery({
+    const { data, isFetching } = API.useActivityGetListQuery({
         date: lastDate
     })
 
@@ -139,7 +139,7 @@ const Main: NextPage = () => {
                             <Gallery
                                 photos={item.photos?.map((photo) => ({
                                     height: photo.height,
-                                    src: `${ImageHost}photos/${item.place?.id}/${photo.filename}.${photo.extension}`,
+                                    src: `${ImageHost}photo/${item.place?.id}/${photo.filename}.${photo.extension}`,
                                     width: photo.width
                                 }))}
                             />
@@ -159,4 +159,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     }
 })
 
-export default Main
+export default MainPage

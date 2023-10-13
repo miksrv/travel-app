@@ -8,6 +8,9 @@ use Config\Services;
 
 class Photos extends ResourceController {
     public function list(): ResponseInterface {
+        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
+        $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
             ->select(
@@ -17,7 +20,7 @@ class Photos extends ResourceController {
             ->join('users', 'photos.author = users.id', 'left')
             ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
             ->orderBy('photos.created_at')
-            ->findAll();
+            ->findAll($limit, $offset);
 
         if (empty($photosData)) {
             return $this->respond([
@@ -49,7 +52,7 @@ class Photos extends ResourceController {
 
         return $this->respond([
             'items' => $result,
-            'count' => count($result)
+            'count' => $photosModel->select('id')->countAllResults()
         ]);
     }
 

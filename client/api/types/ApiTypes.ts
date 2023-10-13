@@ -71,6 +71,11 @@ export interface RequestPlacesGetList {
     excludePlaces?: string[]
 }
 
+export interface RequestPhotosGetList {
+    limit?: number
+    offset?: number
+}
+
 export interface ResponseAddressGetSearch {
     countries?: AddressObject[]
     regions?: AddressObject[]

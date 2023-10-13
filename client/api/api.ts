@@ -74,7 +74,7 @@ export const API = createApi({
 
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
-            Maybe<ApiTypes.RequestPlacesGetList>
+            Maybe<ApiTypes.RequestPhotosGetList>
         >({
             providesTags: ['Photos'],
             query: (params) => `photos${encodeQueryData(params)}`

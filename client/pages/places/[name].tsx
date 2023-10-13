@@ -58,7 +58,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 const PLACES_PER_PAGE = 3
 
-const PageItem: NextPage = () => {
+const PlaceItemPage: NextPage = () => {
     const router = useRouter()
     const routerObject = router.query.name
     const objectName =
@@ -300,4 +300,4 @@ const PageItem: NextPage = () => {
 }
 
 // export default connect((state: RootState) => state)(PlacePage)
-export default PageItem
+export default PlaceItemPage

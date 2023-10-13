@@ -40,7 +40,7 @@ export type LatLngCoordinate = {
     longitude: number
 }
 
-const Map: NextPage = () => {
+const MapPage: NextPage = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
 
@@ -228,4 +228,4 @@ const Map: NextPage = () => {
     )
 }
 
-export default Map
+export default MapPage

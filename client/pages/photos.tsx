@@ -5,42 +5,27 @@ import CardHeader from '@mui/material/CardHeader'
 import { NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/dist/client/router'
-import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import React, { useState } from 'react'
-import useGeolocation from 'react-hook-geolocation'
 import Lightbox from 'react-image-lightbox'
 import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
-import { ApiTypes, Place } from '@/api/types'
 
 import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import PlacesFilterPanel from '@/components/places-filter-panel'
 
 import { encodeQueryData, formatDate } from '@/functions/helpers'
 
-const POST_PER_PAGE = 9
+const POST_PER_PAGE = 30
 
 const PhotosPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.photos' })
 
-    const searchParams = useSearchParams()
-    const geolocation = useGeolocation()
     const router = useRouter()
 
     const [page, setPage] = useState<number>(1)
-    const [sort, setSort] = useState<ApiTypes.SortFields>(
-        ApiTypes.SortFields.Updated
-    )
-    const [order, setOrder] = useState<ApiTypes.SortOrder>(
-        ApiTypes.SortOrder.DESC
-    )
-    const [category, setCategory] = useState<Place.Category>()
-    const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
-
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setCurrentIndex] = useState<number>(0)
 
@@ -50,62 +35,20 @@ const PhotosPage: NextPage = () => {
     const thumbImageUrl = (index: number) =>
         `${ImageHost}photo/${data?.items?.[index]?.placeId}/${data?.items?.[index]?.filename}_thumb.${data?.items?.[index]?.extension}`
 
-    const [introduce] = API.useIntroduceMutation()
-    const { data, isLoading } = API.usePhotosGetListQuery({
-        category: category?.name,
-        city:
-            location?.type === ApiTypes.LocationType.City
-                ? location.value
-                : undefined,
-        country:
-            location?.type === ApiTypes.LocationType.Country
-                ? location.value
-                : undefined,
-        district:
-            location?.type === ApiTypes.LocationType.District
-                ? location.value
-                : undefined,
+    const { data } = API.usePhotosGetListQuery({
         limit: POST_PER_PAGE,
-        offset: ((Number(page) || 1) - 1) * POST_PER_PAGE,
-        order: order,
-        region:
-            location?.type === ApiTypes.LocationType.Region
-                ? location.value
-                : undefined,
-        sort: sort
+        offset: ((Number(page) || 1) - 1) * POST_PER_PAGE
     })
-
-    // useEffect(() => {
-    //     if (pageUrl) {
-    //         setPage(Number(pageUrl))
-    //     }
-    //
-    //     if (sortUrl) {
-    //         setSort(sortUrl as API.SortFields)
-    //     }
-    //
-    //     if (orderUrl) {
-    //         setOrder(orderUrl as API.SortOrder)
-    //     }
-    // })
 
     useEffect(() => {
         const urlParams = {
-            order: order !== ApiTypes.SortOrder.DESC ? order : undefined,
-            page: page !== 1 ? page : undefined,
-            sort: sort !== ApiTypes.SortFields.Updated ? sort : undefined
+            page: page !== 1 ? page : undefined
         }
 
         router.push(`photos${encodeQueryData(urlParams)}`, undefined, {
             shallow: true
         })
-    }, [page, sort, order])
-
-    useEffect(() => {
-        if (geolocation?.latitude && geolocation?.longitude) {
-            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
-        }
-    }, [geolocation.latitude, geolocation.longitude])
+    }, [page])
 
     return (
         <PageLayout maxWidth={'lg'}>
@@ -125,44 +68,28 @@ const PhotosPage: NextPage = () => {
                             size={'medium'}
                             variant={'contained'}
                         >
-                            Добавить
+                            {'Загрузить'}
                         </Button>
                     }
                 />
             </Card>
-            <Card sx={{ mb: 2 }}>
-                <CardContent sx={{ mb: -2, mt: -2 }}>
-                    <PlacesFilterPanel
-                        sort={sort}
-                        order={order}
-                        location={location}
-                        category={category}
-                        onChangeSort={setSort}
-                        onChangeOrder={setOrder}
-                        onChangeLocation={async (location) => {
-                            setPage(1)
-                            setLocation(location)
-                        }}
-                        onChangeCategory={(category) => {
-                            setPage(1)
-                            setCategory(category)
-                        }}
-                    />
-                </CardContent>
-            </Card>
 
             {data?.items?.length ? (
-                <Gallery
-                    photos={data.items.map((photo) => ({
-                        height: photo.height,
-                        src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
-                        width: photo.width
-                    }))}
-                    onClick={(event, photos) => {
-                        setCurrentIndex(photos.index)
-                        setShowLightbox(true)
-                    }}
-                />
+                <Card sx={{ mb: 2 }}>
+                    <CardContent sx={{ m: -1.5, mb: -2.5 }}>
+                        <Gallery
+                            photos={data.items.map((photo) => ({
+                                height: photo.height,
+                                src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
+                                width: photo.width
+                            }))}
+                            onClick={(event, photos) => {
+                                setCurrentIndex(photos.index)
+                                setShowLightbox(true)
+                            }}
+                        />
+                    </CardContent>
+                </Card>
             ) : (
                 <div>{'Нет фотографий'}</div>
             )}
