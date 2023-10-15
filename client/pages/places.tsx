@@ -21,7 +21,7 @@ import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
 
-const POST_PER_PAGE = 9
+const POST_PER_PAGE = 15
 
 const PlacesPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })

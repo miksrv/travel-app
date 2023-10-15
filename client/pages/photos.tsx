@@ -122,7 +122,14 @@ const PhotosPage: NextPage = () => {
             </Card>
 
             <Card sx={{ height: '200px', mt: 3 }}>
-                {/*<CardContent>*/}
+                {/*<CardContent*/}
+                {/*    sx={{*/}
+                {/*        height: '100%',*/}
+                {/*        overflow: 'hidden',*/}
+                {/*        p: 0.5,*/}
+                {/*        width: '100%'*/}
+                {/*    }}*/}
+                {/*>*/}
                 <DynamicMap
                     center={DEFAULT_CENTER}
                     zoom={15}
