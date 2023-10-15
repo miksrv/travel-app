@@ -19,9 +19,9 @@ class Introduce extends ResourceController {
     /**
      * Пользователь представляется сервису, отправляя свои координаты.
      * По координатам выполняется поиск новых мест в округе, сессия пользователя сохраняется в БД.
-     * @return void
-     * @throws ReflectionException
+     * @return ResponseInterface
      * @throws Exception
+     * @throws ReflectionException
      */
     public function hello(): ResponseInterface {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
@@ -122,6 +122,12 @@ class Introduce extends ResourceController {
         return $pointAdded;
     }
 
+    /**
+     * Remove unused tags (name and category) from OverpassAPI
+     * @param array $tags
+     * @param string $category
+     * @return string|null
+     */
     protected function cleanTags(array $tags, string $category): ?string {
         if (!$tags) {
             return null;

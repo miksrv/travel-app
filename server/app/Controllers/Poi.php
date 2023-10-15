@@ -6,6 +6,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $bounds      = $this->_getBounds();
         $placesModel = new PlacesModel();
@@ -43,6 +46,10 @@ class Poi extends ResourceController {
         ]);
     }
 
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
     public function show($id = null): ResponseInterface {
         try {
             $photosModel = new PhotosModel();

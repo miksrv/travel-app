@@ -4,6 +4,9 @@ use App\Models\CategoryModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
+/**
+ * Categories API controller (not use now)
+ */
 class Categories extends ResourceController {
     public function list(): ResponseInterface {
         $categoriesModel = new CategoryModel();

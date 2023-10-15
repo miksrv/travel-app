@@ -7,8 +7,14 @@ use App\Models\AddressRegion;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
+/**
+ * Addresses API controller
+ *
+ * GET /search?search=text
+ */
 class Address extends ResourceController {
     /**
+     * Find all address by search text
      * @return ResponseInterface
      */
     public function search(): ResponseInterface {

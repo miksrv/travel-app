@@ -89,7 +89,6 @@ class Photos extends ResourceController {
             return $this->respondCreated([
                 'name'      => $name,
                 'extension' => $file->getExtension(),
-                'filesize'  => $file->getSize(),
                 'latitude'  => $coordinates->lat,
                 'longitude' => $coordinates->lng,
             ]);
@@ -100,8 +99,8 @@ class Photos extends ResourceController {
 
     /**
      * Returns an array of latitude and longitude from the Image file
-     * @param image $file
-     * @return float[]:number |boolean
+     * @param string $file
+     * @return object|null :number |boolean
      */
     protected function _readPhotoLocation(string $file): ?object {
         if (!is_file($file)) {

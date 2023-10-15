@@ -12,7 +12,7 @@ use ReflectionException;
 
 class Places extends ResourceController {
     /**
-     * @example http://localhost:8080/places?sort=rating&order=ASC&category=historic&limit=20&offset=1
+     * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
