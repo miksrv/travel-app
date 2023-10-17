@@ -17,6 +17,7 @@ import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 
 import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
 const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
@@ -40,10 +41,16 @@ export type LatLngCoordinate = {
     longitude: number
 }
 
+interface mapLocalStorage extends LatLngCoordinate {
+    zoom: number
+}
+
 const MapPage: NextPage = () => {
     const searchParams = useSearchParams()
     const router = useRouter()
     const geolocation = useGeolocation()
+    const [coordinates, setCoordinates] =
+        useLocalStorage<mapLocalStorage>('map')
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
     const [mapCenter, setMapCenter] = useState<number[]>(MYPOINT)
@@ -64,7 +71,7 @@ const MapPage: NextPage = () => {
         const mapCenter = bounds.getCenter()
 
         if (boundsString !== mapBounds) {
-            debounceSetMapBounds(boundsString)
+            debounceSetMapBounds(boundsString, mapCenter)
         }
 
         // if (mapCenter) {
@@ -78,9 +85,17 @@ const MapPage: NextPage = () => {
         // }
     }
 
+    console.log('coordinates', coordinates)
+
     const debounceSetMapBounds = useCallback(
-        debounce((bounds: string) => {
+        debounce((bounds: string, mapCenter?: any) => {
             setMapBounds(bounds)
+
+            setCoordinates({
+                latitude: mapCenter.lat,
+                longitude: mapCenter.lng,
+                zoom: 14
+            })
         }, 500),
         []
     )
