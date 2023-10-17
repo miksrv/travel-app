@@ -28,12 +28,6 @@ const MyMapEvents = dynamic(
         ssr: false
     }
 )
-const MarkerUser = dynamic(
-    () => import('@/components/interactive-map/MarkerUser'),
-    {
-        ssr: false
-    }
-)
 const MarkerPoint = dynamic(
     () => import('@/components/interactive-map/MarkerPoint'),
     {
@@ -57,54 +51,54 @@ interface mapLocalStorage extends LatLngCoordinate {
 }
 
 const MapPage: NextPage = () => {
-    const searchParams = useSearchParams()
-    const router = useRouter()
+    // const searchParams = useSearchParams()
+    // const router = useRouter()
     const geolocation = useGeolocation()
-    const [coordinates, setCoordinates] =
-        useLocalStorage<mapLocalStorage>('map')
+    // const [coordinates, setCoordinates] =
+    //     useLocalStorage<mapLocalStorage>('map')
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
     const [mapCenter, setMapCenter] = useState<number[]>(MYPOINT)
     const [mapBounds, setMapBounds] = useState<string>()
 
-    const lat = searchParams.get('lat')
-    const lon = searchParams.get('lon')
+    // const lat = searchParams.get('lat')
+    // const lon = searchParams.get('lon')
 
     const [introduce] = API.useIntroduceMutation()
-    const { data: poiList } = API.usePoiGetListQuery(
+    const { data: poiListData } = API.usePoiGetListQuery(
         { bounds: mapBounds },
         { skip: !mapBounds }
     )
 
-    const handleChangeBounds = async (bounds: LatLngBounds) => {
-        // left, top, right, bottom
-        const boundsString = bounds.toBBoxString()
-        const mapCenter = bounds.getCenter()
-
-        if (boundsString !== mapBounds) {
-            debounceSetMapBounds(boundsString, mapCenter)
-        }
-
-        // if (mapCenter) {
-        //     await router.push(
-        //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
-        //         undefined,
-        //         {
-        //             shallow: true
-        //         }
-        //     )
-        // }
-    }
+    // const handleChangeBounds = async (bounds: LatLngBounds) => {
+    //     // left, top, right, bottom
+    //     const boundsString = bounds.toBBoxString()
+    //     const mapCenter = bounds.getCenter()
+    //
+    //     if (boundsString !== mapBounds) {
+    //         debounceSetMapBounds(boundsString, mapCenter)
+    //     }
+    //
+    //     // if (mapCenter) {
+    //     //     await router.push(
+    //     //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
+    //     //         undefined,
+    //     //         {
+    //     //             shallow: true
+    //     //         }
+    //     //     )
+    //     // }
+    // }
 
     const debounceSetMapBounds = useCallback(
-        debounce((bounds: string, mapCenter?: any) => {
-            setMapBounds(bounds)
+        debounce((bounds: LatLngBounds, zoom?: number) => {
+            setMapBounds(bounds.toBBoxString())
 
-            setCoordinates({
-                latitude: mapCenter.lat,
-                longitude: mapCenter.lng,
-                zoom: 14
-            })
+            // setCoordinates({
+            //     latitude: mapCenter.lat,
+            //     longitude: mapCenter.lng,
+            //     zoom: 14
+            // })
         }, 500),
         []
     )
@@ -175,24 +169,15 @@ const MapPage: NextPage = () => {
                     //             : DEFAULT_CENTER
                     //         : [lat, lon]
                     // }
-                    center={mapCenter}
+                    places={poiListData?.items}
                     zoom={15}
+                    center={[mapCenter[0], mapCenter[1]]}
+                    userLatLng={[geolocation.latitude, geolocation.longitude]}
+                    onChangePosition={debounceSetMapBounds}
                 >
                     {/*@ts-ignore*/}
                     {({ TileLayer }) => (
                         <>
-                            {geolocation.latitude && geolocation.longitude && (
-                                <MarkerUser
-                                    lat={geolocation.latitude}
-                                    lon={geolocation.longitude}
-                                />
-                            )}
-                            {poiList?.items?.map((place) => (
-                                <MarkerPoint
-                                    key={place.id}
-                                    place={place}
-                                />
-                            ))}
                             <div className='leaflet-control'>
                                 <Button
                                     variant={'contained'}
@@ -209,7 +194,7 @@ const MapPage: NextPage = () => {
                                     <AccountCircleOutlined fontSize={'small'} />
                                 </Button>
                             </div>
-                            <MyMapEvents onChangeBounds={handleChangeBounds} />
+                            {/*<MyMapEvents onChangeBounds={handleChangeBounds} />*/}
                         </>
                     )}
                 </InteractiveMap>

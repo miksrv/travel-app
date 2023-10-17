@@ -279,6 +279,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                             : [52.580517, 56.855385]
                                     }
                                     zoom={15}
+                                    scrollWheelZoom={false}
                                 >
                                     {/*@ts-ignore*/}
                                     {({ TileLayer }) => (
