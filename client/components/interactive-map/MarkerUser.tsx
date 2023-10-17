@@ -20,19 +20,19 @@ const MarkerUser: React.FC<MarkerUser> = ({ latLng }) => {
 
     return (
         <>
-            {/*<Circle*/}
-            {/*    center={latLng}*/}
-            {/*    opacity={0.5} //Stroke opacity*/}
-            {/*    color={'#227c23'} // Stroke color*/}
-            {/*    weight={1} // Stroke width in pixels*/}
-            {/*    stroke={true} // Whether to draw stroke along the path*/}
-            {/*    fillColor={'#227c23'}*/}
-            {/*    radius={500}*/}
-            {/*/>*/}
-            {/*<Marker*/}
-            {/*    position={latLng}*/}
-            {/*    icon={userMarkerIcon}*/}
-            {/*/>*/}
+            <Circle
+                center={latLng}
+                opacity={0.5} //Stroke opacity
+                color={'#227c23'} // Stroke color
+                weight={1} // Stroke width in pixels
+                stroke={true} // Whether to draw stroke along the path
+                fillColor={'#227c23'}
+                radius={500}
+            />
+            <Marker
+                position={latLng}
+                icon={userMarkerIcon}
+            />
         </>
     )
 }

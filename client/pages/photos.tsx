@@ -26,18 +26,6 @@ const PHOTOS_PER_PAGE = 30
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-const MyMapEvents = dynamic(
-    () => import('@/components/interactive-map/MapEvents'),
-    {
-        ssr: false
-    }
-)
-const MarkerPhoto = dynamic(
-    () => import('@/components/interactive-map/MarkerPhoto'),
-    {
-        ssr: false
-    }
-)
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
@@ -62,7 +50,7 @@ const PhotosPage: NextPage = () => {
         offset: ((Number(page) || 1) - 1) * PHOTOS_PER_PAGE
     })
 
-    const { data: poiList } = API.usePoiGetPhotoListQuery(
+    const { data: poiListData } = API.usePoiGetPhotoListQuery(
         {
             bounds: mapBounds
         },
@@ -70,30 +58,11 @@ const PhotosPage: NextPage = () => {
     )
 
     const debounceSetMapBounds = useCallback(
-        debounce((bounds: string) => {
-            setMapBounds(bounds)
+        debounce((bounds: LatLngBounds, zoom?: number) => {
+            setMapBounds(bounds.toBBoxString())
         }, 500),
         []
     )
-
-    const handleChangeBounds = async (bounds: LatLngBounds) => {
-        // left, top, right, bottom
-        const boundsString = bounds.toBBoxString()
-
-        if (boundsString !== mapBounds) {
-            debounceSetMapBounds(boundsString)
-        }
-
-        // if (mapCenter) {
-        //     await router.push(
-        //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
-        //         undefined,
-        //         {
-        //             shallow: true
-        //         }
-        //     )
-        // }
-    }
 
     useEffect(() => {
         const urlParams = {
@@ -129,33 +98,13 @@ const PhotosPage: NextPage = () => {
                 />
             </Card>
 
-            <Card sx={{ height: '200px', mt: 3 }}>
-                {/*<CardContent*/}
-                {/*    sx={{*/}
-                {/*        height: '100%',*/}
-                {/*        overflow: 'hidden',*/}
-                {/*        p: 0.5,*/}
-                {/*        width: '100%'*/}
-                {/*    }}*/}
-                {/*>*/}
+            <Card sx={{ height: '200px', mt: 2 }}>
                 <InteractiveMap
-                    center={DEFAULT_CENTER}
                     zoom={15}
-                >
-                    {/*@ts-ignore*/}
-                    {({ TileLayer }) => (
-                        <>
-                            {poiList?.items?.map((photo) => (
-                                <MarkerPhoto
-                                    key={photo.filename}
-                                    photo={photo}
-                                />
-                            ))}
-                            <MyMapEvents onChangeBounds={handleChangeBounds} />
-                        </>
-                    )}
-                </InteractiveMap>
-                {/*</CardContent>*/}
+                    center={[DEFAULT_CENTER[0], DEFAULT_CENTER[1]]}
+                    photos={poiListData?.items}
+                    onChangePosition={debounceSetMapBounds}
+                ></InteractiveMap>
             </Card>
 
             {data?.items?.length ? (

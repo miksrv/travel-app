@@ -1,12 +1,9 @@
 'use client'
 
 import * as ReactLeaflet from 'react-leaflet'
-import Leaflet, {
-    LatLngBounds,
-    LatLngExpression,
-    Map,
-    MapOptions
-} from 'leaflet'
+import { AccountCircleOutlined } from '@mui/icons-material'
+import { Button } from '@mui/material'
+import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import React, { useEffect, useRef, useState } from 'react'
@@ -14,13 +11,13 @@ import { useMapEvents } from 'react-leaflet'
 
 import { Photo, Place } from '@/api/types/Poi'
 
+import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
 
 import styles from './styles.module.sass'
 
 type MapProps = {
-    children: any
     places?: Place[]
     photos?: Photo[]
     storeMapPosition?: boolean
@@ -29,7 +26,6 @@ type MapProps = {
 } & MapOptions
 
 const InteractiveMap: React.FC<MapProps> = ({
-    children,
     places,
     photos,
     storeMapPosition,
@@ -73,28 +69,33 @@ const InteractiveMap: React.FC<MapProps> = ({
                         place={place}
                     />
                 ))}
+                {photos?.map((photo) => (
+                    <MarkerPhoto
+                        key={photo.filename}
+                        photo={photo}
+                    />
+                ))}
                 {userLatLng && (
                     <>
-                        {/*<div className='leaflet-control'>*/}
-                        {/*    <Button*/}
-                        {/*        variant={'contained'}*/}
-                        {/*        size={'small'}*/}
-                        {/*        sx={{*/}
-                        {/*            left: '10px',*/}
-                        {/*            minWidth: '26px',*/}
-                        {/*            mt: 9,*/}
-                        {/*            width: '26px'*/}
-                        {/*        }}*/}
-                        {/*        color={'primary'}*/}
-                        {/*        onClick={handleUserPosition}*/}
-                        {/*    >*/}
-                        {/*        <AccountCircleOutlined fontSize={'small'} />*/}
-                        {/*    </Button>*/}
-                        {/*</div>*/}
-                        <MarkerUser latLng={userLatLng} />
+                        <div className='leaflet-control'>
+                            <Button
+                                variant={'contained'}
+                                size={'small'}
+                                sx={{
+                                    left: '10px',
+                                    minWidth: '26px',
+                                    mt: 9,
+                                    width: '26px'
+                                }}
+                                color={'primary'}
+                                // onClick={handleUserPosition}
+                            >
+                                <AccountCircleOutlined fontSize={'small'} />
+                            </Button>
+                        </div>
+                        {/*<MarkerUser latLng={userLatLng} />*/}
                     </>
                 )}
-                {children(ReactLeaflet, Leaflet)}
                 {onChangePosition && (
                     <MapEvents onChangeBounds={onChangePosition} />
                 )}

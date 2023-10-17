@@ -1,13 +1,10 @@
-import { AccountCircleOutlined } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
-import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
-import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
@@ -22,20 +19,6 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-const MyMapEvents = dynamic(
-    () => import('@/components/interactive-map/MapEvents'),
-    {
-        ssr: false
-    }
-)
-const MarkerPoint = dynamic(
-    () => import('@/components/interactive-map/MarkerPoint'),
-    {
-        ssr: false
-    }
-)
-
-const DEFAULT_CENTER = [52.580517, 56.855385]
 
 // const MYPOINT = [42.834944, 74.586949]
 // const MYPOINT = [42.877172, 74.593635] // Bishkek
@@ -157,7 +140,7 @@ const MapPage: NextPage = () => {
                 />
             </Card>
 
-            <Card sx={{ height: '80vh', mt: 3 }}>
+            <Card sx={{ height: '80vh', mt: 2 }}>
                 <InteractiveMap
                     // center={
                     //     !lat || !lon
@@ -174,30 +157,7 @@ const MapPage: NextPage = () => {
                     center={[mapCenter[0], mapCenter[1]]}
                     userLatLng={[geolocation.latitude, geolocation.longitude]}
                     onChangePosition={debounceSetMapBounds}
-                >
-                    {/*@ts-ignore*/}
-                    {({ TileLayer }) => (
-                        <>
-                            <div className='leaflet-control'>
-                                <Button
-                                    variant={'contained'}
-                                    size={'small'}
-                                    sx={{
-                                        left: '10px',
-                                        minWidth: '26px',
-                                        mt: 9,
-                                        width: '26px'
-                                    }}
-                                    color={'primary'}
-                                    onClick={handleUserPosition}
-                                >
-                                    <AccountCircleOutlined fontSize={'small'} />
-                                </Button>
-                            </div>
-                            {/*<MyMapEvents onChangeBounds={handleChangeBounds} />*/}
-                        </>
-                    )}
-                </InteractiveMap>
+                />
                 {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
                 {/*<div>*/}
                 {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}

@@ -31,12 +31,6 @@ import { convertDMS, formatDate } from '@/functions/helpers'
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-const MarkerPoint = dynamic(
-    () => import('@/components/interactive-map/MarkerPoint'),
-    {
-        ssr: false
-    }
-)
 
 interface PlaceInformationProps {
     place?: Place
@@ -266,42 +260,25 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 width: '100%'
                             }}
                         >
-                            {loading ? (
+                            {loading ||
+                            (!place?.latitude && !place?.longitude) ? (
                                 <Skeleton
                                     variant={'rounded'}
                                     height={'100%'}
                                 />
                             ) : (
                                 <InteractiveMap
-                                    center={
-                                        place?.latitude && place?.longitude
-                                            ? [place.latitude, place.longitude]
-                                            : [52.580517, 56.855385]
-                                    }
                                     zoom={15}
+                                    center={[place.latitude, place.longitude]}
                                     scrollWheelZoom={false}
-                                >
-                                    {/*@ts-ignore*/}
-                                    {({ TileLayer }) => (
-                                        <>
-                                            {place?.latitude &&
-                                                place?.longitude &&
-                                                place?.category && (
-                                                    <MarkerPoint
-                                                        place={{
-                                                            category:
-                                                                place.category
-                                                                    .name,
-                                                            latitude:
-                                                                place.latitude,
-                                                            longitude:
-                                                                place.longitude
-                                                        }}
-                                                    />
-                                                )}
-                                        </>
-                                    )}
-                                </InteractiveMap>
+                                    places={[
+                                        {
+                                            category: place.category?.name!,
+                                            latitude: place.latitude,
+                                            longitude: place.longitude
+                                        }
+                                    ]}
+                                />
                             )}
                         </Box>
                     </Grid>
