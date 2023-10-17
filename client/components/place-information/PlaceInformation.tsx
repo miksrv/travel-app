@@ -28,10 +28,15 @@ import StatisticLine from '@/components/place-information/StatisticLine'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
 
-const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
-const MarkerPoint = dynamic(() => import('@/components/map/MarkerPoint'), {
+const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
+const MarkerPoint = dynamic(
+    () => import('@/components/interactive-map/MarkerPoint'),
+    {
+        ssr: false
+    }
+)
 
 interface PlaceInformationProps {
     place?: Place
@@ -267,7 +272,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                     height={'100%'}
                                 />
                             ) : (
-                                <DynamicMap
+                                <InteractiveMap
                                     center={
                                         place?.latitude && place?.longitude
                                             ? [place.latitude, place.longitude]
@@ -278,9 +283,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                     {/*@ts-ignore*/}
                                     {({ TileLayer }) => (
                                         <>
-                                            <TileLayer
-                                                url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
-                                            />
                                             {place?.latitude &&
                                                 place?.longitude &&
                                                 place?.category && (
@@ -298,7 +300,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                                 )}
                                         </>
                                     )}
-                                </DynamicMap>
+                                </InteractiveMap>
                             )}
                         </Box>
                     </Grid>

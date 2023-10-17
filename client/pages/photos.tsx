@@ -23,13 +23,21 @@ import { encodeQueryData, formatDate } from '@/functions/helpers'
 
 const PHOTOS_PER_PAGE = 30
 
-const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
-const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
+const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-const MarkerPhoto = dynamic(() => import('@/components/map/MarkerPhoto'), {
-    ssr: false
-})
+const MyMapEvents = dynamic(
+    () => import('@/components/interactive-map/MapEvents'),
+    {
+        ssr: false
+    }
+)
+const MarkerPhoto = dynamic(
+    () => import('@/components/interactive-map/MarkerPhoto'),
+    {
+        ssr: false
+    }
+)
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
@@ -130,19 +138,13 @@ const PhotosPage: NextPage = () => {
                 {/*        width: '100%'*/}
                 {/*    }}*/}
                 {/*>*/}
-                <DynamicMap
+                <InteractiveMap
                     center={DEFAULT_CENTER}
                     zoom={15}
                 >
                     {/*@ts-ignore*/}
                     {({ TileLayer }) => (
                         <>
-                            <TileLayer
-                                url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
-                            />
-                            {/*<TileLayer*/}
-                            {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
-                            {/*/>*/}
                             {poiList?.items?.map((photo) => (
                                 <MarkerPhoto
                                     key={photo.filename}
@@ -152,7 +154,7 @@ const PhotosPage: NextPage = () => {
                             <MyMapEvents onChangeBounds={handleChangeBounds} />
                         </>
                     )}
-                </DynamicMap>
+                </InteractiveMap>
                 {/*</CardContent>*/}
             </Card>
 

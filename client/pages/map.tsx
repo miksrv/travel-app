@@ -19,16 +19,27 @@ import PageLayout from '@/components/page-layout'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
-const DynamicMap = dynamic(() => import('@/components/map'), { ssr: false })
-const MyMapEvents = dynamic(() => import('@/components/map/MapEvents'), {
+const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-const MarkerUser = dynamic(() => import('@/components/map/MarkerUser'), {
-    ssr: false
-})
-const MarkerPoint = dynamic(() => import('@/components/map/MarkerPoint'), {
-    ssr: false
-})
+const MyMapEvents = dynamic(
+    () => import('@/components/interactive-map/MapEvents'),
+    {
+        ssr: false
+    }
+)
+const MarkerUser = dynamic(
+    () => import('@/components/interactive-map/MarkerUser'),
+    {
+        ssr: false
+    }
+)
+const MarkerPoint = dynamic(
+    () => import('@/components/interactive-map/MarkerPoint'),
+    {
+        ssr: false
+    }
+)
 
 const DEFAULT_CENTER = [52.580517, 56.855385]
 
@@ -85,8 +96,6 @@ const MapPage: NextPage = () => {
         // }
     }
 
-    console.log('coordinates', coordinates)
-
     const debounceSetMapBounds = useCallback(
         debounce((bounds: string, mapCenter?: any) => {
             setMapBounds(bounds)
@@ -125,6 +134,13 @@ const MapPage: NextPage = () => {
         }
     }, [geolocation.latitude, geolocation.longitude])
 
+    // useEffect(() => {
+    //     if (coordinates?.latitude && coordinates?.longitude) {
+    //         console.log('111')
+    //         setMapCenter([coordinates.latitude, coordinates.longitude])
+    //     }
+    // })
+
     return (
         <PageLayout>
             <Card sx={{ mb: 2 }}>
@@ -148,7 +164,7 @@ const MapPage: NextPage = () => {
             </Card>
 
             <Card sx={{ height: '80vh', mt: 3 }}>
-                <DynamicMap
+                <InteractiveMap
                     // center={
                     //     !lat || !lon
                     //         ? myCoordinates?.latitude && myCoordinates.longitude
@@ -165,12 +181,6 @@ const MapPage: NextPage = () => {
                     {/*@ts-ignore*/}
                     {({ TileLayer }) => (
                         <>
-                            <TileLayer
-                                url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
-                            />
-                            {/*<TileLayer*/}
-                            {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
-                            {/*/>*/}
                             {geolocation.latitude && geolocation.longitude && (
                                 <MarkerUser
                                     lat={geolocation.latitude}
@@ -202,7 +212,7 @@ const MapPage: NextPage = () => {
                             <MyMapEvents onChangeBounds={handleChangeBounds} />
                         </>
                     )}
-                </DynamicMap>
+                </InteractiveMap>
                 {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
                 {/*<div>*/}
                 {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
