@@ -12,7 +12,7 @@ class UsersModel extends MyBaseModel
     protected $returnType     = User::class;
     protected $useSoftDeletes = true;
 
-    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
+    protected array $hiddenFields = ['deleted_at']; // 'created_at', 'updated_at',
 
     // The updatable fields
     protected $allowedFields = [

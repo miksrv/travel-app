@@ -68,17 +68,17 @@ const menuItems: MenuItemsProps[] = [
         icon: <PhotoOutlined color={'primary'} />,
         link: '/photos',
         text: 'Фотографии'
-    }
+    },
     // {
     //     icon: <BookmarkBorderOutlined color={'primary'} />,
     //     link: '/categories',
     //     text: 'Категории'
     // },
-    // {
-    //     icon: <PeopleOutline color={'primary'} />,
-    //     link: '/users',
-    //     text: 'Пользователи'
-    // }
+    {
+        icon: <PeopleOutline color={'primary'} />,
+        link: '/users',
+        text: 'Путешественники'
+    }
 ]
 
 const PageLayout: React.FC<any> = ({ children, ...props }) => {

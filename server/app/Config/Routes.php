@@ -56,3 +56,6 @@ $routes->options('rating', 'Rating');
 $routes->get('activity', 'Activity::list');
 $routes->get('activity/(:alphanum)', 'Activity::show/$1');
 $routes->options('activity', 'Activity');
+
+$routes->get('users', 'users::list');
+$routes->options('users', 'users');

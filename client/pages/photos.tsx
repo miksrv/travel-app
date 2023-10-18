@@ -27,8 +27,6 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-const DEFAULT_CENTER = [52.580517, 56.855385]
-
 const PhotosPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.photos' })
 

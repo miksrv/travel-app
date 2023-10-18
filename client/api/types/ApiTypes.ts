@@ -4,6 +4,7 @@ import { Item } from './Activity'
 import { Photo } from './Photo'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { Rating } from './Rating'
+import { User } from './User'
 
 export type DateTimeType = {
     date: string
@@ -128,4 +129,15 @@ export interface ResponsePoiPlacesList {
 
 export interface ResponsePoiPhotosList {
     items: poiPhoto[]
+}
+
+/* Controller: User */
+export interface ResponseUsersGetList {
+    items?: User[]
+    count?: number
+}
+
+export interface RequestUsersGetList {
+    limit?: number
+    offset?: number
 }

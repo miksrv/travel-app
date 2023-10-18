@@ -128,6 +128,15 @@ export const API = createApi({
                 url: 'rating'
             }),
             transformErrorResponse: (response) => response.data
+        }),
+
+        /* Controller: User */
+        usersGetList: builder.query<
+            ApiTypes.ResponseUsersGetList,
+            Maybe<ApiTypes.RequestUsersGetList>
+        >({
+            providesTags: ['Users'],
+            query: (params) => `users${encodeQueryData(params)}`
         })
     }),
     extractRehydrationInfo(action, { reducerPath }) {
@@ -136,15 +145,11 @@ export const API = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Activity', 'Places', 'Photos', 'Rating']
+    tagTypes: ['Activity', 'Places', 'Photos', 'Rating', 'Users']
 })
 
 // Export hooks for usage in functional components
 export const {
-    useAddressGetSearchMutation,
-
-    useCategoriesGetListQuery,
-
     util: { getRunningQueriesThunk }
 } = API
 

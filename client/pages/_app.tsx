@@ -132,8 +132,9 @@ const theme = createTheme(
             '0 0 0 1px rgba(0,0,0,.12)',
             '0 1px 2px rgba(0,0,0,.1)',
             '1px 1px 1px 0 rgba(0, 0, 0, 0.1)',
+            '0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)',
             '0px 6px 8px 0px rgba(0, 0, 0, 0.25)',
-            ...Array(20).fill('none')
+            ...Array(19).fill('none')
         ] as unknown as Shadows,
         typography: {
             body1: {

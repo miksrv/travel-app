@@ -4,10 +4,10 @@ import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
-import React, { useMemo, useState } from 'react'
+import React from 'react'
 
-import { useCategoriesGetListQuery } from '@/api/api'
-import { ApiTypes, Place } from '@/api/types'
+import { API } from '@/api/api'
+import { Place } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
 
@@ -19,7 +19,7 @@ interface PlacesCategorySelectProps {
 const PlacesCategorySelect: React.FC<PlacesCategorySelectProps> = (props) => {
     const { category, onChangeCategory } = props
 
-    const { data, isLoading } = useCategoriesGetListQuery()
+    const { data, isLoading } = API.useCategoriesGetListQuery()
 
     return (
         <FormControl
