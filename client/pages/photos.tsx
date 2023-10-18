@@ -157,8 +157,7 @@ const PhotosPage: NextPage = () => {
                     imageCaption={
                         <Avatar
                             size={'medium'}
-                            userName={data?.items?.[photoIndex]?.author?.name}
-                            image={data?.items?.[photoIndex]?.author?.avatar}
+                            user={data?.items?.[photoIndex]?.author}
                             text={formatDate(
                                 data?.items?.[photoIndex]?.created?.date
                             )}

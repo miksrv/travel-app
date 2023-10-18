@@ -40,7 +40,7 @@ const PlacesPage: NextPage = () => {
     //     ? (searchParams.get('order') as API.SortOrder)
     //     : API.SortOrder.DESC
 
-    const [page, setPage] = useState<number>(1)
+    const [page, setPage] = useState<number>()
     const [sort, setSort] = useState<ApiTypes.SortFields>(
         ApiTypes.SortFields.Updated
     )
@@ -76,10 +76,7 @@ const PlacesPage: NextPage = () => {
     })
 
     // useEffect(() => {
-    //     if (pageUrl) {
-    //         setPage(Number(pageUrl))
-    //     }
-    //
+    //     setPage(initPage)
     //     if (sortUrl) {
     //         setSort(sortUrl as API.SortFields)
     //     }
@@ -154,7 +151,7 @@ const PlacesPage: NextPage = () => {
             <Pagination
                 sx={{ mt: 2 }}
                 shape={'rounded'}
-                page={page}
+                defaultValue={page}
                 hidden={!data?.count}
                 count={Math.ceil((data?.count || 0) / POST_PER_PAGE)}
                 onChange={(_, page) => setPage(page)}

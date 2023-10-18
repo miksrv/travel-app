@@ -70,8 +70,7 @@ const MainPage: NextPage = () => {
                     <CardContent>
                         <Avatar
                             size={'medium'}
-                            userName={item.author?.name}
-                            image={item.author?.avatar}
+                            user={item.author}
                             text={
                                 <>
                                     {formatDate(item.created?.date)}

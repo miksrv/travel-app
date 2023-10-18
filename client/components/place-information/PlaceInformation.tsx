@@ -112,8 +112,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             title={'Автор:'}
                             text={
                                 <Avatar
-                                    userName={place?.author?.name}
-                                    image={place?.author?.avatar}
+                                    user={place?.author}
                                     loading={loading}
                                 />
                             }

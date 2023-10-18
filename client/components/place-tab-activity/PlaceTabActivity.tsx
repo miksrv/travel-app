@@ -45,8 +45,7 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                 >
                     <Avatar
                         size={'medium'}
-                        userName={item.author?.name}
-                        image={item.author?.avatar}
+                        user={item.author}
                         text={
                             <>
                                 {formatDate(item.created?.date)}
