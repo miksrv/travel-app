@@ -100,11 +100,10 @@ const PhotosPage: NextPage = () => {
 
             <Card sx={{ height: '200px', mt: 2 }}>
                 <InteractiveMap
-                    zoom={15}
-                    center={[DEFAULT_CENTER[0], DEFAULT_CENTER[1]]}
+                    storeMapPosition={true}
                     photos={poiListData?.items}
-                    onChangePosition={debounceSetMapBounds}
-                ></InteractiveMap>
+                    onChangeBounds={debounceSetMapBounds}
+                />
             </Card>
 
             {data?.items?.length ? (

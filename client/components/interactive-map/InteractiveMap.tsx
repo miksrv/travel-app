@@ -3,7 +3,13 @@
 import * as ReactLeaflet from 'react-leaflet'
 import { AccountCircleOutlined } from '@mui/icons-material'
 import { Button } from '@mui/material'
-import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
+import {
+    LatLngBounds,
+    LatLngExpression,
+    LatLngLiteral,
+    Map,
+    MapOptions
+} from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import React, { useEffect, useRef, useState } from 'react'
@@ -15,44 +21,107 @@ import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
 
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
+
 import styles from './styles.module.sass'
+
+const DEFAULT_MAP_STORAGE_KEY = 'mapCoordinates'
+const DEFAULT_MAP_ZOOM = 15
+const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
+
+type mapPositionType = {
+    lat: number
+    lng: number
+    zoom: number
+}
 
 type MapProps = {
     places?: Place[]
     photos?: Photo[]
     storeMapPosition?: boolean
-    userLatLng?: LatLngExpression
-    onChangePosition?: (bounds: LatLngBounds, zoom: number) => void
+    storeMapKey?: string
+    userLatLng?: LatLngLiteral
+    onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
 } & MapOptions
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
     storeMapPosition,
+    storeMapKey,
     userLatLng,
-    onChangePosition,
+    onChangeBounds,
     ...props
 }) => {
-    const [center, setCenter] = useState<LatLngExpression>()
+    const [readyStorage, setReadyStorage] = useState<boolean>(false)
+    const [mapPosition, setMapPosition] = useState<mapPositionType>()
     const mapRef = useRef<Map | any>()
 
-    // const handleUserPosition = () => {
-    //     if (myCoordinates?.latitude && myCoordinates?.longitude) {
-    //         setMapCenter([myCoordinates.latitude, myCoordinates.longitude])
-    //     }
-    // }
+    const [coordinates, setCoordinates] = useLocalStorage<mapPositionType>(
+        storeMapKey || DEFAULT_MAP_STORAGE_KEY
+    )
+
+    const handleUserPosition = () => {
+        if (userLatLng) {
+            mapRef.current?.setView(
+                [userLatLng.lat, userLatLng.lng],
+                DEFAULT_MAP_ZOOM
+            )
+        }
+    }
+
+    const handleChangeBounds = (bounds: LatLngBounds, zoom: number) => {
+        const center = bounds.getCenter()
+        const currentMapPosition = {
+            lat: center.lat,
+            lng: center.lng,
+            zoom
+        }
+
+        if (!isEqual(mapPosition, currentMapPosition)) {
+            onChangeBounds?.(bounds, zoom)
+            setMapPosition(currentMapPosition)
+
+            if (readyStorage && storeMapPosition) {
+                setCoordinates(currentMapPosition)
+            }
+        }
+    }
 
     useEffect(() => {
-        if (!isEqual(center, props.center) && props.center) {
-            setCenter(props.center)
-            mapRef.current?.setView(props.center, mapRef?.current.getZoom())
+        if (typeof coordinates !== 'undefined') {
+            if (
+                !readyStorage &&
+                storeMapPosition &&
+                coordinates?.lng &&
+                coordinates?.lat &&
+                coordinates?.zoom
+            ) {
+                mapRef.current?.setView(
+                    [coordinates.lat, coordinates.lng],
+                    coordinates.zoom
+                )
+            }
+
+            setReadyStorage(true)
         }
-    }, [props.center, center])
+    }, [readyStorage, coordinates])
+
+    useEffect(() => {
+        if (props.center || props.zoom) {
+            mapRef.current?.setView(
+                props.center || DEFAULT_MAP_CENTER,
+                props.zoom || DEFAULT_MAP_ZOOM
+            )
+        }
+    })
 
     return (
         <div className={styles.mapContainer}>
             <ReactLeaflet.MapContainer
                 {...props}
+                center={props.center || DEFAULT_MAP_CENTER}
+                zoom={props.zoom || DEFAULT_MAP_ZOOM}
                 style={{ height: '100%', width: '100%' }}
                 attributionControl={false}
                 ref={mapRef}
@@ -88,16 +157,16 @@ const InteractiveMap: React.FC<MapProps> = ({
                                     width: '26px'
                                 }}
                                 color={'primary'}
-                                // onClick={handleUserPosition}
+                                onClick={handleUserPosition}
                             >
                                 <AccountCircleOutlined fontSize={'small'} />
                             </Button>
                         </div>
-                        {/*<MarkerUser latLng={userLatLng} />*/}
+                        <MarkerUser latLng={userLatLng} />
                     </>
                 )}
-                {onChangePosition && (
-                    <MapEvents onChangeBounds={onChangePosition} />
+                {onChangeBounds && (
+                    <MapEvents onChangeBounds={handleChangeBounds} />
                 )}
             </ReactLeaflet.MapContainer>
         </div>

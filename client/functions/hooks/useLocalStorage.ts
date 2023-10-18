@@ -5,15 +5,18 @@ export const useLocalStorage = <S>(
     initialState?: S | (() => S)
 ): [S, React.Dispatch<React.SetStateAction<S>>] => {
     const [state, setState] = useState<S>(initialState as S)
+
     useDebugValue(state)
 
     useEffect(() => {
         const item = localStorage.getItem(key)
-        if (item) setState(parse(item))
+        setState(item ? parse(item) : null)
     }, [])
 
     useEffect(() => {
-        localStorage.setItem(key, JSON.stringify(state))
+        if (state) {
+            localStorage.setItem(key, JSON.stringify(state))
+        }
     }, [state])
 
     return [state, setState]

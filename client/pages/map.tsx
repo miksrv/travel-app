@@ -14,34 +14,22 @@ import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 
 import { round } from '@/functions/helpers'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-
-// const MYPOINT = [42.834944, 74.586949]
-// const MYPOINT = [42.877172, 74.593635] // Bishkek
-export const MYPOINT = [51.765445, 55.099745] // Orenburg
 
 export type LatLngCoordinate = {
     latitude: number
     longitude: number
 }
 
-interface mapLocalStorage extends LatLngCoordinate {
-    zoom: number
-}
-
 const MapPage: NextPage = () => {
     // const searchParams = useSearchParams()
     // const router = useRouter()
     const geolocation = useGeolocation()
-    // const [coordinates, setCoordinates] =
-    //     useLocalStorage<mapLocalStorage>('map')
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
-    const [mapCenter, setMapCenter] = useState<number[]>(MYPOINT)
     const [mapBounds, setMapBounds] = useState<string>()
 
     // const lat = searchParams.get('lat')
@@ -53,44 +41,12 @@ const MapPage: NextPage = () => {
         { skip: !mapBounds }
     )
 
-    // const handleChangeBounds = async (bounds: LatLngBounds) => {
-    //     // left, top, right, bottom
-    //     const boundsString = bounds.toBBoxString()
-    //     const mapCenter = bounds.getCenter()
-    //
-    //     if (boundsString !== mapBounds) {
-    //         debounceSetMapBounds(boundsString, mapCenter)
-    //     }
-    //
-    //     // if (mapCenter) {
-    //     //     await router.push(
-    //     //         `?lat=${mapCenter.lat}&lon=${mapCenter.lng}`,
-    //     //         undefined,
-    //     //         {
-    //     //             shallow: true
-    //     //         }
-    //     //     )
-    //     // }
-    // }
-
     const debounceSetMapBounds = useCallback(
-        debounce((bounds: LatLngBounds, zoom?: number) => {
+        debounce((bounds: LatLngBounds) => {
             setMapBounds(bounds.toBBoxString())
-
-            // setCoordinates({
-            //     latitude: mapCenter.lat,
-            //     longitude: mapCenter.lng,
-            //     zoom: 14
-            // })
         }, 500),
         []
     )
-
-    const handleUserPosition = () => {
-        if (myCoordinates?.latitude && myCoordinates?.longitude) {
-            setMapCenter([myCoordinates.latitude, myCoordinates.longitude])
-        }
-    }
 
     useEffect(() => {
         const updateLatitude = round(geolocation?.latitude)
@@ -110,13 +66,6 @@ const MapPage: NextPage = () => {
             introduce({ lat: updateLatitude, lon: updateLongitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
-
-    // useEffect(() => {
-    //     if (coordinates?.latitude && coordinates?.longitude) {
-    //         console.log('111')
-    //         setMapCenter([coordinates.latitude, coordinates.longitude])
-    //     }
-    // })
 
     return (
         <PageLayout>
@@ -142,21 +91,17 @@ const MapPage: NextPage = () => {
 
             <Card sx={{ height: '80vh', mt: 2 }}>
                 <InteractiveMap
-                    // center={
-                    //     !lat || !lon
-                    //         ? myCoordinates?.latitude && myCoordinates.longitude
-                    //             ? [
-                    //                   myCoordinates.latitude,
-                    //                   myCoordinates.longitude
-                    //               ]
-                    //             : DEFAULT_CENTER
-                    //         : [lat, lon]
-                    // }
+                    storeMapPosition={true}
                     places={poiListData?.items}
-                    zoom={15}
-                    center={[mapCenter[0], mapCenter[1]]}
-                    userLatLng={[geolocation.latitude, geolocation.longitude]}
-                    onChangePosition={debounceSetMapBounds}
+                    onChangeBounds={debounceSetMapBounds}
+                    userLatLng={
+                        geolocation.latitude && geolocation.longitude
+                            ? {
+                                  lat: geolocation.latitude,
+                                  lng: geolocation.longitude
+                              }
+                            : undefined
+                    }
                 />
                 {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
                 {/*<div>*/}
