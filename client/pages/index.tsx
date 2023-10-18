@@ -14,9 +14,9 @@ import Gallery from 'react-photo-gallery'
 import { API, ImageHost } from '@/api/api'
 import { ActivityTypes } from '@/api/types/Activity'
 
-import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import UserAvatar from '@/components/user-avatar'
 
 import { categoryImage } from '@/functions/categories'
 import { formatDate } from '@/functions/helpers'
@@ -68,7 +68,7 @@ const MainPage: NextPage = () => {
                     sx={{ mb: 1.5 }}
                 >
                     <CardContent>
-                        <Avatar
+                        <UserAvatar
                             size={'medium'}
                             user={item.author}
                             text={

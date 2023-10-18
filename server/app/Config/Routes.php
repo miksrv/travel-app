@@ -57,5 +57,6 @@ $routes->get('activity', 'Activity::list');
 $routes->get('activity/(:alphanum)', 'Activity::show/$1');
 $routes->options('activity', 'Activity');
 
-$routes->get('users', 'users::list');
+$routes->get('users', 'Users::list');
+$routes->get('users/(:alphanum)', 'Users::show/$1');
 $routes->options('users', 'users');

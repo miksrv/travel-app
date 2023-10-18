@@ -15,9 +15,9 @@ import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
 
-import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import UserAvatar from '@/components/user-avatar'
 
 import { encodeQueryData, formatDate } from '@/functions/helpers'
 
@@ -106,7 +106,7 @@ const PhotosPage: NextPage = () => {
 
             {data?.items?.length ? (
                 <Card sx={{ mb: 2, mt: 2 }}>
-                    <CardContent sx={{ m: -1.5, mb: -2.5 }}>
+                    <CardContent sx={{ mb: -1 }}>
                         <Gallery
                             photos={data.items.map((photo) => ({
                                 height: photo.height,
@@ -153,7 +153,7 @@ const PhotosPage: NextPage = () => {
                     )}
                     imageTitle={data?.items?.[photoIndex]?.title || ''}
                     imageCaption={
-                        <Avatar
+                        <UserAvatar
                             size={'medium'}
                             user={data?.items?.[photoIndex]?.author}
                             text={formatDate(

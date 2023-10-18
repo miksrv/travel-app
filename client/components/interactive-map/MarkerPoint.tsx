@@ -52,7 +52,6 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                             <Link
                                 href={`/places/${place.id}`}
                                 title={poiData?.title}
-                                target={'_blank'}
                             >
                                 <Image
                                     className={styles.image}

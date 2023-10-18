@@ -11,16 +11,16 @@ import React, { useState } from 'react'
 
 import { API } from '@/api/api'
 
-import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 import { encodeQueryData } from '@/functions/helpers'
 
 const USERS_PER_PAGE = 30
 
-const PhotosPage: NextPage = () => {
+const UsersPage: NextPage = () => {
     const router = useRouter()
 
     const [page, setPage] = useState<number>(1)
@@ -64,12 +64,10 @@ const PhotosPage: NextPage = () => {
                                         key !== (data.items?.length || 1) - 1
                                     }
                                 >
-                                    <Avatar
+                                    <UserAvatar
                                         user={user}
                                         size={'medium'}
-                                        text={`Зарегистрирован(а): ${formatDate(
-                                            user?.created?.date
-                                        )}`}
+                                        text={formatDate(user?.created?.date)}
                                     />
                                 </ListItem>
                             ))}
@@ -92,4 +90,4 @@ const PhotosPage: NextPage = () => {
     )
 }
 
-export default PhotosPage
+export default UsersPage

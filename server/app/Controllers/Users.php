@@ -7,7 +7,6 @@ use CodeIgniter\RESTful\ResourceController;
 class Users extends ResourceController {
 
     /**
-     * Show all activities for all users and all places, photos
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
@@ -41,6 +40,30 @@ class Users extends ResourceController {
         return $this->respond([
             'items' => $result,
             'count' => $usersModel->select('id')->countAllResults()
+        ]);
+    }
+
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
+    public function show($id = null): ResponseInterface {
+        $usersModel = new UsersModel();
+        $usersData  = $usersModel
+            ->select('id, name, avatar, created_at, updated_at')
+            ->orderBy('reputation', 'DESC')
+            ->find($id);
+
+        if (!$usersData) {
+            return $this->failNotFound();
+        }
+
+        return $this->respond((object) [
+            'id'      => $usersData->id,
+            'name'    => $usersData->name,
+            'avatar'  => $usersData->avatar,
+            'created' => $usersData->created_at,
+            'updated' => $usersData->updated_at
         ]);
     }
 }

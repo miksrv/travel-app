@@ -11,7 +11,7 @@ import React from 'react'
 // import { ImageHost } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
 
-import Avatar from '@/components/avatar'
+import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 
@@ -43,7 +43,7 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
                     sx={{ mb: 2 }}
                     key={index}
                 >
-                    <Avatar
+                    <UserAvatar
                         size={'medium'}
                         user={item.author}
                         text={

@@ -141,3 +141,5 @@ export interface RequestUsersGetList {
     limit?: number
     offset?: number
 }
+
+export interface ResponseUsersGetItem extends User {}

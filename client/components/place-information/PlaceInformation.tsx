@@ -22,8 +22,8 @@ import React from 'react'
 import { API } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
-import Avatar from '@/components/avatar'
 import StatisticLine from '@/components/place-information/StatisticLine'
+import UserAvatar from '@/components/user-avatar'
 
 import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
@@ -111,7 +111,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             icon={<AccountCircleOutlined color={'disabled'} />}
                             title={'Автор:'}
                             text={
-                                <Avatar
+                                <UserAvatar
                                     user={place?.author}
                                     loading={loading}
                                 />

@@ -131,6 +131,10 @@ export const API = createApi({
         }),
 
         /* Controller: User */
+        usersGetItem: builder.query<ApiTypes.ResponseUsersGetItem, string>({
+            providesTags: ['Users'],
+            query: (item) => `users/${item}`
+        }),
         usersGetList: builder.query<
             ApiTypes.ResponseUsersGetList,
             Maybe<ApiTypes.RequestUsersGetList>

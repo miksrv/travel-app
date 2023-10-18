@@ -1,9 +1,10 @@
-import { Avatar as MuiAvatar } from '@mui/material'
+import { Avatar } from '@mui/material'
 import Box from '@mui/material/Box'
 import Popover from '@mui/material/Popover'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 import { ImageHost } from '@/api/api'
@@ -24,7 +25,7 @@ const POPOVER_ID = 'user-avatar'
 
 const getDimension = (size?: SizeType) => (size === 'medium' ? 34 : 20)
 
-const Avatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
+const UserAvatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
     const [anchorEl, setAnchorEl] = useState<HTMLDivElement | null>(null)
 
     const handleClick = (event: React.MouseEvent<HTMLDivElement>) => {
@@ -59,7 +60,7 @@ const Avatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
                     </>
                 ) : (
                     <>
-                        <MuiAvatar
+                        <Avatar
                             alt={user?.name || ''}
                             src={
                                 user?.avatar
@@ -76,7 +77,16 @@ const Avatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
                             aria-describedby={POPOVER_ID}
                         />
                         <div>
-                            <div>{user?.name || 'Гость'}</div>
+                            {user?.id ? (
+                                <Link
+                                    href={`/users/${user.id}`}
+                                    title={user?.name}
+                                >
+                                    {user?.name}
+                                </Link>
+                            ) : (
+                                <div>{user?.name || 'Гость'}</div>
+                            )}
                             {text && (
                                 <Typography
                                     variant={'caption'}
@@ -124,4 +134,4 @@ const Avatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
     )
 }
 
-export default Avatar
+export default UserAvatar

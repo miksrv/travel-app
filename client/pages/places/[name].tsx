@@ -17,7 +17,6 @@ import { API, ImageHost } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
-import Avatar from '@/components/avatar'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PlaceInformation from '@/components/place-information'
@@ -25,6 +24,7 @@ import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
+import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 
@@ -61,16 +61,15 @@ const PLACES_PER_PAGE = 3
 
 const PlaceItemPage: NextPage = () => {
     const router = useRouter()
-    const routerObject = router.query.name
-    const objectName =
-        typeof routerObject === 'string' ? routerObject : skipToken
+    const routerId = router.query.name
+    const placeId = typeof routerId === 'string' ? routerId : skipToken
 
     const [activeTab, setActiveTab] = React.useState<number>(0)
 
     const { data, isLoading } = API.usePlacesGetItemQuery(
-        typeof objectName === 'string' ? objectName : '',
+        typeof placeId === 'string' ? placeId : '',
         {
-            skip: router.isFallback || !routerObject
+            skip: router.isFallback || !routerId
         }
     )
 
@@ -282,7 +281,7 @@ const PlaceItemPage: NextPage = () => {
                     )}
                     imageTitle={data?.photos?.[photoIndex]?.title || ''}
                     imageCaption={
-                        <Avatar
+                        <UserAvatar
                             size={'medium'}
                             user={data?.photos?.[photoIndex]?.author}
                             text={formatDate(

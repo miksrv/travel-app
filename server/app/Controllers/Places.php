@@ -155,7 +155,7 @@ class Places extends ResourceController {
                 ->join('address_city', 'address_city.id = places.address_city', 'left')
                 ->find($id);
 
-            if (!$placeData) { //  || !$placeTranslate->title($id)
+            if (!$placeData) {
                 return $this->failNotFound();
             }
 
