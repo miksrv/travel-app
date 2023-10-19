@@ -294,6 +294,7 @@ class Places extends ResourceController {
         $orderFields   = ['ASC', 'DESC'];
 
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
+        $author   = $this->request->getGet('author', FILTER_SANITIZE_STRING);
         $exclude  = $this->request->getGet('excludePlaces', FILTER_SANITIZE_STRING);
         $order    = $this->request->getGet('order', FILTER_SANITIZE_STRING) ?? $orderDefault;
         $country  = $this->request->getGet('country', FILTER_SANITIZE_NUMBER_INT);
@@ -322,6 +323,10 @@ class Places extends ResourceController {
 
         if ($category) {
             $placesModel->where(['places.category' => $category]);
+        }
+
+        if ($author) {
+            $placesModel->where(['places.author' => $author]);
         }
 
         if ($exclude) {

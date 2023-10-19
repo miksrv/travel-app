@@ -69,8 +69,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         <>
                                             <Skeleton
                                                 variant={'rectangular'}
-                                                width={18}
-                                                height={18}
+                                                width={20}
+                                                height={20}
                                             />
                                             <Skeleton
                                                 variant={'text'}
@@ -86,9 +86,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         <>
                                             <Image
                                                 style={{
-                                                    marginLeft: '2px',
-                                                    marginRight: '4px',
-                                                    marginTop: '2px'
+                                                    marginRight: '8px'
                                                 }}
                                                 src={
                                                     categoryImage(
@@ -98,8 +96,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                                 alt={
                                                     place?.category?.title || ''
                                                 }
-                                                width={16}
-                                                height={18}
+                                                width={18}
+                                                height={20}
                                             />
                                             {place?.category?.title}
                                         </>
@@ -131,22 +129,22 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 )
                             }
                         />
-                        <StatisticLine
-                            icon={<StraightenOutlined color={'disabled'} />}
-                            title={'Расстояние:'}
-                            text={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={60}
-                                    />
-                                ) : place?.distance ? (
-                                    `${place?.distance || 0} км`
-                                ) : (
-                                    '-'
-                                )
-                            }
-                        />
+                        {place?.distance && (
+                            <StatisticLine
+                                icon={<StraightenOutlined color={'disabled'} />}
+                                title={'Как далеко:'}
+                                text={
+                                    loading ? (
+                                        <Skeleton
+                                            variant={'text'}
+                                            width={60}
+                                        />
+                                    ) : (
+                                        `${place?.distance} км`
+                                    )
+                                }
+                            />
+                        )}
                         <StatisticLine
                             icon={<PlaceOutlined color={'disabled'} />}
                             title={'Координаты:'}

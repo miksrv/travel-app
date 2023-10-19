@@ -1,7 +1,7 @@
 import { ApiTypes } from '@/api/types'
 
 export type User = {
-    id: number
+    id: string
     name: string
     avatar?: string
 

@@ -11,7 +11,6 @@ import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import Typography from '@mui/material/Typography'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -260,13 +259,6 @@ const PlaceItemPage: NextPage = () => {
                     />
                 )}
             </Card>
-
-            <Typography
-                variant={'h2'}
-                sx={{ mb: 2, mt: 4 }}
-            >
-                {'Ближайшие интересные места'}
-            </Typography>
 
             <PlacesList
                 perPage={PLACES_PER_PAGE}

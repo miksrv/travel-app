@@ -17,6 +17,7 @@ import { wrapper } from '@/api/store'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import PlacesList from '@/components/places-list'
 
 import userAvatar from '@/public/images/no-avatar.jpeg'
 
@@ -52,12 +53,24 @@ const UserItemPage: NextPage = () => {
 
     const [activeTab, setActiveTab] = React.useState<number>(0)
 
-    const { data, isLoading } = API.useUsersGetItemQuery(
+    const { data: userData, isLoading } = API.useUsersGetItemQuery(
         typeof userId === 'string' ? userId : '',
         {
             skip: router.isFallback || !routerId
         }
     )
+
+    const { data: dataPlaces, isLoading: dataPlacesLoading } =
+        API.usePlacesGetListQuery(
+            {
+                author: userData?.id,
+                limit: 20,
+                offset: 0
+            },
+            {
+                skip: !userData?.id
+            }
+        )
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
@@ -74,7 +87,7 @@ const UserItemPage: NextPage = () => {
                                 width={'40%'}
                             />
                         ) : (
-                            data?.name
+                            userData?.name
                         )
                     }
                     titleTypographyProps={{ component: 'h1' }}
@@ -86,7 +99,7 @@ const UserItemPage: NextPage = () => {
                             />
                         ) : (
                             <Breadcrumbs
-                                currentPage={data?.name}
+                                currentPage={userData?.name}
                                 links={[
                                     {
                                         link: '/users/',
@@ -101,10 +114,10 @@ const UserItemPage: NextPage = () => {
                 <Divider />
                 <CardContent>
                     <Avatar
-                        alt={data?.name || ''}
+                        alt={userData?.name || ''}
                         src={
-                            data?.avatar
-                                ? `${ImageHost}avatar/${data.avatar}`
+                            userData?.avatar
+                                ? `${ImageHost}avatar/${userData.avatar}`
                                 : userAvatar.src
                         }
                         sx={{
@@ -128,7 +141,11 @@ const UserItemPage: NextPage = () => {
                             aria-label={'basic tabs'}
                         >
                             <Tab
-                                label={'Места (23)'}
+                                label={`Места ${
+                                    dataPlaces?.items?.length
+                                        ? ` (${dataPlaces?.items.length})`
+                                        : ''
+                                }`}
                                 icon={<PlaceOutlined />}
                                 iconPosition={'start'}
                             />
@@ -140,9 +157,22 @@ const UserItemPage: NextPage = () => {
                         </Tabs>
                     }
                 />
-                <Divider />
-                <CardContent>sss</CardContent>
+
+                {activeTab === 1 && (
+                    <>
+                        <Divider />
+                        <CardContent>sss</CardContent>
+                    </>
+                )}
             </Card>
+
+            {activeTab === 0 && (
+                <PlacesList
+                    perPage={6}
+                    places={dataPlaces?.items}
+                    loading={dataPlacesLoading}
+                />
+            )}
         </PageLayout>
     )
 }
