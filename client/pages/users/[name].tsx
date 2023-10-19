@@ -1,9 +1,12 @@
+import { ImageOutlined, PlaceOutlined } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
+import Tab from '@mui/material/Tab'
+import Tabs from '@mui/material/Tabs'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -47,12 +50,18 @@ const UserItemPage: NextPage = () => {
     const routerId = router.query.name
     const userId = typeof routerId === 'string' ? routerId : skipToken
 
+    const [activeTab, setActiveTab] = React.useState<number>(0)
+
     const { data, isLoading } = API.useUsersGetItemQuery(
         typeof userId === 'string' ? userId : '',
         {
             skip: router.isFallback || !routerId
         }
     )
+
+    const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
+        setActiveTab(newTab)
+    }
 
     return (
         <PageLayout>
@@ -105,6 +114,34 @@ const UserItemPage: NextPage = () => {
                         variant={'rounded'}
                     />
                 </CardContent>
+            </Card>
+
+            <Card sx={{ mb: 2 }}>
+                <CardHeader
+                    sx={{ p: 0 }}
+                    title={
+                        <Tabs
+                            defaultValue={0}
+                            value={activeTab}
+                            tabIndex={activeTab}
+                            onChange={handleTabChange}
+                            aria-label={'basic tabs'}
+                        >
+                            <Tab
+                                label={'Места (23)'}
+                                icon={<PlaceOutlined />}
+                                iconPosition={'start'}
+                            />
+                            <Tab
+                                label={'Фотографии (12)'}
+                                icon={<ImageOutlined />}
+                                iconPosition={'start'}
+                            />
+                        </Tabs>
+                    }
+                />
+                <Divider />
+                <CardContent>sss</CardContent>
             </Card>
         </PageLayout>
     )

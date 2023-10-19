@@ -6,17 +6,23 @@ interface StatisticLineProps {
     title: string
     icon?: React.ReactNode
     text?: React.ReactNode
+    last?: boolean
 }
 
-const StatisticLine: React.FC<StatisticLineProps> = ({ icon, title, text }) => (
+const StatisticLine: React.FC<StatisticLineProps> = ({
+    icon,
+    title,
+    text,
+    last
+}) => (
     <Stack
         direction={'row'}
         spacing={1}
-        sx={{ mb: 0.6 }}
+        sx={{ mb: !last ? 1 : 0 }}
     >
         {icon}
         <Typography
-            sx={{ color: '#818c99', width: 140 }}
+            color={'#616161'}
             variant={'body1'}
         >
             {title}

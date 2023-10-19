@@ -33,9 +33,9 @@ const theme = createTheme(
             MuiAppBar: {
                 styleOverrides: {
                     root: {
-                        // backgroundColor: '#FFF',
-                        // borderBottom: '1px solid rgba(0,0,0,.12)',
-                        // color: '#000'
+                        backgroundColor: '#FFF',
+                        borderBottom: '1px solid rgba(0,0,0,.12)',
+                        color: '#000'
                     }
                 }
             },
@@ -54,11 +54,14 @@ const theme = createTheme(
             MuiChip: {
                 styleOverrides: {
                     root: {
-                        backgroundColor: '#f7f8fa',
-                        borderColor: 'rgba(0,0,0,.08)',
-                        borderRadius: 4,
+                        backgroundColor: 'transparent', // #f7f8fa
+                        // borderColor: 'rgba(0,0,0,.08)',
+                        // borderRadius: 4,
+                        border: 'none',
+                        color: '#616161',
                         fontSize: 12,
-                        paddingLeft: 4
+                        fontWeight: 500,
+                        padding: 0
                     }
                 }
             },
@@ -93,7 +96,7 @@ const theme = createTheme(
                     root: {
                         fontSize: 12,
                         minHeight: 24,
-                        padding: '14px 20px',
+                        padding: '12px 20px',
                         textTransform: 'none'
                     }
                 }

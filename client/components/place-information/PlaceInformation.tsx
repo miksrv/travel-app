@@ -199,6 +199,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<StarBorderOutlined color={'disabled'} />}
                             title={'Рейтнг:'}
+                            last={true}
                             text={
                                 loading ? (
                                     <Skeleton

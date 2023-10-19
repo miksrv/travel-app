@@ -1,3 +1,8 @@
+import {
+    ArticleOutlined,
+    DescriptionOutlined,
+    ImageOutlined
+} from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
@@ -196,13 +201,19 @@ const PlaceItemPage: NextPage = () => {
                             onChange={handleTabChange}
                             aria-label={'basic tabs'}
                         >
-                            <Tab label={'Описание'} />
+                            <Tab
+                                label={'Описание'}
+                                icon={<DescriptionOutlined />}
+                                iconPosition={'start'}
+                            />
                             <Tab
                                 label={`Фотографии ${
                                     data?.photos?.length
                                         ? `(${data.photos.length})`
                                         : ''
                                 }`}
+                                icon={<ImageOutlined />}
+                                iconPosition={'start'}
                             />
                             {!!activityData?.items?.length && (
                                 <Tab
@@ -211,6 +222,8 @@ const PlaceItemPage: NextPage = () => {
                                             ? `(${activityData?.items?.length})`
                                             : ''
                                     }`}
+                                    icon={<ArticleOutlined />}
+                                    iconPosition={'start'}
                                 />
                             )}
                         </Tabs>

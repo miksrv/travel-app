@@ -66,7 +66,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 {place?.content || 'Нет данных для отображения'}
             </Typography>
         </CardContent>
-        <CardContent sx={{ p: 1.5 }}>
+        <CardContent sx={{ p: 1.5, pb: '17px !important', pt: 0.5 }}>
             <Stack
                 direction={'row'}
                 spacing={1}
