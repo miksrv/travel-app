@@ -10,22 +10,8 @@ class Photos extends ResourceController {
     public function list(): ResponseInterface {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
-        $author = $this->request->getGet('author', FILTER_SANITIZE_STRING);
 
-        $photosModel = new PhotosModel();
-        $photosModel
-            ->select(
-                'photos.place, photos.author, photos.filename, photos.extension, photos.width, 
-                    photos.height, photos.order, translations_photos.title, photos.created_at,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-            ->join('users', 'photos.author = users.id', 'left')
-            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
-
-        if ($author) {
-            $photosModel->where(['photos.author' => $author]);
-        }
-
-        $photosData = $photosModel->orderBy('photos.created_at')->findAll($limit, $offset);
+        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll($limit, $offset);
 
         if (empty($photosData)) {
             return $this->respond([
@@ -57,7 +43,7 @@ class Photos extends ResourceController {
 
         return $this->respond([
             'items' => $result,
-            'count' => $photosModel->select('id')->countAllResults()
+            'count' => $this->_makeListFilters()->countAllResults()
         ]);
     }
 
@@ -150,5 +136,27 @@ class Photos extends ResourceController {
             'lat' => round($lat, 7),
             'lng' => round($lng, 7)
         ];
+    }
+
+    /**
+     * @return PhotosModel
+     */
+    protected function _makeListFilters(): PhotosModel {
+        $author = $this->request->getGet('author', FILTER_SANITIZE_STRING);
+
+        $photosModel = new PhotosModel();
+        $photosModel
+            ->select(
+                'photos.place, photos.author, photos.filename, photos.extension, photos.width, 
+                    photos.height, photos.order, translations_photos.title, photos.created_at,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
+            ->join('users', 'photos.author = users.id', 'left')
+            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
+
+        if ($author) {
+            $photosModel->where(['photos.author' => $author]);
+        }
+
+        return $photosModel;
     }
 }

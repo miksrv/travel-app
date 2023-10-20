@@ -18,7 +18,6 @@ import { wrapper } from '@/api/store'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
 import userAvatar from '@/public/images/no-avatar.jpeg'
@@ -181,9 +180,9 @@ const UserItemPage: NextPage = () => {
                             {dataPhotos?.items?.length ? (
                                 <Gallery
                                     photos={dataPhotos?.items?.map((photo) => ({
-                                        height: photo.height,
+                                        height: photo.height / 90,
                                         src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
-                                        width: photo.width
+                                        width: photo.width / 90
                                     }))}
                                     // onClick={(event, photos) => {
                                     //     onPhotoClick?.(photos.index)

@@ -10,18 +10,17 @@ import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect } from 'react'
 import React, { useState } from 'react'
-import Lightbox from 'react-image-lightbox'
-import Gallery from 'react-photo-gallery'
 
-import { API, ImageHost } from '@/api/api'
+import { API } from '@/api/api'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import UserAvatar from '@/components/user-avatar'
+import PhotoGallery from '@/components/photo-gallery'
+import PhotoLightbox from '@/components/photo-lightbox'
 
-import { encodeQueryData, formatDate } from '@/functions/helpers'
+import { encodeQueryData } from '@/functions/helpers'
 
-const PHOTOS_PER_PAGE = 30
+const PHOTOS_PER_PAGE = 32
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -35,13 +34,7 @@ const PhotosPage: NextPage = () => {
     const [page, setPage] = useState<number>(1)
     const [mapBounds, setMapBounds] = useState<string>()
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setCurrentIndex] = useState<number>(0)
-
-    const imageUrl = (index: number) =>
-        `${ImageHost}photo/${data?.items?.[index]?.placeId}/${data?.items?.[index]?.filename}.${data?.items?.[index]?.extension}`
-
-    const thumbImageUrl = (index: number) =>
-        `${ImageHost}photo/${data?.items?.[index]?.placeId}/${data?.items?.[index]?.filename}_thumb.${data?.items?.[index]?.extension}`
+    const [photoIndex, setPhotoIndex] = useState<number>(0)
 
     const { data } = API.usePhotosGetListQuery({
         limit: PHOTOS_PER_PAGE,
@@ -61,6 +54,15 @@ const PhotosPage: NextPage = () => {
         }, 500),
         []
     )
+
+    const handlePhotoClick = (index: number) => {
+        setPhotoIndex(index)
+        setShowLightbox(true)
+    }
+
+    const handleCloseLightbox = () => {
+        setShowLightbox(false)
+    }
 
     useEffect(() => {
         const urlParams = {
@@ -104,25 +106,21 @@ const PhotosPage: NextPage = () => {
                 />
             </Card>
 
-            {data?.items?.length ? (
-                <Card sx={{ mb: 2, mt: 2 }}>
-                    <CardContent sx={{ mb: -1 }}>
-                        <Gallery
-                            photos={data.items.map((photo) => ({
-                                height: photo.height,
-                                src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
-                                width: photo.width
-                            }))}
-                            onClick={(event, photos) => {
-                                setCurrentIndex(photos.index)
-                                setShowLightbox(true)
-                            }}
-                        />
-                    </CardContent>
-                </Card>
-            ) : (
-                <div>{'Нет фотографий'}</div>
-            )}
+            <Card sx={{ mb: 2, mt: 2 }}>
+                <CardContent sx={{ mb: -1 }}>
+                    <PhotoGallery
+                        photos={data?.items}
+                        onPhotoClick={handlePhotoClick}
+                    />
+                    <PhotoLightbox
+                        photos={data?.items}
+                        photoIndex={photoIndex}
+                        showLightbox={showLightbox}
+                        onChangeIndex={setPhotoIndex}
+                        onCloseLightBox={handleCloseLightbox}
+                    />
+                </CardContent>
+            </Card>
 
             <Pagination
                 sx={{ mt: 2 }}
@@ -132,49 +130,6 @@ const PhotosPage: NextPage = () => {
                 count={Math.ceil((data?.count || 0) / PHOTOS_PER_PAGE)}
                 onChange={(_, page) => setPage(page)}
             />
-
-            {showLightbox && (
-                <Lightbox
-                    mainSrc={imageUrl(photoIndex)}
-                    nextSrc={imageUrl(
-                        (photoIndex + 1) % (data?.items?.length || 0)
-                    )}
-                    prevSrc={imageUrl(
-                        (photoIndex + (data?.items?.length || 0) - 1) %
-                            (data?.items?.length || 0)
-                    )}
-                    mainSrcThumbnail={thumbImageUrl(photoIndex)}
-                    prevSrcThumbnail={thumbImageUrl(
-                        (photoIndex + (data?.items?.length || 0) - 1) %
-                            (data?.items?.length || 0)
-                    )}
-                    nextSrcThumbnail={thumbImageUrl(
-                        (photoIndex + 1) % (data?.items?.length || 0)
-                    )}
-                    imageTitle={data?.items?.[photoIndex]?.title || ''}
-                    imageCaption={
-                        <UserAvatar
-                            size={'medium'}
-                            user={data?.items?.[photoIndex]?.author}
-                            text={formatDate(
-                                data?.items?.[photoIndex]?.created?.date
-                            )}
-                        />
-                    }
-                    onCloseRequest={() => setShowLightbox(false)}
-                    onMovePrevRequest={() =>
-                        setCurrentIndex(
-                            (photoIndex + (data?.items?.length || 0) - 1) %
-                                (data?.items?.length || 0)
-                        )
-                    }
-                    onMoveNextRequest={() =>
-                        setCurrentIndex(
-                            (photoIndex + 1) % (data?.items?.length || 0)
-                        )
-                    }
-                />
-            )}
         </PageLayout>
     )
 }
