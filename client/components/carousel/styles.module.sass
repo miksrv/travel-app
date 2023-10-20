@@ -67,38 +67,56 @@
 //    --admonition-danger-rgb-value: 220, 38, 38
 //
 
-.embla
+.carousel
     --slide-spacing: 1rem
     --slide-size: 20%
     --slide-height: 5rem
-    //padding: 1rem
+    padding: 0 1rem
+    position: relative
 
-.embla__viewport
+.viewport
     overflow: hidden
     padding: 5px
 
-.embla__container
+.container
     backface-visibility: hidden
     display: flex
     touch-action: pan-y
     margin-left: calc(var(--slide-spacing) * -1)
 
-.embla__slide
-    flex: 0 0 var(--slide-size)
-    min-width: 0
-    padding-left: var(--slide-spacing)
-    position: relative
-
-.embla__slide__img
-    display: block
-    height: var(--slide-height)
+.buttonsContainer
+    display: flex
+    align-items: center
+    position: absolute
+    top: 50%
+    transform: translateY(-50%)
     width: 100%
-    object-fit: cover
-    border: 1px solid #edeef0
 
-    &.point
-        cursor: pointer
+.arrowButton
+    z-index: 1
+    background: none
+    border: none
+    display: flex
+    align-items: center
+    justify-content: center
+    cursor: pointer
+    width: 2rem
+    height: 4rem
+    position: absolute
+    color: #a6a6a6
+    transition: color .15s ease-out, opacity .15s ease-out
 
-        &:hover
-            opacity: .8
+    &:hover
+        color: #737373
 
+.arrowButtonLeft
+    @extend .arrowButton
+    left: 0em
+    right: auto
+    margin-left: -3em
+
+.arrowButtonRight
+    @extend .arrowButton
+    left: auto
+    right: 0em
+    margin-right: -0.5em
