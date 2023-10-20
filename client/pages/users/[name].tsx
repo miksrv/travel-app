@@ -11,12 +11,14 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
+import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
 import { wrapper } from '@/api/store'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
 import userAvatar from '@/public/images/no-avatar.jpeg'
@@ -66,6 +68,16 @@ const UserItemPage: NextPage = () => {
                 author: userData?.id,
                 limit: 20,
                 offset: 0
+            },
+            {
+                skip: !userData?.id
+            }
+        )
+
+    const { data: dataPhotos, isLoading: dataPhotosLoading } =
+        API.usePhotosGetListQuery(
+            {
+                author: userData?.id
             },
             {
                 skip: !userData?.id
@@ -142,15 +154,19 @@ const UserItemPage: NextPage = () => {
                         >
                             <Tab
                                 label={`Места ${
-                                    dataPlaces?.items?.length
-                                        ? ` (${dataPlaces?.items.length})`
+                                    dataPlaces?.count
+                                        ? ` (${dataPlaces?.count})`
                                         : ''
                                 }`}
                                 icon={<PlaceOutlined />}
                                 iconPosition={'start'}
                             />
                             <Tab
-                                label={'Фотографии (12)'}
+                                label={`Фотографии ${
+                                    dataPhotos?.count
+                                        ? ` (${dataPhotos?.count})`
+                                        : ''
+                                }`}
                                 icon={<ImageOutlined />}
                                 iconPosition={'start'}
                             />
@@ -161,7 +177,22 @@ const UserItemPage: NextPage = () => {
                 {activeTab === 1 && (
                     <>
                         <Divider />
-                        <CardContent>sss</CardContent>
+                        <CardContent sx={{ mt: 1 }}>
+                            {dataPhotos?.items?.length ? (
+                                <Gallery
+                                    photos={dataPhotos?.items?.map((photo) => ({
+                                        height: photo.height,
+                                        src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
+                                        width: photo.width
+                                    }))}
+                                    // onClick={(event, photos) => {
+                                    //     onPhotoClick?.(photos.index)
+                                    // }}
+                                />
+                            ) : (
+                                <div>{'Нет фотографий'}</div>
+                            )}
+                        </CardContent>
                     </>
                 )}
             </Card>

@@ -10,17 +10,22 @@ class Photos extends ResourceController {
     public function list(): ResponseInterface {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $author = $this->request->getGet('author', FILTER_SANITIZE_STRING);
 
         $photosModel = new PhotosModel();
-        $photosData  = $photosModel
+        $photosModel
             ->select(
                 'photos.place, photos.author, photos.filename, photos.extension, photos.width, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.author = users.id', 'left')
-            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
-            ->orderBy('photos.created_at')
-            ->findAll($limit, $offset);
+            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
+
+        if ($author) {
+            $photosModel->where(['photos.author' => $author]);
+        }
+
+        $photosData = $photosModel->orderBy('photos.created_at')->findAll($limit, $offset);
 
         if (empty($photosData)) {
             return $this->respond([

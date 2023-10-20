@@ -79,6 +79,7 @@ export interface ResponsePhotosGetList {
 export interface RequestPhotosGetList {
     limit?: number
     offset?: number
+    author?: string
 }
 
 /* Controller: Address */
