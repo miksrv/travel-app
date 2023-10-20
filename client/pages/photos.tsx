@@ -12,6 +12,7 @@ import { useCallback, useEffect } from 'react'
 import React, { useState } from 'react'
 
 import { API } from '@/api/api'
+import { Photo, Poi } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
@@ -34,7 +35,8 @@ const PhotosPage: NextPage = () => {
     const [page, setPage] = useState<number>(1)
     const [mapBounds, setMapBounds] = useState<string>()
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setPhotoIndex] = useState<number>(0)
+    const [photoIndex, setPhotoIndex] = useState<number>()
+    const [photos, setPhotos] = useState<Photo.Photo[] | Poi.Photo[]>()
 
     const { data } = API.usePhotosGetListQuery({
         limit: PHOTOS_PER_PAGE,
@@ -55,7 +57,18 @@ const PhotosPage: NextPage = () => {
         []
     )
 
+    const handleMapPhotoClick = (photo: Poi.Photo) => {
+        const index = poiListData?.items?.findIndex(
+            (item) => item.filename === photo.filename
+        )
+
+        setPhotos(poiListData?.items)
+        setPhotoIndex(index)
+        setShowLightbox(true)
+    }
+
     const handlePhotoClick = (index: number) => {
+        setPhotos(data?.items)
         setPhotoIndex(index)
         setShowLightbox(true)
     }
@@ -103,6 +116,7 @@ const PhotosPage: NextPage = () => {
                     storeMapPosition={true}
                     photos={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}
+                    onPhotoClick={handleMapPhotoClick}
                 />
             </Card>
 
@@ -113,7 +127,7 @@ const PhotosPage: NextPage = () => {
                         onPhotoClick={handlePhotoClick}
                     />
                     <PhotoLightbox
-                        photos={data?.items}
+                        photos={photos}
                         photoIndex={photoIndex}
                         showLightbox={showLightbox}
                         onChangeIndex={setPhotoIndex}

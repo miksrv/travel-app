@@ -2,14 +2,14 @@ import React from 'react'
 import Lightbox from 'react-image-lightbox'
 
 import { ImageHost } from '@/api/api'
-import { Photo } from '@/api/types/Photo'
+import { Photo, Poi } from '@/api/types'
 
 import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 
 interface PhotoLightboxProps {
-    photos?: Photo[]
+    photos?: Photo.Photo[] | Poi.Photo[]
     photoIndex?: number
     showLightbox?: boolean
     onCloseLightBox?: () => void
@@ -49,11 +49,15 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                     )}
                     imageTitle={photos[photoIndex]?.title || ''}
                     imageCaption={
-                        <UserAvatar
-                            size={'medium'}
-                            user={photos[photoIndex]?.author}
-                            text={formatDate(photos[photoIndex]?.created?.date)}
-                        />
+                        photos[photoIndex]?.author && (
+                            <UserAvatar
+                                size={'medium'}
+                                user={photos[photoIndex]?.author}
+                                text={formatDate(
+                                    photos[photoIndex]?.created?.date
+                                )}
+                            />
+                        )
                     }
                     onCloseRequest={() => onCloseLightBox?.()}
                     onMovePrevRequest={() =>

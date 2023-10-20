@@ -6,7 +6,10 @@ import React from 'react'
 import styles from './styles.module.sass'
 
 const PlacesListItem: React.FC = () => (
-    <Card className={styles.placesListItem}>
+    <Card
+        className={styles.placesListItem}
+        sx={{ minWidth: '280px' }}
+    >
         <Skeleton
             variant={'rectangular'}
             height={180}

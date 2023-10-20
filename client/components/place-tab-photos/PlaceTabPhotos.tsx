@@ -1,50 +1,55 @@
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import React from 'react'
-import Gallery from 'react-photo-gallery'
+import React, { useState } from 'react'
 
-import { ImageHost } from '@/api/api'
 import { Photo } from '@/api/types/Photo'
+
+import PhotoGallery from '@/components/photo-gallery'
+import PhotoLightbox from '@/components/photo-lightbox'
 
 interface PlaceTabPhotosProps {
     title?: string
-    placeId?: string
     photos?: Photo[]
-    onPhotoClick?: (index: number) => void
 }
 
-const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
-    title,
-    placeId,
-    photos,
-    onPhotoClick
-}) => (
-    <>
-        <CardHeader
-            title={title ? `${title} - фотографии` : 'Фотографии'}
-            titleTypographyProps={{
-                component: 'h2',
-                fontSize: 18
-            }}
-            sx={{ mb: -3 }}
-        />
-        <CardContent sx={{ mt: 1 }}>
-            {photos?.length && placeId ? (
-                <Gallery
-                    photos={photos?.map((photo) => ({
-                        height: photo.height,
-                        src: `${ImageHost}photo/${placeId}/${photo.filename}_thumb.${photo.extension}`,
-                        width: photo.width
-                    }))}
-                    onClick={(event, photos) => {
-                        onPhotoClick?.(photos.index)
-                    }}
+const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
+    const [showLightbox, setShowLightbox] = useState<boolean>(false)
+    const [photoIndex, setPhotoIndex] = useState<number>()
+
+    const handlePhotoClick = (index: number) => {
+        setPhotoIndex(index)
+        setShowLightbox(true)
+    }
+
+    const handleCloseLightbox = () => {
+        setShowLightbox(false)
+    }
+
+    return (
+        <>
+            <CardHeader
+                title={title ? `${title} - фотографии` : 'Фотографии'}
+                titleTypographyProps={{
+                    component: 'h2',
+                    fontSize: 18
+                }}
+                sx={{ mb: -2 }}
+            />
+            <CardContent sx={{ mb: -1 }}>
+                <PhotoGallery
+                    photos={photos}
+                    onPhotoClick={handlePhotoClick}
                 />
-            ) : (
-                <div>{'Нет фотографий'}</div>
-            )}
-        </CardContent>
-    </>
-)
+                <PhotoLightbox
+                    photos={photos}
+                    photoIndex={photoIndex}
+                    showLightbox={showLightbox}
+                    onChangeIndex={setPhotoIndex}
+                    onCloseLightBox={handleCloseLightbox}
+                />
+            </CardContent>
+        </>
+    )
+}
 
 export default PlaceTabPhotos

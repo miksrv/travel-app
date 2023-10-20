@@ -41,8 +41,21 @@ class Poi extends ResourceController {
             ->groupBy('photos.longitude, photos.latitude')
             ->findAll();
 
+        $result = [];
+
+        foreach ($photosData as $photo) {
+            $result[] = (object) [
+                'filename'  => $photo->filename,
+                'extension' => $photo->extension,
+                'latitude'  => $photo->latitude,
+                'longitude' => $photo->longitude,
+                'title'     => $photo->title,
+                'placeId'   => $photo->place,
+            ];
+        }
+
         return $this->respond([
-            'items' => $photosData,
+            'items' => $result,
         ]);
     }
 

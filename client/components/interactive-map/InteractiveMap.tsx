@@ -42,6 +42,7 @@ type MapProps = {
     storeMapKey?: string
     userLatLng?: LatLngLiteral
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
+    onPhotoClick?: (photo: Photo) => void
 } & MapOptions
 
 const InteractiveMap: React.FC<MapProps> = ({
@@ -51,6 +52,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     storeMapKey,
     userLatLng,
     onChangeBounds,
+    onPhotoClick,
     ...props
 }) => {
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
@@ -142,6 +144,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <MarkerPhoto
                         key={photo.filename}
                         photo={photo}
+                        onPhotoClick={onPhotoClick}
                     />
                 ))}
                 {userLatLng && (

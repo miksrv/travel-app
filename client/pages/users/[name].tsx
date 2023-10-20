@@ -10,7 +10,7 @@ import Tabs from '@mui/material/Tabs'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import React from 'react'
+import React, { useState } from 'react'
 import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
@@ -18,6 +18,8 @@ import { wrapper } from '@/api/store'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import PhotoGallery from '@/components/photo-gallery'
+import PhotoLightbox from '@/components/photo-lightbox'
 import PlacesList from '@/components/places-list'
 
 import userAvatar from '@/public/images/no-avatar.jpeg'
@@ -52,6 +54,8 @@ const UserItemPage: NextPage = () => {
     const routerId = router.query.name
     const userId = typeof routerId === 'string' ? routerId : skipToken
 
+    const [showLightbox, setShowLightbox] = useState<boolean>(false)
+    const [photoIndex, setPhotoIndex] = useState<number>()
     const [activeTab, setActiveTab] = React.useState<number>(0)
 
     const { data: userData, isLoading } = API.useUsersGetItemQuery(
@@ -82,6 +86,15 @@ const UserItemPage: NextPage = () => {
                 skip: !userData?.id
             }
         )
+
+    const handlePhotoClick = (index: number) => {
+        setPhotoIndex(index)
+        setShowLightbox(true)
+    }
+
+    const handleCloseLightbox = () => {
+        setShowLightbox(false)
+    }
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
@@ -176,21 +189,29 @@ const UserItemPage: NextPage = () => {
                 {activeTab === 1 && (
                     <>
                         <Divider />
-                        <CardContent sx={{ mt: 1 }}>
-                            {dataPhotos?.items?.length ? (
-                                <Gallery
-                                    photos={dataPhotos?.items?.map((photo) => ({
-                                        height: photo.height / 90,
-                                        src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,
-                                        width: photo.width / 90
-                                    }))}
-                                    // onClick={(event, photos) => {
-                                    //     onPhotoClick?.(photos.index)
-                                    // }}
-                                />
-                            ) : (
-                                <div>{'Нет фотографий'}</div>
-                            )}
+                        <CardHeader
+                            title={`${userData?.name} - Все фотографии путешественницы`}
+                            titleTypographyProps={{
+                                component: 'h2',
+                                fontSize: 18
+                            }}
+                            sx={{ mb: -2 }}
+                        />
+                        <CardContent sx={{ mb: -1 }}>
+                            <PhotoGallery />
+                            <PhotoLightbox />
+
+                            <PhotoGallery
+                                photos={dataPhotos?.items}
+                                onPhotoClick={handlePhotoClick}
+                            />
+                            <PhotoLightbox
+                                photos={dataPhotos?.items}
+                                photoIndex={photoIndex}
+                                showLightbox={showLightbox}
+                                onChangeIndex={setPhotoIndex}
+                                onCloseLightBox={handleCloseLightbox}
+                            />
                         </CardContent>
                     </>
                 )}

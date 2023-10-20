@@ -9,14 +9,15 @@ import styles from './styles.module.sass'
 
 type MarkerPhotoProps = {
     photo: Poi.Photo
+    onPhotoClick?: (photo: Poi.Photo) => void
 }
 
-const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo }) => {
+const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
     const photoMarkerIcon = new Leaflet.Icon({
         className: styles.markerPhoto,
         iconAnchor: [16, 16],
         iconSize: [32, 32],
-        iconUrl: `${ImageHost}photo/${photo.place}/${photo.filename}_thumb.${photo.extension}`
+        iconUrl: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`
     })
 
     return (
@@ -24,6 +25,11 @@ const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo }) => {
             position={[photo.latitude, photo.longitude]}
             icon={photoMarkerIcon}
             title={photo.title}
+            eventHandlers={{
+                click: () => {
+                    onPhotoClick?.(photo)
+                }
+            }}
         />
     )
 }

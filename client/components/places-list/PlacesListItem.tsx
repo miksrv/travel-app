@@ -29,7 +29,10 @@ interface PlacesListItemProps {
 }
 
 const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
-    <Card className={styles.placesListItem}>
+    <Card
+        className={styles.placesListItem}
+        sx={{ minWidth: '280px', width: '100%' }}
+    >
         <Image
             className={styles.categoryIcon}
             src={categoryImage(place.category?.name).src}

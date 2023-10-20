@@ -14,23 +14,20 @@ import Tabs from '@mui/material/Tabs'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import React, { useMemo, useState } from 'react'
-import Lightbox from 'react-image-lightbox'
+import React, { useMemo } from 'react'
 
 import { API, ImageHost } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
+import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
 import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
-import UserAvatar from '@/components/user-avatar'
-
-import { formatDate } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 
@@ -61,7 +58,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 )
 
-const PLACES_PER_PAGE = 3
+const NEAR_PLACES_COUNT = 6
 
 const PlaceItemPage: NextPage = () => {
     const router = useRouter()
@@ -82,7 +79,7 @@ const PlaceItemPage: NextPage = () => {
             {
                 excludePlaces: data?.id ? [data.id] : undefined,
                 latitude: data?.latitude,
-                limit: PLACES_PER_PAGE,
+                limit: NEAR_PLACES_COUNT,
                 longitude: data?.longitude,
                 order: ApiTypes.SortOrder.ASC,
                 sort: ApiTypes.SortFields.Distance
@@ -93,15 +90,6 @@ const PlaceItemPage: NextPage = () => {
     const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
         skip: !data?.id
     })
-
-    const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setCurrentIndex] = useState<number>(0)
-
-    const imageUrl = (index: number) =>
-        `${ImageHost}photo/${data?.id}/${data?.photos?.[index]?.filename}.${data?.photos?.[index]?.extension}`
-
-    const thumbImageUrl = (index: number) =>
-        `${ImageHost}photo/${data?.id}/${data?.photos?.[index]?.filename}_thumb.${data?.photos?.[index]?.extension}`
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
@@ -167,7 +155,6 @@ const PlaceItemPage: NextPage = () => {
                 ) : (
                     <CardMedia
                         alt={data?.photos?.[0]?.title}
-                        sx={{ cursor: 'pointer' }}
                         component={'img'}
                         height={300}
                         image={
@@ -175,10 +162,6 @@ const PlaceItemPage: NextPage = () => {
                                 ? `${ImageHost}photo/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
                                 : noPhoto.src
                         }
-                        onClick={() => {
-                            setCurrentIndex(0)
-                            setShowLightbox(true)
-                        }}
                     />
                 )}
             </Card>
@@ -242,12 +225,7 @@ const PlaceItemPage: NextPage = () => {
                 {activeTab === 1 && (
                     <PlaceTabPhotos
                         title={data?.title}
-                        placeId={data?.id}
                         photos={data?.photos}
-                        onPhotoClick={(index) => {
-                            setCurrentIndex(index)
-                            setShowLightbox(true)
-                        }}
                     />
                 )}
 
@@ -260,54 +238,38 @@ const PlaceItemPage: NextPage = () => {
                 )}
             </Card>
 
-            <PlacesList
-                perPage={PLACES_PER_PAGE}
-                places={nearPlacesData?.items}
-                loading={nearPlacesLoading}
-            />
-
-            {showLightbox && (
-                <Lightbox
-                    mainSrc={imageUrl(photoIndex)}
-                    nextSrc={imageUrl(
-                        (photoIndex + 1) % (data?.photos?.length || 0)
-                    )}
-                    prevSrc={imageUrl(
-                        (photoIndex + (data?.photos?.length || 0) - 1) %
-                            (data?.photos?.length || 0)
-                    )}
-                    mainSrcThumbnail={thumbImageUrl(photoIndex)}
-                    prevSrcThumbnail={thumbImageUrl(
-                        (photoIndex + (data?.photos?.length || 0) - 1) %
-                            (data?.photos?.length || 0)
-                    )}
-                    nextSrcThumbnail={thumbImageUrl(
-                        (photoIndex + 1) % (data?.photos?.length || 0)
-                    )}
-                    imageTitle={data?.photos?.[photoIndex]?.title || ''}
-                    imageCaption={
-                        <UserAvatar
-                            size={'medium'}
-                            user={data?.photos?.[photoIndex]?.author}
-                            text={formatDate(
-                                data?.photos?.[photoIndex]?.created?.date
-                            )}
-                        />
-                    }
-                    onCloseRequest={() => setShowLightbox(false)}
-                    onMovePrevRequest={() =>
-                        setCurrentIndex(
-                            (photoIndex + (data?.photos?.length || 0) - 1) %
-                                (data?.photos?.length || 0)
-                        )
-                    }
-                    onMoveNextRequest={() =>
-                        setCurrentIndex(
-                            (photoIndex + 1) % (data?.photos?.length || 0)
-                        )
-                    }
+            <Card sx={{ mb: 2 }}>
+                <CardHeader
+                    sx={{ mb: -1, mt: -1 }}
+                    title={'Ближайшие интересные места'}
+                    titleTypographyProps={{
+                        component: 'h2',
+                        fontSize: 18
+                    }}
+                    subheader={`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
+                        ...(nearPlacesData?.items?.map(
+                            ({ distance }) => distance || 0
+                        ) || [])
+                    )} км`}
                 />
-            )}
+            </Card>
+
+            <Carousel
+                options={{
+                    align: 'center',
+                    containScroll: false,
+                    dragFree: true,
+                    loop: true,
+                    slidesToScroll: 'auto'
+                }}
+            >
+                <PlacesList
+                    perPage={NEAR_PLACES_COUNT}
+                    places={nearPlacesData?.items}
+                    loading={nearPlacesLoading}
+                    useLinearView={true}
+                />
+            </Carousel>
         </PageLayout>
     )
 }
