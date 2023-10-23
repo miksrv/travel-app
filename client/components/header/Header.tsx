@@ -5,7 +5,7 @@ import {
     AccountCircleOutlined,
     NotificationsOutlined
 } from '@mui/icons-material'
-import SearchIcon from '@mui/icons-material/Search'
+import { SearchOutlined } from '@mui/icons-material'
 import { Badge, IconButton } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
@@ -34,16 +34,20 @@ const Search = styled('div')(({ theme }) => ({
 
 const SearchIconWrapper = styled('div')(({ theme }) => ({
     alignItems: 'center',
+    color: '#818c99',
     display: 'flex',
     height: '100%',
     justifyContent: 'center',
     padding: theme.spacing(0, 2),
     pointerEvents: 'none',
-    position: 'absolute'
+    position: 'absolute',
+    zIndex: 1
 }))
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
     '& .MuiInputBase-input': {
+        backgroundColor: '#edeef0',
+        borderRadius: theme.shape.borderRadius,
         padding: theme.spacing(1, 1, 1, 0),
         // vertical padding + font size from searchIcon
         paddingLeft: `calc(1em + ${theme.spacing(4)})`,
@@ -51,9 +55,9 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
         width: '100%',
         [theme.breakpoints.up('sm')]: {
             '&:focus': {
-                width: '20ch'
+                width: '30ch'
             },
-            width: '12ch'
+            width: '20ch'
         }
     },
     color: 'inherit'
@@ -98,9 +102,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     >
                         {t('Интересно')}
                     </Typography>
-                    <Search sx={{ mr: 2 }}>
+                    <Search sx={{ mr: 1.5 }}>
                         <SearchIconWrapper>
-                            <SearchIcon />
+                            <SearchOutlined />
                         </SearchIconWrapper>
                         <StyledInputBase
                             placeholder='Поиск…'

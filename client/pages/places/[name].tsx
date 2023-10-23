@@ -9,6 +9,7 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
+import Stack from '@mui/material/Stack'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -254,22 +255,27 @@ const PlaceItemPage: NextPage = () => {
                 />
             </Card>
 
-            <Carousel
-                options={{
-                    align: 'center',
-                    containScroll: false,
-                    dragFree: true,
-                    loop: true,
-                    slidesToScroll: 'auto'
-                }}
-            >
-                <PlacesList
-                    perPage={NEAR_PLACES_COUNT}
-                    places={nearPlacesData?.items}
-                    loading={nearPlacesLoading}
-                    useLinearView={true}
-                />
-            </Carousel>
+            <PlacesList
+                perPage={NEAR_PLACES_COUNT}
+                places={nearPlacesData?.items}
+                loading={nearPlacesLoading}
+            />
+            {/*<Carousel*/}
+            {/*    options={{*/}
+            {/*        align: 'center',*/}
+            {/*        containScroll: false,*/}
+            {/*        dragFree: true,*/}
+            {/*        loop: true,*/}
+            {/*        slidesToScroll: 'auto'*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    <PlacesList*/}
+            {/*        perPage={NEAR_PLACES_COUNT}*/}
+            {/*        places={nearPlacesData?.items}*/}
+            {/*        loading={nearPlacesLoading}*/}
+            {/*        useLinearView={true}*/}
+            {/*    />*/}
+            {/*</Carousel>*/}
         </PageLayout>
     )
 }
