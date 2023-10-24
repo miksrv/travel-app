@@ -62,7 +62,7 @@ class Rating extends ResourceController {
 //    }
 
     /**
-     * Добавление новой оценки
+     * Adding a new rating
      * @return ResponseInterface
      * @throws ReflectionException
      */

@@ -5,6 +5,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Countries extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $countriesModel = new AddressCountry();
 

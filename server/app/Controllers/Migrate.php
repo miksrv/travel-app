@@ -24,10 +24,9 @@ define('MAX_PLACES_PER_ITERATION', 1);
 
 class Migrate extends ResourceController {
     /**
-     * @throws Exception
+     * @throws Exception|\ReflectionException
      */
-    public function init(): ResponseInterface
-    {
+    public function init(): ResponseInterface {
         $mapCategories = [
             1 => 'abandoned',     // Заброшенные
             2 => 'construction',  // Техногенные
@@ -291,8 +290,13 @@ class Migrate extends ResourceController {
         return $this->respond($inserted);
     }
 
-    protected function _migrate_tags(string $tag, string $placeId): void
-    {
+    /**
+     * @param string $tag
+     * @param string $placeId
+     * @return void
+     * @throws \ReflectionException
+     */
+    protected function _migrate_tags(string $tag, string $placeId): void {
         if (!$tag || !$placeId) {
             return ;
         }
@@ -322,6 +326,11 @@ class Migrate extends ResourceController {
         }
     }
 
+    /**
+     * @param string $author_id
+     * @return string
+     * @throws \ReflectionException
+     */
     protected function _migrate_user(string $author_id): string {
         $usersModel   = new UsersModel();
         $migrateUsers = new MigrateUsersModel();

@@ -8,6 +8,9 @@ use CodeIgniter\RESTful\ResourceController;
  * Categories API controller (not use now)
  */
 class Categories extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $categoriesModel = new CategoryModel();
 

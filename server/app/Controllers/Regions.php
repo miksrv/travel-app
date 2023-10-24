@@ -5,6 +5,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Regions extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $regionsModel = new AddressRegion();
 

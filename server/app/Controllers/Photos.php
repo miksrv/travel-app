@@ -7,6 +7,9 @@ use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 
 class Photos extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
@@ -47,6 +50,9 @@ class Photos extends ResourceController {
         ]);
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function upload(): ResponseInterface {
         $rules = [
             'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
@@ -95,7 +101,7 @@ class Photos extends ResourceController {
      */
     protected function _readPhotoLocation(string $file): ?object {
         if (!is_file($file)) {
-            return false;
+            return null;
         }
 
             $info = exif_read_data($file);
@@ -104,7 +110,7 @@ class Photos extends ResourceController {
             !isset($info['GPSLatitudeRef']) || !isset($info['GPSLongitudeRef']) ||
             !in_array($info['GPSLatitudeRef'], array('E','W','N','S')) || !in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
 
-            return false;
+            return null;
         }
 
         $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
@@ -127,10 +133,15 @@ class Photos extends ResourceController {
         $lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
         $lng = (float) $lng_degrees+((($lng_minutes*60)+($lng_seconds))/3600);
 
-        //If the latitude is South, make it negative.
-        //If the longitude is west, make it negative
-        $GPSLatitudeRef  == 's' ? $lat *= -1 : '';
-        $GPSLongitudeRef == 'w' ? $lng *= -1 : '';
+        // if the latitude is South, make it negative.
+        if ($GPSLatitudeRef  == 's') {
+            $lat *= -1;
+        }
+
+        // if the longitude is west, make it negative
+        if ($GPSLongitudeRef == 'w') {
+            $lng *= -1;
+        }
 
         return (object) [
             'lat' => round($lat, 7),

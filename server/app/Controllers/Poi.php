@@ -26,6 +26,9 @@ class Poi extends ResourceController {
         ]);
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function photos(): ResponseInterface {
         $bounds      = $this->_getBounds();
         $photosModel = new PhotosModel();
@@ -114,7 +117,7 @@ class Poi extends ResourceController {
     }
 
     /**
-     * Получаем границы карты из GET параметра
+     * Getting the map boundaries from the GET parameter
      * @return array
      */
     protected function _getBounds(): array {

@@ -3,7 +3,6 @@
 use App\Libraries\Geocoder;
 use App\Libraries\OverpassAPI;
 use App\Libraries\Session;
-use App\Models\CategoryModel;
 use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
 use App\Models\TranslationsPlacesModel;
@@ -17,8 +16,8 @@ ignore_user_abort(true);
 
 class Introduce extends ResourceController {
     /**
-     * Пользователь представляется сервису, отправляя свои координаты.
-     * По координатам выполняется поиск новых мест в округе, сессия пользователя сохраняется в БД.
+     * The user introduces himself to the service by sending his coordinates.
+     * The coordinates are used to search for new places in the area, and the user session is saved in the database.
      * @return ResponseInterface
      * @throws Exception
      * @throws ReflectionException
@@ -57,12 +56,12 @@ class Introduce extends ResourceController {
         $overpassCatModel = new OverpassCategoryModel();
 
         foreach ($pointsList as $point) {
-            // Если такой overpass_id уже есть в БД, пропускаем
+            // If such an overpass_id is already in the database, skip it
             if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first()) {
                 continue;
             }
 
-            // Если вообще нет никакого названия - пропускаем просто
+            // If there is no name at all, we simply skip it
             if (!isset($point->tags['name:en']) && !isset($point->tags['name:ru']) && !isset($point->tags['name'])) {
                 continue;
             }
@@ -79,7 +78,7 @@ class Introduce extends ResourceController {
                 ]);
             }
 
-            // Если нет категории для маппинга, то пропускаем такой не известный тип POI
+            // If there is no category for mapping, then we skip this unknown type of POI
             if (!$findOverpassCat->category_map || !$newPoiName) {
                 continue;
             }

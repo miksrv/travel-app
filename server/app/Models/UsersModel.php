@@ -2,8 +2,7 @@
 
 use App\Entities\User;
 
-class UsersModel extends MyBaseModel
-{
+class UsersModel extends MyBaseModel {
     protected $table      = 'users';
     protected $primaryKey = 'id';
 

@@ -5,6 +5,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Cities extends ResourceController {
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $citiesModel = new AddressCity();
         $citiesData  = $citiesModel
