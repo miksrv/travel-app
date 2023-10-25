@@ -22,7 +22,7 @@ import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PlacesList from '@/components/places-list'
 
-import userAvatar from '@/public/images/no-avatar.jpeg'
+import userAvatar from '@/public/images/no-avatar.png'
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>

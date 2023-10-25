@@ -2,7 +2,7 @@ import Leaflet, { LatLngExpression } from 'leaflet'
 import React from 'react'
 import { Circle, Marker } from 'react-leaflet'
 
-import userAvatar from '@/public/images/no-avatar.jpeg'
+import userAvatar from '@/public/images/no-avatar.png'
 
 import styles from './styles.module.sass'
 

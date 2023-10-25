@@ -10,7 +10,7 @@ import React, { useState } from 'react'
 import { ImageHost } from '@/api/api'
 import { User } from '@/api/types/User'
 
-import userAvatar from '@/public/images/no-avatar.jpeg'
+import userAvatar from '@/public/images/no-avatar.png'
 
 type SizeType = 'small' | 'medium'
 
@@ -47,8 +47,9 @@ const UserAvatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
                 {loading ? (
                     <>
                         <Skeleton
-                            variant={'rounded'}
+                            variant={'circular'}
                             sx={{
+                                boxShadow: '0 0 0 1px rgba(0,0,0,.12)',
                                 height: getDimension(size),
                                 width: getDimension(size)
                             }}
@@ -68,11 +69,12 @@ const UserAvatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
                                     : userAvatar.src
                             }
                             sx={{
+                                boxShadow: '0 0 0 1px rgba(0,0,0,.12)',
                                 cursor: user?.avatar ? 'pointer' : 'default',
                                 height: getDimension(size),
                                 width: getDimension(size)
                             }}
-                            variant={'rounded'}
+                            variant={'circular'}
                             onClick={handleClick}
                             aria-describedby={POPOVER_ID}
                         />
