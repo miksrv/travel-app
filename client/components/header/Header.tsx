@@ -76,8 +76,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             sx={{ boxShadow: 0, mb: 2 }}
         >
             <Container
-                maxWidth='lg'
-                disableGutters
+                disableGutters={true}
+                maxWidth={false}
+                sx={{ maxWidth: '1100px' }}
             >
                 <Toolbar
                     sx={{ minHeight: '54px !important', ml: '8px', mr: '8px' }}

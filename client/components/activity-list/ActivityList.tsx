@@ -137,7 +137,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({
                 <Typography
                     variant={'body1'}
                     color={'text.primary'}
-                    sx={{ mb: 0 }}
+                    gutterBottom={false}
                 >
                     {item.place?.content
                         ? `${item.place.content}...`

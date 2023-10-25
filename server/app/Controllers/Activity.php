@@ -27,7 +27,7 @@ class Activity extends ResourceController {
         $place    = $this->request->getGet('place', FILTER_SANITIZE_STRING);
 
         // Load translate library
-        $placeTranslations = new PlaceTranslation('ru', 350);
+        $placeTranslations = new PlaceTranslation('ru', 400);
 
         $categoriesModel = new CategoryModel();
         $categoriesData  = $categoriesModel->findAll();

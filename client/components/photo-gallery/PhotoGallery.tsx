@@ -21,7 +21,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             <ImageList
                 variant={'quilted'}
                 cols={4}
-                rowHeight={150}
+                rowHeight={130}
                 sx={{ m: 0 }}
             >
                 {photos.map((photo, index) => (

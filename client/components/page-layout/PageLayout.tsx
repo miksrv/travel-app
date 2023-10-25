@@ -154,7 +154,9 @@ const PageLayout: React.FC<any> = ({ children, ...props }) => {
             <Header onMenuClick={toggleDrawer(true)} />
             <Container
                 {...props}
-                component='main'
+                component={'main'}
+                maxWidth={false}
+                sx={{ maxWidth: '1100px' }}
             >
                 <Grid
                     container
