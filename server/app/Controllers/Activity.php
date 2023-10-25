@@ -21,6 +21,10 @@ class Activity extends ResourceController {
      */
     public function list(): ResponseInterface {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_STRING);
+        $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
+        $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $author   = $this->request->getGet('author', FILTER_SANITIZE_STRING);
+        $place    = $this->request->getGet('place', FILTER_SANITIZE_STRING);
 
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 350);
@@ -41,10 +45,18 @@ class Activity extends ResourceController {
             $activityModel->where('users_activity.created_at < ', $lastDate);
         }
 
+        if ($author) {
+            $activityModel->where('users_activity.user', $author);
+        }
+
+        if ($place) {
+            $activityModel->where('users_activity.place', $place);
+        }
+
         $activityData = $activityModel
             ->whereIn('users_activity.type', ['photo', 'place'])
             ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
-            ->findAll(20);
+            ->findAll($limit, $offset);
 
         $placesIds = [];
 

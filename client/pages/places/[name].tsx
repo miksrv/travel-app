@@ -9,7 +9,6 @@ import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
 import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
-import Stack from '@mui/material/Stack'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import { skipToken } from '@reduxjs/toolkit/query'
@@ -22,7 +21,6 @@ import { wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
-import Carousel from '@/components/carousel'
 import PageLayout from '@/components/page-layout'
 import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
@@ -42,10 +40,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     API.endpoints.placesGetItem.initiate(name)
                 )
 
-                store.dispatch(API.endpoints.activityGetItem.initiate(name))
+                store.dispatch(
+                    API.endpoints.activityGetList.initiate({ place: name })
+                )
 
                 await Promise.all(
-                    store.dispatch(API.util?.getRunningQueriesThunk())
+                    store.dispatch(API.util.getRunningQueriesThunk())
                 )
 
                 if (data.error?.originalStatus === 404) {
@@ -88,9 +88,14 @@ const PlaceItemPage: NextPage = () => {
             { skip: !data?.longitude || !data?.latitude }
         )
 
-    const { data: activityData } = API.useActivityGetItemQuery(data?.id || '', {
-        skip: !data?.id
-    })
+    const { data: activityData } = API.useActivityGetListQuery(
+        {
+            place: data?.id
+        },
+        {
+            skip: !data?.id
+        }
+    )
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)

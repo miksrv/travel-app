@@ -1,4 +1,8 @@
-import { ImageOutlined, PlaceOutlined } from '@mui/icons-material'
+import {
+    ArticleOutlined,
+    ImageOutlined,
+    TerrainOutlined
+} from '@mui/icons-material'
 import { Avatar } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
@@ -11,11 +15,11 @@ import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React, { useState } from 'react'
-import Gallery from 'react-photo-gallery'
 
 import { API, ImageHost } from '@/api/api'
 import { wrapper } from '@/api/store'
 
+import ActivityList from '@/components/activity-list'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PhotoGallery from '@/components/photo-gallery'
@@ -87,6 +91,18 @@ const UserItemPage: NextPage = () => {
             }
         )
 
+    const { data: dataActivities, isLoading: dataActivitiesLoading } =
+        API.useActivityGetListQuery(
+            {
+                author: userData?.id,
+                limit: 20,
+                offset: 0
+            },
+            {
+                skip: !userData?.id
+            }
+        )
+
     const handlePhotoClick = (index: number) => {
         setPhotoIndex(index)
         setShowLightbox(true)
@@ -148,7 +164,7 @@ const UserItemPage: NextPage = () => {
                             height: 128,
                             width: 128
                         }}
-                        variant={'rounded'}
+                        variant={'circular'}
                     />
                 </CardContent>
             </Card>
@@ -165,12 +181,17 @@ const UserItemPage: NextPage = () => {
                             aria-label={'basic tabs'}
                         >
                             <Tab
+                                label={'Активность'}
+                                icon={<ArticleOutlined />}
+                                iconPosition={'start'}
+                            />
+                            <Tab
                                 label={`Места ${
                                     dataPlaces?.count
                                         ? ` (${dataPlaces?.count})`
                                         : ''
                                 }`}
-                                icon={<PlaceOutlined />}
+                                icon={<TerrainOutlined />}
                                 iconPosition={'start'}
                             />
                             <Tab
@@ -186,7 +207,7 @@ const UserItemPage: NextPage = () => {
                     }
                 />
 
-                {activeTab === 1 && (
+                {activeTab === 2 && (
                     <>
                         <Divider />
                         <CardHeader
@@ -218,6 +239,14 @@ const UserItemPage: NextPage = () => {
             </Card>
 
             {activeTab === 0 && (
+                <ActivityList
+                    perPage={30}
+                    activities={dataActivities?.items}
+                    loading={dataActivitiesLoading}
+                />
+            )}
+
+            {activeTab === 1 && (
                 <PlacesList
                     perPage={6}
                     places={dataPlaces?.items}

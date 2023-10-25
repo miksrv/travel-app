@@ -118,6 +118,10 @@ export interface ResponseActivityGetList {
 
 export interface RequestActivityGetList {
     date?: string
+    author?: string
+    place?: string
+    limit?: number
+    offset?: number
 }
 
 /* Controller: POI */
