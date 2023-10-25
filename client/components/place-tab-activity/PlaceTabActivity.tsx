@@ -27,8 +27,12 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
             }}
             sx={{ mb: -2 }}
         />
-        <CardContent sx={{ mb: -2 }}>
-            <ActivityList activities={activity} />
+        <CardContent sx={{ mb: -3 }}>
+            <ActivityList
+                activities={activity}
+                hidePlaceName={true}
+                hideBorder={true}
+            />
         </CardContent>
     </>
 )

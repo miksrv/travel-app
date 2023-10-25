@@ -219,9 +219,6 @@ const UserItemPage: NextPage = () => {
                             sx={{ mb: -2 }}
                         />
                         <CardContent sx={{ mb: -1 }}>
-                            <PhotoGallery />
-                            <PhotoLightbox />
-
                             <PhotoGallery
                                 photos={dataPhotos?.items}
                                 onPhotoClick={handlePhotoClick}

@@ -68,38 +68,17 @@ class Activity extends ResourceController {
 
         $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeTranslations);
 
-        // Удаляем последнией объект в массиве, потому что он может быть сгруппирован не полностью
+        // We remove the last object in the array because it may not be completely grouped
         array_pop($response);
 
-        return $this->respond(['items'  => $response]);
-    }
-
-    /**
-     * Show all activities for place by ID
-     * @param $id
-     * @return ResponseInterface
-     */
-    public function show($id = null): ResponseInterface {
-        $activityModel = new UsersActivityModel();
-        $activityData  = $activityModel
-            ->select(
-                'users_activity.*, users.id as user_id, users.name as user_name, rating.value, users.avatar as user_avatar,
-                photos.filename, photos.extension, photos.width, photos.height')
-            ->join('rating', 'users_activity.rating = rating.id', 'left')
-            ->join('photos', 'users_activity.photo = photos.id', 'left')
-            ->join('users', 'users_activity.user = users.id', 'left')
-            ->where('users_activity.place', $id)
-            ->orderBy('users_activity.created_at', 'DESC')
-            ->findAll();
-
         return $this->respond([
-            'items'  => $this->_groupSimilarActivities($activityData)
+            'items' => $response
         ]);
     }
 
     /**
-     * Группироуем похожие активности пользователей. Например, загруженные фотографии одного пользователя
-     * для одного места с интервалом 5 минут - объединяем в одну активность
+     * We group similar user activities. For example, uploaded photos of one user
+     * for one place with an interval of 5 minutes - we combine them into one activity
      * @param array $activityData
      * @param PlaceTranslation|null $placeTranslations
      * @param array|null $categoriesData
@@ -122,11 +101,11 @@ class Activity extends ResourceController {
                 'filename'  => $item->filename,
                 'extension' => $item->extension,
                 'width'     => (int) $item->width,
-                'height'    => (int) $item->height
+                'height'    => (int) $item->height,
+                'placeId'   => $item->place
             ] : null;
 
-            // Группируем активность по фотографиям одного пользователя, загруженных для
-            // одного места и с разницей не больше 5 минут
+            // We group activity by photos of one user, uploaded for one place and with a difference of no more than 5 minutes
             if (
                 $lastGroup &&
                 $item->type === 'photo' &&

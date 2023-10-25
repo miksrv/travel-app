@@ -27,13 +27,6 @@ export const API = createApi({
     }),
     endpoints: (builder) => ({
         /* Controller: Activity */
-        activityGetItem: builder.query<
-            ApiTypes.ResponseActivityGetList,
-            string
-        >({
-            providesTags: ['Activity'],
-            query: (item) => `activity/${item}`
-        }),
         activityGetList: builder.query<
             ApiTypes.ResponseActivityGetList,
             Maybe<ApiTypes.RequestActivityGetList>
@@ -156,6 +149,3 @@ export const API = createApi({
 export const {
     util: { getRunningQueriesThunk }
 } = API
-
-// export endpoints for use in SSR
-export const { placesGetItem, activityGetItem } = API.endpoints

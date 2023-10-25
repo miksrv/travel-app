@@ -163,8 +163,8 @@ const theme = createTheme(
                 lineHeight: '24px'
             },
             h3: {
-                fontSize: 16,
-                fontWeight: 600
+                fontSize: 14,
+                fontWeight: 500
             }
         }
     },

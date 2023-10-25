@@ -1,14 +1,16 @@
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 import Gallery from 'react-photo-gallery'
 
 import { ImageHost } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
 
+import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 
 import { categoryImage } from '@/functions/categories'
@@ -18,100 +20,152 @@ interface PlacesListProps {
     perPage?: number
     loading?: boolean
     activities?: Item[]
+    hidePlaceName?: boolean
+    hideBorder?: boolean
 }
 
 const ActivityList: React.FC<PlacesListProps> = ({
     perPage,
     activities,
-    loading
+    loading,
+    hidePlaceName,
+    hideBorder
 }) => (
     <>
-        {activities?.map((item, index) => (
-            <Card
-                key={index}
-                sx={{ mb: 1.5 }}
-            >
-                <CardContent>
-                    <UserAvatar
-                        size={'medium'}
-                        user={item.author}
-                        text={
-                            <>
-                                {formatDate(item.created?.date)}
-                                {' • '}
-                                {
-                                    {
-                                        [ActivityTypes.Place]:
-                                            'Отредактировал(а) материал',
-                                        [ActivityTypes.Photo]:
-                                            'Загрузил(а) фотографии',
-                                        [ActivityTypes.Rating]:
-                                            'Поставил(а) оценку'
-                                    }[item.type]
-                                }
-                            </>
-                        }
+        {activities?.map((item, index) =>
+            hideBorder ? (
+                <Box
+                    key={index}
+                    sx={{ mb: 2 }}
+                >
+                    <ActivityListItem
+                        item={item}
+                        hidePlaceName={hidePlaceName}
                     />
-
-                    <Typography
-                        gutterBottom
-                        variant={'h3'}
-                        sx={{ mt: 1 }}
-                    >
-                        <Link
-                            href={`/places/${item.place?.id}`}
-                            title={item.place?.title}
-                            style={{
-                                color: 'rgba(0, 0, 0, 0.87)',
-                                textDecoration: 'none'
-                            }}
-                        >
-                            <Image
-                                style={{
-                                    float: 'left',
-                                    marginLeft: '2px',
-                                    marginRight: '4px',
-                                    marginTop: '1px'
-                                }}
-                                src={
-                                    categoryImage(item.place?.category?.name)
-                                        .src
-                                }
-                                alt={item.place?.category?.title || ''}
-                                width={16}
-                                height={18}
-                            />
-                            {item.place?.title}
-                        </Link>
-                    </Typography>
-
-                    {item.type === ActivityTypes.Place && (
-                        <Typography
-                            variant={'body1'}
-                            color={'text.primary'}
-                            sx={{ mb: -1.5 }}
-                        >
-                            {item.place?.content
-                                ? `${item.place.content}...`
-                                : 'Нет данных для отображения'}
-                        </Typography>
-                    )}
-
-                    {item.photos?.length && item.place?.id ? (
-                        <Gallery
-                            photos={item.photos?.map((photo) => ({
-                                height: photo.height,
-                                src: `${ImageHost}photo/${item.place?.id}/${photo.filename}.${photo.extension}`,
-                                width: photo.width
-                            }))}
+                </Box>
+            ) : (
+                <Card
+                    key={index}
+                    sx={{ mb: 1.5 }}
+                >
+                    <CardContent>
+                        <ActivityListItem
+                            item={item}
+                            hidePlaceName={hidePlaceName}
                         />
-                    ) : (
-                        ''
-                    )}
-                </CardContent>
-            </Card>
-        ))}
+                    </CardContent>
+                </Card>
+            )
+        )}
     </>
 )
+
+interface ActivityListItemProps {
+    item: Item
+    hidePlaceName?: boolean
+}
+
+const ActivityListItem: React.FC<ActivityListItemProps> = ({
+    item,
+    hidePlaceName
+}) => {
+    const [showLightbox, setShowLightbox] = useState<boolean>(false)
+    const [photoIndex, setPhotoIndex] = useState<number>()
+
+    const handleCloseLightbox = () => {
+        setShowLightbox(false)
+    }
+
+    const handlePhotoClick = (event: React.MouseEvent, photos: any) => {
+        setPhotoIndex(photos.index)
+        setShowLightbox(true)
+    }
+
+    return (
+        <>
+            <UserAvatar
+                size={'medium'}
+                user={item.author}
+                text={
+                    <>
+                        {formatDate(item.created?.date)}
+                        {' • '}
+                        {
+                            {
+                                [ActivityTypes.Place]:
+                                    'Отредактировал(а) материал',
+                                [ActivityTypes.Photo]: 'Загрузил(а) фотографии',
+                                [ActivityTypes.Rating]: 'Поставил(а) оценку'
+                            }[item.type]
+                        }
+                    </>
+                }
+            />
+
+            {!hidePlaceName && (
+                <Typography
+                    gutterBottom
+                    variant={'h3'}
+                    sx={{ lineHeight: '18px', mt: 1 }}
+                >
+                    <Link
+                        href={`/places/${item.place?.id}`}
+                        title={item.place?.title}
+                        style={{
+                            color: 'rgba(0, 0, 0, 0.87)',
+                            textDecoration: 'none'
+                        }}
+                    >
+                        <Image
+                            style={{
+                                float: 'left',
+                                marginLeft: '2px',
+                                marginRight: '4px',
+                                marginTop: '1px'
+                            }}
+                            src={categoryImage(item.place?.category?.name).src}
+                            alt={item.place?.category?.title || ''}
+                            width={16}
+                            height={18}
+                        />
+                        {item.place?.title}
+                    </Link>
+                </Typography>
+            )}
+
+            {item.type === ActivityTypes.Place && (
+                <Typography
+                    variant={'body1'}
+                    color={'text.primary'}
+                    sx={{ mb: 0 }}
+                >
+                    {item.place?.content
+                        ? `${item.place.content}...`
+                        : 'Нет данных для отображения'}
+                </Typography>
+            )}
+
+            {!!item.photos?.length && (
+                <Box sx={{ mt: 1 }}>
+                    <Gallery
+                        photos={item.photos?.map((photo) => ({
+                            height: photo.height,
+                            src: `${ImageHost}photo/${photo.placeId}/${photo.filename}.${photo.extension}`,
+                            width: photo.width
+                        }))}
+                        onClick={handlePhotoClick}
+                    />
+                    <PhotoLightbox
+                        photos={item.photos}
+                        photoIndex={photoIndex}
+                        showLightbox={showLightbox}
+                        onChangeIndex={setPhotoIndex}
+                        onCloseLightBox={handleCloseLightbox}
+                    />
+                </Box>
+            )}
+        </>
+    )
+}
 
 export default ActivityList
