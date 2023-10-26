@@ -44,6 +44,13 @@ export const LocationType = {
 } as const
 export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
+export interface RequestAuthLogin {
+    email: string
+    password: string
+}
+
+export interface ResponseAuthLogin {}
+
 /* Controller: Places */
 export interface ResponsePlacesGetItem extends Place {}
 

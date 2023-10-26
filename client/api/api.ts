@@ -53,6 +53,22 @@ export const API = createApi({
             query: (searchString) => `address?search=${searchString}`
         }),
 
+        /* Controller: Auth */
+        authGetMe: builder.mutation<void, void>({
+            query: () => 'auth/me'
+        }),
+        authPostLogin: builder.mutation<
+            ApiTypes.ResponseAuthLogin,
+            ApiTypes.RequestAuthLogin
+        >({
+            query: (credentials) => ({
+                body: credentials,
+                method: 'POST',
+                url: 'auth/login'
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
+
         /* Controller: Categories */
         categoriesGetList: builder.query<
             ApiTypes.ResponseCategoriesGetList,

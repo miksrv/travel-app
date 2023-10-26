@@ -9,12 +9,19 @@ import { SearchOutlined } from '@mui/icons-material'
 import { Badge, IconButton } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Container from '@mui/material/Container'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
 // import IconButton from '@mui/material/IconButton'
 import InputBase from '@mui/material/InputBase'
+import List from '@mui/material/List'
+import ListItem from '@mui/material/ListItem'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemText from '@mui/material/ListItemText'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 import React from 'react'
 
 const Search = styled('div')(({ theme }) => ({
@@ -69,6 +76,16 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     const { t } = useTranslation()
+
+    const [open, setOpen] = React.useState(false)
+
+    const handleClickOpen = () => {
+        setOpen(true)
+    }
+
+    const handleClose = () => {
+        setOpen(false)
+    }
 
     return (
         <AppBar
@@ -130,13 +147,35 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                         aria-label='account of current user'
                         // aria-controls={menuId}
                         aria-haspopup='true'
-                        // onClick={handleProfileMenuOpen}
+                        onClick={handleClickOpen}
                         color='inherit'
                     >
                         <AccountCircleOutlined />
                     </IconButton>
                 </Toolbar>
             </Container>
+
+            <Dialog
+                onClose={handleClose}
+                open={open}
+            >
+                <DialogTitle>{'Авторизация на сайте'}</DialogTitle>
+
+                <Link
+                    href={'/login'}
+                    title={''}
+                >
+                    Войти
+                </Link>
+
+                <List sx={{ width: '400px' }}>
+                    <ListItem disableGutters>
+                        <ListItemButton>
+                            <ListItemText primary='Add account' />
+                        </ListItemButton>
+                    </ListItem>
+                </List>
+            </Dialog>
         </AppBar>
     )
 }
