@@ -1,6 +1,7 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
+import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { encodeQueryData } from '@/functions/helpers'
@@ -15,11 +16,11 @@ export const API = createApi({
         baseUrl: process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:8080/',
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
-            // const token = (getState() as RootState).auth.userToken
-            //
-            // if (token) {
-            //     headers.set('Authorization', token)
-            // }
+            const token = (getState() as RootState).auth.userToken
+
+            if (token) {
+                headers.set('Authorization', token)
+            }
 
             return headers
         },

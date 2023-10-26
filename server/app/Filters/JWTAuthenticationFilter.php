@@ -26,7 +26,7 @@ class JWTAuthenticationFilter implements FilterInterface {
             return true;
         }
 
-        $authenticationHeader = $request->getServer('HTTP_AUTHORIZATION');
+        $authenticationHeader = $request->getServer('HTTP_AUTHORIZATION') || null;
 
         try {
 

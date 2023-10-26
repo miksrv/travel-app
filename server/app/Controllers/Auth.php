@@ -136,6 +136,7 @@ class Auth extends ResourceController {
 
             $rules = $validation->$rules;
         }
+
         return $this->validator->setRules($rules, $messages)->run($input);
     }
 
@@ -143,7 +144,7 @@ class Auth extends ResourceController {
      * @param IncomingRequest $request
      * @return array|bool|float|int|mixed|object|string|null
      */
-    public function getRequestInput(IncomingRequest $request) {
+    public function getRequestInput(IncomingRequest $request): mixed {
         $input = $request->getPost();
 
         if (empty($input)) {

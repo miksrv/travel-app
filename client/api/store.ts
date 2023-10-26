@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import { createWrapper } from 'next-redux-wrapper'
 
+import authSlice from '@/api/authSlice'
+
 import { API } from './api'
 
 export const store = () =>
@@ -8,6 +10,7 @@ export const store = () =>
         devTools: process.env.NODE_ENV !== 'production',
         middleware: (gDM) => gDM().concat(API.middleware),
         reducer: {
+            auth: authSlice,
             [API.reducerPath]: API.reducer
         }
     })

@@ -1,6 +1,7 @@
 <?php namespace Config;
 
 use App\Filters\Cors;
+use App\Filters\JWTAuthenticationFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
