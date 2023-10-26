@@ -55,7 +55,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 }
             />
         </Link>
-        <CardContent sx={{ height: 155, overflow: 'hidden', p: 1.5 }}>
+        <CardContent sx={{ height: 150, overflow: 'hidden', p: 1.5 }}>
             <Typography
                 gutterBottom
                 variant={'h3'}

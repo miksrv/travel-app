@@ -44,7 +44,7 @@
         "migration:status": "php spark migrate:status",
         "migration:rollback": "php spark migrate:rollback",
         "migration:run": "php spark migrate",
-        "seed:create": "php spark make:seeder Category --suffix",
+        "seed:create": "php spark make:seeder UserLevels --suffix",
         "seed:run": "php spark db:seed ManageSeeder",
         "model:create": "php spark make:model Places",
         "routes": "php spark routes"
