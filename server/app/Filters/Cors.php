@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Filters;
+<?php namespace App\Filters;
 
 use CodeIgniter\Filters\FilterInterface;
 use CodeIgniter\HTTP\RequestInterface;
@@ -21,10 +19,9 @@ class Cors implements FilterInterface
      * @param RequestInterface $request
      * @param array|null       $arguments
      *
-     * @return mixed
+     * @return void
      */
-    public function before(RequestInterface $request, $arguments = null)
-    {
+    public function before(RequestInterface $request, $arguments = null) {
         header("Access-Control-Allow-Origin: *");
         header("Access-Control-Allow-Headers: X-API-KEY, Origin,X-Requested-With, Content-Type, Accept, Access-Control-Requested-Method, Authorization");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PATCH, PUT, DELETE");
@@ -46,10 +43,9 @@ class Cors implements FilterInterface
      * @param ResponseInterface $response
      * @param array|null        $arguments
      *
-     * @return mixed
+     * @return void
      */
-    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null)
-    {
+    public function after(RequestInterface $request, ResponseInterface $response, $arguments = null) {
         //
     }
 }

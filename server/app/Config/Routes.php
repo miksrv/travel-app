@@ -60,3 +60,8 @@ $routes->options('activity', 'Activity');
 $routes->get('users', 'Users::list');
 $routes->get('users/(:alphanum)', 'Users::show/$1');
 $routes->options('users', 'users');
+
+$routes->get('auth/me', 'Auth::me');
+$routes->post('auth/register', 'Auth::register');
+$routes->post('auth/login', 'Auth::login');
+$routes->options('auth/(:any)', 'Auth::me');

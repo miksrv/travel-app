@@ -49,10 +49,45 @@ class UsersModel extends MyBaseModel {
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    private function getUpdatedDataWithHashedPassword(array $data): array {
+        if (isset($data['data']['password'])) {
+            $plaintextPassword = $data['data']['password'];
+            $data['data']['password'] = $this->hashPassword($plaintextPassword);
+        }
+
+        return $data;
+    }
+
+    private function hashPassword(string $plaintextPassword): string {
+        return password_hash($plaintextPassword, PASSWORD_BCRYPT);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function findUserByEmailAddress(string $emailAddress): object|array {
+        $user = $this
+            ->asArray()
+            ->where(['email' => $emailAddress])
+            ->first();
+
+        if (!$user)
+            throw new Exception('User does not exist for specified email address');
+
+        return $user;
     }
 }
