@@ -45,8 +45,8 @@ export const LocationType = {
 export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
 export interface RequestAuthLogin {
-    email: string
-    password: string
+    email?: string
+    password?: string
 }
 
 export interface ResponseAuthLogin {}

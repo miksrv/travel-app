@@ -52,10 +52,9 @@ class Auth extends ResourceController {
 
         $input = $this->getRequestInput($this->request);
 
-
-        if (!$this->validateRequest($input, $rules, $errors)) {
-            return $this->failValidationErrors($this->validator->getErrors());
-        }
+//        if (!$this->validateRequest($input, $rules, $errors)) {
+//            return $this->failValidationErrors($this->validator->getErrors());
+//        }
 
         return $this->getJWTForUser($input['email']);
     }
@@ -98,9 +97,9 @@ class Auth extends ResourceController {
             return $this
                 ->respond(
                     [
-                        'message'      => 'User authenticated successfully',
-                        'user'         => $user,
-                        'access_token' => getSignedJWTForUser($emailAddress)
+                        'message'     => 'User authenticated successfully',
+                        'user'        => $user,
+                        'accessToken' => getSignedJWTForUser($emailAddress)
                     ]
                 );
         } catch (Exception $e) {

@@ -24,6 +24,8 @@ import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React from 'react'
 
+import LoginForm from '@/components/login-form'
+
 const Search = styled('div')(({ theme }) => ({
     '&:hover': {
         backgroundColor: alpha(theme.palette.common.white, 0.25)
@@ -161,12 +163,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
             >
                 <DialogTitle>{'Авторизация на сайте'}</DialogTitle>
 
-                <Link
-                    href={'/login'}
-                    title={''}
-                >
-                    Войти
-                </Link>
+                <LoginForm />
 
                 <List sx={{ width: '400px' }}>
                     <ListItem disableGutters>

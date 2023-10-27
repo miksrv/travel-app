@@ -4,7 +4,7 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddUserAchievements extends Migration {
+class AddUsersLevels extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
@@ -24,27 +24,12 @@ class AddUserAchievements extends Migration {
                 'constraint' => 255,
                 'null'       => true,
             ],
-            'min_count_places' => [
+            'level' => [
                 'type'       => 'SMALLINT',
-                'constraint' => 5,
+                'constraint' => 2,
                 'null'       => true
             ],
-            'min_count_edits' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
-                'null'       => true
-            ],
-            'min_count_photos' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
-                'null'       => true
-            ],
-            'min_count_likes' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
-                'null'       => true
-            ],
-            'min_count_reputation' => [
+            'experience' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
                 'null'       => true
@@ -52,10 +37,10 @@ class AddUserAchievements extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('users_achievements');
+        $this->forge->createTable('users_levels');
     }
 
     public function down() {
-        $this->forge->dropTable('users_achievements');
+        $this->forge->dropTable('users_levels');
     }
 }
