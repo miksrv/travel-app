@@ -2,8 +2,7 @@
 
 use App\Entities\Photo;
 
-class PhotosModel extends MyBaseModel
-{
+class PhotosModel extends MyBaseModel {
     protected $table      = 'photos';
     protected $primaryKey = 'id';
 
@@ -54,8 +53,11 @@ class PhotosModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;

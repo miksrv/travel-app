@@ -2,8 +2,7 @@
 
 use App\Entities\Rating;
 
-class RatingModel extends MyBaseModel
-{
+class RatingModel extends MyBaseModel {
     protected $table      = 'rating';
     protected $primaryKey = 'id';
 
@@ -47,8 +46,11 @@ class RatingModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;

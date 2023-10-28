@@ -3,8 +3,7 @@
 use App\Entities\Category;
 use CodeIgniter\Model;
 
-class CategoryModel extends Model
-{
+class CategoryModel extends Model {
     protected $table      = 'category';
     protected $primaryKey = 'name';
 

@@ -1,7 +1,6 @@
 <?php namespace App\Models;
 
-class TranslationsPhotosModel extends MyBaseModel
-{
+class TranslationsPhotosModel extends MyBaseModel {
     protected $table            = 'translations_photos';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
@@ -38,8 +37,11 @@ class TranslationsPhotosModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;

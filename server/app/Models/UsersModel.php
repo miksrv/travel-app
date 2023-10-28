@@ -72,12 +72,17 @@ class UsersModel extends MyBaseModel {
         return $data;
     }
 
+    /**
+     * @param string $plaintextPassword
+     * @return string
+     */
     private function hashPassword(string $plaintextPassword): string {
         return password_hash($plaintextPassword, PASSWORD_BCRYPT);
     }
 
     /**
-     * @throws Exception
+     * @param string $emailAddress
+     * @return object|array
      */
     public function findUserByEmailAddress(string $emailAddress): object|array {
         $user = $this

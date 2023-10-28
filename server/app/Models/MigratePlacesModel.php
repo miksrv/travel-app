@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class MigratePlacesModel extends Model
-{
+class MigratePlacesModel extends Model {
     protected $table      = 'cms_geo_places';
     protected $primaryKey = 'item_id';
 

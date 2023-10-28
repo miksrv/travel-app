@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class MigrateUsersModel extends Model
-{
+class MigrateUsersModel extends Model {
     protected $table      = 'cms_users';
     protected $primaryKey = 'user_id';
 

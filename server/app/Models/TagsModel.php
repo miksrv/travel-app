@@ -2,8 +2,7 @@
 
 use App\Entities\Tag;
 
-class TagsModel extends MyBaseModel
-{
+class TagsModel extends MyBaseModel {
     protected $table            = 'tags';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
@@ -39,6 +38,10 @@ class TagsModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 

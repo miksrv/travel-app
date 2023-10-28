@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class SessionsHistoryModel extends MyBaseModel
-{
+class SessionsHistoryModel extends MyBaseModel {
     protected $table      = 'sessions_history';
     protected $primaryKey = 'id';
 
@@ -43,6 +42,10 @@ class SessionsHistoryModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
+    /**
+     * @param array $data
+     * @return array
+     */
     protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 

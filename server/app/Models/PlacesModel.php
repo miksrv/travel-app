@@ -2,8 +2,7 @@
 
 use App\Entities\Place;
 
-class PlacesModel extends MyBaseModel
-{
+class PlacesModel extends MyBaseModel {
     protected $table      = 'places';
     protected $primaryKey = 'id';
 

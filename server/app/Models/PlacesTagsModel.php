@@ -1,7 +1,6 @@
 <?php namespace App\Models;
 
-class PlacesTagsModel extends MyBaseModel
-{
+class PlacesTagsModel extends MyBaseModel {
     protected $table            = 'places_tags';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
@@ -37,8 +36,11 @@ class PlacesTagsModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;

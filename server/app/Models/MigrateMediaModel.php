@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class MigrateMediaModel extends Model
-{
+class MigrateMediaModel extends Model {
     protected $table      = 'cms_media';
     protected $primaryKey = 'item_id';
 

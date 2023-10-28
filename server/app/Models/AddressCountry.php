@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class AddressCountry extends Model
-{
+class AddressCountry extends Model {
     protected $table      = 'address_country';
     protected $primaryKey = 'id';
 

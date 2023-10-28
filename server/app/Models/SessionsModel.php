@@ -3,8 +3,7 @@
 use App\Entities\Session;
 use CodeIgniter\Model;
 
-class SessionsModel extends Model
-{
+class SessionsModel extends Model {
     protected $table      = 'sessions';
     protected $primaryKey = 'id';
 

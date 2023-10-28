@@ -2,8 +2,7 @@
 
 use CodeIgniter\Model;
 
-class AddressDistrict extends Model
-{
+class AddressDistrict extends Model {
     protected $table      = 'address_district';
     protected $primaryKey = 'id';
 

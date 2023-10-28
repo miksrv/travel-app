@@ -3,8 +3,7 @@
 use App\Entities\OverpassCategory;
 use CodeIgniter\Model;
 
-class OverpassCategoryModel extends Model
-{
+class OverpassCategoryModel extends Model {
     protected $table      = 'overpass_category';
     protected $primaryKey = 'id';
 

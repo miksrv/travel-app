@@ -2,8 +2,7 @@
 
 use App\Entities\UserActivity;
 
-class UsersActivityModel extends MyBaseModel
-{
+class UsersActivityModel extends MyBaseModel {
     protected $table            = 'users_activity';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
@@ -45,8 +44,11 @@ class UsersActivityModel extends MyBaseModel
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array
-    {
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function beforeInsert(array $data): array {
         $data['data']['id'] = uniqid();
 
         return $data;
