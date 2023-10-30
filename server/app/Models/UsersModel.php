@@ -82,17 +82,15 @@ class UsersModel extends MyBaseModel {
 
     /**
      * @param string $emailAddress
-     * @return object|array
+     * @return User
      */
-    public function findUserByEmailAddress(string $emailAddress): object|array {
-        $user = $this
-            ->asArray()
-            ->where(['email' => $emailAddress])
-            ->first();
+    public function findUserByEmailAddress(string $emailAddress): object {
+        $userData = $this->where(['email' => $emailAddress])->first();
 
-        if (!$user)
+        if (!$userData) {
             throw new Exception('User does not exist for specified email address');
+        }
 
-        return $user;
+        return $userData;
     }
 }

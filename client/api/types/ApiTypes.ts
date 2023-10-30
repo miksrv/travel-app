@@ -49,7 +49,11 @@ export interface RequestAuthLogin {
     password?: string
 }
 
-export interface ResponseAuthLogin {}
+export interface ResponseAuthLogin {
+    token?: string
+    auth?: boolean
+    user?: User
+}
 
 /* Controller: Places */
 export interface ResponsePlacesGetItem extends Place {}

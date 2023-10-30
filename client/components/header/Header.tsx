@@ -22,7 +22,17 @@ import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
+
+import { API } from '@/api/api'
+import {
+    getStorageToken,
+    login,
+    logout,
+    setUserAuth,
+    setUserInfo
+} from '@/api/authSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
 
@@ -77,9 +87,13 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
+    const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
+
     const [open, setOpen] = React.useState(false)
+    const authSlice = useAppSelector((state) => state.auth)
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -88,6 +102,22 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     const handleClose = () => {
         setOpen(false)
     }
+
+    useEffect(() => {
+        if (meData?.auth) {
+            dispatch(login(meData))
+        } else {
+            if (error) {
+                dispatch(logout())
+            }
+        }
+    }, [meData, error])
+
+    useEffect(() => {
+        if (authSlice.token) {
+            authGetMe()
+        }
+    }, [])
 
     return (
         <AppBar

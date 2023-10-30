@@ -1,16 +1,20 @@
 import { Button } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { API } from '@/api/api'
+import { login } from '@/api/authSlice'
+import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 interface LoginFormProps {}
 
 const LoginForm: React.FC<LoginFormProps> = () => {
+    const dispatch = useAppDispatch()
     const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
-    const [login, { isLoading }] = API.useAuthPostLoginMutation()
+    const [authLoginPost, { isLoading, data: authData }] =
+        API.useAuthPostLoginMutation()
 
     const handleChange = ({
         target: { name, value }
@@ -20,9 +24,13 @@ const LoginForm: React.FC<LoginFormProps> = () => {
 
     const handleLoginButton = () => {
         if (formData) {
-            login(formData)
+            authLoginPost(formData)
         }
     }
+
+    useEffect(() => {
+        dispatch(login(authData))
+    }, [authData])
 
     return (
         <>

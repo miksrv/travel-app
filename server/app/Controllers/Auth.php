@@ -67,12 +67,15 @@ class Auth extends ResourceController {
 
         try {
             helper('jwt');
-            $user = validateJWTFromRequest($authenticationHeader);
 
-            return $this->respond(                    [
-                'message'      => 'User authenticated successfully',
-                'user'         => $user,
-                'access_token' => getSignedJWTForUser($authenticationHeader)
+            $userData = validateJWTFromRequest($authenticationHeader);
+
+            unset($userData->password);
+
+            return $this->respond([
+                'auth'  => true,
+                'user'  => $userData,
+                'token' => getSignedJWTForUser($authenticationHeader)
             ], ResponseInterface::HTTP_OK);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
@@ -88,18 +91,19 @@ class Auth extends ResourceController {
      */
     private function getJWTForUser(string $emailAddress, int $responseCode = ResponseInterface::HTTP_OK): ResponseInterface {
         try {
-            $model = new UsersModel();
-            $user = $model->findUserByEmailAddress($emailAddress);
-            unset($user['password']);
+            $userModel = new UsersModel();
+            $userData  = $userModel->findUserByEmailAddress($emailAddress);
+
+            unset($userData->password);
 
             helper('jwt');
 
             return $this
                 ->respond(
                     [
-                        'message'     => 'User authenticated successfully',
-                        'user'        => $user,
-                        'accessToken' => getSignedJWTForUser($emailAddress)
+                        'auth'  => true,
+                        'user'  => $userData,
+                        'token' => getSignedJWTForUser($emailAddress)
                     ]
                 );
         } catch (Exception $e) {

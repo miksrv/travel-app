@@ -15,7 +15,7 @@ class UserRules {
             $model = new UsersModel();
             $user = $model->findUserByEmailAddress($data['email']);
 
-            return password_verify($data['password'], $user['password']);
+            return password_verify($data['password'], $user->password);
 
         } catch (Exception $e) {
             return false;
