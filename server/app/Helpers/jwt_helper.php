@@ -39,3 +39,11 @@ function getSignedJWTForUser(string $email): string {
 
     return JWT::encode($payload, Services::getSecretKey(), 'HS256');
 }
+
+/**
+ * @param string $password
+ * @return string
+ */
+function hashUserPassword(string $password): string {
+    return password_hash($password, PASSWORD_ARGON2ID);
+}

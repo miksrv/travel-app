@@ -52,9 +52,9 @@ class Auth extends ResourceController {
 
         $input = $this->getRequestInput($this->request);
 
-//        if (!$this->validateRequest($input, $rules, $errors)) {
-//            return $this->failValidationErrors($this->validator->getErrors());
-//        }
+        if (!$this->validateRequest($input, $rules, $errors)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
 
         return $this->getJWTForUser($input['email']);
     }
