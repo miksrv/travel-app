@@ -6,8 +6,9 @@ import {
     NotificationsOutlined
 } from '@mui/icons-material'
 import { SearchOutlined } from '@mui/icons-material'
-import { Badge, IconButton } from '@mui/material'
+import { Avatar, Badge, IconButton, Menu, Tooltip } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
+import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
 import Dialog from '@mui/material/Dialog'
 import DialogTitle from '@mui/material/DialogTitle'
@@ -17,12 +18,14 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import ListItemButton from '@mui/material/ListItemButton'
 import ListItemText from '@mui/material/ListItemText'
+import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
 import { useTranslation } from 'next-i18next'
 import React, { useEffect } from 'react'
 
+import { ImageHost } from '@/api/api'
 import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
@@ -79,6 +82,8 @@ interface HeaderProps {
     onMenuClick?: (event: React.KeyboardEvent | React.MouseEvent) => void
 }
 
+const settings = ['Profile', 'Account', 'Dashboard', 'Logout']
+
 const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
@@ -87,6 +92,18 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
     const [open, setOpen] = React.useState(false)
     const authSlice = useAppSelector((state) => state.auth)
+
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+        null
+    )
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+        setAnchorElUser(event.currentTarget)
+    }
+
+    const handleCloseUserMenu = () => {
+        setAnchorElUser(null)
+    }
 
     const handleClickOpen = () => {
         setOpen(true)
@@ -166,17 +183,65 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             <NotificationsOutlined />
                         </Badge>
                     </IconButton>
-                    <IconButton
-                        size='large'
-                        edge='end'
-                        aria-label='account of current user'
-                        // aria-controls={menuId}
-                        aria-haspopup='true'
-                        onClick={handleClickOpen}
-                        color='inherit'
-                    >
-                        <AccountCircleOutlined />
-                    </IconButton>
+
+                    {authSlice.isAuth ? (
+                        <Box sx={{ flexGrow: 0 }}>
+                            <Tooltip title='Open settings'>
+                                <IconButton
+                                    onClick={handleOpenUserMenu}
+                                    sx={{ p: 0 }}
+                                >
+                                    <Avatar
+                                        alt={authSlice?.user?.name}
+                                        src={`${ImageHost}avatar/${authSlice?.user?.avatar}`}
+                                        sx={{
+                                            height: '32px',
+                                            width: '32px'
+                                        }}
+                                    />
+                                </IconButton>
+                            </Tooltip>
+                            <Menu
+                                sx={{ mt: '45px' }}
+                                id='menu-appbar'
+                                anchorEl={anchorElUser}
+                                anchorOrigin={{
+                                    horizontal: 'right',
+                                    vertical: 'top'
+                                }}
+                                keepMounted
+                                transformOrigin={{
+                                    horizontal: 'right',
+                                    vertical: 'top'
+                                }}
+                                open={Boolean(anchorElUser)}
+                                onClose={handleCloseUserMenu}
+                            >
+                                {settings.map((setting) => (
+                                    <MenuItem
+                                        key={setting}
+                                        onClick={handleCloseUserMenu}
+                                    >
+                                        <Typography textAlign='center'>
+                                            {setting}
+                                        </Typography>
+                                    </MenuItem>
+                                ))}
+                            </Menu>
+                        </Box>
+                    ) : (
+                        <IconButton
+                            size='large'
+                            edge='end'
+                            aria-label='account of current user'
+                            // aria-controls={menuId}
+                            aria-haspopup='true'
+                            onClick={handleClickOpen}
+                            color='inherit'
+                        >
+                            <AccountCircleOutlined />
+                        </IconButton>
+                    )}
                 </Toolbar>
             </Container>
 

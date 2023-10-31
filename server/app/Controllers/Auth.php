@@ -72,6 +72,10 @@ class Auth extends ResourceController {
 
             unset($userData->password);
 
+            if (!$userData->id) {
+                return $this->failUnauthorized();
+            }
+
             return $this->respond([
                 'auth'  => true,
                 'user'  => $userData,

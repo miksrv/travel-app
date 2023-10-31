@@ -88,7 +88,7 @@ class UsersModel extends MyBaseModel {
         $userData = $this->where(['email' => $emailAddress])->first();
 
         if (!$userData) {
-            throw new Exception('User does not exist for specified email address');
+            return (object) [];
         }
 
         return $userData;

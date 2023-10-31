@@ -153,7 +153,7 @@ class Photos extends ResourceController {
      * @return PhotosModel
      */
     protected function _makeListFilters(): PhotosModel {
-        $author = $this->request->getGet('author', FILTER_SANITIZE_STRING);
+        $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $photosModel = new PhotosModel();
         $photosModel

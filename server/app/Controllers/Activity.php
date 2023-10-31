@@ -20,11 +20,11 @@ class Activity extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $lastDate = $this->request->getGet('date', FILTER_SANITIZE_STRING);
+        $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
         $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
-        $author   = $this->request->getGet('author', FILTER_SANITIZE_STRING);
-        $place    = $this->request->getGet('place', FILTER_SANITIZE_STRING);
+        $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 400);

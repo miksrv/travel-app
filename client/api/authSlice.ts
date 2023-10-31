@@ -14,8 +14,8 @@ type InitialStateProps = {
 
 export const getStorageToken = (): string | undefined =>
     typeof window !== 'undefined' && localStorage.getItem(ACCESS_TOKEN_KEY)
-        ? localStorage.getItem(ACCESS_TOKEN_KEY) ?? undefined
-        : undefined
+        ? localStorage.getItem(ACCESS_TOKEN_KEY) ?? ''
+        : ''
 
 const authSlice = createSlice({
     extraReducers: {},
@@ -28,7 +28,7 @@ const authSlice = createSlice({
             state,
             { payload }: PayloadAction<ApiTypes.ResponseAuthLogin | undefined>
         ) => {
-            state.token = payload?.token || undefined
+            state.token = payload?.token || ''
             state.user = payload?.user || undefined
             state.isAuth = payload?.auth || false
 

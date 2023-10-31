@@ -18,7 +18,7 @@ class Places extends ResourceController {
     public function list(): ResponseInterface {
         $lat    = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
-        $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
+        $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $session = new Session();
 
@@ -293,17 +293,17 @@ class Places extends ResourceController {
         $sortingFields = ['views', 'rating', 'title', 'category', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
 
-        $sort     = $this->request->getGet('sort', FILTER_SANITIZE_STRING);
-        $author   = $this->request->getGet('author', FILTER_SANITIZE_STRING);
-        $exclude  = $this->request->getGet('excludePlaces', FILTER_SANITIZE_STRING);
-        $order    = $this->request->getGet('order', FILTER_SANITIZE_STRING) ?? $orderDefault;
+        $sort     = $this->request->getGet('sort', FILTER_SANITIZE_SPECIAL_CHARS);
+        $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $exclude  = $this->request->getGet('excludePlaces', FILTER_SANITIZE_SPECIAL_CHARS);
+        $order    = $this->request->getGet('order', FILTER_SANITIZE_SPECIAL_CHARS) ?? $orderDefault;
         $country  = $this->request->getGet('country', FILTER_SANITIZE_NUMBER_INT);
         $region   = $this->request->getGet('region', FILTER_SANITIZE_NUMBER_INT);
         $district = $this->request->getGet('district', FILTER_SANITIZE_NUMBER_INT);
         $city     = $this->request->getGet('city', FILTER_SANITIZE_NUMBER_INT);
         $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
-        $category = $this->request->getGet('category', FILTER_SANITIZE_STRING);
+        $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if ($country) {
             $placesModel->where(['address_country' => $country]);

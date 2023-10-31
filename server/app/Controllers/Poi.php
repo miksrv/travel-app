@@ -122,7 +122,7 @@ class Poi extends ResourceController {
      */
     protected function _getBounds(): array {
         // left (lon), top (lat), right (lon), bottom (lat)
-        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_STRING);
+        $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = explode(',', $bounds);
 
         if (count($bounds) !== 4) {
