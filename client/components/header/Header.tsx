@@ -21,17 +21,10 @@ import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
 import { alpha, styled } from '@mui/material/styles'
 import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
-import {
-    getStorageToken,
-    login,
-    logout,
-    setUserAuth,
-    setUserInfo
-} from '@/api/authSlice'
+import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
