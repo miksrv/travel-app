@@ -10,14 +10,16 @@ class Session {
     public string $id;
     public float | null $latitude;
     public float | null $longitude;
+    public string | null $userId;
 
     /**
      * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
      * @param float|null $latitude
      * @param float|null $longitude
+     * @param string|null $userId
      * @throws ReflectionException
      */
-    public function __construct(float $latitude = null, float $longitude = null) {
+    public function __construct(float $latitude = null, float $longitude = null, string $userId = null) {
         $request = Services::request();
 
         $ip = $request->getIPAddress();
@@ -33,6 +35,7 @@ class Session {
             $sessionData = (object) [
                 'id'         => md5($ip . $ua),
                 'ip'         => $ip,
+                'user'       => $userId,
                 'user_agent' => $ua,
                 'latitude'   => $latitude,
                 'longitude'  => $longitude
@@ -47,6 +50,7 @@ class Session {
 
             $this->latitude  = $latitude;
             $this->longitude = $longitude;
+            $this->userId    = $userId;
 
             return $this->id = $sessionData->id;
         }
@@ -65,11 +69,13 @@ class Session {
 
         $this->latitude  = $latitude ?? $findSession->latitude;
         $this->longitude = $longitude ?? $findSession->longitude;
+        $this->userId    = $userId ?? $findSession->user;
 
         // В любом случае обновляем текущую сессию
         $sessionModel->update($findSession->id, [
             'latitude'  => $this->latitude,
-            'longitude' => $this->longitude
+            'longitude' => $this->longitude,
+            'user'      => $this->userId,
         ]);
 
         return $this->id = $findSession->id;

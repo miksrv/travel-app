@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Session;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -70,17 +71,8 @@ class Auth extends ResourceController {
 
             $userData = validateJWTFromRequest($authenticationHeader);
 
-            unset($userData->password);
+            return $this->getJWTForUser($userData->email, ResponseInterface::HTTP_CREATED);
 
-            if (!$userData->id) {
-                return $this->failUnauthorized();
-            }
-
-            return $this->respond([
-                'auth'  => true,
-                'user'  => $userData,
-                'token' => getSignedJWTForUser($authenticationHeader)
-            ], ResponseInterface::HTTP_OK);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
@@ -102,14 +94,14 @@ class Auth extends ResourceController {
 
             helper('jwt');
 
-            return $this
-                ->respond(
-                    [
-                        'auth'  => true,
-                        'user'  => $userData,
-                        'token' => getSignedJWTForUser($emailAddress)
-                    ]
-                );
+            new Session(null, null, $userData->id);
+
+            return $this->respond([
+                'auth'  => true,
+                'user'  => $userData,
+                'token' => getSignedJWTForUser($emailAddress)
+            ]);
+
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 

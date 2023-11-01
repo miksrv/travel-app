@@ -10,4 +10,5 @@ export type User = {
     level?: number
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
+    activity?: ApiTypes.DateTimeType
 }

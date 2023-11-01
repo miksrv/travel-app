@@ -15,13 +15,10 @@ class JWTAuthenticationFilter implements FilterInterface {
      * @param $arguments
      * @return RequestInterface|ResponseInterface|true
      */
-    public function before(RequestInterface $request, $arguments = null): ResponseInterface|bool|RequestInterface
-    {
+    public function before(RequestInterface $request, $arguments = null): ResponseInterface|RequestInterface|bool {
         if (
             $request->getUri()->getPath() === 'auth/register' ||
-            $request->getUri()->getPath() === 'auth/login' ||
-            $request->getUri()->getPath() === 'fits/data' ||
-            $request->getUri()->getPath() === 'fits/image'
+            $request->getUri()->getPath() === 'auth/login'
         ) {
             return true;
         }

@@ -7,11 +7,11 @@ use Firebase\JWT\Key;
 
 /**
  * @param string $encodedToken
- * @return object|array
+ * @return object
  */
-function validateJWTFromRequest(string $encodedToken): object|array {
+function validateJWTFromRequest(string $encodedToken): object {
     if (!$encodedToken) {
-        return [];
+        return (object) [];
     }
 
     $secretKey    = Services::getSecretKey();
@@ -28,8 +28,8 @@ function validateJWTFromRequest(string $encodedToken): object|array {
  */
 function getSignedJWTForUser(string $email): string {
     $issuedAtTime    = time();
-    $tokenTimeToLive = getenv('JWT_TIME_TO_LIVE') || 15;
-    $tokenExpiration = $issuedAtTime + ($tokenTimeToLive * 1000 * 60);
+    $tokenTimeToLive = getenv('JWT_TIME_TO_LIVE');
+    $tokenExpiration = $issuedAtTime + ($tokenTimeToLive);
 
     $payload = [
         'email' => $email,

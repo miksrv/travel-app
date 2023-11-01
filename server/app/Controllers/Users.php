@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Models\SessionsModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -48,22 +49,29 @@ class Users extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        $usersModel = new UsersModel();
-        $usersData  = $usersModel
+        $usersModel   = new UsersModel();
+        $sessionModel = new SessionsModel();
+        $sessionData  = $sessionModel->where('user', $id)->first();
+        $usersData    = $usersModel
             ->select('id, name, avatar, created_at, updated_at')
-            ->orderBy('reputation', 'DESC')
             ->find($id);
 
         if (!$usersData) {
             return $this->failNotFound();
         }
 
-        return $this->respond((object) [
-            'id'      => $usersData->id,
-            'name'    => $usersData->name,
-            'avatar'  => $usersData->avatar,
-            'created' => $usersData->created_at,
-            'updated' => $usersData->updated_at
-        ]);
+        $result = (object) [
+            'id'       => $usersData->id,
+            'name'     => $usersData->name,
+            'avatar'   => $usersData->avatar,
+            'created'  => $usersData->created_at,
+            'updated'  => $usersData->updated_at
+        ];
+
+        if ($sessionData && $sessionData->updated_at) {
+            $result->activity = $sessionData->updated_at;
+        }
+
+        return $this->respond($result);
     }
 }

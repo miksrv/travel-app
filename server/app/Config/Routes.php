@@ -14,6 +14,8 @@ $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');
 $routes->get('poi/(:alphanum)', 'Poi::show/$1');
 $routes->options('poi', 'Poi');
+$routes->options('poi/photos', 'Poi');
+$routes->options('poi/(:alphanum)', 'Poi');
 
 $routes->get('places', 'Places::list');
 $routes->get('places/(:alphanum)', 'Places::show/$1');
@@ -59,7 +61,8 @@ $routes->options('activity', 'Activity');
 
 $routes->get('users', 'Users::list');
 $routes->get('users/(:alphanum)', 'Users::show/$1');
-$routes->options('users', 'users');
+$routes->options('users', 'Users');
+$routes->options('users/(:alphanum)', 'Users'); // <- It's working!
 
 $routes->get('auth/me', 'Auth::me');
 $routes->post('auth/register', 'Auth::register');
