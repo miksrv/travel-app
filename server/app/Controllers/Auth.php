@@ -71,7 +71,7 @@ class Auth extends ResourceController {
 
             $userData = validateJWTFromRequest($authenticationHeader);
 
-            return $this->getJWTForUser($userData->email, ResponseInterface::HTTP_CREATED);
+            return $this->getJWTForUser($userData['email'], ResponseInterface::HTTP_CREATED);
 
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
@@ -94,7 +94,8 @@ class Auth extends ResourceController {
 
             helper('jwt');
 
-            new Session(null, null, $userData->id);
+            $session = new Session();
+            $session->saveUserSession($userData->id);
 
             return $this->respond([
                 'auth'  => true,

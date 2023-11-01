@@ -6,7 +6,6 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Users extends ResourceController {
-
     /**
      * @return ResponseInterface
      */
@@ -61,11 +60,11 @@ class Users extends ResourceController {
         }
 
         $result = (object) [
-            'id'       => $usersData->id,
-            'name'     => $usersData->name,
-            'avatar'   => $usersData->avatar,
-            'created'  => $usersData->created_at,
-            'updated'  => $usersData->updated_at
+            'id'      => $usersData->id,
+            'name'    => $usersData->name,
+            'avatar'  => $usersData->avatar,
+            'created' => $usersData->created_at,
+            'updated' => $usersData->updated_at
         ];
 
         if ($sessionData && $sessionData->updated_at) {

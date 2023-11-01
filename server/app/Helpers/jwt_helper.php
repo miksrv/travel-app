@@ -1,17 +1,18 @@
 <?php
 
+use App\Entities\User;
 use App\Models\UsersModel;
 use Config\Services;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 /**
- * @param string $encodedToken
- * @return object
+ * @param string|null $encodedToken
+ * @return User|null
  */
-function validateJWTFromRequest(string $encodedToken): object {
+function validateJWTFromRequest(string $encodedToken = null):? User {
     if (!$encodedToken) {
-        return (object) [];
+        return null;
     }
 
     $secretKey    = Services::getSecretKey();
