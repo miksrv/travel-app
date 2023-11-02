@@ -12,10 +12,10 @@ class UserRules {
      */
     public function validateUser(string $str, string $fields, array $data): bool {
         try {
-            $model = new UsersModel();
-            $user = $model->findUserByEmailAddress($data['email']);
+            $userModel = new UsersModel();
+            $userData  = $userModel->findUserByEmailAddress($data['email']);
 
-            return password_verify($data['password'], $user->password);
+            return password_verify($data['password'], $userData->password);
 
         } catch (Exception $e) {
             return false;

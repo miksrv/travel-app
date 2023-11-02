@@ -11,15 +11,15 @@ class AddSessions extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'ip' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 300,
-                'null'       => false,
-            ],
-            'user' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
+            ],
+            'user_ip' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 300,
+                'null'       => false,
             ],
             'user_agent' => [
                 'type'       => 'VARCHAR',
@@ -43,7 +43,7 @@ class AddSessions extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('user', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('sessions');
     }
 

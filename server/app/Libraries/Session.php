@@ -14,13 +14,10 @@ class Session {
     public User | null $userData;
     private SessionsModel $sessionModel;
 
-    /**
-     * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
-     * @param float|null $latitude
-     * @param float|null $longitude
-     * @throws ReflectionException
-     */
-    public function __construct(float $latitude = null, float $longitude = null) {
+    private string $ip;
+    private string $ua;
+
+    public function __construct() {
         helper('jwt');
 
         $request = Services::request();
@@ -29,20 +26,35 @@ class Session {
         $this->userData = validateJWTFromRequest($header);
         $this->sessionModel = new SessionsModel();
 
-        $ip = $request->getIPAddress();
-        $ua = $request->getUserAgent()->getAgentString();
+        $this->ip = $request->getIPAddress();
+        $this->ua = $request->getUserAgent()->getAgentString();
 
         $findSession = $this->sessionModel
-            ->where(['ip' => $ip, 'user_agent' => $ua])
+            ->where(['user_ip' => $this->ip, 'user_agent' => $this->ua])
             ->first();
 
-        // Если сесси в БД с такими IP и UA нет, то добавляем новую
-        if (empty($findSession) || !$findSession->id) {
+        if ($findSession && $findSession->id) {
+            $this->id = $findSession->id;
+            $this->latitude  = $findSession->latitude;
+            $this->longitude = $findSession->longitude;
+        }
+    }
+
+    /**
+     * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
+     * @param float|null $latitude
+     * @param float|null $longitude
+     * @return mixed
+     * @throws ReflectionException
+     */
+    public function update(float $latitude = null, float $longitude = null): string {
+        // Если сессии в БД с такими IP и UA нет, то добавляем новую
+        if (!$this->id) {
             $sessionData = (object) [
-                'id'         => md5($ip . $ua),
-                'ip'         => $ip,
-                'user'       => $this->userData->id ?? null,
-                'user_agent' => $ua,
+                'id'         => md5($this->ip . $this->ua),
+                'user_id'    => $this->userData->id ?? null,
+                'user_ip'    => $this->ip,
+                'user_agent' => $this->ua,
                 'latitude'   => $latitude,
                 'longitude'  => $longitude
             ];
@@ -56,33 +68,34 @@ class Session {
 
             $this->latitude  = $latitude;
             $this->longitude = $longitude;
+            $this->id = $sessionData->id;
 
-            return $this->id = $sessionData->id;
+            return $sessionData->id;
         }
 
         // Если сессия уже есть в БД и положение сейчас отличается от того, что было сохранено,
         // То создается новая запись в истории сессий
         if (($latitude && $longitude) &&
-            ($latitude !== $findSession->latitude || $longitude !== $findSession->longitude)
+            ($latitude !== $this->latitude || $longitude !== $this->longitude)
         ) {
             $this->_saveSessionHistory(
-                $findSession->id,
+                $this->id,
                 $latitude,
                 $longitude
             );
         }
 
-        $this->latitude  = $latitude ?? $findSession->latitude;
-        $this->longitude = $longitude ?? $findSession->longitude;
+        $this->latitude  = $latitude ?? $this->latitude;
+        $this->longitude = $longitude ?? $this->longitude;
 
         // В любом случае обновляем текущую сессию
-        $this->sessionModel->update($findSession->id, [
+        $this->sessionModel->update($this->id, [
             'latitude'  => $this->latitude,
             'longitude' => $this->longitude,
-            'user'      => $this->userData->id ?? $findSession->user ?? null,
+            'user_id'   => $this->userData->id ?? $findSession->user ?? null,
         ]);
 
-        return $this->id = $findSession->id;
+        return $this->id;
     }
 
     /**
@@ -91,11 +104,9 @@ class Session {
      * @throws ReflectionException
      */
     public function saveUserSession(string $userId): void {
-        if (!$this->id) {
-            return ;
+        if ($this->id && $userId) {
+            $this->sessionModel->update($this->id, ['user_id' => $userId]);
         }
-
-        $this->sessionModel->update($this->id, ['user' => $userId]);
     }
 
     /**

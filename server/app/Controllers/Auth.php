@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Entities\User;
 use App\Libraries\Session;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -16,24 +17,24 @@ class Auth extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function register(): ResponseInterface {
-        $rules = [
-            'name'     => 'required',
-            'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[user.email]',
-            'password' => 'required|min_length[8]|max_length[255]'
-        ];
-
-        $input = $this->getRequestInput($this->request);
-
-        if (!$this->validateRequest($input, $rules)) {
-            return $this->failValidationErrors($this->validator->getErrors());
-        }
-
-        $userModel = new UsersModel();
-        $userModel->save($input);
-
-        return $this->getJWTForUser($input['email'], ResponseInterface::HTTP_CREATED);
-    }
+//    public function register(): ResponseInterface {
+//        $rules = [
+//            'name'     => 'required',
+//            'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[user.email]',
+//            'password' => 'required|min_length[8]|max_length[255]'
+//        ];
+//
+//        $input = $this->getRequestInput($this->request);
+//
+//        if (!$this->validateRequest($input, $rules)) {
+//            return $this->failValidationErrors($this->validator->getErrors());
+//        }
+//
+//        $userModel = new UsersModel();
+//        $userModel->save($input);
+//
+//        return $this->getJWTForUser($input['email'], ResponseInterface::HTTP_CREATED);
+//    }
 
     /**
      * Authenticate Existing User
@@ -57,7 +58,10 @@ class Auth extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
-        return $this->getJWTForUser($input['email']);
+        $userModel = new UsersModel();
+        $userData  = $userModel->findUserByEmailAddress($input['email']);
+
+        return $this->getJWTForUser($userData);
     }
 
     /**
@@ -71,7 +75,7 @@ class Auth extends ResourceController {
 
             $userData = validateJWTFromRequest($authenticationHeader);
 
-            return $this->getJWTForUser($userData['email'], ResponseInterface::HTTP_CREATED);
+            return $this->getJWTForUser($userData);
 
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
@@ -81,26 +85,23 @@ class Auth extends ResourceController {
     }
 
     /**
-     * @param string $emailAddress
+     * @param User $userData
      * @param int $responseCode
      * @return ResponseInterface
      */
-    private function getJWTForUser(string $emailAddress, int $responseCode = ResponseInterface::HTTP_OK): ResponseInterface {
+    private function getJWTForUser(User $userData, int $responseCode = ResponseInterface::HTTP_OK): ResponseInterface {
         try {
-            $userModel = new UsersModel();
-            $userData  = $userModel->findUserByEmailAddress($emailAddress);
-
-            unset($userData->password);
-
             helper('jwt');
 
             $session = new Session();
             $session->saveUserSession($userData->id);
 
+            unset($userData->password);
+
             return $this->respond([
                 'auth'  => true,
                 'user'  => $userData,
-                'token' => getSignedJWTForUser($emailAddress)
+                'token' => getSignedJWTForUser($userData->email)
             ]);
 
         } catch (Exception $e) {

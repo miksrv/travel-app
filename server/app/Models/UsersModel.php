@@ -82,15 +82,25 @@ class UsersModel extends MyBaseModel {
 
     /**
      * @param string $emailAddress
-     * @return User
+     * @return User|null
      */
-    public function findUserByEmailAddress(string $emailAddress): object {
-        $userData = $this->where(['email' => $emailAddress])->first();
+    public function findUserByEmailAddress(string $emailAddress):? User {
+        $userData = $this
+            ->select('id, name, avatar, email, password')
+            ->where(['email' => $emailAddress])
+            ->first();
 
         if (!$userData) {
-            return (object) [];
+            return null;
         }
 
-        return $userData;
+        $User = new User();
+        $User->id       = $userData->id;
+        $User->name     = $userData->name;
+        $User->avatar   = $userData->avatar;
+        $User->email    = $userData->email;
+        $User->password = $userData->password;
+
+        return $User;
     }
 }

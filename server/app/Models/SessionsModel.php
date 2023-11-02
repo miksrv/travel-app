@@ -15,8 +15,8 @@ class SessionsModel extends Model {
     // The updatable fields
     protected $allowedFields = [
         'id',
-        'ip',
-        'user',
+        'user_id',
+        'user_ip',
         'user_agent',
         'latitude',
         'longitude',
