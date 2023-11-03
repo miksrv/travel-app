@@ -9,6 +9,7 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import Divider from '@mui/material/Divider'
+import LinearProgress from '@mui/material/LinearProgress'
 import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
@@ -110,6 +111,17 @@ const UserItemPage: NextPage = () => {
             }
         )
 
+    const nextLevelPercentage = (
+        currentExperience: number,
+        experienceToNextLevel: number
+    ): number => {
+        if (currentExperience < 0 || experienceToNextLevel <= 0) {
+            return 0
+        }
+
+        return Math.min(100, (currentExperience / experienceToNextLevel) * 100)
+    }
+
     const handlePhotoClick = (index: number) => {
         setPhotoIndex(index)
         setShowLightbox(true)
@@ -198,7 +210,22 @@ const UserItemPage: NextPage = () => {
                             <StatisticLine
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Уровень:'}
-                                content={<>{userData?.level?.name}</>}
+                                content={
+                                    <div>
+                                        {`${userData?.level?.name} (${userData?.level?.level})`}
+                                        <LinearProgress
+                                            variant={'determinate'}
+                                            value={nextLevelPercentage(
+                                                userData?.level?.experience ||
+                                                    0,
+                                                userData?.level?.nextLevel ||
+                                                    userData?.level
+                                                        ?.experience ||
+                                                    0
+                                            )}
+                                        />
+                                    </div>
+                                }
                             />
                             <StatisticLine
                                 hide={!userData?.created}

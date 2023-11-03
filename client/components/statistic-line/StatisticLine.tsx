@@ -7,7 +7,7 @@ interface StatisticLineProps {
     hide?: boolean
     last?: boolean
     icon?: React.ReactNode
-    content?: React.ReactNode
+    content?: React.ReactNode | string | number
 }
 
 const StatisticLine: React.FC<StatisticLineProps> = ({
@@ -32,9 +32,13 @@ const StatisticLine: React.FC<StatisticLineProps> = ({
             >
                 {title}
             </Typography>
-            <Typography variant={'body1'}>
-                {content ?? <div>{'---'}</div>}
-            </Typography>
+            {typeof content === 'string' || typeof content === 'number' ? (
+                <Typography variant={'body1'}>
+                    {content ?? <div>{'---'}</div>}
+                </Typography>
+            ) : (
+                content
+            )}
         </Stack>
     )
 
