@@ -159,12 +159,8 @@ const UserItemPage: NextPage = () => {
                     sx={{ mb: -1, mt: -1 }}
                 />
                 <Divider />
-                <CardContent>
-                    <Grid
-                        container
-                        spacing={2}
-                        sx={{ mb: 2 }}
-                    >
+                <CardContent sx={{ paddingBottom: '16px !important' }}>
+                    <Grid container>
                         <Grid
                             lg={3}
                             md={3}
@@ -180,6 +176,7 @@ const UserItemPage: NextPage = () => {
                                 }
                                 sx={{
                                     height: 128,
+                                    margin: '0 auto',
                                     width: 128
                                 }}
                                 variant={'circular'}
@@ -190,6 +187,19 @@ const UserItemPage: NextPage = () => {
                             md={9}
                             xs={9}
                         >
+                            <StatisticLine
+                                hide={!userData?.reputation}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Репутация:'}
+                                text={
+                                    <Reputation value={userData?.reputation} />
+                                }
+                            />
+                            <StatisticLine
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Опыт:'}
+                                text={userData?.level || 0}
+                            />
                             <StatisticLine
                                 hide={!userData?.created}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
@@ -221,19 +231,6 @@ const UserItemPage: NextPage = () => {
                                         {userData?.website}
                                     </Link>
                                 }
-                            />
-                            <StatisticLine
-                                hide={!userData?.reputation}
-                                icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Репутация:'}
-                                text={
-                                    <Reputation value={userData?.reputation} />
-                                }
-                            />
-                            <StatisticLine
-                                icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Опыт:'}
-                                text={userData?.level || 0}
                             />
                         </Grid>
                     </Grid>

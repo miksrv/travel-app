@@ -9,8 +9,8 @@ use ReflectionException;
 class Session {
 
     public string $id;
-    public float | null $latitude;
-    public float | null $longitude;
+    public float | null $latitude = null;
+    public float | null $longitude = null;
     public User | null $userData;
     private SessionsModel $sessionModel;
 

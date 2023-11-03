@@ -42,7 +42,7 @@ class Places extends ResourceController {
         if ($lat && $lon) {
             $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $distanceSelect = ($session->longitude && $session->latitude)
+            $distanceSelect = $session->longitude && $session->latitude
                 ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
                 : '';
         }
