@@ -17,7 +17,13 @@ class Session {
     private string $ip;
     private string $ua;
 
-    public function __construct() {
+    /**
+     * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
+     * @param float|null $latitude
+     * @param float|null $longitude
+     * @throws ReflectionException
+     */
+    public function __construct(float $latitude = null, float $longitude = null) {
         helper('jwt');
 
         $request = Services::request();
@@ -38,18 +44,9 @@ class Session {
             $this->latitude  = $findSession->latitude;
             $this->longitude = $findSession->longitude;
         }
-    }
 
-    /**
-     * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
-     * @param float|null $latitude
-     * @param float|null $longitude
-     * @return mixed
-     * @throws ReflectionException
-     */
-    public function update(float $latitude = null, float $longitude = null): string {
         // Если сессии в БД с такими IP и UA нет, то добавляем новую
-        if (!$this->id) {
+        if (!$findSession || !$findSession->id) {
             $sessionData = (object) [
                 'id'         => md5($this->ip . $this->ua),
                 'user_id'    => $this->userData->id ?? null,

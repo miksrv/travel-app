@@ -191,38 +191,38 @@ const UserItemPage: NextPage = () => {
                                 hide={!userData?.reputation}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Репутация:'}
-                                text={
+                                content={
                                     <Reputation value={userData?.reputation} />
                                 }
                             />
                             <StatisticLine
                                 icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Опыт:'}
-                                text={userData?.level || 0}
+                                title={'Уровень:'}
+                                content={<>{userData?.level?.name}</>}
                             />
                             <StatisticLine
                                 hide={!userData?.created}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Регистрация:'}
-                                text={formatDate(userData?.created?.date)}
+                                content={formatDate(userData?.created?.date)}
                             />
                             <StatisticLine
                                 hide={!userData?.updated}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Отредактировано:'}
-                                text={formatDate(userData?.updated?.date)}
+                                content={formatDate(userData?.updated?.date)}
                             />
                             <StatisticLine
                                 hide={!userData?.activity}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Был(а) тут:'}
-                                text={formatDate(userData?.activity?.date)}
+                                content={formatDate(userData?.activity?.date)}
                             />
                             <StatisticLine
                                 hide={!userData?.website}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Вебсайт:'}
-                                text={
+                                content={
                                     <Link
                                         target={'_blank'}
                                         color={'inherit'}

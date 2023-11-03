@@ -5,17 +5,17 @@ import React from 'react'
 interface StatisticLineProps {
     title: string
     hide?: boolean
-    icon?: React.ReactNode
-    text?: React.ReactNode
     last?: boolean
+    icon?: React.ReactNode
+    content?: React.ReactNode
 }
 
 const StatisticLine: React.FC<StatisticLineProps> = ({
     icon,
     hide,
+    last,
     title,
-    text,
-    last
+    content
 }) =>
     hide ? (
         <></>
@@ -32,7 +32,9 @@ const StatisticLine: React.FC<StatisticLineProps> = ({
             >
                 {title}
             </Typography>
-            <Typography variant={'body1'}>{text ?? '-'}</Typography>
+            <Typography variant={'body1'}>
+                {content ?? <div>{'---'}</div>}
+            </Typography>
         </Stack>
     )
 

@@ -13,7 +13,7 @@ use ReflectionException;
 class UserLevels {
 
     public User $user;
-    public UserLevel $userLevel;
+    public UserLevel $data;
 
     public int $experience;
     public int $level;
@@ -82,10 +82,10 @@ class UserLevels {
             }
         }
 
-        $this->userLevel = $findLevel;
-        $this->level     = $findLevel->level ?? 0;
+        $this->data  = $findLevel;
+        $this->level = $findLevel->level ?? 0;
 
-        unset($this->userLevel->id);
+        unset($this->data->id);
 
         if ($experience !== $this->user->experience || $this->level !== $this->user->level) {
             $userModel = new UsersModel();

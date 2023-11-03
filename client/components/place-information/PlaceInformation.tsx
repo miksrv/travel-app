@@ -60,7 +60,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<BookmarkBorderOutlined color={'disabled'} />}
                             title={'Категория:'}
-                            text={
+                            content={
                                 <Stack
                                     direction={'row'}
                                     spacing={2}
@@ -108,7 +108,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<AccountCircleOutlined color={'disabled'} />}
                             title={'Автор:'}
-                            text={
+                            content={
                                 <UserAvatar
                                     user={place?.author}
                                     loading={loading}
@@ -118,7 +118,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<RemoveRedEyeOutlined color={'disabled'} />}
                             title={'Просмотров:'}
-                            text={
+                            content={
                                 loading ? (
                                     <Skeleton
                                         variant={'text'}
@@ -133,7 +133,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             <StatisticLine
                                 icon={<StraightenOutlined color={'disabled'} />}
                                 title={'Как далеко:'}
-                                text={
+                                content={
                                     loading ? (
                                         <Skeleton
                                             variant={'text'}
@@ -148,7 +148,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<PlaceOutlined color={'disabled'} />}
                             title={'Координаты:'}
-                            text={
+                            content={
                                 loading ? (
                                     <Skeleton
                                         variant={'text'}
@@ -183,7 +183,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <StatisticLine
                             icon={<AccessTimeOutlined color={'disabled'} />}
                             title={'Изменено:'}
-                            text={
+                            content={
                                 loading ? (
                                     <Skeleton
                                         variant={'text'}
@@ -198,7 +198,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             icon={<StarBorderOutlined color={'disabled'} />}
                             title={'Рейтнг:'}
                             last={true}
-                            text={
+                            content={
                                 loading ? (
                                     <Skeleton
                                         variant={'text'}
