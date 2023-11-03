@@ -8,8 +8,8 @@ class AddUsersLevels extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+                'type'           => 'SMALLINT',
+                'constraint'     => 3,
                 'null'           => false,
                 'unique'         => true,
                 'auto_increment' => true

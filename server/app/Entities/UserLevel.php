@@ -2,15 +2,12 @@
 
 use CodeIgniter\Entity\Entity;
 
-class User extends Entity {
+class UserLevel extends Entity {
     protected $casts = [
+        'id'         => 'integer',
         'name'       => 'string',
-        'email'      => 'string',
-        'avatar'     => 'string',
-        'website'    => 'string',
-        'password'   => 'string',
+        'text'       => 'string',
         'level'      => 'integer',
         'experience' => 'integer',
-        'reputation' => 'integer',
     ];
 }

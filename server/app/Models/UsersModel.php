@@ -18,6 +18,7 @@ class UsersModel extends MyBaseModel {
         'name',
         'email',
         'password',
+        'experience',
         'level',
         'avatar',
         'website',

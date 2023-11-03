@@ -29,7 +29,13 @@ class AddUsers extends Migration {
             ],
             'level' => [
                 'type'       => 'TINYINT',
-                'constraint' => 2,
+                'constraint' => 3,
+                'null'       => false,
+                'default'    => 0
+            ],
+            'experience' => [
+                'type'       => 'SMALLINT',
+                'constraint' => 5,
                 'null'       => false,
                 'default'    => 0
             ],

@@ -1,10 +1,9 @@
 <?php namespace App\Controllers;
 
-use App\Models\PhotosModel;
+use App\Libraries\UserLevels;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\SessionsModel;
-use App\Models\TranslationsPlacesModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -56,7 +55,7 @@ class Users extends ResourceController {
         $sessionModel = new SessionsModel();
         $sessionData  = $sessionModel->where('user_id', $id)->first();
         $usersData    = $usersModel
-            ->select('id, name, level, reputation, website, avatar, created_at, updated_at')
+            ->select('id, name, level, experience, reputation, website, avatar, created_at, updated_at')
             ->find($id);
 
         // GET ALL USER REPUTATION
@@ -77,23 +76,8 @@ class Users extends ResourceController {
             $ratingValue = $ratingDataPlus->value - $ratingDataMinus->value;
         }
 
-        // GET ALL USER EXPERIENCE
-        $placesModel = new PlacesModel();
-        $photosModel = new PhotosModel();
-        $ratingModel = new RatingModel();
-        $translateModel = new TranslationsPlacesModel();
-
-        $placesCount = $placesModel->selectCount('id')->where('author', $id)->first();
-        $photosCount = $photosModel->selectCount('id')->where('author', $id)->first();
-        $ratingCount = $ratingModel->selectCount('id')->where('author', $id)->first();
-        $translCount = $translateModel->selectCount('id')->where('author', $id)->first();
-
-        $experience = 0;
-        $experience += $placesCount->id * 15;
-        $experience += $photosCount->id * 10;
-        $experience += $ratingCount->id * 1;
-        $experience += $translCount->id * 5;
-
+        $userLevels = new UserLevels($usersData);
+        $userLevels->calculate();
 
         if (!$usersData) {
             return $this->failNotFound();
@@ -103,7 +87,9 @@ class Users extends ResourceController {
             'id'         => $usersData->id,
             'name'       => $usersData->name,
             'avatar'     => $usersData->avatar,
-            'level'      => $experience,
+            'level'      => $userLevels->level,
+            'levelData'  => $userLevels->userLevel,
+            'experience' => $userLevels->experience,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,
