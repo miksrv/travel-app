@@ -1,6 +1,10 @@
 <?php namespace App\Controllers;
 
+use App\Models\PhotosModel;
+use App\Models\PlacesModel;
+use App\Models\RatingModel;
 use App\Models\SessionsModel;
+use App\Models\TranslationsPlacesModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -50,21 +54,60 @@ class Users extends ResourceController {
     public function show($id = null): ResponseInterface {
         $usersModel   = new UsersModel();
         $sessionModel = new SessionsModel();
-        $sessionData  = $sessionModel->where('user', $id)->first();
+        $sessionData  = $sessionModel->where('user_id', $id)->first();
         $usersData    = $usersModel
-            ->select('id, name, avatar, created_at, updated_at')
+            ->select('id, name, level, reputation, website, avatar, created_at, updated_at')
             ->find($id);
+
+        // GET ALL USER REPUTATION
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel->select('id')->where('author', $id)->findAll();
+        $ratingValue = $usersData->reputation;
+
+        if ($placesData) {
+            $ratingModel = new RatingModel();
+            $placesIds   = [];
+
+            foreach ($placesData as $place) {
+                $placesIds[] = $place->id;
+            }
+
+            $ratingDataPlus  = $ratingModel->selectSum('value')->where('value >', 2)->whereIn('place', $placesIds)->first();
+            $ratingDataMinus = $ratingModel->selectSum('value')->where('value <=', 2)->whereIn('place', $placesIds)->first();
+            $ratingValue = $ratingDataPlus->value - $ratingDataMinus->value;
+        }
+
+        // GET ALL USER EXPERIENCE
+        $placesModel = new PlacesModel();
+        $photosModel = new PhotosModel();
+        $ratingModel = new RatingModel();
+        $translateModel = new TranslationsPlacesModel();
+
+        $placesCount = $placesModel->selectCount('id')->where('author', $id)->first();
+        $photosCount = $photosModel->selectCount('id')->where('author', $id)->first();
+        $ratingCount = $ratingModel->selectCount('id')->where('author', $id)->first();
+        $translCount = $translateModel->selectCount('id')->where('author', $id)->first();
+
+        $experience = 0;
+        $experience += $placesCount->id * 15;
+        $experience += $photosCount->id * 10;
+        $experience += $ratingCount->id * 1;
+        $experience += $translCount->id * 5;
+
 
         if (!$usersData) {
             return $this->failNotFound();
         }
 
         $result = (object) [
-            'id'      => $usersData->id,
-            'name'    => $usersData->name,
-            'avatar'  => $usersData->avatar,
-            'created' => $usersData->created_at,
-            'updated' => $usersData->updated_at
+            'id'         => $usersData->id,
+            'name'       => $usersData->name,
+            'avatar'     => $usersData->avatar,
+            'level'      => $experience,
+            'reputation' => $ratingValue,
+            'website'    => $usersData->website,
+            'created'    => $usersData->created_at,
+            'updated'    => $usersData->updated_at
         ];
 
         if ($sessionData && $sessionData->updated_at) {

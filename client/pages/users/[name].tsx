@@ -1,4 +1,5 @@
 import {
+    AccessTimeOutlined,
     ArticleOutlined,
     ImageOutlined,
     TerrainOutlined
@@ -11,9 +12,11 @@ import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
+import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
+import Link from 'next/link'
 import React, { useState } from 'react'
 
 import { API, ImageHost } from '@/api/api'
@@ -25,6 +28,10 @@ import PageLayout from '@/components/page-layout'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PlacesList from '@/components/places-list'
+import Reputation from '@/components/reputation'
+import StatisticLine from '@/components/statistic-line'
+
+import { formatDate } from '@/functions/helpers'
 
 import userAvatar from '@/public/images/no-avatar.png'
 
@@ -153,19 +160,83 @@ const UserItemPage: NextPage = () => {
                 />
                 <Divider />
                 <CardContent>
-                    <Avatar
-                        alt={userData?.name || ''}
-                        src={
-                            userData?.avatar
-                                ? `${ImageHost}avatar/${userData.avatar}`
-                                : userAvatar.src
-                        }
-                        sx={{
-                            height: 128,
-                            width: 128
-                        }}
-                        variant={'circular'}
-                    />
+                    <Grid
+                        container
+                        spacing={2}
+                        sx={{ mb: 2 }}
+                    >
+                        <Grid
+                            lg={3}
+                            md={3}
+                            xs={3}
+                            alignContent={'center'}
+                        >
+                            <Avatar
+                                alt={userData?.name || ''}
+                                src={
+                                    userData?.avatar
+                                        ? `${ImageHost}avatar/${userData.avatar}`
+                                        : userAvatar.src
+                                }
+                                sx={{
+                                    height: 128,
+                                    width: 128
+                                }}
+                                variant={'circular'}
+                            />
+                        </Grid>
+                        <Grid
+                            lg={9}
+                            md={9}
+                            xs={9}
+                        >
+                            <StatisticLine
+                                hide={!userData?.created}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Регистрация:'}
+                                text={formatDate(userData?.created?.date)}
+                            />
+                            <StatisticLine
+                                hide={!userData?.updated}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Отредактировано:'}
+                                text={formatDate(userData?.updated?.date)}
+                            />
+                            <StatisticLine
+                                hide={!userData?.activity}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Был(а) тут:'}
+                                text={formatDate(userData?.activity?.date)}
+                            />
+                            <StatisticLine
+                                hide={!userData?.website}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Вебсайт:'}
+                                text={
+                                    <Link
+                                        target={'_blank'}
+                                        color={'inherit'}
+                                        href={userData?.website || ''}
+                                    >
+                                        {userData?.website}
+                                    </Link>
+                                }
+                            />
+                            <StatisticLine
+                                hide={!userData?.reputation}
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Репутация:'}
+                                text={
+                                    <Reputation value={userData?.reputation} />
+                                }
+                            />
+                            <StatisticLine
+                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                title={'Опыт:'}
+                                text={userData?.level || 0}
+                            />
+                        </Grid>
+                    </Grid>
                 </CardContent>
             </Card>
 

@@ -22,7 +22,7 @@ import React from 'react'
 import { API } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
-import StatisticLine from '@/components/place-information/StatisticLine'
+import StatisticLine from '@/components/statistic-line'
 import UserAvatar from '@/components/user-avatar'
 
 import { categoryImage } from '@/functions/categories'

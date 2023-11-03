@@ -8,6 +8,7 @@ export type User = {
     /* Optional parameters */
     reputation?: number
     level?: number
+    website?: string
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
     activity?: ApiTypes.DateTimeType
