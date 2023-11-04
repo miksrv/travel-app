@@ -2,9 +2,12 @@ import {
     AccessTimeOutlined,
     ArticleOutlined,
     ImageOutlined,
+    LanguageOutlined,
+    SentimentSatisfiedOutlined,
     TerrainOutlined
 } from '@mui/icons-material'
 import { Avatar } from '@mui/material'
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
@@ -193,6 +196,24 @@ const UserItemPage: NextPage = () => {
                                 }}
                                 variant={'circular'}
                             />
+                            <Box
+                                sx={{
+                                    margin: '10px auto',
+                                    maxWidth: '70%',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                {`${userData?.level?.name} (${userData?.level?.level})`}
+                                <LinearProgress
+                                    variant={'determinate'}
+                                    value={nextLevelPercentage(
+                                        userData?.level?.experience || 0,
+                                        userData?.level?.nextLevel ||
+                                            userData?.level?.experience ||
+                                            0
+                                    )}
+                                />
+                            </Box>
                         </Grid>
                         <Grid
                             lg={9}
@@ -201,30 +222,14 @@ const UserItemPage: NextPage = () => {
                         >
                             <StatisticLine
                                 hide={!userData?.reputation}
-                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                icon={
+                                    <SentimentSatisfiedOutlined
+                                        color={'disabled'}
+                                    />
+                                }
                                 title={'Репутация:'}
                                 content={
                                     <Reputation value={userData?.reputation} />
-                                }
-                            />
-                            <StatisticLine
-                                icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Уровень:'}
-                                content={
-                                    <div>
-                                        {`${userData?.level?.name} (${userData?.level?.level})`}
-                                        <LinearProgress
-                                            variant={'determinate'}
-                                            value={nextLevelPercentage(
-                                                userData?.level?.experience ||
-                                                    0,
-                                                userData?.level?.nextLevel ||
-                                                    userData?.level
-                                                        ?.experience ||
-                                                    0
-                                            )}
-                                        />
-                                    </div>
                                 }
                             />
                             <StatisticLine
@@ -234,12 +239,6 @@ const UserItemPage: NextPage = () => {
                                 content={formatDate(userData?.created?.date)}
                             />
                             <StatisticLine
-                                hide={!userData?.updated}
-                                icon={<AccessTimeOutlined color={'disabled'} />}
-                                title={'Отредактировано:'}
-                                content={formatDate(userData?.updated?.date)}
-                            />
-                            <StatisticLine
                                 hide={!userData?.activity}
                                 icon={<AccessTimeOutlined color={'disabled'} />}
                                 title={'Был(а) тут:'}
@@ -247,7 +246,7 @@ const UserItemPage: NextPage = () => {
                             />
                             <StatisticLine
                                 hide={!userData?.website}
-                                icon={<AccessTimeOutlined color={'disabled'} />}
+                                icon={<LanguageOutlined color={'disabled'} />}
                                 title={'Вебсайт:'}
                                 content={
                                     <Link
