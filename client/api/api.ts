@@ -176,6 +176,15 @@ export const API = createApi({
         }),
 
         /* Controller: Visited */
+        visitedGetUsersList: builder.query<
+            ApiTypes.ResponseVisitedUsersList,
+            string
+        >({
+            providesTags: (result, error, arg) => [
+                { id: arg, type: 'Bookmarks' }
+            ],
+            query: (item) => `visited/${item}`
+        }),
         visitedPutPlace: builder.mutation<void, ApiTypes.RequestVisitedSet>({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.place, type: 'Visited' }

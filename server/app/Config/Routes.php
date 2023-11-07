@@ -76,7 +76,7 @@ $routes->options('bookmarks', 'Bookmarks');
 $routes->options('bookmarks/(:alphanum)', 'Bookmarks');
 
 /* Visited Places */
-$routes->get('visited', 'Visited::check');
+$routes->get('visited/(:alphanum)', 'Visited::place/$1');
 $routes->put('visited', 'Visited::set');
 $routes->options('visited', 'Visited');
 $routes->options('visited/(:alphanum)', 'Visited');

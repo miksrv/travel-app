@@ -8,8 +8,23 @@ use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
 class Visited extends ResourceController {
+
     /**
-     * Adds an interesting place to the user's bookmarks
+     * @param $id
+     * @return ResponseInterface
+     */
+    public function place($id = null): ResponseInterface {
+        $visitedModel = new UsersVisitedPlacesModel();
+        $visitedData  = $visitedModel
+            ->select('users.id, users.name, users.avatar')
+            ->join('users', 'users_visited_places.user = users.id', 'inner')
+            ->where(['place' => $id])
+            ->findAll();
+
+        return $this->respond(['items' => $visitedData]);
+    }
+
+    /**
      * @return ResponseInterface
      * @throws ReflectionException
      */

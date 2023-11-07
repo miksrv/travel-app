@@ -81,9 +81,6 @@ const PlaceItemPage: NextPage = () => {
     const [setBookmark, { isLoading: bookmarkPutLoading }] =
         API.useBookmarksPutPlaceMutation()
 
-    const [setVisited, { isLoading: visitedPutLoading }] =
-        API.useVisitedPutPlaceMutation()
-
     const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
         API.useBookmarksGetCheckPlaceQuery(
             { place: data?.id! },
@@ -118,10 +115,6 @@ const PlaceItemPage: NextPage = () => {
 
     const handlePutPlaceBookmark = () => {
         setBookmark({ place: data?.id! })
-    }
-
-    const handlePutPlaceVisited = () => {
-        setVisited({ place: data?.id! })
     }
 
     const ratingCount = useMemo(
@@ -201,33 +194,6 @@ const PlaceItemPage: NextPage = () => {
                                     bookmarkPutLoading
                                 }
                                 onClick={handlePutPlaceBookmark}
-                            >
-                                <BookmarkBorderOutlined />
-                            </Button>
-
-                            <Button
-                                sx={{
-                                    height: '33px',
-                                    minWidth: '26px',
-                                    mr: 1,
-                                    mt: 1.4,
-                                    p: '6px 8px'
-                                }}
-                                size={'medium'}
-                                // variant={
-                                //     !bookmarksUserData?.result
-                                //         ? 'contained'
-                                //         : 'outlined'
-                                // }
-                                // color={
-                                //     !bookmarksUserData?.result
-                                //         ? 'success'
-                                //         : 'primary'
-                                // }
-                                disabled={
-                                    !authSlice.isAuth || visitedPutLoading
-                                }
-                                onClick={handlePutPlaceVisited}
                             >
                                 <BookmarkBorderOutlined />
                             </Button>

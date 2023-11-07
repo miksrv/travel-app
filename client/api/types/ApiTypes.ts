@@ -140,6 +140,10 @@ export interface RequestVisitedSet {
     place: string
 }
 
+export interface ResponseVisitedUsersList {
+    items: User[]
+}
+
 /* Controller: Activity */
 export interface ResponseActivityGetList {
     items: Item[]
