@@ -123,7 +123,7 @@ export interface ResponseRatingSet {
     rating: number
 }
 
-/* Controller: Activity */
+/* Controller: Bookmarks */
 export interface RequestBookmarkSet {
     place: string
 }
@@ -133,6 +133,11 @@ export interface RequestBookmarkGetCheck {
 
 export interface ResponseBookmarkGetCheck {
     result: boolean
+}
+
+/* Controller: Visited */
+export interface RequestVisitedSet {
+    place: string
 }
 
 /* Controller: Activity */

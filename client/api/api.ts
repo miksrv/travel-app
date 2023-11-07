@@ -173,6 +173,19 @@ export const API = createApi({
         >({
             providesTags: ['Users'],
             query: (params) => `users${encodeQueryData(params)}`
+        }),
+
+        /* Controller: Visited */
+        visitedPutPlace: builder.mutation<void, ApiTypes.RequestVisitedSet>({
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.place, type: 'Visited' }
+            ],
+            query: (data) => ({
+                body: data,
+                method: 'PUT',
+                url: 'visited'
+            }),
+            transformErrorResponse: (response) => response.data
         })
     }),
     extractRehydrationInfo(action, { reducerPath }) {
@@ -181,7 +194,15 @@ export const API = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Activity', 'Bookmarks', 'Places', 'Photos', 'Rating', 'Users']
+    tagTypes: [
+        'Activity',
+        'Bookmarks',
+        'Places',
+        'Photos',
+        'Rating',
+        'Visited',
+        'Users'
+    ]
 })
 
 // Export hooks for usage in functional components
