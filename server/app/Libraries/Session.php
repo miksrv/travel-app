@@ -11,6 +11,7 @@ class Session {
     public string $id;
     public float | null $latitude = null;
     public float | null $longitude = null;
+    public bool $isAuth = false;
     public User | null $userData;
     private SessionsModel $sessionModel;
 
@@ -38,6 +39,10 @@ class Session {
         $findSession = $this->sessionModel
             ->where(['user_ip' => $this->ip, 'user_agent' => $this->ua])
             ->first();
+
+        if ($this->userData && $this->userData->id) {
+            $this->isAuth = true;
+        }
 
         if ($findSession && $findSession->id) {
             $this->id = $findSession->id;

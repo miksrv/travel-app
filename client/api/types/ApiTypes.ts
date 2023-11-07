@@ -123,6 +123,11 @@ export interface ResponseRatingSet {
 }
 
 /* Controller: Activity */
+export interface RequestBookmarkSet {
+    place: string
+}
+
+/* Controller: Activity */
 export interface ResponseActivityGetList {
     items: Item[]
 }

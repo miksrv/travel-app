@@ -70,8 +70,7 @@ class Rating extends ResourceController {
         try {
             $inputJSON = $this->request->getJSON();
 
-            if (empty($inputJSON) || !$inputJSON->place || !$inputJSON->score)
-            {
+            if (empty($inputJSON) || !$inputJSON->place || !$inputJSON->score) {
                 return $this->failValidationErrors();
             }
 

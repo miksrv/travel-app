@@ -69,6 +69,17 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         }),
 
+        /* Controller: Bookmarks */
+        bookmarksPutPlace: builder.mutation<void, ApiTypes.RequestBookmarkSet>({
+            invalidatesTags: [{ type: 'Bookmarks' }, { type: 'Activity' }],
+            query: (data) => ({
+                body: data,
+                method: 'PUT',
+                url: 'bookmarks'
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
+
         /* Controller: Categories */
         categoriesGetList: builder.query<
             ApiTypes.ResponseCategoriesGetList,
@@ -159,7 +170,7 @@ export const API = createApi({
         }
     },
     reducerPath: 'api',
-    tagTypes: ['Activity', 'Places', 'Photos', 'Rating', 'Users']
+    tagTypes: ['Activity', 'Bookmarks', 'Places', 'Photos', 'Rating', 'Users']
 })
 
 // Export hooks for usage in functional components

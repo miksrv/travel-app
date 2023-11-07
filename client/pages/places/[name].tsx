@@ -1,5 +1,6 @@
 import {
     ArticleOutlined,
+    BookmarkBorderOutlined,
     DescriptionOutlined,
     ImageOutlined
 } from '@mui/icons-material'
@@ -75,6 +76,9 @@ const PlaceItemPage: NextPage = () => {
         }
     )
 
+    const [setBookmark, { isLoading: isBookmarkPutLoading }] =
+        API.useBookmarksPutPlaceMutation()
+
     const { data: nearPlacesData, isLoading: nearPlacesLoading } =
         API.usePlacesGetListQuery(
             {
@@ -99,6 +103,10 @@ const PlaceItemPage: NextPage = () => {
 
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
+    }
+
+    const handlePutPlaceBookmark = () => {
+        setBookmark({ place: data?.id! })
     }
 
     const ratingCount = useMemo(
@@ -144,13 +152,30 @@ const PlaceItemPage: NextPage = () => {
                     }
                     sx={{ mb: -1, mt: -1 }}
                     action={
-                        <Button
-                            sx={{ mr: 1, mt: 1.4 }}
-                            size={'medium'}
-                            variant={'contained'}
-                        >
-                            Добавить
-                        </Button>
+                        <>
+                            <Button
+                                sx={{ mr: 1, mt: 1.4 }}
+                                size={'medium'}
+                                variant={'contained'}
+                            >
+                                {'Добавить'}
+                            </Button>
+
+                            <Button
+                                sx={{
+                                    height: '33px',
+                                    minWidth: '22px',
+                                    mr: 1,
+                                    mt: 1.4,
+                                    p: '6px 5px'
+                                }}
+                                size={'medium'}
+                                variant={'outlined'}
+                                onClick={handlePutPlaceBookmark}
+                            >
+                                <BookmarkBorderOutlined />
+                            </Button>
+                        </>
                     }
                 />
                 {isLoading ? (
