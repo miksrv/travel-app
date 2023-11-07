@@ -6,6 +6,7 @@ use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
+use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
@@ -180,7 +181,7 @@ class Places extends ResourceController {
             // Has the user already voted for this material or not?
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel
-                ->select('rating.id')
+                ->select('id')
                 ->where(['place' => $placeData->id, 'session' => $session->id])
                 ->first();
 
@@ -204,7 +205,7 @@ class Places extends ResourceController {
                     'title' => $placeData->category_title,
                 ],
                 'actions'   => [
-                    'rating' => !$ratingData
+                    'rating' => !$ratingData,
                 ],
                 'address'   => [],
                 'tags'      => $placeData->tags,

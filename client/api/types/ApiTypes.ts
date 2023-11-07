@@ -126,6 +126,13 @@ export interface ResponseRatingSet {
 export interface RequestBookmarkSet {
     place: string
 }
+export interface RequestBookmarkGetCheck {
+    place: string
+}
+
+export interface ResponseBookmarkGetCheck {
+    result: boolean
+}
 
 /* Controller: Activity */
 export interface ResponseActivityGetList {

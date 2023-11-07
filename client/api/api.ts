@@ -70,8 +70,19 @@ export const API = createApi({
         }),
 
         /* Controller: Bookmarks */
+        bookmarksGetCheckPlace: builder.query<
+            ApiTypes.ResponseBookmarkGetCheck,
+            ApiTypes.RequestBookmarkGetCheck
+        >({
+            providesTags: (result, error, arg) => [
+                { id: arg.place, type: 'Bookmarks' }
+            ],
+            query: (params) => `bookmarks${encodeQueryData(params)}`
+        }),
         bookmarksPutPlace: builder.mutation<void, ApiTypes.RequestBookmarkSet>({
-            invalidatesTags: [{ type: 'Bookmarks' }, { type: 'Activity' }],
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.place, type: 'Bookmarks' }
+            ],
             query: (data) => ({
                 body: data,
                 method: 'PUT',

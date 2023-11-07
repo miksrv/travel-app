@@ -18,7 +18,7 @@ import { useRouter } from 'next/dist/client/router'
 import React, { useMemo } from 'react'
 
 import { API, ImageHost } from '@/api/api'
-import { wrapper } from '@/api/store'
+import { useAppSelector, wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import Breadcrumbs from '@/components/breadcrumbs'
@@ -67,6 +67,8 @@ const PlaceItemPage: NextPage = () => {
     const routerId = router.query.name
     const placeId = typeof routerId === 'string' ? routerId : skipToken
 
+    const authSlice = useAppSelector((state) => state.auth)
+
     const [activeTab, setActiveTab] = React.useState<number>(0)
 
     const { data, isLoading } = API.usePlacesGetItemQuery(
@@ -78,6 +80,12 @@ const PlaceItemPage: NextPage = () => {
 
     const [setBookmark, { isLoading: isBookmarkPutLoading }] =
         API.useBookmarksPutPlaceMutation()
+
+    const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
+        API.useBookmarksGetCheckPlaceQuery(
+            { place: data?.id! },
+            { skip: !data?.id || !authSlice.isAuth }
+        )
 
     const { data: nearPlacesData, isLoading: nearPlacesLoading } =
         API.usePlacesGetListQuery(
@@ -164,13 +172,25 @@ const PlaceItemPage: NextPage = () => {
                             <Button
                                 sx={{
                                     height: '33px',
-                                    minWidth: '22px',
+                                    minWidth: '26px',
                                     mr: 1,
                                     mt: 1.4,
-                                    p: '6px 5px'
+                                    p: '6px 8px'
                                 }}
                                 size={'medium'}
-                                variant={'outlined'}
+                                variant={
+                                    !bookmarksUserData?.result
+                                        ? 'contained'
+                                        : 'outlined'
+                                }
+                                color={
+                                    !bookmarksUserData?.result
+                                        ? 'success'
+                                        : 'primary'
+                                }
+                                disabled={
+                                    !authSlice.isAuth || bookmarksUserLoading
+                                }
                                 onClick={handlePutPlaceBookmark}
                             >
                                 <BookmarkBorderOutlined />

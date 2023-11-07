@@ -2,13 +2,37 @@
 
 use App\Libraries\Session;
 use App\Models\PlacesModel;
-use App\Models\UsersActivityModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
 class Bookmarks extends ResourceController {
+
+    /**
+     * Checks whether this place is already in the user's bookmarks or not
+     * @return ResponseInterface
+     */
+    public function check(): ResponseInterface {
+        $placeId = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
+        $session = new Session();
+
+        if (!$session->isAuth) {
+            return $this->respond(['result' => false]);
+        }
+
+        if (!$placeId) {
+            return $this->failValidationErrors('Point of Interest ID missing');
+        }
+
+        $bookmarksModel = new UsersBookmarksModel();
+        $bookmarkData   = $bookmarksModel
+            ->select('id')
+            ->where(['user' => $session->userData->id, 'place' => $placeId])
+            ->first();
+
+        return $this->respond(['result' => !$bookmarkData]);
+    }
 
     /**
      * Adds an interesting place to the user's bookmarks
@@ -35,7 +59,9 @@ class Bookmarks extends ResourceController {
             $placesData     = $placesModel->find($inputJSON->place);
 
             if ($bookmarksData) {
-                return $this->failValidationErrors('The user already has this place bookmarked');
+                $bookmarksModel->delete($bookmarksData->id);
+
+                return $this->respondDeleted();
             }
 
             if (!$placesData) {

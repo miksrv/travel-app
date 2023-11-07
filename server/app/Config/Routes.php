@@ -70,5 +70,7 @@ $routes->post('auth/login', 'Auth::login');
 $routes->options('auth/(:any)', 'Auth::me');
 
 /* Bookmarks */
+$routes->get('bookmarks', 'Bookmarks::check');
 $routes->put('bookmarks', 'Bookmarks::set');
 $routes->options('bookmarks', 'Bookmarks');
+$routes->options('bookmarks/(:alphanum)', 'Bookmarks');
