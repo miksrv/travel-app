@@ -19,10 +19,11 @@ import Grid from '@mui/material/Unstable_Grid2'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { ImageHost } from '@/api/api'
 import { API } from '@/api/api'
+import { useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
 import StatisticLine from '@/components/statistic-line'
@@ -39,10 +40,13 @@ interface PlaceInformationProps {
     place?: Place
     ratingCount?: number
     loading?: boolean
+    onChangeWasHere?: (wasHere: boolean) => void
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
-    const { place, ratingCount, loading } = props
+    const { place, ratingCount, loading, onChangeWasHere } = props
+
+    const authSlice = useAppSelector((state) => state.auth)
 
     const [setRating, { data: newRating, isLoading: setRatingLoading }] =
         API.useRatingPutScoreMutation()
@@ -50,12 +54,17 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
     const { data: visitedUsersData, isLoading: visitedUsersLoading } =
         API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
 
-    const [setVisited, { isLoading: visitedPutLoading }] =
-        API.useVisitedPutPlaceMutation()
+    const iWasHere = useMemo(
+        () =>
+            !visitedUsersData?.items?.find(
+                ({ id }) => id === authSlice?.user?.id
+            )?.id,
+        [visitedUsersData, authSlice]
+    )
 
-    const handlePutPlaceVisited = () => {
-        setVisited({ place: place?.id! })
-    }
+    React.useEffect(() => {
+        onChangeWasHere?.(iWasHere)
+    }, [visitedUsersData, authSlice])
 
     return (
         <Card sx={{ mb: 2, mt: 0 }}>
@@ -168,7 +177,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         width={150}
                                     />
                                 ) : (
-                                    <>
+                                    <Box sx={{ mt: '-2px !important' }}>
                                         {`${convertDMS(
                                             place?.latitude || 0,
                                             place?.longitude || 0
@@ -189,7 +198,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                                 {'G'}
                                             </Link>
                                         </sup>
-                                    </>
+                                    </Box>
                                 )
                             }
                         />
@@ -216,35 +225,36 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         variant={'text'}
                                         width={150}
                                     />
-                                ) : (
-                                    <>
-                                        <AvatarGroup
-                                            max={4}
-                                            componentsProps={{
-                                                additionalAvatar: {
-                                                    sx: {
-                                                        fontSize: '10px',
+                                ) : visitedUsersData?.items?.length ? (
+                                    <AvatarGroup
+                                        max={8}
+                                        sx={{ mt: '-2px !important' }}
+                                        componentsProps={{
+                                            additionalAvatar: {
+                                                sx: {
+                                                    fontSize: '10px',
+                                                    height: 20,
+                                                    width: 20
+                                                }
+                                            }
+                                        }}
+                                    >
+                                        {visitedUsersData?.items?.map(
+                                            (user) => (
+                                                <Avatar
+                                                    key={user.id}
+                                                    alt={user.name}
+                                                    src={`${ImageHost}avatar/${user.avatar}`}
+                                                    sx={{
                                                         height: 20,
                                                         width: 20
-                                                    }
-                                                }
-                                            }}
-                                        >
-                                            {visitedUsersData?.items?.map(
-                                                (user) => (
-                                                    <Avatar
-                                                        key={user.id}
-                                                        alt={user.name}
-                                                        src={`${ImageHost}avatar/${user.avatar}`}
-                                                        sx={{
-                                                            height: 20,
-                                                            width: 20
-                                                        }}
-                                                    />
-                                                )
-                                            )}
-                                        </AvatarGroup>
-                                    </>
+                                                    }}
+                                                />
+                                            )
+                                        )}
+                                    </AvatarGroup>
+                                ) : (
+                                    <div>{'Тут еще никого не было'}</div>
                                 )
                             }
                         />

@@ -2,7 +2,8 @@ import {
     ArticleOutlined,
     BookmarkBorderOutlined,
     DescriptionOutlined,
-    ImageOutlined
+    ImageOutlined,
+    OutlinedFlagOutlined
 } from '@mui/icons-material'
 import { Button } from '@mui/material'
 import Card from '@mui/material/Card'
@@ -71,6 +72,8 @@ const PlaceItemPage: NextPage = () => {
 
     const [activeTab, setActiveTab] = React.useState<number>(0)
 
+    const [iWasHere, setIWasHere] = React.useState<boolean>(false)
+
     const { data, isLoading } = API.usePlacesGetItemQuery(
         typeof placeId === 'string' ? placeId : '',
         {
@@ -80,6 +83,9 @@ const PlaceItemPage: NextPage = () => {
 
     const [setBookmark, { isLoading: bookmarkPutLoading }] =
         API.useBookmarksPutPlaceMutation()
+
+    const [setVisited, { isLoading: visitedPutLoading }] =
+        API.useVisitedPutPlaceMutation()
 
     const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
         API.useBookmarksGetCheckPlaceQuery(
@@ -115,6 +121,10 @@ const PlaceItemPage: NextPage = () => {
 
     const handlePutPlaceBookmark = () => {
         setBookmark({ place: data?.id! })
+    }
+
+    const handlePutPlaceVisited = () => {
+        setVisited({ place: data?.id! })
     }
 
     const ratingCount = useMemo(
@@ -178,16 +188,32 @@ const PlaceItemPage: NextPage = () => {
                                     p: '6px 8px'
                                 }}
                                 size={'medium'}
+                                variant={!iWasHere ? 'contained' : 'outlined'}
+                                color={'primary'}
+                                disabled={
+                                    !authSlice.isAuth || visitedPutLoading
+                                }
+                                onClick={handlePutPlaceVisited}
+                                startIcon={<OutlinedFlagOutlined />}
+                            >
+                                {'Я тут был'}
+                            </Button>
+
+                            <Button
+                                sx={{
+                                    height: '33px',
+                                    minWidth: '26px',
+                                    mr: 1,
+                                    mt: 1.4,
+                                    p: '6px 8px'
+                                }}
+                                size={'medium'}
                                 variant={
                                     !bookmarksUserData?.result
                                         ? 'contained'
                                         : 'outlined'
                                 }
-                                color={
-                                    !bookmarksUserData?.result
-                                        ? 'success'
-                                        : 'primary'
-                                }
+                                color={'primary'}
                                 disabled={
                                     !authSlice.isAuth ||
                                     bookmarksUserLoading ||
@@ -223,6 +249,7 @@ const PlaceItemPage: NextPage = () => {
                 place={data}
                 ratingCount={ratingCount}
                 loading={isLoading}
+                onChangeWasHere={setIWasHere}
             />
 
             <Card sx={{ mb: 2, mt: 0 }}>

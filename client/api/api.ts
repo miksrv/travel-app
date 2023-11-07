@@ -181,7 +181,7 @@ export const API = createApi({
             string
         >({
             providesTags: (result, error, arg) => [
-                { id: arg, type: 'Bookmarks' }
+                { id: arg, type: 'Visited' }
             ],
             query: (item) => `visited/${item}`
         }),
