@@ -1,6 +1,7 @@
 import {
     AccessTimeOutlined,
     ArticleOutlined,
+    BookmarkBorderOutlined,
     ImageOutlined,
     LanguageOutlined,
     SentimentSatisfiedOutlined,
@@ -79,6 +80,18 @@ const UserItemPage: NextPage = () => {
             skip: router.isFallback || !routerId
         }
     )
+
+    const { data: dataBookmarks, isLoading: dataBookmarksLoading } =
+        API.usePlacesGetListQuery(
+            {
+                bookmarkUser: userData?.id,
+                limit: 20,
+                offset: 0
+            },
+            {
+                skip: !userData?.id
+            }
+        )
 
     const { data: dataPlaces, isLoading: dataPlacesLoading } =
         API.usePlacesGetListQuery(
@@ -289,6 +302,17 @@ const UserItemPage: NextPage = () => {
                                 iconPosition={'start'}
                             />
                             <Tab
+                                label={`Избранное ${
+                                    // NOT WORKING!!
+                                    dataPlaces?.count
+                                        ? ` (${dataBookmarks?.count})`
+                                        : ''
+                                }`}
+                                disabled={!dataBookmarks?.count}
+                                icon={<BookmarkBorderOutlined />}
+                                iconPosition={'start'}
+                            />
+                            <Tab
                                 label={`Фотографии ${
                                     dataPhotos?.count
                                         ? ` (${dataPhotos?.count})`
@@ -301,7 +325,7 @@ const UserItemPage: NextPage = () => {
                     }
                 />
 
-                {activeTab === 2 && (
+                {activeTab === 3 && (
                     <>
                         <Divider />
                         <CardHeader
@@ -342,6 +366,14 @@ const UserItemPage: NextPage = () => {
                     perPage={6}
                     places={dataPlaces?.items}
                     loading={dataPlacesLoading}
+                />
+            )}
+
+            {activeTab === 2 && (
+                <PlacesList
+                    perPage={6}
+                    places={dataBookmarks?.items}
+                    loading={dataBookmarksLoading}
                 />
             )}
         </PageLayout>

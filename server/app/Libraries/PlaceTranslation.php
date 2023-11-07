@@ -124,10 +124,7 @@ class PlaceTranslation {
                 continue;
             }
 
-            if (empty($this->placeIds)) {
-                $this->placeIds[] = $item->place;
-            }
-
+            $this->placeIds[] = $item->place;
             $this->translate[$item->place] = $item;
         }
     }

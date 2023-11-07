@@ -61,6 +61,7 @@ export interface ResponsePlacesGetItem extends Place {}
 export interface RequestPlacesGetList {
     sort?: SortFields
     order?: SortOrder
+    bookmarkUser?: string
     author?: string
     latitude?: number
     longitude?: number

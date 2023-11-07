@@ -17,11 +17,34 @@ class Places extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
         $lat    = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $session = new Session();
+        $bookmarksPlacesIds = [];
+
+        // If filtering of interesting places by user bookmark is specified,
+        // then we find all the bookmarks of this user, and then extract all the IDs of places in the bookmarks
+        if ($bookmarksUser) {
+            $bookmarksModel = new UsersBookmarksModel();
+            $bookmarksData  = $bookmarksModel->select('place')->where('user', $bookmarksUser)->findAll();
+
+            if ($bookmarksData) {
+                foreach ($bookmarksData as $bookmark) {
+                    $bookmarksPlacesIds[] = $bookmark->place;
+                }
+            }
+        }
+
+        // Filtering by user bookmarks (like any other) - if we don’t find a single place in the bookmarks, we return an empty array
+        if ($bookmarksUser && empty($bookmarksPlacesIds)) {
+            return $this->respond([
+                'items'  => [],
+                'count'  => 0,
+            ]);
+        }
 
         // Load translate library
         $placeTranslations = new PlaceTranslation('ru', 350);
@@ -54,10 +77,15 @@ class Places extends ResourceController {
             ->select('places.id, places.category, places.latitude, places.longitude, places.rating, places.views, category.title as category_title' . $distanceSelect)
             ->join('category', 'places.category = category.name', 'left');
 
+        // If search or any other filter is not used, then we always use an empty array
+        $searchPlacesIds = !$search && !$bookmarksUser
+            ? []
+            : array_unique(array_merge($placeTranslations->placeIds, $bookmarksPlacesIds));
+
         // Find all places
         // If a search was enabled, the second argument to the _makeListFilters function will contain the
         // IDs of the places found using the search criteria
-        $placesList = $this->_makeListFilters($placesModel, $placeTranslations->placeIds)->get()->getResult();
+        $placesList = $this->_makeListFilters($placesModel, $searchPlacesIds)->get()->getResult();
         $placesIds  = [];
         $result     = [];
         foreach ($placesList as $place) {
@@ -118,7 +146,7 @@ class Places extends ResourceController {
 
         return $this->respond([
             'items'  => $result,
-            'count'  => $this->_makeListFilters($placesModel, !$search ? [] : $placeTranslations->placeIds)->countAllResults(),
+            'count'  => $this->_makeListFilters($placesModel, $searchPlacesIds)->countAllResults(),
         ]);
     }
 
