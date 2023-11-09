@@ -1,10 +1,12 @@
 import { Pagination } from '@mui/material'
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import LinearProgress from '@mui/material/LinearProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
+import Stack from '@mui/material/Stack'
 import { NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
@@ -76,23 +78,34 @@ const UsersPage: NextPage = () => {
                                         key !== (data.items?.length || 1) - 1
                                     }
                                 >
-                                    <UserAvatar
-                                        user={user}
-                                        size={'medium'}
-                                        text={formatDate(user?.created?.date)}
-                                    />
-                                    <div>
-                                        {`${user?.level?.name} (${user?.level?.level})`}
-                                        <LinearProgress
-                                            variant={'determinate'}
-                                            value={nextLevelPercentage(
-                                                user?.level?.experience || 0,
-                                                user?.level?.nextLevel ||
+                                    <Stack
+                                        direction={'row'}
+                                        spacing={2}
+                                    >
+                                        <Box sx={{ minWidth: '230px' }}>
+                                            <UserAvatar
+                                                user={user}
+                                                size={'medium'}
+                                                text={formatDate(
+                                                    user?.created?.date
+                                                )}
+                                            />
+                                        </Box>
+                                        <div>
+                                            {`${user?.level?.name} (${user?.level?.level})`}
+                                            <LinearProgress
+                                                variant={'determinate'}
+                                                value={nextLevelPercentage(
                                                     user?.level?.experience ||
-                                                    0
-                                            )}
-                                        />
-                                    </div>
+                                                        0,
+                                                    user?.level?.nextLevel ||
+                                                        user?.level
+                                                            ?.experience ||
+                                                        0
+                                                )}
+                                            />
+                                        </div>
+                                    </Stack>
                                 </ListItem>
                             ))}
                         </List>
