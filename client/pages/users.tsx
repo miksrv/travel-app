@@ -2,6 +2,7 @@ import { Pagination } from '@mui/material'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
+import LinearProgress from '@mui/material/LinearProgress'
 import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import { NextPage } from 'next'
@@ -40,6 +41,17 @@ const UsersPage: NextPage = () => {
         })
     }, [page])
 
+    const nextLevelPercentage = (
+        currentExperience: number,
+        experienceToNextLevel: number
+    ): number => {
+        if (currentExperience < 0 || experienceToNextLevel <= 0) {
+            return 0
+        }
+
+        return Math.min(100, (currentExperience / experienceToNextLevel) * 100)
+    }
+
     return (
         <PageLayout maxWidth={'lg'}>
             <Card sx={{ mb: 2 }}>
@@ -69,6 +81,18 @@ const UsersPage: NextPage = () => {
                                         size={'medium'}
                                         text={formatDate(user?.created?.date)}
                                     />
+                                    <div>
+                                        {`${user?.level?.name} (${user?.level?.level})`}
+                                        <LinearProgress
+                                            variant={'determinate'}
+                                            value={nextLevelPercentage(
+                                                user?.level?.experience || 0,
+                                                user?.level?.nextLevel ||
+                                                    user?.level?.experience ||
+                                                    0
+                                            )}
+                                        />
+                                    </div>
                                 </ListItem>
                             ))}
                         </List>
