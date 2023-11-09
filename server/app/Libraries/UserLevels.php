@@ -59,6 +59,31 @@ class UserLevels {
 
         $this->experience = $experience;
 
+        $this->getUserLevel();
+
+        if ($this->experience !== $this->user->experience || $this->level !== $this->user->level) {
+            $userModel = new UsersModel();
+
+            $userModel->update($this->user->id, [
+                'level'      => $this->level,
+                'experience' => $this->experience
+            ]);
+
+            // if ($this->level !== $this->user->level) {
+            // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
+            // }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return void
+     */
+    public function getUserLevel(): void {
+        $userLevelsModel = new UsersLevelsModel();
+        $allUserLevels = $userLevelsModel->orderBy('experience')->findAll();
+
         // CALCULATE USER LEVEL
         $findLevel = null;
 
@@ -67,8 +92,8 @@ class UserLevels {
 
             if (
                 $nextKey !== count($allUserLevels) &&
-                $experience >= $level->experience &&
-                $experience < $allUserLevels[$nextKey]->experience
+                $this->experience >= $level->experience &&
+                $this->experience < $allUserLevels[$nextKey]->experience
             ) {
                 $level->nextLevel = $allUserLevels[$nextKey]->experience;
                 $findLevel        = $level;
@@ -86,20 +111,5 @@ class UserLevels {
         $this->level = $findLevel->level ?? 0;
 
         unset($this->data->id);
-
-        if ($experience !== $this->user->experience || $this->level !== $this->user->level) {
-            $userModel = new UsersModel();
-
-            $userModel->update($this->user->id, [
-                'level'      => $findLevel->level,
-                'experience' => $experience
-            ]);
-
-            // if ($this->level !== $this->user->level) {
-            // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
-            // }
-        }
-
-        return $this;
     }
 }

@@ -18,7 +18,7 @@ class Users extends ResourceController {
 
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select('id, name, avatar, created_at')
+            ->select('id, name, avatar, created_at, level, experience')
             ->orderBy('reputation', 'DESC')
             ->findAll($limit, $offset);
 
@@ -32,10 +32,14 @@ class Users extends ResourceController {
         }
 
         foreach ($usersData as $item) {
+            $userLevels = new UserLevels($item);
+            $userLevels->getUserLevel();
+
             $result[] = (object) [
                 'id'      => $item->id,
                 'name'    => $item->name,
                 'avatar'  => $item->avatar,
+                'level'   => $userLevels->data,
                 'created' => $item->created_at
             ];
         }
