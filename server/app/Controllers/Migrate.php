@@ -20,7 +20,7 @@ use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use Geocoder\Exception\Exception;
 
-define('MAX_PLACES_PER_ITERATION', 1);
+define('MAX_PLACES_PER_ITERATION', 2);
 
 class Migrate extends ResourceController {
     /**

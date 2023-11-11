@@ -209,7 +209,8 @@ const PlaceItemPage: NextPage = () => {
                                 }}
                                 size={'medium'}
                                 variant={
-                                    !bookmarksUserData?.result
+                                    !bookmarksUserData?.result &&
+                                    authSlice.isAuth
                                         ? 'contained'
                                         : 'outlined'
                                 }

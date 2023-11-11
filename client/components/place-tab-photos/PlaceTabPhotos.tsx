@@ -1,7 +1,9 @@
+import { Button } from '@mui/material'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
 import React, { useState } from 'react'
 
+import { API } from '@/api/api'
 import { Photo } from '@/api/types/Photo'
 
 import PhotoGallery from '@/components/photo-gallery'
@@ -15,6 +17,12 @@ interface PlaceTabPhotosProps {
 const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
+    const [file, setFile] = useState<File | undefined>()
+
+    const [
+        uploadPhoto,
+        { data: uploadData, isLoading: uploadLoading, isSuccess: uploadSuccess }
+    ] = API.usePhotoPostUploadMutation()
 
     const handlePhotoClick = (index: number) => {
         setPhotoIndex(index)
@@ -23,6 +31,15 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
+    }
+
+    const handleUpload = () => {
+        if (!file) return
+
+        const formData = new FormData()
+        formData.append('image', file)
+
+        uploadPhoto(formData)
     }
 
     return (
@@ -34,6 +51,20 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
                     fontSize: 18
                 }}
                 sx={{ mb: -2 }}
+                action={
+                    <Button
+                        sx={{ mr: 0 }}
+                        size={'medium'}
+                        variant={'contained'}
+                        onClick={handleUpload}
+                    >
+                        {'Загрузить'}
+                    </Button>
+                }
+            />
+            <input
+                type='file'
+                onChange={(e) => setFile(e?.target?.files?.[0])}
             />
             <CardContent sx={{ mb: -1 }}>
                 <PhotoGallery

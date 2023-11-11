@@ -7,6 +7,7 @@ use App\Models\SessionsModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Users extends ResourceController {
     /**
@@ -53,6 +54,7 @@ class Users extends ResourceController {
     /**
      * @param $id
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
         $usersModel   = new UsersModel();

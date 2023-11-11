@@ -30,6 +30,7 @@ $routes->post('photos', 'Photos::create');
 $routes->post('photos/upload', 'Photos::upload');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
+$routes->options('photos/upload', 'Photos::upload');
 //$routes->options('photos/(:alphanum)', 'Photos');
 //$routes->options('photos/upload', 'Photos');
 

@@ -104,6 +104,14 @@ export const API = createApi({
             // invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
+        photoPostUpload: builder.mutation<any, FormData>({
+            query: (formData) => ({
+                body: formData,
+                method: 'POST',
+                url: 'photos/upload'
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
 
         /* Controller: Photos */
         photosGetList: builder.query<
