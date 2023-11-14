@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class OverpassCategory extends Entity
-{
+class OverpassCategory extends Entity {
     protected $casts = [
         
     ];

@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Tag extends Entity
-{
+class Tag extends Entity {
     protected $casts = [
         'title'   => 'string',
         'counter' => 'integer',

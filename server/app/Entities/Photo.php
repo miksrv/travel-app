@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Photo extends Entity
-{
+class Photo extends Entity {
     protected $casts = [
         'translation' => 'string',
         'latitude'    => 'float',

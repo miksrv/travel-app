@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Rating extends Entity
-{
+class Rating extends Entity {
     protected $casts = [
         'place'   => 'string',
         'author'  => 'string',

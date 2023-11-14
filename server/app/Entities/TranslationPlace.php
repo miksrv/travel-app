@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class TranslationPlace extends Entity
-{
+class TranslationPlace extends Entity {
     protected $casts = [
         'place'    => 'string',
         'language' => 'string',

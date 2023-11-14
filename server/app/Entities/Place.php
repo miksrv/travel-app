@@ -2,8 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Place extends Entity
-{
+class Place extends Entity {
     protected $casts = [
         'category'         => 'string',
         'address_country'  => 'integer',
