@@ -128,3 +128,4 @@ nb-configuration.xml
 # Uploads
 /public/photo/
 /public/avatar/
+/public/temp/

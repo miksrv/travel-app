@@ -27,10 +27,10 @@ $routes->options('places/(:alphanum)', 'Places');
 
 $routes->get('photos', 'Photos::list');
 $routes->post('photos', 'Photos::create');
-$routes->post('photos/upload', 'Photos::upload');
+$routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
-$routes->options('photos/upload', 'Photos::upload');
+$routes->options('photos/upload/(:alphanum)', 'Photos::upload');
 //$routes->options('photos/(:alphanum)', 'Photos');
 //$routes->options('photos/upload', 'Photos');
 

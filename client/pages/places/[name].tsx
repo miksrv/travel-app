@@ -307,6 +307,7 @@ const PlaceItemPage: NextPage = () => {
                     <PlaceTabPhotos
                         title={data?.title}
                         photos={data?.photos}
+                        placeId={data?.id}
                     />
                 )}
 

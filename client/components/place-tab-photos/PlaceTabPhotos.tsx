@@ -11,10 +11,15 @@ import PhotoLightbox from '@/components/photo-lightbox'
 
 interface PlaceTabPhotosProps {
     title?: string
+    placeId?: string
     photos?: Photo[]
 }
 
-const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
+const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
+    title,
+    placeId,
+    photos
+}) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const [file, setFile] = useState<File | undefined>()
@@ -39,7 +44,10 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({ title, photos }) => {
         const formData = new FormData()
         formData.append('image', file)
 
-        uploadPhoto(formData)
+        uploadPhoto({
+            formData,
+            placeId
+        })
     }
 
     return (

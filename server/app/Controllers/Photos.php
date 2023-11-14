@@ -1,6 +1,9 @@
 <?php namespace App\Controllers;
 
+use App\Entities\Photo;
+use App\Libraries\Session;
 use App\Models\PhotosModel;
+use App\Models\PlacesModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -53,35 +56,65 @@ class Photos extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function upload(): ResponseInterface {
-        $rules = [
+    public function upload($id = null): ResponseInterface {
+        $session = new Session();
+        $rules   = [
             'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
         ];
 
+        if (!$session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
         if (!$this->validate($rules)) {
             return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel->select('id, latitude, longitude')->find($id);
+
+        if (!$placesData || !$placesData->id) {
+            return $this->failValidationErrors('There is no point with this ID');
         }
 
         $img = $this->request->getFile('image');
 
         if (!$img->hasMoved()) {
 
-            if (!is_dir(UPLOAD_TEMP)) {
-                mkdir(UPLOAD_TEMP,0777, TRUE);
-            }
+//            if (!is_dir(UPLOAD_TEMP)) {
+//                mkdir(UPLOAD_TEMP,0777, TRUE);
+//            }
 
-            $newName = $img->getRandomName();
-            $img->move(UPLOAD_TEMP, $newName);
+            $photoDir = UPLOAD_PHOTOS . '/' . $placesData->id . '/';
+            $newName  = $img->getRandomName();
+            $img->move($photoDir, $newName);
 
-            $file = new File(UPLOAD_TEMP . $newName);
+            $file = new File($photoDir . $newName);
             $name = pathinfo($file, PATHINFO_FILENAME);
 
             $image = Services::image('gd'); // imagick
             $image->withFile($file->getRealPath())
                 ->fit(700, 500, 'center')
-                ->save(UPLOAD_TEMP . $name . '_thumb.' . $file->getExtension());
+                ->save($photoDir . $name . '_thumb.' . $file->getExtension());
 
             $coordinates = $this->_readPhotoLocation($file->getRealPath());
+            $photosModel = new PhotosModel();
+
+            list($width, $height) = getimagesize($file->getRealPath());
+
+            // Save photo to DB
+            $photo = new Photo();
+            $photo->latitude    = $coordinates->lat ?? $placesData->latitude;
+            $photo->longitude   = $coordinates->lng ?? $placesData->longitude;
+            $photo->place       = $placesData->id;
+            $photo->author      = $session->userData->id;
+            $photo->filename    = $name;
+            $photo->extension   = $file->getExtension();
+            $photo->filesize    = $file->getSize();
+            $photo->width       = $width;
+            $photo->height      = $height;
+
+            $photosModel->insert($photo);
 
             return $this->respondCreated([
                 'name'      => $name,

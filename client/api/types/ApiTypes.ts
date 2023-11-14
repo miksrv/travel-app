@@ -94,6 +94,11 @@ export interface RequestPhotosGetList {
     author?: string
 }
 
+export interface RequestPhotoPostUpload {
+    formData?: FormData
+    placeId?: string
+}
+
 /* Controller: Address */
 export interface ResponseAddressGetSearch {
     countries?: AddressObject[]
