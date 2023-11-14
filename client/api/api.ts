@@ -129,7 +129,7 @@ export const API = createApi({
 
         /* Controller: Places */
         placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, string>({
-            providesTags: ['Places'],
+            providesTags: (result, error, arg) => [{ id: arg, type: 'Places' }],
             query: (item) => `places/${item}`
         }),
         placesGetList: builder.query<

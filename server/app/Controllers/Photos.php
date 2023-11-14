@@ -1,9 +1,11 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Photo;
+use App\Entities\UserActivity;
 use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
+use App\Models\UsersActivityModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -104,17 +106,26 @@ class Photos extends ResourceController {
 
             // Save photo to DB
             $photo = new Photo();
-            $photo->latitude    = $coordinates->lat ?? $placesData->latitude;
-            $photo->longitude   = $coordinates->lng ?? $placesData->longitude;
-            $photo->place       = $placesData->id;
-            $photo->author      = $session->userData->id;
-            $photo->filename    = $name;
-            $photo->extension   = $file->getExtension();
-            $photo->filesize    = $file->getSize();
-            $photo->width       = $width;
-            $photo->height      = $height;
+            $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
+            $photo->longitude = $coordinates->lng ?? $placesData->longitude;
+            $photo->place     = $placesData->id;
+            $photo->author    = $session->userData->id;
+            $photo->filename  = $name;
+            $photo->extension = $file->getExtension();
+            $photo->filesize  = $file->getSize();
+            $photo->width     = $width;
+            $photo->height    = $height;
 
             $photosModel->insert($photo);
+
+            // Make user activity
+            $activityModel = new UsersActivityModel();
+            $activity      = new UserActivity();
+            $activity->user  = $session->userData->id;
+            $activity->type  = 'photo';
+            $activity->place = $placesData->id;
+            $activity->photo = $photosModel->getInsertID();
+            $activityModel->insert($activity);
 
             return $this->respondCreated([
                 'name'      => $name,
