@@ -1,7 +1,7 @@
 import { Button } from '@mui/material'
 import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 
 import { API } from '@/api/api'
 import { Photo } from '@/api/types/Photo'
@@ -23,6 +23,7 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const [file, setFile] = useState<File | undefined>()
+    const inputFile = useRef<HTMLInputElement>(null)
 
     const [
         uploadPhoto,
@@ -38,16 +39,26 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
         setShowLightbox(false)
     }
 
-    const handleUpload = () => {
-        if (!file) return
+    const handleSelectedFilesUpload = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        if (!event.target.files?.length) {
+            return
+        }
 
-        const formData = new FormData()
-        formData.append('image', file)
+        for (let i = 0; i < event.target.files.length; i++) {
+            const file = event.target.files?.item(i)
 
-        uploadPhoto({
-            formData,
-            place: placeId
-        })
+            if (file) {
+                const formData = new FormData()
+                formData.append('image', file)
+
+                uploadPhoto({
+                    formData,
+                    place: placeId
+                })
+            }
+        }
     }
 
     return (
@@ -64,15 +75,19 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
                         sx={{ mr: 0 }}
                         size={'medium'}
                         variant={'contained'}
-                        onClick={handleUpload}
+                        onClick={() => inputFile.current?.click()}
                     >
                         {'Загрузить'}
                     </Button>
                 }
             />
             <input
-                type='file'
-                onChange={(e) => setFile(e?.target?.files?.[0])}
+                multiple={true}
+                ref={inputFile}
+                style={{ display: 'none' }}
+                type={'file'}
+                accept={'image/png, image/gif, image/jpeg'}
+                onChange={handleSelectedFilesUpload}
             />
             <CardContent sx={{ mb: -1 }}>
                 <PhotoGallery

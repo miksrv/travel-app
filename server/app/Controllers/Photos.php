@@ -10,6 +10,7 @@ use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
+use ReflectionException;
 
 class Photos extends ResourceController {
     /**
@@ -56,7 +57,9 @@ class Photos extends ResourceController {
     }
 
     /**
+     * @param null $id
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function upload($id = null): ResponseInterface {
         $session = new Session();
@@ -82,11 +85,6 @@ class Photos extends ResourceController {
         $img = $this->request->getFile('image');
 
         if (!$img->hasMoved()) {
-
-//            if (!is_dir(UPLOAD_TEMP)) {
-//                mkdir(UPLOAD_TEMP,0777, TRUE);
-//            }
-
             $photoDir = UPLOAD_PHOTOS . '/' . $placesData->id . '/';
             $newName  = $img->getRandomName();
             $img->move($photoDir, $newName);
@@ -216,6 +214,8 @@ class Photos extends ResourceController {
         if ($author) {
             $photosModel->where(['photos.author' => $author]);
         }
+
+        $photosModel->orderBy('photos.order, photos.created_at', 'DESC');
 
         return $photosModel;
     }

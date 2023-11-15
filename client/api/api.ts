@@ -39,7 +39,9 @@ export const API = createApi({
             merge: (currentCache, newItems) => {
                 currentCache.items.push(...newItems.items)
             },
-            providesTags: ['Activity'],
+            providesTags: (result, error, arg) => [
+                { id: arg?.place || arg?.author, type: 'Activity' }
+            ],
             query: (params) => `activity${encodeQueryData(params)}`,
             // Only have one cache entry because the arg always maps to one string
             serializeQueryArgs: ({ endpointName }) => endpointName
