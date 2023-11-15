@@ -46,19 +46,16 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
             return
         }
 
-        for (let i = 0; i < event.target.files.length; i++) {
-            const file = event.target.files?.item(i)
+        const formData = new FormData()
 
-            if (file) {
-                const formData = new FormData()
-                formData.append('image', file)
+        Array.from(event.target.files).forEach((photo, index) => {
+            formData.append(`photo${index}`, photo)
+        })
 
-                uploadPhoto({
-                    formData,
-                    place: placeId
-                })
-            }
-        }
+        uploadPhoto({
+            formData,
+            place: placeId
+        })
     }
 
     return (

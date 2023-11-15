@@ -275,8 +275,8 @@ const PlaceItemPage: NextPage = () => {
                             />
                             <Tab
                                 label={`Фотографии ${
-                                    placeData?.photoCount
-                                        ? `(${placeData.photoCount})`
+                                    photosData?.items?.length
+                                        ? `(${photosData.items.length})`
                                         : ''
                                 }`}
                                 icon={<ImageOutlined />}
