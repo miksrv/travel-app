@@ -66,7 +66,7 @@ const NEAR_PLACES_COUNT = 6
 const PlaceItemPage: NextPage = () => {
     const router = useRouter()
     const routerId = router.query.name
-    const placeId = typeof routerId === 'string' ? routerId : skipToken
+    const placeId = typeof routerId === 'string' ? routerId : ''
 
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -74,12 +74,17 @@ const PlaceItemPage: NextPage = () => {
 
     const [iWasHere, setIWasHere] = React.useState<boolean>(false)
 
-    const { data, isLoading } = API.usePlacesGetItemQuery(
-        typeof placeId === 'string' ? placeId : '',
-        {
-            skip: router.isFallback || !routerId
-        }
-    )
+    const { data, isLoading } = API.usePlacesGetItemQuery(placeId, {
+        skip: router.isFallback || !routerId
+    })
+
+    const { data: photosData, isLoading: photosLoading } =
+        API.usePhotosGetListQuery(
+            { place: placeId },
+            {
+                skip: router.isFallback || !routerId
+            }
+        )
 
     const [setBookmark, { isLoading: bookmarkPutLoading }] =
         API.useBookmarksPutPlaceMutation()
@@ -234,12 +239,12 @@ const PlaceItemPage: NextPage = () => {
                     />
                 ) : (
                     <CardMedia
-                        alt={data?.photos?.[0]?.title}
+                        alt={data?.photo?.title}
                         component={'img'}
                         height={300}
                         image={
-                            data?.photos?.[0]?.filename
-                                ? `${ImageHost}photo/${data?.id}/${data?.photos?.[0]?.filename}.${data?.photos?.[0]?.extension}`
+                            data?.photo?.filename
+                                ? `${ImageHost}photo/${data?.id}/${data?.photo?.filename}.${data?.photo?.extension}`
                                 : noPhoto.src
                         }
                     />
@@ -271,8 +276,8 @@ const PlaceItemPage: NextPage = () => {
                             />
                             <Tab
                                 label={`Фотографии ${
-                                    data?.photos?.length
-                                        ? `(${data.photos.length})`
+                                    data?.photoCount
+                                        ? `(${data.photoCount})`
                                         : ''
                                 }`}
                                 icon={<ImageOutlined />}
@@ -306,7 +311,7 @@ const PlaceItemPage: NextPage = () => {
                 {activeTab === 1 && (
                     <PlaceTabPhotos
                         title={data?.title}
-                        photos={data?.photos}
+                        photos={photosData?.items}
                         placeId={data?.id}
                     />
                 )}

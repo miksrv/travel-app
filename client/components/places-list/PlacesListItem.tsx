@@ -45,12 +45,12 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
             title={place.title}
         >
             <CardMedia
-                alt={place?.photos?.[0]?.title}
+                alt={place?.photo?.title}
                 component={'img'}
                 height={180}
                 image={
-                    place?.photos?.[0]?.filename
-                        ? `${ImageHost}photo/${place?.id}/${place?.photos?.[0]?.filename}_thumb.${place?.photos?.[0]?.extension}`
+                    place?.photo?.filename
+                        ? `${ImageHost}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
                         : noPhoto.src
                 }
             />
@@ -81,10 +81,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                     size={'small'}
                     variant={'outlined'}
                 />
-                {!!place.photosCount && (
+                {!!place.photoCount && (
                     <Chip
                         icon={<PhotoCameraOutlined />}
-                        label={place.photosCount || 0}
+                        label={place.photoCount || 0}
                         size={'small'}
                         variant={'outlined'}
                     />

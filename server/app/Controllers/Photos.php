@@ -198,6 +198,7 @@ class Photos extends ResourceController {
      */
     protected function _makeListFilters(): PhotosModel {
         $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $place  = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $photosModel = new PhotosModel();
         $photosModel
@@ -207,6 +208,10 @@ class Photos extends ResourceController {
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.author = users.id', 'left')
             ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
+
+        if ($place) {
+            $photosModel->where(['photos.place' => $place]);
+        }
 
         if ($author) {
             $photosModel->where(['photos.author' => $author]);

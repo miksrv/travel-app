@@ -18,9 +18,9 @@ export type Place = {
     category?: Category
     subcategory?: Category
     address?: Address
+    photo?: Photo
     tags?: Tag[]
-    photosCount?: number
-    photos?: Photo[]
+    photoCount?: number
     actions?: {
         rating?: boolean
     }

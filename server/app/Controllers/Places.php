@@ -130,14 +130,12 @@ class Places extends ResourceController {
             }
 
             if ($photoId !== false && isset($photosData[$photoId])) {
-                $return['photosCount'] = $counts;
-                $return['photos']      = [
-                    (object) [
-                        'filename'  => $photosData[$photoId]->filename,
-                        'extension' => $photosData[$photoId]->extension,
-                        'width'     => $photosData[$photoId]->width,
-                        'height'    => $photosData[$photoId]->width
-                    ]
+                $return['photoCount'] = $counts;
+                $return['photo'] = [
+                    'filename'  => $photosData[$photoId]->filename,
+                    'extension' => $photosData[$photoId]->extension,
+                    'width'     => $photosData[$photoId]->width,
+                    'height'    => $photosData[$photoId]->width
                 ];
             }
 
@@ -188,8 +186,8 @@ class Places extends ResourceController {
                 return $this->failNotFound();
             }
 
-            // Collect photos
-            $placeData->photos = $photosModel
+            // Find all place photos
+            $placeData->photo = $photosModel
                 ->select(
                     'photos.author, photos.filename, photos.extension, photos.width, photos.place, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
@@ -197,6 +195,7 @@ class Places extends ResourceController {
                 ->join('users', 'photos.author = users.id', 'left')
                 ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
                 ->where(['place' => $placeData->id])
+                ->orderBy('photos.order', 'DESC')
                 ->findAll();
 
             // Collect tags
@@ -243,27 +242,24 @@ class Places extends ResourceController {
                 $response['address']['street'] = $placeData->address;
             }
 
-            if ($placeData->photos) {
-                $response['photos']      = [];
-                $response['photosCount'] = count($placeData->photos);
+            if ($placeData->photo) {
+                $response['photoCount'] = count($placeData->photo);
 
-                foreach ($placeData->photos as $photo) {
-                    $response['photos'][] = [
-                        'filename'  => $photo->filename,
-                        'extension' => $photo->extension,
-                        'order'     => $photo->order,
-                        'width'     => $photo->width,
-                        'height'    => $photo->height,
-                        'title'     => $photo->title,
-                        'placeId'   => $photo->place,
-                        'created'   => $photo->created_at,
-                        'author'    => $photo->user_id ? [
-                            'id'     => $photo->user_id,
-                            'name'   => $photo->user_name,
-                            'avatar' => $photo->user_avatar,
-                        ] : null
-                    ];
-                }
+                $response['photo'] = [
+                    'filename'  => $placeData->photo[0]->filename,
+                    'extension' => $placeData->photo[0]->extension,
+                    'order'     => $placeData->photo[0]->order,
+                    'width'     => $placeData->photo[0]->width,
+                    'height'    => $placeData->photo[0]->height,
+                    'title'     => $placeData->photo[0]->title,
+                    'placeId'   => $placeData->photo[0]->place,
+                    'created'   => $placeData->photo[0]->created_at,
+                    'author'    => $placeData->photo[0]->user_id ? [
+                        'id'     => $placeData->photo[0]->user_id,
+                        'name'   => $placeData->photo[0]->user_name,
+                        'avatar' => $placeData->photo[0]->user_avatar,
+                    ] : null
+                ];
             }
 
             if ($session->longitude && $session->latitude) {

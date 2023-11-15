@@ -92,6 +92,7 @@ export interface RequestPhotosGetList {
     limit?: number
     offset?: number
     author?: string
+    place?: string
 }
 
 export interface RequestPhotoPostUpload {
