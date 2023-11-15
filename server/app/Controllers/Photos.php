@@ -128,10 +128,10 @@ class Photos extends ResourceController {
             $activityModel->insert($activity);
 
             return $this->respondCreated([
-                'name'      => $name,
-                'extension' => $file->getExtension(),
-                'latitude'  => $coordinates->lat,
-                'longitude' => $coordinates->lng,
+//                'name'      => $name,
+//                'extension' => $file->getExtension(),
+//                'latitude'  => $coordinates->lat,
+//                'longitude' => $coordinates->lng,
             ]);
         }
 

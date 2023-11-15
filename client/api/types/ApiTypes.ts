@@ -97,7 +97,7 @@ export interface RequestPhotosGetList {
 
 export interface RequestPhotoPostUpload {
     formData?: FormData
-    placeId?: string
+    place?: string
 }
 
 /* Controller: Address */

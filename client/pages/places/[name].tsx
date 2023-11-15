@@ -13,7 +13,6 @@ import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
-import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo } from 'react'
@@ -35,29 +34,29 @@ import noPhoto from '@/public/images/no-photo-available.png'
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<any>> => {
-            const name = context.params?.name
+            const id = context.params?.name
 
-            if (typeof name === 'string') {
-                const data: any = await store.dispatch(
-                    API.endpoints.placesGetItem.initiate(name)
-                )
-
-                store.dispatch(
-                    API.endpoints.activityGetList.initiate({ place: name })
-                )
-
-                await Promise.all(
-                    store.dispatch(API.util.getRunningQueriesThunk())
-                )
-
-                if (data.error?.originalStatus === 404) {
-                    return { notFound: true }
-                }
-
-                return { props: { data } }
+            if (typeof id !== 'string') {
+                return { notFound: true }
             }
 
-            return { notFound: true }
+            const data: any = await store.dispatch(
+                API.endpoints.placesGetItem.initiate(id)
+            )
+
+            store.dispatch(API.endpoints.photosGetList.initiate({ place: id }))
+
+            store.dispatch(
+                API.endpoints.activityGetList.initiate({ place: id })
+            )
+
+            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
+
+            if (data.error?.originalStatus === 404) {
+                return { notFound: true }
+            }
+
+            return { props: { data } }
         }
 )
 
@@ -74,7 +73,7 @@ const PlaceItemPage: NextPage = () => {
 
     const [iWasHere, setIWasHere] = React.useState<boolean>(false)
 
-    const { data, isLoading } = API.usePlacesGetItemQuery(placeId, {
+    const { data: placeData, isLoading } = API.usePlacesGetItemQuery(placeId, {
         skip: router.isFallback || !routerId
     })
 
@@ -94,29 +93,29 @@ const PlaceItemPage: NextPage = () => {
 
     const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
         API.useBookmarksGetCheckPlaceQuery(
-            { place: data?.id! },
-            { skip: !data?.id || !authSlice.isAuth }
+            { place: placeData?.id! },
+            { skip: !placeData?.id || !authSlice.isAuth }
         )
 
     const { data: nearPlacesData, isLoading: nearPlacesLoading } =
         API.usePlacesGetListQuery(
             {
-                excludePlaces: data?.id ? [data.id] : undefined,
-                latitude: data?.latitude,
+                excludePlaces: placeData?.id ? [placeData.id] : undefined,
+                latitude: placeData?.latitude,
                 limit: NEAR_PLACES_COUNT,
-                longitude: data?.longitude,
+                longitude: placeData?.longitude,
                 order: ApiTypes.SortOrder.ASC,
                 sort: ApiTypes.SortFields.Distance
             },
-            { skip: !data?.longitude || !data?.latitude }
+            { skip: !placeData?.longitude || !placeData?.latitude }
         )
 
     const { data: activityData } = API.useActivityGetListQuery(
         {
-            place: data?.id
+            place: placeData?.id
         },
         {
-            skip: !data?.id
+            skip: !placeData?.id
         }
     )
 
@@ -125,11 +124,11 @@ const PlaceItemPage: NextPage = () => {
     }
 
     const handlePutPlaceBookmark = () => {
-        setBookmark({ place: data?.id! })
+        setBookmark({ place: placeData?.id! })
     }
 
     const handlePutPlaceVisited = () => {
-        setVisited({ place: data?.id! })
+        setVisited({ place: placeData?.id! })
     }
 
     const ratingCount = useMemo(
@@ -145,25 +144,25 @@ const PlaceItemPage: NextPage = () => {
             <Card sx={{ mb: 2 }}>
                 <CardHeader
                     title={
-                        isLoading ? (
+                        isLoading || photosLoading ? (
                             <Skeleton
                                 variant={'text'}
                                 width={'40%'}
                             />
                         ) : (
-                            data?.title
+                            placeData?.title
                         )
                     }
                     titleTypographyProps={{ component: 'h1' }}
                     subheader={
-                        isLoading ? (
+                        isLoading || photosLoading ? (
                             <Skeleton
                                 variant={'text'}
                                 width={'70%'}
                             />
                         ) : (
                             <Breadcrumbs
-                                currentPage={data?.title}
+                                currentPage={placeData?.title}
                                 links={[
                                     {
                                         link: '/places/',
@@ -232,19 +231,19 @@ const PlaceItemPage: NextPage = () => {
                         </>
                     }
                 />
-                {isLoading ? (
+                {isLoading || photosLoading ? (
                     <Skeleton
                         variant={'rectangular'}
                         height={300}
                     />
                 ) : (
                     <CardMedia
-                        alt={data?.photo?.title}
+                        alt={placeData?.photo?.title}
                         component={'img'}
                         height={300}
                         image={
-                            data?.photo?.filename
-                                ? `${ImageHost}photo/${data?.id}/${data?.photo?.filename}.${data?.photo?.extension}`
+                            placeData?.photo?.filename
+                                ? `${ImageHost}photo/${placeData?.id}/${placeData?.photo?.filename}.${placeData?.photo?.extension}`
                                 : noPhoto.src
                         }
                     />
@@ -252,7 +251,7 @@ const PlaceItemPage: NextPage = () => {
             </Card>
 
             <PlaceInformation
-                place={data}
+                place={placeData}
                 ratingCount={ratingCount}
                 loading={isLoading}
                 onChangeWasHere={setIWasHere}
@@ -276,8 +275,8 @@ const PlaceItemPage: NextPage = () => {
                             />
                             <Tab
                                 label={`Фотографии ${
-                                    data?.photoCount
-                                        ? `(${data.photoCount})`
+                                    placeData?.photoCount
+                                        ? `(${placeData.photoCount})`
                                         : ''
                                 }`}
                                 icon={<ImageOutlined />}
@@ -301,25 +300,25 @@ const PlaceItemPage: NextPage = () => {
 
                 {activeTab === 0 && (
                     <PlaceTabDescription
-                        title={data?.title}
-                        address={data?.address}
-                        content={data?.content}
-                        tags={data?.tags}
+                        title={placeData?.title}
+                        address={placeData?.address}
+                        content={placeData?.content}
+                        tags={placeData?.tags}
                     />
                 )}
 
                 {activeTab === 1 && (
                     <PlaceTabPhotos
-                        title={data?.title}
+                        title={placeData?.title}
                         photos={photosData?.items}
-                        placeId={data?.id}
+                        placeId={placeData?.id}
                     />
                 )}
 
                 {activeTab === 2 && !!activityData?.items?.length && (
                     <PlaceTabActivity
-                        title={data?.title}
-                        placeId={data?.id}
+                        title={placeData?.title}
+                        placeId={placeData?.id}
                         activity={activityData?.items}
                     />
                 )}
@@ -346,6 +345,7 @@ const PlaceItemPage: NextPage = () => {
                 places={nearPlacesData?.items}
                 loading={nearPlacesLoading}
             />
+
             {/*<Carousel*/}
             {/*    options={{*/}
             {/*        align: 'center',*/}

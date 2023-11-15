@@ -104,26 +104,29 @@ export const API = createApi({
             // invalidatesTags: ['Places'],
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
+
+        /* Controller: Photos */
         photoPostUpload: builder.mutation<any, ApiTypes.RequestPhotoPostUpload>(
             {
                 invalidatesTags: (res, err, arg) => [
-                    { id: arg.placeId, type: 'Places' }
+                    { id: arg.place, type: 'Photos' },
+                    { id: arg.place, type: 'Activity' }
                 ],
                 query: (data) => ({
                     body: data.formData,
                     method: 'POST',
-                    url: `photos/upload/${data.placeId}`
+                    url: `photos/upload/${data.place}`
                 }),
                 transformErrorResponse: (response) => response.data
             }
         ),
-
-        /* Controller: Photos */
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>
         >({
-            providesTags: ['Photos'],
+            providesTags: (result, error, arg) => [
+                { id: arg?.place, type: 'Photos' }
+            ],
             query: (params) => `photos${encodeQueryData(params)}`
         }),
 

@@ -46,7 +46,7 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
 
         uploadPhoto({
             formData,
-            placeId
+            place: placeId
         })
     }
 
