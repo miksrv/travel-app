@@ -46,11 +46,15 @@ class PlaceTranslation {
         $this->trim     = $trim;
 
         $this->model->select(
-            'translations_places.place, translations_places.title, translations_places.created_at,' .
+            'id, place, title, author, created_at, updated_at,' .
             ($this->trim > 0 ? 'SUBSTRING(translations_places.content, 1, ' . $this->trim . ') as content' : 'translations_places.content')
         );
     }
 
+    /**
+     * @param string $term
+     * @return void
+     */
     public function search(string $term): void {
         $this->search = $term;
 
@@ -63,6 +67,10 @@ class PlaceTranslation {
         $this->_prepareOutput($data);
     }
 
+    /**
+     * @param array $placeIds
+     * @return void
+     */
     public function translate(array $placeIds): void {
         $this->placeIds = $placeIds;
 
@@ -84,11 +92,7 @@ class PlaceTranslation {
      * @return string
      */
     public function title(string $placeId): string {
-        if (isset($this->translate[$placeId])) {
-            return $this->translate[$placeId]->title;
-        }
-
-        return '';
+        return $this->_get($placeId, 'title');
     }
 
     /**
@@ -97,8 +101,44 @@ class PlaceTranslation {
      * @return string
      */
     public function content(string $placeId): string {
-        if (isset($this->translate[$placeId])) {
-            return $this->translate[$placeId]->content;
+        return $this->_get($placeId, 'content');
+    }
+
+    /**
+     * Return author ID for translation place by ID
+     * @param string $placeId
+     * @return string
+     */
+    public function author(string $placeId): string {
+        return $this->_get($placeId, 'author');
+    }
+
+    /**
+     * Return updated time for translation place by ID
+     * @param string $placeId
+     * @return string
+     */
+    public function updated(string $placeId): string {
+        return $this->_get($placeId, 'updated_at');
+    }
+
+    /**
+     * Return updated time for translation place by ID
+     * @param string $placeId
+     * @return string
+     */
+    public function id(string $placeId): string {
+        return $this->_get($placeId, 'id');
+    }
+
+    /**
+     * @param string $id
+     * @param string $field
+     * @return string
+     */
+    protected function _get(string $id, string $field): string {
+        if (isset($this->translate[$id])) {
+            return $this->translate[$id]->{$field};
         }
 
         return '';

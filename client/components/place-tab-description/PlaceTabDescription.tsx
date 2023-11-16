@@ -24,7 +24,7 @@ interface PlaceTabDescriptionProps {
 const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
     const { id, title, address, content, tags } = props
 
-    const [savePlace, { isLoading, saveData }] =
+    const [savePlace, { isLoading, data: saveData }] =
         API.usePlacesPatchItemMutation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
@@ -36,7 +36,8 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
     }
 
     const handleSaveEditorClick = async () => {
-        if (!id) {
+        if (!id || !editorContent) {
+            setEditorMode(false)
             return
         }
 

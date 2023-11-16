@@ -10,6 +10,7 @@ use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
 use App\Models\TranslationsPlacesModel;
 use App\Models\UsersBookmarksModel;
+use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
@@ -339,17 +340,35 @@ class Places extends ResourceController {
         $langModel   = new TranslationsPlacesModel();
         $translation = new TranslationPlace();
 
+        $newContent = strip_tags(html_entity_decode($input->content));
+
         $translation->place    = $id;
         $translation->language = 'ru';
         $translation->author   = $session->userData->id;
         $translation->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
-        $translation->content  = strip_tags(html_entity_decode($input->content));
+        $translation->content  = $newContent;
+        $translation->delta    = strlen($newContent) - strlen($placeTranslate->content($id));
 
-        $langModel->insert($translation);
+        // If the author of the last edit is the same as the current one,
+        // then you need to check when the content was last edited
+        if ($placeTranslate->author($id) === $session->userData->id) {
+            $time = new Time('now');
+            $diff = $time->difference($placeTranslate->updated($id));
 
+            // If the last time a user edited this content was less than or equal to 15 minutes,
+            // then we will simply update the data and will not add a new version
+            if (abs($diff->getMinutes()) <= 15) {
+                $langModel->update($placeTranslate->id($id), $translation);
+            } else {
+                $langModel->insert($translation);
+            }
+        } else {
+            $langModel->insert($translation);
+        }
+
+        // In any case, we update the time when the post was last edited
         $place = new Place();
         $place->updated_at = time();
-
         $placesModel->update($id, $place);
 
         return $this->respond((object) ['status' => true]);

@@ -144,7 +144,7 @@ class Migrate extends ResourceController {
             if (!empty($placeVersions)) {
                 foreach ($placeVersions as $placeVersionItem) {
                     $versionContent = strip_tags(html_entity_decode($placeVersionItem->item_content));
-                    $versionDelta   = strcmp($placeContent, $versionContent);
+                    $versionDelta   = strlen($placeContent) - strlen($versionContent);
                     // If in version text nothing changed
                     if ($versionDelta === 0) {
                         continue ;
