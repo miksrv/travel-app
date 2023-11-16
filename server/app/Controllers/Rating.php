@@ -89,7 +89,7 @@ class Rating extends ResourceController {
 
             $insertRating = [
                 'place'   => $input->place,
-                'author'  => null,
+                'author'  => isset($session->userData) ? $session->userData->id : null,
                 'session' => $session->id,
                 'value'   => $newScore,
             ];

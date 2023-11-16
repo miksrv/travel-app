@@ -17,6 +17,7 @@ class UserLevels {
 
     public int $experience;
     public int $level;
+    public object $statistic;
 
     /**
      * @param User $user
@@ -25,6 +26,12 @@ class UserLevels {
         $this->user       = $user;
         $this->level      = $user->level;
         $this->experience = $user->experience;
+        $this->statistic  = (object) [
+            'places' => 0,
+            'photos' => 0,
+            'rating' => 0,
+            'edits'  => 0,
+        ];
 
         return $this;
     }
@@ -36,26 +43,26 @@ class UserLevels {
      * @throws ReflectionException
      */
     public function calculate(): static {
-        $userLevelsModel = new UsersLevelsModel();
-
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $ratingModel = new RatingModel();
-        $translateModel = new TranslationsPlacesModel();
+        $translModel = new TranslationsPlacesModel();
 
-        $placesCount = $placesModel->selectCount('id')->where('author', $this->user->id)->first();
-        $photosCount = $photosModel->selectCount('id')->where('author', $this->user->id)->first();
-        $ratingCount = $ratingModel->selectCount('id')->where('author', $this->user->id)->first();
-        $translCount = $translateModel->selectCount('id')->where('author', $this->user->id)->first();
+        $this->statistic->places = (int) $placesModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $this->statistic->photos = (int) $photosModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $this->statistic->rating = (int) $ratingModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $this->statistic->edits  = (int) $translModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
 
-        $allUserLevels = $userLevelsModel->orderBy('experience')->findAll();
+        $this->statistic->edits = $this->statistic->edits > $this->statistic->places
+            ? ($this->statistic->edits - $this->statistic->places)
+            : $this->statistic->edits;
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;
-        $experience += $placesCount->id * 15;
-        $experience += $photosCount->id * 10;
-        $experience += $ratingCount->id * 1;
-        $experience += $translCount->id * 5;
+        $experience += $this->statistic->places * 15;
+        $experience += $this->statistic->photos * 10;
+        $experience += $this->statistic->rating * 1;
+        $experience += $this->statistic->edits * 5;
 
         $this->experience = $experience;
 

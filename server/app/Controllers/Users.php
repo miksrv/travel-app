@@ -94,6 +94,7 @@ class Users extends ResourceController {
             'name'       => $usersData->name,
             'avatar'     => $usersData->avatar,
             'level'      => $userLevels->data,
+            'statistic'  => $userLevels->statistic,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,

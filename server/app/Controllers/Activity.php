@@ -64,9 +64,13 @@ class Activity extends ResourceController {
             $placesIds[] = $item->place_id;
         }
 
-        $placeTranslations->translate($placesIds);
+        $placeTranslations->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeTranslations);
+        $response = $this->_groupSimilarActivities(
+            $activityData,
+            $categoriesData,
+            $placeTranslations
+        );
 
         // We remove the last object in the array because it may not be completely grouped
         if (!$author && !$place) {
@@ -82,8 +86,8 @@ class Activity extends ResourceController {
      * We group similar user activities. For example, uploaded photos of one user
      * for one place with an interval of 5 minutes - we combine them into one activity
      * @param array $activityData
-     * @param PlaceTranslation|null $placeTranslations
      * @param array|null $categoriesData
+     * @param PlaceTranslation|null $placeTranslations
      * @return array
      */
     protected function _groupSimilarActivities(
@@ -133,8 +137,8 @@ class Activity extends ResourceController {
 
                 $currentGroup->place = (object) [
                     'id'       => $item->place,
-                    'title'    => $placeTranslations->title($item->place),
-                    'content'  => $placeTranslations->content($item->place),
+                    'title'    => $placeTranslations->get($item->place, 'title', $item->created_at),
+                    'content'  => $placeTranslations->get($item->place, 'content', $item->created_at),
                     'category' => (object) [
                         'name'  => $categoriesData[$findCategory]->name,
                         'title' => $categoriesData[$findCategory]->title,

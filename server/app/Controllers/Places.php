@@ -2,6 +2,7 @@
 
 use App\Entities\Place;
 use App\Entities\TranslationPlace;
+use App\Entities\UserActivity;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Models\PhotosModel;
@@ -9,6 +10,7 @@ use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
 use App\Models\TranslationsPlacesModel;
+use App\Models\UsersActivityModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -355,15 +357,31 @@ class Places extends ResourceController {
             $time = new Time('now');
             $diff = $time->difference($placeTranslate->updated($id));
 
-            // If the last time a user edited this content was less than or equal to 15 minutes,
+            // If the last time a user edited this content was less than or equal to 30 minutes,
             // then we will simply update the data and will not add a new version
-            if (abs($diff->getMinutes()) <= 15) {
+            if (abs($diff->getMinutes()) <= 30) {
                 $langModel->update($placeTranslate->id($id), $translation);
             } else {
                 $langModel->insert($translation);
+
+                // Make user activity
+                $activityModel = new UsersActivityModel();
+                $activity = new UserActivity();
+                $activity->user = $session->userData->id;
+                $activity->type = 'place';
+                $activity->place = $id;
+                $activityModel->insert($activity);
+
             }
         } else {
             $langModel->insert($translation);
+
+            $activityModel = new UsersActivityModel();
+            $activity = new UserActivity();
+            $activity->user = $session->userData->id;
+            $activity->type = 'place';
+            $activity->place = $id;
+            $activityModel->insert($activity);
         }
 
         // In any case, we update the time when the post was last edited

@@ -231,9 +231,9 @@ const UserItemPage: NextPage = () => {
                             </Box>
                         </Grid>
                         <Grid
-                            lg={9}
-                            md={9}
-                            xs={9}
+                            lg={5}
+                            md={5}
+                            xs={5}
                         >
                             <StatisticLine
                                 hide={!userData?.reputation}
@@ -272,6 +272,28 @@ const UserItemPage: NextPage = () => {
                                         {userData?.website}
                                     </Link>
                                 }
+                            />
+                        </Grid>
+                        <Grid
+                            lg={4}
+                            md={4}
+                            xs={4}
+                        >
+                            <StatisticLine
+                                title={'Добавлено мест:'}
+                                content={userData?.statistic?.places}
+                            />
+                            <StatisticLine
+                                title={'Загружено фотографий:'}
+                                content={userData?.statistic?.photos}
+                            />
+                            <StatisticLine
+                                title={'Поставлено оценок:'}
+                                content={userData?.statistic?.rating}
+                            />
+                            <StatisticLine
+                                title={'Редактирований:'}
+                                content={userData?.statistic?.edits}
                             />
                         </Grid>
                     </Grid>

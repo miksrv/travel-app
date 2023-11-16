@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Photo;
+use App\Entities\Place;
 use App\Entities\UserActivity;
 use App\Libraries\Session;
 use App\Models\PhotosModel;
@@ -131,6 +132,11 @@ class Photos extends ResourceController {
                 sleep(1);
             }
         }
+
+        // Update the time when the post was last edited
+        $place = new Place();
+        $place->updated_at = time();
+        $placesModel->update($id, $place);
 
         return $this->respondCreated();
     }

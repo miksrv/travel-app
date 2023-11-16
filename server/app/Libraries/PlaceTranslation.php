@@ -1,10 +1,6 @@
 <?php namespace App\Libraries;
 
-use App\Models\SessionsHistoryModel;
-use App\Models\SessionsModel;
 use App\Models\TranslationsPlacesModel;
-use Config\Services;
-use ReflectionException;
 
 /**
  * Class for find actual translation for place
@@ -25,18 +21,21 @@ use ReflectionException;
 class PlaceTranslation {
 
     protected array $translate = [];
+    protected array $versions = [];
     public array $placeIds = [];
     protected string $language = 'ru';
     protected int $trim;
     protected string $search;
 
+    protected bool $keepVersions = false;
+
     private TranslationsPlacesModel $model;
 
     /**
-     * При вызове конструктора устанавливаем параметры и начинаем работать с моделью.
-     * Библиотека работает в двух режимах:
-     *  1) Поиск по ключевому слову и возвращение списка ID мест и контента для каждого
-     *  2) Получает список ID мест, извлекает для них контент и возвращает его
+     * When calling the constructor, we set the parameters and start working with the model.
+     * The library works in two modes:
+     *  1) Search by keyword and return a list of location and content IDs for each
+     *  2) Gets a list of place IDs, extracts content for them and returns it
      * @param string $language
      * @param int $trim
      */
@@ -68,16 +67,26 @@ class PlaceTranslation {
     }
 
     /**
+     * When we request translations for all places, we can immediately indicate whether we should store content
+     * versions for each translation or not (these versions are needed so that when requesting an activity,
+     * we can compare the translation of the place on the date the activity was added)
      * @param array $placeIds
+     * @param bool $keepVersions
      * @return void
      */
-    public function translate(array $placeIds): void {
+    public function translate(array $placeIds, bool $keepVersions = false): void {
         $this->placeIds = $placeIds;
 
         if (empty($placeIds)) {
             return ;
         }
 
+        // Setting a global variable
+        if ($keepVersions === true) {
+            $this->keepVersions = true;
+        }
+
+        // Here we get all edition versions for all places by their ID
         $data = $this->model
             ->whereIn('place', $placeIds)
             ->orderBy('created_at', 'DESC')
@@ -92,7 +101,7 @@ class PlaceTranslation {
      * @return string
      */
     public function title(string $placeId): string {
-        return $this->_get($placeId, 'title');
+        return $this->get($placeId, 'title');
     }
 
     /**
@@ -101,7 +110,7 @@ class PlaceTranslation {
      * @return string
      */
     public function content(string $placeId): string {
-        return $this->_get($placeId, 'content');
+        return $this->get($placeId, 'content');
     }
 
     /**
@@ -110,7 +119,7 @@ class PlaceTranslation {
      * @return string
      */
     public function author(string $placeId): string {
-        return $this->_get($placeId, 'author');
+        return $this->get($placeId, 'author');
     }
 
     /**
@@ -119,7 +128,7 @@ class PlaceTranslation {
      * @return string
      */
     public function updated(string $placeId): string {
-        return $this->_get($placeId, 'updated_at');
+        return $this->get($placeId, 'updated_at');
     }
 
     /**
@@ -128,15 +137,24 @@ class PlaceTranslation {
      * @return string
      */
     public function id(string $placeId): string {
-        return $this->_get($placeId, 'id');
+        return $this->get($placeId, 'id');
     }
 
     /**
      * @param string $id
      * @param string $field
+     * @param string|null $version
      * @return string
      */
-    protected function _get(string $id, string $field): string {
+    public function get(string $id, string $field, string $version = null): string {
+        if ($version && isset($this->versions[$id])) {
+            $findKey = array_search($version, array_column($this->versions[$id], 'created_at'));
+
+            if ($findKey !== false) {
+                return $this->versions[$id][$findKey]->{$field};
+            }
+        }
+
         if (isset($this->translate[$id])) {
             return $this->translate[$id]->{$field};
         }
@@ -145,10 +163,10 @@ class PlaceTranslation {
     }
 
     /**
-     * Подготоваливает массив $this->translate, содержащий переводы для каждого места.
-     * Также, если $this->placeIds пустой, то заполняем его найденными ID мест, для
-     * которых найдены соответствия критериям поиска.
-     * @param array $data
+     * Prepares an array $this->translate containing translations for each location.
+     * Also, if $this->placeIds is empty, then fill it with the found IDs of places for
+     * which matches to the search criteria were found.
+     * @param array $data translations data for all places (by array of IDs)
      * @return array|void
      */
     protected function _prepareOutput(array $data) {
@@ -157,10 +175,18 @@ class PlaceTranslation {
         }
 
         foreach ($data as $item) {
+            // While searching through each translation - if a translation has already been found for the location
+            // (and it was added to the general array of ready-made translations)
+            // and if the date of the added translation is greater than the date of the current searched region -
+            // we add such a translation to the history and move on.
             if (
                 isset($this->translate[$item->place]) &&
                 strtotime($this->translate[$item->place]->created_at) > strtotime($item->created_at)
             ) {
+                if ($this->keepVersions) {
+                    $this->versions[$item->place][] = $item;
+                }
+
                 continue;
             }
 

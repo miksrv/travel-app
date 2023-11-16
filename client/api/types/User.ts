@@ -12,6 +12,7 @@ export type User = {
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
     activity?: ApiTypes.DateTimeType
+    statistic?: Statistic
 }
 
 export type LevelData = {
@@ -20,4 +21,11 @@ export type LevelData = {
     level?: number
     experience?: number
     nextLevel?: number
+}
+
+export type Statistic = {
+    places: number
+    photos: number
+    rating: number
+    edits: number
 }
