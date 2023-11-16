@@ -20,6 +20,7 @@ import Tabs from '@mui/material/Tabs'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import React, { useState } from 'react'
@@ -153,6 +154,7 @@ const UserItemPage: NextPage = () => {
 
     return (
         <PageLayout>
+            <NextSeo title={userData?.name} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
                     title={

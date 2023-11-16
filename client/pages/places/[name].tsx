@@ -14,6 +14,7 @@ import Skeleton from '@mui/material/Skeleton'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo } from 'react'
 
@@ -141,6 +142,7 @@ const PlaceItemPage: NextPage = () => {
 
     return (
         <PageLayout>
+            <NextSeo title={placeData?.title} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
                     title={
@@ -345,23 +347,6 @@ const PlaceItemPage: NextPage = () => {
                 places={nearPlacesData?.items}
                 loading={nearPlacesLoading}
             />
-
-            {/*<Carousel*/}
-            {/*    options={{*/}
-            {/*        align: 'center',*/}
-            {/*        containScroll: false,*/}
-            {/*        dragFree: true,*/}
-            {/*        loop: true,*/}
-            {/*        slidesToScroll: 'auto'*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    <PlacesList*/}
-            {/*        perPage={NEAR_PLACES_COUNT}*/}
-            {/*        places={nearPlacesData?.items}*/}
-            {/*        loading={nearPlacesLoading}*/}
-            {/*        useLinearView={true}*/}
-            {/*    />*/}
-            {/*</Carousel>*/}
         </PageLayout>
     )
 }

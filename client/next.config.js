@@ -18,6 +18,14 @@ const nextConfig = {
         unoptimized: true
     },
 
+    transpilePackages: [
+        '@mdxeditor/editor',
+        'react-diff-view',
+        'leaflet',
+        'leaflet-defaulticon-compatibility',
+        'leaflet-geosearch'
+    ],
+
     webpack(config) {
         config.resolve.fallback = {
             // if you miss it, all the other options in fallback, specified
