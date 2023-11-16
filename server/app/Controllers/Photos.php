@@ -115,10 +115,9 @@ class Photos extends ResourceController {
                 $photo->filesize = $file->getSize();
                 $photo->width = $width;
                 $photo->height = $height;
-
                 $photosModel->insert($photo);
 
-                // BATCH INSERT!!
+                $lastId = $photosModel->getInsertID();
 
                 // Make user activity
                 $activityModel = new UsersActivityModel();
@@ -126,86 +125,14 @@ class Photos extends ResourceController {
                 $activity->user = $session->userData->id;
                 $activity->type = 'photo';
                 $activity->place = $placesData->id;
-                $activity->photo = $photosModel->getInsertID();
+                $activity->photo = $lastId;
                 $activityModel->insert($activity);
+
+                sleep(1);
             }
         }
 
         return $this->respondCreated();
-
-
-//        $session = new Session();
-//        $rules   = [
-//            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
-//        ];
-//
-//        if (!$session->isAuth) {
-//            return $this->failUnauthorized();
-//        }
-//
-//        if (!$this->validate($rules)) {
-//            return $this->failValidationErrors($this->validator->getErrors());
-//        }
-//
-//        $placesModel = new PlacesModel();
-//        $placesData  = $placesModel->select('id, latitude, longitude')->find($id);
-//
-//        if (!$placesData || !$placesData->id) {
-//            return $this->failValidationErrors('There is no point with this ID');
-//        }
-//
-//        $img = $this->request->getFile('image');
-//
-//        if (!$img->hasMoved()) {
-//            $photoDir = UPLOAD_PHOTOS . '/' . $placesData->id . '/';
-//            $newName  = $img->getRandomName();
-//            $img->move($photoDir, $newName);
-//
-//            $file = new File($photoDir . $newName);
-//            $name = pathinfo($file, PATHINFO_FILENAME);
-//
-//            $image = Services::image('gd'); // imagick
-//            $image->withFile($file->getRealPath())
-//                ->fit(700, 500, 'center')
-//                ->save($photoDir . $name . '_thumb.' . $file->getExtension());
-//
-//            $coordinates = $this->_readPhotoLocation($file->getRealPath());
-//            $photosModel = new PhotosModel();
-//
-//            list($width, $height) = getimagesize($file->getRealPath());
-//
-//            // Save photo to DB
-//            $photo = new Photo();
-//            $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
-//            $photo->longitude = $coordinates->lng ?? $placesData->longitude;
-//            $photo->place     = $placesData->id;
-//            $photo->author    = $session->userData->id;
-//            $photo->filename  = $name;
-//            $photo->extension = $file->getExtension();
-//            $photo->filesize  = $file->getSize();
-//            $photo->width     = $width;
-//            $photo->height    = $height;
-//
-//            $photosModel->insert($photo);
-//
-//            // Make user activity
-//            $activityModel = new UsersActivityModel();
-//            $activity      = new UserActivity();
-//            $activity->user  = $session->userData->id;
-//            $activity->type  = 'photo';
-//            $activity->place = $placesData->id;
-//            $activity->photo = $photosModel->getInsertID();
-//            $activityModel->insert($activity);
-//
-//            return $this->respondCreated([
-////                'name'      => $name,
-////                'extension' => $file->getExtension(),
-////                'latitude'  => $coordinates->lat,
-////                'longitude' => $coordinates->lng,
-//            ]);
-//        }
-//
-//        return $this->failServerError();
     }
 
     /**

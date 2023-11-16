@@ -1,32 +1,25 @@
 import { Card } from '@mui/material'
-import CardContent from '@mui/material/CardContent'
 import CardHeader from '@mui/material/CardHeader'
-import Typography from '@mui/material/Typography'
 import { NextPage } from 'next'
 import type { GetStaticProps } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import Image from 'next/image'
-import Link from 'next/link'
+import { NextSeo } from 'next-seo'
 import React, { useEffect, useState } from 'react'
-import Gallery from 'react-photo-gallery'
 
-import { API, ImageHost } from '@/api/api'
-import { ActivityTypes } from '@/api/types/Activity'
+import { API } from '@/api/api'
 
 import ActivityList from '@/components/activity-list'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
-import UserAvatar from '@/components/user-avatar'
 
-import { categoryImage } from '@/functions/categories'
-import { formatDate } from '@/functions/helpers'
+const PAGE_TITLE = 'Лента активности'
 
 const MainPage: NextPage = () => {
     const [lastDate, setLastDate] = useState<string>()
     const { t } = useTranslation('common')
 
-    const { data, isFetching } = API.useActivityGetListQuery({
+    const { data, isFetching } = API.useActivityGetInfinityListQuery({
         date: lastDate
     })
 
@@ -50,9 +43,10 @@ const MainPage: NextPage = () => {
 
     return (
         <PageLayout>
+            <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={t('title', 'Лента активности')}
+                    title={t('title', PAGE_TITLE)}
                     titleTypographyProps={{ component: 'h1' }}
                     subheader={
                         <Breadcrumbs

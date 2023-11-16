@@ -4,6 +4,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import dynamic from 'next/dynamic'
 import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
@@ -23,6 +24,8 @@ export type LatLngCoordinate = {
     latitude: number
     longitude: number
 }
+
+const PAGE_TITLE = 'Карта интересных мест'
 
 const MapPage: NextPage = () => {
     // const searchParams = useSearchParams()
@@ -69,13 +72,12 @@ const MapPage: NextPage = () => {
 
     return (
         <PageLayout>
+            <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={'Карта интересных мест'}
+                    title={PAGE_TITLE}
                     titleTypographyProps={{ component: 'h1' }}
-                    subheader={
-                        <Breadcrumbs currentPage={'Карта интересных мест'} />
-                    }
+                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
                     sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button

@@ -28,7 +28,7 @@ export const API = createApi({
     }),
     endpoints: (builder) => ({
         /* Controller: Activity */
-        activityGetList: builder.query<
+        activityGetInfinityList: builder.query<
             ApiTypes.ResponseActivityGetList,
             Maybe<ApiTypes.RequestActivityGetList>
         >({
@@ -45,6 +45,15 @@ export const API = createApi({
             query: (params) => `activity${encodeQueryData(params)}`,
             // Only have one cache entry because the arg always maps to one string
             serializeQueryArgs: ({ endpointName }) => endpointName
+        }),
+        activityGetList: builder.query<
+            ApiTypes.ResponseActivityGetList,
+            Maybe<ApiTypes.RequestActivityGetList>
+        >({
+            providesTags: (result, error, arg) => [
+                { id: arg?.place || arg?.author, type: 'Activity' }
+            ],
+            query: (params) => `activity${encodeQueryData(params)}`
         }),
 
         /* Controller: Address */

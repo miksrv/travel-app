@@ -6,6 +6,7 @@ import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useCallback, useEffect } from 'react'
@@ -22,6 +23,7 @@ import PhotoLightbox from '@/components/photo-lightbox'
 import { encodeQueryData } from '@/functions/helpers'
 
 const PHOTOS_PER_PAGE = 32
+const PAGE_TITLE = 'Фотографии интересных мест'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -89,15 +91,12 @@ const PhotosPage: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
+            <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={t('title', 'Фотографии интересных мест')}
+                    title={t('title', PAGE_TITLE)}
                     titleTypographyProps={{ component: 'h1' }}
-                    subheader={
-                        <Breadcrumbs
-                            currentPage={'Фотографии интересных мест'}
-                        />
-                    }
+                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
                     sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button

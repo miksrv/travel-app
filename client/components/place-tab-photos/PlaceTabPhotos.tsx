@@ -22,7 +22,6 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
 }) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
-    const [file, setFile] = useState<File | undefined>()
     const inputFile = useRef<HTMLInputElement>(null)
 
     const [
@@ -72,6 +71,7 @@ const PlaceTabPhotos: React.FC<PlaceTabPhotosProps> = ({
                         sx={{ mr: 0 }}
                         size={'medium'}
                         variant={'contained'}
+                        disabled={uploadLoading}
                         onClick={() => inputFile.current?.click()}
                     >
                         {'Загрузить'}

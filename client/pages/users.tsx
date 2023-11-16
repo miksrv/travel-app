@@ -8,6 +8,7 @@ import List from '@mui/material/List'
 import ListItem from '@mui/material/ListItem'
 import Stack from '@mui/material/Stack'
 import { NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import { useEffect } from 'react'
 import React, { useState } from 'react'
@@ -22,6 +23,7 @@ import { formatDate } from '@/functions/helpers'
 import { encodeQueryData } from '@/functions/helpers'
 
 const USERS_PER_PAGE = 30
+const PAGE_TITLE = 'Список путешественников'
 
 const UsersPage: NextPage = () => {
     const router = useRouter()
@@ -56,13 +58,12 @@ const UsersPage: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
+            <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={'Путешественники'}
+                    title={PAGE_TITLE}
                     titleTypographyProps={{ component: 'h1' }}
-                    subheader={
-                        <Breadcrumbs currentPage={'Список путешественников'} />
-                    }
+                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
                     sx={{ mb: -1, mt: -1 }}
                 />
             </Card>

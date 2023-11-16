@@ -31,8 +31,6 @@ $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
 $routes->options('photos/upload/(:alphanum)', 'Photos::upload');
-//$routes->options('photos/(:alphanum)', 'Photos');
-//$routes->options('photos/upload', 'Photos');
 
 $routes->get('countries', 'Countries::list');
 $routes->options('countries', 'Countries');

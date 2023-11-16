@@ -5,6 +5,7 @@ import CardHeader from '@mui/material/CardHeader'
 import { GetStaticProps, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
@@ -22,6 +23,7 @@ import PlacesList from '@/components/places-list'
 import { encodeQueryData } from '@/functions/helpers'
 
 const POST_PER_PAGE = 15
+const PAGE_TITLE = 'Интересные места'
 
 const PlacesPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
@@ -106,11 +108,12 @@ const PlacesPage: NextPage = () => {
 
     return (
         <PageLayout maxWidth={'lg'}>
+            <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={t('title', 'Интересные места')}
+                    title={t('title', PAGE_TITLE)}
                     titleTypographyProps={{ component: 'h1' }}
-                    subheader={<Breadcrumbs currentPage={'Интересные места'} />}
+                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
                     sx={{ mb: -1, mt: -1 }}
                     action={
                         <Button
