@@ -153,6 +153,20 @@ export const API = createApi({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
+        placesPatchItem: builder.mutation<
+            ApiTypes.ResponsePlacesPatchItem,
+            ApiTypes.RequestPlacesPatchItem
+        >({
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.id, type: 'Places' },
+                { type: 'Activity' }
+            ],
+            query: (data) => ({
+                body: data,
+                method: 'PATCH',
+                url: `places/${data.id}`
+            })
+        }),
 
         /* Controller: POI */
         poiGetItem: builder.mutation<any, string>({

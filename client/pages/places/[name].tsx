@@ -302,6 +302,7 @@ const PlaceItemPage: NextPage = () => {
 
                 {activeTab === 0 && (
                     <PlaceTabDescription
+                        id={placeData?.id}
                         title={placeData?.title}
                         address={placeData?.address}
                         content={placeData?.content}

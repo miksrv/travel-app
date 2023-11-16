@@ -58,6 +58,11 @@ export interface ResponseAuthLogin {
 /* Controller: Places */
 export interface ResponsePlacesGetItem extends Place {}
 
+export interface ResponsePlacesGetList {
+    items?: Place[]
+    count?: number
+}
+
 export interface RequestPlacesGetList {
     sort?: SortFields
     order?: SortOrder
@@ -77,9 +82,15 @@ export interface RequestPlacesGetList {
     excludePlaces?: string[]
 }
 
-export interface ResponsePlacesGetList {
-    items?: Place[]
-    count?: number
+export interface RequestPlacesPatchItem {
+    id: string
+    content?: string
+    title?: string
+    tags?: string[]
+}
+
+export interface ResponsePlacesPatchItem {
+    status: boolean
 }
 
 /* Controller: Photos */

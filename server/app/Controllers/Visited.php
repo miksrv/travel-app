@@ -29,23 +29,23 @@ class Visited extends ResourceController {
      * @throws ReflectionException
      */
     public function set(): ResponseInterface {
-        $inputJSON = $this->request->getJSON();
-        $session   = new Session();
+        $input   = $this->request->getJSON();
+        $session = new Session();
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
         }
 
-        if (empty($inputJSON) || !$inputJSON->place) {
+        if (empty($input) || !$input->place) {
             return $this->failValidationErrors('Point of Interest ID missing');
         }
 
         try {
-            $insertData   = ['user' => $session->userData->id, 'place' => $inputJSON->place];
+            $insertData   = ['user' => $session->userData->id, 'place' => $input->place];
             $visitedModel = new UsersVisitedPlacesModel();
             $visitedData  = $visitedModel->where($insertData)->first();
             $placesModel  = new PlacesModel();
-            $placesData   = $placesModel->find($inputJSON->place);
+            $placesData   = $placesModel->find($input->place);
 
             if ($visitedData) {
                 $visitedModel->delete($visitedData->id);

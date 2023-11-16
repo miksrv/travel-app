@@ -4,15 +4,17 @@ import CardHeader from '@mui/material/CardHeader'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect } from 'react'
 import Markdown from 'react-markdown'
 
+import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Address, Tag } from '@/api/types/Place'
 
 import ContentEditor from '@/components/content-editor'
 
 interface PlaceTabDescriptionProps {
+    id?: string
     title?: string
     address?: Address
     content?: string
@@ -20,14 +22,36 @@ interface PlaceTabDescriptionProps {
 }
 
 const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
-    const { title, address, content, tags } = props
+    const { id, title, address, content, tags } = props
+
+    const [savePlace, { isLoading, saveData }] =
+        API.usePlacesPatchItemMutation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
     const [editorMode, setEditorMode] = React.useState<boolean>(false)
+    const [editorContent, setEditorContent] = React.useState<string>()
 
     const handleSetEditorClick = () => {
         setEditorMode(!editorMode)
     }
+
+    const handleSaveEditorClick = async () => {
+        if (!id) {
+            return
+        }
+
+        await savePlace({
+            content: editorContent,
+            id
+        })
+    }
+
+    useEffect(() => {
+        if (saveData?.status && editorMode) {
+            setEditorMode(false)
+            setEditorContent(undefined)
+        }
+    }, [saveData])
 
     return (
         <>
@@ -90,22 +114,45 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
                     </Typography>
                 }
                 action={
-                    <Button
-                        sx={{ mr: 0 }}
-                        size={'medium'}
-                        variant={'contained'}
-                        disabled={!isAuth}
-                        onClick={handleSetEditorClick}
-                    >
-                        {'Редактировать'}
-                    </Button>
+                    isAuth && editorMode ? (
+                        <>
+                            <Button
+                                sx={{ mr: 1 }}
+                                size={'medium'}
+                                variant={'contained'}
+                                disabled={isLoading}
+                                onClick={handleSaveEditorClick}
+                            >
+                                {'Сохранить'}
+                            </Button>
+                            <Button
+                                sx={{ mr: 0 }}
+                                size={'medium'}
+                                variant={'outlined'}
+                                disabled={isLoading}
+                                onClick={handleSetEditorClick}
+                            >
+                                {'Отмена'}
+                            </Button>
+                        </>
+                    ) : (
+                        <Button
+                            sx={{ mr: 0 }}
+                            size={'medium'}
+                            variant={'contained'}
+                            disabled={!isAuth}
+                            onClick={handleSetEditorClick}
+                        >
+                            {'Редактировать'}
+                        </Button>
+                    )
                 }
             />
             <CardContent sx={{ mt: -3 }}>
                 {isAuth && editorMode ? (
                     <ContentEditor
                         markdown={content || ''}
-                        onChange={(markdown) => console.log(markdown)}
+                        onChange={setEditorContent}
                     />
                 ) : (
                     <Typography

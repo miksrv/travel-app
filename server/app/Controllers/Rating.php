@@ -68,27 +68,27 @@ class Rating extends ResourceController {
      */
     public function set(): ResponseInterface {
         try {
-            $inputJSON = $this->request->getJSON();
+            $input = $this->request->getJSON();
 
-            if (empty($inputJSON) || !$inputJSON->place || !$inputJSON->score) {
+            if (empty($input) || !$input->place || !$input->score) {
                 return $this->failValidationErrors();
             }
 
             $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
-            $placesData  = $placesModel->find($inputJSON->place);
+            $placesData  = $placesModel->find($input->place);
 
             if (!$placesData) {
                 return $this->failNotFound();
             }
 
-            $newScore = (int) $inputJSON->score < 1
+            $newScore = (int) $input->score < 1
                 ? 1
-                : min((int)$inputJSON->score, 5);
+                : min((int)$input->score, 5);
 
             $insertRating = [
-                'place'   => $inputJSON->place,
+                'place'   => $input->place,
                 'author'  => null,
                 'session' => $session->id,
                 'value'   => $newScore,

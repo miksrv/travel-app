@@ -40,23 +40,23 @@ class Bookmarks extends ResourceController {
      * @throws ReflectionException
      */
     public function set(): ResponseInterface {
-        $inputJSON = $this->request->getJSON();
-        $session   = new Session();
+        $input   = $this->request->getJSON();
+        $session = new Session();
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
         }
 
-        if (empty($inputJSON) || !$inputJSON->place) {
+        if (empty($input) || !$input->place) {
             return $this->failValidationErrors('Point of Interest ID missing');
         }
 
         try {
-            $bookmarkData   = ['user' => $session->userData->id, 'place' => $inputJSON->place];
+            $bookmarkData   = ['user' => $session->userData->id, 'place' => $input->place];
             $bookmarksModel = new UsersBookmarksModel();
             $bookmarksData  = $bookmarksModel->where($bookmarkData)->first();
             $placesModel    = new PlacesModel();
-            $placesData     = $placesModel->find($inputJSON->place);
+            $placesData     = $placesModel->find($input->place);
 
             if ($bookmarksData) {
                 $bookmarksModel->delete($bookmarksData->id);

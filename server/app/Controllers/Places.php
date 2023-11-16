@@ -1,11 +1,14 @@
 <?php namespace App\Controllers;
 
+use App\Entities\Place;
+use App\Entities\TranslationPlace;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
+use App\Models\TranslationsPlacesModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -306,6 +309,50 @@ class Places extends ResourceController {
 
             return $this->failNotFound();
         }
+    }
+
+    /**
+     * @param $id
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function update($id = null): ResponseInterface {
+        $session = new Session();
+        $input   = $this->request->getJSON();
+
+        if (!$session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $placeTranslate = new PlaceTranslation('ru');
+        $placeTranslate->translate([$id]);
+
+        if (!$placeTranslate->title($id)) {
+            return $this->failValidationErrors('There is no point with this ID');
+        }
+
+        if (!$input->content) {
+            return $this->failValidationErrors('Cant save empty content');
+        }
+
+        $placesModel = new PlacesModel();
+        $langModel   = new TranslationsPlacesModel();
+        $translation = new TranslationPlace();
+
+        $translation->place    = $id;
+        $translation->language = 'ru';
+        $translation->author   = $session->userData->id;
+        $translation->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
+        $translation->content  = strip_tags(html_entity_decode($input->content));
+
+        $langModel->insert($translation);
+
+        $place = new Place();
+        $place->updated_at = time();
+
+        $placesModel->update($id, $place);
+
+        return $this->respond((object) ['status' => true]);
     }
 
     /**
