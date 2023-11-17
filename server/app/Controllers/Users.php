@@ -17,6 +17,7 @@ class Users extends ResourceController {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
+        $userLevels = new UserLevels();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
             ->select('id, name, avatar, created_at, level, experience, reputation')
@@ -33,14 +34,11 @@ class Users extends ResourceController {
         }
 
         foreach ($usersData as $item) {
-            $userLevels = new UserLevels($item);
-            $userLevels->getUserLevel();
-
             $result[] = (object) [
                 'id'      => $item->id,
                 'name'    => $item->name,
                 'avatar'  => $item->avatar,
-                'level'   => $userLevels->data,
+                'level'   => $userLevels->getLevelData($item),
                 'created' => $item->created_at,
                 'reputation' => $item->reputation,
             ];

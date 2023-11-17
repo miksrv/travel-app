@@ -19,21 +19,11 @@ class UserLevels {
     public int $level;
     public object $statistic;
 
-    /**
-     * @param User $user
-     */
-    public function __construct(User $user) {
-        $this->user       = $user;
-        $this->level      = $user->level;
-        $this->experience = $user->experience;
-        $this->statistic  = (object) [
-            'places' => 0,
-            'photos' => 0,
-            'rating' => 0,
-            'edits'  => 0,
-        ];
+    protected array $userLevels;
 
-        return $this;
+    public function __construct() {
+        $userLevelsModel  = new UsersLevelsModel();
+        $this->userLevels = $userLevelsModel->orderBy('experience')->findAll();
     }
 
     /**
@@ -42,81 +32,110 @@ class UserLevels {
      * @return $this
      * @throws ReflectionException
      */
-    public function calculate(): static {
+    public function calculate(User $user): static {
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $ratingModel = new RatingModel();
         $translModel = new TranslationsPlacesModel();
 
-        $this->statistic->places = (int) $placesModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $this->statistic->photos = (int) $photosModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $this->statistic->rating = (int) $ratingModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $this->statistic->edits  = (int) $translModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $statistic = (object) [
+            'places' => 0,
+            'photos' => 0,
+            'rating' => 0,
+            'edits'  => 0,
+        ];
 
-        $this->statistic->edits = $this->statistic->edits > $this->statistic->places
-            ? ($this->statistic->edits - $this->statistic->places)
-            : $this->statistic->edits;
+        // #TODO вместо выполнения кучи запросов, будем делать всего один запрос на получение данных по активности пользователя
+        $statistic->places = (int) $placesModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $statistic->photos = (int) $photosModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $statistic->rating = (int) $ratingModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $statistic->edits  = (int) $translModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+
+        $statistic->edits = $statistic->edits > $statistic->places
+            ? ($statistic->edits - $statistic->places)
+            : $statistic->edits;
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;
-        $experience += $this->statistic->places * 15;
-        $experience += $this->statistic->photos * 10;
-        $experience += $this->statistic->rating * 1;
-        $experience += $this->statistic->edits * 5;
+        $experience += $statistic->places * 15;
+        $experience += $statistic->photos * 10;
+        $experience += $statistic->rating * 1;
+        $experience += $statistic->edits * 5;
 
-        $this->experience = $experience;
+        // Let's see what level the user should actually have
+        $calcLevel = $this->_findUserLevel($experience);
 
-        $this->getUserLevel();
-
-        if ($this->experience !== $this->user->experience || $this->level !== $this->user->level) {
+        // If we consider that the user’s actual experience or level does not correspond to that obtained
+        // as a result of the calculation, then we will update the user data in the database
+        if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
             $userModel = new UsersModel();
 
             $userModel->update($this->user->id, [
                 'level'      => $this->level,
-                'experience' => $this->experience
+                'experience' => $experience
             ]);
 
-            // if ($this->level !== $this->user->level) {
+            // if ($calcLevel->level !== $user->level) {
             // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
             // }
         }
 
         return $this;
     }
+    
+    /**
+     * We simply find the current user level in the database and return it, no calculations required
+     * @param User $user
+     * @return UserLevel|null
+     */
+    public function getLevelData(User $user): ?UserLevel {
+        $levelIndex = array_search($user->level, array_column($this->userLevels, 'level'));
+
+        if ($levelIndex === false) {
+            return null;
+        }
+
+        if (isset($this->userLevels[$levelIndex + 1])) {
+            $this->userLevels[$levelIndex]->nextLevel = $this->userLevels[$levelIndex + 1]->experience;
+        }
+
+        $this->userLevels[$levelIndex]->experience = $user->experience;
+
+        unset($this->userLevels[$levelIndex]->id);
+
+        return $this->userLevels[$levelIndex];
+    }
 
     /**
-     * @return void
+     * We find the current level by the amount of user experience
+     * @param int $experience
+     * @return UserLevel
      */
-    public function getUserLevel(): void {
-        $userLevelsModel = new UsersLevelsModel();
-        $allUserLevels = $userLevelsModel->orderBy('experience')->findAll();
+    protected function _findUserLevel(int $experience): UserLevel {
+        // If the experience is zero, then we immediately return the very first level (they are sorted by experience)
+        if ($experience === 0) {
+            return $this->userLevels[0];
+        }
 
-        // CALCULATE USER LEVEL
-        $findLevel = null;
-
-        foreach ($allUserLevels as $key => $level) {
+        foreach ($this->userLevels as $key => $level) {
             $nextKey = $key + 1;
 
             if (
-                $nextKey !== count($allUserLevels) &&
+                $nextKey !== count($this->userLevels) &&
                 $this->experience >= $level->experience &&
-                $this->experience < $allUserLevels[$nextKey]->experience
+                $this->experience < $this->userLevels[$nextKey]->experience
             ) {
-                $level->nextLevel = $allUserLevels[$nextKey]->experience;
-                $findLevel        = $level;
-                break;
+                return $level;
             }
 
-            if ($nextKey === count($allUserLevels)) {
-                $level->nextLevel = null;
-                $findLevel        = $level;
-                break;
+            // Reached the last level
+            if ($nextKey === count($this->userLevels)) {
+                return $level;
             }
         }
 
-        $this->data  = $findLevel;
-        $this->level = $findLevel->level ?? 0;
-
-        unset($this->data->id);
+        // In all other cases, return the first level
+        return $this->userLevels[0];
     }
+
 }

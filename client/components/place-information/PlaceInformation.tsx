@@ -178,10 +178,16 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                     />
                                 ) : (
                                     <Box sx={{ mt: '-2px !important' }}>
-                                        {`${convertDMS(
-                                            place?.latitude || 0,
-                                            place?.longitude || 0
-                                        )}`}{' '}
+                                        <Link
+                                            color={'inherit'}
+                                            target={'_blank'}
+                                            href={`geo:${place?.latitude},${place?.longitude}`}
+                                        >
+                                            {`${convertDMS(
+                                                place?.latitude || 0,
+                                                place?.longitude || 0
+                                            )}`}
+                                        </Link>{' '}
                                         <sup>
                                             <Link
                                                 color={'inherit'}
