@@ -15,7 +15,6 @@ class UserLevels {
     public User $user;
     public UserLevel $data;
 
-    public int $experience;
     public int $level;
     public object $statistic;
 
@@ -29,6 +28,9 @@ class UserLevels {
     /**
      * The method starts recalculating the user's experience and returns experience and level.
      * If there is a discrepancy between the current experience or level - updates the user in the database.
+     *
+     * The method is used when changing the gradation of levels (when you need to recalculate the levels of all users)
+     * Or when the user adds/edits material
      * @return $this
      * @throws ReflectionException
      */
@@ -70,8 +72,8 @@ class UserLevels {
         if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
             $userModel = new UsersModel();
 
-            $userModel->update($this->user->id, [
-                'level'      => $this->level,
+            $userModel->update($user->id, [
+                'level'      => $calcLevel->level,
                 'experience' => $experience
             ]);
 
@@ -122,8 +124,8 @@ class UserLevels {
 
             if (
                 $nextKey !== count($this->userLevels) &&
-                $this->experience >= $level->experience &&
-                $this->experience < $this->userLevels[$nextKey]->experience
+                $experience >= $level->experience &&
+                $experience < $this->userLevels[$nextKey]->experience
             ) {
                 return $level;
             }

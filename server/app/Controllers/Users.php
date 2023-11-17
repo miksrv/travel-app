@@ -53,9 +53,9 @@ class Users extends ResourceController {
     /**
      * @param $id
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
+        $userLevels   = new UserLevels();
         $usersModel   = new UsersModel();
         $sessionModel = new SessionsModel();
         $sessionData  = $sessionModel->where('user_id', $id)->first();
@@ -81,9 +81,6 @@ class Users extends ResourceController {
             $ratingValue = $ratingDataPlus->value - $ratingDataMinus->value;
         }
 
-        $userLevels = new UserLevels($usersData);
-        $userLevels->calculate();
-
         if (!$usersData) {
             return $this->failNotFound();
         }
@@ -92,8 +89,9 @@ class Users extends ResourceController {
             'id'         => $usersData->id,
             'name'       => $usersData->name,
             'avatar'     => $usersData->avatar,
-            'level'      => $userLevels->data,
-            'statistic'  => $userLevels->statistic,
+            'level'      => $userLevels->getLevelData($usersData),
+            // #TODO Статистику нужно считать по активности пользователя, а не при расчете уровеня
+            // 'statistic'  => $userLevels->statistic,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,
