@@ -98,6 +98,25 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({
                                 [ActivityTypes.Rating]: 'Поставил(а) оценку'
                             }[item.type]
                         }
+                        {item.type === ActivityTypes.Place &&
+                        item.place?.difference ? (
+                            <>
+                                {' ('}
+                                <span
+                                    className={
+                                        item.place.difference > 0
+                                            ? 'green'
+                                            : 'red'
+                                    }
+                                >
+                                    {item.place.difference > 0 && '+'}
+                                    {item.place.difference}
+                                </span>
+                                {')'}
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </>
                 }
             />

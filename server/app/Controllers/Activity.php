@@ -136,10 +136,11 @@ class Activity extends ResourceController {
                 $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
 
                 $currentGroup->place = (object) [
-                    'id'       => $item->place,
-                    'title'    => $placeTranslations->get($item->place, 'title', $item->created_at),
-                    'content'  => $placeTranslations->get($item->place, 'content', $item->created_at),
-                    'category' => (object) [
+                    'id'         => $item->place,
+                    'title'      => $placeTranslations->get($item->place, 'title', $item->created_at),
+                    'content'    => $placeTranslations->get($item->place, 'content', $item->created_at),
+                    'difference' => (int) $placeTranslations->get($item->place, 'delta', $item->created_at),
+                    'category'   => (object) [
                         'name'  => $categoriesData[$findCategory]->name,
                         'title' => $categoriesData[$findCategory]->title,
                     ]

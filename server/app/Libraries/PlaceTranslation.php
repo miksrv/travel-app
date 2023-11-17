@@ -45,7 +45,7 @@ class PlaceTranslation {
         $this->trim     = $trim;
 
         $this->model->select(
-            'id, place, title, author, created_at, updated_at,' .
+            'id, place, title, author, delta, created_at, updated_at,' .
             ($this->trim > 0 ? 'SUBSTRING(translations_places.content, 1, ' . $this->trim . ') as content' : 'translations_places.content')
         );
     }
