@@ -17,6 +17,7 @@ import { API } from '@/api/api'
 
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
@@ -80,16 +81,26 @@ const UsersPage: NextPage = () => {
                                     }
                                 >
                                     <Stack
-                                        direction={'row'}
                                         spacing={2}
+                                        direction={'row'}
+                                        alignItems={'center'}
                                     >
-                                        <Box sx={{ minWidth: '230px' }}>
+                                        <Box sx={{ minWidth: '200px' }}>
                                             <UserAvatar
                                                 user={user}
                                                 size={'medium'}
                                                 text={formatDate(
                                                     user?.created?.date
                                                 )}
+                                            />
+                                        </Box>
+                                        <Box
+                                            sx={{
+                                                minWidth: '60px'
+                                            }}
+                                        >
+                                            <Reputation
+                                                value={user.reputation}
                                             />
                                         </Box>
                                         <div>
@@ -113,7 +124,7 @@ const UsersPage: NextPage = () => {
                     </CardContent>
                 </Card>
             ) : (
-                <div>{'Нет фотографий'}</div>
+                <div>{'Нет пользователей'}</div>
             )}
 
             <Pagination

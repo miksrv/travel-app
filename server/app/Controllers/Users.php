@@ -19,7 +19,7 @@ class Users extends ResourceController {
 
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select('id, name, avatar, created_at, level, experience')
+            ->select('id, name, avatar, created_at, level, experience, reputation')
             ->orderBy('reputation', 'DESC')
             ->findAll($limit, $offset);
 
@@ -41,7 +41,8 @@ class Users extends ResourceController {
                 'name'    => $item->name,
                 'avatar'  => $item->avatar,
                 'level'   => $userLevels->data,
-                'created' => $item->created_at
+                'created' => $item->created_at,
+                'reputation' => $item->reputation,
             ];
         }
 
