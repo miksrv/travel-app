@@ -11,14 +11,7 @@ use App\Models\UsersModel;
 use ReflectionException;
 
 class UserLevels {
-
-    public User $user;
-    public UserLevel $data;
-
-    public int $level;
-    public object $statistic;
-
-    protected array $userLevels;
+    private array $userLevels;
 
     public function __construct() {
         $userLevelsModel  = new UsersLevelsModel();
@@ -102,8 +95,6 @@ class UserLevels {
         }
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
-
-        unset($this->userLevels[$levelIndex]->id);
 
         return $this->userLevels[$levelIndex];
     }

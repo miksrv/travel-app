@@ -3,7 +3,7 @@
 use App\Entities\UserLevel;
 use CodeIgniter\Model;
 
-class UsersLevelsModel extends Model {
+class UsersLevelsModel extends MyBaseModel {
     protected $table      = 'users_levels';
     protected $primaryKey = 'id';
 
@@ -29,13 +29,13 @@ class UsersLevelsModel extends Model {
     protected $cleanValidationRules = true;
 
     // Callbacks
-    protected $allowCallbacks = false;
+    protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 }

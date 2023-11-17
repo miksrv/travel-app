@@ -7,7 +7,6 @@ use App\Models\SessionsModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-use ReflectionException;
 
 class Users extends ResourceController {
     /**
