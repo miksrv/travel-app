@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\Session;
+use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
@@ -113,25 +114,26 @@ class Rating extends ResourceController {
             $placesModel->update($placesData->id, ['rating' => $newPlaceVal]);
             $ratingModel->insert($insertRating);
 
+            /* ACTIVITY */
+            $userActivity = new UserActivity();
+            $userActivity->rating(
+                $session->isAuth ? $session->userData->id : null,
+                $placesData->id,
+                $ratingModel->getInsertID()
+            );
+
             /* NOTIFICATIONS */
             $userNotify = new UserNotify();
 
             // If the user who sets the rating is authorized, we will send him a notification about the increase in experience
             if ($session->isAuth && $session->userData->id) {
-                $userNotify->add($session->userData->id, $placesData->id, 'experience');
+                $userNotify->experience($session->userData->id, $placesData->id);
             }
 
             // If a user gives a rating to a material that is not his own, we will send a notification to the author of the material about the change in the rating of his place
             if ($placesData->author !== $session->userData->id) {
-                $userNotify->add($placesData->author, $placesData->id, 'rating');
+                $userNotify->rating($placesData->author, $placesData->id);
             }
-
-            $activityModel = new UsersActivityModel();
-            $activityModel->insert([
-                'type'   => 'rating',
-                'place'  => $placesData->id,
-                'rating' => $ratingModel->getInsertID()
-            ]);
 
             return $this->respond((object) ['rating' => $newPlaceVal]);
         } catch (Exception $e) {
