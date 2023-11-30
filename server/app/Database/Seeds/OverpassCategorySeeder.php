@@ -12,21 +12,21 @@ class OverpassCategorySeeder extends Seeder
         ['historic', 'archaeological_site', 'archeology', 'Археология', 'archeology'],
         ['historic', 'battlefield', 'battlefield', 'Место битвы', 'battlefield'],
         ['historic', 'bomb_crater', 'military_training', 'Воронка от бомбы', 'battlefield'],
-        ['historic', 'boundary_stone', null, 'Геодезический маркер'],
+        ['historic', 'boundary_stone', null, 'Геодезический маркер', null],
         ['historic', 'building', 'manor', 'Историческое здание', 'manor'],
         ['historic', 'cannon', 'military_equipment', 'Пушка', 'transport'],
         ['historic', 'castle', 'castle', 'Замок', 'castle'],
-        ['historic', 'charcoal_pile', null, 'Древесный уголь'],
+        ['historic', 'charcoal_pile', null, 'Древесный уголь', ''],
         ['historic', 'church', 'religious', 'Церковь', 'religious'],
         ['historic', 'city_gate', 'castle', 'Городские ворота', 'manor'],
         ['historic', 'farm', 'farm', 'Ферма', 'manor'],
         ['historic', 'fort', 'fort', 'Военный форт', 'fort'],
-        ['historic', 'gallows', null, 'Остатки виселицы'],
-        ['historic', 'highwater_mark', null, 'Маркер наводнения'],
+        ['historic', 'gallows', null, 'Остатки виселицы', null],
+        ['historic', 'highwater_mark', null, 'Маркер наводнения', null],
         ['historic', 'locomotive', 'railroad_transport', 'Локомотив', 'transport'],
         ['historic', 'manor', 'manor', 'Поместье', 'manor'],
         ['historic', 'memorial', 'memorial', 'Памятник', 'memorial'],
-        ['historic', 'milestone', null, 'Указатель расстояния'],
+        ['historic', 'milestone', null, 'Указатель расстояния', null],
         ['historic', 'monastery', 'religious', 'Монастырь', 'religious'],
         ['historic', 'monument', 'monument', 'Монумент', 'monument'],
         ['historic', 'ruins', 'ruins', 'Руины', 'abandoned'],
@@ -111,11 +111,11 @@ class OverpassCategorySeeder extends Seeder
 
         foreach ($this->insertData as $value) {
             $tempInsertData[] = [
-                'category'    => $value[0],
-                'name'        => $value[1],
-                'subcategory' => $value[2],
-                'title'       => $value[3],
-                'category_map'=> $value[4],
+                'category'     => $value[0],
+                'name'         => $value[1],
+                'subcategory'  => $value[2],
+                'title'        => $value[3],
+                'category_map' => $value[4],
             ];
         }
 
