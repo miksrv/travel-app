@@ -19,12 +19,12 @@ class AddPhotos extends Migration {
                 'type'       => 'DECIMAL(16,12)',
                 'null'       => false,
             ],
-            'place' => [
+            'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
             ],
-            'author' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
@@ -69,8 +69,8 @@ class AddPhotos extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('photos');
     }
 

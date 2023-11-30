@@ -13,43 +13,38 @@ class AddUsersActivity extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'user' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => true,
-            ],
             'type' => [
                 'type'       => 'ENUM("photo", "place", "rating")',
                 'null'       => false,
             ],
-            'photo' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
             ],
-            'place' => [
+            'photo_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
             ],
-            'rating' => [
+            'place_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true,
+            ],
+            'rating_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
             ],
             'created_at DATETIME default current_timestamp',
-            'updated_at DATETIME default current_timestamp',
-            'deleted_at' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ]
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('user', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('photo', 'photos', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('rating', 'rating', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('photo_id', 'photos', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('rating_id', 'rating', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users_activity');
     }
 

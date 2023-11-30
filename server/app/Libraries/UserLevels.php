@@ -41,10 +41,10 @@ class UserLevels {
         ];
 
         // #TODO вместо выполнения кучи запросов, будем делать всего один запрос на получение данных по активности пользователя
-        $statistic->places = (int) $placesModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $statistic->photos = (int) $photosModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $statistic->rating = (int) $ratingModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
-        $statistic->edits  = (int) $translModel->selectCount('id')->where('author', $this->user->id)->first()->id ?? 0;
+        $statistic->places = (int) $placesModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
+        $statistic->photos = (int) $photosModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
+        $statistic->rating = (int) $ratingModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
+        $statistic->edits  = (int) $translModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
 
         $statistic->edits = $statistic->edits > $statistic->places
             ? ($statistic->edits - $statistic->places)

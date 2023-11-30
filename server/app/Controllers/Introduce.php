@@ -3,6 +3,7 @@
 use App\Libraries\Geocoder;
 use App\Libraries\OverpassAPI;
 use App\Libraries\Session;
+use App\Libraries\UserActivity;
 use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
 use App\Models\TranslationsPlacesModel;
@@ -103,17 +104,17 @@ class Introduce extends ResourceController {
 
             $translationsPlacesModel = new TranslationsPlacesModel();
             $translation = new \App\Entities\TranslationPlace();
-            $translation->place      = $newPlaceId;
+            $translation->place_id   = $newPlaceId;
             $translation->language   = 'ru';
             $translation->title      = $newPoiName;
             $translation->content    = '';
             $translationsPlacesModel->insert($translation);
 
             // Make user activity
-            $activity = new \App\Entities\UserActivity();
-            $activity->type       = 'place';
-            $activity->place      = $newPlaceId;
-            $activityModel->insert($activity);
+//            $activity = new \App\Entities\UserActivity();
+//            $activity->type       = 'place';
+//            $activity->place_id   = $newPlaceId;
+//            $activityModel->insert($activity);
 
             $pointAdded[] = $newPoiName;
         }

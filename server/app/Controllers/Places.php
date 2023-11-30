@@ -35,7 +35,7 @@ class Places extends ResourceController {
         // then we find all the bookmarks of this user, and then extract all the IDs of places in the bookmarks
         if ($bookmarksUser) {
             $bookmarksModel = new UsersBookmarksModel();
-            $bookmarksData  = $bookmarksModel->select('place')->where('user', $bookmarksUser)->findAll();
+            $bookmarksData  = $bookmarksModel->select('place_id')->where('user_id', $bookmarksUser)->findAll();
 
             if ($bookmarksData) {
                 foreach ($bookmarksData as $bookmark) {
@@ -101,7 +101,7 @@ class Places extends ResourceController {
         // Find all photos for all places
         $photosData = $placesIds
             ? $photosModel
-                ->havingIn('place', $placesIds)
+                ->havingIn('place_id', $placesIds)
                 ->orderBy('order', 'DESC')
                 ->findAll()
             : $placesIds;
@@ -114,8 +114,8 @@ class Places extends ResourceController {
 
         // Map photos and places
         foreach ($placesList as $place) {
-            $photoId = array_search($place->id, array_column($photosData, 'place'));
-            $counts  = array_count_values(array_column($photosData, 'place'))[$place->id] ?? 0;
+            $photoId = array_search($place->id, array_column($photosData, 'place_id'));
+            $counts  = array_count_values(array_column($photosData, 'place_id'))[$place->id] ?? 0;
 
             $return  = [
                 'id'        => $place->id,
@@ -200,22 +200,22 @@ class Places extends ResourceController {
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
                 ->join('users', 'photos.author = users.id', 'left')
                 ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
-                ->where(['place' => $placeData->id])
+                ->where(['place_id' => $placeData->id])
                 ->orderBy('photos.order', 'DESC')
                 ->findAll();
 
             // Collect tags
             $placeData->tags = $placesTagsModel
                 ->select('tags.id, tags.title, tags.counter')
-                ->join('tags', 'tags.id = places_tags.tag')
-                ->where(['place' => $placeData->id])
+                ->join('tags', 'tags.id = places_tags.tag_id')
+                ->where(['place_id' => $placeData->id])
                 ->findAll();
 
             // Has the user already voted for this material or not?
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel
                 ->select('id')
-                ->where(['place' => $placeData->id, 'session' => $session->id])
+                ->where(['place_id' => $placeData->id, 'session_id' => $session->id])
                 ->first();
 
             $response = [

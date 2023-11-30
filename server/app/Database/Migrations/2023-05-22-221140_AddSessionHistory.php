@@ -13,7 +13,7 @@ class AddSessionHistory extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'session' => [
+            'session_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 32,
                 'null'       => false,
@@ -30,7 +30,7 @@ class AddSessionHistory extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('session', 'sessions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('sessions_history');
     }
 

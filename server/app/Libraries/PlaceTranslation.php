@@ -45,7 +45,7 @@ class PlaceTranslation {
         $this->trim     = $trim;
 
         $this->model->select(
-            'id, place, title, author, delta, created_at, updated_at,' .
+            'id, place_id, title, user_id, delta, created_at, updated_at,' .
             ($this->trim > 0 ? 'SUBSTRING(translations_places.content, 1, ' . $this->trim . ') as content' : 'translations_places.content')
         );
     }
@@ -88,7 +88,7 @@ class PlaceTranslation {
 
         // Here we get all edition versions for all places by their ID
         $data = $this->model
-            ->whereIn('place', $placeIds)
+            ->whereIn('place_id', $placeIds)
             ->orderBy('created_at', 'DESC')
             ->findAll();
 
@@ -180,18 +180,18 @@ class PlaceTranslation {
             // and if the date of the added translation is greater than the date of the current searched region -
             // we add such a translation to the history and move on.
             if (
-                isset($this->translate[$item->place]) &&
-                strtotime($this->translate[$item->place]->created_at) > strtotime($item->created_at)
+                isset($this->translate[$item->place_id]) &&
+                strtotime($this->translate[$item->place_id]->created_at) > strtotime($item->created_at)
             ) {
                 if ($this->keepVersions) {
-                    $this->versions[$item->place][] = $item;
+                    $this->versions[$item->place_id][] = $item;
                 }
 
                 continue;
             }
 
-            $this->placeIds[] = $item->place;
-            $this->translate[$item->place] = $item;
+            $this->placeIds[] = $item->place_id;
+            $this->translate[$item->place_id] = $item;
         }
     }
 }

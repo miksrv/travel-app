@@ -37,20 +37,20 @@ class Activity extends ResourceController {
             ->select(
                 'users_activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
                 users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
-            ->join('places', 'users_activity.place = places.id', 'left')
-            ->join('photos', 'users_activity.photo = photos.id', 'left')
-            ->join('users', 'users_activity.user = users.id', 'left');
+            ->join('places', 'users_activity.place_id = places.id', 'left')
+            ->join('photos', 'users_activity.photo_id = photos.id', 'left')
+            ->join('users', 'users_activity.user_id = users.id', 'left');
 
         if ($lastDate) {
             $activityModel->where('users_activity.created_at < ', $lastDate);
         }
 
         if ($author) {
-            $activityModel->where('users_activity.user', $author);
+            $activityModel->where('users_activity.user_id', $author);
         }
 
         if ($place) {
-            $activityModel->where('users_activity.place', $place);
+            $activityModel->where('users_activity.place_id', $place);
         }
 
         $activityData = $activityModel

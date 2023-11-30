@@ -1,25 +1,18 @@
 <?php namespace App\Models;
 
-use App\Entities\Tag;
+use App\Entities\UserVisitedPlace;
 
 class UsersVisitedPlacesModel extends MyBaseModel {
     protected $table            = 'users_visited_places';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
-    protected $returnType       = Tag::class;
+    protected $returnType       = UserVisitedPlace::class;
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
-        'user',
-        'place'
+        'user_id',
+        'place_id'
     ];
-
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];

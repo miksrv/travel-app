@@ -65,7 +65,7 @@ class Migrate extends ResourceController {
         foreach ($migratePlace as $item) {
             if ($translationsPlacesModel
                 ->where('title', strip_tags(html_entity_decode($item->item_title)))
-                ->join('places', 'translations_places.place = places.id')
+                ->join('places', 'translations_places.place_id = places.id')
                 ->first()
             ) {
                 continue;
@@ -94,7 +94,7 @@ class Migrate extends ResourceController {
 
             $place->latitude         = $item->item_latitude;
             $place->longitude        = $item->item_longitude;
-            $place->author           = $placeAuthor;
+            $place->user_id          = $placeAuthor;
             $place->rating           = $ratingSum === 0 ? null : $ratingSum;
             $place->views            = $item->item_count_views;
             $place->category         = $mapCategories[$item->item_category];
@@ -123,9 +123,9 @@ class Migrate extends ResourceController {
 
             // Make translation for current version
             $translation = new \App\Entities\TranslationPlace();
-            $translation->place      = $newPlaceId;
+            $translation->place_id   = $newPlaceId;
             $translation->language   = 'ru';
-            $translation->author     = $placeAuthor;
+            $translation->user_id    = $placeAuthor;
             $translation->title      = $placeTitle;
             $translation->content    = $placeContent;
             $translation->created_at = $placeVersionDate;
@@ -133,9 +133,9 @@ class Migrate extends ResourceController {
 
             // Make user activity
             $activity = new \App\Entities\UserActivity();
-            $activity->user       = $placeAuthor;
             $activity->type       = 'place';
-            $activity->place      = $newPlaceId;
+            $activity->user_id    = $placeAuthor;
+            $activity->place_id   = $newPlaceId;
             $activity->created_at = $placeVersionDate;
             $activityModel->insert($activity);
 
@@ -152,9 +152,9 @@ class Migrate extends ResourceController {
 
                     $historyUser = $this->_migrate_user($placeVersionItem->item_author);
                     $translation = new \App\Entities\TranslationPlace();
-                    $translation->place      = $newPlaceId;
+                    $translation->place_id   = $newPlaceId;
                     $translation->language   = 'ru';
-                    $translation->author     = $historyUser;
+                    $translation->user_id    = $historyUser;
                     $translation->title      = $placeTitle;
                     $translation->content    = $versionContent;
                     $translation->delta      = $versionDelta;
@@ -162,9 +162,9 @@ class Migrate extends ResourceController {
                     $translationsPlacesModel->insert($translation);
 
                     $activity = new \App\Entities\UserActivity();
-                    $activity->user       = $historyUser;
                     $activity->type       = 'place';
-                    $activity->place      = $newPlaceId;
+                    $activity->user_id    = $historyUser;
+                    $activity->place_id   = $newPlaceId;
                     $activity->created_at = $placeVersionItem->item_datestamp;
                     $activityModel->insert($activity);
                 }
@@ -181,18 +181,18 @@ class Migrate extends ResourceController {
                     $ratingAuthor = isset($ratingData['users'][$index]) ? $this->_migrate_user($item->item_author) : null;
 
                     $rating = new \App\Entities\Rating();
-                    $rating->place      = $newPlaceId;
-                    $rating->author     = $ratingAuthor;
+                    $rating->place_id   = $newPlaceId;
+                    $rating->user_id    = $ratingAuthor;
                     $rating->value      = (int) $score;
                     $rating->created_at = $randomDate;
 
                     $ratingModel->insert($rating);
 
                     $activity = new \App\Entities\UserActivity();
-                    $activity->user       = $ratingAuthor ?? null;
                     $activity->type       = 'rating';
-                    $activity->place      = $newPlaceId;
-                    $activity->rating     = $ratingModel->getInsertID();
+                    $activity->user_id    = $ratingAuthor ?? null;
+                    $activity->place_id   = $newPlaceId;
+                    $activity->rating_id  = $ratingModel->getInsertID();
                     $activity->created_at = $randomDate;
 
                     $activityModel->insert($activity);
@@ -246,8 +246,8 @@ class Migrate extends ResourceController {
                             $photo = new \App\Entities\Photo();
                             $photo->latitude    = $currentPhoto->item_latitude;
                             $photo->longitude   = $currentPhoto->item_longitude;
-                            $photo->place       = $newPlaceId;
-                            $photo->author      = $photoAuthor;
+                            $photo->place_id    = $newPlaceId;
+                            $photo->user_id     = $photoAuthor;
                             $photo->filename    = $currentPhoto->item_filename;
                             $photo->extension   = $currentPhoto->item_ext;
                             $photo->filesize    = $file->getSize();
@@ -259,16 +259,16 @@ class Migrate extends ResourceController {
 
                             // Make translation
                             $translationsPhotosModel->insert([
-                                'photo'    => $photosModel->getInsertID(),
+                                'photo_id' => $photosModel->getInsertID(),
                                 'language' => 'ru',
                                 'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
                             ]);
 
                             $activity = new \App\Entities\UserActivity();
-                            $activity->user       = $placeAuthor;
                             $activity->type       = 'photo';
-                            $activity->place      = $newPlaceId;
-                            $activity->photo      = $photosModel->getInsertID();
+                            $activity->user_id    = $placeAuthor;
+                            $activity->place_id   = $newPlaceId;
+                            $activity->photo_id   = $photosModel->getInsertID();
                             $activity->created_at = $photo->created_at;
 
                             // Make user activity
@@ -313,15 +313,15 @@ class Migrate extends ResourceController {
             ]);
 
             $placesTagsModel->insert([
-                'tag'   => $tagsModel->getInsertID(),
-                'place' => $placeId
+                'tag_id'   => $tagsModel->getInsertID(),
+                'place_id' => $placeId
             ]);
 
         } else {
             $tagsModel->update($tagData->id, ['counter' => $tagData->counter + 1]);
             $placesTagsModel->insert([
-                'tag'   => $tagData->id,
-                'place' => $placeId
+                'tag_id'   => $tagData->id,
+                'place_id' => $placeId
             ]);
         }
     }

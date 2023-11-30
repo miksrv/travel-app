@@ -13,12 +13,12 @@ class AddUsersBookmarks extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'user' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true
             ],
-            'place' => [
+            'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true
@@ -26,8 +26,8 @@ class AddUsersBookmarks extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('user', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users_bookmarks');
     }
 

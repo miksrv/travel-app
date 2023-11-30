@@ -13,12 +13,12 @@ class AddPlacesTags extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'tag' => [
+            'tag_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => false,
             ],
-            'place' => [
+            'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => false,
@@ -26,8 +26,8 @@ class AddPlacesTags extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('tag', 'tags', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('tag_id', 'tags', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('places_tags');
     }
 

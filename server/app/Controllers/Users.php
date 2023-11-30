@@ -75,8 +75,8 @@ class Users extends ResourceController {
                 $placesIds[] = $place->id;
             }
 
-            $ratingDataPlus  = $ratingModel->selectSum('value')->where('value >', 2)->whereIn('place', $placesIds)->first();
-            $ratingDataMinus = $ratingModel->selectSum('value')->where('value <=', 2)->whereIn('place', $placesIds)->first();
+            $ratingDataPlus  = $ratingModel->selectSum('value')->where('value >', 2)->whereIn('place_id', $placesIds)->first();
+            $ratingDataMinus = $ratingModel->selectSum('value')->where('value <=', 2)->whereIn('place_id', $placesIds)->first();
             $ratingValue = $ratingDataPlus->value - $ratingDataMinus->value;
         }
 

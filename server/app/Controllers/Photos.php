@@ -2,11 +2,10 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
-use App\Entities\UserActivity;
 use App\Libraries\Session;
+use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
-use App\Models\UsersActivityModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -41,9 +40,9 @@ class Photos extends ResourceController {
                 'width'     => $photo->width,
                 'height'    => $photo->height,
                 'title'     => $photo->title,
-                'placeId'   => $photo->place,
+                'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
-                'author'    => $photo->user_id ? [
+                'user'      => $photo->user_id ? [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
                     'avatar' => $photo->user_avatar,
@@ -73,8 +72,9 @@ class Photos extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $placesModel = new PlacesModel();
-        $placesData  = $placesModel->select('id, latitude, longitude')->find($id);
+        $userActivity = new UserActivity();
+        $placesModel  = new PlacesModel();
+        $placesData   = $placesModel->select('id, latitude, longitude')->find($id);
 
         if (!$placesData || !$placesData->id) {
             return $this->failValidationErrors('There is no point with this ID');
@@ -107,27 +107,18 @@ class Photos extends ResourceController {
 
                 // Save photo to DB
                 $photo = new Photo();
-                $photo->latitude = $coordinates->lat ?? $placesData->latitude;
+                $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
                 $photo->longitude = $coordinates->lng ?? $placesData->longitude;
-                $photo->place = $placesData->id;
-                $photo->author = $session->userData->id;
-                $photo->filename = $name;
+                $photo->place_id  = $placesData->id;
+                $photo->user_id   = $session->userData->id;
+                $photo->filename  = $name;
                 $photo->extension = $file->getExtension();
-                $photo->filesize = $file->getSize();
-                $photo->width = $width;
-                $photo->height = $height;
+                $photo->filesize  = $file->getSize();
+                $photo->width     = $width;
+                $photo->height    = $height;
                 $photosModel->insert($photo);
 
-                $lastId = $photosModel->getInsertID();
-
-                // Make user activity
-                $activityModel = new UsersActivityModel();
-                $activity = new UserActivity();
-                $activity->user = $session->userData->id;
-                $activity->type = 'photo';
-                $activity->place = $placesData->id;
-                $activity->photo = $lastId;
-                $activityModel->insert($activity);
+                $userActivity->photo($session->userData->id, $photosModel->getInsertID(), $placesData->id);
 
                 sleep(1);
             }
@@ -151,7 +142,7 @@ class Photos extends ResourceController {
             return null;
         }
 
-            $info = exif_read_data($file);
+        $info = exif_read_data($file);
 
         if (!isset($info['GPSLatitude']) || !isset($info['GPSLongitude']) ||
             !isset($info['GPSLatitudeRef']) || !isset($info['GPSLongitudeRef']) ||
@@ -206,18 +197,18 @@ class Photos extends ResourceController {
         $photosModel = new PhotosModel();
         $photosModel
             ->select(
-                'photos.place, photos.author, photos.filename, photos.extension, photos.width, 
+                'photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-            ->join('users', 'photos.author = users.id', 'left')
+            ->join('users', 'photos.user_id = users.id', 'left')
             ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
 
         if ($place) {
-            $photosModel->where(['photos.place' => $place]);
+            $photosModel->where(['photos.place_id' => $place]);
         }
 
         if ($author) {
-            $photosModel->where(['photos.author' => $author]);
+            $photosModel->where(['photos.user_id' => $author]);
         }
 
         $photosModel->orderBy('photos.order, photos.created_at', 'DESC');

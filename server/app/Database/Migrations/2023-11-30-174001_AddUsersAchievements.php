@@ -28,10 +28,10 @@ class AddUserAchievements extends Migration {
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('achievements_id', 'achievements', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('user_achievements');
+        $this->forge->createTable('users_achievements');
     }
 
     public function down() {
-        $this->forge->dropTable('user_achievements');
+        $this->forge->dropTable('users_achievements');
     }
 }

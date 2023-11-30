@@ -17,8 +17,8 @@ class Visited extends ResourceController {
         $visitedModel = new UsersVisitedPlacesModel();
         $visitedData  = $visitedModel
             ->select('users.id, users.name, users.avatar')
-            ->join('users', 'users_visited_places.user = users.id', 'inner')
-            ->where(['place' => $id])
+            ->join('users', 'users_visited_places.user_id = users.id', 'inner')
+            ->where(['place_id' => $id])
             ->findAll();
 
         return $this->respond(['items' => $visitedData]);
@@ -41,7 +41,7 @@ class Visited extends ResourceController {
         }
 
         try {
-            $insertData   = ['user' => $session->userData->id, 'place' => $input->place];
+            $insertData   = ['user_id' => $session->userData->id, 'place_id' => $input->place];
             $visitedModel = new UsersVisitedPlacesModel();
             $visitedData  = $visitedModel->where($insertData)->first();
             $placesModel  = new PlacesModel();

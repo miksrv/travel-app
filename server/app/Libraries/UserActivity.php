@@ -67,11 +67,11 @@ class UserActivity {
 
         $userActivity = new \App\Entities\UserActivity();
 
-        $userActivity->type   = $type;
-        $userActivity->user   = $userId;
-        $userActivity->photo  = $photoId;
-        $userActivity->place  = $placeId;
-        $userActivity->rating = $ratingId;
+        $userActivity->type      = $type;
+        $userActivity->user_id   = $userId;
+        $userActivity->photo_id  = $photoId;
+        $userActivity->place_id  = $placeId;
+        $userActivity->rating_id = $ratingId;
 
         if ($this->usersActivityModel->insert($userActivity)) {
             return true;

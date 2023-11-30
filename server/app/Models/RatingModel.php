@@ -11,13 +11,13 @@ class RatingModel extends MyBaseModel {
     protected $returnType     = Rating::class;
     protected $useSoftDeletes = true;
 
-    protected array $hiddenFields = ['updated_at', 'deleted_at'];
+    protected array $hiddenFields = [];
 
     // The updatable fields
     protected $allowedFields = [
-        'place',
-        'author',
-        'session',
+        'place_id',
+        'user_id',
+        'session_id',
         'value',
         'created_at'
     ];
@@ -26,8 +26,6 @@ class RatingModel extends MyBaseModel {
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];
@@ -42,7 +40,7 @@ class RatingModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

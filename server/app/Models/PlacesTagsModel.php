@@ -8,16 +8,9 @@ class PlacesTagsModel extends MyBaseModel {
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
-        'tag',
-        'place'
+        'tag_id',
+        'place_id'
     ];
-
-    // Dates
-    protected $useTimestamps = false;
-    protected $dateFormat    = 'datetime';
-    protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];
@@ -32,7 +25,7 @@ class PlacesTagsModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

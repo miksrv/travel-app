@@ -13,7 +13,7 @@ class AddTranslationsPhotos extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'photo' => [
+            'photo_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
@@ -35,7 +35,7 @@ class AddTranslationsPhotos extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('photo', 'photos', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('photo_id', 'photos', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('translations_photos');
     }
 

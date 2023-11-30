@@ -25,7 +25,7 @@ class PlacesModel extends MyBaseModel {
         'address_city',
         'latitude',
         'longitude',
-        'author',
+        'user_id',
         'rating',
         'cover',
         'views',
@@ -52,7 +52,7 @@ class PlacesModel extends MyBaseModel {
         'address_city'     => 'integer|max_length[5]',
         'latitude'  => 'decimal',
         'longitude' => 'decimal',
-        'author'    => 'string|max_length[40]',
+        'user_id'   => 'string|max_length[40]',
         'name'      => 'required|string|min_length[3]|max_length[40]',
         'rating'    => 'integer|max_length[1]|greater_than[0]',
         'views'     => 'integer|max_length[5]|greater_than[0]'
@@ -68,7 +68,7 @@ class PlacesModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

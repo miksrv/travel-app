@@ -96,7 +96,7 @@ class Rating extends ResourceController {
                 'value'   => $newScore,
             ];
 
-            $placeRating  = $ratingModel->where('place', $placesData->id)->findAll();
+            $placeRating  = $ratingModel->where('place_id', $placesData->id)->findAll();
             $averageValue = 0;
 
             if (in_array($session->id, array_column($placeRating, 'session'))) {

@@ -33,8 +33,8 @@ class Poi extends ResourceController {
         $bounds      = $this->_getBounds();
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select('photos.place, photos.latitude, photos.longitude, photos.filename, photos.extension, translations_photos.title')
-            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+            ->select('photos.place_id, photos.latitude, photos.longitude, photos.filename, photos.extension, translations_photos.title')
+            ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
             ->where([
                 'longitude >=' => $bounds[0],
                 'latitude >=' => $bounds[1],
@@ -53,7 +53,7 @@ class Poi extends ResourceController {
                 'latitude'  => $photo->latitude,
                 'longitude' => $photo->longitude,
                 'title'     => $photo->title,
-                'placeId'   => $photo->place,
+                'placeId'   => $photo->place_id,
             ];
         }
 
@@ -72,7 +72,7 @@ class Poi extends ResourceController {
             $placesModel = new PlacesModel();
             $placeData   = $placesModel
                 ->select('places.*, translations_places.title, translations_places.content')
-                ->join('translations_places', 'places.id = translations_places.place AND language = "ru"')
+                ->join('translations_places', 'places.id = translations_places.place_id AND language = "ru"')
                 ->find($id);
 
             if ($placeData) {
@@ -80,8 +80,8 @@ class Poi extends ResourceController {
                     ->select(
                         'photos.filename, photos.extension, photos.width,
                         photos.height, photos.order, translations_photos.title')
-                    ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
-                    ->where(['place' => $placeData->id])
+                    ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
+                    ->where(['place_id' => $placeData->id])
                     ->orderBy('order', 'DESC')
                     ->findAll();
 

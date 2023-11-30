@@ -7,9 +7,9 @@ class TranslationsPlacesModel extends MyBaseModel {
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields = [
-        'place',
+        'place_id',
+        'user_id',
         'language',
-        'author',
         'title',
         'content',
         'delta',
@@ -36,7 +36,7 @@ class TranslationsPlacesModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

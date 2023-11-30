@@ -13,20 +13,20 @@ class AddTranslationsPlaces extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'place' => [
+            'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
+            ],
+            'user_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true
             ],
             'language' => [
                 'type'       => 'ENUM("ru", "en")',
                 'default'    => 'ru',
                 'null'       => false,
-            ],
-            'author' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => true
             ],
             'title' => [
                 'type'       => 'VARCHAR',
@@ -52,8 +52,8 @@ class AddTranslationsPlaces extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('translations_places');
     }
 

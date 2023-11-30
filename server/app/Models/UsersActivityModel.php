@@ -9,14 +9,14 @@ class UsersActivityModel extends MyBaseModel {
     protected $returnType       = UserActivity::class;
     protected $useSoftDeletes   = true;
 
-    protected array $hiddenFields = ['id', 'updated_at', 'deleted_at'];
+    protected array $hiddenFields = ['id'];
 
     protected $allowedFields = [
-        'user',
         'type',
-        'photo',
-        'place',
-        'rating',
+        'user_id',
+        'photo_id',
+        'place_id',
+        'rating_id',
         'created_at'
     ];
 
@@ -24,8 +24,6 @@ class UsersActivityModel extends MyBaseModel {
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
-    protected $updatedField  = 'updated_at';
-    protected $deletedField  = 'deleted_at';
 
     // Validation
     protected $validationRules      = [];

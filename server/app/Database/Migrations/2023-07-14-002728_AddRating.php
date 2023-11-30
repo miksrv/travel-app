@@ -13,17 +13,17 @@ class AddRating extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'place' => [
+            'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => false,
             ],
-            'author' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
             ],
-            'session' => [
+            'session_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 32,
                 'null'       => true,
@@ -34,17 +34,12 @@ class AddRating extends Migration {
                 'null'       => false,
             ],
             'created_at DATETIME default current_timestamp',
-            'updated_at DATETIME default current_timestamp',
-            'deleted_at' => [
-                'type' => 'DATETIME',
-                'null' => true
-            ]
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('place', 'places', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('session', 'sessions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('rating');
     }
 

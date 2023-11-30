@@ -124,9 +124,9 @@ class Session {
             $historyModel = new SessionsHistoryModel();
 
             $historyModel->insert([
-                'session'   => $session,
-                'latitude'  => $latitude ?? null,
-                'longitude' => $longitude ?? null
+                'session_id' => $session,
+                'latitude'   => $latitude ?? null,
+                'longitude'  => $longitude ?? null
             ]);
 
             return $historyModel->getInsertID();

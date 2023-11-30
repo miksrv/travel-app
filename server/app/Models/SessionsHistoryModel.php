@@ -1,7 +1,5 @@
 <?php namespace App\Models;
 
-use CodeIgniter\Model;
-
 class SessionsHistoryModel extends MyBaseModel {
     protected $table      = 'sessions_history';
     protected $primaryKey = 'id';
@@ -13,7 +11,7 @@ class SessionsHistoryModel extends MyBaseModel {
 
     // The updatable fields
     protected $allowedFields = [
-        'session',
+        'session_id',
         'latitude',
         'longitude'
     ];
@@ -38,7 +36,7 @@ class SessionsHistoryModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

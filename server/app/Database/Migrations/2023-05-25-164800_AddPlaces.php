@@ -59,7 +59,7 @@ class AddPlaces extends Migration {
                 'type'       => 'DECIMAL(16,12)',
                 'null'       => false
             ],
-            'author' => [
+            'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true
@@ -83,7 +83,7 @@ class AddPlaces extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('author', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_country', 'address_country', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('address_region', 'address_region', 'id', 'CASCADE', 'CASCADE');

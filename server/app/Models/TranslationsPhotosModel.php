@@ -7,7 +7,7 @@ class TranslationsPhotosModel extends MyBaseModel {
     protected $returnType       = 'object';
     protected $useSoftDeletes   = false;
     protected $allowedFields = [
-        'photo',
+        'photo_id',
         'language',
         'title',
         'content'
