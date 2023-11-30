@@ -54,6 +54,12 @@ class Auth extends ResourceController {
 
         $input = $this->getRequestInput($this->request);
 
+        // Hash new password
+//        helper('jwt_helper');
+//        echo '<pre>';
+//        var_dump(hashUserPassword($input['password']));
+//        exit();
+
         if (!$this->validateRequest($input, $rules, $errors)) {
             return $this->failValidationErrors($this->validator->getErrors());
         }
