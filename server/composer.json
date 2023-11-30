@@ -41,7 +41,7 @@
         "test": "phpunit",
         "serve": "php spark serve --timeout 0",
         "kill": "pkill -9 php",
-        "migration:create": "php spark migrate:create",
+        "migration:create": "php spark migrate:create AddUsersAchievements",
         "migration:status": "php spark migrate:status",
         "migration:rollback": "php spark migrate:rollback",
         "migration:run": "php spark migrate",

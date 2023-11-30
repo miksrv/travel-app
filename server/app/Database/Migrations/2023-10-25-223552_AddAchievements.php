@@ -4,12 +4,12 @@ namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
-class AddUsersAchievements extends Migration {
+class AddAchievements extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
-                'type'           => 'INT',
-                'constraint'     => 11,
+                'type'           => 'SMALLINT',
+                'constraint'     => 5,
                 'null'           => false,
                 'unique'         => true,
                 'auto_increment' => true
@@ -22,6 +22,11 @@ class AddUsersAchievements extends Migration {
             'text' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
+                'null'       => true,
+            ],
+            'category_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
                 'null'       => true,
             ],
             'min_count_places' => [
@@ -52,10 +57,11 @@ class AddUsersAchievements extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('users_achievements');
+        $this->forge->addForeignKey('category_id', 'category', 'name', 'CASCADE', 'CASCADE');
+        $this->forge->createTable('achievements');
     }
 
     public function down() {
-        $this->forge->dropTable('users_achievements');
+        $this->forge->dropTable('achievements');
     }
 }
