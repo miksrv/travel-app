@@ -180,7 +180,7 @@ class Places extends ResourceController {
                     address_country.name as country_name, address_region.name as region_name, 
                     address_district.name as district_name, address_city.name as city_name,
                     category.title as category_title' . $distanceSelect)
-                ->join('users', 'places.author = users.id', 'left')
+                ->join('users', 'places.user_id = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
                 ->join('address_country', 'address_country.id = places.address_country', 'left')
                 ->join('address_region', 'address_region.id = places.address_region', 'left')
@@ -195,11 +195,11 @@ class Places extends ResourceController {
             // Find all place photos
             $placeData->photo = $photosModel
                 ->select(
-                    'photos.author, photos.filename, photos.extension, photos.width, photos.place, 
+                    'photos.user_id, photos.filename, photos.extension, photos.width, photos.place_id, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-                ->join('users', 'photos.author = users.id', 'left')
-                ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left')
+                ->join('users', 'photos.user_id = users.id', 'left')
+                ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
                 ->where(['place_id' => $placeData->id])
                 ->orderBy('photos.order', 'DESC')
                 ->findAll();
@@ -435,7 +435,7 @@ class Places extends ResourceController {
         }
 
         if ($author) {
-            $placesModel->where(['places.author' => $author]);
+            $placesModel->where(['places.user_id' => $author]);
         }
 
         if ($exclude) {

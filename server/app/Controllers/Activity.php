@@ -108,7 +108,7 @@ class Activity extends ResourceController {
                 'extension' => $item->extension,
                 'width'     => (int) $item->width,
                 'height'    => (int) $item->height,
-                'placeId'   => $item->place
+                'placeId'   => $item->place_id
             ] : null;
 
             // We group activity by photos of one user, uploaded for one place and with a difference of no more than 5 minutes
@@ -116,8 +116,8 @@ class Activity extends ResourceController {
                 $lastGroup &&
                 $item->type === 'photo' &&
                 $lastGroup->type === 'photo' &&
-                (!isset($lastGroup->place) || $lastGroup->place->id === $item->place) &&
-                $lastGroup->author->id === $item->user &&
+                (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
+                $lastGroup->author->id === $item->user_id &&
                 (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
             ) {
                 $lastGroup->created  = $item->created_at; // Каждый раз обновляем время загрузки последней фотографии
@@ -136,10 +136,10 @@ class Activity extends ResourceController {
                 $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
 
                 $currentGroup->place = (object) [
-                    'id'         => $item->place,
-                    'title'      => $placeTranslations->get($item->place, 'title', $item->created_at),
-                    'content'    => $placeTranslations->get($item->place, 'content', $item->created_at),
-                    'difference' => (int) $placeTranslations->get($item->place, 'delta', $item->created_at),
+                    'id'         => $item->place_id,
+                    'title'      => $placeTranslations->get($item->place_id, 'title', $item->created_at),
+                    'content'    => $placeTranslations->get($item->place_id, 'content', $item->created_at),
+                    'difference' => (int) $placeTranslations->get($item->place_id, 'delta', $item->created_at),
                     'category'   => (object) [
                         'name'  => $categoriesData[$findCategory]->name,
                         'title' => $categoriesData[$findCategory]->title,

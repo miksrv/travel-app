@@ -201,7 +201,7 @@ class Photos extends ResourceController {
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.user_id = users.id', 'left')
-            ->join('translations_photos', 'photos.id = translations_photos.photo AND language = "ru"', 'left');
+            ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left');
 
         if ($place) {
             $photosModel->where(['photos.place_id' => $place]);

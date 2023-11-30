@@ -79,7 +79,7 @@ class Rating extends ResourceController {
             $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
-            $placesData  = $placesModel->find($input->place);
+            $placesData  = $placesModel->select('id, user_id, updated_at')->find($input->place);
 
             if (!$placesData) {
                 return $this->failNotFound();
@@ -89,12 +89,11 @@ class Rating extends ResourceController {
                 ? 1
                 : min((int)$input->score, 5);
 
-            $insertRating = [
-                'place'   => $input->place,
-                'author'  => isset($session->userData) ? $session->userData->id : null,
-                'session' => $session->id,
-                'value'   => $newScore,
-            ];
+            $rating = new \App\Entities\Rating();
+            $rating->place_id   = $input->place;
+            $rating->user_id    = isset($session->userData) ? $session->userData->id : null;
+            $rating->session_id = $session->id;
+            $rating->value      = $newScore;
 
             $placeRating  = $ratingModel->where('place_id', $placesData->id)->findAll();
             $averageValue = 0;
@@ -111,8 +110,8 @@ class Rating extends ResourceController {
 
             $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 1);
 
-            $placesModel->update($placesData->id, ['rating' => $newPlaceVal]);
-            $ratingModel->insert($insertRating);
+            $placesModel->update($placesData->id, ['rating' => $newPlaceVal, 'updated_at' => $placesData->updated_at]);
+            $ratingModel->insert($rating);
 
             /* ACTIVITY */
             $userActivity = new UserActivity();
@@ -131,8 +130,8 @@ class Rating extends ResourceController {
             }
 
             // If a user gives a rating to a material that is not his own, we will send a notification to the author of the material about the change in the rating of his place
-            if ($placesData->author !== $session->userData->id) {
-                $userNotify->rating($placesData->author, $placesData->id);
+            if (!$session->isAuth || $placesData->user_id !== $session->userData->id) {
+                $userNotify->rating($placesData->user_id, $placesData->id);
             }
 
             return $this->respond((object) ['rating' => $newPlaceVal]);
