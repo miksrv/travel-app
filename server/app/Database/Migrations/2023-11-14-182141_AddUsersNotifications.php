@@ -14,8 +14,12 @@ class AddUsersNotifications extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type' => 'ENUM("level", "achievements", "rating", "comment")',
+                'type' => 'ENUM("level", "achievements", "rating", "comment", "place", "photo", "experience")',
                 'null' => false,
+            ],
+            'read' => [
+                'type'    => 'BOOLEAN',
+                'default' => false,
             ],
             'user_id' => [
                 'type'       => 'VARCHAR',
