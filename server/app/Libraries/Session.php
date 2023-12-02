@@ -11,6 +11,7 @@ class Session {
     public string $id;
     public float | null $latitude = null;
     public float | null $longitude = null;
+    public string | null $userId = null;
     public bool $isAuth = false;
     public User | null $userData;
     private SessionsModel $sessionModel;
@@ -42,19 +43,21 @@ class Session {
 
         if ($this->userData && $this->userData->id) {
             $this->isAuth = true;
+            $this->userId = $this->userData->id;
         }
 
         if ($findSession && $findSession->id) {
             $this->id = $findSession->id;
             $this->latitude  = $findSession->latitude;
             $this->longitude = $findSession->longitude;
+            $this->userId    = $findSession->user_id;
         }
 
         // Если сессии в БД с такими IP и UA нет, то добавляем новую
         if (!$findSession || !$findSession->id) {
             $sessionData = (object) [
                 'id'         => md5($this->ip . $this->ua),
-                'user_id'    => $this->userData->id ?? null,
+                'user_id'    => $this->userId,
                 'user_ip'    => $this->ip,
                 'user_agent' => $this->ua,
                 'latitude'   => $latitude,
@@ -90,14 +93,19 @@ class Session {
         $this->latitude  = $latitude ?? $this->latitude;
         $this->longitude = $longitude ?? $this->longitude;
 
-        // В любом случае обновляем текущую сессию
-        $this->sessionModel->update($this->id, [
+        return $this->id;
+    }
+
+    /**
+     * @return bool
+     * @throws ReflectionException
+     */
+    public function update(): bool {
+        return $this->sessionModel->update($this->id, [
             'latitude'  => $this->latitude,
             'longitude' => $this->longitude,
-            'user_id'   => $this->userData->id ?? $findSession->user ?? null,
+            'user_id'   => $this->userId,
         ]);
-
-        return $this->id;
     }
 
     /**

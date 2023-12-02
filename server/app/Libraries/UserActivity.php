@@ -6,43 +6,62 @@ use ReflectionException;
 class UserActivity {
     private UsersActivityModel $usersActivityModel;
 
+    private UserLevels $userLevels;
+    private Session $session;
+
     protected array $types = ['photo', 'place', 'rating'];
 
     public function __construct() {
         $this->usersActivityModel = new UsersActivityModel();
+        $this->userLevels = new UserLevels();
+        $this->session    = new Session();
     }
 
-
     /**
-     * @param $userId
      * @param $photoId
      * @param $placeId
      * @return bool
      * @throws ReflectionException
      */
-    public function photo($userId, $photoId, $placeId): bool {
-        return $this->_add('photo', $userId, $photoId, $placeId);
+    public function photo($photoId, $placeId): bool {
+        if (!$this->session->isAuth) {
+            return false;
+        }
+
+        $this->session->update();
+        $this->userLevels->experience('photo', $this->session->userId, $photoId);
+        return $this->_add('photo', $this->session->userId, $photoId, $placeId);
     }
 
     /**
-     * @param $userId
      * @param $placeId
      * @return bool
      * @throws ReflectionException
      */
-    public function place($userId, $placeId): bool {
-        return $this->_add('place', $userId, null, $placeId);
+    public function place($placeId): bool {
+        if (!$this->session->isAuth) {
+            return false;
+        }
+
+        $this->session->update();
+        $this->userLevels->experience('place', $this->session->userId, $placeId);
+        return $this->_add('place', $this->session->userId, null, $placeId);
     }
 
     /**
-     * @param $userId
      * @param $placeId
      * @param $ratingId
      * @return bool
      * @throws ReflectionException
      */
-    public function rating($userId, $placeId, $ratingId): bool {
-        return $this->_add('rating', $userId, null, $placeId, $ratingId);
+    public function rating($placeId, $ratingId): bool {
+        if (!$this->session->isAuth) {
+            return false;
+        }
+
+        $this->session->update();
+        $this->userLevels->experience('rating', $this->session->userId, $ratingId);
+        return $this->_add('rating', $this->session->userId, null, $placeId, $ratingId);
     }
 
     /**

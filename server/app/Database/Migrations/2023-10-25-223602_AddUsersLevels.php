@@ -7,12 +7,11 @@ use CodeIgniter\Database\Migration;
 class AddUsersLevels extends Migration {
     public function up() {
         $this->forge->addField([
-            'id' => [
-                'type'           => 'SMALLINT',
-                'constraint'     => 3,
-                'null'           => false,
-                'unique'         => true,
-                'auto_increment' => true
+            'level' => [
+                'type'       => 'SMALLINT',
+                'constraint' => 2,
+                'null'       => false,
+                'unique'     => true,
             ],
             'name' => [
                 'type'       => 'VARCHAR',
@@ -23,11 +22,6 @@ class AddUsersLevels extends Migration {
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
                 'null'       => true,
-            ],
-            'level' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 2,
-                'null'       => true
             ],
             'experience' => [
                 'type'       => 'SMALLINT',

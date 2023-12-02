@@ -10,8 +10,15 @@ use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
 use ReflectionException;
 
+define('MODIFIER_PLACE', 15);
+define('MODIFIER_PHOTO', 10);
+define('MODIFIER_RATING', 1);
+define('MODIFIER_EDITION', 5);
+
 class UserLevels {
     private array $userLevels;
+
+    private array $types = ['place', 'photo', 'rating', 'edition'];
 
     public function __construct() {
         $userLevelsModel  = new UsersLevelsModel();
@@ -52,10 +59,10 @@ class UserLevels {
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;
-        $experience += $statistic->places * 15;
-        $experience += $statistic->photos * 10;
-        $experience += $statistic->rating * 1;
-        $experience += $statistic->edits * 5;
+        $experience += $statistic->places * MODIFIER_PLACE;
+        $experience += $statistic->photos * MODIFIER_PHOTO;
+        $experience += $statistic->rating * MODIFIER_RATING;
+        $experience += $statistic->edits * MODIFIER_EDITION;
 
         // Let's see what level the user should actually have
         $calcLevel = $this->_findUserLevel($experience);
@@ -76,6 +83,48 @@ class UserLevels {
         }
 
         return $this;
+    }
+
+    public function experience(string $type, string $userId, string $objectId): bool {
+        $userModel  = new UsersModel();
+        $userNotify = new UserNotify();
+
+        $userData = $userModel->select('id, experience, level')->find($userId);
+
+        if (!in_array($type, $this->types) || !$userId || !$userData) {
+            return false;
+        }
+
+        if ($type === 'place') {
+            $userData->experience += MODIFIER_PLACE;
+        } else if ($type === 'photo') {
+            $userData->experience += MODIFIER_PHOTO;
+        } else if ($type === 'rating') {
+            $userData->experience += MODIFIER_RATING;
+        } else if ($type === 'edition') {
+            $userData->experience += MODIFIER_EDITION;
+        }
+
+        $calcLevel = $this->_findUserLevel($userData->experience);
+
+        if ($calcLevel->level !== $userData->level) {
+            $userNotify->level($userId);
+            $userModel->update($userData->id, [
+                'level'      => $calcLevel->level,
+                'experience' => $userData->experience
+            ]);
+
+            // if ($calcLevel->level !== $user->level) {
+            // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
+            // }
+
+            return true;
+        }
+
+        $userNotify->experience($userId, $objectId);
+        $userModel->update($userData->id, ['experience' => $userData->experience]);
+
+        return true;
     }
     
     /**

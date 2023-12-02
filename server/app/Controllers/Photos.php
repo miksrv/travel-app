@@ -118,7 +118,7 @@ class Photos extends ResourceController {
                 $photo->height    = $height;
                 $photosModel->insert($photo);
 
-                $userActivity->photo($session->userData->id, $photosModel->getInsertID(), $placesData->id);
+                $userActivity->photo($photosModel->getInsertID(), $placesData->id);
 
                 sleep(1);
             }

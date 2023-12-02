@@ -89,7 +89,7 @@ class UserNotify {
      * @throws ReflectionException
      */
     protected function _add(string $type, string $userId, string|null $objectId = null): bool {
-        if (!$userId || !$objectId || !in_array($type, $this->types)) {
+        if (!$userId || !in_array($type, $this->types)) {
             return false;
         }
 

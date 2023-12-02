@@ -7,7 +7,7 @@ class ManageSeeder extends Seeder
     public function run()
     {
         $this->call('CategorySeeder');
-//        $this->call('SubcategorySeeder');
         $this->call('OverpassCategorySeeder');
+        $this->call('UserLevelsSeeder');
     }
 }

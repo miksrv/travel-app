@@ -5,7 +5,6 @@ use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
-use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
@@ -114,22 +113,15 @@ class Rating extends ResourceController {
             $ratingModel->insert($rating);
 
             /* ACTIVITY */
-            $userActivity = new UserActivity();
-            $userActivity->rating(
-                $session->isAuth ? $session->userData->id : null,
-                $placesData->id,
-                $ratingModel->getInsertID()
-            );
-
-            /* NOTIFICATIONS */
-            $userNotify = new UserNotify();
-
-            // If the user who sets the rating is authorized, we will send him a notification about the increase in experience
-            if ($session->isAuth && $session->userData->id) {
-                $userNotify->experience($session->userData->id, $placesData->id);
+            if ($session->isAuth) {
+                $userActivity = new UserActivity();
+                $userActivity->rating($placesData->id, $ratingModel->getInsertID());
             }
 
-            // If a user gives a rating to a material that is not his own, we will send a notification to the author of the material about the change in the rating of his place
+            /* NOTIFICATIONS */
+            // If a user gives a rating to a material that is not his own,
+            // we will send a notification to the author of the material about the change in the rating of his place
+            $userNotify = new UserNotify();
             if (!$session->isAuth || $placesData->user_id !== $session->userData->id) {
                 $userNotify->rating($placesData->user_id, $placesData->id);
             }

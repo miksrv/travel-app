@@ -27,7 +27,8 @@ class Introduce extends ResourceController {
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
 
-        new Session($lat, $lon);
+        $session = new Session($lat, $lon);
+        $session->update();
 
         $pointAdded = [];
 
