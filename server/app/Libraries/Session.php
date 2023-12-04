@@ -104,7 +104,7 @@ class Session {
         return $this->sessionModel->update($this->id, [
             'latitude'  => $this->latitude,
             'longitude' => $this->longitude,
-            'user_id'   => $this->userId,
+            'user_id'   => !empty($this->userId) ? $this->userId : null,
         ]);
     }
 

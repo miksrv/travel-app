@@ -64,8 +64,10 @@ class Users extends ResourceController {
 
         // GET ALL USER REPUTATION
         $placesModel = new PlacesModel();
-        $placesData  = $placesModel->select('id')->where('author', $id)->findAll();
+        $placesData  = $placesModel->select('id')->where('user_id', $id)->findAll();
         $ratingValue = $usersData->reputation;
+
+        $userLevels->calculate($usersData);
 
         if ($placesData) {
             $ratingModel = new RatingModel();
@@ -90,7 +92,7 @@ class Users extends ResourceController {
             'avatar'     => $usersData->avatar,
             'level'      => $userLevels->getLevelData($usersData),
             // #TODO Статистику нужно считать по активности пользователя, а не при расчете уровеня
-            // 'statistic'  => $userLevels->statistic,
+            'statistic'  => $userLevels->statistic,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,

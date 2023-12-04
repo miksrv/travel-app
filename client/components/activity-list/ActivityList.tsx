@@ -92,13 +92,13 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Place]:
-                                    'Отредактировал(а) материал',
+                                [ActivityTypes.Edit]: 'Материал отредактирован',
+                                [ActivityTypes.Place]: 'Добавлено на карту',
                                 [ActivityTypes.Photo]: 'Загрузил(а) фотографии',
                                 [ActivityTypes.Rating]: 'Поставил(а) оценку'
                             }[item.type]
                         }
-                        {item.type === ActivityTypes.Place &&
+                        {item.type === ActivityTypes.Edit &&
                         item.place?.difference ? (
                             <>
                                 {' ('}
@@ -152,7 +152,8 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({
                 </Typography>
             )}
 
-            {item.type === ActivityTypes.Place && (
+            {(item.type === ActivityTypes.Place ||
+                item.type === ActivityTypes.Edit) && (
                 <Typography
                     variant={'body1'}
                     color={'text.primary'}

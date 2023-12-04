@@ -54,7 +54,7 @@ class Activity extends ResourceController {
         }
 
         $activityData = $activityModel
-            ->whereIn('users_activity.type', ['photo', 'place'])
+            ->whereIn('users_activity.type', ['photo', 'place', 'edit'])
             ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
             ->findAll($limit, $offset);
 

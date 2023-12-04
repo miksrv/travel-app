@@ -122,6 +122,12 @@ class Migrate extends ResourceController {
             $placeTitle   = strip_tags(html_entity_decode($item->item_title));
             $placeContent = strip_tags(html_entity_decode($item->item_content));
 
+            // Migrate content history
+            $placeVersions = $migrateHistory
+                ->where('item_object_id', $item->item_id)
+                ->orderBy('item_datestamp', 'DESC')
+                ->findAll();
+
             // Make translation for current version
             $translation = new \App\Entities\TranslationPlace();
             $translation->place_id   = $newPlaceId;
@@ -129,27 +135,26 @@ class Migrate extends ResourceController {
             $translation->user_id    = $placeAuthor;
             $translation->title      = $placeTitle;
             $translation->content    = $placeContent;
+            $translation->delta      = $item->item_version_date !== 0 && count($placeVersions) > 0 ? strlen($placeContent) - strlen(strip_tags(html_entity_decode($placeVersions[count($placeVersions) - 1]->item_content))) : 0;
             $translation->created_at = $placeVersionDate;
             $translationsPlacesModel->insert($translation);
 
             // Make user activity
             $activity = new \App\Entities\UserActivity();
-            $activity->type       = 'place';
+            $activity->type       = $item->item_version_date !== 0 ? 'edit' : 'place';
             $activity->user_id    = $placeAuthor;
             $activity->place_id   = $newPlaceId;
             $activity->created_at = $placeVersionDate;
             $activityModel->insert($activity);
 
-            // Migrate content history
-            $placeVersions = $migrateHistory->where('item_object_id', $item->item_id)->findAll();
             if (!empty($placeVersions)) {
                 foreach ($placeVersions as $key => $placeVersionItem) {
                     $versionContent = strip_tags(html_entity_decode($placeVersionItem->item_content));
-                    $versionDelta   = strlen($placeContent) - strlen($versionContent);
-                    // If in version text nothing changed
-                    if ($versionDelta === 0) {
-                        continue ;
-                    }
+                    $versionDelta   = $key === 0 ? 0 : strlen($placeContent) - strlen($versionContent);
+//                    // If in version text nothing changed
+//                    if ($versionDelta === 0) {
+//                        continue ;
+//                    }
 
                     $historyUser = $this->_migrate_user($placeVersionItem->item_author);
                     $translation = new \App\Entities\TranslationPlace();
@@ -258,12 +263,16 @@ class Migrate extends ResourceController {
 
                             $photosModel->insert($photo);
 
+                            sleep(0.2);
+
                             // Make translation
                             $translationsPhotosModel->insert([
                                 'photo_id' => $photosModel->getInsertID(),
                                 'language' => 'ru',
                                 'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
                             ]);
+
+                            sleep(0.2);
 
                             $activity = new \App\Entities\UserActivity();
                             $activity->type       = 'photo';

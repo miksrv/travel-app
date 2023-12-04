@@ -120,7 +120,7 @@ class Photos extends ResourceController {
 
                 $userActivity->photo($photosModel->getInsertID(), $placesData->id);
 
-                sleep(1);
+                sleep(0.2);
             }
         }
 

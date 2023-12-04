@@ -53,7 +53,7 @@ class UserLevels {
         $statistic->rating = (int) $ratingModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
         $statistic->edits  = (int) $translModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
 
-        $statistic->edits = $statistic->edits > $statistic->places
+        $statistic->edits  = $statistic->edits > $statistic->places
             ? ($statistic->edits - $statistic->places)
             : $statistic->edits;
 
@@ -88,8 +88,7 @@ class UserLevels {
     public function experience(string $type, string $userId, string $objectId): bool {
         $userModel  = new UsersModel();
         $userNotify = new UserNotify();
-
-        $userData = $userModel->select('id, experience, level')->find($userId);
+        $userData   = $userModel->select('id, experience, level')->find($userId);
 
         if (!in_array($type, $this->types) || !$userId || !$userData) {
             return false;
