@@ -30,7 +30,7 @@ class AddUsersLevels extends Migration {
             ],
         ]);
 
-        $this->forge->addPrimaryKey('id');
+        $this->forge->addPrimaryKey('level');
         $this->forge->createTable('users_levels');
     }
 

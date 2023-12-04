@@ -19,12 +19,13 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use Geocoder\Exception\Exception;
+use ReflectionException;
 
 define('MAX_PLACES_PER_ITERATION', 2);
 
 class Migrate extends ResourceController {
     /**
-     * @throws Exception|\ReflectionException
+     * @throws Exception|ReflectionException
      */
     public function init(): ResponseInterface {
         $mapCategories = [
@@ -142,7 +143,7 @@ class Migrate extends ResourceController {
             // Migrate content history
             $placeVersions = $migrateHistory->where('item_object_id', $item->item_id)->findAll();
             if (!empty($placeVersions)) {
-                foreach ($placeVersions as $placeVersionItem) {
+                foreach ($placeVersions as $key => $placeVersionItem) {
                     $versionContent = strip_tags(html_entity_decode($placeVersionItem->item_content));
                     $versionDelta   = strlen($placeContent) - strlen($versionContent);
                     // If in version text nothing changed
@@ -162,7 +163,7 @@ class Migrate extends ResourceController {
                     $translationsPlacesModel->insert($translation);
 
                     $activity = new \App\Entities\UserActivity();
-                    $activity->type       = 'place';
+                    $activity->type       = $key === 0 ? 'place' : 'edit';
                     $activity->user_id    = $historyUser;
                     $activity->place_id   = $newPlaceId;
                     $activity->created_at = $placeVersionItem->item_datestamp;
@@ -244,16 +245,16 @@ class Migrate extends ResourceController {
 
                             // Save photo to DB
                             $photo = new \App\Entities\Photo();
-                            $photo->latitude    = $currentPhoto->item_latitude;
-                            $photo->longitude   = $currentPhoto->item_longitude;
-                            $photo->place_id    = $newPlaceId;
-                            $photo->user_id     = $photoAuthor;
-                            $photo->filename    = $currentPhoto->item_filename;
-                            $photo->extension   = $currentPhoto->item_ext;
-                            $photo->filesize    = $file->getSize();
-                            $photo->width       = $width;
-                            $photo->height      = $height;
-                            $photo->created_at  = $currentPhoto->item_timestamp;
+                            $photo->latitude   = $currentPhoto->item_latitude;
+                            $photo->longitude  = $currentPhoto->item_longitude;
+                            $photo->place_id   = $newPlaceId;
+                            $photo->user_id    = $photoAuthor;
+                            $photo->filename   = $currentPhoto->item_filename;
+                            $photo->extension  = $currentPhoto->item_ext;
+                            $photo->filesize   = $file->getSize();
+                            $photo->width      = $width;
+                            $photo->height     = $height;
+                            $photo->created_at = $currentPhoto->item_timestamp + 60;
 
                             $photosModel->insert($photo);
 
@@ -294,7 +295,7 @@ class Migrate extends ResourceController {
      * @param string $tag
      * @param string $placeId
      * @return void
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function _migrate_tags(string $tag, string $placeId): void {
         if (!$tag || !$placeId) {
@@ -329,7 +330,7 @@ class Migrate extends ResourceController {
     /**
      * @param string $author_id
      * @return string
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function _migrate_user(string $author_id): string {
         $usersModel   = new UsersModel();

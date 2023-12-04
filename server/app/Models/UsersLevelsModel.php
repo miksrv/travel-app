@@ -1,18 +1,17 @@
 <?php namespace App\Models;
 
 use App\Entities\UserLevel;
-use CodeIgniter\Model;
 
 class UsersLevelsModel extends MyBaseModel {
     protected $table      = 'users_levels';
-    protected $primaryKey = 'id';
+    protected $primaryKey = 'level';
 
     protected $useAutoIncrement = false;
 
     protected $returnType     = UserLevel::class;
     protected $useSoftDeletes = false;
 
-    protected array $hiddenFields = ['id'];
+    protected array $hiddenFields = [];
 
     // The updatable fields
     protected $allowedFields = [
