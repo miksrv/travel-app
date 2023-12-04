@@ -6,6 +6,7 @@ use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\TranslationsPlacesModel;
+use App\Models\UsersActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
 use ReflectionException;
@@ -17,6 +18,8 @@ define('MODIFIER_EDIT', 5);
 
 class UserLevels {
     private array $userLevels;
+
+    public object $statistic;
 
     private array $types = ['place', 'photo', 'rating', 'edit'];
 
@@ -35,34 +38,38 @@ class UserLevels {
      * @throws ReflectionException
      */
     public function calculate(User $user): static {
-        $placesModel = new PlacesModel();
-        $photosModel = new PhotosModel();
-        $ratingModel = new RatingModel();
-        $translModel = new TranslationsPlacesModel();
+        $activityModel = new UsersActivityModel();
+        $activityData  = $activityModel
+            ->selectCount('photo_id', 'photos')
+            ->selectCount('place_id', 'places')
+            ->selectCount('rating_id', 'rating')
+            ->where('user_id', $user->id)
+            ->first();
+
+        $editsCount = $activityModel
+            ->selectCount('place_id', 'places')
+            ->where(['user_id' => $user->id, 'type' => 'edit'])
+            ->first();
 
         $statistic = (object) [
-            'places' => 0,
-            'photos' => 0,
-            'rating' => 0,
-            'edits'  => 0,
+            'places' => (int) $activityData->places ?? 0,
+            'photos' => (int) $activityData->photos ?? 0,
+            'rating' => (int) $activityData->rating ?? 0,
+            'edit'   => (int) $editsCount->places ?? 0,
         ];
 
-        // #TODO вместо выполнения кучи запросов, будем делать всего один запрос на получение данных по активности пользователя
-        $statistic->places = (int) $placesModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
-        $statistic->photos = (int) $photosModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
-        $statistic->rating = (int) $ratingModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
-        $statistic->edits  = (int) $translModel->selectCount('id')->where('user_id', $this->user->id)->first()->id ?? 0;
-
-        $statistic->edits  = $statistic->edits > $statistic->places
-            ? ($statistic->edits - $statistic->places)
-            : $statistic->edits;
+        $statistic->places = $statistic->edit < $statistic->places
+            ? ($statistic->places - $statistic->edit)
+            : $statistic->edit;
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;
         $experience += $statistic->places * MODIFIER_PLACE;
         $experience += $statistic->photos * MODIFIER_PHOTO;
         $experience += $statistic->rating * MODIFIER_RATING;
-        $experience += $statistic->edits * MODIFIER_EDIT;
+        $experience += $statistic->edit * MODIFIER_EDIT;
+
+        $this->statistic = $statistic;
 
         // Let's see what level the user should actually have
         $calcLevel = $this->_findUserLevel($experience);

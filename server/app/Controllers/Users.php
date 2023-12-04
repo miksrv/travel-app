@@ -4,9 +4,11 @@ use App\Libraries\UserLevels;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\SessionsModel;
+use App\Models\UsersActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Users extends ResourceController {
     /**
@@ -52,6 +54,7 @@ class Users extends ResourceController {
     /**
      * @param $id
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
         $userLevels   = new UserLevels();
@@ -91,7 +94,6 @@ class Users extends ResourceController {
             'name'       => $usersData->name,
             'avatar'     => $usersData->avatar,
             'level'      => $userLevels->getLevelData($usersData),
-            // #TODO Статистику нужно считать по активности пользователя, а не при расчете уровеня
             'statistic'  => $userLevels->statistic,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,

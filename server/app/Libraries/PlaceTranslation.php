@@ -75,9 +75,9 @@ class PlaceTranslation {
      * @return void
      */
     public function translate(array $placeIds, bool $keepVersions = false): void {
-        $this->placeIds = $placeIds;
+        $this->placeIds = array_unique($placeIds);
 
-        if (empty($placeIds)) {
+        if (empty($this->placeIds)) {
             return ;
         }
 
@@ -88,7 +88,7 @@ class PlaceTranslation {
 
         // Here we get all edition versions for all places by their ID
         $data = $this->model
-            ->whereIn('place_id', $placeIds)
+            ->whereIn('place_id', $this->placeIds)
             ->orderBy('created_at', 'DESC')
             ->findAll();
 
@@ -119,7 +119,7 @@ class PlaceTranslation {
      * @return string
      */
     public function author(string $placeId): string {
-        return $this->get($placeId, 'author');
+        return $this->get($placeId, 'user_id');
     }
 
     /**

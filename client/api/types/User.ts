@@ -27,5 +27,5 @@ export type Statistic = {
     places: number
     photos: number
     rating: number
-    edits: number
+    edit: number
 }

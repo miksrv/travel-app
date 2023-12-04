@@ -293,7 +293,7 @@ const UserItemPage: NextPage = () => {
                             />
                             <StatisticLine
                                 title={'Редактирований:'}
-                                content={userData?.statistic?.edits}
+                                content={userData?.statistic?.edit}
                             />
                         </Grid>
                     </Grid>

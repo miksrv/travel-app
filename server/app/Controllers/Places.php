@@ -2,15 +2,14 @@
 
 use App\Entities\Place;
 use App\Entities\TranslationPlace;
-use App\Entities\UserActivity;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
+use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
 use App\Models\TranslationsPlacesModel;
-use App\Models\UsersActivityModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -338,15 +337,16 @@ class Places extends ResourceController {
             return $this->failValidationErrors('Cant save empty content');
         }
 
-        $placesModel = new PlacesModel();
-        $langModel   = new TranslationsPlacesModel();
-        $translation = new TranslationPlace();
+        $userActivity = new UserActivity();
+        $placesModel  = new PlacesModel();
+        $langModel    = new TranslationsPlacesModel();
+        $translation  = new TranslationPlace();
 
         $newContent = strip_tags(html_entity_decode($input->content));
 
         $translation->place    = $id;
         $translation->language = 'ru';
-        $translation->author   = $session->userData->id;
+        $translation->user_id  = $session->userData->id;
         $translation->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
         $translation->content  = $newContent;
         $translation->delta    = strlen($newContent) - strlen($placeTranslate->content($id));
@@ -363,25 +363,11 @@ class Places extends ResourceController {
                 $langModel->update($placeTranslate->id($id), $translation);
             } else {
                 $langModel->insert($translation);
-
-                // Make user activity
-                $activityModel = new UsersActivityModel();
-                $activity = new UserActivity();
-                $activity->user = $session->userData->id;
-                $activity->type = 'place';
-                $activity->place = $id;
-                $activityModel->insert($activity);
-
+                $userActivity->edit($id);
             }
         } else {
             $langModel->insert($translation);
-
-            $activityModel = new UsersActivityModel();
-            $activity = new UserActivity();
-            $activity->user = $session->userData->id;
-            $activity->type = 'place';
-            $activity->place = $id;
-            $activityModel->insert($activity);
+            $userActivity->edit($id);
         }
 
         // In any case, we update the time when the post was last edited
