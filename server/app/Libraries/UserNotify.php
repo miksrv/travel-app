@@ -7,7 +7,7 @@ use ReflectionException;
 class UserNotify {
     private UsersNotifications $userNotifyModel;
 
-    protected array $types = ['level', 'achievements', 'rating', 'comment', 'place', 'photo', 'experience'];
+    protected array $types = ['photo', 'place', 'rating', 'edit', 'experience', 'level', 'achievements'];
 
     public function __construct() {
         $this->userNotifyModel = new UsersNotifications();

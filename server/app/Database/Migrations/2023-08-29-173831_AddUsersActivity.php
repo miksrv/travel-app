@@ -14,7 +14,7 @@ class AddUsersActivity extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type'       => 'ENUM("photo", "place", "rating")',
+                'type'       => 'ENUM("photo", "place", "rating", "edit")',
                 'null'       => false,
             ],
             'user_id' => [

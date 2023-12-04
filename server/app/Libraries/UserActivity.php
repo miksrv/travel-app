@@ -9,7 +9,7 @@ class UserActivity {
     private UserLevels $userLevels;
     private Session $session;
 
-    protected array $types = ['photo', 'place', 'rating'];
+    protected array $types = ['photo', 'place', 'rating', 'edit'];
 
     public function __construct() {
         $this->usersActivityModel = new UsersActivityModel();
@@ -24,12 +24,6 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function photo($photoId, $placeId): bool {
-        if (!$this->session->isAuth) {
-            return false;
-        }
-
-        $this->session->update();
-        $this->userLevels->experience('photo', $this->session->userId, $photoId);
         return $this->_add('photo', $this->session->userId, $photoId, $placeId);
     }
 
@@ -39,13 +33,11 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function place($placeId): bool {
-        if (!$this->session->isAuth) {
-            return false;
-        }
-
-        $this->session->update();
-        $this->userLevels->experience('place', $this->session->userId, $placeId);
         return $this->_add('place', $this->session->userId, null, $placeId);
+    }
+
+    public function edit($placeId): bool {
+        return $this->_add('edit', $this->session->userId, null, $placeId);
     }
 
     /**
@@ -55,12 +47,6 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function rating($placeId, $ratingId): bool {
-        if (!$this->session->isAuth) {
-            return false;
-        }
-
-        $this->session->update();
-        $this->userLevels->experience('rating', $this->session->userId, $ratingId);
         return $this->_add('rating', $this->session->userId, null, $placeId, $ratingId);
     }
 
@@ -80,7 +66,7 @@ class UserActivity {
         string|null $placeId  = null,
         string|null $ratingId = null,
     ): bool {
-        if (!in_array($type, $this->types)) {
+        if (!in_array($type, $this->types) || !$this->session->isAuth) {
             return false;
         }
 
@@ -93,6 +79,14 @@ class UserActivity {
         $userActivity->rating_id = $ratingId;
 
         if ($this->usersActivityModel->insert($userActivity)) {
+
+            $this->session->update();
+            $this->userLevels->experience(
+                $type,
+                $this->session->userId,
+                $type === 'photo' ? $photoId : ($type === 'rating' ? $ratingId : $placeId)
+            );
+
             return true;
         }
 
