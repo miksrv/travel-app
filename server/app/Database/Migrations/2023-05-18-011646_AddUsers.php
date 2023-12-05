@@ -27,6 +27,15 @@ class AddUsers extends Migration {
                 'constraint' => 200,
                 'null'       => false
             ],
+            'auth_type'      => [
+                'type'       => 'ENUM("native", "google")',
+                'null'       => true
+            ],
+            'locale' => [
+                'type'    => 'ENUM("ru", "en")',
+                'default' => 'ru',
+                'null'    => false,
+            ],
             'level' => [
                 'type'       => 'TINYINT',
                 'constraint' => 3,

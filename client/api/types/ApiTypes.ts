@@ -48,8 +48,12 @@ export interface RequestAuthLogin {
     email?: string
     password?: string
 }
+export interface RequestAuthGoogle {
+    code?: string
+}
 
 export interface ResponseAuthLogin {
+    redirect?: string
     token?: string
     auth?: boolean
     user?: User

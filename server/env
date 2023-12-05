@@ -30,6 +30,15 @@ JWT_TIME_TO_LIVE = 3600
 # app.CSPEnabled = false
 
 #--------------------------------------------------------------------
+# AUTHORIZATION
+#--------------------------------------------------------------------
+
+# See this page: https://console.developers.google.com/
+auth.google.clientID = ''
+auth.google.secret   = ''
+auth.google.redirect = ''
+
+#--------------------------------------------------------------------
 # DATABASE
 #--------------------------------------------------------------------
 

@@ -103,7 +103,7 @@ const UsersPage: NextPage = () => {
                                                 value={user.reputation}
                                             />
                                         </Box>
-                                        <div>
+                                        <Box sx={{ minWidth: '140px' }}>
                                             {`${user?.level?.name} (${user?.level?.level})`}
                                             <LinearProgress
                                                 variant={'determinate'}
@@ -116,7 +116,7 @@ const UsersPage: NextPage = () => {
                                                         0
                                                 )}
                                             />
-                                        </div>
+                                        </Box>
                                     </Stack>
                                 </ListItem>
                             ))}

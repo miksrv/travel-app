@@ -68,6 +68,13 @@ export const API = createApi({
         authGetMe: builder.mutation<ApiTypes.ResponseAuthLogin, void>({
             query: () => 'auth/me'
         }),
+        authGoogleLogin: builder.mutation<
+            ApiTypes.ResponseAuthLogin,
+            ApiTypes.RequestAuthGoogle
+        >({
+            query: (params) => `auth/google${encodeQueryData(params)}`,
+            transformErrorResponse: (response) => response.data
+        }),
         authPostLogin: builder.mutation<
             ApiTypes.ResponseAuthLogin,
             ApiTypes.RequestAuthLogin

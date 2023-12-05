@@ -30,6 +30,7 @@ import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
+import LoginGoogle from '@/components/login-google'
 
 const Search = styled('div')(({ theme }) => ({
     '&:hover': {
@@ -251,6 +252,8 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                 <DialogTitle>{'Авторизация на сайте'}</DialogTitle>
 
                 <LoginForm />
+
+                <LoginGoogle />
 
                 <List sx={{ width: '400px' }}>
                     <ListItem disableGutters>

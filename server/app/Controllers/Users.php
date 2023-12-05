@@ -35,11 +35,17 @@ class Users extends ResourceController {
         }
 
         foreach ($usersData as $item) {
+            $level    = $userLevels->getLevelData($item);
             $result[] = (object) [
                 'id'      => $item->id,
                 'name'    => $item->name,
                 'avatar'  => $item->avatar,
-                'level'   => $userLevels->getLevelData($item),
+                'level'   => [
+                    'level'      => $level->level,
+                    'name'       => $level->name,
+                    'experience' => $item->experience,
+                    'nextLevel'  => $level->nextLevel,
+                ],
                 'created' => $item->created_at,
                 'reputation' => $item->reputation,
             ];

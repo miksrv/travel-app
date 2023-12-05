@@ -77,21 +77,30 @@ class UserLevels {
         // If we consider that the user’s actual experience or level does not correspond to that obtained
         // as a result of the calculation, then we will update the user data in the database
         if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
-            $userModel = new UsersModel();
+            $userModel  = new UsersModel();
+            $userNotify = new UserNotify();
 
             $userModel->update($user->id, [
                 'level'      => $calcLevel->level,
                 'experience' => $experience
             ]);
 
-            // if ($calcLevel->level !== $user->level) {
-            // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
-            // }
+             if ($calcLevel->level !== $user->level) {
+                 $userNotify->level($user->id);
+             }
         }
 
         return $this;
     }
 
+    /**
+     * Add points for user experience
+     * @param string $type
+     * @param string $userId
+     * @param string $objectId
+     * @return bool
+     * @throws ReflectionException
+     */
     public function experience(string $type, string $userId, string $objectId): bool {
         $userModel  = new UsersModel();
         $userNotify = new UserNotify();
@@ -119,10 +128,6 @@ class UserLevels {
                 'level'      => $calcLevel->level,
                 'experience' => $userData->experience
             ]);
-
-            // if ($calcLevel->level !== $user->level) {
-            // TODO ОТПРАВИТЬ ПОЛЬЗОВАТЕЛЮ НОТИФИКАЦИЮ О ПОВЫШЕНИИ УРОВНЯ
-            // }
 
             return true;
         }

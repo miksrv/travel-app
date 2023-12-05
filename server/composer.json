@@ -10,6 +10,7 @@
         "firebase/php-jwt": "^6.9",
         "geocoder-php/nominatim-provider": "^5.7",
         "geocoder-php/yandex-provider": "^4.5",
+        "google/apiclient": "^2.0",
         "guzzlehttp/guzzle": "^7.7",
         "nyholm/psr7": "^1.8",
         "symfony/http-client": "^6.2"
