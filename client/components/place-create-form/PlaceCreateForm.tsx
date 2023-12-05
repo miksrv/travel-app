@@ -21,6 +21,7 @@ import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import ContentEditor from '@/components/content-editor'
+import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
 
 import { round } from '@/functions/helpers'
 
@@ -120,6 +121,8 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     />
                 </FormControl>
 
+                <PlacesCategorySelect />
+
                 <Card sx={{ height: '260px', mb: 2, mt: 2 }}>
                     <InteractiveMap
                         storeMapPosition={false}
@@ -155,33 +158,45 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                 </FormControl>
 
                 <Box sx={{ mb: 2, mt: 2 }}>
+                    <InputLabel
+                        shrink={true}
+                        htmlFor={'title'}
+                        sx={{ fontSize: '16px' }}
+                    >
+                        {'Описание интересного места'}
+                    </InputLabel>
                     <ContentEditor
                         markdown={' '}
                         onChange={setEditorContent}
                     />
                 </Box>
 
-                <FormControl
-                    sx={{ m: 1, minWidth: 200, width: '100%' }}
-                    size='small'
-                >
+                <FormControl sx={{ width: '100%' }}>
                     <Autocomplete
+                        sx={{ border: 'none' }}
                         multiple={true}
-                        getOptionLabel={(option) =>
-                            typeof option === 'string' ? option : ''
-                        }
+                        // getOptionLabel={(option) =>
+                        //     typeof option === 'string' ? option : option.label
+                        // }
                         // loading={searchLoading}
                         filterOptions={(x) => x}
-                        options={[]}
+                        options={['Пещера', 'Гора', 'Водоем']}
+                        // options={[
+                        //     { label: 'Пещера' },
+                        //     { label: 'Гора' },
+                        //     { label: 'Водоем' }
+                        // ]}
+                        freeSolo={true}
                         autoComplete
                         includeInputInList
                         filterSelectedOptions
                         // value={''}
                         noOptionsText='Нет найденных локаций'
-                        // groupBy={(option) => option.type}
-                        // onChange={(event, newValue) => {
-                        //     onChangeLocation?.(newValue || undefined)
-                        // }}
+                        // groupBy={(option) => option.label}
+                        onChange={(event, newValue) => {
+                            console.log('onChange', newValue)
+                            // onChangeLocation?.(newValue || undefined)
+                        }}
                         // onInputChange={(event, newInputValue) => {
                         //     if (newInputValue !== location?.title) {
                         //         setLocationLoading(true)
@@ -189,18 +204,18 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                         //
                         //     onSearchChange(newInputValue)
                         // }}
-                        renderOption={(props, option) => (
-                            <li {...props}>
-                                <Typography variant='body1'>
-                                    {/*{option.title}*/}
-                                </Typography>
-                            </li>
-                        )}
+                        // renderOption={(props, option) => (
+                        //     <li {...props}>
+                        //         <Typography variant='body1'>
+                        //             {option.label}
+                        //         </Typography>
+                        //     </li>
+                        // )}
                         renderInput={(params: any) => (
                             <TextField
                                 {...params}
+                                placeholder={'Введите до 20 тегов'}
                                 variant={'outlined'}
-                                placeholder={'Поиск по локации'}
                                 size={'small'}
                                 InputProps={{
                                     ...params.InputProps
