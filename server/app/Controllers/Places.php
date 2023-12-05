@@ -5,6 +5,7 @@ use App\Entities\TranslationPlace;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
+use App\Libraries\UserNotify;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
@@ -314,6 +315,7 @@ class Places extends ResourceController {
     }
 
     /**
+     * Update place content by ID
      * @param $id
      * @return ResponseInterface
      * @throws ReflectionException
@@ -326,10 +328,12 @@ class Places extends ResourceController {
             return $this->failUnauthorized();
         }
 
+        $placesModel    = new PlacesModel();
+        $placeData      = $placesModel->find($id);
         $placeTranslate = new PlaceTranslation('ru');
         $placeTranslate->translate([$id]);
 
-        if (!$placeTranslate->title($id)) {
+        if (!$placeTranslate->title($id) || !$placeData) {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
@@ -338,14 +342,13 @@ class Places extends ResourceController {
         }
 
         $userActivity = new UserActivity();
-        $placesModel  = new PlacesModel();
+
         $langModel    = new TranslationsPlacesModel();
         $translation  = new TranslationPlace();
+        $newContent   = strip_tags(html_entity_decode($input->content));
 
-        $newContent = strip_tags(html_entity_decode($input->content));
-
-        $translation->place    = $id;
         $translation->language = 'ru';
+        $translation->place_id = $id;
         $translation->user_id  = $session->userData->id;
         $translation->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
         $translation->content  = $newContent;
@@ -368,6 +371,12 @@ class Places extends ResourceController {
         } else {
             $langModel->insert($translation);
             $userActivity->edit($id);
+        }
+
+        // We add a notification to the author that his material has been edited
+        if ($placeData->user_ud !== $session->userData->id) {
+            $userNotify = new UserNotify();
+            $userNotify->place($placeTranslate->author($id), $id);
         }
 
         // In any case, we update the time when the post was last edited

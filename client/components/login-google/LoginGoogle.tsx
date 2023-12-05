@@ -1,3 +1,5 @@
+'use client'
+
 import { Button } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
