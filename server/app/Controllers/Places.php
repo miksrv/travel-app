@@ -342,7 +342,6 @@ class Places extends ResourceController {
         }
 
         $userActivity = new UserActivity();
-
         $langModel    = new TranslationsPlacesModel();
         $translation  = new TranslationPlace();
         $newContent   = strip_tags(html_entity_decode($input->content));

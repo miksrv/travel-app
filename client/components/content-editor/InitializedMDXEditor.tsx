@@ -10,13 +10,17 @@ import {
     quotePlugin,
     thematicBreakPlugin
 } from '@mdxeditor/editor'
-import { toolbarPlugin } from '@mdxeditor/editor'
-import { diffSourcePlugin } from '@mdxeditor/editor'
-import { DiffSourceToggleWrapper } from '@mdxeditor/editor'
-import { UndoRedo } from '@mdxeditor/editor'
-import { linkPlugin } from '@mdxeditor/editor'
-import { imagePlugin } from '@mdxeditor/editor'
+import {
+    DiffSourceToggleWrapper,
+    UndoRedo,
+    diffSourcePlugin,
+    imagePlugin,
+    linkPlugin,
+    toolbarPlugin
+} from '@mdxeditor/editor'
 import type { ForwardedRef } from 'react'
+
+import styles from './styles.module.sass'
 
 export default function InitializedMDXEditor({
     editorRef,
@@ -24,7 +28,8 @@ export default function InitializedMDXEditor({
 }: { editorRef: ForwardedRef<MDXEditorMethods> | null } & MDXEditorProps) {
     return (
         <MDXEditor
-            contentEditableClassName={'markdownEditorContent'}
+            className={styles.editor}
+            contentEditableClassName={styles.markdownEditorContent}
             plugins={[
                 diffSourcePlugin({
                     diffMarkdown: props.markdown,
