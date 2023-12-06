@@ -11,7 +11,7 @@ import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Address, Tag } from '@/api/types/Place'
 
-import ContentEditor from '@/components/content-editor'
+import ContentEditor from '../form-controllers/content-editor'
 
 interface PlaceTabDescriptionProps {
     id?: string

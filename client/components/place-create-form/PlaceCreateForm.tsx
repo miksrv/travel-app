@@ -1,14 +1,9 @@
-import { InputField } from '@/pages/_app'
 import { Button } from '@mui/material'
-import Autocomplete from '@mui/material/Autocomplete'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
-import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
@@ -20,8 +15,10 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import ContentEditor from '@/components/content-editor'
-import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
+import CategorySelector from '@/components/form-controllers/category-selector'
+import ContentEditor from '@/components/form-controllers/content-editor'
+import InputField from '@/components/form-controllers/input-field'
+import TagsSelector from '@/components/form-controllers/tags-selector'
 
 import { round } from '@/functions/helpers'
 
@@ -121,7 +118,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     />
                 </FormControl>
 
-                <PlacesCategorySelect />
+                <CategorySelector />
 
                 <Card sx={{ height: '260px', mb: 2, mt: 2 }}>
                     <InteractiveMap
@@ -172,69 +169,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                 </Box>
 
                 <FormControl sx={{ width: '100%' }}>
-                    <Autocomplete
-                        sx={{ border: 'none' }}
-                        multiple={true}
-                        // getOptionLabel={(option) =>
-                        //     typeof option === 'string' ? option : option.label
-                        // }
-                        // loading={searchLoading}
-                        filterOptions={(x) => x}
-                        options={['Пещера', 'Гора', 'Водоем']}
-                        // options={[
-                        //     { label: 'Пещера' },
-                        //     { label: 'Гора' },
-                        //     { label: 'Водоем' }
-                        // ]}
-                        freeSolo={true}
-                        autoComplete
-                        includeInputInList
-                        filterSelectedOptions
-                        // value={''}
-                        noOptionsText='Нет найденных локаций'
-                        // groupBy={(option) => option.label}
-                        onChange={(event, newValue) => {
-                            console.log('onChange', newValue)
-                            // onChangeLocation?.(newValue || undefined)
-                        }}
-                        // onInputChange={(event, newInputValue) => {
-                        //     if (newInputValue !== location?.title) {
-                        //         setLocationLoading(true)
-                        //     }
-                        //
-                        //     onSearchChange(newInputValue)
-                        // }}
-                        // renderOption={(props, option) => (
-                        //     <li {...props}>
-                        //         <Typography variant='body1'>
-                        //             {option.label}
-                        //         </Typography>
-                        //     </li>
-                        // )}
-                        renderInput={(params: any) => (
-                            <TextField
-                                {...params}
-                                placeholder={'Введите до 20 тегов'}
-                                variant={'outlined'}
-                                size={'small'}
-                                InputProps={{
-                                    ...params.InputProps
-                                    // endAdornment: (
-                                    //     <React.Fragment>
-                                    //         {searchLoading ||
-                                    //         locationLoading ? (
-                                    //             <CircularProgress
-                                    //                 color='inherit'
-                                    //                 size={16}
-                                    //             />
-                                    //         ) : null}
-                                    //         {params.InputProps.endAdornment}
-                                    //     </React.Fragment>
-                                    // )
-                                }}
-                            />
-                        )}
-                    />
+                    <TagsSelector />
                 </FormControl>
 
                 <Button
