@@ -11,6 +11,8 @@ import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Address, Tag } from '@/api/types/Place'
 
+import TagsSelector from '@/components/form-controllers/tags-selector'
+
 import ContentEditor from '../form-controllers/content-editor'
 
 interface PlaceTabDescriptionProps {
@@ -30,6 +32,7 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
     const isAuth = useAppSelector((state) => state.auth.isAuth)
     const [editorMode, setEditorMode] = React.useState<boolean>(false)
     const [editorContent, setEditorContent] = React.useState<string>()
+    const [editorTags, setEditorTags] = React.useState<string[]>()
 
     const handleSetEditorClick = () => {
         setEditorMode(!editorMode)
@@ -53,6 +56,10 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
             setEditorContent(undefined)
         }
     }, [saveData])
+
+    useEffect(() => {
+        setEditorTags(tags?.map(({ title }) => title))
+    }, [])
 
     return (
         <>
@@ -169,23 +176,29 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
                     </Typography>
                 )}
 
-                {!!tags?.length && (
-                    <Stack
-                        direction='row'
-                        spacing={1}
-                        sx={{ mb: -1, mt: 1 }}
-                    >
-                        {tags.map((tag) => (
-                            <Link
-                                key={tag.id}
-                                color={'inherit'}
-                                href={`/tags/${tag.id}`}
-                            >
-                                {`#${tag.title}`}
-                            </Link>
-                        ))}
-                    </Stack>
-                )}
+                {!!tags?.length &&
+                    (isAuth && editorMode ? (
+                        <TagsSelector
+                            onChangeTags={setEditorTags}
+                            tags={editorTags}
+                        />
+                    ) : (
+                        <Stack
+                            direction='row'
+                            spacing={1}
+                            sx={{ mb: -1, mt: 1 }}
+                        >
+                            {tags.map((tag) => (
+                                <Link
+                                    key={tag.id}
+                                    color={'inherit'}
+                                    href={`/tags/${tag.id}`}
+                                >
+                                    {`#${tag.title}`}
+                                </Link>
+                            ))}
+                        </Stack>
+                    ))}
             </CardContent>
         </>
     )

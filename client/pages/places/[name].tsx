@@ -71,7 +71,6 @@ const PlaceItemPage: NextPage = () => {
     const authSlice = useAppSelector((state) => state.auth)
 
     const [activeTab, setActiveTab] = React.useState<number>(0)
-
     const [iWasHere, setIWasHere] = React.useState<boolean>(false)
 
     const { data: placeData, isLoading } = API.usePlacesGetItemQuery(placeId, {
@@ -181,6 +180,7 @@ const PlaceItemPage: NextPage = () => {
                                 sx={{ mr: 1, mt: 1.4 }}
                                 size={'medium'}
                                 variant={'contained'}
+                                href={'/places/create'}
                             >
                                 {'Добавить'}
                             </Button>
@@ -194,8 +194,8 @@ const PlaceItemPage: NextPage = () => {
                                     p: '6px 8px'
                                 }}
                                 size={'medium'}
-                                variant={!iWasHere ? 'contained' : 'outlined'}
                                 color={'primary'}
+                                variant={!iWasHere ? 'contained' : 'outlined'}
                                 disabled={
                                     !authSlice.isAuth || visitedPutLoading
                                 }

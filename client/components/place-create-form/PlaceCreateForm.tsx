@@ -156,7 +156,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     />
                 </FormControl>
 
-                <Box sx={{ mb: 2, mt: 2 }}>
+                <Box sx={{ mt: 2 }}>
                     <InputLabel
                         shrink={true}
                         htmlFor={'title'}
@@ -170,19 +170,19 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     />
                 </Box>
 
-                <FormControl sx={{ mb: 2, width: '100%' }}>
-                    <TagsSelector
-                        onChangeTags={(tags) => console.log('tags', tags)}
-                    />
-                </FormControl>
+                <TagsSelector
+                    onChangeTags={(tags) => console.log('tags', tags)}
+                />
 
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    onClick={handleLoginButton}
-                >
-                    {'Добавить'}
-                </Button>
+                <Box sx={{ mt: 2 }}>
+                    <Button
+                        variant={'contained'}
+                        color={'primary'}
+                        onClick={handleLoginButton}
+                    >
+                        {'Добавить'}
+                    </Button>
+                </Box>
             </CardContent>
         </Card>
     )
