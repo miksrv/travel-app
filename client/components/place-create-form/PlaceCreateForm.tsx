@@ -114,6 +114,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     <InputField
                         name={'title'}
                         id={'title'}
+                        placeholder={'Введите заголовок интересного места'}
                         onChange={handleChange}
                     />
                 </FormControl>
@@ -150,6 +151,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     <InputField
                         name={'address'}
                         id={'address'}
+                        placeholder={'Адрес может быть определен автоматически'}
                         onChange={handleChange}
                     />
                 </FormControl>

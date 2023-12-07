@@ -11,10 +11,9 @@ const InputField = styled(InputBase)(({ theme }) => ({
             )} 0 0 0 0.05rem`
         },
         backgroundColor: theme.palette.mode === 'light' ? '#f7f8fa' : '#1A2027',
-        border: '1px solid',
+        border: '0.5px solid',
         borderColor: theme.palette.mode === 'light' ? '#cbcccd' : '#2D3843',
         borderRadius: 6,
-        borderWidth: 0.5,
         fontSize: 14,
         padding: '8px 12px',
         position: 'relative',

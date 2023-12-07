@@ -72,8 +72,8 @@ const CategorySelector: React.FC<CategorySelectorProps> = (props) => {
                 renderInput={(params: any) => (
                     <TextField
                         {...params}
-                        label={'Категория'}
-                        placeholder={'Категория'}
+                        // label={'Категория'}
+                        placeholder={'Выберите категорию'}
                         variant={'outlined'}
                         size={'small'}
                         InputProps={{

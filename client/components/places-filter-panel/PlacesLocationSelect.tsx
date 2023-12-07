@@ -62,7 +62,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
     return (
         <FormControl
             sx={{ m: 1, minWidth: 200, width: '100%' }}
-            size='small'
+            size={'small'}
         >
             <Autocomplete
                 getOptionLabel={(option) =>

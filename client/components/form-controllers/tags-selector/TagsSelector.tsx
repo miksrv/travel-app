@@ -7,8 +7,6 @@ import React, { useMemo, useState } from 'react'
 
 import { API } from '@/api/api'
 
-import styles from './styles.module.sass'
-
 interface TagsSelectorProps {
     tags?: string[]
     onChangeTags?: (value?: string[]) => void
@@ -33,7 +31,6 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ tags, onChangeTags }) => {
 
     return (
         <Autocomplete
-            className={styles.tagsSelector}
             sx={{
                 '& .MuiOutlinedInput-root': {
                     borderRadius: '6px',
