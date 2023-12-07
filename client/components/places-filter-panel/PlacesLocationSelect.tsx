@@ -29,7 +29,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                     searchAddress(search)
                 }
                 setLocationLoading(false)
-            }, 1000),
+            }, 500),
         []
     )
 
@@ -75,8 +75,7 @@ const PlacesLocationSelect: React.FC<PlacesLocationSelectProps> = (props) => {
                 includeInputInList
                 filterSelectedOptions
                 value={location}
-                noOptionsText='Нет найденных локаций'
-                // groupBy={(option) => option.type}
+                noOptionsText={'Нет найденных локаций'}
                 onChange={(event, newValue) => {
                     onChangeLocation?.(newValue || undefined)
                 }}

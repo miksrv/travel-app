@@ -168,13 +168,14 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     />
                 </Box>
 
-                <FormControl sx={{ width: '100%' }}>
-                    <TagsSelector />
+                <FormControl sx={{ mb: 2, width: '100%' }}>
+                    <TagsSelector
+                        onChangeTags={(tags) => console.log('tags', tags)}
+                    />
                 </FormControl>
 
                 <Button
                     variant={'contained'}
-                    size={'small'}
                     color={'primary'}
                     onClick={handleLoginButton}
                 >

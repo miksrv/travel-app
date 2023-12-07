@@ -69,6 +69,10 @@ $routes->post('auth/register', 'Auth::register');
 $routes->post('auth/login', 'Auth::login');
 $routes->options('auth/(:any)', 'Auth::me');
 
+/* Tags */
+$routes->get('tags', 'Tags::search');
+$routes->options('tags', 'Tags');
+
 /* Bookmarks */
 $routes->get('bookmarks', 'Bookmarks::check');
 $routes->put('bookmarks', 'Bookmarks::set');

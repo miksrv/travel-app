@@ -123,6 +123,11 @@ export interface ResponseAddressGetSearch {
     cities?: AddressObject[]
 }
 
+/* Controller: Tags */
+export interface ResponseTagsGetSearch {
+    items?: string[]
+}
+
 /* Controller: Place */
 export interface ResponseCategoriesGetList extends Place {
     items?: Category[]

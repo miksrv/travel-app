@@ -11,12 +11,12 @@ import { Place } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
 
-interface PlacesCategorySelectProps {
+interface CategorySelectorProps {
     category?: Place.Category
     onChangeCategory?: (value?: Place.Category) => void
 }
 
-const CategorySelector: React.FC<PlacesCategorySelectProps> = (props) => {
+const CategorySelector: React.FC<CategorySelectorProps> = (props) => {
     const { category, onChangeCategory } = props
 
     const { data, isLoading } = API.useCategoriesGetListQuery()

@@ -210,6 +210,14 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         }),
 
+        /* Controller: Tags */
+        tagsGetSearch: builder.mutation<
+            ApiTypes.ResponseTagsGetSearch,
+            Maybe<string>
+        >({
+            query: (searchString) => `tags?search=${searchString}`
+        }),
+
         /* Controller: User */
         usersGetItem: builder.query<ApiTypes.ResponseUsersGetItem, string>({
             providesTags: ['Users'],

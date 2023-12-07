@@ -120,8 +120,9 @@ const PlacesPage: NextPage = () => {
                             sx={{ mr: 1, mt: 1.4 }}
                             size={'medium'}
                             variant={'contained'}
+                            href={'/places/create'}
                         >
-                            Добавить
+                            {'Добавить'}
                         </Button>
                     }
                 />
