@@ -2,7 +2,6 @@ import Autocomplete from '@mui/material/Autocomplete'
 import CircularProgress from '@mui/material/CircularProgress'
 import FormControl from '@mui/material/FormControl'
 import TextField from '@mui/material/TextField'
-import Typography from '@mui/material/Typography'
 import { debounce } from '@mui/material/utils'
 import React, { useMemo, useState } from 'react'
 
@@ -48,7 +47,7 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ tags, onChangeTags }) => {
                         },
                     background: '#f7f8fa'
                 }}
-                noOptionsText={'Нет найденных локаций'}
+                noOptionsText={'Нет найденых тегов'}
                 multiple={true}
                 freeSolo={true}
                 autoComplete={true}
@@ -69,11 +68,6 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ tags, onChangeTags }) => {
 
                     onSearchChange(newInputValue)
                 }}
-                renderOption={(props, option) => (
-                    <li {...props}>
-                        <Typography variant={'body1'}>{option}</Typography>
-                    </li>
-                )}
                 renderInput={(params: any) => (
                     <TextField
                         {...params}
@@ -86,7 +80,7 @@ const TagsSelector: React.FC<TagsSelectorProps> = ({ tags, onChangeTags }) => {
                                 <React.Fragment>
                                     {searchLoading || tagsLoading ? (
                                         <CircularProgress
-                                            color='inherit'
+                                            color={'inherit'}
                                             size={16}
                                         />
                                     ) : null}

@@ -2,6 +2,7 @@
 
 use App\Entities\Place;
 use App\Entities\TranslationPlace;
+use App\Libraries\PlaceTags;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
@@ -328,19 +329,26 @@ class Places extends ResourceController {
             return $this->failUnauthorized();
         }
 
+        $placeTags      = new PlaceTags();
         $placesModel    = new PlacesModel();
-        $placeData      = $placesModel->find($id);
         $placeTranslate = new PlaceTranslation('ru');
+        $placeData      = $placesModel->find($id);
         $placeTranslate->translate([$id]);
 
         if (!$placeTranslate->title($id) || !$placeData) {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
-        if (!$input->content) {
-            return $this->failValidationErrors('Cant save empty content');
+        // Save place tags
+        if (isset($input->tags)) {
+            $placeTags->saveTags($input->tags, $id);
         }
 
+        if (!isset($input->content)) {
+            return $this->respond((object) ['status' => true]);
+        }
+
+        // Save place content
         $userActivity = new UserActivity();
         $langModel    = new TranslationsPlacesModel();
         $translation  = new TranslationPlace();

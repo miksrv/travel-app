@@ -40,7 +40,10 @@
     },
     "scripts": {
         "test": "phpunit",
-        "serve": "php spark serve --timeout 0",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "php spark serve"
+        ],
         "kill": "pkill -9 php",
         "migration:create": "php spark migrate:create AddUsersAchievements",
         "migration:status": "php spark migrate:status",
