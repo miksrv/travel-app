@@ -1,14 +1,7 @@
 import '@/styles/globals.sass'
 import CssBaseline from '@mui/material/CssBaseline'
-import InputBase from '@mui/material/InputBase'
 import { ruRU } from '@mui/material/locale'
-import {
-    Shadows,
-    ThemeProvider,
-    alpha,
-    createTheme,
-    styled
-} from '@mui/material/styles'
+import { Shadows, ThemeProvider, createTheme } from '@mui/material/styles'
 import { appWithTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -50,6 +43,14 @@ const theme = createTheme(
                 styleOverrides: {
                     root: {
                         fontSize: 12
+                    }
+                }
+            },
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        fontSize: '14px',
+                        textTransform: 'none'
                     }
                 }
             },

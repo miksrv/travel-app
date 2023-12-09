@@ -2,6 +2,7 @@
 
 import { Button } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
+import InputLabel from '@mui/material/InputLabel'
 import TextField from '@mui/material/TextField'
 import React, { useEffect, useState } from 'react'
 
@@ -9,6 +10,8 @@ import { API } from '@/api/api'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
+
+import InputField from '@/components/form-controllers/input-field'
 
 interface LoginFormProps {}
 
@@ -36,37 +39,56 @@ const LoginForm: React.FC<LoginFormProps> = () => {
 
     return (
         <>
-            <FormControl variant={'standard'}>
-                <TextField
+            <FormControl
+                variant={'standard'}
+                fullWidth={true}
+            >
+                <InputLabel
+                    shrink={true}
+                    htmlFor={'email'}
+                    sx={{ fontSize: '16px' }}
+                >
+                    {'Email адрес'}
+                </InputLabel>
+                <InputField
+                    id={'email'}
                     name={'email'}
-                    label={'Login'}
-                    variant={'outlined'}
                     onChange={handleChange}
                 />
             </FormControl>
-            <FormControl variant={'standard'}>
-                <TextField
+            <FormControl
+                variant={'standard'}
+                fullWidth={true}
+                sx={{ mt: 2 }}
+            >
+                <InputLabel
+                    shrink={true}
+                    htmlFor={'password'}
+                    sx={{ fontSize: '16px' }}
+                >
+                    {'Пароль'}
+                </InputLabel>
+                <InputField
+                    id={'password'}
                     name={'password'}
-                    label={'Password'}
-                    variant={'outlined'}
+                    type={'password'}
                     onChange={handleChange}
                 />
             </FormControl>
 
-            <Button
-                variant={'contained'}
-                size={'small'}
-                sx={{
-                    left: '10px',
-                    minWidth: '26px',
-                    mt: 9,
-                    width: '26px'
-                }}
-                color={'primary'}
-                onClick={handleLoginButton}
+            <FormControl
+                variant={'standard'}
+                fullWidth={true}
+                sx={{ mb: 2, mt: 2 }}
             >
-                {'Войти'}
-            </Button>
+                <Button
+                    variant={'contained'}
+                    color={'primary'}
+                    onClick={handleLoginButton}
+                >
+                    {'Войти'}
+                </Button>
+            </FormControl>
         </>
     )
 }

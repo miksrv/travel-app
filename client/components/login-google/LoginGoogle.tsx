@@ -1,5 +1,6 @@
 'use client'
 
+import GoogleIcon from '@mui/icons-material/Google'
 import { Button } from '@mui/material'
 import { useRouter, useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
@@ -41,16 +42,15 @@ const LoginGoogle: React.FC<LoginFormProps> = () => {
     }, [searchParams])
 
     return (
-        <>
-            <Button
-                variant={'contained'}
-                size={'small'}
-                color={'primary'}
-                onClick={handleLoginButton}
-            >
-                {'Войти через Google'}
-            </Button>
-        </>
+        <Button
+            variant={'contained'}
+            color={'error'}
+            fullWidth={true}
+            onClick={handleLoginButton}
+            startIcon={<GoogleIcon />}
+        >
+            {'Войти через Google'}
+        </Button>
     )
 }
 export default LoginGoogle

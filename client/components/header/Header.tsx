@@ -10,13 +10,7 @@ import { Avatar, Badge, IconButton, Menu, Tooltip } from '@mui/material'
 import AppBar from '@mui/material/AppBar'
 import Box from '@mui/material/Box'
 import Container from '@mui/material/Container'
-import Dialog from '@mui/material/Dialog'
-import DialogTitle from '@mui/material/DialogTitle'
 import InputBase from '@mui/material/InputBase'
-import List from '@mui/material/List'
-import ListItem from '@mui/material/ListItem'
-import ListItemButton from '@mui/material/ListItemButton'
-import ListItemText from '@mui/material/ListItemText'
 import MenuItem from '@mui/material/MenuItem'
 import Toolbar from '@mui/material/Toolbar'
 import Typography from '@mui/material/Typography'
@@ -28,9 +22,6 @@ import { ImageHost } from '@/api/api'
 import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-
-import LoginForm from '@/components/login-form'
-import LoginGoogle from '@/components/login-google'
 
 const Search = styled('div')(({ theme }) => ({
     '&:hover': {
@@ -90,7 +81,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
     const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
 
-    const [open, setOpen] = React.useState(false)
     const authSlice = useAppSelector((state) => state.auth)
 
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
@@ -103,14 +93,6 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
     const handleCloseUserMenu = () => {
         setAnchorElUser(null)
-    }
-
-    const handleClickOpen = () => {
-        setOpen(true)
-    }
-
-    const handleClose = () => {
-        setOpen(false)
     }
 
     useEffect(() => {
@@ -131,7 +113,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
     return (
         <AppBar
-            position='static'
+            position={'static'}
             sx={{ boxShadow: 0, mb: 2 }}
         >
             <Container
@@ -152,9 +134,9 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                     {/*    <MenuIcon />*/}
                     {/*</IconButton>*/}
                     <Typography
-                        variant='h6'
-                        noWrap
-                        component='div'
+                        noWrap={true}
+                        variant={'h6'}
+                        component={'div'}
                         sx={{
                             display: { sm: 'block', xs: 'none' },
                             flexGrow: 1
@@ -167,18 +149,18 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             <SearchOutlined />
                         </SearchIconWrapper>
                         <StyledInputBase
-                            placeholder='Поиск…'
+                            placeholder={'Поиск…'}
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
                     <IconButton
-                        size='large'
-                        aria-label='show 17 new notifications'
-                        color='inherit'
+                        size={'large'}
+                        aria-label={'show 17 new notifications'}
+                        color={'inherit'}
                     >
                         <Badge
                             badgeContent={17}
-                            color='error'
+                            color={'error'}
                         >
                             <NotificationsOutlined />
                         </Badge>
@@ -186,7 +168,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
 
                     {authSlice.isAuth ? (
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title='Open settings'>
+                            <Tooltip title={'Open settings'}>
                                 <IconButton
                                     onClick={handleOpenUserMenu}
                                     sx={{ p: 0 }}
@@ -203,7 +185,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             </Tooltip>
                             <Menu
                                 sx={{ mt: '45px' }}
-                                id='menu-appbar'
+                                id={'menu-appbar'}
                                 anchorEl={anchorElUser}
                                 anchorOrigin={{
                                     horizontal: 'right',
@@ -222,7 +204,7 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                                         key={setting}
                                         onClick={handleCloseUserMenu}
                                     >
-                                        <Typography textAlign='center'>
+                                        <Typography textAlign={'center'}>
                                             {setting}
                                         </Typography>
                                     </MenuItem>
@@ -231,38 +213,18 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                         </Box>
                     ) : (
                         <IconButton
-                            size='large'
-                            edge='end'
-                            aria-label='account of current user'
-                            // aria-controls={menuId}
-                            aria-haspopup='true'
-                            onClick={handleClickOpen}
-                            color='inherit'
+                            size={'large'}
+                            edge={'end'}
+                            aria-label={'account of current user'}
+                            aria-haspopup={'true'}
+                            color={'inherit'}
+                            href={'/login'}
                         >
                             <AccountCircleOutlined />
                         </IconButton>
                     )}
                 </Toolbar>
             </Container>
-
-            <Dialog
-                onClose={handleClose}
-                open={open}
-            >
-                <DialogTitle>{'Авторизация на сайте'}</DialogTitle>
-
-                <LoginForm />
-
-                <LoginGoogle />
-
-                <List sx={{ width: '400px' }}>
-                    <ListItem disableGutters>
-                        <ListItemButton>
-                            <ListItemText primary='Add account' />
-                        </ListItemButton>
-                    </ListItem>
-                </List>
-            </Dialog>
         </AppBar>
     )
 }
