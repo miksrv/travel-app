@@ -3,7 +3,6 @@
 import { Button } from '@mui/material'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
-import TextField from '@mui/material/TextField'
 import React, { useEffect, useState } from 'react'
 
 import { API } from '@/api/api'
@@ -13,9 +12,14 @@ import { ApiTypes } from '@/api/types'
 
 import InputField from '@/components/form-controllers/input-field'
 
-interface LoginFormProps {}
+interface LoginFormProps {
+    loading?: boolean
+    onSuccessLogin?: () => void
+    setLoading?: (loading: boolean) => void
+}
 
-const LoginForm: React.FC<LoginFormProps> = () => {
+const LoginForm: React.FC<LoginFormProps> = (props) => {
+    const { loading, onSuccessLogin, setLoading } = props
     const dispatch = useAppDispatch()
     const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
     const [authLoginPost, { isLoading, data: authData }] =
@@ -30,12 +34,21 @@ const LoginForm: React.FC<LoginFormProps> = () => {
     const handleLoginButton = () => {
         if (formData) {
             authLoginPost(formData)
+            setLoading?.(true)
         }
     }
 
     useEffect(() => {
         dispatch(login(authData))
+
+        if (authData?.auth) {
+            onSuccessLogin?.()
+        }
     }, [authData])
+
+    useEffect(() => {
+        setLoading?.(isLoading)
+    }, [isLoading])
 
     return (
         <>
@@ -53,6 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = () => {
                 <InputField
                     id={'email'}
                     name={'email'}
+                    disabled={isLoading || loading}
                     onChange={handleChange}
                 />
             </FormControl>
@@ -72,6 +86,7 @@ const LoginForm: React.FC<LoginFormProps> = () => {
                     id={'password'}
                     name={'password'}
                     type={'password'}
+                    disabled={isLoading || loading}
                     onChange={handleChange}
                 />
             </FormControl>
@@ -84,6 +99,7 @@ const LoginForm: React.FC<LoginFormProps> = () => {
                 <Button
                     variant={'contained'}
                     color={'primary'}
+                    disabled={isLoading || loading}
                     onClick={handleLoginButton}
                 >
                     {'Войти'}

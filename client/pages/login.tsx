@@ -6,8 +6,11 @@ import Divider from '@mui/material/Divider'
 import Grid from '@mui/material/Unstable_Grid2'
 import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
+import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+
+import { useAppSelector } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
 import LoginGoogle from '@/components/login-google'
@@ -15,6 +18,21 @@ import LoginGoogle from '@/components/login-google'
 const PAGE_TITLE = 'Авторизация'
 
 const LoginPage: NextPage = () => {
+    const router = useRouter()
+    const authSlice = useAppSelector((state) => state.auth)
+
+    const [loading, setLoading] = useState<boolean>(false)
+
+    const handleSuccessLogin = () => {
+        router.push('/')
+    }
+
+    useEffect(() => {
+        if (authSlice.isAuth) {
+            router.push('/')
+        }
+    })
+
     return (
         <Container
             component={'main'}
@@ -35,8 +53,16 @@ const LoginPage: NextPage = () => {
                     sx={{ mt: 1 }}
                 >
                     <CardContent>
-                        <LoginForm />
-                        <LoginGoogle />
+                        <LoginForm
+                            loading={loading}
+                            onSuccessLogin={handleSuccessLogin}
+                            setLoading={setLoading}
+                        />
+                        <LoginGoogle
+                            loading={loading}
+                            onSuccessLogin={handleSuccessLogin}
+                            setLoading={setLoading}
+                        />
                         <Divider sx={{ mb: 2, mt: 2 }} />
                         <Grid container>
                             <Grid xs>

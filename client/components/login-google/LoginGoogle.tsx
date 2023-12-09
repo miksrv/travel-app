@@ -2,24 +2,30 @@
 
 import GoogleIcon from '@mui/icons-material/Google'
 import { Button } from '@mui/material'
-import { useRouter, useSearchParams } from 'next/navigation'
+import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 
-interface LoginFormProps {}
+interface LoginFormProps {
+    loading?: boolean
+    onSuccessLogin?: () => void
+    setLoading?: (loading: boolean) => void
+}
 
-const LoginGoogle: React.FC<LoginFormProps> = () => {
+const LoginGoogle: React.FC<LoginFormProps> = (props) => {
+    const { loading, onSuccessLogin, setLoading } = props
     const dispatch = useAppDispatch()
     const searchParams = useSearchParams()
-    const router = useRouter()
+
     const [authLoginPost, { isLoading, data: authData }] =
         API.useAuthGoogleLoginMutation()
 
     const handleLoginButton = () => {
         authLoginPost({})
+        setLoading?.(true)
     }
 
     useEffect(() => {
@@ -29,7 +35,7 @@ const LoginGoogle: React.FC<LoginFormProps> = () => {
 
         if (authData?.auth === true) {
             dispatch(login(authData))
-            router.push('/')
+            onSuccessLogin?.()
         }
     }, [authData])
 
@@ -38,14 +44,20 @@ const LoginGoogle: React.FC<LoginFormProps> = () => {
 
         if (code) {
             authLoginPost({ code })
+            setLoading?.(true)
         }
     }, [searchParams])
+
+    useEffect(() => {
+        setLoading?.(isLoading)
+    }, [isLoading])
 
     return (
         <Button
             variant={'contained'}
             color={'error'}
             fullWidth={true}
+            disabled={isLoading || loading}
             onClick={handleLoginButton}
             startIcon={<GoogleIcon />}
         >
