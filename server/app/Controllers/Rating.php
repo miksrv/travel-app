@@ -73,7 +73,7 @@ class Rating extends ResourceController {
             $input = $this->request->getJSON();
 
             if (empty($input) || !$input->place || !$input->score) {
-                return $this->failValidationErrors();
+                return $this->failValidationErrors('Not enough data to change the rating');
             }
 
             $session     = new Session();
@@ -85,6 +85,16 @@ class Rating extends ResourceController {
 
             if (!$placesData) {
                 return $this->failNotFound();
+            }
+
+            /* The user cannot change the rating for this place again */
+            $ratingHistory = $ratingModel
+                ->select('session_id, place_id')
+                ->where(['place_id' => $input->place, 'session_id' => $session->id])
+                ->findAll();
+
+            if ($ratingHistory && count($ratingHistory) > 0) {
+                return $this->failValidationErrors('You have already changed the rating for this interesting place');
             }
 
             $ratingValue = (int) $input->score <= -1 ? -1 : 1;

@@ -291,9 +291,9 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                             newRating?.rating || place?.rating
                                         }
                                         enable={
-                                            place?.actions?.rating ||
-                                            !setRatingLoading ||
-                                            !!newRating?.rating
+                                            place?.actions?.rating &&
+                                            !setRatingLoading &&
+                                            !newRating?.rating
                                         }
                                         onChange={handleRatingChange}
                                     />
