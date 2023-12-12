@@ -8,17 +8,10 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
-import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined'
-import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined'
-import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown'
-import ExpandLessIcon from '@mui/icons-material/ExpandLess'
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
-import { Avatar, AvatarGroup, Typography } from '@mui/material'
+import { Avatar, AvatarGroup } from '@mui/material'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
-import IconButton from '@mui/material/IconButton'
-import Rating from '@mui/material/Rating'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -32,6 +25,7 @@ import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
+import Rating from '@/components/form-controllers/rating'
 import StatisticLine from '@/components/statistic-line'
 import UserAvatar from '@/components/user-avatar'
 
@@ -67,6 +61,17 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
             )?.id,
         [visitedUsersData, authSlice]
     )
+
+    const handleRatingChange = (value?: number) => {
+        if (!value) {
+            return
+        }
+
+        setRating({
+            place: place?.id!,
+            score: value
+        })
+    }
 
     React.useEffect(() => {
         onChangeWasHere?.(iWasHere)
@@ -281,66 +286,19 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         width={150}
                                     />
                                 ) : (
-                                    <Box
-                                        sx={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            width: 200
-                                        }}
-                                    >
-                                        <Rating
-                                            size={'medium'}
-                                            value={
-                                                place?.rating &&
-                                                place.rating > 0 &&
-                                                !newRating?.rating
-                                                    ? place?.rating
-                                                    : newRating?.rating ?? 0
-                                            }
-                                            // precision={0.5}
-                                            disabled={setRatingLoading}
-                                            readOnly={
-                                                !place?.actions?.rating ||
-                                                !!newRating?.rating
-                                            }
-                                            onChange={(_, value) => {
-                                                setRating({
-                                                    place: place?.id!,
-                                                    score: value || 5
-                                                })
-                                            }}
-                                        />
-                                        {ratingCount && (
-                                            <Box
-                                                sx={{ ml: 1 }}
-                                            >{`(${ratingCount})`}</Box>
-                                        )}
-                                    </Box>
+                                    <Rating
+                                        value={
+                                            place?.rating || newRating?.rating
+                                        }
+                                        enable={
+                                            setRatingLoading ||
+                                            !!newRating?.rating
+                                        }
+                                        onChange={handleRatingChange}
+                                    />
                                 )
                             }
                         />
-
-                        <Stack
-                            direction={'row'}
-                            spacing={1}
-                            sx={{ mb: 1 }}
-                        >
-                            <IconButton
-                                sx={{ p: '0 !important' }}
-                                size='small'
-                            >
-                                <ExpandLessIcon fontSize={'large'} />
-                            </IconButton>
-                            <Typography sx={{ lineHeight: '30px' }}>
-                                {place?.rating}
-                            </Typography>
-                            <IconButton
-                                sx={{ p: '0 !important' }}
-                                size='small'
-                            >
-                                <ExpandMoreIcon fontSize={'large'} />
-                            </IconButton>
-                        </Stack>
                     </Grid>
                     <Grid
                         lg={6}
