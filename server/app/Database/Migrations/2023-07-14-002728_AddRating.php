@@ -30,7 +30,7 @@ class AddRating extends Migration {
             ],
             'value' => [
                 'type'       => 'TINYINT',
-                'constraint' => 5,
+                'constraint' => 2,
                 'null'       => false,
             ],
             'created_at DATETIME default current_timestamp',

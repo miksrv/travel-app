@@ -13,7 +13,7 @@ class Place extends Entity {
         'latitude'         => 'float',
         'longitude'        => 'float',
         'user_id'          => 'string',
-        'rating'           => 'float',
+        'rating'           => 'integer',
         'views'            => 'integer',
         'cover'            => 'string',
         'tags'             => 'json'

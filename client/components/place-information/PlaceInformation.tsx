@@ -288,10 +288,11 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 ) : (
                                     <Rating
                                         value={
-                                            place?.rating || newRating?.rating
+                                            newRating?.rating || place?.rating
                                         }
                                         enable={
-                                            setRatingLoading ||
+                                            place?.actions?.rating ||
+                                            !setRatingLoading ||
                                             !!newRating?.rating
                                         }
                                         onChange={handleRatingChange}
