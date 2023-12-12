@@ -153,21 +153,22 @@ const Header: React.FC<HeaderProps> = ({ onMenuClick }) => {
                             inputProps={{ 'aria-label': 'search' }}
                         />
                     </Search>
-                    <IconButton
-                        size={'large'}
-                        aria-label={'show 17 new notifications'}
-                        color={'inherit'}
-                    >
-                        <Badge
-                            badgeContent={17}
-                            color={'error'}
-                        >
-                            <NotificationsOutlined />
-                        </Badge>
-                    </IconButton>
 
                     {authSlice.isAuth ? (
                         <Box sx={{ flexGrow: 0 }}>
+                            <IconButton
+                                size={'large'}
+                                aria-label={'show 17 new notifications'}
+                                sx={{ mr: 2 }}
+                            >
+                                <Badge
+                                    badgeContent={17}
+                                    color={'error'}
+                                >
+                                    <NotificationsOutlined />
+                                </Badge>
+                            </IconButton>
+
                             <Tooltip title={'Open settings'}>
                                 <IconButton
                                     onClick={handleOpenUserMenu}
