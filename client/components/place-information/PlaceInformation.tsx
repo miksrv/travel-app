@@ -8,10 +8,16 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
-import { Avatar, AvatarGroup } from '@mui/material'
+import ArrowDropDownOutlinedIcon from '@mui/icons-material/ArrowDropDownOutlined'
+import ArrowDropUpOutlinedIcon from '@mui/icons-material/ArrowDropUpOutlined'
+import ExpandCircleDownIcon from '@mui/icons-material/ExpandCircleDown'
+import ExpandLessIcon from '@mui/icons-material/ExpandLess'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { Avatar, AvatarGroup, Typography } from '@mui/material'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import IconButton from '@mui/material/IconButton'
 import Rating from '@mui/material/Rating'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
@@ -313,6 +319,28 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 )
                             }
                         />
+
+                        <Stack
+                            direction={'row'}
+                            spacing={1}
+                            sx={{ mb: 1 }}
+                        >
+                            <IconButton
+                                sx={{ p: '0 !important' }}
+                                size='small'
+                            >
+                                <ExpandLessIcon fontSize={'large'} />
+                            </IconButton>
+                            <Typography sx={{ lineHeight: '30px' }}>
+                                {place?.rating}
+                            </Typography>
+                            <IconButton
+                                sx={{ p: '0 !important' }}
+                                size='small'
+                            >
+                                <ExpandMoreIcon fontSize={'large'} />
+                            </IconButton>
+                        </Stack>
                     </Grid>
                     <Grid
                         lg={6}
