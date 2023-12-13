@@ -78,10 +78,8 @@ class Migrate extends ResourceController {
 
             if ($ratingData && is_array($ratingData['scores'])) {
                 foreach ($ratingData['scores'] as $score) {
-                    $ratingSum += $score;
+                    $ratingSum += $score >= 3 ? 1 : -1;
                 }
-
-                $ratingSum = $ratingSum / count($ratingData['scores']);
             }
 
             // Add or update user
@@ -189,7 +187,7 @@ class Migrate extends ResourceController {
                     $rating = new \App\Entities\Rating();
                     $rating->place_id   = $newPlaceId;
                     $rating->user_id    = $ratingAuthor;
-                    $rating->value      = (int) $score;
+                    $rating->value      = (int) $score >= 3 ? 1 : -1;
                     $rating->created_at = $randomDate;
 
                     $ratingModel->insert($rating);

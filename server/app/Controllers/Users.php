@@ -4,7 +4,6 @@ use App\Libraries\UserLevels;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\SessionsModel;
-use App\Models\UsersActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -78,6 +77,7 @@ class Users extends ResourceController {
 
         $userLevels->calculate($usersData);
 
+        // Calculate new user reputation value
         if ($placesData) {
             $ratingModel = new RatingModel();
             $placesIds   = [];
