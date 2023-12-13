@@ -4,9 +4,10 @@ import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
-import { LatLngBounds } from 'leaflet'
+import { LatLng, LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
+import Image from 'next/image'
 import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
@@ -21,6 +22,8 @@ import InputField from '@/components/form-controllers/input-field'
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
 import { round } from '@/functions/helpers'
+
+import abandoned from '@/public/images/map-center.png'
 
 interface LoginFormProps {}
 
@@ -43,9 +46,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
     const [mapBounds, setMapBounds] = useState<string>()
-
-    // const lat = searchParams.get('lat')
-    // const lon = searchParams.get('lon')
+    const [mapCenter, setMapCenter] = useState<LatLng>()
 
     const [introduce] = API.useIntroduceMutation()
     const { data: poiListData } = API.usePoiGetListQuery(
@@ -55,10 +56,13 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
+            setMapCenter(bounds.getCenter())
             setMapBounds(bounds.toBBoxString())
         }, 500),
         []
     )
+
+    console.log('mapCenter', mapCenter)
 
     const [editorContent, setEditorContent] = React.useState<string>(' ')
 
@@ -121,7 +125,21 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
                 <CategorySelector />
 
-                <Card sx={{ height: '260px', mb: 2, mt: 2 }}>
+                <Card
+                    sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}
+                >
+                    <Image
+                        style={{
+                            left: '48.1%',
+                            position: 'absolute',
+                            top: '43.8%',
+                            zIndex: 10000
+                        }}
+                        src={abandoned}
+                        alt={''}
+                        width={32}
+                        height={32}
+                    />
                     <InteractiveMap
                         storeMapPosition={false}
                         places={poiListData?.items}

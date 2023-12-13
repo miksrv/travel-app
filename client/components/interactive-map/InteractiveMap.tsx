@@ -40,6 +40,7 @@ type MapProps = {
     photos?: Photo[]
     storeMapPosition?: boolean
     storeMapKey?: string
+    centerPoint?: boolean
     userLatLng?: LatLngLiteral
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
@@ -50,6 +51,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     photos,
     storeMapPosition,
     storeMapKey,
+    centerPoint,
     userLatLng,
     onChangeBounds,
     onPhotoClick,
@@ -149,7 +151,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 ))}
                 {userLatLng && (
                     <>
-                        <div className='leaflet-control'>
+                        <div className={'leaflet-control'}>
                             <Button
                                 variant={'contained'}
                                 size={'small'}
