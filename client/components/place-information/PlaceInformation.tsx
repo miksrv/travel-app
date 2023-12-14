@@ -12,6 +12,7 @@ import { Avatar, AvatarGroup } from '@mui/material'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'
+import Rating from '@mui/material/Rating'
 import Skeleton from '@mui/material/Skeleton'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Unstable_Grid2'
@@ -25,7 +26,6 @@ import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
-import Rating from '@/components/form-controllers/rating'
 import StatisticLine from '@/components/statistic-line'
 import UserAvatar from '@/components/user-avatar'
 
@@ -286,17 +286,41 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                         width={150}
                                     />
                                 ) : (
-                                    <Rating
-                                        value={
-                                            newRating?.rating || place?.rating
-                                        }
-                                        enable={
-                                            place?.actions?.rating &&
-                                            !setRatingLoading &&
-                                            !newRating?.rating
-                                        }
-                                        onChange={handleRatingChange}
-                                    />
+                                    <Box
+                                        sx={{
+                                            alignItems: 'center',
+                                            display: 'flex',
+                                            width: 200
+                                        }}
+                                    >
+                                        <Rating
+                                            size={'medium'}
+                                            value={
+                                                place?.rating &&
+                                                place.rating > 0 &&
+                                                !newRating?.rating
+                                                    ? place?.rating
+                                                    : newRating?.rating ?? 0
+                                            }
+                                            // precision={0.5}
+                                            disabled={setRatingLoading}
+                                            readOnly={
+                                                !place?.actions?.rating ||
+                                                !!newRating?.rating
+                                            }
+                                            onChange={(_, value) => {
+                                                setRating({
+                                                    place: place?.id!,
+                                                    score: value || 5
+                                                })
+                                            }}
+                                        />
+                                        {ratingCount && (
+                                            <Box
+                                                sx={{ ml: 1 }}
+                                            >{`(${ratingCount})`}</Box>
+                                        )}
+                                    </Box>
                                 )
                             }
                         />

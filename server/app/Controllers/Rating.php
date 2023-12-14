@@ -79,35 +79,41 @@ class Rating extends ResourceController {
             $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
-            $usersModel  = new UsersModel();
+//            $usersModel  = new UsersModel();
             $placesData  = $placesModel->select('id, user_id, rating, updated_at')->find($input->place);
-            $usersData   = $usersModel->select('id, reputation, updated_at')->find($placesData->user_id);
+//            $usersData   = $usersModel->select('id, reputation, updated_at')->find($placesData->user_id);
 
             if (!$placesData) {
                 return $this->failNotFound();
             }
 
-            /* The user cannot change the rating for this place again */
-            $ratingHistory = $ratingModel
-                ->select('session_id, place_id')
-                ->where(['place_id' => $input->place, 'session_id' => $session->id])
-                ->findAll();
+            $newScore = (int) $input->score < 1
+                ? 1
+                : min((int)$input->score, 5);
 
-            if ($ratingHistory && count($ratingHistory) > 0) {
-                return $this->failValidationErrors('You have already changed the rating for this interesting place');
+            $placeRating  = $ratingModel->where('place_id', $placesData->id)->findAll();
+            $averageValue = 0;
+
+            if (in_array($session->id, array_column($placeRating, 'session'))) {
+                return $this->failValidationErrors('The user has already voted for this material');
             }
 
-            $ratingValue = (int) $input->score <= -1 ? -1 : 1;
-            $placeRating = $placesData->rating + $ratingValue;
+            if ($placeRating) {
+                foreach ($placeRating as $item) {
+                    $averageValue += $item->value;
+                }
+            }
+
+            $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 1);
 
             $rating = new \App\Entities\Rating();
             $rating->place_id   = $input->place;
             $rating->user_id    = isset($session->userData) ? $session->userData->id : null;
             $rating->session_id = $session->id;
-            $rating->value      = $ratingValue;
+            $rating->value      = $newScore;
 
-            $usersModel->update($placesData->user_id, ['reputation' => $usersData->reputation + $ratingValue, 'updated_at' => $usersData->updated_at]);
-            $placesModel->update($placesData->id, ['rating' => $placeRating, 'updated_at' => $placesData->updated_at]);
+//            $usersModel->update($placesData->user_id, ['reputation' => $usersData->reputation + $newPlaceVal, 'updated_at' => $usersData->updated_at]);
+            $placesModel->update($placesData->id, ['rating' => $newPlaceVal, 'updated_at' => $placesData->updated_at]);
             $ratingModel->insert($rating);
 
             /* ACTIVITY */
@@ -124,7 +130,7 @@ class Rating extends ResourceController {
                 $userNotify->rating($placesData->user_id, $placesData->id);
             }
 
-            return $this->respond((object) ['rating' => $placeRating]);
+            return $this->respond((object) ['rating' => $newPlaceVal]);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
