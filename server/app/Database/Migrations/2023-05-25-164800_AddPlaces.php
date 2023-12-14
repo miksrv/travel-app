@@ -65,8 +65,7 @@ class AddPlaces extends Migration {
                 'null'       => true
             ],
             'rating' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
+                'type'       => 'DECIMAL(2,1)',
                 'null'       => true
             ],
             'views' => [
