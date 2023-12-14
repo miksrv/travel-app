@@ -115,6 +115,12 @@ export interface RequestPhotoPostUpload {
     place?: string
 }
 
+/* Controller: Location */
+export interface RequestLocationGetGeocoder {
+    lat?: number
+    lng?: number
+}
+
 /* Controller: Address */
 export interface ResponseAddressGetSearch {
     countries?: AddressObject[]

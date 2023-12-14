@@ -54,6 +54,17 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         { skip: !mapBounds }
     )
 
+    // const { data: geocoderData, isLoading: geocoderLoading } =
+    //     API.useLocationGetGeocoderQuery(
+    //         {
+    //             lat: mapCenter?.lat,
+    //             lng: mapCenter?.lng
+    //         },
+    //         {
+    //             skip: !mapCenter?.lat || !mapCenter?.lng
+    //         }
+    //     )
+
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
             setMapCenter(bounds.getCenter())
@@ -61,8 +72,6 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         }, 500),
         []
     )
-
-    console.log('mapCenter', mapCenter)
 
     const [editorContent, setEditorContent] = React.useState<string>(' ')
 

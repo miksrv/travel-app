@@ -123,6 +123,14 @@ export const API = createApi({
             query: (params) => `introduce${encodeQueryData(params)}`
         }),
 
+        /* Controller: Location */
+        locationGetGeocoder: builder.query<
+            any,
+            Maybe<ApiTypes.RequestLocationGetGeocoder>
+        >({
+            query: (params) => `location/geocoder${encodeQueryData(params)}`
+        }),
+
         /* Controller: Photos */
         photoPostUpload: builder.mutation<any, ApiTypes.RequestPhotoPostUpload>(
             {

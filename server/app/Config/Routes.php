@@ -69,6 +69,10 @@ $routes->post('auth/register', 'Auth::register');
 $routes->post('auth/login', 'Auth::login');
 $routes->options('auth/(:any)', 'Auth::me');
 
+/* Location */
+$routes->get('location/geocoder', 'Location::geocoder');
+$routes->options('location/geocoder', 'Location');
+
 /* Tags */
 $routes->get('tags', 'Tags::search');
 $routes->options('tags', 'Tags');
