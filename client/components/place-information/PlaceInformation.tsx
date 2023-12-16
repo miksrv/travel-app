@@ -8,7 +8,8 @@ import {
     StarBorderOutlined,
     StraightenOutlined
 } from '@mui/icons-material'
-import { Avatar, AvatarGroup } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
+import AvatarGroup from '@mui/material/AvatarGroup'
 import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardContent from '@mui/material/CardContent'

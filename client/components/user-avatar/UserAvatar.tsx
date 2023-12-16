@@ -1,4 +1,4 @@
-import { Avatar } from '@mui/material'
+import Avatar from '@mui/material/Avatar'
 import Box from '@mui/material/Box'
 import Popover from '@mui/material/Popover'
 import Skeleton from '@mui/material/Skeleton'
