@@ -1,10 +1,8 @@
-import {
-    Autocomplete,
-    CircularProgress,
-    FormControl,
-    TextField,
-    Typography
-} from '@mui/material'
+import Autocomplete from '@mui/material/Autocomplete'
+import CircularProgress from '@mui/material/CircularProgress'
+import FormControl from '@mui/material/FormControl'
+import TextField from '@mui/material/TextField'
+import Typography from '@mui/material/Typography'
 import Image from 'next/image'
 import React from 'react'
 
