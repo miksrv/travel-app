@@ -6,7 +6,6 @@ import {
     OutlinedFlagOutlined,
     PhotoCameraOutlined,
     RemoveRedEyeOutlined,
-    StarOutline,
     Straighten
 } from '@mui/icons-material'
 import { Button } from '@mui/material'
@@ -23,8 +22,8 @@ import Tabs from '@mui/material/Tabs'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
+import Image from 'next/image'
 import React, { useMemo } from 'react'
-import { position } from 'unist-util-position'
 
 import { API, ImageHost } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
@@ -38,6 +37,7 @@ import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
 
+import { categoryImage } from '@/functions/categories'
 import { numberFormatter } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
@@ -161,7 +161,23 @@ const PlaceItemPage: NextPage = () => {
                                 width={'40%'}
                             />
                         ) : (
-                            placeData?.title
+                            <>
+                                <Image
+                                    style={{
+                                        float: 'left',
+                                        marginRight: '5px',
+                                        marginTop: '4px'
+                                    }}
+                                    src={
+                                        categoryImage(placeData?.category?.name)
+                                            .src
+                                    }
+                                    alt={placeData?.category?.title || ''}
+                                    width={17}
+                                    height={20}
+                                />
+                                {placeData?.title}
+                            </>
                         )
                     }
                     titleTypographyProps={{ component: 'h1' }}
@@ -187,15 +203,6 @@ const PlaceItemPage: NextPage = () => {
                     action={
                         <>
                             <Button
-                                sx={{ mr: 1, mt: 1.4 }}
-                                size={'medium'}
-                                variant={'contained'}
-                                href={'/places/create'}
-                            >
-                                {'Добавить'}
-                            </Button>
-
-                            <Button
                                 sx={{
                                     height: '33px',
                                     minWidth: '26px',
@@ -210,9 +217,8 @@ const PlaceItemPage: NextPage = () => {
                                     !authSlice.isAuth || visitedPutLoading
                                 }
                                 onClick={handlePutPlaceVisited}
-                                startIcon={<OutlinedFlagOutlined />}
                             >
-                                {'Я тут был'}
+                                <OutlinedFlagOutlined />
                             </Button>
 
                             <Button

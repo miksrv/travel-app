@@ -92,54 +92,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         xs={6}
                     >
                         <StatisticLine
-                            icon={<BookmarkBorderOutlined color={'disabled'} />}
-                            title={'Категория:'}
-                            content={
-                                <Stack
-                                    direction={'row'}
-                                    spacing={2}
-                                >
-                                    {loading ? (
-                                        <>
-                                            <Skeleton
-                                                variant={'rectangular'}
-                                                width={20}
-                                                height={20}
-                                            />
-                                            <Skeleton
-                                                variant={'text'}
-                                                width={150}
-                                                sx={{
-                                                    marginLeft:
-                                                        '10px !important',
-                                                    marginTop: '-1px !important'
-                                                }}
-                                            />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Image
-                                                style={{
-                                                    marginRight: '8px'
-                                                }}
-                                                src={
-                                                    categoryImage(
-                                                        place?.category?.name
-                                                    ).src
-                                                }
-                                                alt={
-                                                    place?.category?.title || ''
-                                                }
-                                                width={18}
-                                                height={20}
-                                            />
-                                            {place?.category?.title}
-                                        </>
-                                    )}
-                                </Stack>
-                            }
-                        />
-                        <StatisticLine
                             icon={<AccountCircleOutlined color={'disabled'} />}
                             title={'Автор:'}
                             content={
@@ -192,7 +144,21 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         />
                         <StatisticLine
                             icon={<AccessTimeOutlined color={'disabled'} />}
-                            title={'Изменено:'}
+                            title={'Добавлено:'}
+                            content={
+                                loading ? (
+                                    <Skeleton
+                                        variant={'text'}
+                                        width={150}
+                                    />
+                                ) : (
+                                    formatDate(place?.created?.date)
+                                )
+                            }
+                        />
+                        <StatisticLine
+                            icon={<AccessTimeOutlined color={'disabled'} />}
+                            title={'Отредактировано:'}
                             content={
                                 loading ? (
                                     <Skeleton
