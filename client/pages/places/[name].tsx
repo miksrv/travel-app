@@ -3,20 +3,28 @@ import {
     BookmarkBorderOutlined,
     DescriptionOutlined,
     ImageOutlined,
-    OutlinedFlagOutlined
+    OutlinedFlagOutlined,
+    PhotoCameraOutlined,
+    RemoveRedEyeOutlined,
+    StarOutline,
+    Straighten
 } from '@mui/icons-material'
 import { Button } from '@mui/material'
+import Box from '@mui/material/Box'
 import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
 import CardMedia from '@mui/material/CardMedia'
+import Chip from '@mui/material/Chip'
 import Divider from '@mui/material/Divider'
 import Skeleton from '@mui/material/Skeleton'
+import Stack from '@mui/material/Stack'
 import Tab from '@mui/material/Tab'
 import Tabs from '@mui/material/Tabs'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo } from 'react'
+import { position } from 'unist-util-position'
 
 import { API, ImageHost } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
@@ -29,6 +37,8 @@ import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
 import PlaceTabPhotos from '@/components/place-tab-photos'
 import PlacesList from '@/components/places-list'
+
+import { numberFormatter } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
 
@@ -142,7 +152,7 @@ const PlaceItemPage: NextPage = () => {
     return (
         <PageLayout>
             <NextSeo title={placeData?.title} />
-            <Card sx={{ mb: 2 }}>
+            <Card sx={{ mb: 2, position: 'relative' }}>
                 <CardHeader
                     title={
                         isLoading || photosLoading ? (
@@ -250,6 +260,55 @@ const PlaceItemPage: NextPage = () => {
                         }
                     />
                 )}
+                <Box sx={{ left: '10px', position: 'absolute', top: '70px' }}>
+                    HEADER
+                </Box>
+                <Box
+                    sx={{ bottom: '10px', left: '10px', position: 'absolute' }}
+                >
+                    <Stack
+                        direction={'row'}
+                        spacing={1}
+                    >
+                        <Chip
+                            sx={{
+                                background: 'rgb(255 255 255 / 64%)',
+                                color: '#343434',
+                                p: '2px 4px'
+                            }}
+                            icon={<RemoveRedEyeOutlined />}
+                            label={numberFormatter(placeData?.views || 0)}
+                            size={'small'}
+                            variant={'outlined'}
+                        />
+                        {!!placeData?.photoCount && (
+                            <Chip
+                                sx={{
+                                    background: 'rgb(255 255 255 / 64%)',
+                                    color: '#343434',
+                                    p: '2px 4px'
+                                }}
+                                icon={<PhotoCameraOutlined />}
+                                label={placeData.photoCount || 0}
+                                size={'small'}
+                                variant={'outlined'}
+                            />
+                        )}
+                        {!!placeData?.distance && (
+                            <Chip
+                                sx={{
+                                    background: 'rgb(255 255 255 / 64%)',
+                                    color: '#343434',
+                                    p: '2px 4px'
+                                }}
+                                icon={<Straighten />}
+                                label={numberFormatter(placeData.distance || 0)}
+                                size={'small'}
+                                variant={'outlined'}
+                            />
+                        )}
+                    </Stack>
+                </Box>
             </Card>
 
             <PlaceInformation

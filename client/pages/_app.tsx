@@ -63,9 +63,9 @@ const theme = createTheme(
                 styleOverrides: {
                     root: {
                         backgroundColor: 'transparent', // #f7f8fa
-                        // borderColor: 'rgba(0,0,0,.08)',
-                        // borderRadius: 4,
                         border: 'none',
+                        // borderColor: 'rgba(0,0,0,.08)',
+                        borderRadius: 4,
                         color: '#616161',
                         fontSize: 12,
                         fontWeight: 500,

@@ -150,36 +150,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             }
                         />
                         <StatisticLine
-                            icon={<RemoveRedEyeOutlined color={'disabled'} />}
-                            title={'Просмотров:'}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : (
-                                    place?.views || 0
-                                )
-                            }
-                        />
-                        {place?.distance && (
-                            <StatisticLine
-                                icon={<StraightenOutlined color={'disabled'} />}
-                                title={'Как далеко:'}
-                                content={
-                                    loading ? (
-                                        <Skeleton
-                                            variant={'text'}
-                                            width={60}
-                                        />
-                                    ) : (
-                                        `${place?.distance} км`
-                                    )
-                                }
-                            />
-                        )}
-                        <StatisticLine
                             icon={<PlaceOutlined color={'disabled'} />}
                             title={'Координаты:'}
                             content={
