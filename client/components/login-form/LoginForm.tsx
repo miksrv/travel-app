@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import React, { useEffect, useState } from 'react'

@@ -1,7 +1,7 @@
 'use client'
 
 import GoogleIcon from '@mui/icons-material/Google'
-import { Button } from '@mui/material'
+import Button from '@mui/material/Button'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect } from 'react'
 
