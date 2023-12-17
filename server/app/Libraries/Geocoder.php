@@ -5,10 +5,12 @@ use App\Models\AddressCountry;
 use App\Models\AddressDistrict;
 use App\Models\AddressRegion;
 use Config\Services;
+use Geocoder\Exception\Exception;
 use Geocoder\Provider\Nominatim\Nominatim;
 use Geocoder\Query\ReverseQuery;
 use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client;
+use ReflectionException;
 
 class Geocoder {
     public ?int $countryID;
@@ -21,7 +23,7 @@ class Geocoder {
     /**
      * @param $latitude
      * @param $longitude
-     * @throws \Geocoder\Exception\Exception
+     * @throws Exception|ReflectionException
      */
     public function __construct($latitude, $longitude) {
         $request    = Services::request();
@@ -137,7 +139,7 @@ class Geocoder {
      * @param int|null $region
      * @param int|null $district
      * @return int|null
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     protected function getCity(?string $name, int $country, ?int $region = null, ?int $district = null): ?int
     {

@@ -5,7 +5,6 @@ use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
-use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
