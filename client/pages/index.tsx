@@ -1,63 +1,124 @@
-import { Card } from '@mui/material'
+import { Button } from '@mui/material'
+import Card from '@mui/material/Card'
 import CardHeader from '@mui/material/CardHeader'
-import { NextPage } from 'next'
-import type { GetStaticProps } from 'next'
+import { LatLngBounds } from 'leaflet'
+import debounce from 'lodash-es/debounce'
+import { type GetStaticProps, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React, { useEffect, useState } from 'react'
+import dynamic from 'next/dynamic'
+import React, { useCallback, useEffect, useState } from 'react'
+import useGeolocation from 'react-hook-geolocation'
 
 import { API } from '@/api/api'
 
-import ActivityList from '@/components/activity-list'
 import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 
-const PAGE_TITLE = 'Лента активности'
+import { round } from '@/functions/helpers'
 
-const MainPage: NextPage = () => {
-    const [lastDate, setLastDate] = useState<string>()
-    const { t } = useTranslation('common')
+const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
+    ssr: false
+})
 
-    const { data, isFetching } = API.useActivityGetInfinityListQuery({
-        date: lastDate
-    })
+export type LatLngCoordinate = {
+    latitude: number
+    longitude: number
+}
+
+const IndexPage: NextPage = () => {
+    const { t } = useTranslation('common', { keyPrefix: 'page.index' })
+
+    // const searchParams = useSearchParams()
+    // const router = useRouter()
+    const geolocation = useGeolocation()
+
+    const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
+    const [mapBounds, setMapBounds] = useState<string>()
+
+    // const lat = searchParams.get('lat')
+    // const lon = searchParams.get('lon')
+
+    const [introduce] = API.useIntroduceMutation()
+    const { data: poiListData } = API.usePoiGetListQuery(
+        { bounds: mapBounds },
+        { skip: !mapBounds }
+    )
+
+    const debounceSetMapBounds = useCallback(
+        debounce((bounds: LatLngBounds) => {
+            setMapBounds(bounds.toBBoxString())
+        }, 500),
+        []
+    )
 
     useEffect(() => {
-        const onScroll = () => {
-            const scrolledToBottom =
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 20
+        const updateLatitude = round(geolocation?.latitude)
+        const updateLongitude = round(geolocation?.longitude)
 
-            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
-                setLastDate(data.items[data.items?.length - 1].created?.date)
-            }
+        if (
+            updateLatitude &&
+            updateLongitude &&
+            updateLatitude !== myCoordinates?.latitude &&
+            updateLongitude !== myCoordinates?.longitude
+        ) {
+            setMyCoordinates({
+                latitude: updateLatitude,
+                longitude: updateLongitude
+            })
+
+            introduce({ lat: updateLatitude, lon: updateLongitude })
         }
+    }, [geolocation.latitude, geolocation.longitude])
 
-        document.addEventListener('scroll', onScroll)
-
-        return function () {
-            document.removeEventListener('scroll', onScroll)
-        }
-    }, [lastDate, isFetching, data])
+    const PAGE_TITLE = t(
+        'title',
+        'Карта интересных мест и достопримечательностей'
+    )
 
     return (
         <PageLayout>
             <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
-                    title={t('title', PAGE_TITLE)}
+                    title={PAGE_TITLE}
                     titleTypographyProps={{ component: 'h1' }}
-                    subheader={
-                        <Breadcrumbs
-                            currentPage={'Лента активности пользователей'}
-                            hideHomePage={true}
-                        />
-                    }
+                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
                     sx={{ mb: -1, mt: -1 }}
+                    action={
+                        <Button
+                            sx={{ mr: 1, mt: 1.4 }}
+                            size={'medium'}
+                            variant={'contained'}
+                            href={'/places/create'}
+                        >
+                            {'Добавить'}
+                        </Button>
+                    }
                 />
             </Card>
-            <ActivityList activities={data?.items} />
+
+            <Card sx={{ height: '80vh', mt: 2 }}>
+                <InteractiveMap
+                    storeMapPosition={true}
+                    places={poiListData?.items}
+                    onChangeBounds={debounceSetMapBounds}
+                    userLatLng={
+                        geolocation.latitude && geolocation.longitude
+                            ? {
+                                  lat: geolocation.latitude,
+                                  lng: geolocation.longitude
+                              }
+                            : undefined
+                    }
+                />
+                {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
+                {/*<div>*/}
+                {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
+                {/*</div>*/}
+                {/*<div>Bounds: {mapBounds?.toBBoxString()}</div>*/}
+            </Card>
         </PageLayout>
     )
 }
@@ -68,4 +129,4 @@ export const getStaticProps: GetStaticProps = async ({ locale }) => ({
     }
 })
 
-export default MainPage
+export default IndexPage
