@@ -1,6 +1,26 @@
 @import ../../styles/variables
 @import ../../styles/animations
 
+$sideBarWidth: 300px
+
+@keyframes animation-sideBar-slideIn
+    0%
+        left: -$sideBarWidth
+
+    100%
+        left: 0
+
+@keyframes animation-sideBar-slideOut
+    0%
+        left: 0
+
+    100%
+        left: -$sideBarWidth
+
+.noAnimation
+    animation: none !important
+    transition: none !important
+
 .component
     width: 100%
     margin: 0 auto
@@ -18,30 +38,55 @@
         position: absolute
         height: 100vh
         width: 100%
-        z-index: 490
+        z-index: 500
         background: $overlayBackground
         transition: opacity 167ms ease-out
 
         &.hidden
-            z-index: -1
             opacity: 0
-            animation: animation-fadeOut .32s ease
+            visibility: hidden
+            //animation: animation-fadeOut .32s ease
 
         &.displayed
-            z-index: 1000
             opacity: 1
-            animation: animation-fadeIn .32s ease
+            visibility: visible
+            //animation: animation-fadeIn .32s ease
 
     .sidebar
         position: absolute
-        background: red
-        width: 200px
+        background-color: #fff
+        width: $sideBarWidth
         height: 100vh
-        z-index: 500
+        z-index: 600
         top: 0
+        left: -$sideBarWidth
+        transition: left 167ms ease-out
 
         &.opened
             left: 0
+            //animation: animation-sideBar-slideIn .32s ease
 
         &.closed
-            left: -200px
+            left: -$sideBarWidth
+            //animation: animation-sideBar-slideOut .32s ease
+
+    .menu
+        list-style: none
+        padding: 8px
+        margin: 0
+
+        a
+            padding: 8px 16px
+            width: 100%
+            display: flex
+            min-height: 32px
+            align-items: center
+            border-radius: $borderRadius
+            color: $colorTextMain
+            text-decoration: none
+            font-size: 15px
+            font-weight: 400
+            transition: background-color .15s ease-out,opacity .15s ease-out
+
+            &:hover
+                background-color: #ebedf0

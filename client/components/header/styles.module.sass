@@ -1,10 +1,13 @@
 @import ../../styles/variables
 
 .component
+    position: relative
+    z-index: 450
     color: $colorTextMain
     background-color: $boxBackground
     padding: 8px 15px
-    box-shadow: $boxShadow
+    //box-shadow: $boxShadow
+    box-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)
     height: 60px
     display: flex
 
@@ -19,7 +22,12 @@
         padding: 0
         margin-right: 20px
         cursor: pointer
+        opacity: .7
+        transition: opacity .3s
+
+        &:hover
+            opacity: 1
 
         svg
-            width: 32px
-            height: 32px
+            width: 24px
+            height: 24px
