@@ -64,3 +64,7 @@ export const formatDate = (
 
 export const round = (value?: number, digits: number = 4): number | undefined =>
     value ? Number(value.toFixed(digits)) : undefined
+
+export const concatClassNames = (
+    ...args: Array<string | boolean | null | undefined>
+): string => args.filter((item) => !!item).join(' ')

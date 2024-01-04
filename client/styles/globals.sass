@@ -1,7 +1,11 @@
+@import variables
+@import animations
+
 *
   font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif
   font-size: 13px
   font-weight: 400
+  color: $colorTextMain
 
 body
   background: #ebedf0
@@ -95,3 +99,6 @@ a
   border-width: 0.5px !important
   border-color: #1976d2 !important
   box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem !important
+
+.leaflet-top, .leaflet-bottom, .leaflet-control
+  z-index: 400 !important

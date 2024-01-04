@@ -1,11 +1,25 @@
+@import ../../styles/variables
+
 .component
-    color: rgba(0, 0, 0, 0.87)
-    background-color: #FFFFFF
+    color: $colorTextMain
+    background-color: $boxBackground
     padding: 8px 15px
-    box-shadow: 0 0 0 1px rgba(0,0,0,.12)
+    box-shadow: $boxShadow
     height: 60px
+    display: flex
 
     .title
         margin: 0
         font-size: 1.2857142857142856rem
         line-height: 1.334
+
+    .hamburgerButton
+        border: none
+        background: transparent
+        padding: 0
+        margin-right: 20px
+        cursor: pointer
+
+        svg
+            width: 32px
+            height: 32px

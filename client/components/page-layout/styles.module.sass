@@ -1,6 +1,10 @@
+@import ../../styles/variables
+@import ../../styles/animations
+
 .component
     width: 100%
     margin: 0 auto
+    position: relative
 
     .wrapper
         max-width: 900px
@@ -9,3 +13,30 @@
     &.fullSize
         .wrapper
             max-width: 100%
+
+    .overlay
+        position: absolute
+        height: 100vh
+        width: 100%
+        z-index: 490
+        background: $overlayBackground
+        opacity: 1
+        animation: animation-fadeIn .32s ease
+        transition: opacity 167ms ease-out
+
+        &.hidden
+            animation: animation-fadeOut .32s ease
+
+    .sidebar
+        position: absolute
+        background: red
+        width: 200px
+        height: 100vh
+        z-index: 500
+        top: 0
+
+        &.opened
+            left: 0
+
+        &.closed
+            left: -200px
