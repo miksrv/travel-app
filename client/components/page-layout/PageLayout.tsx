@@ -1,12 +1,7 @@
-import {
-    ArticleOutlined,
-    MapOutlined,
-    PeopleOutline,
-    PhotoOutlined,
-    TerrainOutlined
-} from '@mui/icons-material'
 import Link from 'next/link'
 import React, { useState } from 'react'
+
+import Icon from '@/ui/icon'
 
 import { useAppSelector } from '@/api/store'
 
@@ -14,6 +9,7 @@ import Header from '@/components/header'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
+import { menuItems } from './menu'
 import styles from './styles.module.sass'
 
 interface PageLayoutProps {
@@ -22,55 +18,6 @@ interface PageLayoutProps {
     fullSize?: boolean
     children?: React.ReactNode
 }
-
-type MenuItemsProps = {
-    link: string
-    text: string
-    icon?: React.ReactNode
-}
-
-const menuItems: MenuItemsProps[] = [
-    {
-        icon: <ArticleOutlined color={'primary'} />,
-        link: '/',
-        text: 'Лента активностей'
-    },
-    {
-        icon: <TerrainOutlined color={'primary'} />,
-        link: '/places',
-        text: 'Интересные места'
-    },
-    // {
-    //     icon: <PlaceOutlined color={'primary'} />,
-    //     link: '/places',
-    //     text: 'Населенные пункты'
-    // },
-    {
-        icon: <MapOutlined color={'primary'} />,
-        link: '/map',
-        text: 'Карта мест'
-    },
-    // {
-    //     icon: <LabelOutlined color={'primary'} />,
-    //     link: '/tags',
-    //     text: 'Метки мест'
-    // },
-    {
-        icon: <PhotoOutlined color={'primary'} />,
-        link: '/photos',
-        text: 'Фотографии'
-    },
-    // {
-    //     icon: <BookmarkBorderOutlined color={'primary'} />,
-    //     link: '/categories',
-    //     text: 'Категории'
-    // },
-    {
-        icon: <PeopleOutline color={'primary'} />,
-        link: '/users',
-        text: 'Путешественники'
-    }
-]
 
 const PageLayout: React.FC<PageLayoutProps> = ({
     title,
@@ -124,6 +71,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                                 title={item.text}
                                 onClick={handleCloseOverlay}
                             >
+                                {item.icon && <Icon name={item.icon} />}
                                 {item.text}
                             </Link>
                         </li>
