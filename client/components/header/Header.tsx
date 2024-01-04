@@ -1,9 +1,8 @@
 import { useTranslation } from 'next-i18next'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
 
-import { ImageHost } from '@/api/api'
 import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'

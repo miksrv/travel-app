@@ -5,7 +5,7 @@ import { User } from '@/api/types/User'
 
 export const ACCESS_TOKEN_KEY = 'authToken'
 
-type InitialStateProps = {
+type AuthStateProps = {
     isAuth?: boolean
     error?: any
     token?: string
@@ -20,7 +20,7 @@ export const getStorageToken = (): string | undefined =>
 const authSlice = createSlice({
     initialState: {
         token: getStorageToken()
-    } as InitialStateProps,
+    } as AuthStateProps,
     name: 'auth',
     reducers: {
         login: (

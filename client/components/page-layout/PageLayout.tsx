@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 
+import { toggleOverlay } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+
 import Header from '@/components/header'
 
 import { concatClassNames as cn } from '@/functions/helpers'
@@ -19,20 +22,27 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     fullSize,
     children
 }) => {
+    const dispatch = useAppDispatch()
+    const application = useAppSelector((store) => store.application)
+
     const [sidebarOpen, setSidebarOpen] = useState(false)
 
     const handleToggleSidebar = () => {
+        dispatch(toggleOverlay(!sidebarOpen))
         setSidebarOpen(!sidebarOpen)
     }
 
     return (
         <div className={cn(styles.component, fullSize && styles.fullSize)}>
-            {sidebarOpen && (
-                <div
-                    className={styles.overlay}
-                    onClick={handleToggleSidebar}
-                />
-            )}
+            <div
+                className={cn(
+                    styles.overlay,
+                    application?.showOverlay || sidebarOpen
+                        ? styles.displayed
+                        : styles.hidden
+                )}
+                onClick={handleToggleSidebar}
+            />
             <Header
                 fullSize={fullSize}
                 title={title}
@@ -40,9 +50,10 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 onMenuClick={handleToggleSidebar}
             />
             <aside
-                className={`${styles.sidebar} ${
+                className={cn(
+                    styles.sidebar,
                     sidebarOpen ? styles.opened : styles.closed
-                }`}
+                )}
             >
                 Sidebar Content
             </aside>

@@ -20,12 +20,17 @@
         width: 100%
         z-index: 490
         background: $overlayBackground
-        opacity: 1
-        animation: animation-fadeIn .32s ease
         transition: opacity 167ms ease-out
 
         &.hidden
+            z-index: -1
+            opacity: 0
             animation: animation-fadeOut .32s ease
+
+        &.displayed
+            z-index: 1000
+            opacity: 1
+            animation: animation-fadeIn .32s ease
 
     .sidebar
         position: absolute
