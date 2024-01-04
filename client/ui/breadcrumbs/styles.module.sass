@@ -1,0 +1,16 @@
+.component
+  list-style: none
+  display: flex
+  margin: 0
+  padding: 0
+
+  li
+    color: rgba(0, 0, 0, 0.6)
+
+    &:not(:last-of-type)
+      &:after
+        content: '/'
+        user-select: none
+        margin-left: 8px
+        margin-right: 8px
+

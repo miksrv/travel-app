@@ -29,7 +29,6 @@ import { API, ImageHost } from '@/api/api'
 import { wrapper } from '@/api/store'
 
 import ActivityList from '@/components/activity-list'
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
@@ -40,6 +39,8 @@ import StatisticLine from '@/components/statistic-line'
 import { formatDate } from '@/functions/helpers'
 
 import userAvatar from '@/public/images/no-avatar.png'
+
+import Breadcrumbs from '../../ui/breadcrumbs'
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>

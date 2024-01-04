@@ -15,12 +15,13 @@ import React, { useState } from 'react'
 import { API } from '@/api/api'
 import { Photo, Poi } from '@/api/types'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 
 import { encodeQueryData } from '@/functions/helpers'
+
+import Breadcrumbs from '../ui/breadcrumbs'
 
 const PHOTOS_PER_PAGE = 32
 const PAGE_TITLE = 'Фотографии интересных мест'

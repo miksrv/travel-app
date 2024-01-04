@@ -13,10 +13,11 @@ import useGeolocation from 'react-hook-geolocation'
 
 import { API } from '@/api/api'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 
 import { round } from '@/functions/helpers'
+
+import Breadcrumbs from '../ui/breadcrumbs'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -72,34 +73,14 @@ const IndexPage: NextPage = () => {
         }
     }, [geolocation.latitude, geolocation.longitude])
 
-    const PAGE_TITLE = t(
-        'title',
-        'Карта интересных мест и достопримечательностей'
-    )
-
     return (
-        <PageLayout>
-            <NextSeo title={PAGE_TITLE} />
-            <Card sx={{ mb: 2 }}>
-                <CardHeader
-                    title={PAGE_TITLE}
-                    titleTypographyProps={{ component: 'h1' }}
-                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
-                    sx={{ mb: -1, mt: -1 }}
-                    action={
-                        <Button
-                            sx={{ mr: 1, mt: 1.4 }}
-                            size={'medium'}
-                            variant={'contained'}
-                            href={'/places/create'}
-                        >
-                            {'Добавить'}
-                        </Button>
-                    }
-                />
-            </Card>
-
-            <Card sx={{ height: '80vh', mt: 2 }}>
+        <PageLayout
+            fullSize={true}
+            title={t('title')}
+            breadcrumb={t('breadcrumb')}
+        >
+            <NextSeo title={t('title')} />
+            <div style={{ height: 'calc(100vh - 60px)' }}>
                 <InteractiveMap
                     storeMapPosition={true}
                     places={poiListData?.items}
@@ -113,12 +94,7 @@ const IndexPage: NextPage = () => {
                             : undefined
                     }
                 />
-                {/*<div>{(isLoading || placesLoading) && 'Загрузка...'}</div>*/}
-                {/*<div>*/}
-                {/*    My Location: {geolocation?.latitude},{geolocation?.longitude}*/}
-                {/*</div>*/}
-                {/*<div>Bounds: {mapBounds?.toBBoxString()}</div>*/}
-            </Card>
+            </div>
         </PageLayout>
     )
 }

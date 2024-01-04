@@ -23,12 +23,6 @@
             "@/*": ["./*"]
         }
     },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts",
-        "/Users/mik/Documents/Project/nextjs-vcard-project-example/.next/types/**/*.ts"
-    ],
+    "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
     "exclude": ["node_modules"]
 }

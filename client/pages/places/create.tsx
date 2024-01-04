@@ -4,9 +4,10 @@ import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PlaceCreateForm from '@/components/place-create-form'
+
+import Breadcrumbs from '../../ui/breadcrumbs'
 
 const PAGE_TITLE = 'Добавить интересное место'
 

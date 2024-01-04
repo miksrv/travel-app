@@ -2,12 +2,34 @@ import React from 'react'
 
 import Header from '@/components/header'
 
-const PageLayout: React.FC<any> = ({ children, ...props }) => {
+import styles from './styles.module.sass'
+
+interface PageLayoutProps {
+    title?: string
+    breadcrumb?: string
+    fullSize?: boolean
+    children?: React.ReactNode
+}
+
+const PageLayout: React.FC<PageLayoutProps> = ({
+    title,
+    breadcrumb,
+    fullSize,
+    children
+}) => {
     return (
-        <>
-            <Header />
-            {children}
-        </>
+        <div
+            className={`${styles.component} ${
+                fullSize ? styles.fullSize : undefined
+            }`}
+        >
+            <Header
+                fullSize={fullSize}
+                title={title}
+                breadcrumb={breadcrumb}
+            />
+            <main className={styles.wrapper}>{children}</main>
+        </div>
     )
 }
 

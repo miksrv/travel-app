@@ -29,7 +29,6 @@ import { API, ImageHost } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
@@ -41,6 +40,8 @@ import { categoryImage } from '@/functions/categories'
 import { numberFormatter } from '@/functions/helpers'
 
 import noPhoto from '@/public/images/no-photo-available.png'
+
+import Breadcrumbs from '../../ui/breadcrumbs'
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>

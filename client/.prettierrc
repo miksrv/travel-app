@@ -11,6 +11,7 @@
     "endOfLine": "lf",
     "singleAttributePerLine": true,
     "importOrder": [
+        "@/ui/(.*)$",
         "@/api/(.*)$",
         "@/@mui/(.*)$",
         "@/components/(.*)$",

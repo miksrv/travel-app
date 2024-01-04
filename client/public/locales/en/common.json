@@ -1,12 +1,8 @@
 {
-    "HELLO_WORLD": "Hello, World!",
     "page": {
-        "places": {
-            "title": "Interesting places"
-        },
         "index": {
-            "title": "Интересн111"
+            "title": "Карта интересных мест",
+            "breadcrumb": "Карта интересных мест и достопримечательностей"
         }
-    },
-    "title": "asfasfasf"
+    }
 }

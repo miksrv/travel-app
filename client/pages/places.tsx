@@ -15,12 +15,13 @@ import useGeolocation from 'react-hook-geolocation'
 import { API } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
+
+import Breadcrumbs from '../ui/breadcrumbs'
 
 const POST_PER_PAGE = 15
 const PAGE_TITLE = 'Интересные места'

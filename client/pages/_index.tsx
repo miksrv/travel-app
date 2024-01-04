@@ -10,8 +10,9 @@ import React, { useEffect, useState } from 'react'
 import { API } from '@/api/api'
 
 import ActivityList from '@/components/activity-list'
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
+
+import Breadcrumbs from '../ui/breadcrumbs'
 
 const PAGE_TITLE = 'Лента активности'
 

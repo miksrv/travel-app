@@ -15,13 +15,14 @@ import React, { useState } from 'react'
 
 import { API } from '@/api/api'
 
-import Breadcrumbs from '@/components/breadcrumbs'
 import PageLayout from '@/components/page-layout'
 import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 import { encodeQueryData } from '@/functions/helpers'
+
+import Breadcrumbs from '../ui/breadcrumbs'
 
 const USERS_PER_PAGE = 30
 const PAGE_TITLE = 'Список путешественников'
