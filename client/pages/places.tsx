@@ -108,7 +108,10 @@ const PlacesPage: NextPage = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <PageLayout maxWidth={'lg'}>
+        <PageLayout
+            title={PAGE_TITLE}
+            breadcrumb={PAGE_TITLE}
+        >
             <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader

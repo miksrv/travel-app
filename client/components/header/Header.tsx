@@ -7,6 +7,8 @@ import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 interface HeaderProps {
@@ -44,17 +46,19 @@ const Header: React.FC<HeaderProps> = ({
     }, [])
 
     return (
-        <header className={styles.component}>
-            <button
-                className={styles.hamburgerButton}
-                onClick={onMenuClick}
-                aria-label={'Toggle Sidebar'}
-            >
-                <Icon name={'Menu'} />
-            </button>
-            <div>
-                {title && <h1 className={styles.title}>{title}</h1>}
-                <Breadcrumbs currentPage={breadcrumb} />
+        <header className={cn(styles.component, fullSize && styles.fullSize)}>
+            <div className={styles.wrapper}>
+                <button
+                    className={styles.hamburgerButton}
+                    onClick={onMenuClick}
+                    aria-label={'Toggle Sidebar'}
+                >
+                    <Icon name={'Menu'} />
+                </button>
+                <div>
+                    {title && <h1 className={styles.title}>{title}</h1>}
+                    <Breadcrumbs currentPage={breadcrumb} />
+                </div>
             </div>
         </header>
     )

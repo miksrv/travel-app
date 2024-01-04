@@ -9,7 +9,15 @@
     //box-shadow: $boxShadow
     box-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)
     height: 60px
-    display: flex
+
+    .wrapper
+        display: flex
+        max-width: $maxWidth
+        margin: 0 auto
+
+    &.fullSize
+        .wrapper
+            max-width: 100%
 
     .title
         margin: 0
