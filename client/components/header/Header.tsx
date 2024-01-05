@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
+import { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
@@ -14,12 +15,14 @@ import styles from './styles.module.sass'
 interface HeaderProps {
     title?: string
     breadcrumb?: string
+    links?: BreadcrumbLink[]
     fullSize?: boolean
     onMenuClick?: () => void
 }
 
 const Header: React.FC<HeaderProps> = ({
     title,
+    links,
     breadcrumb,
     fullSize,
     onMenuClick
@@ -57,7 +60,10 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
                 <div>
                     {title && <h1 className={styles.title}>{title}</h1>}
-                    <Breadcrumbs currentPage={breadcrumb} />
+                    <Breadcrumbs
+                        currentPage={breadcrumb}
+                        links={links}
+                    />
                 </div>
             </div>
         </header>

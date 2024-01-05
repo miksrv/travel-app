@@ -12,6 +12,8 @@ import { useEffect } from 'react'
 import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Container from '@/ui/container'
+
 import { API } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
 
@@ -113,49 +115,43 @@ const PlacesPage: NextPage = () => {
             breadcrumb={PAGE_TITLE}
         >
             <NextSeo title={PAGE_TITLE} />
-            <Card sx={{ mb: 2 }}>
-                <CardHeader
-                    title={t('title', PAGE_TITLE)}
-                    titleTypographyProps={{ component: 'h1' }}
-                    subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}
-                    sx={{ mb: -1, mt: -1 }}
-                    action={
-                        <Button
-                            sx={{ mr: 1, mt: 1.4 }}
-                            size={'medium'}
-                            variant={'contained'}
-                            href={'/places/create'}
-                        >
-                            {'Добавить'}
-                        </Button>
-                    }
+            {/*<Card sx={{ mb: 2 }}>*/}
+            {/*    <CardHeader*/}
+            {/*        title={t('title', PAGE_TITLE)}*/}
+            {/*        titleTypographyProps={{ component: 'h1' }}*/}
+            {/*        subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}*/}
+            {/*        sx={{ mb: -1, mt: -1 }}*/}
+            {/*        action={*/}
+            {/*            <Button*/}
+            {/*                sx={{ mr: 1, mt: 1.4 }}*/}
+            {/*                size={'medium'}*/}
+            {/*                variant={'contained'}*/}
+            {/*                href={'/places/create'}*/}
+            {/*            >*/}
+            {/*                {'Добавить'}*/}
+            {/*            </Button>*/}
+            {/*        }*/}
+            {/*    />*/}
+            {/*</Card>*/}
+            <Container>
+                <PlacesFilterPanel
+                    sort={sort}
+                    order={order}
+                    location={location}
+                    category={category}
+                    onChangeSort={setSort}
+                    onChangeOrder={setOrder}
+                    onChangeLocation={async (location) => {
+                        setPage(1)
+                        setLocation(location)
+                    }}
+                    onChangeCategory={(category) => {
+                        setPage(1)
+                        setCategory(category)
+                    }}
                 />
-            </Card>
-            <Card sx={{ mb: 2 }}>
-                <CardContent sx={{ mb: -2, mt: -2 }}>
-                    <PlacesFilterPanel
-                        sort={sort}
-                        order={order}
-                        location={location}
-                        category={category}
-                        onChangeSort={setSort}
-                        onChangeOrder={setOrder}
-                        onChangeLocation={async (location) => {
-                            setPage(1)
-                            setLocation(location)
-                        }}
-                        onChangeCategory={(category) => {
-                            setPage(1)
-                            setCategory(category)
-                        }}
-                    />
-                </CardContent>
-            </Card>
-            <PlacesList
-                perPage={POST_PER_PAGE}
-                loading={isLoading}
-                places={data?.items}
-            />
+            </Container>
+            <PlacesList places={data?.items} />
             <Pagination
                 sx={{ mt: 2 }}
                 shape={'rounded'}

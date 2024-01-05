@@ -1,7 +1,52 @@
+@import ../../styles/variables
+
+.component
+  display: flex
+  flex-wrap: wrap
+  margin: 10px -8px -8px
+
 .placesListItem
   position: relative
+  flex: 1 0 19%
+  margin: 8px
+  background: #fff
+  border-radius: $borderRadius
+  box-shadow: 0 0 0 1px rgba(0,0,0,.12)
+  height: 382px
+  overflow: hidden
 
   .categoryIcon
     position: absolute
     left: 10px
     top: 10px
+
+  .photo
+    width: 100%
+    border-top-left-radius: $borderRadius
+    border-top-right-radius: $borderRadius
+    object-fit: cover
+    margin-bottom: -5px
+
+  .title
+    margin: 10px
+
+    a
+      font-size: 1.1rem
+      color: $colorTextMain
+      text-decoration: none
+      font-weight: 500
+
+  p
+    margin: 0 10px 10px
+
+    &:after
+      content: ''
+      height: 15%
+      width: 100%
+      bottom: 0
+      z-index: 1
+      position: absolute
+      left: 0
+      background-image: linear-gradient(to top,#fff,rgba(255,255,255,0))
+      background-color: transparent
+      pointer-events: none

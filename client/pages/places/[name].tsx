@@ -25,11 +25,14 @@ import { useRouter } from 'next/dist/client/router'
 import Image from 'next/image'
 import React, { useMemo } from 'react'
 
+import Container from '@/ui/container'
+
 import { API, ImageHost } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
+import PlaceImage from '@/components/place-image'
 import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
@@ -74,7 +77,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
 const NEAR_PLACES_COUNT = 6
 
-const PlaceItemPage: NextPage = () => {
+const PlacePage: NextPage = () => {
     const router = useRouter()
     const routerId = router.query.name
     const placeId = typeof routerId === 'string' ? routerId : ''
@@ -151,105 +154,117 @@ const PlaceItemPage: NextPage = () => {
     )
 
     return (
-        <PageLayout>
+        <PageLayout
+            title={placeData?.title}
+            breadcrumb={placeData?.title}
+            links={[
+                {
+                    link: '/places/',
+                    text: 'Интересные места'
+                }
+            ]}
+        >
             <NextSeo title={placeData?.title} />
-            <Card sx={{ mb: 2, position: 'relative' }}>
-                <CardHeader
-                    title={
-                        isLoading || photosLoading ? (
-                            <Skeleton
-                                variant={'text'}
-                                width={'40%'}
-                            />
-                        ) : (
-                            <>
-                                <Image
-                                    style={{
-                                        float: 'left',
-                                        marginRight: '5px',
-                                        marginTop: '4px'
-                                    }}
-                                    src={
-                                        categoryImage(placeData?.category?.name)
-                                            .src
-                                    }
-                                    alt={placeData?.category?.title || ''}
-                                    width={17}
-                                    height={20}
-                                />
-                                {placeData?.title}
-                            </>
-                        )
-                    }
-                    titleTypographyProps={{ component: 'h1' }}
-                    subheader={
-                        isLoading || photosLoading ? (
-                            <Skeleton
-                                variant={'text'}
-                                width={'70%'}
-                            />
-                        ) : (
-                            <Breadcrumbs
-                                currentPage={placeData?.title}
-                                links={[
-                                    {
-                                        link: '/places/',
-                                        text: 'Интересные места'
-                                    }
-                                ]}
-                            />
-                        )
-                    }
-                    sx={{ mb: -1, mt: -1 }}
-                    action={
-                        <>
-                            <Button
-                                sx={{
-                                    height: '33px',
-                                    minWidth: '26px',
-                                    mr: 1,
-                                    mt: 1.4,
-                                    p: '6px 8px'
-                                }}
-                                size={'medium'}
-                                color={'primary'}
-                                variant={!iWasHere ? 'contained' : 'outlined'}
-                                disabled={
-                                    !authSlice.isAuth || visitedPutLoading
-                                }
-                                onClick={handlePutPlaceVisited}
-                            >
-                                <OutlinedFlagOutlined />
-                            </Button>
 
-                            <Button
-                                sx={{
-                                    height: '33px',
-                                    minWidth: '26px',
-                                    mr: 1,
-                                    mt: 1.4,
-                                    p: '6px 8px'
-                                }}
-                                size={'medium'}
-                                variant={
-                                    !bookmarksUserData?.result &&
-                                    authSlice.isAuth
-                                        ? 'contained'
-                                        : 'outlined'
-                                }
-                                color={'primary'}
-                                disabled={
-                                    !authSlice.isAuth ||
-                                    bookmarksUserLoading ||
-                                    bookmarkPutLoading
-                                }
-                                onClick={handlePutPlaceBookmark}
-                            >
-                                <BookmarkBorderOutlined />
-                            </Button>
-                        </>
-                    }
-                />
+            <PlaceImage place={placeData} />
+
+            <Card sx={{ mb: 2, position: 'relative' }}>
+                {/*<CardHeader*/}
+                {/*    title={*/}
+                {/*        isLoading || photosLoading ? (*/}
+                {/*            <Skeleton*/}
+                {/*                variant={'text'}*/}
+                {/*                width={'40%'}*/}
+                {/*            />*/}
+                {/*        ) : (*/}
+                {/*            <>*/}
+                {/*                <Image*/}
+                {/*                    style={{*/}
+                {/*                        float: 'left',*/}
+                {/*                        marginRight: '5px',*/}
+                {/*                        marginTop: '4px'*/}
+                {/*                    }}*/}
+                {/*                    src={*/}
+                {/*                        categoryImage(placeData?.category?.name)*/}
+                {/*                            .src*/}
+                {/*                    }*/}
+                {/*                    alt={placeData?.category?.title || ''}*/}
+                {/*                    width={17}*/}
+                {/*                    height={20}*/}
+                {/*                />*/}
+                {/*                {placeData?.title}*/}
+                {/*            </>*/}
+                {/*        )*/}
+                {/*    }*/}
+                {/*    titleTypographyProps={{ component: 'h1' }}*/}
+                {/*    subheader={*/}
+                {/*        isLoading || photosLoading ? (*/}
+                {/*            <Skeleton*/}
+                {/*                variant={'text'}*/}
+                {/*                width={'70%'}*/}
+                {/*            />*/}
+                {/*        ) : (*/}
+                {/*            <Breadcrumbs*/}
+                {/*                currentPage={placeData?.title}*/}
+                {/*                links={[*/}
+                {/*                    {*/}
+                {/*                        link: '/places/',*/}
+                {/*                        text: 'Интересные места'*/}
+                {/*                    }*/}
+                {/*                ]}*/}
+                {/*            />*/}
+                {/*        )*/}
+                {/*    }*/}
+                {/*    sx={{ mb: -1, mt: -1 }}*/}
+                {/*    action={*/}
+                {/*        <>*/}
+                {/*            <Button*/}
+                {/*                sx={{*/}
+                {/*                    height: '33px',*/}
+                {/*                    minWidth: '26px',*/}
+                {/*                    mr: 1,*/}
+                {/*                    mt: 1.4,*/}
+                {/*                    p: '6px 8px'*/}
+                {/*                }}*/}
+                {/*                size={'medium'}*/}
+                {/*                color={'primary'}*/}
+                {/*                variant={!iWasHere ? 'contained' : 'outlined'}*/}
+                {/*                disabled={*/}
+                {/*                    !authSlice.isAuth || visitedPutLoading*/}
+                {/*                }*/}
+                {/*                onClick={handlePutPlaceVisited}*/}
+                {/*            >*/}
+                {/*                <OutlinedFlagOutlined />*/}
+                {/*            </Button>*/}
+
+                {/*            <Button*/}
+                {/*                sx={{*/}
+                {/*                    height: '33px',*/}
+                {/*                    minWidth: '26px',*/}
+                {/*                    mr: 1,*/}
+                {/*                    mt: 1.4,*/}
+                {/*                    p: '6px 8px'*/}
+                {/*                }}*/}
+                {/*                size={'medium'}*/}
+                {/*                variant={*/}
+                {/*                    !bookmarksUserData?.result &&*/}
+                {/*                    authSlice.isAuth*/}
+                {/*                        ? 'contained'*/}
+                {/*                        : 'outlined'*/}
+                {/*                }*/}
+                {/*                color={'primary'}*/}
+                {/*                disabled={*/}
+                {/*                    !authSlice.isAuth ||*/}
+                {/*                    bookmarksUserLoading ||*/}
+                {/*                    bookmarkPutLoading*/}
+                {/*                }*/}
+                {/*                onClick={handlePutPlaceBookmark}*/}
+                {/*            >*/}
+                {/*                <BookmarkBorderOutlined />*/}
+                {/*            </Button>*/}
+                {/*        </>*/}
+                {/*    }*/}
+                {/*/>*/}
                 {isLoading || photosLoading ? (
                     <Skeleton
                         variant={'rectangular'}
@@ -409,14 +424,10 @@ const PlaceItemPage: NextPage = () => {
                 />
             </Card>
 
-            <PlacesList
-                perPage={NEAR_PLACES_COUNT}
-                places={nearPlacesData?.items}
-                loading={nearPlacesLoading}
-            />
+            <PlacesList places={nearPlacesData?.items} />
         </PageLayout>
     )
 }
 
 // export default connect((state: RootState) => state)(PlacePage)
-export default PlaceItemPage
+export default PlacePage

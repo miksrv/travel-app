@@ -27,7 +27,7 @@ $sideBarWidth: 300px
     position: relative
 
     .wrapper
-        max-width: 900px
+        max-width: $maxWidth
         margin: 0 auto
 
     &.fullSize
@@ -45,12 +45,12 @@ $sideBarWidth: 300px
         &.hidden
             opacity: 0
             visibility: hidden
-            //animation: animation-fadeOut .32s ease
+        //animation: animation-fadeOut .32s ease
 
         &.displayed
             opacity: 1
             visibility: visible
-            //animation: animation-fadeIn .32s ease
+    //animation: animation-fadeIn .32s ease
 
     .sidebar
         position: absolute
@@ -64,11 +64,11 @@ $sideBarWidth: 300px
 
         &.opened
             left: 0
-            //animation: animation-sideBar-slideIn .32s ease
+        //animation: animation-sideBar-slideIn .32s ease
 
         &.closed
             left: -$sideBarWidth
-            //animation: animation-sideBar-slideOut .32s ease
+    //animation: animation-sideBar-slideOut .32s ease
 
     .menu
         list-style: none
