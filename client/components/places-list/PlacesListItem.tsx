@@ -14,6 +14,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
+import Badge from '@/ui/badge'
+
 import { ImageHost } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
@@ -30,7 +32,7 @@ interface PlacesListItemProps {
 
 const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
     <article className={styles.placesListItem}>
-        <section>
+        <section className={styles.photoSection}>
             <Image
                 className={styles.categoryIcon}
                 src={categoryImage(place.category?.name).src}
@@ -54,6 +56,20 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                     }
                 />
             </Link>
+            <div className={styles.bottomPanel}>
+                <Badge
+                    icon={'Eye'}
+                    content={numberFormatter(place?.views || 0)}
+                />
+                <Badge
+                    icon={'Camera'}
+                    content={place?.photoCount || 0}
+                />
+                <Badge
+                    icon={'Camera'}
+                    content={numberFormatter(place?.distance || 0)}
+                />
+            </div>
         </section>
         <h2 className={styles.title}>
             <Link

@@ -32,11 +32,17 @@ const PlaceImage: React.FC<PlacesListProps> = ({ place }) => (
         />
         <div className={styles.bottomPanel}>
             <Badge
-                icon={'Map'}
+                icon={'Eye'}
                 content={numberFormatter(place?.views || 0)}
             />
-            {place?.photoCount || 0}
-            {numberFormatter(place?.distance || 0)}
+            <Badge
+                icon={'Camera'}
+                content={place?.photoCount || 0}
+            />
+            <Badge
+                icon={'Camera'}
+                content={numberFormatter(place?.distance || 0)}
+            />
         </div>
     </section>
 )

@@ -14,7 +14,7 @@ interface BadgeProps {
 const Badge: React.FC<BadgeProps> = ({ icon, children, content }) => (
     <div className={styles.component}>
         {icon && <Icon name={icon} />}
-        <div>{children || content}</div>
+        {children || content}
     </div>
 )
 

@@ -1,1 +1,1 @@
-export type IconTypes = 'Map' | 'Menu' | 'Terrain'
+export type IconTypes = 'Map' | 'Menu' | 'Terrain' | 'Eye' | 'Camera' | 'Ruler'

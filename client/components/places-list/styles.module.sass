@@ -15,17 +15,26 @@
   height: 382px
   overflow: hidden
 
-  .categoryIcon
-    position: absolute
-    left: 10px
-    top: 10px
+  .photoSection
+    position: relative
 
-  .photo
-    width: 100%
-    border-top-left-radius: $borderRadius
-    border-top-right-radius: $borderRadius
-    object-fit: cover
-    margin-bottom: -5px
+    .categoryIcon
+      position: absolute
+      left: 10px
+      top: 10px
+
+    .photo
+      width: 100%
+      border-top-left-radius: $borderRadius
+      border-top-right-radius: $borderRadius
+      object-fit: cover
+      margin-bottom: -5px
+
+    .bottomPanel
+      position: absolute
+      bottom: 10px
+      left: 10px
+      display: flex
 
   .title
     margin: 10px
