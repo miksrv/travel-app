@@ -32,11 +32,11 @@ import { useAppSelector, wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
-import PlaceHeader from '@/components/place-header'
-import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
-import PlaceTabDescription from '@/components/place-tab-description'
-import PlaceTabPhotos from '@/components/place-tab-photos'
+import Description from '@/components/place/description'
+import Header from '@/components/place/header'
+import Information from '@/components/place/information'
+import Photos from '@/components/place/photos'
 import PlacesList from '@/components/places-list'
 
 import { categoryImage } from '@/functions/categories'
@@ -170,29 +170,24 @@ const PlacePage: NextPage = () => {
             ]}
         >
             <NextSeo title={placeData?.title} />
-
-            <PlaceHeader
+            <Header
                 place={placeData}
                 ratingCount={ratingData?.count}
             />
-
-            <PlaceInformation
+            <Information
                 place={placeData}
                 ratingCount={ratingCount}
                 loading={isLoading}
                 onChangeWasHere={setIWasHere}
             />
-
-            <PlaceTabPhotos
+            <Photos
                 title={placeData?.title}
                 photos={photosData?.items}
                 placeId={placeData?.id}
             />
-
-            <PlaceTabDescription
+            <Description
                 id={placeData?.id}
                 title={placeData?.title}
-                address={placeData?.address}
                 content={placeData?.content}
                 tags={placeData?.tags}
             />

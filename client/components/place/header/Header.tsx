@@ -9,7 +9,6 @@ import { Place } from '@/api/types/Place'
 import {
     addDecimalPoint,
     concatClassNames as cn,
-    numberFormatter,
     ratingColor
 } from '@/functions/helpers'
 
@@ -17,12 +16,12 @@ import noPhoto from '@/public/images/no-photo-available.png'
 
 import styles from './styles.module.sass'
 
-interface PlacesListProps {
+interface HeaderProps {
     place?: Place
     ratingCount?: number
 }
 
-const PlaceHeader: React.FC<PlacesListProps> = ({ place, ratingCount }) => (
+const Header: React.FC<HeaderProps> = ({ place, ratingCount }) => (
     <section className={styles.component}>
         <div className={styles.topPanel}>
             {ratingCount && (
@@ -67,4 +66,4 @@ const PlaceHeader: React.FC<PlacesListProps> = ({ place, ratingCount }) => (
     </section>
 )
 
-export default PlaceHeader
+export default Header

@@ -23,14 +23,14 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-interface PlaceInformationProps {
+interface InformationProps {
     place?: Place
     ratingCount?: number
     loading?: boolean
     onChangeWasHere?: (wasHere: boolean) => void
 }
 
-const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
+const Information: React.FC<InformationProps> = (props) => {
     const { place, ratingCount, loading, onChangeWasHere } = props
 
     const authSlice = useAppSelector((state) => state.auth)
@@ -214,4 +214,4 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
     )
 }
 
-export default PlaceInformation
+export default Information

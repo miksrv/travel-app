@@ -11,19 +11,18 @@ import { Address, Tag } from '@/api/types/Place'
 
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
-import ContentEditor from '../form-controllers/content-editor'
+import ContentEditor from '../../form-controllers/content-editor'
 import styles from './styles.module.sass'
 
-interface PlaceTabDescriptionProps {
+interface DescriptionProps {
     id?: string
     title?: string
-    address?: Address
     content?: string
     tags?: Tag[]
 }
 
-const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
-    const { id, title, address, content, tags } = props
+const Description: React.FC<DescriptionProps> = (props) => {
+    const { id, title, content, tags } = props
 
     const [savePlace, { isLoading, data: saveData }] =
         API.usePlacesPatchItemMutation()
@@ -223,4 +222,4 @@ const PlaceTabDescription: React.FC<PlaceTabDescriptionProps> = (props) => {
     )
 }
 
-export default PlaceTabDescription
+export default Description
