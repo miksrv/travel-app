@@ -11,6 +11,8 @@ import dynamic from 'next/dynamic'
 import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Container from '@/ui/container'
+
 import { API } from '@/api/api'
 
 import PageLayout from '@/components/page-layout'
@@ -75,12 +77,11 @@ const IndexPage: NextPage = () => {
 
     return (
         <PageLayout
-            fullSize={true}
             title={t('title')}
             breadcrumb={t('breadcrumb')}
         >
             <NextSeo title={t('title')} />
-            <div style={{ height: 'calc(100vh - 60px)' }}>
+            <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}
                     places={poiListData?.items}
@@ -94,7 +95,7 @@ const IndexPage: NextPage = () => {
                             : undefined
                     }
                 />
-            </div>
+            </Container>
         </PageLayout>
     )
 }

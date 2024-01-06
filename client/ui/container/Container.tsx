@@ -4,7 +4,7 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface ContainerProps {
+interface ContainerProps extends React.HTMLAttributes<unknown> {
     title?: string
     className?: string
     action?: React.ReactNode
