@@ -17,8 +17,8 @@ class Rating extends ResourceController {
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel
                 ->select('rating.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-                ->join('users', 'rating.author = users.id', 'left')
-                ->where('place', $id)
+                ->join('users', 'rating.user_id = users.id', 'left')
+                ->where('place_id', $id)
                 ->findAll();
 
             $result = [];

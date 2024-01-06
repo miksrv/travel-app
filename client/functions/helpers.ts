@@ -68,3 +68,22 @@ export const round = (value?: number, digits: number = 4): number | undefined =>
 export const concatClassNames = (
     ...args: Array<string | boolean | null | undefined>
 ): string => args.filter((item) => !!item).join(' ')
+
+export const ratingColor = (value: number): 'plus' | 'minus' | 'neutral' =>
+    value > 0 ? 'plus' : value < 0 ? 'minus' : 'neutral'
+
+export const addDecimalPoint = (input: number | string): string => {
+    const inputValue: string =
+        typeof input === 'number' ? input.toString() : input
+    const isInteger: boolean = inputValue.includes('.')
+        ? inputValue.split('.')[1].length === 0
+        : true
+
+    if (isInteger) {
+        return `${inputValue}.0`
+    } else if (!inputValue.includes('.')) {
+        return `${inputValue}.`
+    }
+
+    return inputValue
+}

@@ -91,6 +91,11 @@ const PlacePage: NextPage = () => {
         skip: router.isFallback || !routerId
     })
 
+    const { data: ratingData, isLoading: ratingLoading } =
+        API.useRatingGetListQuery(placeId, {
+            skip: router.isFallback || !routerId
+        })
+
     const { data: photosData, isLoading: photosLoading } =
         API.usePhotosGetListQuery(
             { place: placeId },
@@ -166,7 +171,10 @@ const PlacePage: NextPage = () => {
         >
             <NextSeo title={placeData?.title} />
 
-            <PlaceImage place={placeData} />
+            <PlaceImage
+                place={placeData}
+                ratingCount={ratingData?.count}
+            />
 
             <PlaceInformation
                 place={placeData}
