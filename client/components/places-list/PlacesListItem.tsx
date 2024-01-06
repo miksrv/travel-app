@@ -46,16 +46,16 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
             </Link>
             <div className={styles.bottomPanel}>
                 <Badge
-                    icon={'Eye'}
-                    content={numberFormatter(place?.views || 0)}
+                    icon={'Camera'}
+                    content={place?.photoCount || 0}
                 />
                 <Badge
                     icon={'Star'}
                     content={place.rating}
                 />
                 <Badge
-                    icon={'Camera'}
-                    content={place?.photoCount || 0}
+                    icon={'Eye'}
+                    content={numberFormatter(place?.views || 0)}
                 />
                 <Badge
                     icon={'Ruler'}

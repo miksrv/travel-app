@@ -22,7 +22,7 @@ interface PlacesListProps {
     ratingCount?: number
 }
 
-const PlaceImage: React.FC<PlacesListProps> = ({ place, ratingCount }) => (
+const PlaceHeader: React.FC<PlacesListProps> = ({ place, ratingCount }) => (
     <section className={styles.component}>
         <div className={styles.topPanel}>
             {ratingCount && (
@@ -52,19 +52,19 @@ const PlaceImage: React.FC<PlacesListProps> = ({ place, ratingCount }) => (
         />
         <div className={styles.bottomPanel}>
             <Badge
-                icon={'Eye'}
-                content={numberFormatter(place?.views || 0)}
-            />
-            <Badge
                 icon={'Camera'}
                 content={place?.photoCount || 0}
             />
             <Badge
+                icon={'Eye'}
+                content={place?.views || 0}
+            />
+            <Badge
                 icon={'Ruler'}
-                content={numberFormatter(place?.distance || 0)}
+                content={`${place?.distance || '?'} км`}
             />
         </div>
     </section>
 )
 
-export default PlaceImage
+export default PlaceHeader

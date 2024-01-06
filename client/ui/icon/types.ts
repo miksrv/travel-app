@@ -1,4 +1,5 @@
 export type IconTypes =
+    | 'Address'
     | 'Map'
     | 'Menu'
     | 'Terrain'
@@ -6,3 +7,7 @@ export type IconTypes =
     | 'Camera'
     | 'Ruler'
     | 'Star'
+    | 'User'
+    | 'Point'
+    | 'Time'
+    | 'Clip'

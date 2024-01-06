@@ -1,0 +1,52 @@
+@import ../../styles/variables
+
+.component
+  display: flex
+  justify-content: space-between
+
+  .information
+    width: 60%
+
+    li
+      display: flex
+      align-items: start
+      margin-bottom: 10px
+
+      &:last-of-type
+        margin-bottom: 0
+
+      svg
+        width: 18px
+        height: 18px
+        fill: $colorTextMain
+        margin-right: 5px
+
+      .key
+        color: $colorTextSecond
+        margin-right: 5px
+
+      .value
+        max-width: 50%
+        min-width: 200px
+
+  .mapLink
+    display: inline-block
+    margin-left: 10px
+    margin-bottom: -2px
+    vertical-align: middle
+
+    &:last-of-type
+      margin-left: 3px
+
+  .map
+    border-radius: $borderRadius
+    border: 1px solid #CCC
+    width: 40%
+    flex-grow: 1
+    min-width: 300px
+
+    & > div
+      height: 100%
+
+      & > div
+        border-radius: $borderRadius

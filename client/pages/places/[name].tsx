@@ -32,7 +32,7 @@ import { useAppSelector, wrapper } from '@/api/store'
 import { Activity, ApiTypes } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
-import PlaceImage from '@/components/place-image'
+import PlaceHeader from '@/components/place-header'
 import PlaceInformation from '@/components/place-information'
 import PlaceTabActivity from '@/components/place-tab-activity'
 import PlaceTabDescription from '@/components/place-tab-description'
@@ -75,7 +75,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 )
 
-const NEAR_PLACES_COUNT = 6
+const NEAR_PLACES_COUNT = 4
 
 const PlacePage: NextPage = () => {
     const router = useRouter()
@@ -171,7 +171,7 @@ const PlacePage: NextPage = () => {
         >
             <NextSeo title={placeData?.title} />
 
-            <PlaceImage
+            <PlaceHeader
                 place={placeData}
                 ratingCount={ratingData?.count}
             />
@@ -183,89 +183,103 @@ const PlacePage: NextPage = () => {
                 onChangeWasHere={setIWasHere}
             />
 
-            <Card sx={{ mb: 2, mt: 0 }}>
-                <CardHeader
-                    sx={{ p: 0 }}
-                    title={
-                        <Tabs
-                            defaultValue={0}
-                            value={activeTab}
-                            tabIndex={activeTab}
-                            onChange={handleTabChange}
-                            aria-label={'basic tabs'}
-                        >
-                            <Tab
-                                label={'Описание'}
-                                icon={<DescriptionOutlined />}
-                                iconPosition={'start'}
-                            />
-                            <Tab
-                                label={`Фотографии ${
-                                    photosData?.items?.length
-                                        ? `(${photosData.items.length})`
-                                        : ''
-                                }`}
-                                icon={<ImageOutlined />}
-                                iconPosition={'start'}
-                            />
-                            {!!activityData?.items?.length && (
-                                <Tab
-                                    label={`Активность ${
-                                        activityData?.items?.length
-                                            ? `(${activityData?.items?.length})`
-                                            : ''
-                                    }`}
-                                    icon={<ArticleOutlined />}
-                                    iconPosition={'start'}
-                                />
-                            )}
-                        </Tabs>
-                    }
-                />
-                <Divider />
+            <PlaceTabPhotos
+                title={placeData?.title}
+                photos={photosData?.items}
+                placeId={placeData?.id}
+            />
 
-                {activeTab === 0 && (
-                    <PlaceTabDescription
-                        id={placeData?.id}
-                        title={placeData?.title}
-                        address={placeData?.address}
-                        content={placeData?.content}
-                        tags={placeData?.tags}
-                    />
-                )}
+            <PlaceTabDescription
+                id={placeData?.id}
+                title={placeData?.title}
+                address={placeData?.address}
+                content={placeData?.content}
+                tags={placeData?.tags}
+            />
 
-                {activeTab === 1 && (
-                    <PlaceTabPhotos
-                        title={placeData?.title}
-                        photos={photosData?.items}
-                        placeId={placeData?.id}
-                    />
-                )}
+            {/*<Card sx={{ mb: 2, mt: 0 }}>*/}
+            {/*    <CardHeader*/}
+            {/*        sx={{ p: 0 }}*/}
+            {/*        title={*/}
+            {/*            <Tabs*/}
+            {/*                defaultValue={0}*/}
+            {/*                value={activeTab}*/}
+            {/*                tabIndex={activeTab}*/}
+            {/*                onChange={handleTabChange}*/}
+            {/*                aria-label={'basic tabs'}*/}
+            {/*            >*/}
+            {/*                <Tab*/}
+            {/*                    label={'Описание'}*/}
+            {/*                    icon={<DescriptionOutlined />}*/}
+            {/*                    iconPosition={'start'}*/}
+            {/*                />*/}
+            {/*                <Tab*/}
+            {/*                    label={`Фотографии ${*/}
+            {/*                        photosData?.items?.length*/}
+            {/*                            ? `(${photosData.items.length})`*/}
+            {/*                            : ''*/}
+            {/*                    }`}*/}
+            {/*                    icon={<ImageOutlined />}*/}
+            {/*                    iconPosition={'start'}*/}
+            {/*                />*/}
+            {/*                {!!activityData?.items?.length && (*/}
+            {/*                    <Tab*/}
+            {/*                        label={`Активность ${*/}
+            {/*                            activityData?.items?.length*/}
+            {/*                                ? `(${activityData?.items?.length})`*/}
+            {/*                                : ''*/}
+            {/*                        }`}*/}
+            {/*                        icon={<ArticleOutlined />}*/}
+            {/*                        iconPosition={'start'}*/}
+            {/*                    />*/}
+            {/*                )}*/}
+            {/*            </Tabs>*/}
+            {/*        }*/}
+            {/*    />*/}
+            {/*    <Divider />*/}
 
-                {activeTab === 2 && !!activityData?.items?.length && (
-                    <PlaceTabActivity
-                        title={placeData?.title}
-                        placeId={placeData?.id}
-                        activity={activityData?.items}
-                    />
-                )}
-            </Card>
+            {/*    {activeTab === 0 && (*/}
+            {/*        <PlaceTabDescription*/}
+            {/*            id={placeData?.id}*/}
+            {/*            title={placeData?.title}*/}
+            {/*            address={placeData?.address}*/}
+            {/*            content={placeData?.content}*/}
+            {/*            tags={placeData?.tags}*/}
+            {/*        />*/}
+            {/*    )}*/}
 
-            <Card sx={{ mb: 2 }}>
-                <CardHeader
-                    sx={{ mb: -1, mt: -1 }}
-                    title={'Ближайшие интересные места'}
-                    titleTypographyProps={{
-                        component: 'h2',
-                        fontSize: 18
-                    }}
-                    subheader={`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
-                        ...(nearPlacesData?.items?.map(
-                            ({ distance }) => distance || 0
-                        ) || [])
-                    )} км`}
-                />
-            </Card>
+            {/*    {activeTab === 1 && (*/}
+            {/*        <PlaceTabPhotos*/}
+            {/*            title={placeData?.title}*/}
+            {/*            photos={photosData?.items}*/}
+            {/*            placeId={placeData?.id}*/}
+            {/*        />*/}
+            {/*    )}*/}
+
+            {/*    {activeTab === 2 && !!activityData?.items?.length && (*/}
+            {/*        <PlaceTabActivity*/}
+            {/*            title={placeData?.title}*/}
+            {/*            placeId={placeData?.id}*/}
+            {/*            activity={activityData?.items}*/}
+            {/*        />*/}
+            {/*    )}*/}
+            {/*</Card>*/}
+
+            {/*<Card sx={{ mb: 2 }}>*/}
+            {/*    <CardHeader*/}
+            {/*        sx={{ mb: -1, mt: -1 }}*/}
+            {/*        title={'Ближайшие интересные места'}*/}
+            {/*        titleTypographyProps={{*/}
+            {/*            component: 'h2',*/}
+            {/*            fontSize: 18*/}
+            {/*        }}*/}
+            {/*        subheader={`Найдены несколько ближайших интересных мест в радиусе ${Math.max(*/}
+            {/*            ...(nearPlacesData?.items?.map(*/}
+            {/*                ({ distance }) => distance || 0*/}
+            {/*            ) || [])*/}
+            {/*        )} км`}*/}
+            {/*    />*/}
+            {/*</Card>*/}
 
             <PlacesList places={nearPlacesData?.items} />
         </PageLayout>

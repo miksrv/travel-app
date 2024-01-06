@@ -1,37 +1,23 @@
-import {
-    AccessTimeOutlined,
-    AccountCircleOutlined,
-    BookmarkBorderOutlined,
-    FlagOutlined,
-    PlaceOutlined,
-    RemoveRedEyeOutlined,
-    StarBorderOutlined,
-    StraightenOutlined
-} from '@mui/icons-material'
-import Avatar from '@mui/material/Avatar'
-import AvatarGroup from '@mui/material/AvatarGroup'
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import Rating from '@mui/material/Rating'
-import Skeleton from '@mui/material/Skeleton'
-import Stack from '@mui/material/Stack'
-import Grid from '@mui/material/Unstable_Grid2'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useMemo } from 'react'
 
-import { ImageHost } from '@/api/api'
+import Container from '@/ui/container'
+import Icon from '@/ui/icon'
+
 import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
-import StatisticLine from '@/components/statistic-line'
 import UserAvatar from '@/components/user-avatar'
 
-import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
+
+import googleLogo from '@/public/images/google-logo.png'
+import yandexLogo from '@/public/images/yandex-logo.png'
+
+import styles from './styles.module.sass'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -79,228 +65,152 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
     }, [visitedUsersData, authSlice])
 
     return (
-        <Card sx={{ mb: 2, mt: 0 }}>
-            <CardContent sx={{ mb: -4 }}>
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{ mb: 2 }}
-                >
-                    <Grid
-                        lg={6}
-                        md={6}
-                        xs={6}
-                    >
-                        <StatisticLine
-                            icon={<AccountCircleOutlined color={'disabled'} />}
-                            title={'Автор:'}
-                            content={
-                                <UserAvatar
-                                    user={place?.author}
-                                    loading={loading}
-                                />
-                            }
+        <Container className={styles.component}>
+            <ul className={styles.information}>
+                <li>
+                    <Icon name={'Star'} />
+                    <div className={styles.key}>{'Оценка пользователей:'}</div>
+                    <div className={styles.value}>{place?.rating}</div>
+                </li>
+                <li>
+                    <Icon name={'User'} />
+                    <div className={styles.key}>{'Автор материала:'}</div>
+                    <div className={styles.value}>
+                        <UserAvatar
+                            user={place?.author}
+                            loading={loading}
                         />
-                        <StatisticLine
-                            icon={<PlaceOutlined color={'disabled'} />}
-                            title={'Координаты:'}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : (
-                                    <Box sx={{ mt: '-2px !important' }}>
-                                        <Link
-                                            color={'inherit'}
-                                            target={'_blank'}
-                                            href={`geo:${place?.latitude},${place?.longitude}`}
-                                        >
-                                            {`${convertDMS(
-                                                place?.latitude || 0,
-                                                place?.longitude || 0
-                                            )}`}
-                                        </Link>{' '}
-                                        <sup>
-                                            <Link
-                                                color={'inherit'}
-                                                target={'_blank'}
-                                                href={`https://yandex.ru/maps/?pt=${place?.longitude},${place?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
-                                            >
-                                                {'Я'}
-                                            </Link>{' '}
-                                            <Link
-                                                target={'_blank'}
-                                                color={'inherit'}
-                                                href={`https://maps.google.com/maps?ll=${place?.latitude},${place?.longitude}&q=${place?.latitude},${place?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
-                                            >
-                                                {'G'}
-                                            </Link>
-                                        </sup>
-                                    </Box>
-                                )
-                            }
-                        />
-                        <StatisticLine
-                            icon={<AccessTimeOutlined color={'disabled'} />}
-                            title={'Добавлено:'}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : (
-                                    formatDate(place?.created?.date)
-                                )
-                            }
-                        />
-                        <StatisticLine
-                            icon={<AccessTimeOutlined color={'disabled'} />}
-                            title={'Отредактировано:'}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : (
-                                    formatDate(place?.updated?.date)
-                                )
-                            }
-                        />
-                        <StatisticLine
-                            icon={<FlagOutlined color={'disabled'} />}
-                            title={'Были тут:'}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : visitedUsersData?.items?.length ? (
-                                    <AvatarGroup
-                                        max={8}
-                                        sx={{ mt: '-2px !important' }}
-                                        componentsProps={{
-                                            additionalAvatar: {
-                                                sx: {
-                                                    fontSize: '10px',
-                                                    height: 20,
-                                                    width: 20
-                                                }
-                                            }
-                                        }}
-                                    >
-                                        {visitedUsersData?.items?.map(
-                                            (user) => (
-                                                <Avatar
-                                                    key={user.id}
-                                                    alt={user.name}
-                                                    src={`${ImageHost}avatar/${user.avatar}`}
-                                                    sx={{
-                                                        height: 20,
-                                                        width: 20
-                                                    }}
-                                                />
-                                            )
-                                        )}
-                                    </AvatarGroup>
-                                ) : (
-                                    <div>{'Тут еще никого не было'}</div>
-                                )
-                            }
-                        />
-                        <StatisticLine
-                            icon={<StarBorderOutlined color={'disabled'} />}
-                            title={'Рейтнг:'}
-                            last={true}
-                            content={
-                                loading ? (
-                                    <Skeleton
-                                        variant={'text'}
-                                        width={150}
-                                    />
-                                ) : (
-                                    <Box
-                                        sx={{
-                                            alignItems: 'center',
-                                            display: 'flex',
-                                            width: 200
-                                        }}
-                                    >
-                                        <Rating
-                                            size={'medium'}
-                                            value={
-                                                place?.rating &&
-                                                place.rating > 0 &&
-                                                !newRating?.rating
-                                                    ? place?.rating
-                                                    : newRating?.rating ?? 0
-                                            }
-                                            // precision={0.5}
-                                            disabled={setRatingLoading}
-                                            readOnly={
-                                                !place?.actions?.rating ||
-                                                !!newRating?.rating
-                                            }
-                                            onChange={(_, value) => {
-                                                setRating({
-                                                    place: place?.id!,
-                                                    score: value || 5
-                                                })
-                                            }}
-                                        />
-                                        {ratingCount && (
-                                            <Box
-                                                sx={{ ml: 1 }}
-                                            >{`(${ratingCount})`}</Box>
-                                        )}
-                                    </Box>
-                                )
-                            }
-                        />
-                    </Grid>
-                    <Grid
-                        lg={6}
-                        md={6}
-                        xs={6}
-                    >
-                        <Box
-                            sx={{
-                                border: '1px solid #CCC',
-                                borderRadius: 1,
-                                height: '100%',
-                                overflow: 'hidden',
-                                width: '100%'
-                            }}
+                    </div>
+                </li>
+                <li>
+                    <Icon name={'Point'} />
+                    <div className={styles.key}>{'Координаты места:'}</div>
+                    <div className={styles.value}>
+                        <Link
+                            color={'inherit'}
+                            target={'_blank'}
+                            href={`geo:${place?.latitude},${place?.longitude}`}
                         >
-                            {loading ||
-                            (!place?.latitude && !place?.longitude) ? (
-                                <Skeleton
-                                    variant={'rounded'}
-                                    height={'100%'}
-                                />
-                            ) : (
-                                <InteractiveMap
-                                    zoom={15}
-                                    center={[place.latitude, place.longitude]}
-                                    scrollWheelZoom={false}
-                                    places={[
-                                        {
-                                            category: place.category?.name!,
-                                            latitude: place.latitude,
-                                            longitude: place.longitude
-                                        }
-                                    ]}
-                                />
-                            )}
-                        </Box>
-                    </Grid>
-                </Grid>
-            </CardContent>
-        </Card>
+                            {`${convertDMS(
+                                place?.latitude || 0,
+                                place?.longitude || 0
+                            )}`}
+                        </Link>
+                        <Link
+                            className={styles.mapLink}
+                            color={'inherit'}
+                            target={'_blank'}
+                            href={`https://yandex.ru/maps/?pt=${place?.longitude},${place?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
+                        >
+                            <Image
+                                src={yandexLogo.src}
+                                width={16}
+                                height={16}
+                                alt={''}
+                            />
+                        </Link>
+                        <Link
+                            className={styles.mapLink}
+                            target={'_blank'}
+                            color={'inherit'}
+                            href={`https://maps.google.com/maps?ll=${place?.latitude},${place?.longitude}&q=${place?.latitude},${place?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                        >
+                            <Image
+                                src={googleLogo.src}
+                                width={16}
+                                height={16}
+                                alt={''}
+                            />
+                        </Link>
+                    </div>
+                </li>
+                <li>
+                    <Icon name={'Time'} />
+                    <div className={styles.key}>{'Место добавлено:'}</div>
+                    <div className={styles.value}>
+                        {formatDate(place?.created?.date)}
+                    </div>
+                </li>
+                <li>
+                    <Icon name={'Time'} />
+                    <div className={styles.key}>
+                        {'Последнее редактирование:'}
+                    </div>
+                    <div className={styles.value}>
+                        {formatDate(place?.updated?.date)}
+                    </div>
+                </li>
+                <li>
+                    <Icon name={'Address'} />
+                    <div className={styles.key}>{'Адрес:'}</div>
+                    <div className={styles.value}>
+                        {place?.address?.country && (
+                            <Link
+                                color='inherit'
+                                href={`/country/${place?.address.country.id}`}
+                            >
+                                {place?.address.country.name}
+                            </Link>
+                        )}
+                        {place?.address?.region && (
+                            <>
+                                {place?.address?.country && ', '}
+                                <Link
+                                    color='inherit'
+                                    href={`/region/${place?.address.region.id}`}
+                                >
+                                    {place?.address.region.name}
+                                </Link>
+                            </>
+                        )}
+                        {place?.address?.district && (
+                            <>
+                                {place?.address?.region && ', '}
+                                <Link
+                                    color='inherit'
+                                    href={`/district/${place?.address.district.id}`}
+                                >
+                                    {place?.address.district.name}
+                                </Link>
+                            </>
+                        )}
+                        {place?.address?.city && (
+                            <>
+                                {place?.address?.district && ', '}
+                                <Link
+                                    color='inherit'
+                                    href={`/city/${place?.address.city.id}`}
+                                >
+                                    {place?.address.city.name}
+                                </Link>
+                            </>
+                        )}
+                        {place?.address?.street && (
+                            <>
+                                {', '}
+                                {place?.address?.street}
+                            </>
+                        )}
+                    </div>
+                </li>
+            </ul>
+            <div className={styles.map}>
+                {place?.latitude && place?.longitude && (
+                    <InteractiveMap
+                        zoom={15}
+                        center={[place.latitude, place.longitude]}
+                        scrollWheelZoom={false}
+                        places={[
+                            {
+                                category: place.category?.name!,
+                                latitude: place.latitude,
+                                longitude: place.longitude
+                            }
+                        ]}
+                    />
+                )}
+            </div>
+        </Container>
     )
 }
 
