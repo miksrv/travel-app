@@ -6,6 +6,7 @@ import Icon from '@/ui/icon'
 
 import { useAppSelector } from '@/api/store'
 
+import Footer from '@/components/footer'
 import Header from '@/components/header'
 
 import { concatClassNames as cn } from '@/functions/helpers'
@@ -83,6 +84,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 </menu>
             </aside>
             <main className={styles.wrapper}>{children}</main>
+            <Footer />
         </div>
     )
 }
