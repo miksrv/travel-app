@@ -141,9 +141,9 @@ export interface ResponseCategoriesGetList extends Place {
 
 /* Controller: Rating */
 export interface ResponseRatingGetList {
-    items?: Rating[]
+    rating?: number
     count?: number
-    canVote?: boolean
+    vote?: number | null
 }
 
 export interface RequestRatingSet {

@@ -96,9 +96,6 @@ const PlacePage: NextPage = () => {
             skip: router.isFallback || !routerId
         })
 
-    const [setRating, { data: newRating, isLoading: setRatingLoading }] =
-        API.useRatingPutScoreMutation()
-
     const { data: photosData, isLoading: photosLoading } =
         API.usePhotosGetListQuery(
             { place: placeId },
@@ -141,15 +138,6 @@ const PlacePage: NextPage = () => {
         }
     )
 
-    const handleRatingChange = (value?: number) => {
-        if (value) {
-            setRating({
-                place: placeId,
-                score: value
-            })
-        }
-    }
-
     const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
         setActiveTab(newTab)
     }
@@ -161,14 +149,6 @@ const PlacePage: NextPage = () => {
     const handlePutPlaceVisited = () => {
         setVisited({ place: placeData?.id! })
     }
-
-    const ratingCount = useMemo(
-        () =>
-            activityData?.items?.filter(
-                (item) => item.type === Activity.ActivityTypes.Rating
-            )?.length || undefined,
-        [activityData]
-    )
 
     return (
         <PageLayout
@@ -184,15 +164,14 @@ const PlacePage: NextPage = () => {
             <NextSeo title={placeData?.title} />
             <Header
                 place={placeData}
-                ratingValue={newRating?.rating ?? placeData?.rating}
+                ratingValue={ratingData?.rating || placeData?.rating}
                 ratingCount={ratingData?.count}
             />
             <Information
                 place={placeData}
-                ratingCount={ratingCount}
+                ratingValue={ratingData?.vote}
                 loading={isLoading || ratingLoading}
                 onChangeWasHere={setIWasHere}
-                onChangeRating={handleRatingChange}
             />
             <Photos
                 title={placeData?.title}

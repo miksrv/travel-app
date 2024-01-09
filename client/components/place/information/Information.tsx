@@ -26,20 +26,21 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
 
 interface InformationProps {
     place?: Place
-    ratingCount?: number
+    ratingValue?: number | null
     loading?: boolean
     onChangeWasHere?: (wasHere: boolean) => void
-    onChangeRating?: (rating: number) => void
 }
 
 const Information: React.FC<InformationProps> = (props) => {
-    const { place, ratingCount, loading, onChangeWasHere, onChangeRating } =
-        props
+    const { place, ratingValue, loading, onChangeWasHere } = props
 
     const authSlice = useAppSelector((state) => state.auth)
 
     const { data: visitedUsersData, isLoading: visitedUsersLoading } =
         API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
+
+    const [changeRating, { isLoading: ratingLoading }] =
+        API.useRatingPutScoreMutation()
 
     const iWasHere = useMemo(
         () =>
@@ -48,6 +49,15 @@ const Information: React.FC<InformationProps> = (props) => {
             )?.id,
         [visitedUsersData, authSlice]
     )
+
+    const handleRatingChange = (value?: number) => {
+        if (value && place?.id) {
+            changeRating({
+                place: place.id,
+                score: value
+            })
+        }
+    }
 
     React.useEffect(() => {
         onChangeWasHere?.(iWasHere)
@@ -61,9 +71,9 @@ const Information: React.FC<InformationProps> = (props) => {
                     <div className={styles.key}>{'Оценка пользователей:'}</div>
                     <div className={styles.value}>
                         <Rating
-                            value={place?.rating}
-                            disabled={loading}
-                            onChange={onChangeRating}
+                            value={ratingValue ?? undefined}
+                            disabled={ratingLoading}
+                            onChange={handleRatingChange}
                         />
                     </div>
                 </li>

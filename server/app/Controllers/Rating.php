@@ -5,55 +5,45 @@ use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
+use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
 class Rating extends ResourceController {
 
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
     public function show($id = null): ResponseInterface {
         try {
             $session     = new Session();
             $ratingModel = new RatingModel();
-            $ratingData  = $ratingModel
-                ->select('rating.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-                ->join('users', 'rating.user_id = users.id', 'left')
-                ->where('place_id', $id)
-                ->findAll();
+            $ratingData  = $ratingModel->select('value, session_id, user_id')->where(['place_id' => $id])->findAll();
+            $response    = ['rating' => 0, 'count'  => 0];
 
-            $result = [];
-
-            if (!empty($ratingData)) {
-                foreach ($ratingData as $item) {
-                     $tmpData = [
-                         'created' => $item->created_at,
-                         'session' => $item->session,
-                         'value'   => (int) $item->value
-                     ];
-
-                     if ($item->user_id) {
-                         $tmpData['author'] = [
-                             'id'         => $item->user_id,
-                             'name'       => $item->user_name,
-                             'level'      => (int) $item->user_level,
-                             'reputation' => (int) $item->user_reputation,
-                             'avatar'     => $item->user_avatar
-                         ];
-                     }
-
-                     $result[] = $tmpData;
-                }
+            if (!$ratingData) {
+                return $this->respond($response);
             }
 
-            return $this->respond([
-                'items'   => $result,
-                'count'   => count($result),
-                'canVote' => !in_array($session->id, array_column($result, 'session'))
-            ]);
+            $response['count'] = count($ratingData);
+
+            foreach ($ratingData as $item) {
+                if ($item->session_id === $session->id || $item->user_id === $session?->userData?->id) {
+                    $response['vote'] = $item->value;
+                }
+
+                $response['rating'] += $item->value;
+            }
+
+            $response['rating'] = round($response['rating'] / $response['count'], 1);
+
+            return $this->respond($response);
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
-            return $this->failNotFound();
+            return $this->failServerError();
         }
     }
 
@@ -66,48 +56,59 @@ class Rating extends ResourceController {
         try {
             $input = $this->request->getJSON();
 
-            if (empty($input) || !$input->place || !$input->score) {
+            if (empty($input) || !$input->place || !(int) $input->score) {
                 return $this->failValidationErrors('Not enough data to change the rating');
             }
 
             $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
-//            $usersModel  = new UsersModel();
+            $usersModel  = new UsersModel();
             $placesData  = $placesModel->select('id, user_id, rating, updated_at')->find($input->place);
-//            $usersData   = $usersModel->select('id, reputation, updated_at')->find($placesData->user_id);
+            $usersData   = $usersModel->select('id, reputation, updated_at')->find($placesData->user_id);
+            $ratingData  = $ratingModel->where('place_id', $placesData->id)->findAll();
+
+            $inputRating  = (int) $input->score;
+            $ratingValue  = $inputRating;
+            $alreadyVoted = null; // Пользователь меняет свою оценку? Будем тут хранить ID записи рейтинга
 
             if (!$placesData) {
                 return $this->failNotFound();
             }
 
-            $newScore = (int) $input->score < 1
-                ? 1
-                : min((int)$input->score, 5);
+            // Рассчитаем новую оценку для места
+            if ($ratingData) {
+                foreach ($ratingData as $item) {
+                    if ($item->session_id === $session->id || $item->user_id === $session?->userData?->id) {
+                        $alreadyVoted = $item->id;
+                    }
 
-            $placeRating  = $ratingModel->where('place_id', $placesData->id)->findAll();
-            $averageValue = 0;
-
-            if (in_array($session->id, array_column($placeRating, 'session'))) {
-                return $this->failValidationErrors('The user has already voted for this material');
-            }
-
-            if ($placeRating) {
-                foreach ($placeRating as $item) {
-                    $averageValue += $item->value;
+                    $ratingValue += $item->value;
                 }
+
+                $ratingValue = round($ratingValue / (count($ratingData) + 1), 1);
             }
 
-            $newPlaceVal = round(($averageValue + $newScore) / (count($placeRating) + 1), 1);
+            // Теперь изменим репутацию автора материала
+            $userRating = $usersData->reputation + ($inputRating > 2 ? 1 : -1);
 
+            // Создаем новую модель рейтинга для сохранения
             $rating = new \App\Entities\Rating();
             $rating->place_id   = $input->place;
             $rating->user_id    = isset($session->userData) ? $session->userData->id : null;
             $rating->session_id = $session->id;
-            $rating->value      = $newScore;
+            $rating->value      = $inputRating;
 
-//            $usersModel->update($placesData->user_id, ['reputation' => $usersData->reputation + $newPlaceVal, 'updated_at' => $usersData->updated_at]);
-            $placesModel->update($placesData->id, ['rating' => $newPlaceVal, 'updated_at' => $placesData->updated_at]);
+            $usersModel->update($placesData->user_id, ['reputation' => $userRating, 'updated_at' => $usersData->updated_at]);
+            $placesModel->update($placesData->id, ['rating' => $ratingValue, 'updated_at' => $placesData->updated_at]);
+
+            // Редактируем оценку пользователя
+            if ($alreadyVoted) {
+                $ratingModel->update($alreadyVoted, ['value' => $inputRating]);
+                return $this->respondUpdated();
+            }
+
+            // Добавляем новую оценку (пользователь ни разу не голосовал еще)
             $ratingModel->insert($rating);
 
             /* ACTIVITY */
@@ -124,7 +125,7 @@ class Rating extends ResourceController {
                 $userNotify->rating($placesData->user_id, $placesData->id);
             }
 
-            return $this->respond((object) ['rating' => $newPlaceVal]);
+            return $this->respondCreated();
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
