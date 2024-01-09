@@ -126,6 +126,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {...props}
                 center={props.center || DEFAULT_MAP_CENTER}
                 zoom={props.zoom || DEFAULT_MAP_ZOOM}
+                minZoom={6}
                 style={{ height: '100%', width: '100%' }}
                 attributionControl={false}
                 ref={mapRef}

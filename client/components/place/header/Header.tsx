@@ -24,7 +24,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ place, ratingCount }) => (
     <section className={styles.component}>
         <div className={styles.topPanel}>
-            {ratingCount && (
+            {!!ratingCount && (
                 <div
                     className={cn(
                         styles.rating,

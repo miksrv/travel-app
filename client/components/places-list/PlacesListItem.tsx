@@ -49,18 +49,22 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                     icon={'Camera'}
                     content={place?.photoCount || 0}
                 />
-                <Badge
-                    icon={'Star'}
-                    content={place.rating}
-                />
+                {!!place.rating && (
+                    <Badge
+                        icon={'Star'}
+                        content={place.rating}
+                    />
+                )}
                 <Badge
                     icon={'Eye'}
                     content={numberFormatter(place?.views || 0)}
                 />
-                <Badge
-                    icon={'Ruler'}
-                    content={numberFormatter(place?.distance || 0)}
-                />
+                {!!place?.distance && (
+                    <Badge
+                        icon={'Ruler'}
+                        content={numberFormatter(place?.distance || 0)}
+                    />
+                )}
             </div>
         </section>
         <h2 className={styles.title}>

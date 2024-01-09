@@ -25,7 +25,7 @@ import { encodeQueryData } from '@/functions/helpers'
 
 import Breadcrumbs from '../ui/breadcrumbs'
 
-const POST_PER_PAGE = 15
+const POST_PER_PAGE = 16
 const PAGE_TITLE = 'Интересные места'
 
 const PlacesPage: NextPage = () => {
