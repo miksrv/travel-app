@@ -1,0 +1,32 @@
+@import ../../styles/variables
+
+.component
+  display: flex
+
+  svg
+    margin-right: 0 !important
+    fill: $colorTextSecond !important
+    transform: scale(1)
+    transition: transform 0.15s ease
+
+  //&:hover
+  //  svg
+  //    fill: #faaf00 !important
+
+  .hovered, .fullStar
+    svg
+      fill: #faaf00 !important
+
+  .current
+    svg
+      transform: scale(1.2)
+
+  label
+    cursor: pointer
+
+  input[type="radio"]
+    display: none
+
+  li
+    margin: 0 !important
+    height: 18px

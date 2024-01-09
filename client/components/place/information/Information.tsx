@@ -5,6 +5,7 @@ import React, { useMemo } from 'react'
 
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
+import Rating from '@/ui/rating'
 
 import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
@@ -70,7 +71,9 @@ const Information: React.FC<InformationProps> = (props) => {
                 <li>
                     <Icon name={'Star'} />
                     <div className={styles.key}>{'Оценка пользователей:'}</div>
-                    <div className={styles.value}>{place?.rating}</div>
+                    <div className={styles.value}>
+                        <Rating value={place?.rating} />
+                    </div>
                 </li>
                 <li>
                     <Icon name={'User'} />
