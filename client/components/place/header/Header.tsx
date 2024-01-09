@@ -18,21 +18,22 @@ import styles from './styles.module.sass'
 
 interface HeaderProps {
     place?: Place
+    ratingValue?: number
     ratingCount?: number
 }
 
-const Header: React.FC<HeaderProps> = ({ place, ratingCount }) => (
+const Header: React.FC<HeaderProps> = ({ place, ratingValue, ratingCount }) => (
     <section className={styles.component}>
         <div className={styles.topPanel}>
             {!!ratingCount && (
                 <div
                     className={cn(
                         styles.rating,
-                        styles[ratingColor(place?.rating || 0)]
+                        styles[ratingColor(ratingValue || 0)]
                     )}
                 >
                     <div className={styles.value}>
-                        {addDecimalPoint(place?.rating || 0)}
+                        {addDecimalPoint(ratingValue || 0)}
                     </div>
                     <div className={styles.count}>{ratingCount} голоса</div>
                 </div>

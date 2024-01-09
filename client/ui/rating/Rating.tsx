@@ -6,10 +6,11 @@ import styles from './styles.module.sass'
 
 interface RatingProps {
     value?: number
-    onChange?: (rating?: number) => void
+    disabled?: boolean
+    onChange?: (rating: number) => void
 }
 
-const Rating: React.FC<RatingProps> = ({ value, onChange }) => {
+const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
     const [hoverRating, setHoverRating] = useState<number>()
 
     const showFullStar = (rating: number) =>
@@ -33,9 +34,6 @@ const Rating: React.FC<RatingProps> = ({ value, onChange }) => {
                     onMouseLeave={() => {
                         setHoverRating(undefined)
                     }}
-                    onClick={() => {
-                        onChange?.(rating)
-                    }}
                 >
                     <label
                         className={
@@ -51,6 +49,14 @@ const Rating: React.FC<RatingProps> = ({ value, onChange }) => {
                             type={'radio'}
                             value={rating}
                             checked={value === rating}
+                            onClick={() => {
+                                !disabled ? onChange?.(rating) : undefined
+                            }}
+                            onKeyDown={(e) => {
+                                if (e.key === 'Enter' || e.key === ' ') {
+                                    !disabled ? onChange?.(rating) : undefined
+                                }
+                            }}
                         />
                     </label>
                 </li>

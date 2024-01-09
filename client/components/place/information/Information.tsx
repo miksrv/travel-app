@@ -29,15 +29,14 @@ interface InformationProps {
     ratingCount?: number
     loading?: boolean
     onChangeWasHere?: (wasHere: boolean) => void
+    onChangeRating?: (rating: number) => void
 }
 
 const Information: React.FC<InformationProps> = (props) => {
-    const { place, ratingCount, loading, onChangeWasHere } = props
+    const { place, ratingCount, loading, onChangeWasHere, onChangeRating } =
+        props
 
     const authSlice = useAppSelector((state) => state.auth)
-
-    const [setRating, { data: newRating, isLoading: setRatingLoading }] =
-        API.useRatingPutScoreMutation()
 
     const { data: visitedUsersData, isLoading: visitedUsersLoading } =
         API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
@@ -50,17 +49,6 @@ const Information: React.FC<InformationProps> = (props) => {
         [visitedUsersData, authSlice]
     )
 
-    const handleRatingChange = (value?: number) => {
-        if (!value) {
-            return
-        }
-
-        setRating({
-            place: place?.id!,
-            score: value
-        })
-    }
-
     React.useEffect(() => {
         onChangeWasHere?.(iWasHere)
     }, [visitedUsersData, authSlice])
@@ -72,7 +60,11 @@ const Information: React.FC<InformationProps> = (props) => {
                     <Icon name={'Star'} />
                     <div className={styles.key}>{'Оценка пользователей:'}</div>
                     <div className={styles.value}>
-                        <Rating value={place?.rating} />
+                        <Rating
+                            value={place?.rating}
+                            disabled={loading}
+                            onChange={onChangeRating}
+                        />
                     </div>
                 </li>
                 <li>

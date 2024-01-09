@@ -69,8 +69,16 @@ export const concatClassNames = (
     ...args: Array<string | boolean | null | undefined>
 ): string => args.filter((item) => !!item).join(' ')
 
-export const ratingColor = (value: number): 'plus' | 'minus' | 'neutral' =>
-    value > 0 ? 'plus' : value < 0 ? 'minus' : 'neutral'
+export const ratingColor = (
+    value: number
+): 'green' | 'orange' | 'gray' | 'red' =>
+    value <= 1
+        ? 'red'
+        : value > 1 && value < 3
+        ? 'orange'
+        : value >= 3
+        ? 'green'
+        : 'gray'
 
 export const addDecimalPoint = (input: number | string): string => {
     const inputValue: string =
