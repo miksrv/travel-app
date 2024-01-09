@@ -12,7 +12,6 @@ import { Poi } from '@/api/types'
 import { categoryImage } from '@/functions/categories'
 
 import noPhoto from '@/public/images/no-photo-available.png'
-import icon from '@/public/images/poi/battlefield.png'
 
 import styles from './styles.module.sass'
 
@@ -26,8 +25,8 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
 
     const placeMarkerIcon = new Leaflet.Icon({
         className: styles.markerPoint,
-        iconAnchor: [icon.width - 20, icon.height - 20],
-        iconSize: [icon.width - 10, icon.height - 12],
+        iconAnchor: [10, 10],
+        iconSize: [20, 20],
         iconUrl: categoryImage(place.category).src
     })
 

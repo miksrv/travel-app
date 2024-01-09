@@ -21,7 +21,7 @@ use Config\Services;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 2);
+define('MAX_PLACES_PER_ITERATION', 5);
 
 class Migrate extends ResourceController {
     /**

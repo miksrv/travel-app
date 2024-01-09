@@ -82,14 +82,6 @@ const IndexPage: NextPage = () => {
             breadcrumb={t('breadcrumb')}
         >
             <NextSeo title={t('title')} />
-            <MapIcon
-                name={'Forest'}
-                height={'32px'}
-            />
-            <MapIcon
-                name={'Mount'}
-                height={'32px'}
-            />
             <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}
