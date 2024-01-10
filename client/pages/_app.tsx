@@ -13,6 +13,7 @@ import { Provider } from 'react-redux'
 import { wrapper } from '@/api/store'
 
 // https://vkcom.github.io/VKUI/#/SplitLayout
+// https://vkcom.github.io/VKUI/6.0.0-beta.3/#/RichCell
 // https://setproduct.com/material-x
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
 // https://account.travel/things-to-do/california
@@ -180,7 +181,7 @@ const theme = createTheme(
 )
 
 const App = ({ Component, pageProps }: AppProps) => {
-    const { store, props } = wrapper.useWrappedStore(pageProps)
+    const { store } = wrapper.useWrappedStore(pageProps)
 
     return (
         <>
@@ -198,7 +199,7 @@ const App = ({ Component, pageProps }: AppProps) => {
             <Provider store={store}>
                 <ThemeProvider theme={theme}>
                     <CssBaseline />
-                    <Component {...props.pageProps} />
+                    <Component {...pageProps} />
                 </ThemeProvider>
             </Provider>
         </>

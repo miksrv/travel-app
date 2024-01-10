@@ -46,7 +46,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
             </Link>
             <div className={styles.bottomPanel}>
                 <Badge
-                    icon={'Camera'}
+                    icon={'Photo'}
                     content={place?.photoCount || 0}
                 />
                 {!!place.rating && (

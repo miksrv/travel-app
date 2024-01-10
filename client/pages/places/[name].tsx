@@ -5,6 +5,8 @@ import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 
+import Container from '@/ui/container'
+
 import { API } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -117,13 +119,14 @@ const PlacePage: NextPage = () => {
                 content={placeData?.content}
                 tags={placeData?.tags}
             />
-
-            {`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
-                ...(nearPlacesData?.items?.map(
-                    ({ distance }) => distance || 0
-                ) || [])
-            )} км`}
-
+            <Container>
+                <h2>{'Ближайшие места рядом'}</h2>
+                {`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
+                    ...(nearPlacesData?.items?.map(
+                        ({ distance }) => distance || 0
+                    ) || [])
+                )} км`}
+            </Container>
             <PlacesList places={nearPlacesData?.items} />
         </PageLayout>
     )

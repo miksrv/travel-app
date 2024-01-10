@@ -1,3 +1,4 @@
+import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
@@ -11,6 +12,10 @@ type Maybe<T> = T | void
 export const ImageHost =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
+function isHydrateAction(action: Action): action is PayloadAction<RootState> {
+    return action.type === HYDRATE
+}
+
 export const API = createApi({
     baseQuery: fetchBaseQuery({
         baseUrl: process.env.NEXT_PUBLIC_API_HOST || 'http://localhost:8080/',
@@ -23,8 +28,8 @@ export const API = createApi({
             }
 
             return headers
-        },
-        responseHandler: 'content-type'
+        }
+        // responseHandler: 'content-type'
     }),
     endpoints: (builder) => ({
         /* Controller: Activity */

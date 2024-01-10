@@ -5,6 +5,7 @@ export type IconTypes =
     | 'Terrain'
     | 'Eye'
     | 'Camera'
+    | 'Photo'
     | 'Ruler'
     | 'Star'
     | 'User'
@@ -13,3 +14,5 @@ export type IconTypes =
     | 'Clip'
     | 'Search'
     | 'UserCircle'
+    | 'Left'
+    | 'Right'

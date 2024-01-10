@@ -7,6 +7,7 @@ import styles from './styles.module.sass'
 interface ContainerProps extends React.HTMLAttributes<unknown> {
     title?: string
     className?: string
+    compact?: boolean
     action?: React.ReactNode
     header?: React.ReactNode
     children?: React.ReactNode
@@ -14,6 +15,7 @@ interface ContainerProps extends React.HTMLAttributes<unknown> {
 
 const Container: React.FC<ContainerProps> = ({
     className,
+    compact,
     title,
     action,
     header,
@@ -22,7 +24,7 @@ const Container: React.FC<ContainerProps> = ({
 }) => (
     <section
         {...props}
-        className={cn(className, styles.container)}
+        className={cn(className, styles.container, compact && styles.compact)}
     >
         {(header || title || action) && (
             <div className={styles.header}>

@@ -17,7 +17,6 @@ const nextConfig = {
     images: {
         unoptimized: true
     },
-
     transpilePackages: [
         '@mdxeditor/editor',
         'react-diff-view',
