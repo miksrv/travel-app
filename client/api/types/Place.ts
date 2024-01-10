@@ -17,7 +17,6 @@ export type Place = {
     distance?: number
     author?: User
     category?: Category
-    subcategory?: Category
     address?: Address
     photo?: Photo
     tags?: Tag[]

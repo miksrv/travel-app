@@ -25,7 +25,7 @@ import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-import { API, ImageHost } from '@/api/api'
+import { API, IMG_HOST } from '@/api/api'
 import { wrapper } from '@/api/store'
 
 import ActivityList from '@/components/activity-list'
@@ -202,7 +202,7 @@ const UserItemPage: NextPage = () => {
                                 alt={userData?.name || ''}
                                 src={
                                     userData?.avatar
-                                        ? `${ImageHost}avatar/${userData.avatar}`
+                                        ? `${IMG_HOST}avatar/${userData.avatar}`
                                         : userAvatar.src
                                 }
                                 sx={{

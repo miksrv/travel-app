@@ -1,17 +1,15 @@
+import { SITE_NAME } from '@/pages/_app'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
 import React from 'react'
 
 import Container from '@/ui/container'
 
-import { API } from '@/api/api'
+import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Photo } from '@/api/types/Photo'
-import { Place } from '@/api/types/Place'
+import { ApiTypes, Photo, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
 import PlaceDescription from '@/components/place/description'
@@ -20,12 +18,14 @@ import PlaceInformation from '@/components/place/information'
 import PlacePhotos from '@/components/place/photos'
 import PlacesList from '@/components/places-list'
 
+import { formatDateUTC } from '@/functions/helpers'
+
 const NEAR_PLACES_COUNT = 4
 
 interface PlacePageProps {
-    place?: Place
-    photoList?: Photo[]
-    nearPlaces?: Place[]
+    place?: Place.Place
+    photoList?: Photo.Photo[]
+    nearPlaces?: Place.Place[]
 }
 
 const PlacePage: NextPage<PlacePageProps> = (props) => {
@@ -68,28 +68,56 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
                 }
             ]}
         >
-            <NextSeo title={place?.title} />
+            <NextSeo
+                title={place?.title}
+                description={place?.content?.substring(0, 160)}
+                openGraph={{
+                    article: {
+                        authors: [`${SITE_LINK}users/${place?.author?.id}`],
+                        modifiedTime: formatDateUTC(place?.updated?.date),
+                        publishedTime: formatDateUTC(place?.created?.date),
+                        section: place?.category?.name,
+                        tags: place?.tags?.map(({ title }) => title)
+                    },
+                    description: place?.content?.substring(0, 160),
+                    images: photoList?.map((photo, index) => ({
+                        alt: `${photo.title} - Фото ${index + 1}`,
+                        height: photo.height,
+                        url: `${IMG_HOST}photo/${place?.id}/${photo.filename}_thumb.${photo.extension}`,
+                        width: photo.width
+                    })),
+                    siteName: SITE_NAME,
+                    title: place?.title,
+                    type: 'article',
+                    url: SITE_LINK
+                }}
+            />
+
             <PlaceHeader
                 place={place}
                 ratingValue={ratingData?.rating ?? place?.rating}
                 ratingCount={ratingData?.count}
             />
+
             <PlaceInformation
                 place={place}
                 ratingValue={ratingData?.vote}
                 loading={ratingLoading}
             />
+
             <PlacePhotos
                 title={place?.title}
                 photos={photoList}
                 placeId={place?.id}
             />
+
             <PlaceDescription
                 id={place?.id}
                 title={place?.title}
                 content={place?.content}
                 tags={place?.tags}
             />
+
             <Container>
                 <h2>{'Ближайшие места рядом'}</h2>
                 {`Найдены несколько ближайших интересных мест в радиусе ${Math.max(

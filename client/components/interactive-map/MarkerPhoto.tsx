@@ -2,7 +2,7 @@ import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { Poi } from '@/api/types'
 
 import styles from './styles.module.sass'
@@ -17,7 +17,7 @@ const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
         className: styles.markerPhoto,
         iconAnchor: [16, 16],
         iconSize: [32, 32],
-        iconUrl: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`
+        iconUrl: `${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`
     })
 
     return (

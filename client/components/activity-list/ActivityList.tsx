@@ -7,7 +7,7 @@ import Link from 'next/link'
 import React, { useState } from 'react'
 import Gallery from 'react-photo-gallery'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
 
 import PhotoLightbox from '@/components/photo-lightbox'
@@ -170,7 +170,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({
                     <Gallery
                         photos={item.photos?.map((photo) => ({
                             height: photo.height,
-                            src: `${ImageHost}photo/${photo.placeId}/${photo.filename}.${photo.extension}`,
+                            src: `${IMG_HOST}photo/${photo.placeId}/${photo.filename}.${photo.extension}`,
                             width: photo.width
                         }))}
                         onClick={handlePhotoClick}

@@ -6,7 +6,7 @@ import Link from 'next/link'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
-import { API, ImageHost } from '@/api/api'
+import { API, IMG_HOST } from '@/api/api'
 import { Poi } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -56,7 +56,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                     className={styles.image}
                                     src={
                                         poiData?.photos?.[0]?.filename
-                                            ? `${ImageHost}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
+                                            ? `${IMG_HOST}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
                                             : noPhoto.src
                                     }
                                     alt={poiData?.title}

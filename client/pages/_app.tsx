@@ -18,6 +18,8 @@ import { wrapper } from '@/api/store'
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
 // https://account.travel/things-to-do/california
 
+export const SITE_NAME = 'Название сайта'
+
 const LinkBehaviour = forwardRef(function LinkBehaviour(props, ref) {
     return (
         <NextLink

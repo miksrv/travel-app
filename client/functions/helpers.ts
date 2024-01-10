@@ -62,6 +62,9 @@ export const formatDate = (
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs(date).format(format) : '')
 
+export const formatDateUTC = (date?: string | Date): string =>
+    date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
+
 export const round = (value?: number, digits: number = 4): number | undefined =>
     value ? Number(value.toFixed(digits)) : undefined
 

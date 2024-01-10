@@ -9,12 +9,10 @@ import { encodeQueryData } from '@/functions/helpers'
 
 type Maybe<T> = T | void
 
-export const ImageHost =
+export const IMG_HOST =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
-function isHydrateAction(action: Action): action is PayloadAction<RootState> {
-    return action.type === HYDRATE
-}
+export const SITE_LINK = process.env.NEXT_PUBLIC_SITE_LINK
 
 export const API = createApi({
     baseQuery: fetchBaseQuery({

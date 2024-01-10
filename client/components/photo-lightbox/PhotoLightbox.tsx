@@ -1,7 +1,7 @@
 import React from 'react'
 import Lightbox from 'react-image-lightbox'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { Photo, Poi } from '@/api/types'
 
 import UserAvatar from '@/components/user-avatar'
@@ -24,10 +24,10 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     onChangeIndex
 }) => {
     const imageUrl = (index: number) =>
-        `${ImageHost}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}.${photos?.[index]?.extension}`
+        `${IMG_HOST}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}.${photos?.[index]?.extension}`
 
     const thumbImageUrl = (index: number) =>
-        `${ImageHost}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}_thumb.${photos?.[index]?.extension}`
+        `${IMG_HOST}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}_thumb.${photos?.[index]?.extension}`
 
     return (
         <>

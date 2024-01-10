@@ -3,7 +3,7 @@ import React from 'react'
 
 import Badge from '@/ui/badge'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
 import {
@@ -50,7 +50,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             width={1100}
             src={
                 place?.photo?.filename
-                    ? `${ImageHost}photo/${place?.id}/${place?.photo?.filename}.${place?.photo?.extension}`
+                    ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}.${place?.photo?.extension}`
                     : noPhoto.src
             }
         />

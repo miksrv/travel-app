@@ -4,7 +4,7 @@ import React from 'react'
 
 import Badge from '@/ui/badge'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
@@ -39,7 +39,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                     width={260}
                     src={
                         place?.photo?.filename
-                            ? `${ImageHost}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
+                            ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
                             : noPhoto.src
                     }
                 />

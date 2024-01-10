@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { User } from '@/api/types/User'
 
 import userAvatar from '@/public/images/no-avatar.png'
@@ -65,7 +65,7 @@ const UserAvatar: React.FC<AvatarProps> = ({ user, size, text, loading }) => {
                             alt={user?.name || ''}
                             src={
                                 user?.avatar
-                                    ? `${ImageHost}avatar/${user.avatar}`
+                                    ? `${IMG_HOST}avatar/${user.avatar}`
                                     : userAvatar.src
                             }
                             sx={{

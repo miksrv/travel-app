@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 
-import { ImageHost } from '@/api/api'
+import { IMG_HOST } from '@/api/api'
 import { Photo } from '@/api/types/Photo'
 
 import styles from './styles.module.sass'
@@ -20,7 +20,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         {photos?.map((photo, index) => (
             <li key={photo.filename}>
                 <Link
-                    href={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                    href={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
                     title={`${photo.title}. Посмотреть фото ${index + 1}`}
                     onClick={(event) => {
                         event.preventDefault()
@@ -28,7 +28,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     }}
                 >
                     <Image
-                        src={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                        src={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
                         alt={`${photo.title}, фото ${index + 1}`}
                         width={200}
                         height={150}
