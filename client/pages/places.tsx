@@ -23,24 +23,19 @@ import PlacesList from '@/components/places-list'
 const POST_PER_PAGE = 16
 
 interface PlacesPageProps {
-    _nextI18Next?:
-        | {
-              initialI18nStore: any
-              initialLocale: string
-              ns: string[]
-              userConfig: any
-          }
-        | undefined
     currentPage: number
+    placesCount: number
+    placesList: Place.Place[]
 }
 
 const PlacesPage: NextPage<PlacesPageProps> = (props) => {
+    const { currentPage, placesCount, placesList } = props
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
-    const pathname = usePathname()
-    const searchParams = useSearchParams()
+    // const pathname = usePathname()
+    // const searchParams = useSearchParams()
     const geolocation = useGeolocation()
-    const router = useRouter()
+    // const router = useRouter()
 
     // const initPage = searchParams.get('page')
     //     ? Number(searchParams.get('page'))
@@ -56,40 +51,40 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
 
     // const currentPage = Number(searchParams.get('page')) || 1
 
-    const [page, setPage] = useState<number>()
-    const [sort, setSort] = useState<ApiTypes.SortFields>(
-        ApiTypes.SortFields.Updated
-    )
-    const [order, setOrder] = useState<ApiTypes.SortOrder>(
-        ApiTypes.SortOrder.DESC
-    )
-    const [category, setCategory] = useState<Place.Category>()
-    const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
+    // const [page, setPage] = useState<number>()
+    // const [sort, setSort] = useState<ApiTypes.SortFields>(
+    //     ApiTypes.SortFields.Updated
+    // )
+    // const [order, setOrder] = useState<ApiTypes.SortOrder>(
+    //     ApiTypes.SortOrder.DESC
+    // )
+    // const [category, setCategory] = useState<Place.Category>()
+    // const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
 
     const [introduce] = API.useIntroduceMutation()
-    const { data } = API.usePlacesGetListQuery({
-        category: category?.name,
-        city:
-            location?.type === ApiTypes.LocationType.City
-                ? location.value
-                : undefined,
-        country:
-            location?.type === ApiTypes.LocationType.Country
-                ? location.value
-                : undefined,
-        district:
-            location?.type === ApiTypes.LocationType.District
-                ? location.value
-                : undefined,
-        limit: POST_PER_PAGE,
-        offset: (props.currentPage - 1) * POST_PER_PAGE,
-        order: order,
-        region:
-            location?.type === ApiTypes.LocationType.Region
-                ? location.value
-                : undefined,
-        sort: sort
-    })
+    // const { data } = API.usePlacesGetListQuery({
+    //     category: category?.name,
+    //     city:
+    //         location?.type === ApiTypes.LocationType.City
+    //             ? location.value
+    //             : undefined,
+    //     country:
+    //         location?.type === ApiTypes.LocationType.Country
+    //             ? location.value
+    //             : undefined,
+    //     district:
+    //         location?.type === ApiTypes.LocationType.District
+    //             ? location.value
+    //             : undefined,
+    //     limit: POST_PER_PAGE,
+    //     offset: (props.currentPage - 1) * POST_PER_PAGE,
+    //     order: order,
+    //     region:
+    //         location?.type === ApiTypes.LocationType.Region
+    //             ? location.value
+    //             : undefined,
+    //     sort: sort
+    // })
 
     // useEffect(() => {
     //     const urlParams = {
@@ -103,11 +98,11 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     //     })
     // }, [page, sort, order])
 
-    const createPageURL = (pageNumber: number | string) => {
-        const params = new URLSearchParams(searchParams)
-        params.set('page', pageNumber.toString())
-        return `${pathname}?${params.toString()}`
-    }
+    // const createPageURL = (pageNumber: number | string) => {
+    //     const params = new URLSearchParams(searchParams)
+    //     params.set('page', pageNumber.toString())
+    //     return `${pathname}?${params.toString()}`
+    // }
 
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
@@ -139,29 +134,32 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             {/*        }*/}
             {/*    />*/}
             {/*</Card>*/}
-            <Container>
-                <PlacesFilterPanel
-                    sort={sort}
-                    order={order}
-                    location={location}
-                    category={category}
-                    onChangeSort={setSort}
-                    onChangeOrder={setOrder}
-                    onChangeLocation={async (location) => {
-                        setPage(1)
-                        setLocation(location)
-                    }}
-                    onChangeCategory={(category) => {
-                        setPage(1)
-                        setCategory(category)
-                    }}
-                />
-            </Container>
-            <PlacesList places={data?.items} />
-            <Container>
+            {/*<Container>*/}
+            {/*    <PlacesFilterPanel*/}
+            {/*        sort={sort}*/}
+            {/*        order={order}*/}
+            {/*        location={location}*/}
+            {/*        category={category}*/}
+            {/*        onChangeSort={setSort}*/}
+            {/*        onChangeOrder={setOrder}*/}
+            {/*        onChangeLocation={async (location) => {*/}
+            {/*            setPage(1)*/}
+            {/*            setLocation(location)*/}
+            {/*        }}*/}
+            {/*        onChangeCategory={(category) => {*/}
+            {/*            setPage(1)*/}
+            {/*            setCategory(category)*/}
+            {/*        }}*/}
+            {/*    />*/}
+            {/*</Container>*/}
+            <PlacesList places={placesList} />
+            <Container className={'pagination'}>
+                <div>
+                    {'Интересных мест:'} <strong>{placesCount}</strong>
+                </div>
                 <Pagination
-                    currentPage={props.currentPage}
-                    totalPostCount={data?.count}
+                    currentPage={currentPage}
+                    totalPostCount={placesCount}
                     perPage={POST_PER_PAGE}
                     linkPart={'places'}
                 />
@@ -174,28 +172,29 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
             const locale = context.locale ?? 'en'
+            const currentPage = parseInt(context.query.page as string, 10) || 1
+
             const translations = await serverSideTranslations(locale)
-            const page = parseInt(context.query.page as string, 10) || 1
 
-            // const action = store
-            //     .dispatch(
-            //         API.endpoints?.placesGetList.initiate({
-            //             limit: POST_PER_PAGE,
-            //             offset: (page - 1) * POST_PER_PAGE,
-            //             order: ApiTypes.SortOrder.DESC,
-            //             sort: ApiTypes.SortFields.Updated
-            //         })
-            //     )
-            //     .unwrap()
-
-            // После завершения действия получаем данные из состояния хранилища
-            // const datas = store.getState()
+            const { data: placesList } = await store.dispatch(
+                API.endpoints?.placesGetList.initiate({
+                    limit: POST_PER_PAGE,
+                    offset: (currentPage - 1) * POST_PER_PAGE,
+                    order: ApiTypes.SortOrder.ASC,
+                    sort: ApiTypes.SortFields.Distance
+                })
+            )
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
-            // console.log('data', action)
-
-            return { props: { ...translations, currentPage: page } }
+            return {
+                props: {
+                    ...translations,
+                    currentPage,
+                    placesCount: placesList?.count || 0,
+                    placesList: placesList?.items || []
+                }
+            }
         }
 )
 

@@ -19,6 +19,8 @@ use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
 class Places extends ResourceController {
+    protected bool $coordinatesAvailable = false;
+
     /**
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
@@ -132,8 +134,9 @@ class Places extends ResourceController {
                 ]
             ];
 
-            if ($distanceSelect) {
+            if ($distanceSelect && $place->distance) {
                 $return['distance'] = round((float) $place->distance, 1);
+                $this->coordinatesAvailable = true;
             }
 
             if ($photoId !== false && isset($photosData[$photoId])) {
@@ -415,6 +418,10 @@ class Places extends ResourceController {
         $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
         $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
         $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if (!$this->coordinatesAvailable) {
+            $sortingFields = array_diff($sortingFields, ['distance']);
+        }
 
         if ($country) {
             $placesModel->where(['address_country' => $country]);
