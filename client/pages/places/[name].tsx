@@ -10,6 +10,8 @@ import Container from '@/ui/container'
 import { API } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
+import { Photo } from '@/api/types/Photo'
+import { Place } from '@/api/types/Place'
 
 import PageLayout from '@/components/page-layout'
 import PlaceDescription from '@/components/place/description'
@@ -20,54 +22,31 @@ import PlacesList from '@/components/places-list'
 
 const NEAR_PLACES_COUNT = 4
 
-const PlacePage: NextPage = () => {
+interface PlacePageProps {
+    place?: Place
+    photoList?: Photo[]
+    nearPlaces?: Place[]
+}
+
+const PlacePage: NextPage<PlacePageProps> = (props) => {
+    const { place, photoList, nearPlaces } = props
     const { t } = useTranslation('common', { keyPrefix: 'page.place' })
-    const router = useRouter()
-    const routerId = router.query.name
-    const placeId = typeof routerId === 'string' ? routerId : ''
-
-    // const authSlice = useAppSelector((state) => state.auth)
-
-    const { data: placeData, isLoading } = API.usePlacesGetItemQuery(placeId, {
-        skip: router.isFallback || !routerId
-    })
-
     const { data: ratingData, isLoading: ratingLoading } =
-        API.useRatingGetListQuery(placeId, {
-            skip: router.isFallback || !routerId
+        API.useRatingGetListQuery(place?.id!, {
+            skip: !place?.id
         })
-
-    const { data: photosData } = API.usePhotosGetListQuery(
-        { place: placeId },
-        {
-            skip: router.isFallback || !routerId
-        }
-    )
 
     // const [setBookmark, { isLoading: bookmarkPutLoading }] =
     //     API.useBookmarksPutPlaceMutation()
-
+    //
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
-
+    //
     // const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
     //     API.useBookmarksGetCheckPlaceQuery(
     //         { place: placeData?.id! },
     //         { skip: !placeData?.id || !authSlice.isAuth }
     //     )
-
-    const { data: nearPlacesData, isLoading: nearPlacesLoading } =
-        API.usePlacesGetListQuery(
-            {
-                excludePlaces: placeData?.id ? [placeData.id] : undefined,
-                latitude: placeData?.latitude,
-                limit: NEAR_PLACES_COUNT,
-                longitude: placeData?.longitude,
-                order: ApiTypes.SortOrder.ASC,
-                sort: ApiTypes.SortFields.Distance
-            },
-            { skip: !placeData?.longitude || !placeData?.latitude }
-        )
 
     // const { data: activityData } = API.useActivityGetListQuery(
     //     {
@@ -78,18 +57,10 @@ const PlacePage: NextPage = () => {
     //     }
     // )
 
-    // const handlePutPlaceBookmark = () => {
-    //     setBookmark({ place: placeData?.id! })
-    // }
-
-    // const handlePutPlaceVisited = () => {
-    //     setVisited({ place: placeData?.id! })
-    // }
-
     return (
         <PageLayout
-            title={placeData?.title}
-            breadcrumb={placeData?.title}
+            title={place?.title}
+            breadcrumb={place?.title}
             links={[
                 {
                     link: '/places/',
@@ -97,65 +68,84 @@ const PlacePage: NextPage = () => {
                 }
             ]}
         >
-            <NextSeo title={placeData?.title} />
+            <NextSeo title={place?.title} />
             <PlaceHeader
-                place={placeData}
-                ratingValue={ratingData?.rating || placeData?.rating}
+                place={place}
+                ratingValue={ratingData?.rating ?? place?.rating}
                 ratingCount={ratingData?.count}
             />
             <PlaceInformation
-                place={placeData}
+                place={place}
                 ratingValue={ratingData?.vote}
-                loading={isLoading || ratingLoading}
+                loading={ratingLoading}
             />
             <PlacePhotos
-                title={placeData?.title}
-                photos={photosData?.items}
-                placeId={placeData?.id}
+                title={place?.title}
+                photos={photoList}
+                placeId={place?.id}
             />
             <PlaceDescription
-                id={placeData?.id}
-                title={placeData?.title}
-                content={placeData?.content}
-                tags={placeData?.tags}
+                id={place?.id}
+                title={place?.title}
+                content={place?.content}
+                tags={place?.tags}
             />
             <Container>
                 <h2>{'Ближайшие места рядом'}</h2>
                 {`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
-                    ...(nearPlacesData?.items?.map(
-                        ({ distance }) => distance || 0
-                    ) || [])
+                    ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
                 )} км`}
             </Container>
-            <PlacesList places={nearPlacesData?.items} />
+            <PlacesList places={nearPlaces} />
         </PageLayout>
     )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<any>> => {
+        async (context): Promise<GetServerSidePropsResult<PlacePageProps>> => {
             const id = context.params?.name
             const locale = context.locale ?? 'en'
+
             const translations = await serverSideTranslations(locale)
 
             if (typeof id !== 'string') {
                 return { notFound: true }
             }
 
-            const data: any = await store.dispatch(
+            const { data: placeData, isError } = await store.dispatch(
                 API.endpoints.placesGetItem.initiate(id)
             )
 
-            store.dispatch(API.endpoints.photosGetList.initiate({ place: id }))
-
-            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
-
-            if (data.error?.originalStatus === 404) {
+            if (isError) {
                 return { notFound: true }
             }
 
-            return { props: { ...translations, data } }
+            const { data: photosData } = await store.dispatch(
+                API.endpoints.photosGetList.initiate({ place: id })
+            )
+
+            const { data: nearPlaces } = await store.dispatch(
+                API.endpoints?.placesGetList.initiate({
+                    excludePlaces: [id],
+                    latitude: placeData?.latitude,
+                    limit: NEAR_PLACES_COUNT,
+                    longitude: placeData?.longitude,
+                    order: ApiTypes.SortOrder.ASC,
+                    sort: ApiTypes.SortFields.Distance
+                })
+            )
+
+            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
+
+            return {
+                props: {
+                    ...translations,
+                    nearPlaces: nearPlaces?.items,
+                    photoList: photosData?.items,
+                    place: placeData
+                }
+            }
         }
 )
 

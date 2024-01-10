@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useState } from 'react'
 
 import { concatClassNames as cn } from '@/functions/helpers'
@@ -49,7 +51,7 @@ const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
                             type={'radio'}
                             value={rating}
                             checked={value === rating}
-                            onClick={() => {
+                            onChange={() => {
                                 !disabled ? onChange?.(rating) : undefined
                             }}
                             onKeyDown={(e) => {
