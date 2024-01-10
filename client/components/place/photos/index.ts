@@ -1,1 +1,1 @@
-export { default } from './Photos'
+export { default } from './PlacePhotos'

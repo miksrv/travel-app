@@ -11,3 +11,5 @@ export type IconTypes =
     | 'Point'
     | 'Time'
     | 'Clip'
+    | 'Search'
+    | 'UserCircle'

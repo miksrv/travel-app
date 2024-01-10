@@ -14,14 +14,14 @@ import TagsSelector from '@/components/form-controllers/tags-selector'
 import ContentEditor from '../../form-controllers/content-editor'
 import styles from './styles.module.sass'
 
-interface DescriptionProps {
+interface PlaceDescriptionProps {
     id?: string
     title?: string
     content?: string
     tags?: Tag[]
 }
 
-const Description: React.FC<DescriptionProps> = (props) => {
+const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     const { id, title, content, tags } = props
 
     const [savePlace, { isLoading, data: saveData }] =
@@ -222,4 +222,4 @@ const Description: React.FC<DescriptionProps> = (props) => {
     )
 }
 
-export default Description
+export default PlaceDescription

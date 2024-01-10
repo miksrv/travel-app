@@ -6,16 +6,13 @@ import { Item } from '@/api/types/Activity'
 
 import ActivityList from '@/components/activity-list'
 
-interface PlaceTabActivityProps {
+interface PlaceActivityProps {
     title?: string
     placeId?: string
     activity?: Item[]
 }
 
-const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
-    title,
-    activity
-}) => (
+const PlaceActivity: React.FC<PlaceActivityProps> = ({ title, activity }) => (
     <>
         <CardHeader
             title={
@@ -37,4 +34,4 @@ const PlaceTabActivity: React.FC<PlaceTabActivityProps> = ({
     </>
 )
 
-export default PlaceTabActivity
+export default PlaceActivity

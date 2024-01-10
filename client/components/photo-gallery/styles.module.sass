@@ -1,6 +1,24 @@
-.photo
-  cursor: pointer
-  border-radius: 4px
+@import ../../styles/variables
 
-  &:hover
-    opacity: .8
+.component
+  display: flex
+  flex-wrap: wrap
+  margin: -3px
+
+  li
+    flex-basis: calc(20% - 6px)
+    margin: 3px 3px 0
+
+  a
+    display: block
+    width: 100%
+
+    img
+      width: 100%
+      object-fit: cover
+      border-radius: $borderRadius
+      box-shadow: $boxShadow
+
+    &:hover
+      img
+        opacity: .8

@@ -16,13 +16,17 @@ import noPhoto from '@/public/images/no-photo-available.png'
 
 import styles from './styles.module.sass'
 
-interface HeaderProps {
+interface PlaceHeaderProps {
     place?: Place
     ratingValue?: number
     ratingCount?: number
 }
 
-const Header: React.FC<HeaderProps> = ({ place, ratingValue, ratingCount }) => (
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({
+    place,
+    ratingValue,
+    ratingCount
+}) => (
     <section className={styles.component}>
         <div className={styles.topPanel}>
             {!!ratingCount && (
@@ -67,4 +71,4 @@ const Header: React.FC<HeaderProps> = ({ place, ratingValue, ratingCount }) => (
     </section>
 )
 
-export default Header
+export default PlaceHeader

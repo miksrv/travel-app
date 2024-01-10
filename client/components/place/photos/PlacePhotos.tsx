@@ -11,13 +11,17 @@ import PhotoLightbox from '@/components/photo-lightbox'
 
 import styles from './styles.module.sass'
 
-interface PhotosProps {
+interface PlacePhotosProps {
     title?: string
     placeId?: string
     photos?: Photo[]
 }
 
-const Photos: React.FC<PhotosProps> = ({ title, placeId, photos }) => {
+const PlacePhotos: React.FC<PlacePhotosProps> = ({
+    title,
+    placeId,
+    photos
+}) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const inputFile = useRef<HTMLInputElement>(null)
@@ -117,4 +121,4 @@ const Photos: React.FC<PhotosProps> = ({ title, placeId, photos }) => {
     )
 }
 
-export default Photos
+export default PlacePhotos

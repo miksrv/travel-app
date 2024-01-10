@@ -1,13 +1,9 @@
-import { Button, Pagination } from '@mui/material'
-import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
-import CardHeader from '@mui/material/CardHeader'
-import { GetStaticProps, NextPage } from 'next'
+import { Pagination } from '@mui/material'
+import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import { useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
 import React, { useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
@@ -15,6 +11,7 @@ import useGeolocation from 'react-hook-geolocation'
 import Container from '@/ui/container'
 
 import { API } from '@/api/api'
+import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
@@ -23,15 +20,12 @@ import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
 
-import Breadcrumbs from '../ui/breadcrumbs'
-
 const POST_PER_PAGE = 16
-const PAGE_TITLE = 'Интересные места'
 
 const PlacesPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
-    const searchParams = useSearchParams()
+    // const searchParams = useSearchParams()
     const geolocation = useGeolocation()
     const router = useRouter()
 
@@ -56,7 +50,7 @@ const PlacesPage: NextPage = () => {
     const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
 
     const [introduce] = API.useIntroduceMutation()
-    const { data, isLoading } = API.usePlacesGetListQuery({
+    const { data } = API.usePlacesGetListQuery({
         category: category?.name,
         city:
             location?.type === ApiTypes.LocationType.City
@@ -111,10 +105,10 @@ const PlacesPage: NextPage = () => {
 
     return (
         <PageLayout
-            title={PAGE_TITLE}
-            breadcrumb={PAGE_TITLE}
+            title={t('title')}
+            breadcrumb={t('breadcrumb')}
         >
-            <NextSeo title={PAGE_TITLE} />
+            <NextSeo title={t('title')} />
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardHeader*/}
             {/*        title={t('title', PAGE_TITLE)}*/}
@@ -164,10 +158,24 @@ const PlacesPage: NextPage = () => {
     )
 }
 
-export const getStaticProps: GetStaticProps = async ({ locale }) => ({
-    props: {
-        ...(await serverSideTranslations(locale ?? 'ru'))
-    }
-})
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async (context): Promise<GetServerSidePropsResult<any>> => {
+            const locale = context.locale ?? 'en'
+            const translations = await serverSideTranslations(locale)
+
+            const data: any = await store.dispatch(
+                API.endpoints?.placesGetList.initiate({
+                    limit: POST_PER_PAGE,
+                    order: ApiTypes.SortOrder.DESC,
+                    sort: ApiTypes.SortFields.Updated
+                })
+            )
+
+            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
+
+            return { props: { ...translations, data } }
+        }
+)
 
 export default PlacesPage

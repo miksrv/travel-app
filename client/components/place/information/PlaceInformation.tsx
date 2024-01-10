@@ -1,14 +1,13 @@
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useMemo } from 'react'
+import React from 'react'
 
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
 import Rating from '@/ui/rating'
 
 import { API } from '@/api/api'
-import { useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
 import UserAvatar from '@/components/user-avatar'
@@ -24,31 +23,31 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-interface InformationProps {
+interface PlaceInformationProps {
     place?: Place
     ratingValue?: number | null
     loading?: boolean
-    onChangeWasHere?: (wasHere: boolean) => void
+    // onChangeWasHere?: (wasHere: boolean) => void
 }
 
-const Information: React.FC<InformationProps> = (props) => {
-    const { place, ratingValue, loading, onChangeWasHere } = props
+const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
+    const { place, ratingValue, loading } = props
 
-    const authSlice = useAppSelector((state) => state.auth)
+    // const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: visitedUsersData, isLoading: visitedUsersLoading } =
-        API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
+    // const { data: visitedUsersData, isLoading: visitedUsersLoading } =
+    //     API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
 
     const [changeRating, { isLoading: ratingLoading }] =
         API.useRatingPutScoreMutation()
 
-    const iWasHere = useMemo(
-        () =>
-            !visitedUsersData?.items?.find(
-                ({ id }) => id === authSlice?.user?.id
-            )?.id,
-        [visitedUsersData, authSlice]
-    )
+    // const iWasHere = useMemo(
+    //     () =>
+    //         !visitedUsersData?.items?.find(
+    //             ({ id }) => id === authSlice?.user?.id
+    //         )?.id,
+    //     [visitedUsersData, authSlice]
+    // )
 
     const handleRatingChange = (value?: number) => {
         if (value && place?.id) {
@@ -59,9 +58,9 @@ const Information: React.FC<InformationProps> = (props) => {
         }
     }
 
-    React.useEffect(() => {
-        onChangeWasHere?.(iWasHere)
-    }, [visitedUsersData, authSlice])
+    // React.useEffect(() => {
+    //     onChangeWasHere?.(iWasHere)
+    // }, [visitedUsersData, authSlice])
 
     return (
         <Container className={styles.component}>
@@ -219,4 +218,4 @@ const Information: React.FC<InformationProps> = (props) => {
     )
 }
 
-export default Information
+export default PlaceInformation

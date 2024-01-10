@@ -1,6 +1,3 @@
-import { Button } from '@mui/material'
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { type GetStaticProps, NextPage } from 'next'
@@ -12,15 +9,12 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Container from '@/ui/container'
-import MapIcon from '@/ui/map-icon'
 
 import { API } from '@/api/api'
 
 import PageLayout from '@/components/page-layout'
 
 import { round } from '@/functions/helpers'
-
-import Breadcrumbs from '../ui/breadcrumbs'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false

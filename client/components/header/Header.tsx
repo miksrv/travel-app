@@ -1,3 +1,4 @@
+import Link from 'next/link'
 import React, { useEffect } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
@@ -7,6 +8,8 @@ import Icon from '@/ui/icon'
 import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
+
+import Search from '@/components/header/Search'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -64,6 +67,16 @@ const Header: React.FC<HeaderProps> = ({
                         currentPage={breadcrumb}
                         links={links}
                     />
+                </div>
+                <div className={styles.rightSection}>
+                    <Search />
+                    <Link
+                        href={'/login'}
+                        title={'Авторизация на сайте'}
+                        className={styles.user}
+                    >
+                        <Icon name={'UserCircle'} />
+                    </Link>
                 </div>
             </div>
         </header>

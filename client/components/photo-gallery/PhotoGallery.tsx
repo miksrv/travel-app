@@ -1,8 +1,7 @@
-import ImageList from '@mui/material/ImageList'
-import ImageListItem from '@mui/material/ImageListItem'
+import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
-// import Gallery from 'react-photo-gallery'
 import { ImageHost } from '@/api/api'
 import { Photo } from '@/api/types/Photo'
 
@@ -17,54 +16,27 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
     onPhotoClick
 }) => (
-    <>
-        {!!photos?.length && (
-            <ImageList
-                variant={'quilted'}
-                cols={5}
-                rowHeight={130}
-                sx={{ m: 0 }}
-            >
-                {photos.map((photo, index) => (
-                    <ImageListItem
-                        key={photo.filename}
-                        cols={1}
-                        rows={1}
-                    >
-                        <img
-                            className={styles.photo}
-                            loading={'lazy'}
-                            src={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
-                            alt={photo.title || ''}
-                            onClick={() => {
-                                onPhotoClick?.(index)
-                            }}
-                        />
-
-                        {/*<Image*/}
-                        {/*    width={photo.width}*/}
-                        {/*    height={photo.height}*/}
-                        {/*    src={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}*/}
-                        {/*    alt={photo.title || ''}*/}
-                        {/*    loading={'lazy'}*/}
-                        {/*/>*/}
-                    </ImageListItem>
-                ))}
-            </ImageList>
-        )}
-
-        {/*<Gallery*/}
-        {/*    photos={data.items.map((photo) => ({*/}
-        {/*        height: photo.height,*/}
-        {/*        src: `${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`,*/}
-        {/*        width: photo.width*/}
-        {/*    }))}*/}
-        {/*    onClick={(event, photos) => {*/}
-        {/*        setCurrentIndex(photos.index)*/}
-        {/*        setShowLightbox(true)*/}
-        {/*    }}*/}
-        {/*/>*/}
-    </>
+    <ul className={styles.component}>
+        {photos?.map((photo, index) => (
+            <li key={photo.filename}>
+                <Link
+                    href={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                    title={`${photo.title}. Посмотреть фото ${index + 1}`}
+                    onClick={(event) => {
+                        event.preventDefault()
+                        onPhotoClick?.(index)
+                    }}
+                >
+                    <Image
+                        src={`${ImageHost}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                        alt={`${photo.title}, фото ${index + 1}`}
+                        width={200}
+                        height={150}
+                    />
+                </Link>
+            </li>
+        ))}
+    </ul>
 )
 
 export default PhotoGallery
