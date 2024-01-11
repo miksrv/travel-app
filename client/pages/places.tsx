@@ -42,30 +42,14 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     const { sort, order, currentPage, placesCount, placesList } = props
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
+    const geolocation = useGeolocation()
+    const router = useRouter()
+
     const filterData: FilterDataType = {
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         sort: sort !== DEFAULT_SORT ? sort : undefined
     }
-
-    // const pathname = usePathname()
-    // const searchParams = useSearchParams()
-    const geolocation = useGeolocation()
-    const router = useRouter()
-
-    // const initPage = searchParams.get('page')
-    //     ? Number(searchParams.get('page'))
-    //     : 1
-    // const initSort = searchParams.get('sort')
-    //     ? (searchParams.get('sort') as API.SortFields)
-    //     : API.SortFields.Updated
-    // const initOrder = searchParams.get('order')
-    //     ? (searchParams.get('order') as API.SortOrder)
-    //     : API.SortOrder.DESC
-
-    // console.log('props', props)
-
-    // const currentPage = Number(searchParams.get('page')) || 1
 
     // const [page, setPage] = useState<number>()
     // const [sort, setSort] = useState<ApiTypes.SortFields>(
@@ -101,30 +85,6 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     //             : undefined,
     //     sort: sort
     // })
-
-    // useEffect(() => {
-    //     const urlParams = {
-    //         order: order !== ApiTypes.SortOrder.DESC ? order : undefined,
-    //         page: page !== 1 ? page : undefined,
-    //         sort: sort !== ApiTypes.SortFields.Updated ? sort : undefined
-    //     }
-    //
-    //     router.replace(`places${encodeQueryData(urlParams)}`, undefined, {
-    //         shallow: true
-    //     })
-    // }, [page, sort, order])
-
-    // const createPageURL = (pageNumber: number | string) => {
-    //     const params = new URLSearchParams(searchParams)
-    //     params.set('page', pageNumber.toString())
-    //     return `${pathname}?${params.toString()}`
-    // }
-
-    // const urlParams = {
-    //     order: order !== ApiTypes.SortOrder.DESC ? order : undefined,
-    //     page: currentPage !== 1 ? currentPage : undefined,
-    //     sort: sort !== ApiTypes.SortFields.Updated ? sort : undefined
-    // }
 
     const urlOrder = order !== ApiTypes.SortOrder.DESC ? order : undefined
     const urlSort = sort !== ApiTypes.SortFields.Updated ? sort : undefined
@@ -187,23 +147,23 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                 order={order}
                 // location={location}
                 // category={category}
-                onChangeSort={
-                    async (val) =>
-                        await router.push(
-                            `/places${encodeQueryData({
+                onChangeSort={async (val) =>
+                    await router.push(
+                        '/places' +
+                            encodeQueryData({
                                 order: urlOrder,
-                                sort: val
-                            })}`
-                        )
-                    // redirect('/places' + encodeQueryData(sort))
+                                sort: val !== DEFAULT_SORT ? val : undefined
+                            })
+                    )
                 }
                 onChangeOrder={async (val) =>
                     await router.push(
-                        `/places${encodeQueryData({
-                            order: val,
-                            page: urlPage,
-                            sort: urlSort
-                        })}`
+                        '/places' +
+                            encodeQueryData({
+                                order: val !== DEFAULT_ORDER ? val : undefined,
+                                page: urlPage,
+                                sort: urlSort
+                            })
                     )
                 }
                 // onChangeLocation={async (location) => {

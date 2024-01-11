@@ -1,7 +1,9 @@
+import Image, { StaticImageData } from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Icon from '@/ui/icon'
 
+import { categoryImage } from '@/functions/categories'
 import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
@@ -9,25 +11,30 @@ import styles from './styles.module.sass'
 type DropdownOptions = {
     key: string | number
     value: React.ReactNode | string | number
+    image?: StaticImageData
 }
 
 interface DropdownProps<T> {
     className?: string
     options?: DropdownOptions[]
     disabled?: boolean
+    placeholder?: string
     label?: string
     value?: T
     onSelect?: (selectedOption: T) => void
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = ({
-    className,
-    options,
-    disabled,
-    value,
-    label,
-    onSelect
-}) => {
+const Dropdown: React.FC<DropdownProps<any>> = (props) => {
+    const {
+        className,
+        options,
+        disabled,
+        value,
+        placeholder,
+        label,
+        onSelect
+    } = props
+
     const [isOpen, setIsOpen] = useState(false)
     const [selectedOption, setSelectedOption] = useState<DropdownOptions>()
     const dropdownRef = useRef<HTMLDivElement>(null)
@@ -96,7 +103,11 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                         selectedOption && styles.selected
                     )}
                 >
-                    <span>{selectedOption?.value ?? 'Выберите опцию'}</span>
+                    <span>
+                        {selectedOption?.value ??
+                            placeholder ??
+                            'Выберите опцию'}
+                    </span>
                     <span className={styles.arrow}>
                         {isOpen ? <Icon name={'Down'} /> : <Icon name={'Up'} />}
                     </span>
@@ -112,7 +123,16 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                                 )}
                             >
                                 <button onClick={() => handleSelect(option)}>
-                                    {option.value}
+                                    {option.image && (
+                                        <Image
+                                            className={styles.categoryIcon}
+                                            src={option.image.src}
+                                            alt={''}
+                                            width={22}
+                                            height={26}
+                                        />
+                                    )}
+                                    <span>{option.value}</span>
                                 </button>
                             </li>
                         ))}

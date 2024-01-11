@@ -77,11 +77,13 @@
       top: 35px
       border-bottom-left-radius: 8px
       border-bottom-right-radius: 8px
+      max-height: 200px
+      overflow: hidden
+      overflow-y: scroll
 
       li
         button
           margin: 0
-          padding: 0
           height: 100%
           width: 100%
           padding: 8px 10px
@@ -90,6 +92,13 @@
           background: transparent
           border: none
           text-align: left
+          display: flex
+          align-items: center
+
+          img
+            width: 14px
+            height: 15px
+            margin-right: 4px
 
         &:hover, &.active
           background-color: #f2f3f5

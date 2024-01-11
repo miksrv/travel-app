@@ -8,10 +8,13 @@ import React from 'react'
 import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
+import { API } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
 
 import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
 import PlacesLocationSelect from '@/components/places-filter-panel/PlacesLocationSelect'
+
+import { categoryImage } from '@/functions/categories'
 
 import styles from './styles.module.sass'
 
@@ -70,6 +73,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
         onChangeCategory
     } = props
 
+    const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
+
     return (
         <Container className={styles.component}>
             <div className={styles.container}>
@@ -94,6 +99,18 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         }
                     ]}
                     onSelect={onChangeOrder}
+                />
+
+                <Dropdown
+                    // value={sort}
+                    placeholder={'Выберите категорию'}
+                    className={styles.categoryDropdown}
+                    options={categoryData?.items?.map((item) => ({
+                        image: categoryImage(item.name),
+                        key: item.name,
+                        value: item.title
+                    }))}
+                    // onSelect={onChangeSort}
                 />
                 {/*<Stack*/}
                 {/*    direction={'row'}*/}
