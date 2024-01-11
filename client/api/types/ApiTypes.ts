@@ -3,7 +3,6 @@ import { AddressObject, Category, Place } from '@/api/types/Place'
 import { Item } from './Activity'
 import { Photo } from './Photo'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
-import { Rating } from './Rating'
 import { User } from './User'
 
 export type DateTimeType = {
@@ -29,7 +28,6 @@ export const SortFields = {
     Created: 'created_at',
     Distance: 'distance',
     Rating: 'rating',
-    Subcategory: 'subcategory',
     Title: 'title',
     Updated: 'updated_at',
     Views: 'views'
@@ -81,8 +79,7 @@ export interface RequestPlacesGetList {
     city?: number
     limit?: number
     offset?: number
-    category?: string
-    subcategory?: string
+    category?: string | null
     excludePlaces?: string[]
 }
 

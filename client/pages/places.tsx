@@ -16,6 +16,7 @@ import { ApiTypes, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
 import PlacesFilterPanel from '@/components/places-filter-panel'
+import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
@@ -25,6 +26,7 @@ const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
 const POST_PER_PAGE = 16
 
 interface PlacesPageProps {
+    category: string | null
     sort: ApiTypes.SortFields
     order: ApiTypes.SortOrder
     currentPage: number
@@ -32,63 +34,39 @@ interface PlacesPageProps {
     placesList: Place.Place[]
 }
 
-type FilterDataType = {
-    order?: ApiTypes.SortOrder
-    page?: number
-    sort?: ApiTypes.SortFields
-}
-
 const PlacesPage: NextPage<PlacesPageProps> = (props) => {
-    const { sort, order, currentPage, placesCount, placesList } = props
+    const { category, sort, order, currentPage, placesCount, placesList } =
+        props
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
     const geolocation = useGeolocation()
     const router = useRouter()
 
-    const filterData: FilterDataType = {
+    const initialFilter: PlacesFilterType = {
+        category: category ?? undefined,
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         sort: sort !== DEFAULT_SORT ? sort : undefined
     }
 
-    // const [page, setPage] = useState<number>()
-    // const [sort, setSort] = useState<ApiTypes.SortFields>(
-    //     ApiTypes.SortFields.Updated
-    // )
-    // const [order, setOrder] = useState<ApiTypes.SortOrder>(
-    //     ApiTypes.SortOrder.DESC
-    // )
-    // const [category, setCategory] = useState<Place.Category>()
+    const handleChangeFilter = async (
+        key: keyof PlacesFilterType,
+        value: string | number
+    ) => {
+        const filter = { ...initialFilter, [key]: value }
+        const result = {
+            category: filter.category ?? undefined,
+            order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
+            page: filter.page !== 1 ? filter.page : undefined,
+            sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined
+        }
+
+        return await router.push('/places' + encodeQueryData(result))
+    }
+
     // const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
 
     const [introduce] = API.useIntroduceMutation()
-    // const { data } = API.usePlacesGetListQuery({
-    //     category: category?.name,
-    //     city:
-    //         location?.type === ApiTypes.LocationType.City
-    //             ? location.value
-    //             : undefined,
-    //     country:
-    //         location?.type === ApiTypes.LocationType.Country
-    //             ? location.value
-    //             : undefined,
-    //     district:
-    //         location?.type === ApiTypes.LocationType.District
-    //             ? location.value
-    //             : undefined,
-    //     limit: POST_PER_PAGE,
-    //     offset: (props.currentPage - 1) * POST_PER_PAGE,
-    //     order: order,
-    //     region:
-    //         location?.type === ApiTypes.LocationType.Region
-    //             ? location.value
-    //             : undefined,
-    //     sort: sort
-    // })
-
-    const urlOrder = order !== ApiTypes.SortOrder.DESC ? order : undefined
-    const urlSort = sort !== ApiTypes.SortFields.Updated ? sort : undefined
-    const urlPage = currentPage !== 1 ? currentPage : undefined
 
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
@@ -124,48 +102,12 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             {/*        }*/}
             {/*    />*/}
             {/*</Card>*/}
-            {/*<Container>*/}
-            {/*    <PlacesFilterPanel*/}
-            {/*        sort={sort}*/}
-            {/*        order={order}*/}
-            {/*        // location={location}*/}
-            {/*        // category={category}*/}
-            {/*        // onChangeSort={setSort}*/}
-            {/*        // onChangeOrder={setOrder}*/}
-            {/*        // onChangeLocation={async (location) => {*/}
-            {/*        //     setPage(1)*/}
-            {/*        //     setLocation(location)*/}
-            {/*        // }}*/}
-            {/*        // onChangeCategory={(category) => {*/}
-            {/*        //     setPage(1)*/}
-            {/*        //     setCategory(category)*/}
-            {/*        // }}*/}
-            {/*    />*/}
-            {/*</Container>*/}
             <PlacesFilterPanel
                 sort={sort}
                 order={order}
+                category={category}
                 // location={location}
-                // category={category}
-                onChangeSort={async (val) =>
-                    await router.push(
-                        '/places' +
-                            encodeQueryData({
-                                order: urlOrder,
-                                sort: val !== DEFAULT_SORT ? val : undefined
-                            })
-                    )
-                }
-                onChangeOrder={async (val) =>
-                    await router.push(
-                        '/places' +
-                            encodeQueryData({
-                                order: val !== DEFAULT_ORDER ? val : undefined,
-                                page: urlPage,
-                                sort: urlSort
-                            })
-                    )
-                }
+                onChange={handleChangeFilter}
                 // onChangeLocation={async (location) => {
                 //     setPage(1)
                 //     setLocation(location)
@@ -184,7 +126,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                     currentPage={currentPage}
                     totalPostCount={placesCount}
                     perPage={POST_PER_PAGE}
-                    urlParam={filterData}
+                    urlParam={initialFilter}
                     linkPart={'places'}
                 />
             </Container>
@@ -197,6 +139,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
             const locale = context.locale ?? 'en'
             const currentPage = parseInt(context.query.page as string, 10) || 1
+            const category = (context.query.category as string) || null
             const sort =
                 (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
             const order =
@@ -206,6 +149,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
+                    category: category ?? null,
                     limit: POST_PER_PAGE,
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
@@ -218,6 +162,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
+                    category,
                     currentPage,
                     order,
                     placesCount: placesList?.count || 0,

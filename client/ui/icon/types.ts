@@ -18,3 +18,4 @@ export type IconTypes =
     | 'Right'
     | 'Down'
     | 'Up'
+    | 'Close'

@@ -47,14 +47,35 @@
         display: block
         text-overflow: ellipsis
 
+        img
+          width: 18px
+          height: 20px
+          margin-right: 5px
+          float: left
+
       .arrow
-        display: block
-        margin-top: 5px
+        display: flex
+        margin-top: 1px
 
         svg
           width: 24px
           height: 24px
           fill: #6d7885
+
+      .clear
+        background: transparent
+        border: none
+        margin: 0
+        padding: 0
+        cursor: pointer
+
+        svg
+          margin-top: 2px
+          width: 18px !important
+          height: 18px !important
+
+          &:hover
+            fill: #3d434b
 
     &.open
       .dropdownButton

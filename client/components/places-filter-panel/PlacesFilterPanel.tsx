@@ -13,6 +13,7 @@ import { ApiTypes, Place } from '@/api/types'
 
 import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
 import PlacesLocationSelect from '@/components/places-filter-panel/PlacesLocationSelect'
+import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
 
@@ -22,7 +23,8 @@ interface PlacesFilterPanelProps {
     sort?: ApiTypes.SortFields
     order?: ApiTypes.SortOrder
     location?: ApiTypes.PlaceLocationType
-    category?: Place.Category
+    category?: string | null
+    onChange?: (key: keyof PlacesFilterType, value: string | number) => void
     onChangeSort?: (value: ApiTypes.SortFields) => void
     onChangeOrder?: (value: ApiTypes.SortOrder) => void
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
@@ -67,6 +69,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
         order,
         location,
         category,
+        onChange,
         onChangeSort,
         onChangeOrder,
         onChangeLocation,
@@ -75,6 +78,15 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
 
+    const handleChangeSort = (value: ApiTypes.SortFields) =>
+        onChange?.('sort', value)
+
+    const handleChangeOrder = (value: ApiTypes.SortOrder) =>
+        onChange?.('order', value)
+
+    const handleChangeCategory = (value: string) =>
+        onChange?.('category', value)
+
     return (
         <Container className={styles.component}>
             <div className={styles.container}>
@@ -82,7 +94,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     value={sort}
                     className={styles.sortDropdown}
                     options={SortOptions.map((item) => item)}
-                    onSelect={onChangeSort}
+                    onSelect={handleChangeSort}
                 />
 
                 <Dropdown
@@ -98,11 +110,12 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                             value: 'По убыванию'
                         }
                     ]}
-                    onSelect={onChangeOrder}
+                    onSelect={handleChangeOrder}
                 />
 
                 <Dropdown
-                    // value={sort}
+                    clearable={true}
+                    value={category}
                     placeholder={'Выберите категорию'}
                     className={styles.categoryDropdown}
                     options={categoryData?.items?.map((item) => ({
@@ -110,7 +123,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         key: item.name,
                         value: item.title
                     }))}
-                    // onSelect={onChangeSort}
+                    onSelect={handleChangeCategory}
                 />
                 {/*<Stack*/}
                 {/*    direction={'row'}*/}

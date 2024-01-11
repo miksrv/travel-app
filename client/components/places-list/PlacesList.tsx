@@ -23,7 +23,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places }) =>
             ))}
         </section>
     ) : (
-        <Container>
+        <Container className={styles.emptyList}>
             Нет интересных мест по вашему запросу. Попробуйте изменить условия
             поиска.
         </Container>

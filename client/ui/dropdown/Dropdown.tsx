@@ -18,6 +18,7 @@ interface DropdownProps<T> {
     className?: string
     options?: DropdownOptions[]
     disabled?: boolean
+    clearable?: boolean
     placeholder?: string
     label?: string
     value?: T
@@ -29,6 +30,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         className,
         options,
         disabled,
+        clearable,
         value,
         placeholder,
         label,
@@ -36,17 +38,19 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     } = props
 
     const [isOpen, setIsOpen] = useState(false)
-    const [selectedOption, setSelectedOption] = useState<DropdownOptions>()
+    const [selectedOption, setSelectedOption] = useState<
+        DropdownOptions | undefined
+    >(undefined)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
     }
 
-    const handleSelect = (option: DropdownOptions) => {
-        if (selectedOption?.key !== option.key) {
+    const handleSelect = (option: DropdownOptions | undefined) => {
+        if (selectedOption?.key !== option?.key) {
             setSelectedOption(option)
-            onSelect?.(option.key)
+            onSelect?.(option?.key)
         }
 
         setIsOpen(false)
@@ -59,6 +63,11 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         ) {
             setIsOpen(false)
         }
+    }
+
+    const handleClearClick = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        handleSelect(undefined)
     }
 
     useEffect(() => {
@@ -87,7 +96,6 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
             className={cn(className, styles.dropdown)}
         >
             {label && <label className={styles.label}>{label}</label>}
-
             <div
                 className={cn(
                     styles.container,
@@ -104,12 +112,30 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                     )}
                 >
                     <span>
+                        {selectedOption?.image && (
+                            <Image
+                                className={styles.categoryIcon}
+                                src={selectedOption.image.src}
+                                alt={''}
+                                width={22}
+                                height={26}
+                            />
+                        )}
                         {selectedOption?.value ??
                             placeholder ??
                             'Выберите опцию'}
                     </span>
                     <span className={styles.arrow}>
-                        {isOpen ? <Icon name={'Down'} /> : <Icon name={'Up'} />}
+                        {clearable && selectedOption?.key && (
+                            <button
+                                className={styles.clear}
+                                type={'button'}
+                                onClick={handleClearClick}
+                            >
+                                <Icon name={'Close'} />
+                            </button>
+                        )}
+                        {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
                     </span>
                 </button>
                 {isOpen && (
