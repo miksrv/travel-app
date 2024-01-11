@@ -39,6 +39,8 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         props
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
 
+    const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
+
     const geolocation = useGeolocation()
     const router = useRouter()
 
@@ -74,16 +76,29 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         }
     }, [geolocation.latitude, geolocation.longitude])
 
-    const title = `${t('title')}${
+    const currentCategory = categoryData?.items?.find(
+        ({ name }) => name === category
+    )?.title
+
+    const title = currentCategory
+        ? `${t('shortTitle')}: ${currentCategory}`
+        : t('title')
+
+    const titlePage = `${title}${
         currentPage && currentPage !== 1 ? ` - Страница ${currentPage}` : ''
     }`
 
     return (
         <PageLayout
-            title={title}
-            breadcrumb={t('breadcrumb')}
+            title={titlePage}
+            breadcrumb={category ? currentCategory : t('breadcrumb')}
+            links={
+                category
+                    ? [{ link: '/places', text: t('breadcrumb') }]
+                    : undefined
+            }
         >
-            <NextSeo title={title} />
+            <NextSeo title={titlePage} />
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardHeader*/}
             {/*        title={t('title', PAGE_TITLE)}*/}
