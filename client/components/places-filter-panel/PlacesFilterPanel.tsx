@@ -1,21 +1,12 @@
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
-import MenuItem from '@mui/material/MenuItem'
-import Select, { SelectChangeEvent } from '@mui/material/Select'
-import Stack from '@mui/material/Stack'
-import { debounce } from '@mui/material/utils'
 import React, { useMemo } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
-import Button from '@/ui/button'
 import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
 import { API } from '@/api/api'
 import { ApiTypes, Place } from '@/api/types'
 
-import PlacesCategorySelect from '@/components/places-filter-panel/PlacesCategorySelect'
-import PlacesLocationSelect from '@/components/places-filter-panel/PlacesLocationSelect'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -67,21 +58,11 @@ const SortOptions: SortOptionsProps[] = [
 ]
 
 const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
-    const {
-        sort,
-        order,
-        location,
-        category,
-        onChange,
-        onChangeSort,
-        onChangeOrder,
-        onChangeLocation,
-        onChangeCategory
-    } = props
+    const { sort, order, location, category, onChange } = props
 
-    const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
+    const { data: categoryData } = API.useCategoriesGetListQuery()
 
-    const [searchAddress, { data: searchResult, isLoading: searchLoading }] =
+    const [searchAddress, { data: addressData, isLoading: addressLoading }] =
         API.useAddressGetSearchMutation()
 
     const handleChangeSort = (value: ApiTypes.SortFields) =>
@@ -101,28 +82,28 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     const AutocompleteData = useMemo(
         () => [
-            ...(searchResult?.countries?.map((item) => ({
+            ...(addressData?.countries?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.Country,
                 value: item.name
             })) || []),
-            ...(searchResult?.regions?.map((item) => ({
+            ...(addressData?.regions?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.Region,
                 value: item.name
             })) || []),
-            ...(searchResult?.districts?.map((item) => ({
+            ...(addressData?.districts?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.District,
                 value: item.name
             })) || []),
-            ...(searchResult?.cities?.map((item) => ({
+            ...(addressData?.cities?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.City,
                 value: item.name
             })) || [])
         ],
-        [searchResult]
+        [addressData]
     )
 
     return (
@@ -130,14 +111,14 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
             <div className={styles.container}>
                 <Dropdown
                     value={sort}
-                    className={styles.sortDropdown}
+                    // className={styles.sortDropdown}
                     options={SortOptions.map((item) => item)}
                     onSelect={handleChangeSort}
                 />
 
                 <Dropdown
                     value={order}
-                    className={styles.orderDropdown}
+                    // className={styles.orderDropdown}
                     options={[
                         {
                             key: ApiTypes.SortOrder.ASC,
@@ -155,7 +136,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     clearable={true}
                     value={category}
                     placeholder={'Выберите категорию'}
-                    className={styles.categoryDropdown}
+                    // className={styles.categoryDropdown}
                     options={categoryData?.items?.map((item) => ({
                         image: categoryImage(item.name),
                         key: item.name,
@@ -166,79 +147,10 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
                 <Autocomplete
                     placeholder={'Поиск по местоположению'}
+                    loading={addressLoading}
                     options={AutocompleteData}
                     onSearch={handleSearchLocation}
                 />
-
-                <PlacesLocationSelect
-                    location={location}
-                    onChangeLocation={onChangeLocation}
-                />
-                {/*<Stack*/}
-                {/*    direction={'row'}*/}
-                {/*    justifyContent={'space-between'}*/}
-                {/*    spacing={1}*/}
-                {/*    sx={{ mb: 1, mt: 2 }}*/}
-                {/*>*/}
-                {/*    <FormControl*/}
-                {/*        sx={{ m: 1, minWidth: 210, width: 'auto' }}*/}
-                {/*        size={'small'}*/}
-                {/*    >*/}
-                {/*        <InputLabel>Сортировка</InputLabel>*/}
-                {/*        <Select*/}
-                {/*            value={sort}*/}
-                {/*            variant={'outlined'}*/}
-                {/*            label={'Сортировка'}*/}
-                {/*            onChange={(event: SelectChangeEvent) =>*/}
-                {/*                onChangeSort?.(*/}
-                {/*                    event.target.value as ApiTypes.SortFields*/}
-                {/*                )*/}
-                {/*            }*/}
-                {/*        >*/}
-                {/*            {SortOptions.map((option) => (*/}
-                {/*                <MenuItem*/}
-                {/*                    value={option.key}*/}
-                {/*                    key={option.key}*/}
-                {/*                >*/}
-                {/*                    {option.value}*/}
-                {/*                </MenuItem>*/}
-                {/*            ))}*/}
-                {/*        </Select>*/}
-                {/*    </FormControl>*/}
-
-                {/*    <FormControl*/}
-                {/*        sx={{ m: 1, minWidth: 150, width: 'auto' }}*/}
-                {/*        size={'small'}*/}
-                {/*    >*/}
-                {/*        <InputLabel>Порядок</InputLabel>*/}
-                {/*        <Select*/}
-                {/*            value={order}*/}
-                {/*            label={'Порядок'}*/}
-                {/*            onChange={(event: SelectChangeEvent) => {*/}
-                {/*                onChangeOrder?.(*/}
-                {/*                    event.target.value as ApiTypes.SortOrder*/}
-                {/*                )*/}
-                {/*            }}*/}
-                {/*        >*/}
-                {/*            <MenuItem value={ApiTypes.SortOrder.ASC}>*/}
-                {/*                {'По возрастанию'}*/}
-                {/*            </MenuItem>*/}
-                {/*            <MenuItem value={ApiTypes.SortOrder.DESC}>*/}
-                {/*                {'По убыванию'}*/}
-                {/*            </MenuItem>*/}
-                {/*        </Select>*/}
-                {/*    </FormControl>*/}
-
-                {/*    <PlacesCategorySelect*/}
-                {/*        category={category}*/}
-                {/*        onChangeCategory={onChangeCategory}*/}
-                {/*    />*/}
-
-                {/*<PlacesLocationSelect*/}
-                {/*    location={location}*/}
-                {/*    onChangeLocation={onChangeLocation}*/}
-                {/*/>*/}
-                {/*</Stack>*/}
             </div>
         </Container>
     )

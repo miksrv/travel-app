@@ -17,6 +17,7 @@ type DropdownOptions = {
 interface DropdownProps<T> {
     className?: string
     options?: DropdownOptions[]
+    loading?: boolean
     disabled?: boolean
     clearable?: boolean
     placeholder?: string
@@ -31,6 +32,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         className,
         options,
         disabled,
+        loading,
         clearable,
         value,
         placeholder,
@@ -39,7 +41,8 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         onSearch
     } = props
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [search, setSearch] = useState<string>()
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOptions | undefined
     >(undefined)
@@ -51,6 +54,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
 
     const handleChangeInput = debounce((event) => {
         const value = event.target.value
+        setSearch(value)
         onSearch?.(value)
     }, 1000)
 
@@ -74,6 +78,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
 
     const handleClearClick = (event: React.MouseEvent) => {
         event.stopPropagation()
+        setSearch(value)
         handleSelect(undefined)
     }
 
@@ -98,7 +103,9 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
     }, [value])
 
     useEffect(() => {
-        setIsOpen(true)
+        if (search) {
+            setIsOpen(true)
+        }
     }, [options])
 
     return (

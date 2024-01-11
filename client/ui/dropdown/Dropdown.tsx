@@ -36,7 +36,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         onSelect
     } = props
 
-    const [isOpen, setIsOpen] = useState(false)
+    const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOptions | undefined
     >(undefined)
