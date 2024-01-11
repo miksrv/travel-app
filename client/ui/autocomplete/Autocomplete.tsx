@@ -1,3 +1,4 @@
+import debounce from 'lodash-es/debounce'
 import Image, { StaticImageData } from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -22,9 +23,10 @@ interface DropdownProps<T> {
     label?: string
     value?: T
     onSelect?: (selectedOption: T) => void
+    onSearch?: (value: string) => void
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = (props) => {
+const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
     const {
         className,
         options,
@@ -33,7 +35,8 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         value,
         placeholder,
         label,
-        onSelect
+        onSelect,
+        onSearch
     } = props
 
     const [isOpen, setIsOpen] = useState(false)
@@ -45,6 +48,11 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
     }
+
+    const handleChangeInput = debounce((event) => {
+        const value = event.target.value
+        onSearch?.(value)
+    }, 1000)
 
     const handleSelect = (option: DropdownOptions | undefined) => {
         if (selectedOption?.key !== option?.key) {
@@ -89,10 +97,14 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         }
     }, [value])
 
+    useEffect(() => {
+        setIsOpen(true)
+    }, [options])
+
     return (
         <div
             ref={dropdownRef}
-            className={cn(className, styles.dropdown)}
+            className={cn(className, styles.autocomplete)}
         >
             {label && <label className={styles.label}>{label}</label>}
             <div
@@ -102,14 +114,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                     disabled && styles.disabled
                 )}
             >
-                <button
-                    onClick={toggleDropdown}
-                    disabled={disabled}
-                    className={cn(
-                        styles.dropdownButton,
-                        selectedOption && styles.selected
-                    )}
-                >
+                <div className={styles.searchContainer}>
                     <span>
                         {selectedOption?.image && (
                             <Image
@@ -120,10 +125,15 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                                 height={26}
                             />
                         )}
-                        {selectedOption?.value ??
-                            placeholder ??
-                            'Выберите опцию'}
                     </span>
+                    <input
+                        type={'text'}
+                        className={styles.searchInput}
+                        placeholder={
+                            placeholder ?? 'Введите значение для поиска'
+                        }
+                        onChange={handleChangeInput}
+                    />
                     <span className={styles.arrow}>
                         {clearable && selectedOption?.key && (
                             <button
@@ -134,11 +144,26 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                                 <Icon name={'Close'} />
                             </button>
                         )}
-                        {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
+                        <button
+                            className={styles.toggleButton}
+                            type={'button'}
+                            onClick={toggleDropdown}
+                        >
+                            {isOpen ? (
+                                <Icon name={'Up'} />
+                            ) : (
+                                <Icon name={'Down'} />
+                            )}
+                        </button>
                     </span>
-                </button>
+                </div>
                 {isOpen && (
                     <ul className={styles.optionsList}>
+                        {!options?.length && (
+                            <li className={styles.emptyItem}>
+                                {'Пока что ничего не найдено'}
+                            </li>
+                        )}
                         {options?.map((option) => (
                             <li
                                 key={option.key}
@@ -168,4 +193,4 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     )
 }
 
-export default Dropdown
+export default Autocomplete

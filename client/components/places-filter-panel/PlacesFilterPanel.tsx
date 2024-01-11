@@ -3,8 +3,11 @@ import InputLabel from '@mui/material/InputLabel'
 import MenuItem from '@mui/material/MenuItem'
 import Select, { SelectChangeEvent } from '@mui/material/Select'
 import Stack from '@mui/material/Stack'
-import React from 'react'
+import { debounce } from '@mui/material/utils'
+import React, { useMemo } from 'react'
 
+import Autocomplete from '@/ui/autocomplete'
+import Button from '@/ui/button'
 import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
@@ -78,6 +81,9 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
 
+    const [searchAddress, { data: searchResult, isLoading: searchLoading }] =
+        API.useAddressGetSearchMutation()
+
     const handleChangeSort = (value: ApiTypes.SortFields) =>
         onChange?.('sort', value)
 
@@ -86,6 +92,38 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     const handleChangeCategory = (value: string) =>
         onChange?.('category', value)
+
+    const handleSearchLocation = (value: string) => {
+        if (value.length > 3) {
+            searchAddress(value)
+        }
+    }
+
+    const AutocompleteData = useMemo(
+        () => [
+            ...(searchResult?.countries?.map((item) => ({
+                key: item.id,
+                type: ApiTypes.LocationType.Country,
+                value: item.name
+            })) || []),
+            ...(searchResult?.regions?.map((item) => ({
+                key: item.id,
+                type: ApiTypes.LocationType.Region,
+                value: item.name
+            })) || []),
+            ...(searchResult?.districts?.map((item) => ({
+                key: item.id,
+                type: ApiTypes.LocationType.District,
+                value: item.name
+            })) || []),
+            ...(searchResult?.cities?.map((item) => ({
+                key: item.id,
+                type: ApiTypes.LocationType.City,
+                value: item.name
+            })) || [])
+        ],
+        [searchResult]
+    )
 
     return (
         <Container className={styles.component}>
@@ -124,6 +162,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         value: item.title
                     }))}
                     onSelect={handleChangeCategory}
+                />
+
+                <Autocomplete
+                    placeholder={'Поиск по местоположению'}
+                    options={AutocompleteData}
+                    onSearch={handleSearchLocation}
+                />
+
+                <PlacesLocationSelect
+                    location={location}
+                    onChangeLocation={onChangeLocation}
                 />
                 {/*<Stack*/}
                 {/*    direction={'row'}*/}
@@ -185,10 +234,10 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                 {/*        onChangeCategory={onChangeCategory}*/}
                 {/*    />*/}
 
-                {/*    <PlacesLocationSelect*/}
-                {/*        location={location}*/}
-                {/*        onChangeLocation={onChangeLocation}*/}
-                {/*    />*/}
+                {/*<PlacesLocationSelect*/}
+                {/*    location={location}*/}
+                {/*    onChangeLocation={onChangeLocation}*/}
+                {/*/>*/}
                 {/*</Stack>*/}
             </div>
         </Container>
