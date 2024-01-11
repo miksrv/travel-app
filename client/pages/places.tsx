@@ -1,12 +1,10 @@
-import { getState } from 'jest-circus'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import { usePathname, useSearchParams } from 'next/navigation'
 import { useEffect } from 'react'
-import React, { useState } from 'react'
+import React from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Container from '@/ui/container'
@@ -20,22 +18,40 @@ import PageLayout from '@/components/page-layout'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import PlacesList from '@/components/places-list'
 
+import { encodeQueryData } from '@/functions/helpers'
+
+const DEFAULT_SORT = ApiTypes.SortFields.Updated
+const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
 const POST_PER_PAGE = 16
 
 interface PlacesPageProps {
+    sort: ApiTypes.SortFields
+    order: ApiTypes.SortOrder
     currentPage: number
     placesCount: number
     placesList: Place.Place[]
 }
 
+type FilterDataType = {
+    order?: ApiTypes.SortOrder
+    page?: number
+    sort?: ApiTypes.SortFields
+}
+
 const PlacesPage: NextPage<PlacesPageProps> = (props) => {
-    const { currentPage, placesCount, placesList } = props
+    const { sort, order, currentPage, placesCount, placesList } = props
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
+
+    const filterData: FilterDataType = {
+        order: order !== DEFAULT_ORDER ? order : undefined,
+        page: currentPage !== 1 ? currentPage : undefined,
+        sort: sort !== DEFAULT_SORT ? sort : undefined
+    }
 
     // const pathname = usePathname()
     // const searchParams = useSearchParams()
     const geolocation = useGeolocation()
-    // const router = useRouter()
+    const router = useRouter()
 
     // const initPage = searchParams.get('page')
     //     ? Number(searchParams.get('page'))
@@ -104,18 +120,32 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     //     return `${pathname}?${params.toString()}`
     // }
 
+    // const urlParams = {
+    //     order: order !== ApiTypes.SortOrder.DESC ? order : undefined,
+    //     page: currentPage !== 1 ? currentPage : undefined,
+    //     sort: sort !== ApiTypes.SortFields.Updated ? sort : undefined
+    // }
+
+    const urlOrder = order !== ApiTypes.SortOrder.DESC ? order : undefined
+    const urlSort = sort !== ApiTypes.SortFields.Updated ? sort : undefined
+    const urlPage = currentPage !== 1 ? currentPage : undefined
+
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
             introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
 
+    const title = `${t('title')}${
+        currentPage && currentPage !== 1 ? ` - Страница ${currentPage}` : ''
+    }`
+
     return (
         <PageLayout
-            title={t('title')}
+            title={title}
             breadcrumb={t('breadcrumb')}
         >
-            <NextSeo title={t('title')} />
+            <NextSeo title={title} />
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardHeader*/}
             {/*        title={t('title', PAGE_TITLE)}*/}
@@ -138,20 +168,53 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             {/*    <PlacesFilterPanel*/}
             {/*        sort={sort}*/}
             {/*        order={order}*/}
-            {/*        location={location}*/}
-            {/*        category={category}*/}
-            {/*        onChangeSort={setSort}*/}
-            {/*        onChangeOrder={setOrder}*/}
-            {/*        onChangeLocation={async (location) => {*/}
-            {/*            setPage(1)*/}
-            {/*            setLocation(location)*/}
-            {/*        }}*/}
-            {/*        onChangeCategory={(category) => {*/}
-            {/*            setPage(1)*/}
-            {/*            setCategory(category)*/}
-            {/*        }}*/}
+            {/*        // location={location}*/}
+            {/*        // category={category}*/}
+            {/*        // onChangeSort={setSort}*/}
+            {/*        // onChangeOrder={setOrder}*/}
+            {/*        // onChangeLocation={async (location) => {*/}
+            {/*        //     setPage(1)*/}
+            {/*        //     setLocation(location)*/}
+            {/*        // }}*/}
+            {/*        // onChangeCategory={(category) => {*/}
+            {/*        //     setPage(1)*/}
+            {/*        //     setCategory(category)*/}
+            {/*        // }}*/}
             {/*    />*/}
             {/*</Container>*/}
+            <PlacesFilterPanel
+                sort={sort}
+                order={order}
+                // location={location}
+                // category={category}
+                onChangeSort={
+                    async (val) =>
+                        await router.push(
+                            `/places${encodeQueryData({
+                                order: urlOrder,
+                                sort: val
+                            })}`
+                        )
+                    // redirect('/places' + encodeQueryData(sort))
+                }
+                onChangeOrder={async (val) =>
+                    await router.push(
+                        `/places${encodeQueryData({
+                            order: val,
+                            page: urlPage,
+                            sort: urlSort
+                        })}`
+                    )
+                }
+                // onChangeLocation={async (location) => {
+                //     setPage(1)
+                //     setLocation(location)
+                // }}
+                // onChangeCategory={(category) => {
+                //     setPage(1)
+                //     setCategory(category)
+                // }}
+            />
             <PlacesList places={placesList} />
             <Container className={'pagination'}>
                 <div>
@@ -161,6 +224,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                     currentPage={currentPage}
                     totalPostCount={placesCount}
                     perPage={POST_PER_PAGE}
+                    urlParam={filterData}
                     linkPart={'places'}
                 />
             </Container>
@@ -173,6 +237,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
             const locale = context.locale ?? 'en'
             const currentPage = parseInt(context.query.page as string, 10) || 1
+            const sort =
+                (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
+            const order =
+                (context.query.order as ApiTypes.SortOrder) || DEFAULT_ORDER
 
             const translations = await serverSideTranslations(locale)
 
@@ -180,8 +248,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints?.placesGetList.initiate({
                     limit: POST_PER_PAGE,
                     offset: (currentPage - 1) * POST_PER_PAGE,
-                    order: ApiTypes.SortOrder.ASC,
-                    sort: ApiTypes.SortFields.Distance
+                    order: order,
+                    sort: sort
                 })
             )
 
@@ -191,8 +259,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 props: {
                     ...translations,
                     currentPage,
+                    order,
                     placesCount: placesList?.count || 0,
-                    placesList: placesList?.items || []
+                    placesList: placesList?.items || [],
+                    sort
                 }
             }
         }

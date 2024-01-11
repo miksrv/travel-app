@@ -16,3 +16,5 @@ export type IconTypes =
     | 'UserCircle'
     | 'Left'
     | 'Right'
+    | 'Down'
+    | 'Up'

@@ -1,0 +1,99 @@
+@import ../../styles/variables
+
+.dropdown
+  display: block
+
+  .label
+    display: block
+    color: #6d7885
+    overflow: hidden
+    padding-bottom: 6px
+    padding-top: 2px
+    text-overflow: ellipsis
+    white-space: nowrap
+    font-size: 13px
+
+  .container
+    position: relative
+
+    .dropdownButton
+      width: 100%
+      font-size: 14px
+      line-height: 20px
+      position: relative
+      background-color: #f2f3f5
+      -webkit-tap-highlight-color: transparent
+      align-items: center
+      border-radius: 8px
+      box-sizing: border-box
+      border: 1px solid #e0e0e0
+      color: #6d7885
+      height: 36px
+      margin: 0
+      padding: 0 12px
+      cursor: pointer
+      display: flex
+      justify-content: space-between
+
+      &:focus, &:active, &:hover
+        border-color: #c2c2c2
+
+      &.selected
+        color: #000
+
+      span
+        overflow: hidden
+        white-space: nowrap
+        display: block
+        text-overflow: ellipsis
+
+      .arrow
+        display: block
+        margin-top: 5px
+
+        svg
+          width: 24px
+          height: 24px
+          fill: #6d7885
+
+    &.open
+      .dropdownButton
+        border-bottom-left-radius: 0
+        border-bottom-right-radius: 0
+
+    &.disabled
+      opacity: .5
+      cursor: default
+
+    .optionsList
+      position: absolute
+      background-color: #FFFFFF
+      box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
+      border: 1px solid #e0e0e0
+      list-style: none
+      padding: 0
+      width: 100%
+      z-index: 1
+      top: 35px
+      border-bottom-left-radius: 8px
+      border-bottom-right-radius: 8px
+
+      li
+        button
+          margin: 0
+          padding: 0
+          height: 100%
+          width: 100%
+          padding: 8px 10px
+          font-size: 13px
+          cursor: pointer
+          background: transparent
+          border: none
+          text-align: left
+
+        &:hover, &.active
+          background-color: #f2f3f5
+
+        &:last-of-type
+          border-bottom-left-radius: 8px
+          border-bottom-right-radius: 8px

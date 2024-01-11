@@ -3,27 +3,29 @@ import React, { useMemo } from 'react'
 
 import Icon from '@/ui/icon'
 
-import { concatClassNames as cn } from '@/functions/helpers'
+import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
 
-interface PaginationProps {
+interface PaginationProps<T> {
     currentPage?: number
     totalPostCount?: number
     linkPart?: string
+    urlParam?: T
     perPage?: number
     neighbours?: number
     onChangePage?: (page: number) => void
 }
 
-const Pagination: React.FC<PaginationProps> = (props) => {
+const Pagination: React.FC<PaginationProps<any>> = (props) => {
     const {
         currentPage = 1,
         totalPostCount = 0,
         linkPart,
+        urlParam,
         perPage = 4,
         neighbours = 2,
         onChangePage
@@ -95,12 +97,24 @@ const Pagination: React.FC<PaginationProps> = (props) => {
                     )}
                     href={
                         page === RIGHT_PAGE
-                            ? `${link}?page=${currentPage + 1}`
+                            ? `${link}${encodeQueryData({
+                                  ...urlParam,
+                                  page: currentPage + 1
+                              })}`
                             : page === LEFT_PAGE
-                            ? `${link}?page=${currentPage - 1}`
+                            ? `${link}${encodeQueryData({
+                                  ...urlParam,
+                                  page: currentPage - 1
+                              })}`
                             : page === 1
-                            ? link
-                            : `${link}?page=${page}`
+                            ? `${link}${encodeQueryData({
+                                  ...urlParam,
+                                  page: undefined
+                              })}`
+                            : `${link}${encodeQueryData({
+                                  ...urlParam,
+                                  page
+                              })}`
                     }
                     title={
                         page === RIGHT_PAGE
