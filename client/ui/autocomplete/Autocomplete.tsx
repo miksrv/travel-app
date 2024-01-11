@@ -1,8 +1,8 @@
 import debounce from 'lodash-es/debounce'
-import Image, { StaticImageData } from 'next/image'
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Icon from '@/ui/icon'
+import Loader from '@/ui/loader'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -10,8 +10,8 @@ import styles from './styles.module.sass'
 
 type DropdownOptions = {
     key: string | number
-    value: React.ReactNode | string | number
-    image?: StaticImageData
+    value: string
+    type?: string
 }
 
 interface DropdownProps<T> {
@@ -23,7 +23,7 @@ interface DropdownProps<T> {
     placeholder?: string
     label?: string
     value?: T
-    onSelect?: (selectedOption: T) => void
+    onSelect?: (option: T) => void
     onSearch?: (value: string) => void
 }
 
@@ -42,6 +42,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
     } = props
 
     const [search, setSearch] = useState<string>()
+    const [localLoading, setLocaLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOptions | undefined
@@ -52,16 +53,32 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         setIsOpen(!isOpen)
     }
 
-    const handleChangeInput = debounce((event) => {
+    const handleDebouncedSearch = useCallback(
+        debounce((value) => {
+            onSearch?.(value)
+            setLocaLoading(false)
+        }, 1000),
+        []
+    )
+
+    const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
+
+        if (value.length > 0) {
+            setLocaLoading(true)
+        } else {
+            setLocaLoading(false)
+        }
+
         setSearch(value)
-        onSearch?.(value)
-    }, 1000)
+        handleDebouncedSearch(value)
+    }
 
     const handleSelect = (option: DropdownOptions | undefined) => {
         if (selectedOption?.key !== option?.key) {
             setSelectedOption(option)
-            onSelect?.(option?.key)
+            setSearch(option?.value)
+            onSelect?.(option)
         }
 
         setIsOpen(false)
@@ -78,7 +95,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
 
     const handleClearClick = (event: React.MouseEvent) => {
         event.stopPropagation()
-        setSearch(value)
+        setSearch(undefined)
         handleSelect(undefined)
     }
 
@@ -122,19 +139,10 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                 )}
             >
                 <div className={styles.searchContainer}>
-                    <span>
-                        {selectedOption?.image && (
-                            <Image
-                                className={styles.categoryIcon}
-                                src={selectedOption.image.src}
-                                alt={''}
-                                width={22}
-                                height={26}
-                            />
-                        )}
-                    </span>
                     <input
                         type={'text'}
+                        value={search || ''}
+                        defaultValue={selectedOption?.value || value}
                         className={styles.searchInput}
                         placeholder={
                             placeholder ?? 'Введите значение для поиска'
@@ -142,7 +150,9 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                         onChange={handleChangeInput}
                     />
                     <span className={styles.arrow}>
-                        {clearable && selectedOption?.key && (
+                        {loading || localLoading ? (
+                            <Loader className={styles.loader} />
+                        ) : clearable && selectedOption?.key ? (
                             <button
                                 className={styles.clear}
                                 type={'button'}
@@ -150,18 +160,19 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                             >
                                 <Icon name={'Close'} />
                             </button>
+                        ) : (
+                            <button
+                                className={styles.toggleButton}
+                                type={'button'}
+                                onClick={toggleDropdown}
+                            >
+                                {isOpen ? (
+                                    <Icon name={'Up'} />
+                                ) : (
+                                    <Icon name={'Down'} />
+                                )}
+                            </button>
                         )}
-                        <button
-                            className={styles.toggleButton}
-                            type={'button'}
-                            onClick={toggleDropdown}
-                        >
-                            {isOpen ? (
-                                <Icon name={'Up'} />
-                            ) : (
-                                <Icon name={'Down'} />
-                            )}
-                        </button>
                     </span>
                 </div>
                 {isOpen && (
@@ -176,19 +187,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                                 key={option.key}
                                 className={cn(
                                     option.key === selectedOption?.key &&
+                                        option?.type === selectedOption?.type &&
                                         styles.active
                                 )}
                             >
                                 <button onClick={() => handleSelect(option)}>
-                                    {option.image && (
-                                        <Image
-                                            className={styles.categoryIcon}
-                                            src={option.image.src}
-                                            alt={''}
-                                            width={22}
-                                            height={26}
-                                        />
-                                    )}
                                     <span>{option.value}</span>
                                 </button>
                             </li>

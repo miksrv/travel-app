@@ -13,6 +13,10 @@
     white-space: nowrap
     font-size: 13px
 
+  .loader
+    width: 18px !important
+    height: 18px !important
+
   .container
     position: relative
 
@@ -29,8 +33,7 @@
       color: $colorTextMain
       height: 36px
       margin: 0
-      padding: 0 12px
-      cursor: pointer
+      padding: 0 12px 0 0
       display: flex
       justify-content: space-between
 
@@ -38,6 +41,9 @@
         background: transparent
         border: none
         outline: none
+        width: 90%
+        height: inherit
+        padding-left: 12px
 
       &:focus, &:active, &:hover
         border-color: #c2c2c2

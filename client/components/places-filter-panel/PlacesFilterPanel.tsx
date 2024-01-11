@@ -74,6 +74,10 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const handleChangeCategory = (value: string) =>
         onChange?.('category', value)
 
+    const handleChangeLocation = (value: any) => {
+        console.log('value', value)
+    }
+
     const handleSearchLocation = (value: string) => {
         if (value.length > 3) {
             searchAddress(value)
@@ -147,9 +151,11 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
                 <Autocomplete
                     placeholder={'Поиск по местоположению'}
+                    clearable={true}
                     loading={addressLoading}
                     options={AutocompleteData}
                     onSearch={handleSearchLocation}
+                    onSelect={handleChangeLocation}
                 />
             </div>
         </Container>

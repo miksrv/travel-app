@@ -66,15 +66,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         return await router.push('/places' + encodeQueryData(result))
     }
 
-    // const [location, setLocation] = useState<ApiTypes.PlaceLocationType>()
-
     const [introduce] = API.useIntroduceMutation()
-
-    useEffect(() => {
-        if (geolocation?.latitude && geolocation?.longitude) {
-            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
-        }
-    }, [geolocation.latitude, geolocation.longitude])
 
     const currentCategory = categoryData?.items?.find(
         ({ name }) => name === category
@@ -87,6 +79,12 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     const titlePage = `${title}${
         currentPage && currentPage !== 1 ? ` - Страница ${currentPage}` : ''
     }`
+
+    useEffect(() => {
+        if (geolocation?.latitude && geolocation?.longitude) {
+            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
+        }
+    }, [geolocation.latitude, geolocation.longitude])
 
     return (
         <PageLayout
