@@ -21,6 +21,16 @@ use ReflectionException;
 class Places extends ResourceController {
     protected bool $coordinatesAvailable = false;
 
+    public function random(): ResponseInterface{
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel
+            ->select('id')
+            ->orderBy('id', 'RANDOM')
+            ->first();
+
+        return $this->respond(['id' => $placesData->id]);
+    }
+
     /**
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
@@ -309,6 +319,14 @@ class Places extends ResourceController {
                 'views'      => $placeData->views + 1,
                 'updated_at' => $placeData->updated_at
             ]);
+
+            // Get random place ID
+            $placesData = $placesModel
+                ->select('id')
+                ->orderBy('id', 'RANDOM')
+                ->first();
+
+            $response['randomId'] = $placesData->id;
 
             return $this->respond((object) $response);
         } catch (Exception $e) {

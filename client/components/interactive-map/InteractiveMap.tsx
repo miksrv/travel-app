@@ -15,6 +15,8 @@ import isEqual from 'lodash-es/isEqual'
 import React, { useEffect, useRef, useState } from 'react'
 import { useMapEvents } from 'react-leaflet'
 
+import Loader from '@/ui/loader'
+
 import { Photo, Place } from '@/api/types/Poi'
 
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
@@ -38,6 +40,7 @@ type mapPositionType = {
 type MapProps = {
     places?: Place[]
     photos?: Photo[]
+    loading?: boolean
     storeMapPosition?: boolean
     storeMapKey?: string
     centerPoint?: boolean
@@ -49,6 +52,7 @@ type MapProps = {
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
+    loading,
     storeMapPosition,
     storeMapKey,
     centerPoint,
@@ -170,6 +174,11 @@ const InteractiveMap: React.FC<MapProps> = ({
                         </div>
                         <MarkerUser latLng={userLatLng} />
                     </>
+                )}
+                {loading && (
+                    <div className={styles.loader}>
+                        <Loader />
+                    </div>
                 )}
                 {onChangeBounds && (
                     <MapEvents onChangeBounds={handleChangeBounds} />

@@ -1,8 +1,9 @@
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
 import { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
+import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
@@ -17,6 +18,7 @@ import styles from './styles.module.sass'
 
 interface HeaderProps {
     title?: string
+    randomPlaceId?: string
     breadcrumb?: string
     links?: BreadcrumbLink[]
     fullSize?: boolean
@@ -25,15 +27,18 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({
     title,
+    randomPlaceId,
     links,
     breadcrumb,
     fullSize,
     onMenuClick
 }) => {
     const dispatch = useAppDispatch()
-    const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
-
     const authSlice = useAppSelector((state) => state.auth)
+    const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
+    const randomPlaceQuery = API.usePlacesGetRandomQuery(undefined, {
+        skip: !!randomPlaceId
+    })
 
     useEffect(() => {
         if (meData?.auth) {
@@ -69,6 +74,17 @@ const Header: React.FC<HeaderProps> = ({
                     />
                 </div>
                 <div className={styles.rightSection}>
+                    {(randomPlaceId || randomPlaceQuery?.data?.id) && (
+                        <Button
+                            link={`/places/${
+                                randomPlaceId ?? randomPlaceQuery?.data?.id
+                            }`}
+                            title={'Перейти на случайное место'}
+                            size={'m'}
+                            icon={'Question'}
+                            mode={'primary'}
+                        />
+                    )}
                     <Search />
                     <Link
                         href={'/login'}

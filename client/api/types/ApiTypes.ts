@@ -60,11 +60,17 @@ export interface ResponseAuthLogin {
 }
 
 /* Controller: Places */
-export interface ResponsePlacesGetItem extends Place {}
+export interface ResponsePlacesGetItem extends Place {
+    randomId?: string
+}
 
 export interface ResponsePlacesGetList {
     items?: Place[]
     count?: number
+}
+
+export interface ResponsePlacesGetRandom {
+    id?: string
 }
 
 export interface RequestPlacesGetList {

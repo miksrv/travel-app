@@ -16,6 +16,7 @@ import styles from './styles.module.sass'
 
 interface PageLayoutProps {
     title?: string
+    randomPlaceId?: string
     links?: BreadcrumbLink[]
     breadcrumb?: string
     fullSize?: boolean
@@ -24,6 +25,7 @@ interface PageLayoutProps {
 
 const PageLayout: React.FC<PageLayoutProps> = ({
     title,
+    randomPlaceId,
     links,
     breadcrumb,
     fullSize,
@@ -60,6 +62,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                 title={title}
                 links={links}
                 breadcrumb={breadcrumb}
+                randomPlaceId={randomPlaceId}
                 onMenuClick={handleOpenSideBar}
             />
             <aside

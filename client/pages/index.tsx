@@ -43,7 +43,7 @@ const IndexPage: NextPage = () => {
 
     const [introduce] = API.useIntroduceMutation()
     const { data: categoryData } = API.useCategoriesGetListQuery()
-    const { data: poiListData } = API.usePoiGetListQuery(
+    const { data: poiListData, isFetching } = API.usePoiGetListQuery(
         { bounds: mapBounds, category },
         { skip: !mapBounds }
     )
@@ -84,26 +84,27 @@ const IndexPage: NextPage = () => {
             breadcrumb={t('breadcrumb')}
         >
             <NextSeo title={t('title')} />
-            <Container className={'mapPageFilters'}>
-                <Dropdown
-                    clearable={true}
-                    value={category}
-                    placeholder={'Выберите категорию'}
-                    options={categoryData?.items?.map((item) => ({
-                        image: categoryImage(item.name),
-                        key: item.name,
-                        value: item.title
-                    }))}
-                    onSelect={handleChangeCategory}
-                />
-                <div>
-                    {'Точек на карте: '}
-                    <strong>{poiListData?.count}</strong>
-                </div>
-            </Container>
+            {/*<Container className={'mapPageFilters'}>*/}
+            {/*    <Dropdown*/}
+            {/*        clearable={true}*/}
+            {/*        value={category}*/}
+            {/*        placeholder={'Выберите категорию'}*/}
+            {/*        options={categoryData?.items?.map((item) => ({*/}
+            {/*            image: categoryImage(item.name),*/}
+            {/*            key: item.name,*/}
+            {/*            value: item.title*/}
+            {/*        }))}*/}
+            {/*        onSelect={handleChangeCategory}*/}
+            {/*    />*/}
+            {/*    <div>*/}
+            {/*        {'Точек на карте: '}*/}
+            {/*        <strong>{poiListData?.count}</strong>*/}
+            {/*    </div>*/}
+            {/*</Container>*/}
             <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}
+                    loading={isFetching}
                     places={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}
                     userLatLng={

@@ -23,7 +23,7 @@ import { formatDateUTC } from '@/functions/helpers'
 const NEAR_PLACES_COUNT = 4
 
 interface PlacePageProps {
-    place?: Place.Place
+    place?: Place.Place & { randomId: string }
     photoList?: Photo.Photo[]
     nearPlaces?: Place.Place[]
 }
@@ -61,6 +61,7 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
         <PageLayout
             title={place?.title}
             breadcrumb={place?.title}
+            randomPlaceId={place?.randomId}
             links={[
                 {
                     link: '/places/',
