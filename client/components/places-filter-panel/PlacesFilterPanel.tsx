@@ -5,7 +5,7 @@ import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
 import { API } from '@/api/api'
-import { ApiTypes, Place } from '@/api/types'
+import { ApiTypes } from '@/api/types'
 
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
@@ -19,10 +19,7 @@ interface PlacesFilterPanelProps {
     location?: ApiTypes.PlaceLocationType
     category?: string | null
     onChange?: (key: keyof PlacesFilterType, value: string | number) => void
-    onChangeSort?: (value: ApiTypes.SortFields) => void
-    onChangeOrder?: (value: ApiTypes.SortOrder) => void
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
-    onChangeCategory?: (value?: Place.Category) => void
 }
 
 type SortOptionsProps = {
@@ -58,7 +55,8 @@ const SortOptions: SortOptionsProps[] = [
 ]
 
 const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
-    const { sort, order, location, category, onChange } = props
+    const { sort, order, location, category, onChange, onChangeLocation } =
+        props
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
@@ -74,12 +72,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const handleChangeCategory = (value: string) =>
         onChange?.('category', value)
 
-    const handleChangeLocation = (value: any) => {
-        console.log('value', value)
-    }
-
     const handleSearchLocation = (value: string) => {
-        if (value.length > 3) {
+        if (value.length >= 3) {
             searchAddress(value)
         }
     }
@@ -115,14 +109,12 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
             <div className={styles.container}>
                 <Dropdown
                     value={sort}
-                    // className={styles.sortDropdown}
                     options={SortOptions.map((item) => item)}
                     onSelect={handleChangeSort}
                 />
 
                 <Dropdown
                     value={order}
-                    // className={styles.orderDropdown}
                     options={[
                         {
                             key: ApiTypes.SortOrder.ASC,
@@ -140,7 +132,6 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     clearable={true}
                     value={category}
                     placeholder={'Выберите категорию'}
-                    // className={styles.categoryDropdown}
                     options={categoryData?.items?.map((item) => ({
                         image: categoryImage(item.name),
                         key: item.name,
@@ -152,10 +143,11 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                 <Autocomplete
                     placeholder={'Поиск по местоположению'}
                     clearable={true}
+                    value={location}
                     loading={addressLoading}
                     options={AutocompleteData}
                     onSearch={handleSearchLocation}
-                    onSelect={handleChangeLocation}
+                    onSelect={onChangeLocation}
                 />
             </div>
         </Container>

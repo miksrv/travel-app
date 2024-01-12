@@ -1,4 +1,3 @@
-import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
@@ -127,6 +126,12 @@ export const API = createApi({
         }),
 
         /* Controller: Location */
+        locationGetByType: builder.query<
+            ApiTypes.ResponseLocationGetByType,
+            ApiTypes.RequestLocationGetByType
+        >({
+            query: (params) => `location/${params.id}?type=${params.type}`
+        }),
         locationGetGeocoder: builder.query<
             any,
             Maybe<ApiTypes.RequestLocationGetGeocoder>

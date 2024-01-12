@@ -26,6 +26,10 @@ const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
 const POST_PER_PAGE = 16
 
 interface PlacesPageProps {
+    country: number | null
+    region: number | null
+    district: number | null
+    city: number | null
     category: string | null
     sort: ApiTypes.SortFields
     order: ApiTypes.SortOrder
@@ -35,38 +39,93 @@ interface PlacesPageProps {
 }
 
 const PlacesPage: NextPage<PlacesPageProps> = (props) => {
-    const { category, sort, order, currentPage, placesCount, placesList } =
-        props
-    const { t } = useTranslation('common', { keyPrefix: 'page.places' })
+    const {
+        country,
+        region,
+        district,
+        city,
+        category,
+        sort,
+        order,
+        currentPage,
+        placesCount,
+        placesList
+    } = props
 
-    const { data: categoryData, isLoading } = API.useCategoriesGetListQuery()
+    const locationUnset = !country && !region && !district && !city
+    const locationType = country
+        ? 'country'
+        : region
+        ? 'region'
+        : district
+        ? 'district'
+        : 'city'
+
+    const { t } = useTranslation('common', { keyPrefix: 'page.places' })
+    const { data: categoryData } = API.useCategoriesGetListQuery()
+    const { data: locationData } = API.useLocationGetByTypeQuery(
+        {
+            id: country ?? region ?? district ?? city,
+            type: locationType
+        },
+        { skip: locationUnset }
+    )
+
+    const [introduce] = API.useIntroduceMutation()
 
     const geolocation = useGeolocation()
     const router = useRouter()
 
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined,
+        city: city ?? undefined,
+        country: country ?? undefined,
+        district: district ?? undefined,
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
+        region: region ?? undefined,
         sort: sort !== DEFAULT_SORT ? sort : undefined
     }
 
     const handleChangeFilter = async (
         key: keyof PlacesFilterType,
-        value: string | number
+        value: string | number | undefined
     ) => {
         const filter = { ...initialFilter, [key]: value }
-        const result = {
+        const update = {
             category: filter.category ?? undefined,
+            city: filter.city ?? undefined,
+            country: filter.country ?? undefined,
+            district: filter.district ?? undefined,
             order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
             page: filter.page !== 1 ? filter.page : undefined,
+            region: filter.region ?? undefined,
             sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined
         }
 
-        return await router.push('/places' + encodeQueryData(result))
+        return await router.push('/places' + encodeQueryData(update))
     }
 
-    const [introduce] = API.useIntroduceMutation()
+    const handleClearLocationFilter = async () => {
+        const filter = {
+            ...initialFilter,
+            city: undefined,
+            country: undefined,
+            district: undefined,
+            region: undefined
+        }
+        return await router.push('/places' + encodeQueryData(filter))
+    }
+
+    const handleChangeLocation = async (
+        location?: ApiTypes.PlaceLocationType
+    ) => {
+        if (!location) {
+            await handleClearLocationFilter()
+        } else {
+            await handleChangeFilter(location?.type ?? 'city', location?.key)
+        }
+    }
 
     const currentCategory = categoryData?.items?.find(
         ({ name }) => name === category
@@ -97,38 +156,21 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             }
         >
             <NextSeo title={titlePage} />
-            {/*<Card sx={{ mb: 2 }}>*/}
-            {/*    <CardHeader*/}
-            {/*        title={t('title', PAGE_TITLE)}*/}
-            {/*        titleTypographyProps={{ component: 'h1' }}*/}
-            {/*        subheader={<Breadcrumbs currentPage={PAGE_TITLE} />}*/}
-            {/*        sx={{ mb: -1, mt: -1 }}*/}
-            {/*        action={*/}
-            {/*            <Button*/}
-            {/*                sx={{ mr: 1, mt: 1.4 }}*/}
-            {/*                size={'medium'}*/}
-            {/*                variant={'contained'}*/}
-            {/*                href={'/places/create'}*/}
-            {/*            >*/}
-            {/*                {'Добавить'}*/}
-            {/*            </Button>*/}
-            {/*        }*/}
-            {/*    />*/}
-            {/*</Card>*/}
             <PlacesFilterPanel
                 sort={sort}
                 order={order}
                 category={category}
-                // location={location}
+                location={
+                    locationData && !locationUnset
+                        ? {
+                              key: locationData.id,
+                              type: locationType,
+                              value: locationData.name
+                          }
+                        : undefined
+                }
                 onChange={handleChangeFilter}
-                // onChangeLocation={async (location) => {
-                //     setPage(1)
-                //     setLocation(location)
-                // }}
-                // onChangeCategory={(category) => {
-                //     setPage(1)
-                //     setCategory(category)
-                // }}
+                onChangeLocation={handleChangeLocation}
             />
             <PlacesList places={placesList} />
             <Container className={'pagination'}>
@@ -151,6 +193,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
             const locale = context.locale ?? 'en'
+
+            const country =
+                parseInt(context.query.country as string, 10) || null
+            const region = parseInt(context.query.region as string, 10) || null
+            const district =
+                parseInt(context.query.district as string, 10) || null
+            const city = parseInt(context.query.city as string, 10) || null
+
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
             const sort =
@@ -162,10 +212,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
-                    category: category ?? null,
+                    category,
+                    city,
+                    country,
+                    district,
                     limit: POST_PER_PAGE,
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
+                    region,
                     sort: sort
                 })
             )
@@ -176,10 +230,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 props: {
                     ...translations,
                     category,
+                    city,
+                    country,
                     currentPage,
+                    district,
                     order,
                     placesCount: placesList?.count || 0,
                     placesList: placesList?.items || [],
+                    region,
                     sort
                 }
             }

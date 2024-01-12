@@ -12,8 +12,8 @@ export type DateTimeType = {
 }
 
 export type PlaceLocationType = {
-    title: string
-    value: number
+    value: string
+    key: number
     type: LocationType
 }
 
@@ -41,6 +41,8 @@ export const LocationType = {
     Region: 'region'
 } as const
 export type LocationType = (typeof LocationType)[keyof typeof LocationType]
+
+export type LocationTypes = 'country' | 'region' | 'district' | 'city'
 
 export interface RequestAuthLogin {
     email?: string
@@ -73,10 +75,10 @@ export interface RequestPlacesGetList {
     latitude?: number
     longitude?: number
     search?: string
-    country?: number
-    region?: number
-    district?: number
-    city?: number
+    country?: number | null
+    region?: number | null
+    district?: number | null
+    city?: number | null
     limit?: number
     offset?: number
     category?: string | null
@@ -113,6 +115,13 @@ export interface RequestPhotoPostUpload {
 }
 
 /* Controller: Location */
+export interface ResponseLocationGetByType extends AddressObject {}
+
+export interface RequestLocationGetByType {
+    id?: number | null
+    type?: LocationTypes
+}
+
 export interface RequestLocationGetGeocoder {
     lat?: number
     lng?: number

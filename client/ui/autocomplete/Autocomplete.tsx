@@ -113,8 +113,9 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         }
 
         if (value) {
+            setSearch(value.value)
             setSelectedOption(
-                options?.find(({ key }) => value === key) ?? undefined
+                options?.find(({ key }) => value === key) ?? value ?? undefined
             )
         }
     }, [value])
@@ -142,7 +143,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                     <input
                         type={'text'}
                         value={search || ''}
-                        defaultValue={selectedOption?.value || value}
+                        defaultValue={selectedOption?.value ?? value?.name}
                         className={styles.searchInput}
                         placeholder={
                             placeholder ?? 'Введите значение для поиска'
