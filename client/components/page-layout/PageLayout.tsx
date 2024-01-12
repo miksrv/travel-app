@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import React, { useState } from 'react'
 
-import { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
 import Icon from '@/ui/icon'
 
 import { useAppSelector } from '@/api/store'
@@ -15,19 +14,13 @@ import { menuItems } from './menu'
 import styles from './styles.module.sass'
 
 interface PageLayoutProps {
-    title?: string
     randomPlaceId?: string
-    links?: BreadcrumbLink[]
-    breadcrumb?: string
     fullSize?: boolean
     children?: React.ReactNode
 }
 
 const PageLayout: React.FC<PageLayoutProps> = ({
-    title,
     randomPlaceId,
-    links,
-    breadcrumb,
     fullSize,
     children
 }) => {
@@ -59,9 +52,6 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             />
             <Header
                 fullSize={fullSize}
-                title={title}
-                links={links}
-                breadcrumb={breadcrumb}
                 randomPlaceId={randomPlaceId}
                 onMenuClick={handleOpenSideBar}
             />

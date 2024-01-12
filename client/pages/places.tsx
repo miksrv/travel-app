@@ -6,6 +6,7 @@ import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
@@ -14,6 +15,7 @@ import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
+import styles from '@/components/place/header/styles.module.sass'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
@@ -172,18 +174,23 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <PageLayout
-            title={title}
-            breadcrumb={
-                category
-                    ? currentCategory
-                    : !locationUnset
-                    ? locationData?.name
-                    : t('breadcrumb')
-            }
-            links={breadcrumbsLinks || []}
-        >
+        <PageLayout>
             <NextSeo title={title} />
+            <Container className={'pageHeader'}>
+                <header>
+                    <h1>{title}</h1>
+                    <Breadcrumbs
+                        currentPage={
+                            category
+                                ? currentCategory
+                                : !locationUnset
+                                ? locationData?.name
+                                : t('breadcrumb')
+                        }
+                        links={breadcrumbsLinks || []}
+                    />
+                </header>
+            </Container>
             <PlacesFilterPanel
                 sort={sort}
                 order={order}

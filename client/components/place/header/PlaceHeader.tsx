@@ -2,6 +2,8 @@ import Image from 'next/image'
 import React from 'react'
 
 import Badge from '@/ui/badge'
+import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
+import Container from '@/ui/container'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
@@ -18,11 +20,13 @@ import styles from './styles.module.sass'
 
 interface PlaceHeaderProps {
     place?: Place
+    breadcrumbs?: BreadcrumbLink[]
     ratingValue?: number
     ratingCount?: number
 }
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({
+    breadcrumbs,
     place,
     ratingValue,
     ratingCount
@@ -68,6 +72,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                 content={`${place?.distance || '?'} км`}
             />
         </div>
+        <header className={styles.header}>
+            <h1>{place?.title}</h1>
+            <Breadcrumbs
+                currentPage={place?.title}
+                links={breadcrumbs}
+            />
+        </header>
     </section>
 )
 

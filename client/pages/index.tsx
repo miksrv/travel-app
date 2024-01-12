@@ -8,6 +8,7 @@ import dynamic from 'next/dynamic'
 import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
@@ -79,10 +80,7 @@ const IndexPage: NextPage = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <PageLayout
-            title={t('title')}
-            breadcrumb={t('breadcrumb')}
-        >
+        <PageLayout>
             <NextSeo title={t('title')} />
             {/*<Container className={'mapPageFilters'}>*/}
             {/*    <Dropdown*/}
@@ -101,6 +99,15 @@ const IndexPage: NextPage = () => {
             {/*        <strong>{poiListData?.count}</strong>*/}
             {/*    </div>*/}
             {/*</Container>*/}
+            <Container className={'pageHeader'}>
+                <header>
+                    <h1>{t('title')}</h1>
+                    <Breadcrumbs
+                        currentPage={t('breadcrumb')}
+                        hideHomePage={true}
+                    />
+                </header>
+            </Container>
             <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}

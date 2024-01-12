@@ -5,12 +5,14 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
+import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Photo, Place } from '@/api/types'
 
+import styles from '@/components/header/styles.module.sass'
 import PageLayout from '@/components/page-layout'
 import PlaceDescription from '@/components/place/description'
 import PlaceHeader from '@/components/place/header'
@@ -23,13 +25,14 @@ import { formatDateUTC } from '@/functions/helpers'
 const NEAR_PLACES_COUNT = 4
 
 interface PlacePageProps {
-    place?: Place.Place & { randomId: string }
+    randomId?: string
+    place?: Place.Place
     photoList?: Photo.Photo[]
     nearPlaces?: Place.Place[]
 }
 
 const PlacePage: NextPage<PlacePageProps> = (props) => {
-    const { place, photoList, nearPlaces } = props
+    const { randomId, place, photoList, nearPlaces } = props
     const { t } = useTranslation('common', { keyPrefix: 'page.place' })
     const { data: ratingData, isLoading: ratingLoading } =
         API.useRatingGetListQuery(place?.id!, {
@@ -58,17 +61,7 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
     // )
 
     return (
-        <PageLayout
-            title={place?.title}
-            breadcrumb={place?.title}
-            randomPlaceId={place?.randomId}
-            links={[
-                {
-                    link: '/places/',
-                    text: t('breadcrumb')
-                }
-            ]}
-        >
+        <PageLayout randomPlaceId={randomId}>
             <NextSeo
                 title={place?.title}
                 description={place?.content?.substring(0, 160)}
@@ -98,6 +91,12 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
                 place={place}
                 ratingValue={ratingData?.rating ?? place?.rating}
                 ratingCount={ratingData?.count}
+                breadcrumbs={[
+                    {
+                        link: '/places/',
+                        text: t('breadcrumb')
+                    }
+                ]}
             />
 
             <PlaceInformation
@@ -172,7 +171,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     ...translations,
                     nearPlaces: nearPlaces?.items,
                     photoList: photosData?.items,
-                    place: placeData
+                    place: placeData,
+                    randomId: placeData?.randomId
                 }
             }
         }
