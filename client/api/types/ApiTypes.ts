@@ -198,10 +198,12 @@ export interface RequestActivityGetList {
 /* Controller: POI */
 export interface RequestPoiList {
     bounds?: string
+    category?: string
 }
 
 export interface ResponsePoiPlacesList {
     items: poiPlace[]
+    count: number
 }
 
 export interface ResponsePoiPhotosList {

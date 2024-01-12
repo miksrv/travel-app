@@ -10,7 +10,9 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $bounds      = $this->_getBounds();
+        $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
+        $bounds   = $this->_getBounds();
+
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
             ->select('id, category, latitude, longitude')
@@ -19,10 +21,17 @@ class Poi extends ResourceController {
                 'latitude >=' => $bounds[1],
                 'longitude <=' =>  $bounds[2],
                 'latitude <=' =>  $bounds[3],
-            ])->findAll();
+            ]);
+
+        if ($category) {
+            $placesData->where('category', $category);
+        }
+
+        $result = $placesData->findAll();
 
         return $this->respond([
-            'items' => $placesData,
+            'items' => $result,
+            'count' => count($result)
         ]);
     }
 

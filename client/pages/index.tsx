@@ -9,11 +9,13 @@ import React, { useCallback, useEffect, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Container from '@/ui/container'
+import Dropdown from '@/ui/dropdown'
 
 import { API } from '@/api/api'
 
 import PageLayout from '@/components/page-layout'
 
+import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
@@ -34,13 +36,15 @@ const IndexPage: NextPage = () => {
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
     const [mapBounds, setMapBounds] = useState<string>()
+    const [category, setCategory] = useState<string>()
 
     // const lat = searchParams.get('lat')
     // const lon = searchParams.get('lon')
 
     const [introduce] = API.useIntroduceMutation()
+    const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: poiListData } = API.usePoiGetListQuery(
-        { bounds: mapBounds },
+        { bounds: mapBounds, category },
         { skip: !mapBounds }
     )
 
@@ -50,6 +54,10 @@ const IndexPage: NextPage = () => {
         }, 500),
         []
     )
+
+    const handleChangeCategory = (category: string) => {
+        setCategory(category)
+    }
 
     useEffect(() => {
         const updateLatitude = round(geolocation?.latitude)
@@ -76,6 +84,23 @@ const IndexPage: NextPage = () => {
             breadcrumb={t('breadcrumb')}
         >
             <NextSeo title={t('title')} />
+            <Container className={'mapPageFilters'}>
+                <Dropdown
+                    clearable={true}
+                    value={category}
+                    placeholder={'Выберите категорию'}
+                    options={categoryData?.items?.map((item) => ({
+                        image: categoryImage(item.name),
+                        key: item.name,
+                        value: item.title
+                    }))}
+                    onSelect={handleChangeCategory}
+                />
+                <div>
+                    {'Точек на карте: '}
+                    <strong>{poiListData?.count}</strong>
+                </div>
+            </Container>
             <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}
