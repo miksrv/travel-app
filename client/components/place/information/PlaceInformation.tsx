@@ -186,7 +186,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 {place?.address?.district && ', '}
                                 <Link
                                     color='inherit'
-                                    href={`/places?city${place?.address.city.id}`}
+                                    href={`/places?city=${place?.address.city.id}`}
                                     title={`Интересные места: ${place?.address.city.name}`}
                                 >
                                     {place?.address.city.name}

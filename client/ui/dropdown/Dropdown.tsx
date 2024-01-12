@@ -120,9 +120,11 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                                 height={26}
                             />
                         )}
-                        {selectedOption?.value ??
-                            placeholder ??
-                            'Выберите опцию'}
+                        {selectedOption?.value ?? (
+                            <span className={styles.placeHolder}>
+                                {placeholder ?? 'Выберите опцию'}
+                            </span>
+                        )}
                     </span>
                     <span className={styles.arrow}>
                         {clearable && selectedOption?.key && (
