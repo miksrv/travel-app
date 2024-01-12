@@ -151,7 +151,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         {place?.address?.country && (
                             <Link
                                 color='inherit'
-                                href={`/country/${place?.address.country.id}`}
+                                href={`/places?country=${place?.address.country.id}`}
+                                title={`Интересные места: ${place?.address.country.name}`}
                             >
                                 {place?.address.country.name}
                             </Link>
@@ -161,7 +162,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 {place?.address?.country && ', '}
                                 <Link
                                     color='inherit'
-                                    href={`/region/${place?.address.region.id}`}
+                                    href={`/places?region=${place?.address.region.id}`}
+                                    title={`Интересные места: ${place?.address.region.name}`}
                                 >
                                     {place?.address.region.name}
                                 </Link>
@@ -172,7 +174,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 {place?.address?.region && ', '}
                                 <Link
                                     color='inherit'
-                                    href={`/district/${place?.address.district.id}`}
+                                    href={`/places?district=${place?.address.district.id}`}
+                                    title={`Интересные места: ${place?.address.district.name}`}
                                 >
                                     {place?.address.district.name}
                                 </Link>
@@ -183,7 +186,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                                 {place?.address?.district && ', '}
                                 <Link
                                     color='inherit'
-                                    href={`/city/${place?.address.city.id}`}
+                                    href={`/places?city${place?.address.city.id}`}
+                                    title={`Интересные места: ${place?.address.city.name}`}
                                 >
                                     {place?.address.city.name}
                                 </Link>

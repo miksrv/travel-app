@@ -87,7 +87,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                 options?.find(({ key }) => value === key) ?? undefined
             )
         }
-    }, [value])
+    }, [value, options])
 
     return (
         <div

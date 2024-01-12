@@ -3,8 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import { useEffect } from 'react'
-import React from 'react'
+import React, { useEffect, useMemo } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Container from '@/ui/container'
@@ -131,13 +130,40 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         ({ name }) => name === category
     )?.title
 
-    const title = currentCategory
-        ? `${t('shortTitle')}: ${currentCategory}`
-        : t('title')
+    const title = useMemo(() => {
+        if (!currentCategory && locationUnset) {
+            return t('title')
+        }
 
-    const titlePage = `${title}${
-        currentPage && currentPage !== 1 ? ` - Страница ${currentPage}` : ''
-    }`
+        let titles = []
+
+        if (!locationUnset) {
+            titles.push(locationData?.name)
+        }
+
+        if (currentCategory) {
+            titles.push(currentCategory)
+        }
+
+        return `${t('shortTitle')}: ${titles.join(', ')}`
+    }, [currentCategory, locationData, locationUnset])
+
+    const breadcrumbsLinks = useMemo(() => {
+        let breadcrumbs = []
+
+        if (category || !locationUnset) {
+            breadcrumbs.push({ link: '/places', text: t('breadcrumb') })
+        }
+
+        if (!locationUnset && category) {
+            breadcrumbs.push({
+                link: `/places?${locationType}=${locationData?.id}`,
+                text: locationData?.name!
+            })
+        }
+
+        return breadcrumbs
+    }, [category, locationData, locationUnset])
 
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
@@ -147,15 +173,17 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
 
     return (
         <PageLayout
-            title={titlePage}
-            breadcrumb={category ? currentCategory : t('breadcrumb')}
-            links={
+            title={title}
+            breadcrumb={
                 category
-                    ? [{ link: '/places', text: t('breadcrumb') }]
-                    : undefined
+                    ? currentCategory
+                    : !locationUnset
+                    ? locationData?.name
+                    : t('breadcrumb')
             }
+            links={breadcrumbsLinks || []}
         >
-            <NextSeo title={titlePage} />
+            <NextSeo title={title} />
             <PlacesFilterPanel
                 sort={sort}
                 order={order}
