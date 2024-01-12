@@ -20,3 +20,4 @@ export type IconTypes =
     | 'Up'
     | 'Close'
     | 'Question'
+    | 'Tune'

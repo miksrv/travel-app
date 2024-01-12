@@ -4,7 +4,7 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface ContainerProps extends React.HTMLAttributes<unknown> {
+interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
     className?: string
     compact?: boolean

@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
-import Container from '@/ui/container'
 import Dropdown from '@/ui/dropdown'
 
 import { API } from '@/api/api'
@@ -105,52 +104,54 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     )
 
     return (
-        <Container className={styles.component}>
-            <div className={styles.container}>
-                <Dropdown
-                    value={sort}
-                    options={SortOptions.map((item) => item)}
-                    onSelect={handleChangeSort}
-                />
+        <div className={styles.component}>
+            <Dropdown
+                label={'Сортировка мест'}
+                value={sort}
+                options={SortOptions.map((item) => item)}
+                onSelect={handleChangeSort}
+            />
 
-                <Dropdown
-                    value={order}
-                    options={[
-                        {
-                            key: ApiTypes.SortOrder.ASC,
-                            value: 'По возрастанию'
-                        },
-                        {
-                            key: ApiTypes.SortOrder.DESC,
-                            value: 'По убыванию'
-                        }
-                    ]}
-                    onSelect={handleChangeOrder}
-                />
+            <Dropdown
+                label={'Порядок сортировки'}
+                value={order}
+                options={[
+                    {
+                        key: ApiTypes.SortOrder.ASC,
+                        value: 'По возрастанию'
+                    },
+                    {
+                        key: ApiTypes.SortOrder.DESC,
+                        value: 'По убыванию'
+                    }
+                ]}
+                onSelect={handleChangeOrder}
+            />
 
-                <Dropdown
-                    clearable={true}
-                    value={category}
-                    placeholder={'Выберите категорию'}
-                    options={categoryData?.items?.map((item) => ({
-                        image: categoryImage(item.name),
-                        key: item.name,
-                        value: item.title
-                    }))}
-                    onSelect={handleChangeCategory}
-                />
+            <Dropdown
+                clearable={true}
+                value={category}
+                label={'Фильтровать по категории'}
+                placeholder={'Выберите категорию'}
+                options={categoryData?.items?.map((item) => ({
+                    image: categoryImage(item.name),
+                    key: item.name,
+                    value: item.title
+                }))}
+                onSelect={handleChangeCategory}
+            />
 
-                <Autocomplete
-                    placeholder={'Поиск по местоположению'}
-                    clearable={true}
-                    value={location}
-                    loading={addressLoading}
-                    options={AutocompleteData}
-                    onSearch={handleSearchLocation}
-                    onSelect={onChangeLocation}
-                />
-            </div>
-        </Container>
+            <Autocomplete
+                label={'Фильтровать по местоположению'}
+                placeholder={'Начните вводить название'}
+                clearable={true}
+                value={location}
+                loading={addressLoading}
+                options={AutocompleteData}
+                onSearch={handleSearchLocation}
+                onSelect={onChangeLocation}
+            />
+        </div>
     )
 }
 

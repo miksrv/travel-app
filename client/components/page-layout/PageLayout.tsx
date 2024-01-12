@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Icon from '@/ui/icon'
 
@@ -35,6 +35,18 @@ const PageLayout: React.FC<PageLayoutProps> = ({
     const handleOpenSideBar = () => {
         setSidebarOpen(true)
     }
+
+    useEffect(() => {
+        if (application?.showOverlay || sidebarOpen) {
+            document.body.style.overflow = 'hidden'
+        } else {
+            document.body.style.overflow = 'auto'
+        }
+
+        return () => {
+            document.body.style.overflow = 'auto'
+        }
+    }, [application?.showOverlay, sidebarOpen])
 
     return (
         <div className={cn(styles.component, fullSize && styles.fullSize)}>

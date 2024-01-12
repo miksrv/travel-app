@@ -3,19 +3,22 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
+import Button from '@/ui/button'
 import Container from '@/ui/container'
+import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
+import { toggleOverlay } from '@/api/applicationSlice'
+import { useAppDispatch } from '@/api/store'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
-import styles from '@/components/place/header/styles.module.sass'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
@@ -62,6 +65,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         ? 'district'
         : 'city'
 
+    const dispatch = useAppDispatch()
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: locationData } = API.useLocationGetByTypeQuery(
@@ -76,6 +80,8 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
 
     const geolocation = useGeolocation()
     const router = useRouter()
+
+    const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
 
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined,
@@ -167,6 +173,30 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         return breadcrumbs
     }, [category, locationData, locationUnset])
 
+    const filtersCount = useMemo(() => {
+        let count = 0
+
+        if (!locationUnset) {
+            count++
+        }
+
+        if (category) {
+            count++
+        }
+
+        return count
+    }, [category, locationUnset])
+
+    const handleClickOpenFiltersDialog = () => {
+        dispatch(toggleOverlay(true))
+        setFiltersDialogOpen(true)
+    }
+
+    const handleFiltersDialogClose = () => {
+        dispatch(toggleOverlay(false))
+        setFiltersDialogOpen(false)
+    }
+
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
             introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
@@ -190,23 +220,19 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                         links={breadcrumbsLinks || []}
                     />
                 </header>
+                <div className={'actions'}>
+                    <Button
+                        size={'m'}
+                        mode={'primary'}
+                        icon={'Tune'}
+                        onClick={handleClickOpenFiltersDialog}
+                    >
+                        {`Фильтры ${
+                            filtersCount > 0 ? `(${filtersCount})` : ''
+                        }`}
+                    </Button>
+                </div>
             </Container>
-            <PlacesFilterPanel
-                sort={sort}
-                order={order}
-                category={category}
-                location={
-                    locationData && !locationUnset
-                        ? {
-                              key: locationData.id,
-                              type: locationType,
-                              value: locationData.name
-                          }
-                        : undefined
-                }
-                onChange={handleChangeFilter}
-                onChangeLocation={handleChangeLocation}
-            />
             <PlacesList places={placesList} />
             <Container className={'pagination'}>
                 <div>
@@ -220,6 +246,29 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                     linkPart={'places'}
                 />
             </Container>
+
+            <Dialog
+                open={filtersDialogOpen}
+                header={'Фильтры'}
+                onCloseDialog={handleFiltersDialogClose}
+            >
+                <PlacesFilterPanel
+                    sort={sort}
+                    order={order}
+                    category={category}
+                    location={
+                        locationData && !locationUnset
+                            ? {
+                                  key: locationData.id,
+                                  type: locationType,
+                                  value: locationData.name
+                              }
+                            : undefined
+                    }
+                    onChange={handleChangeFilter}
+                    onChangeLocation={handleChangeLocation}
+                />
+            </Dialog>
         </PageLayout>
     )
 }
