@@ -21,3 +21,4 @@ export type IconTypes =
     | 'Close'
     | 'Question'
     | 'Tune'
+    | 'PlusCircle'

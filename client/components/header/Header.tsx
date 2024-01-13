@@ -60,6 +60,12 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
                 <Search />
                 <div className={styles.rightSection}>
+                    <Link
+                        href={'/places/create'}
+                        title={'Добавить новое интересное место'}
+                    >
+                        <Icon name={'PlusCircle'} />
+                    </Link>
                     {(randomPlaceId || randomPlaceQuery?.data?.id) && (
                         <Link
                             href={`/places/${
@@ -74,7 +80,7 @@ const Header: React.FC<HeaderProps> = ({
                         href={'/login'}
                         title={'Авторизация на сайте'}
                     >
-                        <Icon name={'UserCircle'} />
+                        <Icon name={'User'} />
                     </Link>
                 </div>
             </div>

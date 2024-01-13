@@ -22,6 +22,11 @@ export const menuItems: MenuItemType[] = [
         icon: 'Terrain',
         link: '/places',
         text: 'Интересные места'
+    },
+    {
+        icon: 'PlusCircle',
+        link: '/places/create',
+        text: 'Добавить место'
     }
 ]
 

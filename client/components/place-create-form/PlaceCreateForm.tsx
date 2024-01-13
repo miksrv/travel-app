@@ -111,107 +111,101 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <Card sx={{ mb: 2, mt: 2 }}>
-            <CardContent>
-                <FormControl
-                    variant={'standard'}
-                    fullWidth={true}
+        <section>
+            <FormControl
+                variant={'standard'}
+                fullWidth={true}
+            >
+                <InputLabel
+                    shrink={true}
+                    htmlFor={'title'}
+                    sx={{ fontSize: '16px' }}
                 >
-                    <InputLabel
-                        shrink={true}
-                        htmlFor={'title'}
-                        sx={{ fontSize: '16px' }}
-                    >
-                        {'Заголовок интересного места'}
-                    </InputLabel>
-                    <InputField
-                        name={'title'}
-                        id={'title'}
-                        placeholder={'Введите заголовок интересного места'}
-                        onChange={handleChange}
-                    />
-                </FormControl>
-
-                <CategorySelector />
-
-                <Card
-                    sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}
-                >
-                    <Image
-                        style={{
-                            left: '48.1%',
-                            position: 'absolute',
-                            top: '43.8%',
-                            zIndex: 10000
-                        }}
-                        src={abandoned}
-                        alt={''}
-                        width={32}
-                        height={32}
-                    />
-                    <InteractiveMap
-                        storeMapPosition={false}
-                        places={poiListData?.items}
-                        onChangeBounds={debounceSetMapBounds}
-                        userLatLng={
-                            geolocation.latitude && geolocation.longitude
-                                ? {
-                                      lat: geolocation.latitude,
-                                      lng: geolocation.longitude
-                                  }
-                                : undefined
-                        }
-                    />
-                </Card>
-
-                <FormControl
-                    variant={'standard'}
-                    fullWidth={true}
-                >
-                    <InputLabel
-                        shrink={true}
-                        htmlFor={'title'}
-                        sx={{ fontSize: '16px' }}
-                    >
-                        {'Адрес интересного места'}
-                    </InputLabel>
-                    <InputField
-                        name={'address'}
-                        id={'address'}
-                        placeholder={'Адрес может быть определен автоматически'}
-                        onChange={handleChange}
-                    />
-                </FormControl>
-
-                <Box sx={{ mt: 2 }}>
-                    <InputLabel
-                        shrink={true}
-                        htmlFor={'title'}
-                        sx={{ fontSize: '16px' }}
-                    >
-                        {'Описание интересного места'}
-                    </InputLabel>
-                    <ContentEditor
-                        markdown={' '}
-                        onChange={setEditorContent}
-                    />
-                </Box>
-
-                <TagsSelector
-                    onChangeTags={(tags) => console.log('tags', tags)}
+                    {'Заголовок интересного места'}
+                </InputLabel>
+                <InputField
+                    name={'title'}
+                    id={'title'}
+                    placeholder={'Введите заголовок интересного места'}
+                    onChange={handleChange}
                 />
+            </FormControl>
 
-                <Box sx={{ mt: 2 }}>
-                    <Button
-                        variant={'contained'}
-                        color={'primary'}
-                        onClick={handleLoginButton}
-                    >
-                        {'Добавить'}
-                    </Button>
-                </Box>
-            </CardContent>
-        </Card>
+            <CategorySelector />
+
+            <Card sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}>
+                <Image
+                    style={{
+                        left: '48.1%',
+                        position: 'absolute',
+                        top: '43.8%',
+                        zIndex: 10000
+                    }}
+                    src={abandoned}
+                    alt={''}
+                    width={32}
+                    height={32}
+                />
+                <InteractiveMap
+                    storeMapPosition={false}
+                    places={poiListData?.items}
+                    onChangeBounds={debounceSetMapBounds}
+                    userLatLng={
+                        geolocation.latitude && geolocation.longitude
+                            ? {
+                                  lat: geolocation.latitude,
+                                  lng: geolocation.longitude
+                              }
+                            : undefined
+                    }
+                />
+            </Card>
+
+            <FormControl
+                variant={'standard'}
+                fullWidth={true}
+            >
+                <InputLabel
+                    shrink={true}
+                    htmlFor={'title'}
+                    sx={{ fontSize: '16px' }}
+                >
+                    {'Адрес интересного места'}
+                </InputLabel>
+                <InputField
+                    name={'address'}
+                    id={'address'}
+                    placeholder={'Адрес может быть определен автоматически'}
+                    onChange={handleChange}
+                />
+            </FormControl>
+
+            <Box sx={{ mt: 2 }}>
+                <InputLabel
+                    shrink={true}
+                    htmlFor={'title'}
+                    sx={{ fontSize: '16px' }}
+                >
+                    {'Описание интересного места'}
+                </InputLabel>
+                <ContentEditor
+                    markdown={' '}
+                    onChange={setEditorContent}
+                />
+            </Box>
+
+            <TagsSelector onChangeTags={(tags) => console.log('tags', tags)} />
+
+            <Box sx={{ mt: 2 }}>
+                <Button
+                    variant={'contained'}
+                    color={'primary'}
+                    onClick={handleLoginButton}
+                >
+                    {'Добавить'}
+                </Button>
+            </Box>
+        </section>
     )
 }
 export default PlaceCreateForm

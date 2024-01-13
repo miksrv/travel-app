@@ -63,7 +63,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({
         <Container
             className={styles.component}
             title={`Фотографии: ${title}`}
-            action={<Button icon={'Camera'}>{'Добавить фото'}</Button>}
+            action={<Button icon={'Camera'}>{'Загрузить'}</Button>}
         >
             <PhotoGallery
                 photos={photos}
