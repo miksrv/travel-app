@@ -1,13 +1,14 @@
 import Image, { StaticImageData } from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 
+import OptionsList from '@/ui/dropdown/OptionsList'
 import Icon from '@/ui/icon'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-type DropdownOptions = {
+export type DropdownOptions = {
     key: string | number
     value: React.ReactNode | string | number
     image?: StaticImageData
@@ -21,7 +22,8 @@ interface DropdownProps<T> {
     placeholder?: string
     label?: string
     value?: T
-    onSelect?: (selectedOption: T) => void
+    onSelect?: (selectedOption: DropdownOptions | undefined) => void
+    onOpen?: () => void
 }
 
 const Dropdown: React.FC<DropdownProps<any>> = (props) => {
@@ -33,7 +35,8 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         value,
         placeholder,
         label,
-        onSelect
+        onSelect,
+        onOpen
     } = props
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -43,13 +46,17 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     const dropdownRef = useRef<HTMLDivElement>(null)
 
     const toggleDropdown = () => {
-        setIsOpen(!isOpen)
+        if (onOpen) {
+            onOpen?.()
+        } else {
+            setIsOpen(!isOpen)
+        }
     }
 
     const handleSelect = (option: DropdownOptions | undefined) => {
         if (selectedOption?.key !== option?.key) {
             setSelectedOption(option)
-            onSelect?.(option?.key)
+            onSelect?.(option ?? undefined)
         }
 
         setIsOpen(false)
@@ -80,14 +87,10 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     useEffect(() => {
         if (!value) {
             setSelectedOption(undefined)
+        } else {
+            setSelectedOption(value)
         }
-
-        if (value) {
-            setSelectedOption(
-                options?.find(({ key }) => value === key) ?? undefined
-            )
-        }
-    }, [value, options])
+    }, [value])
 
     return (
         <div
@@ -140,30 +143,11 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                     </span>
                 </button>
                 {isOpen && (
-                    <ul className={styles.optionsList}>
-                        {options?.map((option) => (
-                            <li
-                                key={option.key}
-                                className={cn(
-                                    option.key === selectedOption?.key &&
-                                        styles.active
-                                )}
-                            >
-                                <button onClick={() => handleSelect(option)}>
-                                    {option.image && (
-                                        <Image
-                                            className={styles.categoryIcon}
-                                            src={option.image.src}
-                                            alt={''}
-                                            width={22}
-                                            height={26}
-                                        />
-                                    )}
-                                    <span>{option.value}</span>
-                                </button>
-                            </li>
-                        ))}
-                    </ul>
+                    <OptionsList
+                        options={options}
+                        selectedOption={selectedOption}
+                        onSelect={handleSelect}
+                    />
                 )}
             </div>
         </div>

@@ -248,8 +248,9 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             </Container>
 
             <Dialog
-                open={filtersDialogOpen}
+                contentHeight={'306px'}
                 header={'Фильтры'}
+                open={filtersDialogOpen}
                 onCloseDialog={handleFiltersDialogClose}
             >
                 <PlacesFilterPanel

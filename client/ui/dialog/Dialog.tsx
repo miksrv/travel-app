@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
 
 interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
+    contentHeight?: string
     header?: string
     children?: React.ReactNode
     onCloseDialog?: () => void
@@ -13,6 +12,7 @@ interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
 
 const Dialog: React.FC<DialogProps> = ({
     open,
+    contentHeight,
     header,
     children,
     onCloseDialog,
@@ -75,7 +75,12 @@ const Dialog: React.FC<DialogProps> = ({
                     <h2>{header}</h2>
                 </div>
             )}
-            <div className={styles.content}>{children}</div>
+            <div
+                className={styles.content}
+                style={{ height: contentHeight ? contentHeight : 'auto' }}
+            >
+                {children}
+            </div>
         </dialog>
     )
 }

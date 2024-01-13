@@ -1,5 +1,47 @@
 @import ../../styles/variables
 
+.optionsList
+  //position: absolute
+  //background-color: #FFFFFF
+  //box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
+  //border: 1px solid #e0e0e0
+  list-style: none
+  padding: 0
+  width: 100%
+  z-index: 405
+  //top: 35px
+  //border-bottom-left-radius: 8px
+  //border-bottom-right-radius: 8px
+  //max-height: 200px
+  //overflow: hidden
+  //overflow-y: scroll
+
+  li
+    button
+      margin: 0
+      height: 100%
+      width: 100%
+      padding: 8px 10px
+      font-size: 13px
+      cursor: pointer
+      background: transparent
+      border: none
+      text-align: left
+      display: flex
+      align-items: center
+
+      img
+        width: 14px
+        height: 15px
+        margin-right: 4px
+
+    &:hover, &.active
+      background-color: #f2f3f5
+
+    &:last-of-type
+      border-bottom-left-radius: 8px
+      border-bottom-right-radius: 8px
+
 .dropdown
   display: block
 
@@ -89,44 +131,14 @@
       opacity: .5
       cursor: default
 
-    .optionsList
-      position: absolute
-      background-color: #FFFFFF
-      box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
-      border: 1px solid #e0e0e0
-      list-style: none
-      padding: 0
-      width: 100%
-      z-index: 405
-      top: 35px
-      border-bottom-left-radius: 8px
-      border-bottom-right-radius: 8px
-      max-height: 200px
-      overflow: hidden
-      overflow-y: scroll
-
-      li
-        button
-          margin: 0
-          height: 100%
-          width: 100%
-          padding: 8px 10px
-          font-size: 13px
-          cursor: pointer
-          background: transparent
-          border: none
-          text-align: left
-          display: flex
-          align-items: center
-
-          img
-            width: 14px
-            height: 15px
-            margin-right: 4px
-
-        &:hover, &.active
-          background-color: #f2f3f5
-
-        &:last-of-type
-          border-bottom-left-radius: 8px
-          border-bottom-right-radius: 8px
+  .optionsList
+    position: absolute
+    background-color: #FFFFFF
+    box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
+    border: 1px solid #e0e0e0
+    top: 35px
+    border-bottom-left-radius: 8px
+    border-bottom-right-radius: 8px
+    max-height: 200px
+    overflow: hidden
+    overflow-y: scroll

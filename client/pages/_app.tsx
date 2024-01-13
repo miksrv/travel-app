@@ -17,6 +17,7 @@ import { wrapper } from '@/api/store'
 // https://setproduct.com/material-x
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
 // https://account.travel/things-to-do/california
+// https://dtf.ru/life/2419947-dvachery-doveli-do-suicida-eshe-odnogo-niderlandah-sovershil-suicid-anton-babkin-antonina-babkina
 
 export const SITE_NAME = 'Название сайта'
 

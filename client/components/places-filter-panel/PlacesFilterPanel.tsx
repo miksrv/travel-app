@@ -1,7 +1,8 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useState } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
-import Dropdown from '@/ui/dropdown'
+import Dropdown, { DropdownOptions } from '@/ui/dropdown'
+import OptionsList from '@/ui/dropdown/OptionsList'
 
 import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
@@ -9,6 +10,7 @@ import { ApiTypes } from '@/api/types'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
+import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -17,16 +19,14 @@ interface PlacesFilterPanelProps {
     order?: ApiTypes.SortOrder
     location?: ApiTypes.PlaceLocationType
     category?: string | null
-    onChange?: (key: keyof PlacesFilterType, value: string | number) => void
+    onChange?: (
+        key: keyof PlacesFilterType,
+        value: string | number | undefined
+    ) => void
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
-type SortOptionsProps = {
-    key: ApiTypes.SortFields
-    value: string
-}
-
-const SortOptions: SortOptionsProps[] = [
+const sortOptions: DropdownOptions[] = [
     {
         key: ApiTypes.SortFields.Views,
         value: 'Просмотры'
@@ -53,6 +53,17 @@ const SortOptions: SortOptionsProps[] = [
     }
 ]
 
+const orderOptions: DropdownOptions[] = [
+    {
+        key: ApiTypes.SortOrder.ASC,
+        value: 'По возрастанию'
+    },
+    {
+        key: ApiTypes.SortOrder.DESC,
+        value: 'По убыванию'
+    }
+]
+
 const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const { sort, order, location, category, onChange, onChangeLocation } =
         props
@@ -62,14 +73,22 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const [searchAddress, { data: addressData, isLoading: addressLoading }] =
         API.useAddressGetSearchMutation()
 
-    const handleChangeSort = (value: ApiTypes.SortFields) =>
-        onChange?.('sort', value)
+    const [openCategory, setOpenCategory] = useState<boolean>(false)
 
-    const handleChangeOrder = (value: ApiTypes.SortOrder) =>
-        onChange?.('order', value)
+    const handleChangeSort = (value: DropdownOptions | undefined) =>
+        onChange?.('sort', value?.key)
 
-    const handleChangeCategory = (value: string) =>
-        onChange?.('category', value)
+    const handleChangeOrder = (value: DropdownOptions | undefined) =>
+        onChange?.('order', value?.key)
+
+    const handleChangeCategory = (value: DropdownOptions | undefined) => {
+        onChange?.('category', value?.key)
+        setOpenCategory(false)
+    }
+
+    const handleOpenOptionsCategory = () => {
+        setOpenCategory(true)
+    }
 
     const handleSearchLocation = (value: string) => {
         if (value.length >= 3) {
@@ -77,7 +96,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
         }
     }
 
-    const AutocompleteData = useMemo(
+    const categoryOptions = useMemo(
+        () =>
+            categoryData?.items?.map((item) => ({
+                image: categoryImage(item.name),
+                key: item.name,
+                value: item.title
+            })),
+        [categoryData?.items]
+    )
+
+    const locationOptions = useMemo(
         () => [
             ...(addressData?.countries?.map((item) => ({
                 key: item.id,
@@ -105,52 +134,52 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     return (
         <div className={styles.component}>
-            <Dropdown
-                label={'Сортировка мест'}
-                value={sort}
-                options={SortOptions.map((item) => item)}
-                onSelect={handleChangeSort}
-            />
+            {openCategory && (
+                <OptionsList
+                    options={categoryOptions}
+                    onSelect={handleChangeCategory}
+                />
+            )}
 
-            <Dropdown
-                label={'Порядок сортировки'}
-                value={order}
-                options={[
-                    {
-                        key: ApiTypes.SortOrder.ASC,
-                        value: 'По возрастанию'
-                    },
-                    {
-                        key: ApiTypes.SortOrder.DESC,
-                        value: 'По убыванию'
-                    }
-                ]}
-                onSelect={handleChangeOrder}
-            />
+            {!openCategory && (
+                <>
+                    <Dropdown
+                        label={'Сортировка мест'}
+                        value={sortOptions?.find(({ key }) => key === sort)}
+                        options={sortOptions}
+                        onSelect={handleChangeSort}
+                    />
 
-            <Dropdown
-                clearable={true}
-                value={category}
-                label={'Фильтровать по категории'}
-                placeholder={'Выберите категорию'}
-                options={categoryData?.items?.map((item) => ({
-                    image: categoryImage(item.name),
-                    key: item.name,
-                    value: item.title
-                }))}
-                onSelect={handleChangeCategory}
-            />
+                    <Dropdown
+                        label={'Порядок сортировки'}
+                        value={orderOptions?.find(({ key }) => key === order)}
+                        options={orderOptions}
+                        onSelect={handleChangeOrder}
+                    />
 
-            <Autocomplete
-                label={'Фильтровать по местоположению'}
-                placeholder={'Начните вводить название'}
-                clearable={true}
-                value={location}
-                loading={addressLoading}
-                options={AutocompleteData}
-                onSearch={handleSearchLocation}
-                onSelect={onChangeLocation}
-            />
+                    <Dropdown
+                        clearable={true}
+                        value={categoryOptions?.find(
+                            ({ key }) => key === category
+                        )}
+                        label={'Фильтровать по категории'}
+                        placeholder={'Выберите категорию'}
+                        onSelect={handleChangeCategory}
+                        onOpen={handleOpenOptionsCategory}
+                    />
+
+                    <Autocomplete
+                        label={'Фильтровать по местоположению'}
+                        placeholder={'Начните вводить название'}
+                        clearable={true}
+                        value={location}
+                        loading={addressLoading}
+                        options={locationOptions}
+                        onSearch={handleSearchLocation}
+                        onSelect={onChangeLocation}
+                    />
+                </>
+            )}
         </div>
     )
 }
