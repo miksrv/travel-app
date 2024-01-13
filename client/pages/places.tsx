@@ -81,6 +81,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     const geolocation = useGeolocation()
     const router = useRouter()
 
+    const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
 
     const initialFilter: PlacesFilterType = {
@@ -110,6 +111,8 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined
         }
 
+        setFiltersOptionsOpen(false)
+
         return await router.push('/places' + encodeQueryData(update))
     }
 
@@ -122,6 +125,10 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
             region: undefined
         }
         return await router.push('/places' + encodeQueryData(filter))
+    }
+
+    const handleOpenFilterOptions = () => {
+        setFiltersOptionsOpen(true)
     }
 
     const handleChangeLocation = async (
@@ -197,6 +204,10 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         setFiltersDialogOpen(false)
     }
 
+    const handleFiltersBackLink = () => {
+        setFiltersOptionsOpen(false)
+    }
+
     useEffect(() => {
         if (geolocation?.latitude && geolocation?.longitude) {
             introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
@@ -251,12 +262,15 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                 contentHeight={'306px'}
                 header={'Фильтры'}
                 open={filtersDialogOpen}
+                showBackLink={filtersOptionsOpen}
+                onBackClick={handleFiltersBackLink}
                 onCloseDialog={handleFiltersDialogClose}
             >
                 <PlacesFilterPanel
                     sort={sort}
                     order={order}
                     category={category}
+                    optionsOpen={filtersOptionsOpen}
                     location={
                         locationData && !locationUnset
                             ? {
@@ -267,6 +281,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                             : undefined
                     }
                     onChange={handleChangeFilter}
+                    onOpenOptions={handleOpenFilterOptions}
                     onChangeLocation={handleChangeLocation}
                 />
             </Dialog>

@@ -1,20 +1,10 @@
 @import ../../styles/variables
 
 .optionsList
-  //position: absolute
-  //background-color: #FFFFFF
-  //box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
-  //border: 1px solid #e0e0e0
   list-style: none
   padding: 0
   width: 100%
   z-index: 405
-  //top: 35px
-  //border-bottom-left-radius: 8px
-  //border-bottom-right-radius: 8px
-  //max-height: 200px
-  //overflow: hidden
-  //overflow-y: scroll
 
   li
     button
@@ -37,10 +27,6 @@
 
     &:hover, &.active
       background-color: #f2f3f5
-
-    &:last-of-type
-      border-bottom-left-radius: 8px
-      border-bottom-right-radius: 8px
 
 .dropdown
   display: block
@@ -137,8 +123,13 @@
     box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
     border: 1px solid #e0e0e0
     top: 35px
-    border-bottom-left-radius: 8px
-    border-bottom-right-radius: 8px
+    border-bottom-left-radius: $borderRadius
+    border-bottom-right-radius: $borderRadius
     max-height: 200px
     overflow: hidden
     overflow-y: scroll
+
+    li
+      &:last-of-type
+        border-bottom-left-radius: $borderRadius
+        border-bottom-right-radius: $borderRadius

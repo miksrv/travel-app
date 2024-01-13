@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
 import Dropdown, { DropdownOptions } from '@/ui/dropdown'
@@ -10,7 +10,6 @@ import { ApiTypes } from '@/api/types'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
-import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -19,10 +18,12 @@ interface PlacesFilterPanelProps {
     order?: ApiTypes.SortOrder
     location?: ApiTypes.PlaceLocationType
     category?: string | null
+    optionsOpen?: boolean
     onChange?: (
         key: keyof PlacesFilterType,
         value: string | number | undefined
     ) => void
+    onOpenOptions?: (open: boolean) => void
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
@@ -64,30 +65,56 @@ const orderOptions: DropdownOptions[] = [
     }
 ]
 
+type OpenedOptionsType = 'sort' | 'order' | 'category' | undefined
+
 const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
-    const { sort, order, location, category, onChange, onChangeLocation } =
-        props
+    const {
+        sort,
+        order,
+        location,
+        category,
+        optionsOpen,
+        onChange,
+        onOpenOptions,
+        onChangeLocation
+    } = props
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const [searchAddress, { data: addressData, isLoading: addressLoading }] =
         API.useAddressGetSearchMutation()
 
-    const [openCategory, setOpenCategory] = useState<boolean>(false)
+    const [openedOptions, setOpenedOptions] =
+        useState<OpenedOptionsType>(undefined)
 
-    const handleChangeSort = (value: DropdownOptions | undefined) =>
+    const handleChangeSort = (value: DropdownOptions | undefined) => {
         onChange?.('sort', value?.key)
+        setOpenedOptions(undefined)
+    }
 
-    const handleChangeOrder = (value: DropdownOptions | undefined) =>
+    const handleChangeOrder = (value: DropdownOptions | undefined) => {
         onChange?.('order', value?.key)
+        setOpenedOptions(undefined)
+    }
 
     const handleChangeCategory = (value: DropdownOptions | undefined) => {
         onChange?.('category', value?.key)
-        setOpenCategory(false)
+        setOpenedOptions(undefined)
+    }
+
+    const handleOpenSort = () => {
+        onOpenOptions?.(true)
+        setOpenedOptions('sort')
+    }
+
+    const handleOpenOrder = () => {
+        onOpenOptions?.(true)
+        setOpenedOptions('order')
     }
 
     const handleOpenOptionsCategory = () => {
-        setOpenCategory(true)
+        onOpenOptions?.(true)
+        setOpenedOptions('category')
     }
 
     const handleSearchLocation = (value: string) => {
@@ -132,36 +159,63 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
         [addressData]
     )
 
+    const selectedSort = sortOptions?.find(({ key }) => key === sort)
+    const selectedOrder = orderOptions?.find(({ key }) => key === order)
+    const selectedCategory = categoryOptions?.find(
+        ({ key }) => key === category
+    )
+
+    useEffect(() => {
+        if (!optionsOpen) {
+            setOpenedOptions(undefined)
+        }
+    }, [optionsOpen])
+
     return (
         <div className={styles.component}>
-            {openCategory && (
+            {openedOptions === 'sort' && (
                 <OptionsList
+                    selectedOption={selectedSort}
+                    options={sortOptions}
+                    onSelect={handleChangeSort}
+                />
+            )}
+
+            {openedOptions === 'order' && (
+                <OptionsList
+                    selectedOption={selectedOrder}
+                    options={orderOptions}
+                    onSelect={handleChangeOrder}
+                />
+            )}
+
+            {openedOptions === 'category' && (
+                <OptionsList
+                    selectedOption={selectedCategory}
                     options={categoryOptions}
                     onSelect={handleChangeCategory}
                 />
             )}
 
-            {!openCategory && (
+            {!openedOptions && (
                 <>
                     <Dropdown
                         label={'Сортировка мест'}
-                        value={sortOptions?.find(({ key }) => key === sort)}
-                        options={sortOptions}
+                        value={selectedSort}
                         onSelect={handleChangeSort}
+                        onOpen={handleOpenSort}
                     />
 
                     <Dropdown
                         label={'Порядок сортировки'}
-                        value={orderOptions?.find(({ key }) => key === order)}
-                        options={orderOptions}
+                        value={selectedOrder}
                         onSelect={handleChangeOrder}
+                        onOpen={handleOpenOrder}
                     />
 
                     <Dropdown
                         clearable={true}
-                        value={categoryOptions?.find(
-                            ({ key }) => key === category
-                        )}
+                        value={selectedCategory}
                         label={'Фильтровать по категории'}
                         placeholder={'Выберите категорию'}
                         onSelect={handleChangeCategory}

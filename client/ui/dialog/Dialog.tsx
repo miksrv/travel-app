@@ -1,20 +1,26 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import Icon from '@/ui/icon'
+
 import styles from './styles.module.sass'
 
 interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
-    contentHeight?: string
     header?: string
+    contentHeight?: string
+    showBackLink?: boolean
     children?: React.ReactNode
+    onBackClick?: () => void
     onCloseDialog?: () => void
 }
 
 const Dialog: React.FC<DialogProps> = ({
     open,
-    contentHeight,
     header,
+    contentHeight,
+    showBackLink,
     children,
+    onBackClick,
     onCloseDialog,
     ...props
 }) => {
@@ -70,8 +76,17 @@ const Dialog: React.FC<DialogProps> = ({
             className={styles.dialog}
             style={dialogStyle}
         >
-            {header && (
+            {(header || showBackLink) && (
                 <div className={styles.header}>
+                    {showBackLink && (
+                        <button
+                            className={styles.backLink}
+                            onClick={onBackClick}
+                        >
+                            <Icon name={'Left'} />
+                            <div>{'Назад'}</div>
+                        </button>
+                    )}
                     <h2>{header}</h2>
                 </div>
             )}
