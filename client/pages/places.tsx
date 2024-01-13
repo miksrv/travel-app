@@ -27,7 +27,7 @@ import { encodeQueryData } from '@/functions/helpers'
 
 const DEFAULT_SORT = ApiTypes.SortFields.Updated
 const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
-const POST_PER_PAGE = 16
+const POST_PER_PAGE = 15
 
 interface PlacesPageProps {
     country: number | null

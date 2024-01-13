@@ -1,7 +1,4 @@
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-
-import Icon from '@/ui/icon'
 
 import { useAppSelector } from '@/api/store'
 
@@ -10,7 +7,7 @@ import Header from '@/components/header'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
-import { menuItems } from './menu'
+import Menu from './Menu'
 import styles from './styles.module.sass'
 
 interface PageLayoutProps {
@@ -73,23 +70,15 @@ const PageLayout: React.FC<PageLayoutProps> = ({
                     sidebarOpen ? styles.opened : styles.closed
                 )}
             >
-                <menu className={styles.menu}>
-                    {menuItems.map((item) => (
-                        <li key={item.link}>
-                            <Link
-                                href={item.link}
-                                title={item.text}
-                                onClick={handleCloseOverlay}
-                            >
-                                {item.icon && <Icon name={item.icon} />}
-                                {item.text}
-                            </Link>
-                        </li>
-                    ))}
-                </menu>
+                <Menu onClick={handleCloseOverlay} />
             </aside>
-            <main className={styles.wrapper}>{children}</main>
-            <Footer />
+            <section className={styles.mainContainer}>
+                <aside className={styles.menubar}>
+                    <Menu />
+                    <Footer />
+                </aside>
+                <main className={styles.main}>{children}</main>
+            </section>
         </div>
     )
 }

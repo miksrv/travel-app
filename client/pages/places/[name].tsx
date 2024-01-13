@@ -5,14 +5,12 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
-import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Photo, Place } from '@/api/types'
 
-import styles from '@/components/header/styles.module.sass'
 import PageLayout from '@/components/page-layout'
 import PlaceDescription from '@/components/place/description'
 import PlaceHeader from '@/components/place/header'
@@ -22,7 +20,7 @@ import PlacesList from '@/components/places-list'
 
 import { formatDateUTC } from '@/functions/helpers'
 
-const NEAR_PLACES_COUNT = 4
+const NEAR_PLACES_COUNT = 3
 
 interface PlacePageProps {
     randomId?: string

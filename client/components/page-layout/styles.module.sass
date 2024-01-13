@@ -21,17 +21,59 @@ $sideBarWidth: 300px
     animation: none !important
     transition: none !important
 
+.menu
+    list-style: none
+    padding: 8px
+    margin: 15px 0 0 0
+
+    a
+        padding: 8px 16px
+        width: 100%
+        display: flex
+        min-height: 32px
+        align-items: center
+        border-radius: $borderRadius
+        color: $colorTextMain
+        text-decoration: none
+        font-size: 14px
+        font-weight: 400
+        transition: background-color .15s ease-out,opacity .15s ease-out
+
+        &:hover
+            background-color: #ebedf0
+
+        svg
+            fill: $colorLinkSvg
+            margin: -10px 10px -10px 0
+            width: 22px
+            height: 22px
+
 .component
     width: 100%
     margin: 0 auto
     position: relative
 
-    .wrapper
+    .mainContainer
+        display: flex
         max-width: $maxWidth
         margin: 0 auto
 
+        .menubar
+            width: 280px
+
+            .menu
+                margin: 15px 0 0 0
+                padding: 0
+
+                a
+                    padding: 0
+
+        .main
+            width: 100%
+            margin-bottom: 20px
+
     &.fullSize
-        .wrapper
+        .mainContainer
             max-width: 100%
 
     .overlay
@@ -46,12 +88,12 @@ $sideBarWidth: 300px
         &.hidden
             opacity: 0
             visibility: hidden
-        //animation: animation-fadeOut .32s ease
+            //animation: animation-fadeOut .32s ease
 
         &.displayed
             opacity: 1
             visibility: visible
-    //animation: animation-fadeIn .32s ease
+            //animation: animation-fadeIn .32s ease
 
     .sidebar
         position: absolute
@@ -65,35 +107,8 @@ $sideBarWidth: 300px
 
         &.opened
             left: 0
-        //animation: animation-sideBar-slideIn .32s ease
+            //animation: animation-sideBar-slideIn .32s ease
 
         &.closed
             left: -$sideBarWidth
-    //animation: animation-sideBar-slideOut .32s ease
-
-    .menu
-        list-style: none
-        padding: 8px
-        margin: 15px 0 0 0
-
-        a
-            padding: 8px 16px
-            width: 100%
-            display: flex
-            min-height: 32px
-            align-items: center
-            border-radius: $borderRadius
-            color: $colorTextMain
-            text-decoration: none
-            font-size: 15px
-            font-weight: 400
-            transition: background-color .15s ease-out,opacity .15s ease-out
-
-            &:hover
-                background-color: #ebedf0
-
-            svg
-                fill: $colorLinkSvg
-                margin: -10px 10px -10px 0
-                width: 22px
-                height: 22px
+            //animation: animation-sideBar-slideOut .32s ease
