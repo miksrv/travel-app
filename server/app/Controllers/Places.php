@@ -326,7 +326,7 @@ class Places extends ResourceController {
                 ->orderBy('id', 'RANDOM')
                 ->first();
 
-            $response['randomId'] = $placesData->id;
+                    $response['randomId'] = $placesData->id;
 
             return $this->respond((object) $response);
         } catch (Exception $e) {
