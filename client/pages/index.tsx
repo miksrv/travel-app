@@ -108,7 +108,7 @@ const IndexPage: NextPage = () => {
                     />
                 </header>
             </Container>
-            <Container style={{ height: 'calc(100vh - 150px)', padding: 0 }}>
+            <Container style={{ height: 'calc(100vh - 200px)', padding: 0 }}>
                 <InteractiveMap
                     storeMapPosition={true}
                     loading={isFetching}

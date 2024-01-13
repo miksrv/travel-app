@@ -59,7 +59,7 @@ $sideBarWidth: 300px
         margin: 0 auto
 
         .menubar
-            width: 280px
+            width: $menuBarWidth
 
             .menu
                 margin: 15px 0 0 0
@@ -71,6 +71,13 @@ $sideBarWidth: 300px
         .main
             width: 100%
             margin-bottom: 20px
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            .menubar
+                display: none
+
+            .main
+                margin: 0 10px
 
     &.fullSize
         .mainContainer

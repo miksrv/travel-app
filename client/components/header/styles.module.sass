@@ -34,6 +34,7 @@
         cursor: pointer
         opacity: .7
         transition: opacity .3s
+        display: none
 
         &:hover
             opacity: 1
@@ -49,6 +50,10 @@
         width: 24px
         fill: #818c99
 
+    @media only screen and (max-width: $mobileMaxWidth)
+        .hamburgerButton
+            display: block
+
     .rightSection
         margin-left: auto
         display: flex
@@ -63,6 +68,9 @@
     height: 34px
     display: flex
     align-items: center
+
+    @media only screen and (min-width: $mobileMaxWidth)
+        margin-left: calc($menuBarWidth - 55px)
 
     &:hover
         background-color: rgba(242, 243, 245, 0.6)

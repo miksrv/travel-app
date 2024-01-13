@@ -59,17 +59,17 @@ const Header: React.FC<HeaderProps> = ({
                     <Icon name={'Menu'} />
                 </button>
                 <Search />
-                {(randomPlaceId || randomPlaceQuery?.data?.id) && (
-                    <Link
-                        href={`/places/${
-                            randomPlaceId ?? randomPlaceQuery?.data?.id
-                        }`}
-                        title={'Перейти на случайное место'}
-                    >
-                        <Icon name={'Question'} />
-                    </Link>
-                )}
                 <div className={styles.rightSection}>
+                    {(randomPlaceId || randomPlaceQuery?.data?.id) && (
+                        <Link
+                            href={`/places/${
+                                randomPlaceId ?? randomPlaceQuery?.data?.id
+                            }`}
+                            title={'Перейти на случайное место'}
+                        >
+                            <Icon name={'Question'} />
+                        </Link>
+                    )}
                     <Link
                         href={'/login'}
                         title={'Авторизация на сайте'}
