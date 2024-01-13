@@ -60,21 +60,19 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
                 <Search />
                 {(randomPlaceId || randomPlaceQuery?.data?.id) && (
-                    <Button
-                        link={`/places/${
+                    <Link
+                        href={`/places/${
                             randomPlaceId ?? randomPlaceQuery?.data?.id
                         }`}
                         title={'Перейти на случайное место'}
-                        size={'m'}
-                        icon={'Question'}
-                        mode={'primary'}
-                    />
+                    >
+                        <Icon name={'Question'} />
+                    </Link>
                 )}
                 <div className={styles.rightSection}>
                     <Link
                         href={'/login'}
                         title={'Авторизация на сайте'}
-                        className={styles.user}
                     >
                         <Icon name={'UserCircle'} />
                     </Link>
