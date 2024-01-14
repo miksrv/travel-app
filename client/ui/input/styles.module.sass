@@ -1,0 +1,46 @@
+@import ../../styles/variables
+
+.input
+  display: block
+
+  .label
+    display: block
+    color: #6d7885
+    overflow: hidden
+    padding-bottom: 6px
+    padding-top: 2px
+    text-overflow: ellipsis
+    white-space: nowrap
+    font-size: 13px
+
+  .formField
+    font-size: 16px
+    line-height: 20px
+    position: relative
+    background-color: #f2f3f5
+    -webkit-tap-highlight-color: transparent
+    align-items: center
+    border-radius: $borderRadius
+    box-sizing: border-box
+    display: flex
+    font-family: -apple-system, system-ui, "Helvetica Neue", Roboto, sans-serif
+    border: 1px solid #e0e0e0
+
+    .input
+      appearance: none
+      background: transparent
+      border: 0
+      border-radius: inherit
+      box-shadow: none
+      box-sizing: border-box
+      color: #000
+      height: 36px
+      margin: 0
+      padding: 0 12px
+      position: relative
+      width: 100%
+      outline: none
+
+  [readonly]
+    cursor: default
+    color: rgba(0, 0, 0, 0.41) !important

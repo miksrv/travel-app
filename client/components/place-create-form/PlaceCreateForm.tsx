@@ -1,15 +1,17 @@
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
-import CardContent from '@mui/material/CardContent'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
 import { LatLng, LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
+
+import Dropdown from '@/ui/dropdown'
+import Input from '@/ui/input'
 
 import { API } from '@/api/api'
 import { login } from '@/api/authSlice'
@@ -21,6 +23,7 @@ import ContentEditor from '@/components/form-controllers/content-editor'
 import InputField from '@/components/form-controllers/input-field'
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
+import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
 
 import abandoned from '@/public/images/map-center.png'
@@ -39,8 +42,6 @@ export type LatLngCoordinate = {
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     const dispatch = useAppDispatch()
     const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
-    const [authLoginPost, { isLoading, data: authData }] =
-        API.useAuthPostLoginMutation()
 
     const geolocation = useGeolocation()
 
@@ -53,6 +54,8 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         { bounds: mapBounds },
         { skip: !mapBounds }
     )
+
+    const { data: categoryData } = API.useCategoriesGetListQuery()
 
     // const { data: geocoderData, isLoading: geocoderLoading } =
     //     API.useLocationGetGeocoderQuery(
@@ -81,15 +84,15 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         setFormState((prev) => ({ ...prev, [name]: value }))
     }
 
-    const handleLoginButton = () => {
-        if (formData) {
-            authLoginPost(formData)
-        }
-    }
-
-    useEffect(() => {
-        dispatch(login(authData))
-    }, [authData])
+    const categoryOptions = useMemo(
+        () =>
+            categoryData?.items?.map((item) => ({
+                image: categoryImage(item.name),
+                key: item.name,
+                value: item.title
+            })),
+        [categoryData?.items]
+    )
 
     useEffect(() => {
         const updateLatitude = round(geolocation?.latitude)
@@ -112,26 +115,20 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     return (
         <section>
-            <FormControl
-                variant={'standard'}
-                fullWidth={true}
-            >
-                <InputLabel
-                    shrink={true}
-                    htmlFor={'title'}
-                    sx={{ fontSize: '16px' }}
-                >
-                    {'Заголовок интересного места'}
-                </InputLabel>
-                <InputField
-                    name={'title'}
-                    id={'title'}
-                    placeholder={'Введите заголовок интересного места'}
-                    onChange={handleChange}
-                />
-            </FormControl>
+            <Input
+                label={'Заголовок интересного места'}
+                placeholder={'Введите заголовок интересного места'}
+                onChange={handleChange}
+            />
 
-            <CategorySelector />
+            <Dropdown
+                clearable={true}
+                // value={selectedCategory}
+                label={'Категория интересного места'}
+                placeholder={'Выберите категорию'}
+                options={categoryOptions}
+                // onSelect={}
+            />
 
             <Card sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}>
                 <Image
