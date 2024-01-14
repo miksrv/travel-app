@@ -40,7 +40,6 @@ export type LatLngCoordinate = {
 }
 
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
-    const dispatch = useAppDispatch()
     const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
 
     const geolocation = useGeolocation()
@@ -56,17 +55,6 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     )
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
-
-    // const { data: geocoderData, isLoading: geocoderLoading } =
-    //     API.useLocationGetGeocoderQuery(
-    //         {
-    //             lat: mapCenter?.lat,
-    //             lng: mapCenter?.lng
-    //         },
-    //         {
-    //             skip: !mapCenter?.lat || !mapCenter?.lng
-    //         }
-    //     )
 
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
@@ -192,16 +180,6 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             </Box>
 
             <TagsSelector onChangeTags={(tags) => console.log('tags', tags)} />
-
-            <Box sx={{ mt: 2 }}>
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    onClick={handleLoginButton}
-                >
-                    {'Добавить'}
-                </Button>
-            </Box>
         </section>
     )
 }
