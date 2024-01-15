@@ -8,7 +8,7 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-type DropdownOptions = {
+type DropdownOption = {
     key: string | number
     value: string
     type?: string
@@ -16,7 +16,7 @@ type DropdownOptions = {
 
 interface DropdownProps<T> {
     className?: string
-    options?: DropdownOptions[]
+    options?: DropdownOption[]
     loading?: boolean
     disabled?: boolean
     clearable?: boolean
@@ -45,7 +45,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
     const [localLoading, setLocaLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
-        DropdownOptions | undefined
+        DropdownOption | undefined
     >(undefined)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -74,7 +74,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         handleDebouncedSearch(value)
     }
 
-    const handleSelect = (option: DropdownOptions | undefined) => {
+    const handleSelect = (option: DropdownOption | undefined) => {
         if (selectedOption?.key !== option?.key) {
             setSelectedOption(option)
             setSearch(option?.value)

@@ -5,16 +5,16 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-type DropdownOptions = {
+type DropdownOption = {
     key: string | number
     value: React.ReactNode | string | number
     image?: StaticImageData
 }
 
 interface DropdownProps {
-    options?: DropdownOptions[]
-    selectedOption?: DropdownOptions
-    onSelect?: (selectedOption: DropdownOptions) => void
+    options?: DropdownOption[]
+    selectedOption?: DropdownOption
+    onSelect?: (selectedOption: DropdownOption) => void
 }
 
 const OptionsList: React.FC<DropdownProps> = ({

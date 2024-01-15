@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box'
-import Button from '@mui/material/Button'
 import Card from '@mui/material/Card'
 import FormControl from '@mui/material/FormControl'
 import InputLabel from '@mui/material/InputLabel'
@@ -10,11 +9,10 @@ import Image from 'next/image'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
-import Dropdown from '@/ui/dropdown'
+import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
 
 import { API } from '@/api/api'
-import { ApiTypes } from '@/api/types'
 
 import ContentEditor from '@/components/form-controllers/content-editor'
 import InputField from '@/components/form-controllers/input-field'
@@ -31,13 +29,19 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
+export type PlaceFormData = {
+    title?: string
+    content?: string
+    category?: string | number
+}
+
 export type LatLngCoordinate = {
     latitude: number
     longitude: number
 }
 
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
-    const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
+    const [formData, setFormState] = useState<PlaceFormData>()
 
     const geolocation = useGeolocation()
 
@@ -69,6 +73,10 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         setFormState((prev) => ({ ...prev, [name]: value }))
     }
 
+    const handleChangeCategory = (category?: DropdownOption) => {
+        setFormState({ ...formData, category: category?.key })
+    }
+
     const categoryOptions = useMemo(
         () =>
             categoryData?.items?.map((item) => ({
@@ -77,6 +85,10 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                 value: item.title
             })),
         [categoryData?.items]
+    )
+
+    const selectedCategory = categoryOptions?.find(
+        ({ key }) => key === formData?.category
     )
 
     useEffect(() => {
@@ -108,26 +120,28 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
             <Dropdown
                 clearable={true}
-                // value={selectedCategory}
+                value={selectedCategory}
                 label={'Категория интересного места'}
                 placeholder={'Выберите категорию'}
                 options={categoryOptions}
-                // onSelect={}
+                onSelect={handleChangeCategory}
             />
 
             <Card sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}>
-                <Image
-                    style={{
-                        left: '48.1%',
-                        position: 'absolute',
-                        top: '43.8%',
-                        zIndex: 10000
-                    }}
-                    src={abandoned}
-                    alt={''}
-                    width={32}
-                    height={32}
-                />
+                {selectedCategory && (
+                    <Image
+                        style={{
+                            left: '48.1%',
+                            position: 'absolute',
+                            top: '43.8%',
+                            zIndex: 401
+                        }}
+                        src={categoryImage(selectedCategory.key)?.src}
+                        alt={''}
+                        width={22}
+                        height={25}
+                    />
+                )}
                 <InteractiveMap
                     storeMapPosition={false}
                     places={poiListData?.items}

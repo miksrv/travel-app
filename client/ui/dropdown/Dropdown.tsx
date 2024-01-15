@@ -8,7 +8,7 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-export type DropdownOptions = {
+export type DropdownOption = {
     key: string | number
     value: React.ReactNode | string | number
     image?: StaticImageData
@@ -16,13 +16,13 @@ export type DropdownOptions = {
 
 interface DropdownProps<T> {
     className?: string
-    options?: DropdownOptions[]
+    options?: DropdownOption[]
     disabled?: boolean
     clearable?: boolean
     placeholder?: string
     label?: string
     value?: T
-    onSelect?: (selectedOption: DropdownOptions | undefined) => void
+    onSelect?: (selectedOption: DropdownOption | undefined) => void
     onOpen?: () => void
 }
 
@@ -41,7 +41,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
-        DropdownOptions | undefined
+        DropdownOption | undefined
     >(undefined)
     const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -53,7 +53,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         }
     }
 
-    const handleSelect = (option: DropdownOptions | undefined) => {
+    const handleSelect = (option: DropdownOption | undefined) => {
         if (selectedOption?.key !== option?.key) {
             setSelectedOption(option)
             onSelect?.(option ?? undefined)

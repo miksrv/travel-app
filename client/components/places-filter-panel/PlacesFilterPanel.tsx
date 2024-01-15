@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
-import Dropdown, { DropdownOptions } from '@/ui/dropdown'
+import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
 import { API } from '@/api/api'
@@ -27,7 +27,7 @@ interface PlacesFilterPanelProps {
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
-const sortOptions: DropdownOptions[] = [
+const sortOptions: DropdownOption[] = [
     {
         key: ApiTypes.SortFields.Views,
         value: 'Просмотры'
@@ -54,7 +54,7 @@ const sortOptions: DropdownOptions[] = [
     }
 ]
 
-const orderOptions: DropdownOptions[] = [
+const orderOptions: DropdownOption[] = [
     {
         key: ApiTypes.SortOrder.ASC,
         value: 'По возрастанию'
@@ -87,17 +87,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
 
-    const handleChangeSort = (value: DropdownOptions | undefined) => {
+    const handleChangeSort = (value: DropdownOption | undefined) => {
         onChange?.('sort', value?.key)
         setOpenedOptions(undefined)
     }
 
-    const handleChangeOrder = (value: DropdownOptions | undefined) => {
+    const handleChangeOrder = (value: DropdownOption | undefined) => {
         onChange?.('order', value?.key)
         setOpenedOptions(undefined)
     }
 
-    const handleChangeCategory = (value: DropdownOptions | undefined) => {
+    const handleChangeCategory = (value: DropdownOption | undefined) => {
         onChange?.('category', value?.key)
         setOpenedOptions(undefined)
     }
