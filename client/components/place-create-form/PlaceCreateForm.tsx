@@ -23,6 +23,8 @@ import { round } from '@/functions/helpers'
 
 import abandoned from '@/public/images/map-center.png'
 
+import styles from './styles.module.sass'
+
 interface LoginFormProps {}
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
@@ -111,31 +113,30 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <section>
-            <Input
-                label={'Заголовок интересного места'}
-                placeholder={'Введите заголовок интересного места'}
-                onChange={handleChange}
-            />
+        <section className={styles.component}>
+            <div className={styles.formElement}>
+                <Input
+                    label={'Заголовок интересного места'}
+                    placeholder={'Введите заголовок интересного места'}
+                    onChange={handleChange}
+                />
+            </div>
 
-            <Dropdown
-                clearable={true}
-                value={selectedCategory}
-                label={'Категория интересного места'}
-                placeholder={'Выберите категорию'}
-                options={categoryOptions}
-                onSelect={handleChangeCategory}
-            />
+            <div className={styles.formElement}>
+                <Dropdown
+                    clearable={true}
+                    value={selectedCategory}
+                    label={'Категория интересного места'}
+                    placeholder={'Выберите категорию'}
+                    options={categoryOptions}
+                    onSelect={handleChangeCategory}
+                />
+            </div>
 
-            <Card sx={{ height: '260px', mb: 2, mt: 2, position: 'relative' }}>
+            <div className={styles.mapContainer}>
                 {selectedCategory && (
                     <Image
-                        style={{
-                            left: '48.1%',
-                            position: 'absolute',
-                            top: '43.8%',
-                            zIndex: 401
-                        }}
+                        className={styles.categoryImage}
                         src={categoryImage(selectedCategory.key)?.src}
                         alt={''}
                         width={22}
@@ -155,42 +156,31 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                             : undefined
                     }
                 />
-            </Card>
+            </div>
 
-            <FormControl
-                variant={'standard'}
-                fullWidth={true}
-            >
-                <InputLabel
-                    shrink={true}
-                    htmlFor={'title'}
-                    sx={{ fontSize: '16px' }}
-                >
-                    {'Адрес интересного места'}
-                </InputLabel>
-                <InputField
-                    name={'address'}
-                    id={'address'}
-                    placeholder={'Адрес может быть определен автоматически'}
+            <div className={styles.formElement}>
+                <Input
+                    label={'Адрес'}
+                    placeholder={
+                        'Адрес интересного места будет определен автоматически'
+                    }
                     onChange={handleChange}
                 />
-            </FormControl>
+            </div>
 
-            <Box sx={{ mt: 2 }}>
-                <InputLabel
-                    shrink={true}
-                    htmlFor={'title'}
-                    sx={{ fontSize: '16px' }}
-                >
-                    {'Описание интересного места'}
-                </InputLabel>
+            <div className={styles.formElement}>
+                <label>{'Описание'}</label>
                 <ContentEditor
                     markdown={' '}
                     onChange={setEditorContent}
                 />
-            </Box>
+            </div>
 
-            <TagsSelector onChangeTags={(tags) => console.log('tags', tags)} />
+            <div className={styles.formElement}>
+                <TagsSelector
+                    onChangeTags={(tags) => console.log('tags', tags)}
+                />
+            </div>
         </section>
     )
 }
