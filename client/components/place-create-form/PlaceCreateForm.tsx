@@ -1,7 +1,3 @@
-import Box from '@mui/material/Box'
-import Card from '@mui/material/Card'
-import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
 import { LatLng, LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
@@ -15,13 +11,10 @@ import Input from '@/ui/input'
 import { API } from '@/api/api'
 
 import ContentEditor from '@/components/form-controllers/content-editor'
-import InputField from '@/components/form-controllers/input-field'
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
 import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
-
-import abandoned from '@/public/images/map-center.png'
 
 import styles from './styles.module.sass'
 
