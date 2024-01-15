@@ -1,10 +1,7 @@
-import Card from '@mui/material/Card'
-import CardHeader from '@mui/material/CardHeader'
 import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
-import Button from '@/ui/button'
 import Container from '@/ui/container'
 
 import PageLayout from '@/components/page-layout'
@@ -14,7 +11,7 @@ import Breadcrumbs from '../../ui/breadcrumbs'
 
 const PAGE_TITLE = 'Добавить интересное место'
 
-const MapPage: NextPage = () => {
+const CreatePlacePage: NextPage = () => {
     return (
         <PageLayout>
             <NextSeo title={PAGE_TITLE} />
@@ -36,31 +33,7 @@ const MapPage: NextPage = () => {
                 <PlaceCreateForm />
             </Container>
         </PageLayout>
-
-        // <PageLayout>
-        //     <NextSeo title={PAGE_TITLE} />
-        //     <Card sx={{ mb: 2 }}>
-        //         <CardHeader
-        //             title={PAGE_TITLE}
-        //             titleTypographyProps={{ component: 'h1' }}
-        //             subheader={
-        //                 <Breadcrumbs
-        //                     currentPage={'Добавить новое'}
-        //                     links={[
-        //                         {
-        //                             link: '/places/',
-        //                             text: 'Интересные места'
-        //                         }
-        //                     ]}
-        //                 />
-        //             }
-        //             sx={{ mb: -1, mt: -1 }}
-        //         />
-        //     </Card>
-        //
-        //     <PlaceCreateForm />
-        // </PageLayout>
     )
 }
 
-export default MapPage
+export default CreatePlacePage
