@@ -14,11 +14,8 @@ import Dropdown from '@/ui/dropdown'
 import Input from '@/ui/input'
 
 import { API } from '@/api/api'
-import { login } from '@/api/authSlice'
-import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import CategorySelector from '@/components/form-controllers/category-selector'
 import ContentEditor from '@/components/form-controllers/content-editor'
 import InputField from '@/components/form-controllers/input-field'
 import TagsSelector from '@/components/form-controllers/tags-selector'
