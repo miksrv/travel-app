@@ -11,7 +11,7 @@ import { Address, Tag } from '@/api/types/Place'
 
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
-import ContentEditor from '../../form-controllers/content-editor'
+import ContentEditor from '../../../ui/content-editor'
 import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {

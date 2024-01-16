@@ -54,7 +54,7 @@
       align-items: center
       border-radius: $borderRadius
       box-sizing: border-box
-      border: 1px solid #e0e0e0
+      border: 0.5px solid #cbcccd
       color: #6d7885
       height: 36px
       margin: 0
@@ -64,7 +64,9 @@
       justify-content: space-between
 
       &:focus, &:active, &:hover
-        border-color: #c2c2c2
+        outline: none
+        border-color: #1976d2
+        box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
         color: #000

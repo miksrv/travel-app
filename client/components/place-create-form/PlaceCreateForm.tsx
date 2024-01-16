@@ -5,12 +5,12 @@ import Image from 'next/image'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
 
 import { API } from '@/api/api'
 
-import ContentEditor from '@/components/form-controllers/content-editor'
 import TagsSelector from '@/components/form-controllers/tags-selector'
 
 import { categoryImage } from '@/functions/categories'

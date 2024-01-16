@@ -24,12 +24,11 @@
     box-sizing: border-box
     display: flex
     font-family: -apple-system, system-ui, "Helvetica Neue", Roboto, sans-serif
-    border: 1px solid #e0e0e0
 
     .input
       appearance: none
       background: transparent
-      border: 0
+      border: 0.5px solid #cbcccd
       border-radius: inherit
       box-shadow: none
       box-sizing: border-box
@@ -40,6 +39,11 @@
       position: relative
       width: 100%
       outline: none
+
+      &:focus, &:active
+        outline: none
+        border-color: #1976d2
+        box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
   [readonly]
     cursor: default
