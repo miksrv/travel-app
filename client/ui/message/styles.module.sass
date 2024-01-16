@@ -1,0 +1,29 @@
+@import ../../styles/variables
+
+.message
+  width: 100%
+  padding: 8px 12px
+  position: relative
+  border-radius: $borderRadius
+  margin-bottom: 15px
+
+  p
+    width: 100%
+    display: block
+
+  ul
+    list-style: inherit
+    margin-left: 20px
+
+  .title
+    margin: 0 0 5px
+    font-weight: 600
+
+  .content
+    margin: 0
+
+  &.negative
+    background-color: #faebeb
+
+    p, li
+      color: #e64646

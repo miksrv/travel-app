@@ -10,6 +10,7 @@ import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
+import Message from '@/ui/message'
 
 import { API } from '@/api/api'
 
@@ -152,6 +153,14 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     return (
         <section className={styles.component}>
+            {(formErrors?.title || formErrors?.category) && (
+                <Message
+                    type={'negative'}
+                    title={'Исправте ошибки'}
+                    list={[formErrors?.title || '', formErrors?.category || '']}
+                />
+            )}
+
             <div className={styles.formElement}>
                 <Input
                     name={'title'}
