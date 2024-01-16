@@ -5,6 +5,12 @@ import { Photo } from './Photo'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { User } from './User'
 
+/** General Types **/
+export type LatLngCoordinate = {
+    latitude: number
+    longitude: number
+}
+
 export type DateTimeType = {
     date: string
     timezone_type: number
@@ -100,6 +106,18 @@ export interface RequestPlacesPatchItem {
 
 export interface ResponsePlacesPatchItem {
     status: boolean
+}
+
+export interface RequestPlacesPostItem {
+    title?: string
+    content?: string
+    category?: string
+    tags?: string[]
+    coordinates?: LatLngCoordinate
+}
+
+export interface ResponsePlacesPostItem {
+    id: string
 }
 
 /* Controller: Photos */

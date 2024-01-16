@@ -193,6 +193,17 @@ export const API = createApi({
                 url: `places/${data.id}`
             })
         }),
+        placesPostItem: builder.mutation<
+            ApiTypes.ResponsePlacesPostItem,
+            ApiTypes.RequestPlacesPostItem
+        >({
+            invalidatesTags: [{ type: 'Places' }, { type: 'Activity' }],
+            query: (data) => ({
+                body: data,
+                method: 'POST',
+                url: 'places'
+            })
+        }),
 
         /* Controller: POI */
         poiGetItem: builder.mutation<any, string>({

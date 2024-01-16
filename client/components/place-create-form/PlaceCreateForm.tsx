@@ -2,6 +2,8 @@ import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
@@ -13,6 +15,7 @@ import Input from '@/ui/input'
 import Message from '@/ui/message'
 
 import { API } from '@/api/api'
+import { ApiTypes } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
@@ -25,29 +28,18 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-export type PlaceFormData = {
-    title?: string
-    content?: string
-    category?: string | number
-    tags?: string[]
-    coordinates?: LatLngCoordinate
-}
-
 export type PlaceFormErrors = {
     title?: string
     category?: string
 }
 
-export type LatLngCoordinate = {
-    latitude: number
-    longitude: number
-}
-
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
+    const router = useRouter()
     const geolocation = useGeolocation()
 
-    const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
-    const [formData, setFormData] = useState<PlaceFormData>()
+    const [myCoordinates, setMyCoordinates] =
+        useState<ApiTypes.LatLngCoordinate>()
+    const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
     const [mapBounds, setMapBounds] = useState<string>()
 
@@ -60,6 +52,11 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
 
+    const [
+        createPlace,
+        { data: createPlaceData, isLoading: createPlaceLoading }
+    ] = API.usePlacesPostItemMutation()
+
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const handleChange = ({
@@ -69,7 +66,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     }
 
     const handleChangeCategory = (category?: DropdownOption) => {
-        setFormData({ ...formData, category: category?.key })
+        setFormData({ ...formData, category: String(category?.key) })
     }
 
     const handleMapBounds = (bounds: LatLngBounds) => {
@@ -106,8 +103,8 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
         setFormErrors(errors)
 
-        if (errors.title || errors.category) {
-            console.log('handleSubmit', formData)
+        if (!errors.title && !errors.category) {
+            createPlace({ ...formData })
         }
     }
 
@@ -150,6 +147,12 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             introduce({ lat: updateLatitude, lon: updateLongitude })
         }
     }, [geolocation.latitude, geolocation.longitude])
+
+    useEffect(() => {
+        if (createPlaceData?.id) {
+            router.push(`/places/${createPlaceData.id}`)
+        }
+    }, [createPlaceData])
 
     return (
         <section className={styles.component}>

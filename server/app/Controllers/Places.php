@@ -2,6 +2,7 @@
 
 use App\Entities\Place;
 use App\Entities\TranslationPlace;
+use App\Libraries\Geocoder;
 use App\Libraries\PlaceTags;
 use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
@@ -16,6 +17,7 @@ use App\Models\UsersBookmarksModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Geocoder\Exception\Exception;
 use ReflectionException;
 
 class Places extends ResourceController {
@@ -334,6 +336,58 @@ class Places extends ResourceController {
 
             return $this->failNotFound();
         }
+    }
+
+    /**
+     * Create new place
+     * @return ResponseInterface
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function create(): ResponseInterface {
+        $session = new Session();
+        $input   = $this->request->getJSON();
+
+        $placeTags      = new PlaceTags();
+        $placesModel    = new PlacesModel();
+        $userActivity = new UserActivity();
+
+        $geocoder = new Geocoder($input->coordinates->latitude, $input->coordinates->longitude);
+        $place    = new \App\Entities\Place();
+
+        $placeTitle   = strip_tags(html_entity_decode($input->title));
+        $placeContent = strip_tags(html_entity_decode($input->content));
+
+        $place->latitude         = $input->coordinates->latitude;
+        $place->longitude        = $input->coordinates->longitude;
+        $place->user_id          = $session->userId;
+        $place->category         = $input->category;
+        $place->address          = $geocoder->address;
+        $place->address_country  = $geocoder->countryID;
+        $place->address_region   = $geocoder->regionID;
+        $place->address_district = $geocoder->districtID;
+        $place->address_city     = $geocoder->cityID;
+
+        $placesModel->insert($place);
+
+        $newPlaceId = $placesModel->getInsertID();
+
+        $placeTags->saveTags($input->tags, $newPlaceId);
+
+        $translationsPlacesModel = new TranslationsPlacesModel();
+
+        $translation = new \App\Entities\TranslationPlace();
+        $translation->place_id   = $newPlaceId;
+        $translation->language   = 'ru';
+        $translation->user_id    = $session->userId;
+        $translation->title      = $placeTitle;
+        $translation->content    = $placeContent;
+
+        $translationsPlacesModel->insert($translation);
+
+        $userActivity->place($newPlaceId);
+
+        return $this->respondCreated((object) ['id' => $newPlaceId]);
     }
 
     /**
