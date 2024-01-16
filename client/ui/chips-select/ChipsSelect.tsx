@@ -60,6 +60,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
                 onSelect?.([...(value || []), search])
             }
 
+            setIsOpen(false)
             setSearch(undefined)
         }
     }

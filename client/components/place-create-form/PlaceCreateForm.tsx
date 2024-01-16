@@ -1,18 +1,17 @@
-import { LatLng, LatLngBounds } from 'leaflet'
+import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
 
 import { API } from '@/api/api'
-
-import TagsSelector from '@/components/form-controllers/tags-selector'
 
 import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
@@ -30,6 +29,12 @@ export type PlaceFormData = {
     content?: string
     category?: string | number
     tags?: string[]
+    coordinates?: LatLngCoordinate
+}
+
+export type PlaceFormErrors = {
+    title?: string
+    category?: string
 }
 
 export type LatLngCoordinate = {
@@ -38,13 +43,12 @@ export type LatLngCoordinate = {
 }
 
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
-    const [formData, setFormState] = useState<PlaceFormData>()
-
     const geolocation = useGeolocation()
 
     const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
+    const [formData, setFormData] = useState<PlaceFormData>()
+    const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
     const [mapBounds, setMapBounds] = useState<string>()
-    const [mapCenter, setMapCenter] = useState<LatLng>()
 
     const [introduce] = API.useIntroduceMutation()
     const { data: poiListData } = API.usePoiGetListQuery(
@@ -57,28 +61,53 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
-    const debounceSetMapBounds = useCallback(
-        debounce((bounds: LatLngBounds) => {
-            setMapCenter(bounds.getCenter())
-            setMapBounds(bounds.toBBoxString())
-        }, 500),
-        []
-    )
-
-    const [editorContent, setEditorContent] = React.useState<string>(' ')
-
     const handleChange = ({
         target: { name, value }
     }: React.ChangeEvent<HTMLInputElement>) => {
-        setFormState((prev) => ({ ...prev, [name]: value }))
+        setFormData((prev) => ({ ...prev, [name]: value }))
     }
 
     const handleChangeCategory = (category?: DropdownOption) => {
-        setFormState({ ...formData, category: category?.key })
+        setFormData({ ...formData, category: category?.key })
+    }
+
+    const handleMapBounds = (bounds: LatLngBounds) => {
+        const mapCenter = bounds.getCenter()
+
+        setFormData({
+            ...formData,
+            coordinates: {
+                latitude: mapCenter.lat,
+                longitude: mapCenter.lng
+            }
+        })
+
+        debounceSetMapBounds(bounds)
     }
 
     const handleSelectTags = (value: string[]) => {
-        setFormState({ ...formData, tags: value })
+        setFormData({ ...formData, tags: value })
+    }
+
+    const handleContentChange = (text?: string) => {
+        setFormData({ ...formData, content: text || '' })
+    }
+
+    const handleSubmit = () => {
+        const errors: PlaceFormErrors = {
+            category: !formData?.category
+                ? 'Выберите одну из категорий'
+                : undefined,
+            title: !formData?.title
+                ? 'Введите заголовок интересного места'
+                : undefined
+        }
+
+        setFormErrors(errors)
+
+        if (errors.title || errors.category) {
+            console.log('handleSubmit', formData)
+        }
     }
 
     const categoryOptions = useMemo(
@@ -93,6 +122,13 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     const selectedCategory = categoryOptions?.find(
         ({ key }) => key === formData?.category
+    )
+
+    const debounceSetMapBounds = useCallback(
+        debounce((bounds: LatLngBounds) => {
+            setMapBounds(bounds.toBBoxString())
+        }, 500),
+        []
     )
 
     useEffect(() => {
@@ -118,8 +154,10 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         <section className={styles.component}>
             <div className={styles.formElement}>
                 <Input
+                    name={'title'}
                     label={'Заголовок интересного места'}
                     placeholder={'Введите заголовок интересного места'}
+                    error={formErrors?.title}
                     onChange={handleChange}
                 />
             </div>
@@ -127,11 +165,24 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             <div className={styles.formElement}>
                 <Dropdown
                     clearable={true}
-                    value={selectedCategory}
                     label={'Категория интересного места'}
                     placeholder={'Выберите категорию'}
+                    error={formErrors?.category}
+                    value={selectedCategory}
                     options={categoryOptions}
                     onSelect={handleChangeCategory}
+                />
+            </div>
+
+            <div className={styles.formElement}>
+                <ChipsSelect
+                    label={'Выберите или добавьте метки интересного места'}
+                    placeholder={''}
+                    value={formData?.tags}
+                    loading={searchLoading}
+                    options={searchResult?.items}
+                    onSearch={(value) => searchTags(value)}
+                    onSelect={handleSelectTags}
                 />
             </div>
 
@@ -148,7 +199,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                 <InteractiveMap
                     storeMapPosition={false}
                     places={poiListData?.items}
-                    onChangeBounds={debounceSetMapBounds}
+                    onChangeBounds={handleMapBounds}
                     userLatLng={
                         geolocation.latitude && geolocation.longitude
                             ? {
@@ -161,39 +212,20 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             </div>
 
             <div className={styles.formElement}>
-                <Input
-                    label={'Адрес'}
-                    placeholder={
-                        'Адрес интересного места будет определен автоматически'
-                    }
-                    onChange={handleChange}
-                />
-            </div>
-
-            <div className={styles.formElement}>
                 <label>{'Описание'}</label>
                 <ContentEditor
-                    markdown={' '}
-                    onChange={setEditorContent}
+                    markdown={formData?.content || ''}
+                    onChange={handleContentChange}
                 />
             </div>
 
-            <div className={styles.formElement}>
-                <TagsSelector
-                    onChangeTags={(tags) => console.log('tags', tags)}
-                />
-            </div>
-
-            <div className={styles.formElement}>
-                <ChipsSelect
-                    label={'Выберите или добавьте метки интересного места'}
-                    placeholder={''}
-                    value={formData?.tags}
-                    loading={searchLoading}
-                    options={searchResult?.items}
-                    onSearch={(value) => searchTags(value)}
-                    onSelect={handleSelectTags}
-                />
+            <div className={styles.formButtons}>
+                <Button
+                    mode={'primary'}
+                    onClick={handleSubmit}
+                >
+                    {'Сохранить'}
+                </Button>
             </div>
         </section>
     )

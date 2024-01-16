@@ -54,7 +54,9 @@
       align-items: center
       border-radius: $borderRadius
       box-sizing: border-box
-      border: 0.5px solid #cbcccd
+      border-width: 0.5px
+      border-style: solid
+      border-color: #cbcccd
       color: #6d7885
       height: 36px
       margin: 0
@@ -110,6 +112,11 @@
           &:hover
             fill: #3d434b
 
+  &.error
+    .dropdownButton
+      background-color: #faebeb
+      border-color: #e64646 !important
+
     &.open
       .dropdownButton
         border-bottom-left-radius: 0
@@ -128,6 +135,7 @@
     border-bottom-left-radius: $borderRadius
     border-bottom-right-radius: $borderRadius
     max-height: 200px
+    z-index: 405
     overflow: hidden
     overflow-y: scroll
 

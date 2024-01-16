@@ -28,7 +28,9 @@
     .input
       appearance: none
       background: transparent
-      border: 0.5px solid #cbcccd
+      border-width: 0.5px
+      border-style: solid
+      border-color: #cbcccd
       border-radius: inherit
       box-shadow: none
       box-sizing: border-box
@@ -44,6 +46,13 @@
         outline: none
         border-color: #1976d2
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
+
+  &.error
+    .formField
+      background-color: #faebeb
+
+      input
+        border-color: #e64646 !important
 
   [readonly]
     cursor: default

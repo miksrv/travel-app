@@ -21,6 +21,7 @@ interface DropdownProps<T> {
     clearable?: boolean
     placeholder?: string
     label?: string
+    error?: string
     value?: T
     onSelect?: (selectedOption: DropdownOption | undefined) => void
     onOpen?: () => void
@@ -35,6 +36,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         value,
         placeholder,
         label,
+        error,
         onSelect,
         onOpen
     } = props
@@ -95,7 +97,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
     return (
         <div
             ref={dropdownRef}
-            className={cn(className, styles.dropdown)}
+            className={cn(className, styles.dropdown, error && styles.error)}
         >
             {label && <label className={styles.label}>{label}</label>}
             <div
