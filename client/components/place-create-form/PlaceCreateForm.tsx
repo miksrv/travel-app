@@ -5,6 +5,7 @@ import Image from 'next/image'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
@@ -28,6 +29,7 @@ export type PlaceFormData = {
     title?: string
     content?: string
     category?: string | number
+    tags?: string[]
 }
 
 export type LatLngCoordinate = {
@@ -50,6 +52,9 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         { skip: !mapBounds }
     )
 
+    const [searchTags, { data: searchResult, isLoading: searchLoading }] =
+        API.useTagsGetSearchMutation()
+
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const debounceSetMapBounds = useCallback(
@@ -70,6 +75,10 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
 
     const handleChangeCategory = (category?: DropdownOption) => {
         setFormState({ ...formData, category: category?.key })
+    }
+
+    const handleSelectTags = (value: string[]) => {
+        setFormState({ ...formData, tags: value })
     }
 
     const categoryOptions = useMemo(
@@ -172,6 +181,18 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             <div className={styles.formElement}>
                 <TagsSelector
                     onChangeTags={(tags) => console.log('tags', tags)}
+                />
+            </div>
+
+            <div className={styles.formElement}>
+                <ChipsSelect
+                    label={'Выберите или добавьте метки интересного места'}
+                    placeholder={''}
+                    value={formData?.tags}
+                    loading={searchLoading}
+                    options={searchResult?.items}
+                    onSearch={(value) => searchTags(value)}
+                    onSelect={handleSelectTags}
                 />
             </div>
         </section>

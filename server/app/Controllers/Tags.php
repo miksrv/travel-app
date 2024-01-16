@@ -13,7 +13,7 @@ class Tags extends ResourceController {
         $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
 
         $tagsModel = new TagsModel();
-        $tagsData  = $tagsModel->like('title', $search)->findAll();
+        $tagsData  = $tagsModel->like('title', $search)->findAll(10);
         $response  = [];
 
         if ($tagsData) {

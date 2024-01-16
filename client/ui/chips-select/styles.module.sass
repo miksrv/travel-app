@@ -1,6 +1,6 @@
 @import ../../styles/variables
 
-.autocomplete
+.chipsSelect
   display: block
 
   .label
@@ -31,19 +31,24 @@
       box-sizing: border-box
       border: 0.5px solid #cbcccd
       color: $colorTextMain
-      height: 36px
+      min-height: 36px
       margin: 0
-      padding: 0 12px 0 0
+      padding: 0 12px 0 2px
+      //justify-content: space-between
       display: flex
-      justify-content: space-between
+      flex-grow: 1
+      flex-shrink: 1
+      flex-wrap: wrap
 
       .searchInput
         background: transparent
         border: none
         outline: none
-        width: 90%
         height: inherit
         padding-left: 12px
+        flex: 1
+        flex-direction: column
+        justify-content: center
 
       &:focus, &:active, &:hover
         outline: none
@@ -143,3 +148,28 @@
 
       .emptyItem
         padding: 8px 10px
+
+.chip
+  display: inline-flex
+  margin: 2px
+  border-radius: $borderRadius
+  box-sizing: border-box
+  border: 0.5px solid rgba(0, 0, 0, 0.08)
+  background: #ffffff
+  align-items: center
+  height: 28px
+
+  .text
+    overflow: hidden
+    padding-left: 8px
+
+  .close
+    border: none
+    background: none
+    cursor: pointer
+
+    svg
+      width: 16px
+      height: 16px
+      fill: #99a2ad
+      vertical-align: middle
