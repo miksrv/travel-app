@@ -14,8 +14,7 @@ import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch } from '@/api/store'
-import { wrapper } from '@/api/store'
+import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
@@ -292,7 +291,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
-            const locale = context.locale ?? 'en'
+            const locale = context.locale ?? 'ru'
 
             const country =
                 parseInt(context.query.country as string, 10) || null

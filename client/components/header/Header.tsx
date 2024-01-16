@@ -1,7 +1,6 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 
-import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
@@ -9,6 +8,7 @@ import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import Search from '@/components/header/Search'
+import LanguageSwitcher from '@/components/language-switcher'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -60,6 +60,7 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
                 <Search />
                 <div className={styles.rightSection}>
+                    <LanguageSwitcher />
                     {(randomPlaceId || randomPlaceQuery?.data?.id) && (
                         <Link
                             href={`/places/${

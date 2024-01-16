@@ -1,4 +1,5 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
+import { i18n } from 'next-i18next'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
@@ -23,6 +24,13 @@ export const API = createApi({
             if (token) {
                 headers.set('Authorization', token)
             }
+
+            /**
+             * Get locale on API side:
+             * $this->request->header('Locale')
+             */
+
+            headers.set('Locale', i18n?.language || 'ru')
 
             return headers
         }
