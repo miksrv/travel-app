@@ -5,7 +5,7 @@ import React from 'react'
 import Container from '@/ui/container'
 
 import PageLayout from '@/components/page-layout'
-import PlaceCreateForm from '@/components/place-create-form'
+import PlaceCreateForm from '@/components/place-form'
 
 import Breadcrumbs from '../../ui/breadcrumbs'
 

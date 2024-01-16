@@ -1,7 +1,7 @@
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
@@ -23,6 +23,14 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
+type PlaceAddressTypes = 'country' | 'region' | 'district' | 'city'
+
+type PlaceAddress = {
+    id?: number
+    name?: string
+    type: PlaceAddressTypes
+}
+
 interface PlaceInformationProps {
     place?: Place
     ratingValue?: number | null
@@ -40,6 +48,28 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
 
     const [changeRating, { isLoading: ratingLoading }] =
         API.useRatingPutScoreMutation()
+
+    const placeAddress: PlaceAddress[] = useMemo(() => {
+        const addressTypes: PlaceAddressTypes[] = [
+            'country',
+            'region',
+            'district',
+            'city'
+        ]
+        let address: PlaceAddress[] = []
+
+        addressTypes.forEach((type) => {
+            if (place?.address?.[type]?.id) {
+                address.push({
+                    id: place.address[type]?.id,
+                    name: place.address[type]?.name,
+                    type
+                })
+            }
+        })
+
+        return address
+    }, [place?.address])
 
     // const iWasHere = useMemo(
     //     () =>
@@ -148,56 +178,21 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                     <Icon name={'Address'} />
                     <div className={styles.key}>{'Адрес:'}</div>
                     <div className={styles.value}>
-                        {place?.address?.country && (
-                            <Link
-                                color='inherit'
-                                href={`/places?country=${place?.address.country.id}`}
-                                title={`Интересные места: ${place?.address.country.name}`}
-                            >
-                                {place?.address.country.name}
-                            </Link>
-                        )}
-                        {place?.address?.region && (
+                        {placeAddress?.map((address, i) => (
                             <>
-                                {place?.address?.country && ', '}
                                 <Link
-                                    color='inherit'
-                                    href={`/places?region=${place?.address.region.id}`}
-                                    title={`Интересные места: ${place?.address.region.name}`}
+                                    key={`address${address.type}`}
+                                    href={`/places?${address.type}=${address.id}`}
+                                    title={`Интересные места: ${address.name}`}
                                 >
-                                    {place?.address.region.name}
+                                    {address.name}
                                 </Link>
+                                {placeAddress.length - 1 !== i && ', '}
                             </>
-                        )}
-                        {place?.address?.district && (
-                            <>
-                                {place?.address?.region && ', '}
-                                <Link
-                                    color='inherit'
-                                    href={`/places?district=${place?.address.district.id}`}
-                                    title={`Интересные места: ${place?.address.district.name}`}
-                                >
-                                    {place?.address.district.name}
-                                </Link>
-                            </>
-                        )}
-                        {place?.address?.city && (
-                            <>
-                                {place?.address?.district && ', '}
-                                <Link
-                                    color='inherit'
-                                    href={`/places?city=${place?.address.city.id}`}
-                                    title={`Интересные места: ${place?.address.city.name}`}
-                                >
-                                    {place?.address.city.name}
-                                </Link>
-                            </>
-                        )}
+                        ))}
+
                         {place?.address?.street && (
-                            <>
-                                {', '}
-                                {place?.address?.street}
-                            </>
+                            <>{`, ${place?.address?.street}`}</>
                         )}
                     </div>
                 </li>
