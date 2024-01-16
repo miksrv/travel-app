@@ -8,6 +8,7 @@ import Icon from '@/ui/icon'
 import Rating from '@/ui/rating'
 
 import { API } from '@/api/api'
+import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
 import UserAvatar from '@/components/user-avatar'
@@ -23,12 +24,10 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-type PlaceAddressTypes = 'country' | 'region' | 'district' | 'city'
-
 type PlaceAddress = {
     id?: number
     name?: string
-    type: PlaceAddressTypes
+    type: ApiTypes.LocationTypes
 }
 
 interface PlaceInformationProps {
@@ -50,7 +49,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
         API.useRatingPutScoreMutation()
 
     const placeAddress: PlaceAddress[] = useMemo(() => {
-        const addressTypes: PlaceAddressTypes[] = [
+        const addressTypes: ApiTypes.LocationTypes[] = [
             'country',
             'region',
             'district',

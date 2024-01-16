@@ -37,29 +37,28 @@ class Location extends ResourceController {
             return $this->failValidationErrors('Location type must be one of types: ' . implode(', ', $location));
         }
 
-        $countriesModel = new AddressCountry();
-        $regionsModel   = new AddressRegion();
-        $districtsModel = new AddressDistrict();
-        $citiesModel    = new AddressCity();
-
         if ($type === 'country') {
-            $result = $countriesModel->find($id);
-            return $this->respond((object) $result);
+            $countriesModel = new AddressCountry();
+            $countriesData  = $countriesModel->find($id);
+            return $this->respond((object) $countriesData);
         }
 
         if ($type === 'region') {
-            $result = $regionsModel->find($id);
-            return $this->respond((object) $result);
+            $regionsModel = new AddressRegion();
+            $regionsData  = $regionsModel->find($id);
+            return $this->respond((object) $regionsData);
         }
 
         if ($type === 'district') {
-            $result = $districtsModel->find($id);
-            return $this->respond((object) $result);
+            $districtsModel = new AddressDistrict();
+            $districtsData  = $districtsModel->find($id);
+            return $this->respond((object) $districtsData);
         }
 
         if ($type === 'city') {
-            $result = $citiesModel->find($id);
-            return $this->respond((object) $result);
+            $citiesModel = new AddressCity();
+            $citiesData  = $citiesModel->find($id);
+            return $this->respond((object) $citiesData);
         }
 
         return $this->failValidationErrors('Unknown location type');

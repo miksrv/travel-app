@@ -3,6 +3,7 @@ import React from 'react'
 
 import Badge from '@/ui/badge'
 import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
+import Button from '@/ui/button'
 import Container from '@/ui/container'
 
 import { IMG_HOST } from '@/api/api'
@@ -73,11 +74,21 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             />
         </div>
         <header className={styles.header}>
-            <h1>{place?.title}</h1>
-            <Breadcrumbs
-                currentPage={place?.title}
-                links={breadcrumbs}
-            />
+            <div>
+                <h1>{place?.title}</h1>
+                <Breadcrumbs
+                    currentPage={place?.title}
+                    links={breadcrumbs}
+                />
+            </div>
+            <div className={styles.actions}>
+                <Button
+                    icon={'EditLocation'}
+                    mode={'primary'}
+                >
+                    {'Настроить'}
+                </Button>
+            </div>
         </header>
     </section>
 )

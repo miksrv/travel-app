@@ -65,7 +65,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
         <Container
             className={styles.component}
             title={`Описание: ${title}`}
-            action={<Button icon={'Camera'}>{'Редактировать'}</Button>}
+            action={<Button icon={'Pencil'}>{'Редактировать'}</Button>}
         >
             <Markdown>{content}</Markdown>
             {!!tags?.length && (

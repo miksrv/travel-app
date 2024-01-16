@@ -17,6 +17,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     onPhotoClick
 }) => (
     <ul className={styles.component}>
+        {!photos?.length && (
+            <div className={styles.emptyList}>{'Нет фотографий'}</div>
+        )}
         {photos?.map((photo, index) => (
             <li key={photo.filename}>
                 <Link

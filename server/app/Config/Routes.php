@@ -51,8 +51,9 @@ $routes->options('address', 'Address');
 $routes->get('categories', 'Categories::list');
 $routes->options('categories', 'Categories');
 
-$routes->get('rating/(:alphanum)', 'Rating::show/$1'); // !!NOT USED!!
+$routes->get('rating/(:alphanum)', 'Rating::show/$1');
 $routes->put('rating', 'Rating::set');
+$routes->options('rating/(:alphanum)', 'Rating');
 $routes->options('rating', 'Rating');
 
 $routes->get('activity', 'Activity::list');
@@ -74,7 +75,7 @@ $routes->options('auth/(:any)', 'Auth::me');
 $routes->get('location/geocoder', 'Location::geocoder');
 $routes->get('location/(:num)', 'Location::show/$1');
 $routes->options('location/geocoder', 'Location');
-$routes->options('location/show', 'Location');
+$routes->options('location/(:num)', 'Location');
 
 /* Tags */
 $routes->get('tags', 'Tags::search');

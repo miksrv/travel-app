@@ -56,7 +56,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     } = props
 
     const locationUnset = !country && !region && !district && !city
-    const locationType = country
+    const locationType: ApiTypes.LocationTypes = country
         ? 'country'
         : region
         ? 'region'
@@ -143,6 +143,8 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     const currentCategory = categoryData?.items?.find(
         ({ name }) => name === category
     )?.title
+
+    console.log('locationUnset', locationUnset)
 
     const title = useMemo(() => {
         if (!currentCategory && locationUnset) {

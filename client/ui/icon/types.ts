@@ -22,3 +22,5 @@ export type IconTypes =
     | 'Question'
     | 'Tune'
     | 'PlusCircle'
+    | 'Pencil'
+    | 'EditLocation'
