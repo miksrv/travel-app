@@ -74,8 +74,7 @@ class Auth extends ResourceController {
 
         $googleClient->setAccessToken($token['access_token']);
         $googleService = new Google_Service_Oauth2($googleClient);
-
-        $googleUser = $googleService->userinfo->get();
+        $googleUser    = $googleService->userinfo->get();
 
         // If we have not received the user's email, we return an error
         if (!$googleUser->email) {

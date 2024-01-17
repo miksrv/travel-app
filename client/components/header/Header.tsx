@@ -4,7 +4,7 @@ import React, { useEffect } from 'react'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
-import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
+import { openAuthDialog } from '@/api/applicationSlice'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
@@ -74,13 +74,17 @@ const Header: React.FC<HeaderProps> = (props) => {
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    <Link
-                        href={'/login'}
-                        title={'Авторизация на сайте'}
-                        onClick={handleLoginClick}
-                    >
-                        {'Войти'}
-                    </Link>
+                    {authSlice.isAuth ? (
+                        <div>{authSlice?.user?.name}</div>
+                    ) : (
+                        <Link
+                            href={'/login'}
+                            title={'Авторизация на сайте'}
+                            onClick={handleLoginClick}
+                        >
+                            {'Войти'}
+                        </Link>
+                    )}
                 </div>
             </div>
         </header>

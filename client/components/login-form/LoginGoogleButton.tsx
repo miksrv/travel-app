@@ -15,11 +15,14 @@ import googleLogo from '@/public/images/google-logo.png'
 interface LoginFormProps {
     loading?: boolean
     onSuccessLogin?: () => void
-    setLoading?: (loading: boolean) => void
+    onLoading?: (loading: boolean) => void
 }
 
-const LoginGoogleButton: React.FC<LoginFormProps> = (props) => {
-    const { loading, onSuccessLogin, setLoading } = props
+const LoginGoogleButton: React.FC<LoginFormProps> = ({
+    loading,
+    onSuccessLogin,
+    onLoading
+}) => {
     const dispatch = useAppDispatch()
     const searchParams = useSearchParams()
 
@@ -28,7 +31,7 @@ const LoginGoogleButton: React.FC<LoginFormProps> = (props) => {
 
     const handleLoginButton = () => {
         authLoginPost({})
-        setLoading?.(true)
+        onLoading?.(true)
     }
 
     useEffect(() => {
@@ -47,12 +50,12 @@ const LoginGoogleButton: React.FC<LoginFormProps> = (props) => {
 
         if (code) {
             authLoginPost({ code })
-            setLoading?.(true)
+            onLoading?.(true)
         }
     }, [searchParams])
 
     useEffect(() => {
-        setLoading?.(isLoading)
+        onLoading?.(isLoading)
     }, [isLoading])
 
     return (

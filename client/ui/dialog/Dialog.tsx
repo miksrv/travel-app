@@ -43,6 +43,12 @@ const Dialog: React.FC<DialogProps> = ({
         })
     }
 
+    const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+            onCloseDialog?.()
+        }
+    }
+
     const handleClickOutside = (event: MouseEvent) => {
         if (
             dialogRef.current &&
@@ -53,12 +59,14 @@ const Dialog: React.FC<DialogProps> = ({
     }
 
     useEffect(() => {
-        window.addEventListener('resize', handleResize)
+        document.addEventListener('resize', handleResize)
         document.addEventListener('mousedown', handleClickOutside)
+        document.addEventListener('keydown', handleKeyDown)
 
         return () => {
+            document.removeEventListener('resize', handleResize)
             document.removeEventListener('mousedown', handleClickOutside)
-            window.removeEventListener('resize', handleResize)
+            document.removeEventListener('keydown', handleKeyDown)
         }
     }, [])
 
@@ -68,7 +76,7 @@ const Dialog: React.FC<DialogProps> = ({
         }
     }, [open])
 
-    return (
+    return open ? (
         <dialog
             {...props}
             open={open}
@@ -97,6 +105,8 @@ const Dialog: React.FC<DialogProps> = ({
                 {children}
             </div>
         </dialog>
+    ) : (
+        <></>
     )
 }
 

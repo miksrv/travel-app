@@ -1,27 +1,27 @@
 'use client'
 
-import Button from '@mui/material/Button'
 import FormControl from '@mui/material/FormControl'
-import InputLabel from '@mui/material/InputLabel'
 import React, { useEffect, useState } from 'react'
+
+import Button from '@/ui/button'
+import Input from '@/ui/input'
 
 import { API } from '@/api/api'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import InputField from '@/components/form-controllers/input-field'
 import LoginGoogleButton from '@/components/login-form/LoginGoogleButton'
 
+import styles from './styles.module.sass'
+
 interface LoginFormProps {
-    loading?: boolean
     onSuccessLogin?: () => void
-    setLoading?: (loading: boolean) => void
 }
 
-const LoginForm: React.FC<LoginFormProps> = (props) => {
-    const { loading, onSuccessLogin, setLoading } = props
+const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     const dispatch = useAppDispatch()
+    const [loading, setLoading] = useState<boolean>(false)
     const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
     const [authLoginPost, { isLoading, data: authData }] =
         API.useAuthPostLoginMutation()
@@ -52,65 +52,42 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
     }, [isLoading])
 
     return (
-        <>
-            <LoginGoogleButton />
+        <div className={styles.loginForm}>
+            <LoginGoogleButton
+                loading={loading}
+                onLoading={setLoading}
+            />
 
             <hr />
 
-            <FormControl
-                variant={'standard'}
-                fullWidth={true}
-            >
-                <InputLabel
-                    shrink={true}
-                    htmlFor={'email'}
-                    sx={{ fontSize: '16px' }}
-                >
-                    {'Email адрес'}
-                </InputLabel>
-                <InputField
-                    id={'email'}
+            <div className={styles.formElement}>
+                <Input
+                    label={'Email адрес'}
                     name={'email'}
                     disabled={isLoading || loading}
                     onChange={handleChange}
                 />
-            </FormControl>
-            <FormControl
-                variant={'standard'}
-                fullWidth={true}
-                sx={{ mt: 2 }}
-            >
-                <InputLabel
-                    shrink={true}
-                    htmlFor={'password'}
-                    sx={{ fontSize: '16px' }}
-                >
-                    {'Пароль'}
-                </InputLabel>
-                <InputField
-                    id={'password'}
+            </div>
+
+            <div className={styles.formElement}>
+                <Input
+                    label={'Пароль'}
                     name={'password'}
                     type={'password'}
                     disabled={isLoading || loading}
                     onChange={handleChange}
                 />
-            </FormControl>
+            </div>
 
-            <FormControl
-                variant={'standard'}
-                fullWidth={true}
-                sx={{ mb: 2, mt: 2 }}
+            <Button
+                stretched={true}
+                mode={'primary'}
+                disabled={isLoading || loading}
+                onClick={handleLoginButton}
             >
-                <Button
-                    variant={'contained'}
-                    color={'primary'}
-                    disabled={isLoading || loading}
-                    onClick={handleLoginButton}
-                >
-                    {'Войти'}
-                </Button>
-            </FormControl>
-        </>
+                {'Войти'}
+            </Button>
+        </div>
     )
 }
 export default LoginForm

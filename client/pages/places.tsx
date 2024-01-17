@@ -144,8 +144,6 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         ({ name }) => name === category
     )?.title
 
-    console.log('locationUnset', locationUnset)
-
     const title = useMemo(() => {
         if (!currentCategory && locationUnset) {
             return t('title')
