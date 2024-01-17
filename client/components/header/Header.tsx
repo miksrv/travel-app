@@ -9,6 +9,7 @@ import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import Search from '@/components/header/Search'
+import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -74,8 +75,11 @@ const Header: React.FC<HeaderProps> = (props) => {
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    {authSlice.isAuth ? (
-                        <div>{authSlice?.user?.name}</div>
+                    {authSlice.isAuth && authSlice?.user ? (
+                        <UserAvatar
+                            user={authSlice?.user}
+                            size={'medium'}
+                        />
                     ) : (
                         <Link
                             href={'/login'}

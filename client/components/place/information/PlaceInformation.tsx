@@ -111,7 +111,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                     <div className={styles.value}>
                         <UserAvatar
                             user={place?.author}
-                            loading={loading}
+                            showName={true}
                         />
                     </div>
                 </li>
