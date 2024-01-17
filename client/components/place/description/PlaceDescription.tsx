@@ -64,7 +64,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     return (
         <Container
             className={styles.component}
-            title={`Описание: ${title}`}
+            title={'Описание'}
             action={<Button icon={'Pencil'}>{'Редактировать'}</Button>}
         >
             <Markdown>{content}</Markdown>

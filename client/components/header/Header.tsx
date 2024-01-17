@@ -60,7 +60,6 @@ const Header: React.FC<HeaderProps> = ({
                 </button>
                 <Search />
                 <div className={styles.rightSection}>
-                    <LanguageSwitcher />
                     {(randomPlaceId || randomPlaceQuery?.data?.id) && (
                         <Link
                             href={`/places/${

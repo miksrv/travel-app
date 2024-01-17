@@ -4,6 +4,7 @@ import { useAppSelector } from '@/api/store'
 
 import Footer from '@/components/footer'
 import Header from '@/components/header'
+import LanguageSwitcher from '@/components/language-switcher'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -75,6 +76,7 @@ const PageLayout: React.FC<PageLayoutProps> = ({
             <section className={styles.mainContainer}>
                 <aside className={styles.menubar}>
                     <Menu />
+                    <LanguageSwitcher />
                     <Footer />
                 </aside>
                 <main className={styles.main}>{children}</main>

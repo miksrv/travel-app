@@ -2,6 +2,8 @@ import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import React from 'react'
 
+import styles from './styles.module.sass'
+
 const LanguageSwitcher: React.FC = () => {
     const { i18n } = useTranslation()
     const { language: currentLanguage } = i18n
@@ -11,16 +13,23 @@ const LanguageSwitcher: React.FC = () => {
     const changeLanguage = async (locale: 'en' | 'ru') => {
         await i18n.changeLanguage(locale)
         await router.push({ pathname, query }, asPath, { locale })
+
+        router.reload()
     }
 
     return (
-        <div>
-            <button onClick={() => changeLanguage('en')}>
-                {currentLanguage === 'en' && '+'} {'English'}
+        <div className={styles.languageSwitcher}>
+            <button
+                className={currentLanguage === 'en' ? styles.active : undefined}
+                onClick={() => changeLanguage('en')}
+            >
+                {'Eng'}
             </button>
-            <button onClick={() => changeLanguage('ru')}>
-                {currentLanguage === 'ru' && '+'}
-                {'Russian'}
+            <button
+                className={currentLanguage === 'ru' ? styles.active : undefined}
+                onClick={() => changeLanguage('ru')}
+            >
+                {'Rus'}
             </button>
         </div>
     )

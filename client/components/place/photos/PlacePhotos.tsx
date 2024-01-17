@@ -62,7 +62,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({
     return (
         <Container
             className={styles.component}
-            title={`Фотографии: ${title}`}
+            title={'Фотографии'}
             action={<Button icon={'Camera'}>{'Загрузить'}</Button>}
         >
             <PhotoGallery
