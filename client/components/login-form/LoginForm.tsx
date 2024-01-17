@@ -11,6 +11,7 @@ import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import InputField from '@/components/form-controllers/input-field'
+import LoginGoogleButton from '@/components/login-form/LoginGoogleButton'
 
 interface LoginFormProps {
     loading?: boolean
@@ -52,6 +53,10 @@ const LoginForm: React.FC<LoginFormProps> = (props) => {
 
     return (
         <>
+            <LoginGoogleButton />
+
+            <hr />
+
             <FormControl
                 variant={'standard'}
                 fullWidth={true}

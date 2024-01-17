@@ -11,12 +11,19 @@
   font-weight: 500
   display: flex
   align-content: center
+  justify-content: center
 
   svg
     width: 16px
     height: 16px
     margin-right: 5px
     fill: $colorButton
+
+  img
+    margin-right: 5px
+
+  &.stretched
+    width: 100%
 
   &.noText
     svg
@@ -49,3 +56,10 @@
 
     &:hover
       background-color: #247fdc
+
+  &.secondary
+    background-color: rgba(0, 0, 0, 0.04)
+    color: #2688eb
+
+    &:hover
+      background-color: rgba(0, 0, 0, 0.08)

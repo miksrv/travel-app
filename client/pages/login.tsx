@@ -13,7 +13,6 @@ import React, { useEffect, useState } from 'react'
 import { useAppSelector } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
-import LoginGoogle from '@/components/login-google'
 
 const PAGE_TITLE = 'Авторизация'
 
@@ -54,11 +53,6 @@ const LoginPage: NextPage = () => {
                 >
                     <CardContent>
                         <LoginForm
-                            loading={loading}
-                            onSuccessLogin={handleSuccessLogin}
-                            setLoading={setLoading}
-                        />
-                        <LoginGoogle
                             loading={loading}
                             onSuccessLogin={handleSuccessLogin}
                             setLoading={setLoading}

@@ -4,11 +4,11 @@ import React, { useEffect } from 'react'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
+import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import Search from '@/components/header/Search'
-import LanguageSwitcher from '@/components/language-switcher'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -20,17 +20,21 @@ interface HeaderProps {
     onMenuClick?: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({
-    randomPlaceId,
-    fullSize,
-    onMenuClick
-}) => {
+const Header: React.FC<HeaderProps> = (props) => {
+    const { randomPlaceId, fullSize, onMenuClick } = props
+
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
+
     const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
     const randomPlaceQuery = API.usePlacesGetRandomQuery(undefined, {
         skip: !!randomPlaceId
     })
+
+    const handleLoginClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        dispatch(openAuthDialog())
+    }
 
     useEffect(() => {
         if (meData?.auth) {
@@ -59,22 +63,23 @@ const Header: React.FC<HeaderProps> = ({
                     <Icon name={'Menu'} />
                 </button>
                 <Search />
+                {(randomPlaceId || randomPlaceQuery?.data?.id) && (
+                    <Link
+                        href={`/places/${
+                            randomPlaceId ?? randomPlaceQuery?.data?.id
+                        }`}
+                        title={'Перейти на случайное место'}
+                    >
+                        <Icon name={'Question'} />
+                    </Link>
+                )}
                 <div className={styles.rightSection}>
-                    {(randomPlaceId || randomPlaceQuery?.data?.id) && (
-                        <Link
-                            href={`/places/${
-                                randomPlaceId ?? randomPlaceQuery?.data?.id
-                            }`}
-                            title={'Перейти на случайное место'}
-                        >
-                            <Icon name={'Question'} />
-                        </Link>
-                    )}
                     <Link
                         href={'/login'}
                         title={'Авторизация на сайте'}
+                        onClick={handleLoginClick}
                     >
-                        <Icon name={'User'} />
+                        {'Войти'}
                     </Link>
                 </div>
             </div>
