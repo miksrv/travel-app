@@ -148,6 +148,15 @@ export const API = createApi({
         }),
 
         /* Controller: Photos */
+        photoDeleteItem: builder.mutation<
+            ApiTypes.ResponsePhotoDeleteItem,
+            string
+        >({
+            query: (photoId) => ({
+                method: 'DELETE',
+                url: `photos/${photoId}`
+            })
+        }),
         photoPostUpload: builder.mutation<
             ApiTypes.ResponsePhotoPostUpload,
             ApiTypes.RequestPhotoPostUpload

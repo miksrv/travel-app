@@ -138,6 +138,10 @@ export interface RequestPhotosGetActions {
     ids?: string
 }
 
+export interface ResponsePhotoDeleteItem {
+    id?: string
+}
+
 export interface ResponsePhotosGetList {
     items?: Photo[]
     count?: number

@@ -85,6 +85,29 @@ class Photos extends ResourceController {
         ]);
     }
 
+    public function delete($id = null): ResponseInterface {
+        $session  = new Session();
+
+        if (!$session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $photosModel = new PhotosModel();
+        $photoData   = $photosModel->select('id, user_id')->find($id);
+
+        if (!$photoData) {
+            return $this->failValidationErrors('No photo found with this ID');
+        }
+
+        if ($photoData->user_id !== $session->userId) {
+            return $this->failValidationErrors('You can not delete this photo');
+        }
+
+        $photosModel->delete($id);
+
+        return $this->respondDeleted(['id' => $id]);
+    }
+
     /**
      * @param null $id
      * @return ResponseInterface

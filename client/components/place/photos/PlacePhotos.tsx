@@ -33,6 +33,9 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         { skip: !photos || !authSlice.isAuth }
     )
 
+    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
+        API.usePhotoDeleteItemMutation()
+
     const [
         uploadPhoto,
         {
@@ -48,7 +51,11 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         setShowLightbox(true)
     }
 
-    const handlePhotoRemoveClick = (photoId: string) => {}
+    const handlePhotoRemoveClick = (photoId: string) => {
+        if (authSlice.isAuth && !deleteLoading) {
+            deletePhoto(photoId)
+        }
+    }
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
@@ -118,6 +125,13 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             })
         }
     }, [selectedFiles])
+
+    /**
+     *  After deleting a photo, remove it from the local photo list
+     */
+    React.useEffect(() => {
+        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
+    }, [deleteData])
 
     React.useEffect(() => {
         setSelectedFiles([])
