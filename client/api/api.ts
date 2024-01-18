@@ -148,20 +148,21 @@ export const API = createApi({
         }),
 
         /* Controller: Photos */
-        photoPostUpload: builder.mutation<any, ApiTypes.RequestPhotoPostUpload>(
-            {
-                invalidatesTags: (res, err, arg) => [
-                    { id: arg.place, type: 'Photos' },
-                    { id: arg.place, type: 'Activity' }
-                ],
-                query: (data) => ({
-                    body: data.formData,
-                    method: 'POST',
-                    url: `photos/upload/${data.place}`
-                }),
-                transformErrorResponse: (response) => response.data
-            }
-        ),
+        photoPostUpload: builder.mutation<
+            ApiTypes.ResponsePhotoPostUpload,
+            ApiTypes.RequestPhotoPostUpload
+        >({
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.place, type: 'Photos' },
+                { id: arg.place, type: 'Activity' }
+            ],
+            query: (data) => ({
+                body: data.formData,
+                method: 'POST',
+                url: `photos/upload/${data.place}`
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -12,23 +12,25 @@ import PhotoLightbox from '@/components/photo-lightbox'
 import styles from './styles.module.sass'
 
 interface PlacePhotosProps {
-    title?: string
     placeId?: string
     photos?: Photo[]
 }
 
-const PlacePhotos: React.FC<PlacePhotosProps> = ({
-    title,
-    placeId,
-    photos
-}) => {
+const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
+    const [localePhotos, setLocalePhotos] = useState<Photo[]>([])
+    const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
 
     const [
         uploadPhoto,
-        { data: uploadData, isLoading: uploadLoading, isSuccess: uploadSuccess }
+        {
+            data: uploadData,
+            isLoading: uploadLoading,
+            isSuccess: uploadSuccess,
+            isError: uploadError
+        }
     ] = API.usePhotoPostUploadMutation()
 
     const handlePhotoClick = (index: number) => {
@@ -43,80 +45,101 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({
     const handleSelectedFilesUpload = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        if (!event.target.files?.length) {
-            return
+        const files = event.target.files
+
+        if (files?.length) {
+            const filesList = Array.from(files).map((file) => file)
+            setSelectedFiles(filesList)
         }
-
-        const formData = new FormData()
-
-        Array.from(event.target.files).forEach((photo, index) => {
-            formData.append(`photo${index}`, photo)
-        })
-
-        uploadPhoto({
-            formData,
-            place: placeId
-        })
     }
+
+    const uploadingPhotos = useMemo(
+        () =>
+            selectedFiles?.map((file) => URL.createObjectURL(file))?.reverse(),
+        [selectedFiles]
+    )
+
+    /**
+     * If an error occurs in downloading a file, clear the queue of the list of photos for downloading
+     * #TODO:Add notification
+     */
+    React.useEffect(() => {
+        setSelectedFiles([])
+    }, [uploadError])
+
+    /** After successfully uploading each photo:
+     * - remove one file from the download queue
+     * - add the uploaded photo to the list of other photos
+     */
+    React.useEffect(() => {
+        if (uploadData) {
+            const uploadingFiles = [...selectedFiles]
+            uploadingFiles.shift()
+
+            setSelectedFiles(uploadingFiles)
+            setLocalePhotos([uploadData, ...localePhotos])
+        }
+    }, [uploadData])
+
+    /**
+     * After each update of the download queue:
+     * - perform a request to download the first file from the queue
+     */
+    React.useEffect(() => {
+        if (selectedFiles.length) {
+            const formData = new FormData()
+
+            formData.append('photo', selectedFiles[0])
+
+            uploadPhoto({
+                count: selectedFiles.length,
+                formData,
+                place: placeId
+            })
+        }
+    }, [selectedFiles])
+
+    React.useEffect(() => {
+        setSelectedFiles([])
+        setLocalePhotos(photos || [])
+    }, [placeId])
 
     return (
         <Container
             className={styles.component}
             title={'Фотографии'}
-            action={<Button icon={'Camera'}>{'Загрузить'}</Button>}
+            action={
+                <Button
+                    icon={'Camera'}
+                    disabled={uploadLoading}
+                    onClick={() => inputFile.current?.click()}
+                >
+                    {'Загрузить'}
+                </Button>
+            }
         >
             <PhotoGallery
-                photos={photos}
+                photos={localePhotos}
+                uploadingPhotos={uploadingPhotos}
                 onPhotoClick={handlePhotoClick}
             />
+
             <PhotoLightbox
-                photos={photos}
+                photos={localePhotos}
                 photoIndex={photoIndex}
                 showLightbox={showLightbox}
                 onChangeIndex={setPhotoIndex}
                 onCloseLightBox={handleCloseLightbox}
             />
 
-            {/*<CardHeader*/}
-            {/*    title={title ? `${title} - фотографии` : 'Фотографии'}*/}
-            {/*    titleTypographyProps={{*/}
-            {/*        component: 'h2',*/}
-            {/*        fontSize: 18*/}
-            {/*    }}*/}
-            {/*    sx={{ mb: -2 }}*/}
-            {/*    action={*/}
-            {/*        <Button*/}
-            {/*            sx={{ mr: 0 }}*/}
-            {/*            size={'medium'}*/}
-            {/*            variant={'contained'}*/}
-            {/*            disabled={uploadLoading}*/}
-            {/*            onClick={() => inputFile.current?.click()}*/}
-            {/*        >*/}
-            {/*            {'Загрузить'}*/}
-            {/*        </Button>*/}
-            {/*    }*/}
-            {/*/>*/}
-            {/*<input*/}
-            {/*    multiple={true}*/}
-            {/*    ref={inputFile}*/}
-            {/*    style={{ display: 'none' }}*/}
-            {/*    type={'file'}*/}
-            {/*    accept={'image/png, image/gif, image/jpeg'}*/}
-            {/*    onChange={handleSelectedFilesUpload}*/}
-            {/*/>*/}
-            {/*<CardContent sx={{ mb: -1 }}>*/}
-            {/*    <PhotoGallery*/}
-            {/*        photos={photos}*/}
-            {/*        onPhotoClick={handlePhotoClick}*/}
-            {/*    />*/}
-            {/*    <PhotoLightbox*/}
-            {/*        photos={photos}*/}
-            {/*        photoIndex={photoIndex}*/}
-            {/*        showLightbox={showLightbox}*/}
-            {/*        onChangeIndex={setPhotoIndex}*/}
-            {/*        onCloseLightBox={handleCloseLightbox}*/}
-            {/*    />*/}
-            {/*</CardContent>*/}
+            <input
+                multiple={true}
+                ref={inputFile}
+                style={{ display: 'none' }}
+                type={'file'}
+                accept={'image/png, image/gif, image/jpeg'}
+                onChange={handleSelectedFilesUpload}
+            />
         </Container>
     )
 }

@@ -9,6 +9,7 @@ class User extends Entity {
         'avatar'     => 'string',
         'website'    => 'string',
         'password'   => 'string',
+        'locale'     => 'string',
         'level'      => 'integer',
         'experience' => 'integer',
         'reputation' => 'integer',

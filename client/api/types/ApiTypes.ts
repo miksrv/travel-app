@@ -133,9 +133,12 @@ export interface RequestPhotosGetList {
     place?: string
 }
 
+export interface ResponsePhotoPostUpload extends Photo {}
+
 export interface RequestPhotoPostUpload {
     formData?: FormData
     place?: string
+    count?: number
 }
 
 /* Controller: Location */

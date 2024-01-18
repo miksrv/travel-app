@@ -9,8 +9,6 @@ import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Address, Tag } from '@/api/types/Place'
 
-import TagsSelector from '@/components/form-controllers/tags-selector'
-
 import ContentEditor from '../../../ui/content-editor'
 import styles from './styles.module.sass'
 

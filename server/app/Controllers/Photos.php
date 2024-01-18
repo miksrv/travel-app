@@ -2,10 +2,12 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
+use App\Libraries\PlaceTranslation;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
+use App\Models\TranslationsPhotosModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -64,64 +66,79 @@ class Photos extends ResourceController {
     public function upload($id = null): ResponseInterface {
         $session = new Session();
 
-        if (!$photos = $this->request->getFiles()) {
-            return $this->failValidationErrors('No photos for upload');
+        if (!$photo = $this->request->getFile('photo')) {
+            return $this->failValidationErrors('No photo for upload');
         }
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
         }
 
+        $userLocale   = $session->userData->locale ?? 'ru';
         $userActivity = new UserActivity();
         $placesModel  = new PlacesModel();
         $placesData   = $placesModel->select('id, latitude, longitude')->find($id);
+
+        $placeTranslate = new PlaceTranslation($userLocale);
+        $placeTranslate->translate([$id]);
 
         if (!$placesData || !$placesData->id) {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
-        foreach ($photos as $photo) {
-//            if (!$this->validate([
-//                'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
-//            ])) {
-//                return $this->failValidationErrors($this->validator->getErrors());
-//            }
+//        if (!$this->validate([
+//            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
+//        ])) {
+//            return $this->failValidationErrors($this->validator->getErrors());
+//        }
 
-            if (!$photo->hasMoved()) {
-                $photoDir = UPLOAD_PHOTOS . '/' . $placesData->id . '/';
-                $newName = $photo->getRandomName();
-                $photo->move($photoDir, $newName);
+        if (!$photo->hasMoved()) {
+            $photoDir = UPLOAD_PHOTOS . $placesData->id . '/';
+            $newName  = $photo->getRandomName();
+            $photo->move($photoDir, $newName, true);
 
-                $file = new File($photoDir . $newName);
-                $name = pathinfo($file, PATHINFO_FILENAME);
+            $file = new File($photoDir . $newName);
+            $name = pathinfo($file, PATHINFO_FILENAME);
 
-                $image = Services::image('gd'); // imagick
-                $image->withFile($file->getRealPath())
-                    ->fit(700, 500, 'center')
-                    ->save($photoDir . $name . '_thumb.' . $file->getExtension());
+            $image = Services::image('gd'); // imagick
+            $image->withFile($file->getRealPath())
+                ->fit(700, 500, 'center')
+                ->save($photoDir . $name . '_thumb.' . $file->getExtension());
 
-                $coordinates = $this->_readPhotoLocation($file->getRealPath());
-                $photosModel = new PhotosModel();
+            $coordinates = $this->_readPhotoLocation($file->getRealPath());
+            $photosModel = new PhotosModel();
 
-                list($width, $height) = getimagesize($file->getRealPath());
+            list($width, $height) = getimagesize($file->getRealPath());
 
-                // Save photo to DB
-                $photo = new Photo();
-                $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
-                $photo->longitude = $coordinates->lng ?? $placesData->longitude;
-                $photo->place_id  = $placesData->id;
-                $photo->user_id   = $session->userData->id;
-                $photo->filename  = $name;
-                $photo->extension = $file->getExtension();
-                $photo->filesize  = $file->getSize();
-                $photo->width     = $width;
-                $photo->height    = $height;
-                $photosModel->insert($photo);
+            // Save photo to DB
+            $photo = new Photo();
+            $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
+            $photo->longitude = $coordinates->lng ?? $placesData->longitude;
+            $photo->place_id  = $placesData->id;
+            $photo->user_id   = $session->userData->id;
+            $photo->filename  = $name;
+            $photo->extension = $file->getExtension();
+            $photo->filesize  = $file->getSize();
+            $photo->width     = $width;
+            $photo->height    = $height;
+            $photosModel->insert($photo);
 
-                $userActivity->photo($photosModel->getInsertID(), $placesData->id);
+            $photoId = $photosModel->getInsertID();
 
-                sleep(0.2);
-            }
+            $userActivity->photo($photoId, $placesData->id);
+
+            // Add photo translate
+            $translationsPhotosModel = new TranslationsPhotosModel();
+            $translationsPhotosModel->insert([
+                'photo_id' => $photosModel->getInsertID(),
+                'language' => $userLocale,
+                'title'    => $placeTranslate->title($id) ?? ''
+            ]);
+
+            sleep(2.6);
+        } else {
+            echo $photo->getErrorString();
+            exit();
         }
 
         // Update the time when the post was last edited
@@ -129,7 +146,16 @@ class Photos extends ResourceController {
         $place->updated_at = time();
         $placesModel->update($id, $place);
 
-        return $this->respondCreated();
+        return $this->respondCreated((object) [
+            'filename'  => $photo->filename,
+            'extension' => $photo->extension,
+            'order'     => $photo->order,
+            'width'     => $photo->width,
+            'height'    => $photo->height,
+            'title'     => $photo->title,
+            'placeId'   => $photo->place_id,
+            'created'   => $photo->created_at
+        ]);
     }
 
     /**
