@@ -199,6 +199,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
             {!openedOptions && (
                 <>
+                    <Autocomplete
+                        label={'Фильтровать по местоположению'}
+                        placeholder={'Начните вводить название'}
+                        clearable={true}
+                        value={location}
+                        loading={addressLoading}
+                        options={locationOptions}
+                        onSearch={handleSearchLocation}
+                        onSelect={onChangeLocation}
+                    />
+
                     <Dropdown
                         label={'Сортировка мест'}
                         value={selectedSort}
@@ -220,17 +231,6 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                         placeholder={'Выберите категорию'}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
-                    />
-
-                    <Autocomplete
-                        label={'Фильтровать по местоположению'}
-                        placeholder={'Начните вводить название'}
-                        clearable={true}
-                        value={location}
-                        loading={addressLoading}
-                        options={locationOptions}
-                        onSearch={handleSearchLocation}
-                        onSelect={onChangeLocation}
                     />
                 </>
             )}

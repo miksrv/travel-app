@@ -4,6 +4,8 @@ import Button from '@/ui/button'
 import Container from '@/ui/container'
 
 import { API } from '@/api/api'
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
 import PhotoGallery from '@/components/photo-gallery'
@@ -17,6 +19,9 @@ interface PlacePhotosProps {
 }
 
 const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
+    const dispatch = useAppDispatch()
+    const authSlice = useAppSelector((state) => state.auth)
+
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const [localePhotos, setLocalePhotos] = useState<Photo[]>([])
@@ -40,6 +45,14 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
+    }
+
+    const handlePhotoUploadClick = () => {
+        if (authSlice.isAuth) {
+            inputFile.current?.click()
+        } else {
+            dispatch(openAuthDialog())
+        }
     }
 
     const handleSelectedFilesUpload = (
@@ -112,7 +125,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 <Button
                     icon={'Camera'}
                     disabled={uploadLoading}
-                    onClick={() => inputFile.current?.click()}
+                    onClick={handlePhotoUploadClick}
                 >
                     {'Загрузить'}
                 </Button>
