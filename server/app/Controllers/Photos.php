@@ -15,6 +15,33 @@ use Config\Services;
 use ReflectionException;
 
 class Photos extends ResourceController {
+    public function actions(): ResponseInterface {
+        $session = new Session();
+        $photos  = $this->request->getGet('ids', FILTER_SANITIZE_SPECIAL_CHARS);
+        $IDList  = explode(',', $photos);
+
+        if (empty($IDList)) {
+            return $this->failValidationErrors('No photos IDs');
+        }
+
+        $resultData  = [];
+        $photosModel = new PhotosModel();
+        $photosData  = $photosModel->select('id, user_id')->whereIn('id', $IDList)->findAll();
+
+        if (empty($photosData)) {
+            return $this->failValidationErrors('Photos with this IDs not exists');
+        }
+
+        foreach ($photosData as $photo) {
+            $resultData[] = [
+                'id'     => $photo->id,
+                'remove' => $photo->user_id === $session->userId
+            ];
+        }
+
+        return $this->respond(['items' => $resultData]);
+    }
+
     /**
      * @return ResponseInterface
      */
@@ -35,9 +62,9 @@ class Photos extends ResourceController {
 
         foreach ($photosData as $photo) {
             $result[] = (object) [
+                'id'        => $photo->id,
                 'filename'  => $photo->filename,
                 'extension' => $photo->extension,
-                // 'filesize'  => $photo->filesize,
                 'order'     => $photo->order,
                 'width'     => $photo->width,
                 'height'    => $photo->height,
@@ -147,6 +174,7 @@ class Photos extends ResourceController {
         $placesModel->update($id, $place);
 
         return $this->respondCreated((object) [
+            'id'        => $photo->id,
             'filename'  => $photo->filename,
             'extension' => $photo->extension,
             'order'     => $photo->order,
@@ -223,7 +251,7 @@ class Photos extends ResourceController {
         $photosModel = new PhotosModel();
         $photosModel
             ->select(
-                'photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
+                'photos.id, photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
                     photos.height, photos.order, translations_photos.title, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.user_id = users.id', 'left')

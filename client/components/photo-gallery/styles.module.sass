@@ -33,7 +33,7 @@
     .loader
       border-radius: $borderRadius
       position: absolute
-      z-index: 1
+      z-index: 2
       left: 0
       top: 0
       width: 100%
@@ -46,3 +46,23 @@
       svg
         width: 32px
         height: 32px
+
+    .removeButton
+      border: none
+      z-index: 1
+      position: absolute
+      cursor: pointer
+      padding: 4px 4px 2px 4px
+      border-radius: $borderRadius
+      top: 6px
+      right: 6px
+      background-color: rgba(0, 0, 0, .6)
+      opacity: .4
+
+      svg
+        width: 16px
+        height: 16px
+        fill: #FFFFFF
+
+      &:hover
+        opacity: 1

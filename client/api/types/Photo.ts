@@ -3,6 +3,7 @@ import { ApiTypes } from '@/api/types'
 import { User } from './User'
 
 export type Photo = {
+    id: string
     filename: string
     extension: string
     width: number

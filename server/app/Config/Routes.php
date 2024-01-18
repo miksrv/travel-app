@@ -27,10 +27,12 @@ $routes->options('places', 'Places');
 $routes->options('places/(:alphanum)', 'Places');
 
 $routes->get('photos', 'Photos::list');
+$routes->get('photos/actions', 'Photos::actions');
 $routes->post('photos', 'Photos::create');
 $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
+$routes->options('photos/actions', 'Photos');
 $routes->options('photos/upload/(:alphanum)', 'Photos::upload');
 
 $routes->get('countries', 'Countries::list');

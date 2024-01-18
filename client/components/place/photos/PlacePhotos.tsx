@@ -24,9 +24,14 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
-    const [localePhotos, setLocalePhotos] = useState<Photo[]>([])
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
+
+    const { data: actionsData } = API.usePhotosGetActionsQuery(
+        { ids: photos?.map(({ id }) => id)?.join(',') },
+        { skip: !photos || !authSlice.isAuth }
+    )
 
     const [
         uploadPhoto,
@@ -42,6 +47,8 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         setPhotoIndex(index)
         setShowLightbox(true)
     }
+
+    const handlePhotoRemoveClick = (photoId: string) => {}
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
@@ -90,7 +97,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             uploadingFiles.shift()
 
             setSelectedFiles(uploadingFiles)
-            setLocalePhotos([uploadData, ...localePhotos])
+            setLocalPhotos([uploadData, ...localPhotos])
         }
     }, [uploadData])
 
@@ -114,7 +121,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     React.useEffect(() => {
         setSelectedFiles([])
-        setLocalePhotos(photos || [])
+        setLocalPhotos(photos || [])
     }, [placeId])
 
     return (
@@ -132,13 +139,15 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             }
         >
             <PhotoGallery
-                photos={localePhotos}
+                photos={localPhotos}
+                actions={actionsData?.items}
                 uploadingPhotos={uploadingPhotos}
                 onPhotoClick={handlePhotoClick}
+                onPhotoRemoveClick={handlePhotoRemoveClick}
             />
 
             <PhotoLightbox
-                photos={localePhotos}
+                photos={localPhotos}
                 photoIndex={photoIndex}
                 showLightbox={showLightbox}
                 onChangeIndex={setPhotoIndex}

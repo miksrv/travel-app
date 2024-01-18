@@ -50,6 +50,15 @@ export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
 export type LocationTypes = 'country' | 'region' | 'district' | 'city'
 
+/**
+ * The type is used to map possible actions with list items, for example with photographs.
+ * We request possible actions from the API for a list of photos, and an array of such elements is returned in response.
+ */
+export type ItemActionType = {
+    id?: string
+    remove?: boolean
+}
+
 export interface RequestAuthLogin {
     email?: string
     password?: string
@@ -121,6 +130,14 @@ export interface ResponsePlacesPostItem {
 }
 
 /* Controller: Photos */
+export interface ResponsePhotosGetActions {
+    items?: ItemActionType[]
+}
+
+export interface RequestPhotosGetActions {
+    ids?: string
+}
+
 export interface ResponsePhotosGetList {
     items?: Photo[]
     count?: number

@@ -163,6 +163,12 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
+        photosGetActions: builder.query<
+            ApiTypes.ResponsePhotosGetActions,
+            Maybe<ApiTypes.RequestPhotosGetActions>
+        >({
+            query: (params) => `photos/actions${encodeQueryData(params)}`
+        }),
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>
