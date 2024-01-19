@@ -405,13 +405,14 @@ class Places extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $placeTags      = new PlaceTags();
-        $placesModel    = new PlacesModel();
-        $placeTranslate = new PlacesContent('ru');
-        $placeData      = $placesModel->find($id);
-        $placeTranslate->translate([$id]);
+        $placeTags    = new PlaceTags();
+        $placesModel  = new PlacesModel();
+        $placeContent = new PlacesContent('ru');
+        $placeData    = $placesModel->find($id);
 
-        if (!$placeTranslate->title($id) || !$placeData) {
+        $placeContent->translate([$id]);
+
+        if (!$placeContent->title($id) || !$placeData) {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
@@ -426,40 +427,40 @@ class Places extends ResourceController {
 
         // Save place content
         $userActivity = new UserActivity();
-        $langModel    = new PlacesContentModel();
-        $placeContent = new \App\Entities\PlaceContent();
+        $contentModel = new PlacesContentModel();
         $newContent   = strip_tags(html_entity_decode($input->content));
 
-        $placeContent->locale = 'ru';
-        $placeContent->place_id = $id;
-        $placeContent->user_id  = $session->userData->id;
-        $placeContent->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
-        $placeContent->content  = $newContent;
-        $placeContent->delta    = strlen($newContent) - strlen($placeTranslate->content($id));
+        $placeEntity = new \App\Entities\PlaceContent();
+        $placeEntity->locale = 'ru';
+        $placeEntity->place_id = $id;
+        $placeEntity->user_id  = $session->userData->id;
+        $placeEntity->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeContent->title($id);
+        $placeEntity->content  = $newContent;
+        $placeEntity->delta    = strlen($newContent) - strlen($placeContent->content($id));
 
         // If the author of the last edit is the same as the current one,
         // then you need to check when the content was last edited
-        if ($placeTranslate->author($id) === $session->userData->id) {
+        if ($placeContent->author($id) === $session->userData->id) {
             $time = new Time('now');
-            $diff = $time->difference($placeTranslate->updated($id));
+            $diff = $time->difference($placeContent->updated($id));
 
             // If the last time a user edited this content was less than or equal to 30 minutes,
             // then we will simply update the data and will not add a new version
             if (abs($diff->getMinutes()) <= 30) {
-                $langModel->update($placeTranslate->id($id), $placeContent);
+                $contentModel->update($placeContent->id($id), $placeEntity);
             } else {
-                $langModel->insert($placeContent);
+                $contentModel->insert($placeEntity);
                 $userActivity->edit($id);
             }
         } else {
-            $langModel->insert($placeContent);
+            $contentModel->insert($placeEntity);
             $userActivity->edit($id);
         }
 
         // We add a notification to the author that his material has been edited
         if ($placeData->user_ud !== $session->userData->id) {
             $userNotify = new UserNotify();
-            $userNotify->place($placeTranslate->author($id), $id);
+            $userNotify->place($placeContent->author($id), $id);
         }
 
         // In any case, we update the time when the post was last edited

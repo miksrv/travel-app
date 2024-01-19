@@ -17,7 +17,7 @@ export type Place = {
     distance?: number
     author?: User
     category?: Category
-    address?: Address
+    address?: Location
     photo?: Photo
     tags?: Tag[]
     photoCount?: number
@@ -55,15 +55,15 @@ export type Category = {
     title: string
 }
 
-export type Address = {
+export type Location = {
     street?: string
-    country?: AddressObject
-    region?: AddressObject
-    district?: AddressObject
-    city?: AddressObject
+    country?: LocationObject
+    region?: LocationObject
+    district?: LocationObject
+    city?: LocationObject
 }
 
-export type AddressObject = {
+export type LocationObject = {
     id: number
     name: string
 }
@@ -71,5 +71,4 @@ export type AddressObject = {
 export type Tag = {
     id: string
     title: string
-    counter: number
 }

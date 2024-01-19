@@ -30,7 +30,7 @@ const Container: React.FC<ContainerProps> = ({
             <div className={styles.header}>
                 {title && <h2 className={styles.title}>{title}</h2>}
                 {header}
-                {action}
+                {action && <div className={styles.actions}>{action}</div>}
             </div>
         )}
         {children}

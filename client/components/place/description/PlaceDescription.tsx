@@ -3,13 +3,14 @@ import React, { useEffect } from 'react'
 import Markdown from 'react-markdown'
 
 import Button from '@/ui/button'
+import ChipsSelect from '@/ui/chips-select'
 import Container from '@/ui/container'
+import ContentEditor from '@/ui/content-editor'
 
 import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
-import { Address, Tag } from '@/api/types/Place'
+import { Tag } from '@/api/types/Place'
 
-import ContentEditor from '../../../ui/content-editor'
 import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
@@ -24,6 +25,9 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     const [savePlace, { isLoading, data: saveData }] =
         API.usePlacesPatchItemMutation()
 
+    const [searchTags, { data: searchResult, isLoading: searchLoading }] =
+        API.useTagsGetSearchMutation()
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
     const [editorMode, setEditorMode] = React.useState<boolean>(false)
     const [editorContent, setEditorContent] = React.useState<string>()
@@ -31,6 +35,10 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
 
     const handleSetEditorClick = () => {
         setEditorMode(!editorMode)
+    }
+
+    const handleSelectTags = (value: string[]) => {
+        setEditorTags(value)
     }
 
     const handleSaveEditorClick = async () => {
@@ -62,159 +70,70 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
         <Container
             className={styles.component}
             title={'Описание'}
-            action={<Button icon={'Pencil'}>{'Редактировать'}</Button>}
+            action={
+                isAuth && editorMode ? (
+                    <>
+                        <Button
+                            mode={'secondary'}
+                            disabled={isLoading}
+                            onClick={handleSaveEditorClick}
+                        >
+                            {'Сохранить'}
+                        </Button>
+                        <Button
+                            mode={'secondary'}
+                            disabled={isLoading}
+                            onClick={handleSetEditorClick}
+                        >
+                            {'Отмена'}
+                        </Button>
+                    </>
+                ) : (
+                    <Button
+                        icon={'Pencil'}
+                        onClick={handleSetEditorClick}
+                    >
+                        {'Редактировать'}
+                    </Button>
+                )
+            }
         >
-            <Markdown>{content}</Markdown>
-            {!!tags?.length && (
-                <ul className={styles.tagList}>
-                    {tags?.map((tag) => (
-                        <li key={tag.id}>
-                            <Link href={`/tags/${tag.id}`}>
-                                {`#${tag.title}`}
-                            </Link>
-                        </li>
-                    ))}
-                </ul>
+            {isAuth && editorMode ? (
+                <ContentEditor
+                    markdown={content || ''}
+                    onChange={setEditorContent}
+                />
+            ) : content ? (
+                <Markdown>{content}</Markdown>
+            ) : (
+                <div className={styles.emptyContent}>{'Нет описания'}</div>
             )}
 
-            {/*<CardHeader*/}
-            {/*    title={title ? `${title} - описание` : title}*/}
-            {/*    titleTypographyProps={{*/}
-            {/*        component: 'h2',*/}
-            {/*        fontSize: 18*/}
-            {/*    }}*/}
-            {/*    sx={{ mb: -2 }}*/}
-            {/*    subheader={*/}
-            {/*        <Typography variant={'caption'}>*/}
-            {/*            {address?.country && (*/}
-            {/*                <Link*/}
-            {/*                    color='inherit'*/}
-            {/*                    href={`/country/${address.country.id}`}*/}
-            {/*                >*/}
-            {/*                    {address.country.name}*/}
-            {/*                </Link>*/}
-            {/*            )}*/}
-            {/*            {address?.region && (*/}
-            {/*                <>*/}
-            {/*                    {address?.country && ', '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/region/${address.region.id}`}*/}
-            {/*                    >*/}
-            {/*                        {address.region.name}*/}
-            {/*                    </Link>*/}
-            {/*                </>*/}
-            {/*            )}*/}
-            {/*            {address?.district && (*/}
-            {/*                <>*/}
-            {/*                    {address?.region && ', '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/district/${address.district.id}`}*/}
-            {/*                    >*/}
-            {/*                        {address.district.name}*/}
-            {/*                    </Link>*/}
-            {/*                </>*/}
-            {/*            )}*/}
-            {/*            {address?.city && (*/}
-            {/*                <>*/}
-            {/*                    {address?.district && ', '}*/}
-            {/*                    <Link*/}
-            {/*                        color='inherit'*/}
-            {/*                        href={`/city/${address.city.id}`}*/}
-            {/*                    >*/}
-            {/*                        {address.city.name}*/}
-            {/*                    </Link>*/}
-            {/*                </>*/}
-            {/*            )}*/}
-            {/*            {address?.street && (*/}
-            {/*                <>*/}
-            {/*                    {', '}*/}
-            {/*                    {address?.street}*/}
-            {/*                </>*/}
-            {/*            )}*/}
-            {/*        </Typography>*/}
-            {/*    }*/}
-            {/*    action={*/}
-            {/*        isAuth && editorMode ? (*/}
-            {/*            <>*/}
-            {/*                <Button*/}
-            {/*                    sx={{ mr: 1 }}*/}
-            {/*                    size={'medium'}*/}
-            {/*                    variant={'contained'}*/}
-            {/*                    disabled={isLoading}*/}
-            {/*                    onClick={handleSaveEditorClick}*/}
-            {/*                >*/}
-            {/*                    {'Сохранить'}*/}
-            {/*                </Button>*/}
-            {/*                <Button*/}
-            {/*                    sx={{ mr: 0 }}*/}
-            {/*                    size={'medium'}*/}
-            {/*                    variant={'outlined'}*/}
-            {/*                    disabled={isLoading}*/}
-            {/*                    onClick={handleSetEditorClick}*/}
-            {/*                >*/}
-            {/*                    {'Отмена'}*/}
-            {/*                </Button>*/}
-            {/*            </>*/}
-            {/*        ) : (*/}
-            {/*            <Button*/}
-            {/*                sx={{ mr: 0 }}*/}
-            {/*                size={'medium'}*/}
-            {/*                variant={'contained'}*/}
-            {/*                disabled={!isAuth}*/}
-            {/*                onClick={handleSetEditorClick}*/}
-            {/*            >*/}
-            {/*                {'Редактировать'}*/}
-            {/*            </Button>*/}
-            {/*        )*/}
-            {/*    }*/}
-            {/*/>*/}
-            {/*<CardContent sx={{ mt: -3 }}>*/}
-            {/*    {isAuth && editorMode ? (*/}
-            {/*        <ContentEditor*/}
-            {/*            markdown={content || ''}*/}
-            {/*            onChange={setEditorContent}*/}
-            {/*        />*/}
-            {/*    ) : (*/}
-            {/*        <Typography*/}
-            {/*            variant={'body2'}*/}
-            {/*            className={'placeContent'}*/}
-            {/*            sx={{ whiteSpace: 'break-spaces' }}*/}
-            {/*        >*/}
-            {/*            {content ? (*/}
-            {/*                <Markdown>{content}</Markdown>*/}
-            {/*            ) : (*/}
-            {/*                'Нет данных для отображения'*/}
-            {/*            )}*/}
-            {/*        </Typography>*/}
-            {/*    )}*/}
-
-            {/*    {isAuth && editorMode ? (*/}
-            {/*        <TagsSelector*/}
-            {/*            onChangeTags={setEditorTags}*/}
-            {/*            tags={editorTags}*/}
-            {/*        />*/}
-            {/*    ) : tags?.length ? (*/}
-            {/*        <Stack*/}
-            {/*            direction='row'*/}
-            {/*            spacing={1}*/}
-            {/*            sx={{ mb: -1, mt: 1 }}*/}
-            {/*        >*/}
-            {/*            {tags.map((tag) => (*/}
-            {/*                <Link*/}
-            {/*                    key={tag.id}*/}
-            {/*                    color={'inherit'}*/}
-            {/*                    href={`/tags/${tag.id}`}*/}
-            {/*                >*/}
-            {/*                    {`#${tag.title}`}*/}
-            {/*                </Link>*/}
-            {/*            ))}*/}
-            {/*        </Stack>*/}
-            {/*    ) : (*/}
-            {/*        ''*/}
-            {/*    )}*/}
-            {/*</CardContent>*/}
+            {isAuth && editorMode ? (
+                <div className={styles.formElement}>
+                    <ChipsSelect
+                        label={'Выберите или добавьте метки интересного места'}
+                        placeholder={''}
+                        value={tags?.map((tag) => tag.title) || []}
+                        loading={searchLoading}
+                        options={searchResult?.items}
+                        onSearch={(value) => searchTags(value)}
+                        onSelect={handleSelectTags}
+                    />
+                </div>
+            ) : (
+                !!tags?.length && (
+                    <ul className={styles.tagList}>
+                        {tags?.map((tag) => (
+                            <li key={tag.id}>
+                                <Link href={`/tags/${tag.id}`}>
+                                    {`#${tag.title}`}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                )
+            )}
         </Container>
     )
 }

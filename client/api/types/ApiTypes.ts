@@ -1,4 +1,4 @@
-import { AddressObject, Category, Place } from '@/api/types/Place'
+import { Category, LocationObject, Place } from '@/api/types/Place'
 
 import { Item } from './Activity'
 import { Photo } from './Photo'
@@ -163,7 +163,7 @@ export interface RequestPhotoPostUpload {
 }
 
 /* Controller: Location */
-export interface ResponseLocationGetByType extends AddressObject {}
+export interface ResponseLocationGetByType extends LocationObject {}
 
 export interface RequestLocationGetByType {
     id?: number | null
@@ -177,10 +177,10 @@ export interface RequestLocationGetGeocoder {
 
 /* Controller: Address */
 export interface ResponseAddressGetSearch {
-    countries?: AddressObject[]
-    regions?: AddressObject[]
-    districts?: AddressObject[]
-    cities?: AddressObject[]
+    countries?: LocationObject[]
+    regions?: LocationObject[]
+    districts?: LocationObject[]
+    cities?: LocationObject[]
 }
 
 /* Controller: Tags */
