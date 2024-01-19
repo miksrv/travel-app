@@ -2,6 +2,7 @@
 
 use App\Entities\Place;
 use App\Libraries\Geocoder;
+use App\Libraries\LocaleLibrary;
 use App\Libraries\PlaceTags;
 use App\Libraries\PlacesContent;
 use App\Libraries\Session;
@@ -175,6 +176,7 @@ class Places extends ResourceController {
      * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
+        $localeLibrary = new LocaleLibrary();
         $session = new Session();
 
         // Load translate library
@@ -220,7 +222,6 @@ class Places extends ResourceController {
 
             // Collect tags
             $placeData->tags = $placesTagsModel
-                ->select('tags.id, tags.title_ru')
                 ->join('tags', 'tags.id = places_tags.tag_id')
                 ->where(['place_id' => $placeData->id])
                 ->findAll();
@@ -255,8 +256,20 @@ class Places extends ResourceController {
                     'rating' => !$ratingData,
                 ],
                 'address'   => [],
-                'tags'      => $placeData->tags,
             ];
+
+            if ($placeData->tags) {
+                $tagsTitles = [];
+
+                foreach ($placeData->tags as $tagItem) {
+                    $tagsTitles[] = [
+                        'id' => $tagItem->id,
+                        'title' => $tagItem->{"title_$localeLibrary->locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
+                    ];
+                }
+
+                $response['tags'] = $tagsTitles;
+            }
 
             if ($placeData->address) {
                 $response['address']['street'] = $placeData->address;

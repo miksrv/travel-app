@@ -14,6 +14,8 @@ class PlaceTags {
     }
 
     public function saveTags(array $tags, string $placeId): bool {
+        $localeLibrary = new LocaleLibrary();
+
         if (!$placeId) {
             return false;
         }
@@ -25,13 +27,10 @@ class PlaceTags {
         }
 
         foreach ($tags as $tag) {
-            $tagData = $this->tagsModel->where(['title' => $tag])->first();
+            $tagData = $this->tagsModel->where(['title_' . $localeLibrary->locale => $tag])->first();
 
             if (!$tagData) {
-                $this->tagsModel->insert([
-                    'title'   => $tag,
-                    'counter' => 1
-                ]);
+                $this->tagsModel->insert(['title_' . $localeLibrary->locale => $tag,]);
 
                 $this->placeTagsModel->insert([
                     'tag_id'   => $this->tagsModel->getInsertID(),
@@ -40,7 +39,7 @@ class PlaceTags {
 
             } else {
 
-                $this->tagsModel->update($tagData->id, ['counter' => $tagData->counter + 1]);
+                $this->tagsModel->update($tagData->id);
                 $this->placeTagsModel->insert([
                     'tag_id'   => $tagData->id,
                     'place_id' => $placeId

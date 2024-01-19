@@ -63,6 +63,14 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
             setIsOpen(false)
             setSearch(undefined)
         }
+
+        if (event.key === 'Backspace' && value?.length) {
+            const updateValue = [...value]
+
+            updateValue.pop()
+
+            onSelect?.(updateValue)
+        }
     }
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {

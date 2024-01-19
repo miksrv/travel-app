@@ -34,6 +34,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     const [editorTags, setEditorTags] = React.useState<string[]>()
 
     const handleSetEditorClick = () => {
+        setEditorTags(tags?.map((tag) => tag.title) || [])
         setEditorMode(!editorMode)
     }
 
@@ -114,7 +115,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
                     <ChipsSelect
                         label={'Выберите или добавьте метки интересного места'}
                         placeholder={''}
-                        value={tags?.map((tag) => tag.title) || []}
+                        value={editorTags}
                         loading={searchLoading}
                         options={searchResult?.items}
                         onSearch={(value) => searchTags(value)}
