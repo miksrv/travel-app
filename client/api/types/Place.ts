@@ -7,8 +7,8 @@ export type Place = {
     id: string
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
     rating: number
     views: number
     title: string

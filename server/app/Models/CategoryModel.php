@@ -1,6 +1,5 @@
 <?php namespace App\Models;
 
-use App\Entities\Category;
 use CodeIgniter\Model;
 
 class CategoryModel extends Model {
@@ -9,31 +8,31 @@ class CategoryModel extends Model {
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = Category::class;
+    protected $returnType     = \App\Entities\Category::class;
     protected $useSoftDeletes = false;
 
-    // The updatable fields
     protected $allowedFields = [
         'name',
-        'title',
-        'info'
+        'title_en',
+        'title_ru',
+        'content_en',
+        'content_ru',
     ];
 
-    // Dates
     protected $useTimestamps = false;
 
-    // Validation
     protected $validationRules = [
-        'name'  => 'required|alpha_numeric_space|max_length[50]',
-        'title' => 'string|max_length[50]',
-        'info'  => 'string|max_length[300]',
+        'name'       => 'required|alpha_numeric_space|max_length[50]',
+        'title_en'   => 'string|max_length[50]',
+        'title_ru'   => 'string|max_length[50]',
+        'content_en' => 'string|max_length[300]',
+        'content_ru' => 'string|max_length[300]',
     ];
 
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = false;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

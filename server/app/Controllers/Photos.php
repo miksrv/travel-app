@@ -2,19 +2,30 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
-use App\Libraries\PlaceTranslation;
+use App\Libraries\PlacesContent;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
-use App\Models\TranslationsPhotosModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use ReflectionException;
 
+/**
+ * Available methods:
+ *   - actions()
+ *   - list()
+ *   - upload($id)
+ *   - delete($id)
+ */
 class Photos extends ResourceController {
+    /**
+     * Getting a list of actions available to the user for a photo by their ID
+     * @example /photos?ids=1,2,3,4,5
+     * @return ResponseInterface
+     */
     public function actions(): ResponseInterface {
         $session = new Session();
         $photos  = $this->request->getGet('ids', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -43,6 +54,12 @@ class Photos extends ResourceController {
     }
 
     /**
+     * Getting a list of all photos
+     * GET parameters:
+     *   - author (string)
+     *   - place (string)
+     *   - limit (int)
+     *   - offset (int)
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
@@ -85,30 +102,8 @@ class Photos extends ResourceController {
         ]);
     }
 
-    public function delete($id = null): ResponseInterface {
-        $session  = new Session();
-
-        if (!$session->isAuth) {
-            return $this->failUnauthorized();
-        }
-
-        $photosModel = new PhotosModel();
-        $photoData   = $photosModel->select('id, user_id')->find($id);
-
-        if (!$photoData) {
-            return $this->failValidationErrors('No photo found with this ID');
-        }
-
-        if ($photoData->user_id !== $session->userId) {
-            return $this->failValidationErrors('You can not delete this photo');
-        }
-
-        $photosModel->delete($id);
-
-        return $this->respondDeleted(['id' => $id]);
-    }
-
     /**
+     * Uploading a photo by place ID
      * @param null $id
      * @return ResponseInterface
      * @throws ReflectionException
@@ -127,9 +122,9 @@ class Photos extends ResourceController {
         $userLocale   = $session->userData->locale ?? 'ru';
         $userActivity = new UserActivity();
         $placesModel  = new PlacesModel();
-        $placesData   = $placesModel->select('id, latitude, longitude')->find($id);
+        $placesData   = $placesModel->select('id, lat, lng')->find($id);
 
-        $placeTranslate = new PlaceTranslation($userLocale);
+        $placeTranslate = new PlacesContent($userLocale);
         $placeTranslate->translate([$id]);
 
         if (!$placesData || !$placesData->id) {
@@ -162,8 +157,8 @@ class Photos extends ResourceController {
 
             // Save photo to DB
             $photo = new Photo();
-            $photo->latitude  = $coordinates->lat ?? $placesData->latitude;
-            $photo->longitude = $coordinates->lng ?? $placesData->longitude;
+            $photo->lat  = $coordinates->lat ?? $placesData->lat;
+            $photo->lng = $coordinates->lng ?? $placesData->lng;
             $photo->place_id  = $placesData->id;
             $photo->user_id   = $session->userData->id;
             $photo->filename  = $name;
@@ -207,6 +202,29 @@ class Photos extends ResourceController {
             'placeId'   => $photo->place_id,
             'created'   => $photo->created_at
         ]);
+    }
+
+    public function delete($id = null): ResponseInterface {
+        $session  = new Session();
+
+        if (!$session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $photosModel = new PhotosModel();
+        $photoData   = $photosModel->select('id, user_id')->find($id);
+
+        if (!$photoData) {
+            return $this->failValidationErrors('No photo found with this ID');
+        }
+
+        if ($photoData->user_id !== $session->userId) {
+            return $this->failValidationErrors('You can not delete this photo');
+        }
+
+        $photosModel->delete($id);
+
+        return $this->respondDeleted(['id' => $id]);
     }
 
     /**
@@ -275,10 +293,9 @@ class Photos extends ResourceController {
         $photosModel
             ->select(
                 'photos.id, photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
-                    photos.height, photos.order, translations_photos.title, photos.created_at,
+                    photos.height, photos.order, photos.title_ru, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-            ->join('users', 'photos.user_id = users.id', 'left')
-            ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left');
+            ->join('users', 'photos.user_id = users.id', 'left');
 
         if ($place) {
             $photosModel->where(['photos.place_id' => $place]);

@@ -1,35 +1,35 @@
 <?php namespace App\Models;
 
-class TranslationsPlacesModel extends MyBaseModel {
-    protected $table            = 'translations_places';
+class PlacesContentModel extends MyBaseModel {
+    protected $table            = 'places_content';
     protected $primaryKey       = 'id';
+
     protected $useAutoIncrement = false;
-    protected $returnType       = 'object';
+
+    protected $returnType       = \App\Entities\PlaceContent::class;
     protected $useSoftDeletes   = false;
+
     protected $allowedFields = [
         'place_id',
         'user_id',
-        'language',
+        'locale',
         'title',
         'content',
         'delta',
         'created_at'
     ];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];

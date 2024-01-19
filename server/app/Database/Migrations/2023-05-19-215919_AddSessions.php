@@ -26,13 +26,13 @@ class AddSessions extends Migration {
                 'constraint' => 300,
                 'null'       => false,
             ],
-            'latitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => true,
+            'lat' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => true,
             ],
-            'longitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => true,
+            'lng' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => true,
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',

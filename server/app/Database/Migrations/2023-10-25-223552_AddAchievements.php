@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Database\Migrations;
+<?php namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
@@ -14,12 +12,22 @@ class AddAchievements extends Migration {
                 'unique'         => true,
                 'auto_increment' => true
             ],
-            'name' => [
+            'title_en' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
                 'null'       => true,
             ],
-            'text' => [
+            'title_ru' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 200,
+                'null'       => true,
+            ],
+            'content_en' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 255,
+                'null'       => true,
+            ],
+            'content_ru' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 255,
                 'null'       => true,

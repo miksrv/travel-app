@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\PlaceTranslation;
+use App\Libraries\PlacesContent;
 use App\Models\CategoryModel;
 use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -27,7 +27,7 @@ class Activity extends ResourceController {
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // Load translate library
-        $placeTranslations = new PlaceTranslation('ru', 400);
+        $placeTranslations = new PlacesContent('ru', 400);
 
         $categoriesModel = new CategoryModel();
         $categoriesData  = $categoriesModel->findAll();
@@ -87,13 +87,13 @@ class Activity extends ResourceController {
      * for one place with an interval of 5 minutes - we combine them into one activity
      * @param array $activityData
      * @param array|null $categoriesData
-     * @param PlaceTranslation|null $placeTranslations
+     * @param PlacesContent|null $placeTranslations
      * @return array
      */
     protected function _groupSimilarActivities(
         array $activityData,
         array $categoriesData = null,
-        PlaceTranslation $placeTranslations = null
+        PlacesContent $placeTranslations = null
     ): array {
         $groupData = [];
 

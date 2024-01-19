@@ -2,10 +2,8 @@
 
 use CodeIgniter\Database\Seeder;
 
-class ManageSeeder extends Seeder
-{
-    public function run()
-    {
+class ManageSeeder extends Seeder {
+    public function run() {
         $this->call('CategorySeeder');
         $this->call('OverpassCategorySeeder');
         $this->call('UserLevelsSeeder');

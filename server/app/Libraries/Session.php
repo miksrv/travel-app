@@ -7,10 +7,9 @@ use Config\Services;
 use ReflectionException;
 
 class Session {
-
     public string $id;
-    public float | null $latitude = null;
-    public float | null $longitude = null;
+    public float | null $lat = null;
+    public float | null $lng = null;
     public string | null $userId = null;
     public bool $isAuth = false;
     public User | null $userData;
@@ -21,11 +20,11 @@ class Session {
 
     /**
      * Обновляет текущую сессию пользователя по его IP и User Agent, возвращает ID сессии в БД
-     * @param float|null $latitude
-     * @param float|null $longitude
+     * @param float|null $lat
+     * @param float|null $lng
      * @throws ReflectionException
      */
-    public function __construct(float $latitude = null, float $longitude = null) {
+    public function __construct(float $lat = null, float $lng = null) {
         helper('jwt');
 
         $request = Services::request();
@@ -47,10 +46,10 @@ class Session {
         }
 
         if ($findSession && $findSession->id) {
-            $this->id = $findSession->id;
-            $this->latitude  = $findSession->latitude;
-            $this->longitude = $findSession->longitude;
-            $this->userId    = $findSession->user_id;
+            $this->id     = $findSession->id;
+            $this->lat    = $findSession->lat;
+            $this->lng    = $findSession->lng;
+            $this->userId = $findSession->user_id;
         }
 
         // Если сессии в БД с такими IP и UA нет, то добавляем новую
@@ -60,38 +59,34 @@ class Session {
                 'user_id'    => $this->userId,
                 'user_ip'    => $this->ip,
                 'user_agent' => $this->ua,
-                'latitude'   => $latitude,
-                'longitude'  => $longitude
+                'lat'        => $lat,
+                'lng'        => $lng
             ];
 
             $this->sessionModel->insert($sessionData);
             $this->_saveSessionHistory(
                 $sessionData->id,
-                $latitude,
-                $longitude
+                $lat,
+                $lng
             );
 
-            $this->latitude  = $latitude;
-            $this->longitude = $longitude;
-            $this->id = $sessionData->id;
+            $this->lat = $lat;
+            $this->lng = $lng;
+            $this->id  = $sessionData->id;
 
             return $sessionData->id;
         }
 
         // Если сессия уже есть в БД и положение сейчас отличается от того, что было сохранено,
         // То создается новая запись в истории сессий
-        if (($latitude && $longitude) &&
-            ($latitude !== $this->latitude || $longitude !== $this->longitude)
+        if (($lat && $lng) &&
+            ($lat !== $this->lat || $lng !== $this->lng)
         ) {
-            $this->_saveSessionHistory(
-                $this->id,
-                $latitude,
-                $longitude
-            );
+            $this->_saveSessionHistory($this->id, $lat, $lng);
         }
 
-        $this->latitude  = $latitude ?? $this->latitude;
-        $this->longitude = $longitude ?? $this->longitude;
+        $this->lat = $lat ?? $this->lat;
+        $this->lng = $lng ?? $this->lng;
 
         return $this->id;
     }
@@ -102,9 +97,9 @@ class Session {
      */
     public function update(): bool {
         return $this->sessionModel->update($this->id, [
-            'latitude'  => $this->latitude,
-            'longitude' => $this->longitude,
-            'user_id'   => !empty($this->userId) ? $this->userId : null,
+            'lat'     => $this->lat,
+            'lng'     => $this->lng,
+            'user_id' => !empty($this->userId) ? $this->userId : null,
         ]);
     }
 
@@ -122,19 +117,23 @@ class Session {
     /**
      * Сохраняем сессию в истории
      * @param string $session
-     * @param float|null $latitude
-     * @param float|null $longitude
+     * @param float|null $lat
+     * @param float|null $lng
      * @return string|null
      * @throws ReflectionException
      */
-    protected function _saveSessionHistory(string $session, float | null $latitude, float | null $longitude): ?string {
+    protected function _saveSessionHistory(
+        string $session,
+        float | null $lat,
+        float | null $lng
+    ): ?string
+    {
         try {
             $historyModel = new SessionsHistoryModel();
-
             $historyModel->insert([
                 'session_id' => $session,
-                'latitude'   => $latitude ?? null,
-                'longitude'  => $longitude ?? null
+                'lat'        => $lat ?? null,
+                'lng'        => $lng ?? null
             ]);
 
             return $historyModel->getInsertID();

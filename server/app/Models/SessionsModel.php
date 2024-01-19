@@ -1,6 +1,5 @@
 <?php namespace App\Models;
 
-use App\Entities\Session;
 use CodeIgniter\Model;
 
 class SessionsModel extends Model {
@@ -9,35 +8,29 @@ class SessionsModel extends Model {
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = Session::class;
+    protected $returnType     = \App\Entities\Session::class;
     protected $useSoftDeletes = false;
 
-    // The updatable fields
     protected $allowedFields = [
         'id',
         'user_id',
         'user_ip',
         'user_agent',
-        'latitude',
-        'longitude',
+        'lat',
+        'lng',
     ];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
-    protected $validationRules = [
-
-    ];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = false;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

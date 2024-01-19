@@ -1,25 +1,23 @@
 <?php namespace App\Models;
 
-use App\Entities\Photo;
-
 class PhotosModel extends MyBaseModel {
     protected $table      = 'photos';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = Photo::class;
+    protected $returnType     = \App\Entities\Photo::class;
     protected $useSoftDeletes = true;
 
     protected array $hiddenFields = ['updated_at', 'deleted_at'];
 
-    // The updatable fields
     protected $allowedFields = [
-        'title',
-        'latitude',
-        'longitude',
         'place_id',
         'user_id',
+        'lat',
+        'lng',
+        'title_en',
+        'title_ru',
         'filename',
         'extension',
         'filesize',
@@ -29,20 +27,17 @@ class PhotosModel extends MyBaseModel {
         'created_at',
     ];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];

@@ -2,24 +2,25 @@
 
 use CodeIgniter\Database\Migration;
 
-class AddTags extends Migration {
+class LocationCountries extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => false,
-                'unique'     => true
+                'type'           => 'SMALLINT',
+                'constraint'     => 5,
+                'null'           => false,
+                'unique'         => true,
+                'auto_increment' => true
             ],
-            'title_en' => [
+            'title_en'       => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
-                'null'       => true,
+                'constraint' => 50,
+                'null'       => false
             ],
-            'title_ru' => [
+            'title_ru'       => [
                 'type'       => 'VARCHAR',
-                'constraint' => 40,
-                'null'       => true,
+                'constraint' => 50,
+                'null'       => false
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
@@ -30,10 +31,10 @@ class AddTags extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->createTable('tags');
+        $this->forge->createTable('location_countries');
     }
 
     public function down() {
-        $this->forge->dropTable('tags');
+        $this->forge->dropTable('location_countries');
     }
 }

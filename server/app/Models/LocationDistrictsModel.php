@@ -2,34 +2,36 @@
 
 use CodeIgniter\Model;
 
-class AddressDistrict extends Model {
-    protected $table      = 'address_district';
+class LocationDistrictsModel extends Model {
+    protected $table      = 'location_districts';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = \App\Entities\AddressDistrict::class;
+    protected $returnType     = \App\Entities\LocationDistrict::class;
     protected $useSoftDeletes = false;
 
-    // The updatable fields
     protected $allowedFields = [
-        'name',
-        'country',
-        'region'
+        'country_id',
+        'region_id',
+        'title_en',
+        'title_ru'
     ];
 
-    // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
-        'name'  => 'required|string|max_length[100]',
+        'title_en' => 'required|string|max_length[100]',
+        'title_ru' => 'required|string|max_length[100]'
     ];
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = false;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

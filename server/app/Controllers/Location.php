@@ -2,10 +2,10 @@
 
 use App\Libraries\Geocoder;
 use App\Libraries\Session;
-use App\Models\AddressCity;
-use App\Models\AddressCountry;
-use App\Models\AddressDistrict;
-use App\Models\AddressRegion;
+use App\Models\LocationCitiesModel;
+use App\Models\LocationCountriesModel;
+use App\Models\LocationDistrictsModel;
+use App\Models\LocationRegionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
@@ -38,25 +38,25 @@ class Location extends ResourceController {
         }
 
         if ($type === 'country') {
-            $countriesModel = new AddressCountry();
+            $countriesModel = new LocationCountriesModel();
             $countriesData  = $countriesModel->find($id);
             return $this->respond((object) $countriesData);
         }
 
         if ($type === 'region') {
-            $regionsModel = new AddressRegion();
+            $regionsModel = new LocationRegionsModel();
             $regionsData  = $regionsModel->find($id);
             return $this->respond((object) $regionsData);
         }
 
         if ($type === 'district') {
-            $districtsModel = new AddressDistrict();
+            $districtsModel = new LocationDistrictsModel();
             $districtsData  = $districtsModel->find($id);
             return $this->respond((object) $districtsData);
         }
 
         if ($type === 'city') {
-            $citiesModel = new AddressCity();
+            $citiesModel = new LocationCitiesModel();
             $citiesData  = $citiesModel->find($id);
             return $this->respond((object) $citiesData);
         }

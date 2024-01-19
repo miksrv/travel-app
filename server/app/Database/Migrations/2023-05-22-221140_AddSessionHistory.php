@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Database\Migrations;
+<?php namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
@@ -18,15 +16,20 @@ class AddSessionHistory extends Migration {
                 'constraint' => 32,
                 'null'       => false,
             ],
-            'latitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
+            'lat' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false,
             ],
-            'longitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
+            'lng' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false,
             ],
             'created_at DATETIME default current_timestamp',
+            'updated_at DATETIME default current_timestamp',
+            'deleted_at' => [
+                'type' => 'DATETIME',
+                'null' => true
+            ]
         ]);
 
         $this->forge->addPrimaryKey('id');

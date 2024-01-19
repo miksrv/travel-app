@@ -1,19 +1,16 @@
 <?php namespace App\Models;
 
-use App\Entities\Rating;
-
 class RatingModel extends MyBaseModel {
     protected $table      = 'rating';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = Rating::class;
+    protected $returnType     = \App\Entities\Rating::class;
     protected $useSoftDeletes = true;
 
     protected array $hiddenFields = [];
 
-    // The updatable fields
     protected $allowedFields = [
         'place_id',
         'user_id',
@@ -22,20 +19,17 @@ class RatingModel extends MyBaseModel {
         'created_at'
     ];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];

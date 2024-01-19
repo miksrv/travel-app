@@ -8,7 +8,7 @@ class Session extends Entity {
         'user_id'    => 'string',
         'user_ip'    => 'string',
         'user_agent' => 'string',
-        'latitude'   => 'float',
-        'longitude'  => 'float',
+        'lat'        => 'float',
+        'lng'        => 'float',
     ];
 }

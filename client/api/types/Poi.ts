@@ -5,17 +5,16 @@ import { User } from '@/api/types/User'
 export type Place = {
     id?: string
     category: Categories
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
 }
 
 export type Photo = {
     placeId: string
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
     filename: string
     extension: string
-    title: string
     author?: User
     created?: ApiTypes.DateTimeType
 }

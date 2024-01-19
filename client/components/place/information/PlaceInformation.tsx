@@ -122,18 +122,15 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                         <Link
                             color={'inherit'}
                             target={'_blank'}
-                            href={`geo:${place?.latitude},${place?.longitude}`}
+                            href={`geo:${place?.lat},${place?.lng}`}
                         >
-                            {`${convertDMS(
-                                place?.latitude || 0,
-                                place?.longitude || 0
-                            )}`}
+                            {`${convertDMS(place?.lat || 0, place?.lng || 0)}`}
                         </Link>
                         <Link
                             className={styles.mapLink}
                             color={'inherit'}
                             target={'_blank'}
-                            href={`https://yandex.ru/maps/?pt=${place?.longitude},${place?.latitude}&spn=0.1,0.1&l=sat,skl&z=14`}
+                            href={`https://yandex.ru/maps/?pt=${place?.lng},${place?.lat}&spn=0.1,0.1&l=sat,skl&z=14`}
                         >
                             <Image
                                 src={yandexLogo.src}
@@ -146,7 +143,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             className={styles.mapLink}
                             target={'_blank'}
                             color={'inherit'}
-                            href={`https://maps.google.com/maps?ll=${place?.latitude},${place?.longitude}&q=${place?.latitude},${place?.longitude}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                            href={`https://maps.google.com/maps?ll=${place?.lat},${place?.lng}&q=${place?.lat},${place?.lng}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
                         >
                             <Image
                                 src={googleLogo.src}
@@ -197,16 +194,16 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                 </li>
             </ul>
             <div className={styles.map}>
-                {place?.latitude && place?.longitude && (
+                {place?.lat && place?.lng && (
                     <InteractiveMap
                         zoom={15}
-                        center={[place.latitude, place.longitude]}
+                        center={[place.lat, place.lng]}
                         scrollWheelZoom={false}
                         places={[
                             {
                                 category: place.category?.name!,
-                                latitude: place.latitude,
-                                longitude: place.longitude
+                                lat: place.lat,
+                                lng: place.lng
                             }
                         ]}
                     />

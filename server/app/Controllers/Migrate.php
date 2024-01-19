@@ -8,10 +8,9 @@ use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesTagsModel;
 use App\Models\TagsModel;
-use App\Models\TranslationsPhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
-use App\Models\TranslationsPlacesModel;
+use App\Models\PlacesContentModel;
 use App\Models\UsersActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
@@ -21,7 +20,7 @@ use Config\Services;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 20);
+define('MAX_PLACES_PER_ITERATION', 5);
 
 set_time_limit(0);
 
@@ -53,8 +52,7 @@ class Migrate extends ResourceController {
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
 
-        $translationsPlacesModel = new TranslationsPlacesModel();
-        $translationsPhotosModel = new TranslationsPhotosModel();
+        $placesContentModel = new PlacesContentModel();
 
         $activityModel  = new UsersActivityModel();
         $migratePlaces  = new MigratePlacesModel();
@@ -66,9 +64,9 @@ class Migrate extends ResourceController {
         $inserted = [];
 
         foreach ($migratePlace as $item) {
-            if ($translationsPlacesModel
+            if ($placesContentModel
                 ->where('title', strip_tags(html_entity_decode($item->item_title)))
-                ->join('places', 'translations_places.place_id = places.id')
+                ->join('places', 'places_content.place_id = places.id')
                 ->first()
             ) {
                 continue;
@@ -90,22 +88,23 @@ class Migrate extends ResourceController {
             // Place version timestamp
             $placeVersionDate = (int) $item->item_version_date !== 0 ? $item->item_version_date : $item->item_datestamp;
 
-            $geocoder = new Geocoder($item->item_latitude, $item->item_longitude);
+            $geocoder = new Geocoder($item->item_latitude, $item->item_longitude, 'ru');
             $place    = new \App\Entities\Place();
 
-            $place->latitude         = $item->item_latitude;
-            $place->longitude        = $item->item_longitude;
-            $place->user_id          = $placeAuthor;
-            $place->rating           = $ratingSum === 0 ? null : $ratingSum;
-            $place->views            = $item->item_count_views;
-            $place->category         = $mapCategories[$item->item_category];
-            $place->address          = $geocoder->address;
-            $place->address_country  = $geocoder->countryID;
-            $place->address_region   = $geocoder->regionID;
-            $place->address_district = $geocoder->districtID;
-            $place->address_city     = $geocoder->cityID;
-            $place->created_at       = $item->item_datestamp;
-            $place->updated_at       = $placeVersionDate;
+            $place->lat         = $item->item_latitude;
+            $place->lng         = $item->item_longitude;
+            $place->user_id     = $placeAuthor;
+            $place->rating      = $ratingSum === 0 ? null : round($ratingSum / count($ratingData['scores']), 1);
+            $place->views       = $item->item_count_views;
+            $place->category    = $mapCategories[$item->item_category];
+            $place->address_ru  = $geocoder->addressRu;
+            $place->address_en  = $geocoder->addressEn;
+            $place->country_id  = $geocoder->countryId;
+            $place->region_id   = $geocoder->regionId;
+            $place->district_id = $geocoder->districtId;
+            $place->city_id     = $geocoder->cityId;
+            $place->created_at  = $item->item_datestamp;
+            $place->updated_at  = $placeVersionDate;
 
             $placesModel->insert($place);
 
@@ -128,16 +127,16 @@ class Migrate extends ResourceController {
                 ->orderBy('item_datestamp', 'DESC')
                 ->findAll();
 
-            // Make translation for current version
-            $translation = new \App\Entities\TranslationPlace();
-            $translation->place_id   = $newPlaceId;
-            $translation->language   = 'ru';
-            $translation->user_id    = $placeAuthor;
-            $translation->title      = $placeTitle;
-            $translation->content    = $placeContent;
-            $translation->delta      = $item->item_version_date !== 0 && count($placeVersions) > 0 ? strlen($placeContent) - strlen(strip_tags(html_entity_decode($placeVersions[count($placeVersions) - 1]->item_content))) : 0;
-            $translation->created_at = $placeVersionDate;
-            $translationsPlacesModel->insert($translation);
+            // Make Content for current version
+            $content = new \App\Entities\PlaceContent();
+            $content->place_id   = $newPlaceId;
+            $content->locale     = 'ru';
+            $content->user_id    = $placeAuthor;
+            $content->title      = $placeTitle;
+            $content->content    = $placeContent;
+            $content->delta      = $item->item_version_date !== 0 && count($placeVersions) > 0 ? strlen($placeContent) - strlen(strip_tags(html_entity_decode($placeVersions[count($placeVersions) - 1]->item_content))) : 0;
+            $content->created_at = $placeVersionDate;
+            $placesContentModel->insert($content);
 
             // Make user activity
             $activity = new \App\Entities\UserActivity();
@@ -157,15 +156,15 @@ class Migrate extends ResourceController {
 //                    }
 
                     $historyUser = $this->_migrate_user($placeVersionItem->item_author);
-                    $translation = new \App\Entities\TranslationPlace();
-                    $translation->place_id   = $newPlaceId;
-                    $translation->language   = 'ru';
-                    $translation->user_id    = $historyUser;
-                    $translation->title      = $placeTitle;
-                    $translation->content    = $versionContent;
-                    $translation->delta      = $versionDelta;
-                    $translation->created_at = $placeVersionItem->item_datestamp;
-                    $translationsPlacesModel->insert($translation);
+                    $content = new \App\Entities\PlaceContent();
+                    $content->place_id   = $newPlaceId;
+                    $content->locale     = 'ru';
+                    $content->user_id    = $historyUser;
+                    $content->title      = $placeTitle;
+                    $content->content    = $versionContent;
+                    $content->delta      = $versionDelta;
+                    $content->created_at = $placeVersionItem->item_datestamp;
+                    $placesContentModel->insert($content);
 
                     $activity = new \App\Entities\UserActivity();
                     $activity->type       = $key === 0 ? 'place' : 'edit';
@@ -250,10 +249,12 @@ class Migrate extends ResourceController {
 
                             // Save photo to DB
                             $photo = new \App\Entities\Photo();
-                            $photo->latitude   = $currentPhoto->item_latitude;
-                            $photo->longitude  = $currentPhoto->item_longitude;
+                            $photo->lat        = $currentPhoto->item_latitude;
+                            $photo->lng        = $currentPhoto->item_longitude;
                             $photo->place_id   = $newPlaceId;
                             $photo->user_id    = $photoAuthor;
+                            $photo->title_en   = '';
+                            $photo->title_ru   = strip_tags(html_entity_decode($item->item_title)) ?? '';
                             $photo->filename   = $currentPhoto->item_filename;
                             $photo->extension  = $currentPhoto->item_ext;
                             $photo->filesize   = $file->getSize();
@@ -262,15 +263,6 @@ class Migrate extends ResourceController {
                             $photo->created_at = $currentPhoto->item_timestamp + 60;
 
                             $photosModel->insert($photo);
-
-                            sleep(0.2);
-
-                            // Make translation
-                            $translationsPhotosModel->insert([
-                                'photo_id' => $photosModel->getInsertID(),
-                                'language' => 'ru',
-                                'title'    => strip_tags(html_entity_decode($item->item_title)) ?? ''
-                            ]);
 
                             sleep(0.2);
 
@@ -314,13 +306,10 @@ class Migrate extends ResourceController {
         $tagsModel = new TagsModel();
         $placesTagsModel = new PlacesTagsModel();
 
-        $tagData = $tagsModel->where(['title' => $tag])->first();
+        $tagData = $tagsModel->where(['title_ru' => $tag])->first();
 
         if (!$tagData) {
-            $tagsModel->insert([
-                'title'   => $tag,
-                'counter' => 1
-            ]);
+            $tagsModel->insert(['title_ru' => $tag]);
 
             $placesTagsModel->insert([
                 'tag_id'   => $tagsModel->getInsertID(),
@@ -328,7 +317,6 @@ class Migrate extends ResourceController {
             ]);
 
         } else {
-            $tagsModel->update($tagData->id, ['counter' => $tagData->counter + 1]);
             $placesTagsModel->insert([
                 'tag_id'   => $tagData->id,
                 'place_id' => $placeId

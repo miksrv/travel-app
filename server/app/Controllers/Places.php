@@ -1,10 +1,9 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Place;
-use App\Entities\TranslationPlace;
 use App\Libraries\Geocoder;
 use App\Libraries\PlaceTags;
-use App\Libraries\PlaceTranslation;
+use App\Libraries\PlacesContent;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
@@ -12,7 +11,7 @@ use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
-use App\Models\TranslationsPlacesModel;
+use App\Models\PlacesContentModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -30,7 +29,7 @@ class Places extends ResourceController {
             ->orderBy('id', 'RANDOM')
             ->first();
 
-        return $this->respond(['id' => $placesData->id]);
+        return $this->respond($placesData && ['id' => $placesData->id]);
     }
 
     /**
@@ -39,8 +38,8 @@ class Places extends ResourceController {
      */
     public function list(): ResponseInterface {
         $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
-        $lat    = $this->request->getGet('latitude', FILTER_VALIDATE_FLOAT);
-        $lon    = $this->request->getGet('longitude', FILTER_VALIDATE_FLOAT);
+        $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
+        $lon    = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $session = new Session();
@@ -68,7 +67,7 @@ class Places extends ResourceController {
         }
 
         // Load translate library
-        $placeTranslations = new PlaceTranslation('ru', 350);
+        $placeTranslations = new PlacesContent('ru', 350);
 
         // When searching, we search by criteria in the translation array to return object IDs
         if ($search) {
@@ -85,17 +84,17 @@ class Places extends ResourceController {
         }
 
         if ($lat && $lon) {
-            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$lon} - places.longitude) * pi()/180 / 2), 2) )) AS distance";
+            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$lon} - places.lng) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $distanceSelect = $session->longitude && $session->latitude
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = $session->lng && $session->lat
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lng} - places.lng) * pi()/180 / 2), 2) )) AS distance"
                 : '';
         }
 
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $placesModel
-            ->select('places.id, places.category, places.latitude, places.longitude, places.rating, places.views, category.title as category_title' . $distanceSelect)
+            ->select('places.id, places.category, places.lat, places.lng, places.rating, places.views, category.title_en as category_title_en, category.title_ru as category_title_ru' . $distanceSelect)
             ->join('category', 'places.category = category.name', 'left');
 
         // If search or any other filter is not used, then we always use an empty array
@@ -134,15 +133,15 @@ class Places extends ResourceController {
 
             $return  = [
                 'id'        => $place->id,
-                'latitude'  => (float) $place->latitude,
-                'longitude' => (float) $place->longitude,
+                'lat'  => (float) $place->lat,
+                'lng' => (float) $place->lng,
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
                 'title'     => $placeTranslations->title($place->id),
                 'content'   => $placeTranslations->content($place->id),
                 'category'  => [
                     'name'  => $place->category,
-                    'title' => $place->category_title,
+                    'title' => $place->category_title_ru,
                 ]
             ];
 
@@ -179,12 +178,12 @@ class Places extends ResourceController {
         $session = new Session();
 
         // Load translate library
-        $placeTranslate = new PlaceTranslation('ru');
+        $placeTranslate = new PlacesContent('ru');
         $placeTranslate->translate([$id]);
 
         try {
-            $distanceSelect = ($session->longitude && $session->latitude)
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->latitude} - abs(places.latitude)) * pi()/180 / 2), 2) +  COS({$session->latitude} * pi()/180 ) * COS(abs(places.latitude) * pi()/180) *  POWER(SIN(({$session->longitude} - places.longitude) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = ($session->lng && $session->lat)
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lng} - places.lng) * pi()/180 / 2), 2) )) AS distance"
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
@@ -193,15 +192,15 @@ class Places extends ResourceController {
             $placeData   = $placesModel
                 ->select(
                     'places.*,  users.id as user_id, users.name as user_name, users.avatar as user_avatar,
-                    address_country.name as country_name, address_region.name as region_name, 
-                    address_district.name as district_name, address_city.name as city_name,
-                    category.title as category_title' . $distanceSelect)
+                    location_countries.title_ru as country_name, location_regions.title_ru as region_name, 
+                    location_districts.title_ru as district_name, location_cities.title_ru as city_name,
+                    category.title_ru as category_title' . $distanceSelect)
                 ->join('users', 'places.user_id = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
-                ->join('address_country', 'address_country.id = places.address_country', 'left')
-                ->join('address_region', 'address_region.id = places.address_region', 'left')
-                ->join('address_district', 'address_district.id = places.address_district', 'left')
-                ->join('address_city', 'address_city.id = places.address_city', 'left')
+                ->join('location_countries', 'location_countries.id = places.country_id', 'left')
+                ->join('location_regions', 'location_regions.id = places.region_id', 'left')
+                ->join('location_districts', 'location_districts.id = places.district_id', 'left')
+                ->join('location_cities', 'location_cities.id = places.city_id', 'left')
                 ->find($id);
 
             if (!$placeData) {
@@ -212,17 +211,16 @@ class Places extends ResourceController {
             $placeData->photo = $photosModel
                 ->select(
                     'photos.user_id, photos.filename, photos.extension, photos.width, photos.place_id, 
-                    photos.height, photos.order, translations_photos.title, photos.created_at,
+                    photos.height, photos.order, photos.title_ru, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
                 ->join('users', 'photos.user_id = users.id', 'left')
-                ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
                 ->where(['place_id' => $placeData->id])
                 ->orderBy('photos.order', 'DESC')
                 ->findAll();
 
             // Collect tags
             $placeData->tags = $placesTagsModel
-                ->select('tags.id, tags.title, tags.counter')
+                ->select('tags.id, tags.title_ru')
                 ->join('tags', 'tags.id = places_tags.tag_id')
                 ->where(['place_id' => $placeData->id])
                 ->findAll();
@@ -238,8 +236,8 @@ class Places extends ResourceController {
                 'id'        => $placeData->id,
                 'created'   => $placeData->created_at ?? null,
                 'updated'   => $placeData->updated_at ?? null,
-                'latitude'  => (float) $placeData->latitude,
-                'longitude' => (float) $placeData->longitude,
+                'lat'       => (float) $placeData->lat,
+                'lng'       => (float) $placeData->lng,
                 'rating'    => (float) $placeData->rating,
                 'views'     => (int) $placeData->views,
                 'title'     => $placeTranslate->title($id),
@@ -284,34 +282,34 @@ class Places extends ResourceController {
                 ];
             }
 
-            if ($session->longitude && $session->latitude) {
+            if ($session->lng && $session->lat) {
                 $response['distance'] = round((float) $placeData->distance, 1);
             }
 
-            if ($placeData->address_country) {
+            if ($placeData->country_name) {
                 $response['address']['country'] = [
-                    'id'   => (int) $placeData->address_country,
+                    'id'   => (int) $placeData->country_id,
                     'name' => $placeData->country_name
                 ];
             }
 
-            if ($placeData->address_region) {
+            if ($placeData->region_name) {
                 $response['address']['region'] = [
-                    'id'   => (int) $placeData->address_region,
+                    'id'   => (int) $placeData->region_id,
                     'name' => $placeData->region_name
                 ];
             }
 
-            if ($placeData->address_district) {
+            if ($placeData->district_name) {
                 $response['address']['district'] = [
-                    'id'   => (int) $placeData->address_district,
+                    'id'   => (int) $placeData->district_id,
                     'name' => $placeData->district_name
                 ];
             }
 
-            if ($placeData->address_city) {
+            if ($placeData->city_name) {
                 $response['address']['city'] = [
-                    'id'   => (int) $placeData->address_city,
+                    'id'   => (int) $placeData->city_id,
                     'name' => $placeData->city_name
                 ];
             }
@@ -348,42 +346,45 @@ class Places extends ResourceController {
         $session = new Session();
         $input   = $this->request->getJSON();
 
-        $placeTags      = new PlaceTags();
-        $placesModel    = new PlacesModel();
+        $placeTags    = new PlaceTags();
+        $placesModel  = new PlacesModel();
         $userActivity = new UserActivity();
 
-        $geocoder = new Geocoder($input->coordinates->latitude, $input->coordinates->longitude);
+        $geocoder = new Geocoder($input->coordinates->lat, $input->coordinates->lng);
         $place    = new \App\Entities\Place();
 
         $placeTitle   = strip_tags(html_entity_decode($input->title));
         $placeContent = strip_tags(html_entity_decode($input->content));
 
-        $place->latitude         = $input->coordinates->latitude;
-        $place->longitude        = $input->coordinates->longitude;
-        $place->user_id          = $session->userId;
-        $place->category         = $input->category;
-        $place->address          = $geocoder->address;
-        $place->address_country  = $geocoder->countryID;
-        $place->address_region   = $geocoder->regionID;
-        $place->address_district = $geocoder->districtID;
-        $place->address_city     = $geocoder->cityID;
+        $place->lat         = $input->coordinates->lat;
+        $place->lng         = $input->coordinates->lng;
+        $place->user_id     = $session->userId;
+        $place->category    = $input->category;
+        $place->address_en  = $geocoder->addressEn;
+        $place->address_ru  = $geocoder->addressRu;
+        $place->country_id  = $geocoder->countryId;
+        $place->region_id   = $geocoder->regionId;
+        $place->district_id = $geocoder->districtId;
+        $place->city_id     = $geocoder->cityId;
 
         $placesModel->insert($place);
 
         $newPlaceId = $placesModel->getInsertID();
 
-        $placeTags->saveTags($input->tags, $newPlaceId);
+        if (!empty($input->tags)) {
+            $placeTags->saveTags($input->tags, $newPlaceId);
+        }
 
-        $translationsPlacesModel = new TranslationsPlacesModel();
+        $placesContentModel = new PlacesContentModel();
 
-        $translation = new \App\Entities\TranslationPlace();
-        $translation->place_id   = $newPlaceId;
-        $translation->language   = 'ru';
-        $translation->user_id    = $session->userId;
-        $translation->title      = $placeTitle;
-        $translation->content    = $placeContent;
+        $content = new \App\Entities\PlaceContent();
+        $content->place_id   = $newPlaceId;
+        $content->language   = 'ru';
+        $content->user_id    = $session->userId;
+        $content->title      = $placeTitle;
+        $content->content    = $placeContent;
 
-        $translationsPlacesModel->insert($translation);
+        $placesContentModel->insert($content);
 
         $userActivity->place($newPlaceId);
 
@@ -406,7 +407,7 @@ class Places extends ResourceController {
 
         $placeTags      = new PlaceTags();
         $placesModel    = new PlacesModel();
-        $placeTranslate = new PlaceTranslation('ru');
+        $placeTranslate = new PlacesContent('ru');
         $placeData      = $placesModel->find($id);
         $placeTranslate->translate([$id]);
 
@@ -425,16 +426,16 @@ class Places extends ResourceController {
 
         // Save place content
         $userActivity = new UserActivity();
-        $langModel    = new TranslationsPlacesModel();
-        $translation  = new TranslationPlace();
+        $langModel    = new PlacesContentModel();
+        $placeContent = new \App\Entities\PlaceContent();
         $newContent   = strip_tags(html_entity_decode($input->content));
 
-        $translation->language = 'ru';
-        $translation->place_id = $id;
-        $translation->user_id  = $session->userData->id;
-        $translation->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
-        $translation->content  = $newContent;
-        $translation->delta    = strlen($newContent) - strlen($placeTranslate->content($id));
+        $placeContent->locale = 'ru';
+        $placeContent->place_id = $id;
+        $placeContent->user_id  = $session->userData->id;
+        $placeContent->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeTranslate->title($id);
+        $placeContent->content  = $newContent;
+        $placeContent->delta    = strlen($newContent) - strlen($placeTranslate->content($id));
 
         // If the author of the last edit is the same as the current one,
         // then you need to check when the content was last edited
@@ -445,13 +446,13 @@ class Places extends ResourceController {
             // If the last time a user edited this content was less than or equal to 30 minutes,
             // then we will simply update the data and will not add a new version
             if (abs($diff->getMinutes()) <= 30) {
-                $langModel->update($placeTranslate->id($id), $translation);
+                $langModel->update($placeTranslate->id($id), $placeContent);
             } else {
-                $langModel->insert($translation);
+                $langModel->insert($placeContent);
                 $userActivity->edit($id);
             }
         } else {
-            $langModel->insert($translation);
+            $langModel->insert($placeContent);
             $userActivity->edit($id);
         }
 
@@ -496,19 +497,19 @@ class Places extends ResourceController {
         }
 
         if ($country) {
-            $placesModel->where(['address_country' => $country]);
+            $placesModel->where(['location_countries' => $country]);
         }
 
         if ($region) {
-            $placesModel->where(['address_region' => $region]);
+            $placesModel->where(['location_regions' => $region]);
         }
 
         if ($district) {
-            $placesModel->where(['address_district' => $district]);
+            $placesModel->where(['location_districts' => $district]);
         }
 
         if ($city) {
-            $placesModel->where(['address_city' => $city]);
+            $placesModel->where(['location_cities' => $city]);
         }
 
         if ($category) {

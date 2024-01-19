@@ -10,23 +10,17 @@ import useGeolocation from 'react-hook-geolocation'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
-import Dropdown from '@/ui/dropdown'
 
 import { API } from '@/api/api'
+import { ApiTypes } from '@/api/types'
 
 import PageLayout from '@/components/page-layout'
 
-import { categoryImage } from '@/functions/categories'
 import { round } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
-
-export type LatLngCoordinate = {
-    latitude: number
-    longitude: number
-}
 
 const IndexPage: NextPage = () => {
     const { t } = useTranslation('common', { keyPrefix: 'page.index' })
@@ -35,7 +29,8 @@ const IndexPage: NextPage = () => {
     // const router = useRouter()
     const geolocation = useGeolocation()
 
-    const [myCoordinates, setMyCoordinates] = useState<LatLngCoordinate>()
+    const [myCoordinates, setMyCoordinates] =
+        useState<ApiTypes.LatLngCoordinate>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [category, setCategory] = useState<string>()
 
@@ -67,12 +62,12 @@ const IndexPage: NextPage = () => {
         if (
             updateLatitude &&
             updateLongitude &&
-            updateLatitude !== myCoordinates?.latitude &&
-            updateLongitude !== myCoordinates?.longitude
+            updateLatitude !== myCoordinates?.lat &&
+            updateLongitude !== myCoordinates?.lng
         ) {
             setMyCoordinates({
-                latitude: updateLatitude,
-                longitude: updateLongitude
+                lat: updateLatitude,
+                lng: updateLongitude
             })
 
             introduce({ lat: updateLatitude, lon: updateLongitude })
@@ -108,7 +103,13 @@ const IndexPage: NextPage = () => {
                     />
                 </header>
             </Container>
-            <Container style={{ height: 'calc(100vh - 200px)', padding: 0 }}>
+            <Container
+                style={{
+                    height: 'calc(100vh - 200px)',
+                    minHeight: '400px',
+                    padding: 0
+                }}
+            >
                 <InteractiveMap
                     storeMapPosition={true}
                     loading={isFetching}

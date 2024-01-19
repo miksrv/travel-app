@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Models\AddressCity;
+use App\Models\LocationCitiesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -9,7 +9,7 @@ class Cities extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $citiesModel = new AddressCity();
+        $citiesModel = new LocationCitiesModel();
         $citiesData  = $citiesModel
             ->select(
                 'address_city.*, address_district.name as district_name, 

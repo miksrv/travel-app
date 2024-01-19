@@ -7,8 +7,8 @@ import { User } from './User'
 
 /** General Types **/
 export type LatLngCoordinate = {
-    latitude: number
-    longitude: number
+    lat: number
+    lng: number
 }
 
 export type DateTimeType = {
@@ -93,8 +93,8 @@ export interface RequestPlacesGetList {
     order?: SortOrder
     bookmarkUser?: string
     author?: string
-    latitude?: number
-    longitude?: number
+    lat?: number
+    lng?: number
     search?: string
     country?: number | null
     region?: number | null

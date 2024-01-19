@@ -1,19 +1,16 @@
 <?php namespace App\Models;
 
-use App\Entities\User;
-
 class UsersModel extends MyBaseModel {
     protected $table      = 'users';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = User::class;
+    protected $returnType     = \App\Entities\User::class;
     protected $useSoftDeletes = true;
 
-    protected array $hiddenFields = ['deleted_at']; // 'created_at', 'updated_at',
+    protected array $hiddenFields = ['deleted_at'];
 
-    // The updatable fields
     protected $allowedFields = [
         'name',
         'email',
@@ -28,20 +25,17 @@ class UsersModel extends MyBaseModel {
         'created_at',
     ];
 
-    // Dates
     protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
-    protected $validationRules = [];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];
@@ -87,7 +81,7 @@ class UsersModel extends MyBaseModel {
      * @param string $emailAddress
      * @return User|null
      */
-    public function findUserByEmailAddress(string $emailAddress):? User {
+    public function findUserByEmailAddress(string $emailAddress):? \App\Entities\User {
         $userData = $this
             ->select('id, name, avatar, email, password')
             ->where(['email' => $emailAddress])
@@ -97,13 +91,14 @@ class UsersModel extends MyBaseModel {
             return null;
         }
 
-        $User = new User();
-        $User->id       = $userData->id;
-        $User->name     = $userData->name;
-        $User->avatar   = $userData->avatar;
-        $User->email    = $userData->email;
-        $User->password = $userData->password;
+        $user = new \App\Entities\User();
 
-        return $User;
+        $user->id       = $userData->id;
+        $user->name     = $userData->name;
+        $user->avatar   = $userData->avatar;
+        $user->email    = $userData->email;
+        $user->password = $userData->password;
+
+        return $user;
     }
 }

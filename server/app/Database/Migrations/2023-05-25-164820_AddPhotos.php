@@ -11,14 +11,6 @@ class AddPhotos extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'latitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
-            ],
-            'longitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false,
-            ],
             'place_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
@@ -28,6 +20,24 @@ class AddPhotos extends Migration {
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true,
+            ],
+            'lat' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false,
+            ],
+            'lng' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false,
+            ],
+            'title_en' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 200,
+                'null'       => true
+            ],
+            'title_ru' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 200,
+                'null'       => true
             ],
             'filename' => [
                 'type'       => 'VARCHAR',

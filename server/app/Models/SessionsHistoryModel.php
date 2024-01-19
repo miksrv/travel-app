@@ -9,27 +9,21 @@ class SessionsHistoryModel extends MyBaseModel {
     protected $returnType     = 'array';
     protected $useSoftDeletes = false;
 
-    // The updatable fields
     protected $allowedFields = [
         'session_id',
-        'latitude',
-        'longitude'
+        'lat',
+        'lng'
     ];
 
-    // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
 
-    // Validation
-    protected $validationRules = [
-
-    ];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];

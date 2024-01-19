@@ -1,6 +1,6 @@
 <?php namespace App\Libraries;
 
-use App\Models\TranslationsPlacesModel;
+use App\Models\PlacesContentModel;
 
 /**
  * Class for find actual translation for place
@@ -18,7 +18,7 @@ use App\Models\TranslationsPlacesModel;
  *    А: Заголовок $placeTranslations->title({ID});
  *    B: Контент $placeTranslations->content({ID});
  */
-class PlaceTranslation {
+class PlacesContent {
 
     protected array $translate = [];
     protected array $versions = [];
@@ -29,7 +29,7 @@ class PlaceTranslation {
 
     protected bool $keepVersions = false;
 
-    private TranslationsPlacesModel $model;
+    private PlacesContentModel $model;
 
     /**
      * When calling the constructor, we set the parameters and start working with the model.
@@ -40,13 +40,13 @@ class PlaceTranslation {
      * @param int $trim
      */
     public function __construct(string $language = 'ru', int $trim = 0) {
-        $this->model    = new TranslationsPlacesModel();
+        $this->model    = new PlacesContentModel();
         $this->language = $language;
         $this->trim     = $trim;
 
         $this->model->select(
             'id, place_id, title, user_id, delta, created_at, updated_at,' .
-            ($this->trim > 0 ? 'SUBSTRING(translations_places.content, 1, ' . $this->trim . ') as content' : 'translations_places.content')
+            ($this->trim > 0 ? 'SUBSTRING(places_content.content, 1, ' . $this->trim . ') as content' : 'places_content.content')
         );
     }
 

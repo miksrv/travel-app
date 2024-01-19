@@ -5,18 +5,28 @@ use CodeIgniter\Database\Migration;
 class AddCategory extends Migration {
     public function up() {
         $this->forge->addField([
-            'name' => [
+            'name'           => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
                 'null'       => false,
                 'unique'     => true
             ],
-            'title' => [
+            'title_en'       => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
                 'null'       => false
             ],
-            'info' => [
+            'title_ru'       => [
+                'type'       => 'VARCHAR',
+                'constraint' => 50,
+                'null'       => false
+            ],
+            'content_en'     => [
+                'type'       => 'VARCHAR',
+                'constraint' => 300,
+                'null'       => true
+            ],
+            'content_ru'     => [
                 'type'       => 'VARCHAR',
                 'constraint' => 300,
                 'null'       => true

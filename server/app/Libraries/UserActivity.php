@@ -65,7 +65,8 @@ class UserActivity {
         string|null $photoId  = null,
         string|null $placeId  = null,
         string|null $ratingId = null,
-    ): bool {
+    ): bool
+    {
         if (!in_array($type, $this->types) || !$this->session->isAuth) {
             return false;
         }

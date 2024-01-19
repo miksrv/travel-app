@@ -1,9 +1,9 @@
 <?php namespace App\Controllers;
 
-use App\Models\AddressCity;
-use App\Models\AddressCountry;
-use App\Models\AddressDistrict;
-use App\Models\AddressRegion;
+use App\Models\LocationCitiesModel;
+use App\Models\LocationCountriesModel;
+use App\Models\LocationDistrictsModel;
+use App\Models\LocationRegionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -20,10 +20,10 @@ class Address extends ResourceController {
     public function search(): ResponseInterface {
         $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
 
-        $countriesModel = new AddressCountry();
-        $regionsModel   = new AddressRegion();
-        $districtsModel = new AddressDistrict();
-        $citiesModel    = new AddressCity();
+        $countriesModel = new LocationCountriesModel();
+        $regionsModel   = new LocationRegionsModel();
+        $districtsModel = new LocationDistrictsModel();
+        $citiesModel    = new LocationCitiesModel();
 
         $countriesData = $countriesModel->like('name', $search)->findAll();
         $regionsData   = $regionsModel->like('name', $search)->findAll();

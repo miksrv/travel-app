@@ -22,9 +22,9 @@ const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
 
     return (
         <Marker
-            position={[photo.latitude, photo.longitude]}
+            position={[photo.lat, photo.lng]}
             icon={photoMarkerIcon}
-            title={photo.title}
+            title={''}
             eventHandlers={{
                 click: () => {
                     onPhotoClick?.(photo)

@@ -104,14 +104,12 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
             />
 
             <PlacePhotos
-                title={place?.title}
                 photos={photoList}
                 placeId={place?.id}
             />
 
             <PlaceDescription
                 id={place?.id}
-                title={place?.title}
                 content={place?.content}
                 tags={place?.tags}
             />
@@ -154,9 +152,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const { data: nearPlaces } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
                     excludePlaces: [id],
-                    latitude: placeData?.latitude,
+                    lat: placeData?.lat,
                     limit: NEAR_PLACES_COUNT,
-                    longitude: placeData?.longitude,
+                    lng: placeData?.lng,
                     order: ApiTypes.SortOrder.ASC,
                     sort: ApiTypes.SortFields.Distance
                 })

@@ -15,12 +15,12 @@ class Poi extends ResourceController {
 
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
-            ->select('id, category, latitude, longitude')
+            ->select('id, category, lat, lng')
             ->where([
-                'longitude >=' => $bounds[0],
-                'latitude >=' => $bounds[1],
-                'longitude <=' =>  $bounds[2],
-                'latitude <=' =>  $bounds[3],
+                'lng >=' => $bounds[0],
+                'lat >=' => $bounds[1],
+                'lng <=' =>  $bounds[2],
+                'lat <=' =>  $bounds[3],
             ]);
 
         if ($category) {
@@ -42,15 +42,14 @@ class Poi extends ResourceController {
         $bounds      = $this->_getBounds();
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select('photos.place_id, photos.latitude, photos.longitude, photos.filename, photos.extension, translations_photos.title')
-            ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
+            ->select('photos.place_id, photos.lat, photos.lng, photos.filename, photos.extension')
             ->where([
-                'longitude >=' => $bounds[0],
-                'latitude >=' => $bounds[1],
-                'longitude <=' =>  $bounds[2],
-                'latitude <=' =>  $bounds[3],
+                'lng >=' => $bounds[0],
+                'lat >=' => $bounds[1],
+                'lng <=' =>  $bounds[2],
+                'lat <=' =>  $bounds[3],
             ])
-            ->groupBy('photos.longitude, photos.latitude')
+            ->groupBy('photos.lng, photos.lat')
             ->findAll();
 
         $result = [];
@@ -59,8 +58,8 @@ class Poi extends ResourceController {
             $result[] = (object) [
                 'filename'  => $photo->filename,
                 'extension' => $photo->extension,
-                'latitude'  => $photo->latitude,
-                'longitude' => $photo->longitude,
+                'lat'       => $photo->lat,
+                'lng'       => $photo->lng,
                 'title'     => $photo->title,
                 'placeId'   => $photo->place_id,
             ];
@@ -80,16 +79,13 @@ class Poi extends ResourceController {
             $photosModel = new PhotosModel();
             $placesModel = new PlacesModel();
             $placeData   = $placesModel
-                ->select('places.*, translations_places.title, translations_places.content')
-                ->join('translations_places', 'places.id = translations_places.place_id AND language = "ru"')
+                ->select('places.*, places_content.title, places_content.content')
+                ->join('places_content', 'places.id = places_content.place_id AND locale = "ru"')
                 ->find($id);
 
             if ($placeData) {
                 $placeData->photos = $photosModel
-                    ->select(
-                        'photos.filename, photos.extension, photos.width,
-                        photos.height, photos.order, translations_photos.title')
-                    ->join('translations_photos', 'photos.id = translations_photos.photo_id AND language = "ru"', 'left')
+                    ->select('photos.filename, photos.extension, photos.width, photos.height, photos.order')
                     ->where(['place_id' => $placeData->id])
                     ->orderBy('order', 'DESC')
                     ->findAll();

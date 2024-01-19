@@ -1,6 +1,4 @@
-<?php
-
-namespace App\Database\Migrations;
+<?php namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
@@ -14,8 +12,8 @@ class AddUsersActivity extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type'       => 'ENUM("photo", "place", "rating", "edit")',
-                'null'       => false,
+                'type' => 'ENUM("photo", "place", "rating", "edit")',
+                'null' => false,
             ],
             'user_id' => [
                 'type'       => 'VARCHAR',

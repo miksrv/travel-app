@@ -6,7 +6,7 @@ use App\Libraries\Session;
 use App\Libraries\UserActivity;
 use App\Models\OverpassCategoryModel;
 use App\Models\PlacesModel;
-use App\Models\TranslationsPlacesModel;
+use App\Models\PlacesContentModel;
 use App\Models\UsersActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -91,8 +91,8 @@ class Introduce extends ResourceController {
 
             $place->overpass_id = $point->id;
             $place->category    = $findOverpassCat->category_map;
-            $place->latitude    = $point->lat;
-            $place->longitude   = $point->lon;
+            $place->lat    = $point->lat;
+            $place->lng   = $point->lon;
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
             $place->address_region   = $geocoder->regionID;
@@ -103,8 +103,8 @@ class Introduce extends ResourceController {
 
             $newPlaceId = $placesModel->getInsertID();
 
-            $translationsPlacesModel = new TranslationsPlacesModel();
-            $translation = new \App\Entities\TranslationPlace();
+            $translationsPlacesModel = new PlacesContentModel();
+            $translation = new \App\Entities\PlaceContent();
             $translation->place_id   = $newPlaceId;
             $translation->language   = 'ru';
             $translation->title      = $newPoiName;

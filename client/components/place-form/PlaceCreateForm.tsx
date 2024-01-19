@@ -74,8 +74,8 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         setFormData({
             ...formData,
             coordinates: {
-                latitude: mapCenter.lat,
-                longitude: mapCenter.lng
+                lat: mapCenter.lat,
+                lng: mapCenter.lng
             }
         })
 
@@ -135,12 +135,12 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         if (
             updateLatitude &&
             updateLongitude &&
-            updateLatitude !== myCoordinates?.latitude &&
-            updateLongitude !== myCoordinates?.longitude
+            updateLatitude !== myCoordinates?.lat &&
+            updateLongitude !== myCoordinates?.lng
         ) {
             setMyCoordinates({
-                latitude: updateLatitude,
-                longitude: updateLongitude
+                lat: updateLatitude,
+                lng: updateLongitude
             })
 
             introduce({ lat: updateLatitude, lon: updateLongitude })

@@ -1,167 +1,237 @@
 <?php namespace App\Libraries;
 
-use App\Models\AddressCity;
-use App\Models\AddressCountry;
-use App\Models\AddressDistrict;
-use App\Models\AddressRegion;
+use App\Models\LocationCitiesModel;
+use App\Models\LocationCountriesModel;
+use App\Models\LocationDistrictsModel;
+use App\Models\LocationRegionsModel;
 use Config\Services;
 use Geocoder\Exception\Exception;
 use Geocoder\Provider\Nominatim\Nominatim;
+use Geocoder\Provider\Yandex\Yandex;
 use Geocoder\Query\ReverseQuery;
 use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client;
 use ReflectionException;
 
+/**
+ * @link https://geocoder-php.org/docs/providers/nominatim/
+ */
 class Geocoder {
-    public ?int $countryID;
-    public ?int $regionID;
-    public ?int $districtID;
-    public ?int $cityID;
+    public ?int $countryId = null;
+    public ?int $regionId = null;
+    public ?int $districtId = null;
+    public ?int $cityId = null;
 
-    public string $address;
+    public string $addressEn;
+    public string $addressRu;
 
     /**
-     * @param $latitude
-     * @param $longitude
-     * @throws Exception|ReflectionException
+     * @param float $lat
+     * @param float $lng
+     * @param string $locale
+     * @throws Exception
+     * @throws ReflectionException
      */
-    public function __construct($latitude, $longitude) {
-        $request    = Services::request();
+    public function __construct(
+        float $lat,
+        float $lng,
+        string $locale = 'ru'
+    )
+    {
+        $requestApi = Services::request();
         $httpClient = new Client();
 
-        $provider = Nominatim::withOpenStreetMapServer($httpClient, $request->getUserAgent());
-        $geocoder = new StatefulGeocoder($provider, 'ru');
-        $result   = $geocoder->reverseQuery(ReverseQuery::fromCoordinates($latitude, $longitude))->first();
+        $provider = $locale === 'ru'
+            ? new Yandex($httpClient, null, getenv('app.geocoder.yandexKey'))
+            : Nominatim::withOpenStreetMapServer($httpClient, $requestApi->getUserAgent());
 
-        $adminLevels = count($result->getAdminLevels());
+        $geocoderEn = new StatefulGeocoder($provider, 'en');
+        $geocoderRu = new StatefulGeocoder($provider, 'ru');
+        $locationEn = $geocoderEn->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
+        $locationRu = $geocoderRu->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
 
-        $this->countryID = $this->getCountry($result->getCountry()->getName());
+        $countryTitleEn = $locationEn->getCountry()->getName();
+        $countryTitleRu = $locationRu->getCountry()->getName();
 
-        $this->regionID = $adminLevels >= 1 ? $this->getRegion(
-            $result->getAdminLevels()->get(1)->getName(),
-            $this->countryID
-        ) : null;
+        $lvlCount = count($locationEn->getAdminLevels());
 
-        $this->districtID = $adminLevels >= 2 ? $this->getDistrict(
-            $result->getAdminLevels()->get(2)->getName(),
-            $this->countryID,
-            $this->regionID
-        ) : null;
+        $this->_getCountryId($countryTitleEn, $countryTitleRu);
 
-        $this->cityID = $this->getCity(
-            $result->getLocality(),
-            $this->countryID,
-            $this->regionID,
-            $this->districtID
-        );
+        if ($lvlCount >= 1) {
+            $regionTitleEn = $locationEn->getAdminLevels()->get(1)->getName();
+            $regionTitleRu = $locationRu->getAdminLevels()->get(1)->getName();
+            $this->_getRegionId($regionTitleEn, $regionTitleRu);
+        }
 
-        $this->address = $result->getStreetName() . ($result->getStreetNumber() ? ', ' . $result->getStreetNumber() : '');
+        if ($lvlCount >= 2) {
+            $districtTitleEn = $locationEn->getAdminLevels()->get(2)->getName();
+            $districtTitleRu = $locationRu->getAdminLevels()->get(2)->getName();
+            $this->_getDistrictId($districtTitleEn, $districtTitleRu);
+        }
+
+        $this->_getcityId($locationEn->getLocality(), $locationRu->getLocality());
+
+        $this->addressEn = $locationEn->getStreetName() . ($locationEn->getStreetNumber() ? ', ' . $locationEn->getStreetNumber() : '');
+        $this->addressRu = $locationRu->getStreetName() . ($locationRu->getStreetNumber() ? ', ' . $locationRu->getStreetNumber() : '');
     }
 
     /**
-     * Ищет страну по названию, если такой нет - добавляет. Возвращает ID страны из БД
-     * @param string $name
-     * @return int
+     * @param string $titleEn
+     * @param string $titleRu
+     * @return void
      * @throws ReflectionException
      */
-    protected function getCountry(string $name): int
+    private function _getCountryId(
+        string $titleEn,
+        string $titleRu
+    ): void
     {
-        $countryModel = new AddressCountry();
-        $countryData  = $countryModel->where(['name' => $name])->first();
+        $countryModel = new LocationCountriesModel();
+        $countryData  = $countryModel
+            ->select('id')
+            ->where([
+                'title_en' => $titleEn,
+                'title_ru' => $titleRu
+            ])
+            ->first();
 
         if ($countryData) {
-            return $countryData->id;
+            $this->countryId = $countryData->id;
+            return;
         }
 
-        $country = new \App\Entities\AddressCountry();
-        $country->name = $name;
+        $country = new \App\Entities\LocationCountry();
+        $country->title_en = $titleEn;
+        $country->title_ru = $titleRu;
 
         $countryModel->insert($country);
 
-        return $countryModel->getInsertID();
+        $this->countryId = $countryModel->getInsertID();
     }
 
     /**
-     * Возвращает ID региона
-     * @param string $name
-     * @param int $country
-     * @return int
+     * @param string $titleEn
+     * @param string $titleRu
+     * @return void
      * @throws ReflectionException
      */
-    protected function getRegion(string $name, int $country): int
+    private function _getRegionId(
+        string $titleEn,
+        string $titleRu,
+    ): void
     {
-        $regionModel = new AddressRegion();
-        $regionData  = $regionModel->where(['name' => $name, 'country' => $country])->first();
-
-        if ($regionData) {
-            return $regionData->id;
+        if (!$this->countryId) {
+            return;
         }
 
-        $region = new \App\Entities\AddressRegion();
-        $region->country = $country;
-        $region->name    = $name;
+        $regionModel = new LocationRegionsModel();
+        $regionData  = $regionModel
+            ->select('id')
+            ->where([
+                'country_id' => $this->countryId,
+                'title_en'   => $titleEn,
+                'title_ru'   => $titleRu
+            ])
+            ->first();
+
+        if ($regionData) {
+            $this->regionId = $regionData->id;
+            return;
+        }
+
+        $region = new \App\Entities\LocationRegion();
+        $region->country_id = $this->countryId;
+        $region->title_en   = $titleEn;
+        $region->title_ru   = $titleRu;
 
         $regionModel->insert($region);
 
-        return $regionModel->getInsertID();
+        $this->regionId = $regionModel->getInsertID();
     }
 
     /**
-     * Возвращает ID региона
-     * @param string $name
-     * @param int $country
-     * @param int|null $region
-     * @return int
+     * @param string $titleEn
+     * @param string $titleRu
+     * @return void
      * @throws ReflectionException
      */
-    protected function getDistrict(string $name, int $country, ?int $region = null): int
+    private function _getDistrictId(
+        string $titleEn,
+        string $titleRu,
+    ): void
     {
-        $districtModel = new AddressDistrict();
-        $districtData  = $districtModel->where(['name' => $name, 'country' => $country, 'region' => $region])->first();
-
-        if ($districtData) {
-            return $districtData->id;
+        if (!$this->countryId || !$this->regionId) {
+            return;
         }
 
-        $district = new \App\Entities\AddressDistrict();
-        $district->country = $country;
-        $district->region  = $region;
-        $district->name    = $name;
+        $districtModel = new LocationDistrictsModel();
+        $districtData  = $districtModel
+            ->select('id')
+            ->where([
+                'country_id' => $this->countryId,
+                'region_id'  => $this->regionId,
+                'title_en'   => $titleEn,
+                'title_ru'   => $titleRu
+            ])
+            ->first();
+
+        if ($districtData) {
+            $this->districtId = $districtData->id;
+            return;
+        }
+
+        $district = new \App\Entities\LocationDistrict();
+        $district->country_id = $this->countryId;
+        $district->region_id  = $this->regionId;
+        $district->title_en   = $titleEn;
+        $district->title_ru   = $titleRu;
 
         $districtModel->insert($district);
 
-        return $districtModel->getInsertID();
+        $this->districtId = $districtModel->getInsertID();
     }
 
     /**
-     * @param string|null $name
-     * @param int $country
-     * @param int|null $region
-     * @param int|null $district
-     * @return int|null
+     * @param string|null $titleEn
+     * @param string|null $titleRu
+     * @return void
      * @throws ReflectionException
      */
-    protected function getCity(?string $name, int $country, ?int $region = null, ?int $district = null): ?int
+    private function _getcityId(
+        ?string $titleEn,
+        ?string $titleRu,
+    ): void
     {
-        if (!$name) {
-            return null;
+        if (!$titleEn && !$titleRu) {
+            return;
         }
 
-        $cityModel = new AddressCity();
-        $cityData  = $cityModel->where(['name' => $name, 'country' => $country, 'region' => $region, 'district' => $district])->first();
+        $cityModel = new LocationCitiesModel();
+        $cityData  = $cityModel
+            ->select('id')
+            ->where([
+                'country_id'  => $this->countryId,
+                'region_id'   => $this->regionId,
+                'district_id' => $this->districtId,
+                'title_en'    => $titleEn,
+                'title_ru'    => $titleRu
+            ])
+            ->first();
 
         if ($cityData) {
-            return $cityData->id;
+            $this->cityId = $cityData->id;
+            return;
         }
 
-        $city = new \App\Entities\AddressCity();
-        $city->country  = $country;
-        $city->region   = $region;
-        $city->district = $district;
-        $city->name     = $name;
+        $city = new \App\Entities\LocationCity();
+        $city->country_id  = $this->countryId;
+        $city->region_id   = $this->regionId;
+        $city->district_id = $this->districtId;
+        $city->title_en    = $titleEn;
+        $city->title_ru    = $titleRu;
 
         $cityModel->insert($city);
 
-        return $cityModel->getInsertID();
+        $this->cityId = $cityModel->getInsertID();
     }
 }

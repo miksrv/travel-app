@@ -2,9 +2,10 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Tag extends Entity {
+class LocationCountry extends Entity {
     protected $casts = [
+        'id'       => 'integer',
         'title_en' => 'string',
-        'title_ru' => 'string',
+        'title_ru' => 'string'
     ];
 }

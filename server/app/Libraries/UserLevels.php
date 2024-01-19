@@ -5,7 +5,7 @@ use App\Entities\UserLevel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
-use App\Models\TranslationsPlacesModel;
+use App\Models\PlacesContentModel;
 use App\Models\UsersActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;

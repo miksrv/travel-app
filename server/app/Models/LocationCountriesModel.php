@@ -2,32 +2,34 @@
 
 use CodeIgniter\Model;
 
-class AddressCountry extends Model {
-    protected $table      = 'address_country';
+class LocationCountriesModel extends Model {
+    protected $table      = 'location_countries';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = \App\Entities\AddressCountry::class;
+    protected $returnType     = \App\Entities\LocationCountry::class;
     protected $useSoftDeletes = false;
 
-    // The updatable fields
     protected $allowedFields = [
-        'name'
+        'title_en',
+        'title_ru'
     ];
 
-    // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules = [
-        'name'  => 'required|string|max_length[50]',
+        'title_en' => 'required|string|max_length[50]',
+        'title_ru' => 'required|string|max_length[50]',
     ];
     protected $validationMessages   = [];
-    protected $skipValidation       = false;
+    protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = false;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

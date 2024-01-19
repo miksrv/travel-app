@@ -11,68 +11,63 @@ class AddPlaces extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'overpass_id' => [
-                'type'       => 'BIGINT',
-                'constraint' => 15,
-                'null'       => true,
-                'unique'     => true
-            ],
             'category' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 50,
                 'null'       => true
             ],
-            'tags' => [
-                'type' => 'TEXT',
+            'lat' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false
+            ],
+            'lng' => [
+                'type' => 'DECIMAL(16,12)',
+                'null' => false
+            ],
+            'rating' => [
+                'type' => 'DECIMAL(2,1)',
                 'null' => true
             ],
-            'address' => [
+            'views' => [
+                'type'       => 'MEDIUMINT',
+                'constraint' => 10,
+                'null'       => false,
+                'default'    => 0
+            ],
+            'address_en' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 250,
                 'null'       => true
             ],
-            'address_country' => [
+            'address_ru' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 250,
+                'null'       => true
+            ],
+            'country_id' => [
                 'type'       => 'SMALLINT',
                 'constraint' => 5,
                 'null'       => true
             ],
-            'address_region' => [
+            'region_id' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true
             ],
-            'address_district' => [
+            'district_id' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true
             ],
-            'address_city' => [
+            'city_id' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true
-            ],
-            'latitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false
-            ],
-            'longitude' => [
-                'type'       => 'DECIMAL(16,12)',
-                'null'       => false
             ],
             'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true
-            ],
-            'rating' => [
-                'type'       => 'DECIMAL(2,1)',
-                'null'       => true
-            ],
-            'views' => [
-                'type'       => 'MEDIUMINT',
-                'constraint' => 5,
-                'null'       => false,
-                'default'    => 0
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
@@ -85,10 +80,10 @@ class AddPlaces extends Migration {
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('category', 'category', 'name', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('address_country', 'address_country', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('address_region', 'address_region', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('address_district', 'address_district', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('address_city', 'address_city', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('country_id', 'location_countries', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('region_id', 'location_regions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('district_id', 'location_districts', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('city_id', 'location_cities', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('places');
     }
 

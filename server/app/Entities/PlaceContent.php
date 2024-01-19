@@ -2,11 +2,11 @@
 
 use CodeIgniter\Entity\Entity;
 
-class TranslationPlace extends Entity {
+class PlaceContent extends Entity {
     protected $casts = [
         'place_id' => 'string',
         'user_id'  => 'string',
-        'language' => 'string',
+        'locale'   => 'string',
         'title'    => 'title',
         'content'  => 'content',
         'delta'    => 'integer',

@@ -14,13 +14,12 @@ import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
     id?: string
-    title?: string
     content?: string
     tags?: Tag[]
 }
 
 const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
-    const { id, title, content, tags } = props
+    const { id, content, tags } = props
 
     const [savePlace, { isLoading, data: saveData }] =
         API.usePlacesPatchItemMutation()
