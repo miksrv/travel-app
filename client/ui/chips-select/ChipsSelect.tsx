@@ -64,7 +64,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
             setSearch(undefined)
         }
 
-        if (event.key === 'Backspace' && value?.length) {
+        if (event.key === 'Backspace' && value?.length && !search?.length) {
             const updateValue = [...value]
 
             updateValue.pop()
