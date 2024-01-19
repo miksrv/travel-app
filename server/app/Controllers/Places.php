@@ -378,11 +378,11 @@ class Places extends ResourceController {
         $placesContentModel = new PlacesContentModel();
 
         $content = new \App\Entities\PlaceContent();
-        $content->place_id   = $newPlaceId;
-        $content->language   = 'ru';
-        $content->user_id    = $session->userId;
-        $content->title      = $placeTitle;
-        $content->content    = $placeContent;
+        $content->place_id = $newPlaceId;
+        $content->language = 'ru';
+        $content->user_id  = $session->userId;
+        $content->title    = $placeTitle;
+        $content->content  = $placeContent;
 
         $placesContentModel->insert($content);
 

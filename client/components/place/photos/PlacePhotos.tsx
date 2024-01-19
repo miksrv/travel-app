@@ -30,7 +30,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const { data: actionsData } = API.usePhotosGetActionsQuery(
         { ids: photos?.map(({ id }) => id)?.join(',') },
-        { skip: !photos || !authSlice.isAuth }
+        { skip: authSlice.isAuth !== true || !photos?.length }
     )
 
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =

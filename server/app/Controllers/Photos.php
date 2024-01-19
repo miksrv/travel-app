@@ -124,8 +124,8 @@ class Photos extends ResourceController {
         $placesModel  = new PlacesModel();
         $placesData   = $placesModel->select('id, lat, lng')->find($id);
 
-        $placeTranslate = new PlacesContent($userLocale);
-        $placeTranslate->translate([$id]);
+        $placeContent = new PlacesContent($userLocale);
+        $placeContent->translate([$id]);
 
         if (!$placesData || !$placesData->id) {
             return $this->failValidationErrors('There is no point with this ID');
@@ -161,6 +161,8 @@ class Photos extends ResourceController {
             $photo->lng = $coordinates->lng ?? $placesData->lng;
             $photo->place_id  = $placesData->id;
             $photo->user_id   = $session->userData->id;
+            $photo->title_en  = $placeContent->title($id);
+            $photo->title_ru  = $placeContent->title($id);
             $photo->filename  = $name;
             $photo->extension = $file->getExtension();
             $photo->filesize  = $file->getSize();
@@ -171,16 +173,6 @@ class Photos extends ResourceController {
             $photoId = $photosModel->getInsertID();
 
             $userActivity->photo($photoId, $placesData->id);
-
-            // Add photo translate
-            $translationsPhotosModel = new TranslationsPhotosModel();
-            $translationsPhotosModel->insert([
-                'photo_id' => $photosModel->getInsertID(),
-                'language' => $userLocale,
-                'title'    => $placeTranslate->title($id) ?? ''
-            ]);
-
-            sleep(2.6);
         } else {
             echo $photo->getErrorString();
             exit();
