@@ -43,6 +43,9 @@ class Places extends ResourceController {
         $lon    = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
+        $localeLibrary = new LocaleLibrary();
+
+        $locale  = $localeLibrary->locale;
         $session = new Session();
         $bookmarksPlacesIds = [];
 
@@ -95,7 +98,9 @@ class Places extends ResourceController {
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $placesModel
-            ->select('places.id, places.category, places.lat, places.lng, places.rating, places.views, category.title_en as category_title_en, category.title_ru as category_title_ru' . $distanceSelect)
+            ->select('places.id, places.category, places.lat, places.lng, places.rating, places.views,
+                category.title_en as category_en, category.title_ru as category_ru' .
+                $distanceSelect)
             ->join('category', 'places.category = category.name', 'left');
 
         // If search or any other filter is not used, then we always use an empty array
@@ -142,7 +147,7 @@ class Places extends ResourceController {
                 'content'   => $placeTranslations->content($place->id),
                 'category'  => [
                     'name'  => $place->category,
-                    'title' => $place->category_title_ru,
+                    'title' => $place->{"category_$locale"},
                 ]
             ];
 
@@ -269,7 +274,7 @@ class Places extends ResourceController {
 
                 foreach ($placeData->tags as $tagItem) {
                     $tagsTitles[] = [
-                        'id' => $tagItem->id,
+                        'id'    => $tagItem->id,
                         'title' => $tagItem->{"title_$locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
                     ];
                 }
@@ -514,19 +519,19 @@ class Places extends ResourceController {
         }
 
         if ($country) {
-            $placesModel->where(['location_countries' => $country]);
+            $placesModel->where(['country_id' => $country]);
         }
 
         if ($region) {
-            $placesModel->where(['location_regions' => $region]);
+            $placesModel->where(['region_id' => $region]);
         }
 
         if ($district) {
-            $placesModel->where(['location_districts' => $district]);
+            $placesModel->where(['district_id' => $district]);
         }
 
         if ($city) {
-            $placesModel->where(['location_cities' => $city]);
+            $placesModel->where(['city_id' => $city]);
         }
 
         if ($category) {

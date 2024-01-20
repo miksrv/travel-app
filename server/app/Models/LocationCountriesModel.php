@@ -1,15 +1,15 @@
 <?php namespace App\Models;
 
-use CodeIgniter\Model;
-
-class LocationCountriesModel extends Model {
+class LocationCountriesModel extends MyBaseModel {
     protected $table      = 'location_countries';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
 
     protected $returnType     = \App\Entities\LocationCountry::class;
-    protected $useSoftDeletes = false;
+    protected $useSoftDeletes = true;
+
+    protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
 
     protected $allowedFields = [
         'title_en',
@@ -30,13 +30,13 @@ class LocationCountriesModel extends Model {
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    protected $allowCallbacks = false;
+    protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 }

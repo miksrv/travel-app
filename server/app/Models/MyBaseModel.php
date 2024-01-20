@@ -11,7 +11,6 @@ class MyBaseModel extends Model {
      * @return array|array[]
      */
     public function prepareOutput(array $data): array {
-
         // if the hiddenFields array is empty, we just return the original dta
         if (sizeof($this->hiddenFields) == 0) return $data;
 
