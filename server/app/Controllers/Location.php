@@ -13,17 +13,21 @@ use Geocoder\Exception\Exception;
 use ReflectionException;
 
 class Location extends ResourceController {
+    protected string $locale = 'ru';
+
+    function __construct() {
+        $localeLibrary = new LocaleLibrary();
+        $this->locale  = $localeLibrary->locale;
+    }
+
     /**
      * @throws Exception|ReflectionException
      */
     public function geocoder(): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lng = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
 
         $session = new Session();
-        $locale  = $localeLibrary->locale;
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
@@ -32,8 +36,29 @@ class Location extends ResourceController {
         $geocoder = new Geocoder($lat, $lng);
 
         return $this->respond((object) [
-            'address' => $locale === 'ru' ? $geocoder->addressRu : $geocoder->addressEn
+            'address' => $this->locale === 'ru' ? $geocoder->addressRu : $geocoder->addressEn
         ]);
+    }
+
+    public function search(): ResponseInterface {
+        $result = [];
+        $text   = $this->request->getGet('text', FILTER_SANITIZE_STRING);
+
+        if (!$text) {
+            return $this->failValidationErrors('Please enter search string');
+        }
+
+        $countriesData = $this->_searchResult(new LocationCountriesModel(), $text);
+        $regionsData   = $this->_searchResult(new LocationRegionsModel(), $text);
+        $districtsData = $this->_searchResult(new LocationDistrictsModel(), $text);
+        $citiesData    = $this->_searchResult(new LocationCitiesModel(), $text);
+
+        $result['countries'] = $this->_prepareSearchData($countriesData);
+        $result['regions']   = $this->_prepareSearchData($regionsData);
+        $result['districts'] = $this->_prepareSearchData($districtsData);
+        $result['cities']    = $this->_prepareSearchData($citiesData);
+
+        return $this->respond($result);
     }
 
     /**
@@ -77,14 +102,35 @@ class Location extends ResourceController {
      * @return ResponseInterface
      */
     private function _showResult(object $data): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
-        $locale = $localeLibrary->locale;
         $result = $data;
 
-        $result->title = $result->{"title_$locale"};
+        $result->title = $result->{"title_$this->locale"};
         unset($result->title_en, $result->title_ru);
 
         return $this->respond($result);
+    }
+
+    /**
+     * @param $locationModel
+     * @param $text
+     * @return mixed
+     */
+    private function _searchResult($locationModel, string $text): mixed {
+        return $locationModel->like('title_en', $text)->orLike('title_ru', $text)->findAll();
+    }
+
+    private function _prepareSearchData(array $data): array {
+        $result = [];
+
+        if ($data) {
+            foreach ($data as $item) {
+                $item->title = $item->{"title_{$this->locale}"};
+                unset($item->title_en, $item->title_ru);
+
+                $result[] = $item;
+            }
+        }
+
+        return $result;
     }
 }

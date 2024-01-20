@@ -82,7 +82,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const [searchAddress, { data: addressData, isLoading: addressLoading }] =
-        API.useAddressGetSearchMutation()
+        API.useLocationGetSearchMutation()
 
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
@@ -138,22 +138,22 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
             ...(addressData?.countries?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.Country,
-                value: item.name
+                value: item.title
             })) || []),
             ...(addressData?.regions?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.Region,
-                value: item.name
+                value: item.title
             })) || []),
             ...(addressData?.districts?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.District,
-                value: item.name
+                value: item.title
             })) || []),
             ...(addressData?.cities?.map((item) => ({
                 key: item.id,
                 type: ApiTypes.LocationType.City,
-                value: item.name
+                value: item.title
             })) || [])
         ],
         [addressData]

@@ -177,8 +177,7 @@ export interface RequestLocationGetGeocoder {
     lng?: number
 }
 
-/* Controller: Address */
-export interface ResponseAddressGetSearch {
+export interface ResponseLocationGetSearch {
     countries?: LocationObject[]
     regions?: LocationObject[]
     districts?: LocationObject[]

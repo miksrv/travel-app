@@ -71,14 +71,6 @@ export const API = createApi({
             query: (params) => `activity${encodeQueryData(params)}`
         }),
 
-        /* Controller: Address */
-        addressGetSearch: builder.mutation<
-            ApiTypes.ResponseAddressGetSearch,
-            Maybe<string>
-        >({
-            query: (searchString) => `address?search=${searchString}`
-        }),
-
         /* Controller: Auth */
         authGetMe: builder.mutation<ApiTypes.ResponseAuthLogin, void>({
             query: () => 'auth/me'
@@ -150,6 +142,12 @@ export const API = createApi({
             Maybe<ApiTypes.RequestLocationGetGeocoder>
         >({
             query: (params) => `location/geocoder${encodeQueryData(params)}`
+        }),
+        locationGetSearch: builder.mutation<
+            ApiTypes.ResponseLocationGetSearch,
+            Maybe<string>
+        >({
+            query: (searchString) => `location/search?text=${searchString}`
         }),
 
         /* Controller: Photos */

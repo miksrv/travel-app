@@ -48,9 +48,6 @@ $routes->options('districts', 'Districts');
 $routes->get('cities', 'Cities::list');
 $routes->options('cities', 'Cities');
 
-$routes->get('address', 'Address::search');
-$routes->options('address', 'Address');
-
 $routes->get('categories', 'Categories::list');
 $routes->options('categories', 'Categories');
 
@@ -76,8 +73,10 @@ $routes->options('auth/(:any)', 'Auth::me');
 
 /* Location */
 $routes->get('location/geocoder', 'Location::geocoder');
+$routes->get('location/search', 'Location::search');
 $routes->get('location/(:num)', 'Location::show/$1');
 $routes->options('location/geocoder', 'Location');
+$routes->options('location/search', 'Location');
 $routes->options('location/(:num)', 'Location');
 
 /* Tags */
