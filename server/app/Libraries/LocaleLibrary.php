@@ -7,7 +7,10 @@ class LocaleLibrary {
 
     public function __construct() {
         $request = Services::request();
+        $header  = $request->header('Locale');
 
-        $this->locale = $request->header('Locale')->getValue() ?? 'ru';
+        if (isset($header)) {
+            $this->locale = $header->getValue();
+        }
     }
 }

@@ -177,6 +177,8 @@ class Places extends ResourceController {
      */
     public function show($id = null): ResponseInterface {
         $localeLibrary = new LocaleLibrary();
+
+        $locale  = $localeLibrary->locale;
         $session = new Session();
 
         // Load translate library
@@ -193,10 +195,14 @@ class Places extends ResourceController {
             $placesModel = new PlacesModel();
             $placeData   = $placesModel
                 ->select(
-                    'places.*,  users.id as user_id, users.name as user_name, users.avatar as user_avatar,
-                    location_countries.title_ru as country_name, location_regions.title_ru as region_name, 
-                    location_districts.title_ru as district_name, location_cities.title_ru as city_name,
-                    category.title_ru as category_title' . $distanceSelect)
+                    'places.*,  
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar,
+                    location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
+                    location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
+                    location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
+                    location_cities.title_en as city_en, location_cities.title_ru as city_ru,
+                    category.title_ru as category_ru, category.title_en as category_en' .
+                    $distanceSelect)
                 ->join('users', 'places.user_id = users.id', 'left')
                 ->join('category', 'places.category = category.name', 'left')
                 ->join('location_countries', 'location_countries.id = places.country_id', 'left')
@@ -250,7 +256,7 @@ class Places extends ResourceController {
                 ],
                 'category'  => [
                     'name'  => $placeData->category,
-                    'title' => $placeData->category_title,
+                    'title' => $placeData->{"category_$locale"},
                 ],
                 'actions'   => [
                     'rating' => !$ratingData,
@@ -264,16 +270,14 @@ class Places extends ResourceController {
                 foreach ($placeData->tags as $tagItem) {
                     $tagsTitles[] = [
                         'id' => $tagItem->id,
-                        'title' => $tagItem->{"title_$localeLibrary->locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
+                        'title' => $tagItem->{"title_$locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
                     ];
                 }
 
                 $response['tags'] = $tagsTitles;
             }
 
-            if ($placeData->address) {
-                $response['address']['street'] = $placeData->address;
-            }
+            $response['address']['street'] = $placeData->{"address_$locale"};
 
             if ($placeData->photo) {
                 $response['photoCount'] = count($placeData->photo);
@@ -299,31 +303,31 @@ class Places extends ResourceController {
                 $response['distance'] = round((float) $placeData->distance, 1);
             }
 
-            if ($placeData->country_name) {
+            if ($placeData->country_id) {
                 $response['address']['country'] = [
-                    'id'   => (int) $placeData->country_id,
-                    'name' => $placeData->country_name
+                    'id'   => $placeData->country_id,
+                    'name' => $placeData->{"country_$locale"}
                 ];
             }
 
-            if ($placeData->region_name) {
+            if ($placeData->region_id) {
                 $response['address']['region'] = [
-                    'id'   => (int) $placeData->region_id,
-                    'name' => $placeData->region_name
+                    'id'   => $placeData->region_id,
+                    'name' => $placeData->{"region_$locale"}
                 ];
             }
 
-            if ($placeData->district_name) {
+            if ($placeData->district_id) {
                 $response['address']['district'] = [
-                    'id'   => (int) $placeData->district_id,
-                    'name' => $placeData->district_name
+                    'id'   => $placeData->district_id,
+                    'name' => $placeData->{"district_$locale"}
                 ];
             }
 
-            if ($placeData->city_name) {
+            if ($placeData->city_id) {
                 $response['address']['city'] = [
-                    'id'   => (int) $placeData->city_id,
-                    'name' => $placeData->city_name
+                    'id'   => $placeData->city_id,
+                    'name' => $placeData->{"city_$locale"}
                 ];
             }
 
