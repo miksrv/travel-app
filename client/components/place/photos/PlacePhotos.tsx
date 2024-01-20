@@ -20,7 +20,7 @@ interface PlacePhotosProps {
 
 const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const dispatch = useAppDispatch()
-    const authSlice = useAppSelector((state) => state.auth)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
@@ -30,7 +30,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const { data: actionsData } = API.usePhotosGetActionsQuery(
         { ids: photos?.map(({ id }) => id)?.join(',') },
-        { skip: authSlice.isAuth !== true || !photos?.length }
+        { skip: isAuth !== true || !photos?.length }
     )
 
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
@@ -52,7 +52,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     }
 
     const handlePhotoRemoveClick = (photoId: string) => {
-        if (authSlice.isAuth && !deleteLoading) {
+        if (isAuth && !deleteLoading) {
             deletePhoto(photoId)
         }
     }
@@ -62,7 +62,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     }
 
     const handlePhotoUploadClick = () => {
-        if (authSlice.isAuth) {
+        if (isAuth) {
             inputFile.current?.click()
         } else {
             dispatch(openAuthDialog())

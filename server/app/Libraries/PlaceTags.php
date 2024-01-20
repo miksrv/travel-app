@@ -13,40 +13,54 @@ class PlaceTags {
         $this->placeTagsModel = new PlacesTagsModel();
     }
 
-    public function saveTags(array $tags, string $placeId): bool {
+    /**
+     * @param array $tags
+     * @param string $placeId
+     * @return array
+     * @throws \ReflectionException
+     */
+    public function saveTags(array $tags, string $placeId): array {
         $localeLibrary = new LocaleLibrary();
+        $returnTags    = [];
 
         if (!$placeId) {
-            return false;
+            return $returnTags;
+        }
+
+        if (empty($tags)) {
+            return $returnTags;
         }
 
         $this->placeTagsModel->where('place_id', $placeId)->delete();
-
-        if (empty($tags)) {
-            return true;
-        }
 
         foreach ($tags as $tag) {
             $tagData = $this->tagsModel->where(['title_' . $localeLibrary->locale => $tag])->first();
 
             if (!$tagData) {
                 $this->tagsModel->insert(['title_' . $localeLibrary->locale => $tag,]);
-
                 $this->placeTagsModel->insert([
                     'tag_id'   => $this->tagsModel->getInsertID(),
                     'place_id' => $placeId
                 ]);
 
-            } else {
+                $returnTags[] = [
+                    'id'    => $this->tagsModel->getInsertID(),
+                    'title' => $tag,
+                ];
 
-                $this->tagsModel->update($tagData->id);
+            } else {
                 $this->placeTagsModel->insert([
                     'tag_id'   => $tagData->id,
                     'place_id' => $placeId
                 ]);
+
+                $returnTags[] = [
+                    'id'    => $tagData->id,
+                    'title' => $tag,
+                ];
             }
         }
 
-        return true;
+        return $returnTags;
     }
 }

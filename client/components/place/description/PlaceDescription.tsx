@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
 
 import Button from '@/ui/button'
@@ -8,7 +8,8 @@ import Container from '@/ui/container'
 import ContentEditor from '@/ui/content-editor'
 
 import { API } from '@/api/api'
-import { useAppSelector } from '@/api/store'
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Tag } from '@/api/types/Place'
 
 import styles from './styles.module.sass'
@@ -24,6 +25,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     content,
     tags
 }) => {
+    const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [savePlace, { isLoading, data: saveData }] =
@@ -32,13 +34,20 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
 
-    const [editorMode, setEditorMode] = React.useState<boolean>(false)
-    const [editorContent, setEditorContent] = React.useState<string>()
-    const [editorTags, setEditorTags] = React.useState<string[]>()
+    const [editorMode, setEditorMode] = useState<boolean>(false)
+    const [editorContent, setEditorContent] = useState<string>()
+    const [editorTags, setEditorTags] = useState<string[]>()
+
+    const [localTags, setLocalTags] = useState<Tag[]>()
+    const [localContent, setLocalContent] = useState<string>()
 
     const handleSetEditorClick = () => {
-        setEditorTags(tags?.map((tag) => tag.title) || [])
-        setEditorMode(!editorMode)
+        if (isAuth) {
+            setEditorMode(!editorMode)
+            setEditorTags(localTags?.map(({ title }) => title))
+        } else {
+            dispatch(openAuthDialog())
+        }
     }
 
     const handleSelectTags = (value: string[]) => {
@@ -46,8 +55,6 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }
 
     const handleSaveEditorClick = async () => {
-        setEditorMode(false)
-
         await savePlace({
             content: editorContent,
             id: placeId!,
@@ -58,13 +65,16 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     useEffect(() => {
         if (saveData?.status && editorMode) {
             setEditorMode(false)
+            setLocalContent(saveData?.content)
+            setLocalTags(saveData?.tags)
             setEditorContent(undefined)
         }
     }, [saveData])
 
     useEffect(() => {
-        setEditorTags(tags?.map(({ title }) => title))
-    }, [tags])
+        setLocalContent(content)
+        setLocalTags(tags)
+    }, [placeId])
 
     return (
         <Container
@@ -103,8 +113,8 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                     markdown={content || ''}
                     onChange={setEditorContent}
                 />
-            ) : content ? (
-                <Markdown>{content}</Markdown>
+            ) : localContent ? (
+                <Markdown>{localContent}</Markdown>
             ) : (
                 <div className={styles.emptyContent}>{'Нет описания'}</div>
             )}
@@ -122,11 +132,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                     />
                 </div>
             ) : (
-                !!tags?.length && (
+                localTags?.length && (
                     <ul className={styles.tagList}>
-                        {tags?.map((tag) => (
+                        {localTags?.map((tag) => (
                             <li key={tag.id}>
-                                <Link href={`/tags/${tag.id}`}>
+                                <Link
+                                    href={`/tags/${tag.id}`}
+                                    title={''}
+                                >
                                     {`#${tag.title}`}
                                 </Link>
                             </li>

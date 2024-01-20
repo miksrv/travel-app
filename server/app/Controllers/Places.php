@@ -430,50 +430,45 @@ class Places extends ResourceController {
         }
 
         // Save place tags
-        if (isset($input->tags)) {
-            $placeTags->saveTags($input->tags, $id);
-        }
-
-        if (!isset($input->content)) {
-            return $this->respond((object) ['status' => true]);
-        }
+        $updatedTags    = $placeTags->saveTags($input->tags, $id);
+        $updatedContent = strip_tags(html_entity_decode($input->content ?? null));
 
         // Save place content
-        $userActivity = new UserActivity();
-        $contentModel = new PlacesContentModel();
-        $newContent   = strip_tags(html_entity_decode($input->content));
+        if ($updatedContent) {
+            $userActivity = new UserActivity();
+            $contentModel = new PlacesContentModel();
+            $placeEntity  = new \App\Entities\PlaceContent();
+            $placeEntity->locale   = 'ru';
+            $placeEntity->place_id = $id;
+            $placeEntity->user_id  = $session->userData->id;
+            $placeEntity->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeContent->title($id);
+            $placeEntity->content  = $updatedContent;
+            $placeEntity->delta    = strlen($updatedContent) - strlen($placeContent->content($id));
 
-        $placeEntity = new \App\Entities\PlaceContent();
-        $placeEntity->locale = 'ru';
-        $placeEntity->place_id = $id;
-        $placeEntity->user_id  = $session->userData->id;
-        $placeEntity->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeContent->title($id);
-        $placeEntity->content  = $newContent;
-        $placeEntity->delta    = strlen($newContent) - strlen($placeContent->content($id));
+            // If the author of the last edit is the same as the current one,
+            // then you need to check when the content was last edited
+            if ($placeContent->author($id) === $session->userData->id) {
+                $time = new Time('now');
+                $diff = $time->difference($placeContent->updated($id));
 
-        // If the author of the last edit is the same as the current one,
-        // then you need to check when the content was last edited
-        if ($placeContent->author($id) === $session->userData->id) {
-            $time = new Time('now');
-            $diff = $time->difference($placeContent->updated($id));
-
-            // If the last time a user edited this content was less than or equal to 30 minutes,
-            // then we will simply update the data and will not add a new version
-            if (abs($diff->getMinutes()) <= 30) {
-                $contentModel->update($placeContent->id($id), $placeEntity);
+                // If the last time a user edited this content was less than or equal to 30 minutes,
+                // then we will simply update the data and will not add a new version
+                if (abs($diff->getMinutes()) <= 30) {
+                    $contentModel->update($placeContent->id($id), $placeEntity);
+                } else {
+                    $contentModel->insert($placeEntity);
+                    $userActivity->edit($id);
+                }
             } else {
                 $contentModel->insert($placeEntity);
                 $userActivity->edit($id);
             }
-        } else {
-            $contentModel->insert($placeEntity);
-            $userActivity->edit($id);
-        }
 
-        // We add a notification to the author that his material has been edited
-        if ($placeData->user_ud !== $session->userData->id) {
-            $userNotify = new UserNotify();
-            $userNotify->place($placeContent->author($id), $id);
+            // We add a notification to the author that his material has been edited
+            if ($placeData->user_ud !== $session->userData->id) {
+                $userNotify = new UserNotify();
+                $userNotify->place($placeContent->author($id), $id);
+            }
         }
 
         // In any case, we update the time when the post was last edited
@@ -481,7 +476,11 @@ class Places extends ResourceController {
         $place->updated_at = time();
         $placesModel->update($id, $place);
 
-        return $this->respond((object) ['status' => true]);
+        return $this->respond((object) [
+            'status'  => true,
+            'content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id),
+            'tags'    => $updatedTags
+        ]);
     }
 
     /**

@@ -1,4 +1,4 @@
-import { Category, LocationObject, Place } from '@/api/types/Place'
+import { Category, LocationObject, Place, Tag } from '@/api/types/Place'
 
 import { Item } from './Activity'
 import { Photo } from './Photo'
@@ -115,6 +115,8 @@ export interface RequestPlacesPatchItem {
 
 export interface ResponsePlacesPatchItem {
     status: boolean
+    content?: string
+    tags?: Tag[]
 }
 
 export interface RequestPlacesPostItem {

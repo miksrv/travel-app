@@ -109,7 +109,7 @@ const PlacePage: NextPage<PlacePageProps> = (props) => {
             />
 
             <PlaceDescription
-                id={place?.id}
+                placeId={place?.id}
                 content={place?.content}
                 tags={place?.tags}
             />
