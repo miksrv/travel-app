@@ -17,10 +17,13 @@ class Location extends ResourceController {
      * @throws Exception|ReflectionException
      */
     public function geocoder(): ResponseInterface {
+        $localeLibrary = new LocaleLibrary();
+
         $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lng = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
 
         $session = new Session();
+        $locale  = $localeLibrary->locale;
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
@@ -28,7 +31,9 @@ class Location extends ResourceController {
 
         $geocoder = new Geocoder($lat, $lng);
 
-        return $this->respond((object) ['address' => $geocoder->address]);
+        return $this->respond((object) [
+            'address' => $locale === 'ru' ? $geocoder->addressRu : $geocoder->addressEn
+        ]);
     }
 
     /**

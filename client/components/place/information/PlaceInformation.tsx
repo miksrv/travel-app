@@ -38,7 +38,7 @@ interface PlaceInformationProps {
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
-    const { place, ratingValue, loading } = props
+    const { place, ratingValue } = props
 
     // const authSlice = useAppSelector((state) => state.auth)
 
@@ -61,7 +61,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
             if (place?.address?.[type]?.id) {
                 address.push({
                     id: place.address[type]?.id,
-                    name: place.address[type]?.name,
+                    name: place.address[type]?.title,
                     type
                 })
             }

@@ -1,3 +1,4 @@
+import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { i18n } from 'next-i18next'
 import { HYDRATE } from 'next-redux-wrapper'
@@ -13,6 +14,10 @@ export const IMG_HOST =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
 export const SITE_LINK = process.env.NEXT_PUBLIC_SITE_LINK
+
+function isHydrateAction(action: Action): action is PayloadAction<RootState> {
+    return action.type === HYDRATE
+}
 
 export const API = createApi({
     baseQuery: fetchBaseQuery({
@@ -307,8 +312,8 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         })
     }),
-    extractRehydrationInfo(action, { reducerPath }) {
-        if (action.type === HYDRATE) {
+    extractRehydrationInfo(action, { reducerPath }): any {
+        if (isHydrateAction(action)) {
             return action.payload[reducerPath]
         }
     },

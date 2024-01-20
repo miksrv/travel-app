@@ -65,7 +65,7 @@ export type Location = {
 
 export type LocationObject = {
     id: number
-    name: string
+    title: string
 }
 
 export type Tag = {

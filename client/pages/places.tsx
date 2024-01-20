@@ -152,7 +152,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         let titles = []
 
         if (!locationUnset) {
-            titles.push(locationData?.name)
+            titles.push(locationData?.title)
         }
 
         if (currentCategory) {
@@ -172,7 +172,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         if (!locationUnset && category) {
             breadcrumbs.push({
                 link: `/places?${locationType}=${locationData?.id}`,
-                text: locationData?.name!
+                text: locationData?.title!
             })
         }
 
@@ -224,7 +224,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                             category
                                 ? currentCategory
                                 : !locationUnset
-                                ? locationData?.name
+                                ? locationData?.title
                                 : t('breadcrumb')
                         }
                         links={breadcrumbsLinks || []}
@@ -275,7 +275,7 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
                             ? {
                                   key: locationData.id,
                                   type: locationType,
-                                  value: locationData.name
+                                  value: locationData.title
                               }
                             : undefined
                     }

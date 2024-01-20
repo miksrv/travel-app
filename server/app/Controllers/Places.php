@@ -310,29 +310,29 @@ class Places extends ResourceController {
 
             if ($placeData->country_id) {
                 $response['address']['country'] = [
-                    'id'   => $placeData->country_id,
-                    'name' => $placeData->{"country_$locale"}
+                    'id'    => $placeData->country_id,
+                    'title' => $placeData->{"country_$locale"}
                 ];
             }
 
             if ($placeData->region_id) {
                 $response['address']['region'] = [
-                    'id'   => $placeData->region_id,
-                    'name' => $placeData->{"region_$locale"}
+                    'id'    => $placeData->region_id,
+                    'title' => $placeData->{"region_$locale"}
                 ];
             }
 
             if ($placeData->district_id) {
                 $response['address']['district'] = [
-                    'id'   => $placeData->district_id,
-                    'name' => $placeData->{"district_$locale"}
+                    'id'    => $placeData->district_id,
+                    'title' => $placeData->{"district_$locale"}
                 ];
             }
 
             if ($placeData->city_id) {
                 $response['address']['city'] = [
-                    'id'   => $placeData->city_id,
-                    'name' => $placeData->{"city_$locale"}
+                    'id'    => $placeData->city_id,
+                    'title' => $placeData->{"city_$locale"}
                 ];
             }
 
