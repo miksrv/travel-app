@@ -14,13 +14,17 @@ import { Tag } from '@/api/types/Place'
 import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
-    id?: string
+    placeId?: string
     content?: string
     tags?: Tag[]
 }
 
-const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
-    const { id, content, tags } = props
+const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
+    placeId,
+    content,
+    tags
+}) => {
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [savePlace, { isLoading, data: saveData }] =
         API.usePlacesPatchItemMutation()
@@ -28,7 +32,6 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
 
-    const isAuth = useAppSelector((state) => state.auth.isAuth)
     const [editorMode, setEditorMode] = React.useState<boolean>(false)
     const [editorContent, setEditorContent] = React.useState<string>()
     const [editorTags, setEditorTags] = React.useState<string[]>()
@@ -43,15 +46,11 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = (props) => {
     }
 
     const handleSaveEditorClick = async () => {
-        if (!id) {
-            return
-        }
-
         setEditorMode(false)
 
         await savePlace({
             content: editorContent,
-            id,
+            id: placeId!,
             tags: editorTags
         })
     }
