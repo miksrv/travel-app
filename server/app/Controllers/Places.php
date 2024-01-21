@@ -71,7 +71,7 @@ class Places extends ResourceController {
         }
 
         // Load translate library
-        $placeTranslations = new PlacesContent('ru', 350);
+        $placeTranslations = new PlacesContent(350);
 
         // When searching, we search by criteria in the translation array to return object IDs
         if ($search) {
@@ -187,8 +187,8 @@ class Places extends ResourceController {
         $session = new Session();
 
         // Load translate library
-        $placeTranslate = new PlacesContent('ru');
-        $placeTranslate->translate([$id]);
+        $placeContent = new PlacesContent();
+        $placeContent->translate([$id]);
 
         try {
             $distanceSelect = ($session->lng && $session->lat)
@@ -252,8 +252,8 @@ class Places extends ResourceController {
                 'lng'       => (float) $placeData->lng,
                 'rating'    => (float) $placeData->rating,
                 'views'     => (int) $placeData->views,
-                'title'     => $placeTranslate->title($id),
-                'content'   => $placeTranslate->content($id),
+                'title'     => $placeContent->title($id),
+                'content'   => $placeContent->content($id),
                 'author'    => [
                     'id'     => $placeData->user_id,
                     'name'   => $placeData->user_name,
@@ -429,7 +429,7 @@ class Places extends ResourceController {
 
         $placeTags    = new PlaceTags();
         $placesModel  = new PlacesModel();
-        $placeContent = new PlacesContent('ru');
+        $placeContent = new PlacesContent();
         $placeData    = $placesModel->find($id);
 
         $placeContent->translate([$id]);

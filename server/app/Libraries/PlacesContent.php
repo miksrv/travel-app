@@ -8,22 +8,22 @@ use App\Models\PlacesContentModel;
  * Как работать:
  *
  * 1) Импортируем:
- *    $placeTranslations = new PlaceTranslation('ru', 350);
- *    ru - язык (сообщает клиент, если такого языка нет, будет выводится любой), 350 - обрезает контент
+ *    $placeContent = new PlacesContent(350);
+ *    350 - обрезает контент
  * 2) Находим перевод для объектов:
- *    A: Если используется поиск $placeTranslations->search('кратер');
- *    B: Если уже известен массив объектов: $placeTranslations->translate([{ID}, {ID}]);
- * 3) Для того, чтобы вернуть ID всех найденных объектов: $placeTranslations->placeIds;
+ *    A: Если используется поиск $placeContent->search('кратер');
+ *    B: Если уже известен массив объектов: $placeContent->translate([{ID}, {ID}]);
+ * 3) Для того, чтобы вернуть ID всех найденных объектов: $placeContent->placeIds;
  * 4) Перевод для каждого конкретного:
- *    А: Заголовок $placeTranslations->title({ID});
- *    B: Контент $placeTranslations->content({ID});
+ *    А: Заголовок $placeContent->title({ID});
+ *    B: Контент $placeContent->content({ID});
  */
 class PlacesContent {
 
-    protected array $translate = [];
+    protected array $places = [];
     protected array $versions = [];
     public array $placeIds = [];
-    protected string $language = 'ru';
+    protected string $locale;
     protected int $trim;
     protected string $search;
 
@@ -36,16 +36,16 @@ class PlacesContent {
      * The library works in two modes:
      *  1) Search by keyword and return a list of location and content IDs for each
      *  2) Gets a list of place IDs, extracts content for them and returns it
-     * @param string $language
      * @param int $trim
      */
-    public function __construct(string $language = 'ru', int $trim = 0) {
-        $this->model    = new PlacesContentModel();
-        $this->language = $language;
-        $this->trim     = $trim;
+    public function __construct(int $trim = 0) {
+        $localeLibrary = new LocaleLibrary();
+        $this->model   = new PlacesContentModel();
+        $this->locale  = $localeLibrary->locale;
+        $this->trim    = $trim;
 
         $this->model->select(
-            'id, place_id, title, user_id, delta, created_at, updated_at,' .
+            'id, place_id, title, user_id, locale, delta, created_at, updated_at,' .
             ($this->trim > 0 ? 'SUBSTRING(places_content.content, 1, ' . $this->trim . ') as content' : 'places_content.content')
         );
     }
@@ -82,9 +82,8 @@ class PlacesContent {
         }
 
         // Setting a global variable
-        if ($keepVersions === true) {
-            $this->keepVersions = true;
-        }
+        // #TODO
+        $this->keepVersions = $keepVersions === true;
 
         // Here we get all edition versions for all places by their ID
         $data = $this->model
@@ -92,7 +91,9 @@ class PlacesContent {
             ->orderBy('created_at', 'DESC')
             ->findAll();
 
-        $this->_prepareOutput($data);
+        foreach ($this->placeIds as $placeId) {
+            $this->places[$placeId] = $this->_findPlaceContent($placeId, $data);
+        }
     }
 
     /**
@@ -155,15 +156,15 @@ class PlacesContent {
             }
         }
 
-        if (isset($this->translate[$id])) {
-            return $this->translate[$id]->{$field};
+        if (isset($this->places[$id])) {
+            return $this->places[$id]->{$field};
         }
 
         return '';
     }
 
     /**
-     * Prepares an array $this->translate containing translations for each location.
+     * Prepares an array $this->places containing translations for each location.
      * Also, if $this->placeIds is empty, then fill it with the found IDs of places for
      * which matches to the search criteria were found.
      * @param array $data translations data for all places (by array of IDs)
@@ -171,7 +172,7 @@ class PlacesContent {
      */
     protected function _prepareOutput(array $data) {
         if (empty($data)) {
-            return $this->translate;
+            return $this->places;
         }
 
         foreach ($data as $item) {
@@ -180,8 +181,8 @@ class PlacesContent {
             // and if the date of the added translation is greater than the date of the current searched region -
             // we add such a translation to the history and move on.
             if (
-                isset($this->translate[$item->place_id]) &&
-                strtotime($this->translate[$item->place_id]->created_at) > strtotime($item->created_at)
+                isset($this->places[$item->place_id]) &&
+                strtotime($this->places[$item->place_id]->created_at) > strtotime($item->created_at)
             ) {
                 if ($this->keepVersions) {
                     $this->versions[$item->place_id][] = $item;
@@ -191,7 +192,26 @@ class PlacesContent {
             }
 
             $this->placeIds[] = $item->place_id;
-            $this->translate[$item->place_id] = $item;
+            $this->places[$item->place_id] = $item;
+        }
+    }
+
+    /**
+     * @param string $placeId
+     * @param array $data
+     * @return array|void
+     */
+    private function _findPlaceContent(string $placeId, array $data) {
+        foreach ($data as $item) {
+            if ($item->place_id === $placeId && $item->locale === $this->locale) {
+                return $item;
+            }
+        }
+
+        foreach ($data as $item) {
+            if ($item->place_id === $placeId && $item->locale === ($this->locale === 'ru' ? 'en' : 'ru')) {
+                return $item;
+            }
         }
     }
 }
