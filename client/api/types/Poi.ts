@@ -6,13 +6,13 @@ export type Place = {
     id?: string
     category: Categories
     lat: number
-    lng: number
+    lon: number
 }
 
 export type Photo = {
     placeId: string
     lat: number
-    lng: number
+    lon: number
     filename: string
     extension: string
     author?: User

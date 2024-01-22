@@ -9,6 +9,6 @@ class Session extends Entity {
         'user_ip'    => 'string',
         'user_agent' => 'string',
         'lat'        => 'float',
-        'lng'        => 'float',
+        'lon'        => 'float',
     ];
 }

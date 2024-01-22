@@ -158,7 +158,7 @@ class Photos extends ResourceController {
             // Save photo to DB
             $photo = new Photo();
             $photo->lat = $coordinates->lat ?? $placesData->lat;
-            $photo->lng = $coordinates->lng ?? $placesData->lng;
+            $photo->lon = $coordinates->lng ?? $placesData->lon;
             $photo->place_id  = $placesData->id;
             $photo->user_id   = $session->userData->id;
             $photo->title_en  = $placeContent->title($id);

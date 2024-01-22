@@ -36,13 +36,13 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     const router = useRouter()
     const geolocation = useGeolocation()
 
-    const [myCoordinates, setMyCoordinates] =
-        useState<ApiTypes.LatLngCoordinate>()
+    // const [myCoordinates, setMyCoordinates] =
+    //     useState<ApiTypes.LatLonCoordinate>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
     const [mapBounds, setMapBounds] = useState<string>()
 
-    const [introduce] = API.useIntroduceMutation()
+    // const [introduce] = API.useIntroduceMutation()
     const { data: poiListData } = API.usePoiGetListQuery(
         { bounds: mapBounds },
         { skip: !mapBounds }
@@ -75,7 +75,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
             ...formData,
             coordinates: {
                 lat: mapCenter.lat,
-                lng: mapCenter.lng
+                lon: mapCenter.lng
             }
         })
 
@@ -128,24 +128,24 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         []
     )
 
-    useEffect(() => {
-        const updateLatitude = round(geolocation?.latitude)
-        const updateLongitude = round(geolocation?.longitude)
-
-        if (
-            updateLatitude &&
-            updateLongitude &&
-            updateLatitude !== myCoordinates?.lat &&
-            updateLongitude !== myCoordinates?.lng
-        ) {
-            setMyCoordinates({
-                lat: updateLatitude,
-                lng: updateLongitude
-            })
-
-            introduce({ lat: updateLatitude, lon: updateLongitude })
-        }
-    }, [geolocation.latitude, geolocation.longitude])
+    // useEffect(() => {
+    //     const updateLatitude = round(geolocation?.latitude)
+    //     const updateLongitude = round(geolocation?.longitude)
+    //
+    //     if (
+    //         updateLatitude &&
+    //         updateLongitude &&
+    //         updateLatitude !== myCoordinates?.lat &&
+    //         updateLongitude !== myCoordinates?.lng
+    //     ) {
+    //         setMyCoordinates({
+    //             lat: updateLatitude,
+    //             lng: updateLongitude
+    //         })
+    //
+    //         introduce({ lat: updateLatitude, lon: updateLongitude })
+    //     }
+    // }, [geolocation.latitude, geolocation.longitude])
 
     useEffect(() => {
         if (createPlaceData?.id) {

@@ -92,7 +92,7 @@ class Migrate extends ResourceController {
             $place    = new \App\Entities\Place();
 
             $place->lat         = $item->item_latitude;
-            $place->lng         = $item->item_longitude;
+            $place->lon         = $item->item_longitude;
             $place->user_id     = $placeAuthor;
             $place->rating      = $ratingSum === 0 ? null : round($ratingSum / count($ratingData['scores']), 1);
             $place->views       = $item->item_count_views;
@@ -250,7 +250,7 @@ class Migrate extends ResourceController {
                             // Save photo to DB
                             $photo = new \App\Entities\Photo();
                             $photo->lat        = $currentPhoto->item_latitude;
-                            $photo->lng        = $currentPhoto->item_longitude;
+                            $photo->lon        = $currentPhoto->item_longitude;
                             $photo->place_id   = $newPlaceId;
                             $photo->user_id    = $photoAuthor;
                             $photo->title_en   = '';

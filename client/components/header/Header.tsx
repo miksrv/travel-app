@@ -1,17 +1,19 @@
 import Link from 'next/link'
 import React, { useEffect } from 'react'
+import useGeolocation from 'react-hook-geolocation'
 
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
-import { openAuthDialog } from '@/api/applicationSlice'
+import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
 import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 
 import Search from '@/components/header/Search'
 import UserAvatar from '@/components/user-avatar'
 
-import { concatClassNames as cn } from '@/functions/helpers'
+import { concatClassNames as cn, round } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -21,13 +23,19 @@ interface HeaderProps {
     onMenuClick?: () => void
 }
 
-const Header: React.FC<HeaderProps> = (props) => {
-    const { randomPlaceId, fullSize, onMenuClick } = props
-
+const Header: React.FC<HeaderProps> = ({
+    randomPlaceId,
+    fullSize,
+    onMenuClick
+}) => {
     const dispatch = useAppDispatch()
-    const authSlice = useAppSelector((state) => state.auth)
+    const geolocation = useGeolocation()
+
+    const authorization = useAppSelector((state) => state.auth)
+    const location = useAppSelector((state) => state.application.userLocation)
 
     const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
+    const [updateLocation] = API.useLocationPutCoordinatesMutation()
     const randomPlaceQuery = API.usePlacesGetRandomQuery(undefined, {
         skip: !!randomPlaceId
     })
@@ -48,10 +56,30 @@ const Header: React.FC<HeaderProps> = (props) => {
     }, [meData, error])
 
     useEffect(() => {
-        if (authSlice.token) {
+        if (authorization.token) {
             authGetMe()
         }
     }, [])
+
+    useEffect(() => {
+        const updateLat = round(geolocation?.latitude, 4)
+        const updateLng = round(geolocation?.longitude, 4)
+
+        if (
+            updateLat &&
+            updateLng &&
+            updateLat !== location?.lat &&
+            updateLng !== location?.lon
+        ) {
+            const data: ApiTypes.LatLonCoordinate = {
+                lat: updateLat,
+                lon: updateLng
+            }
+
+            dispatch(setUserLocation(data))
+            updateLocation(data)
+        }
+    }, [geolocation.latitude, geolocation.longitude])
 
     return (
         <header className={cn(styles.component, fullSize && styles.fullSize)}>
@@ -75,9 +103,9 @@ const Header: React.FC<HeaderProps> = (props) => {
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    {authSlice.isAuth && authSlice?.user ? (
+                    {authorization.isAuth && authorization?.user ? (
                         <UserAvatar
-                            user={authSlice?.user}
+                            user={authorization?.user}
                             size={'medium'}
                         />
                     ) : (

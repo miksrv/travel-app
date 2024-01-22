@@ -1,8 +1,11 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
+import { ApiTypes } from '@/api/types'
+
 type ApplicationStateProps = {
     showOverlay?: boolean
     showAuthDialog?: boolean
+    userLocation?: ApiTypes.LatLonCoordinate
 }
 
 const applicationSlice = createSlice({
@@ -20,13 +23,23 @@ const applicationSlice = createSlice({
             state.showOverlay = true
             state.showAuthDialog = true
         },
+        setUserLocation: (
+            state,
+            { payload }: PayloadAction<ApiTypes.LatLonCoordinate>
+        ) => {
+            state.userLocation = payload
+        },
         toggleOverlay: (state, { payload }: PayloadAction<boolean>) => {
             state.showOverlay = payload
         }
     }
 })
 
-export const { toggleOverlay, closeAuthDialog, openAuthDialog } =
-    applicationSlice.actions
+export const {
+    toggleOverlay,
+    closeAuthDialog,
+    openAuthDialog,
+    setUserLocation
+} = applicationSlice.actions
 
 export default applicationSlice.reducer

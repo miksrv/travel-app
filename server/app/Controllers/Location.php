@@ -1,12 +1,14 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
+use App\Libraries\Session;
 use App\Models\LocationCitiesModel;
 use App\Models\LocationCountriesModel;
 use App\Models\LocationDistrictsModel;
 use App\Models\LocationRegionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Location extends ResourceController {
     protected string $locale;
@@ -14,6 +16,23 @@ class Location extends ResourceController {
     function __construct() {
         $localeLibrary = new LocaleLibrary();
         $this->locale  = $localeLibrary->locale;
+    }
+
+    /**
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function coordinates(): ResponseInterface {
+        $input = $this->request->getJSON();
+        $lat = (float) $input->lat;
+        $lon = (float) $input->lon;
+
+        if ($lat && $lon) {
+            $session = new Session();
+            $session->updateLocation($lat, $lon);
+        }
+
+        return $this->respondUpdated();
     }
 
     /**

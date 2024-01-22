@@ -6,9 +6,9 @@ import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { User } from './User'
 
 /** General Types **/
-export type LatLngCoordinate = {
+export type LatLonCoordinate = {
     lat: number
-    lng: number
+    lon: number
 }
 
 export type DateTimeType = {
@@ -94,7 +94,7 @@ export interface RequestPlacesGetList {
     bookmarkUser?: string
     author?: string
     lat?: number
-    lng?: number
+    lon?: number
     search?: string
     country?: number | null
     region?: number | null
@@ -124,7 +124,7 @@ export interface RequestPlacesPostItem {
     content?: string
     category?: string
     tags?: string[]
-    coordinates?: LatLngCoordinate
+    coordinates?: LatLonCoordinate
 }
 
 export interface ResponsePlacesPostItem {

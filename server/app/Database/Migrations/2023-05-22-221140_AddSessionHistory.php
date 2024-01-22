@@ -20,7 +20,7 @@ class AddSessionHistory extends Migration {
                 'type' => 'DECIMAL(16,12)',
                 'null' => false,
             ],
-            'lng' => [
+            'lon' => [
                 'type' => 'DECIMAL(16,12)',
                 'null' => false,
             ],

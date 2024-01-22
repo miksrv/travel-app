@@ -33,7 +33,7 @@ const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 
 type mapPositionType = {
     lat: number
-    lng: number
+    lon: number
     zoom: number
 }
 
@@ -82,7 +82,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         const center = bounds.getCenter()
         const currentMapPosition = {
             lat: center.lat,
-            lng: center.lng,
+            lon: center.lng,
             zoom
         }
 
@@ -101,12 +101,12 @@ const InteractiveMap: React.FC<MapProps> = ({
             if (
                 !readyStorage &&
                 storeMapPosition &&
-                coordinates?.lng &&
+                coordinates?.lon &&
                 coordinates?.lat &&
                 coordinates?.zoom
             ) {
                 mapRef.current?.setView(
-                    [coordinates.lat, coordinates.lng],
+                    [coordinates.lat, coordinates.lon],
                     coordinates.zoom
                 )
             }

@@ -12,7 +12,7 @@ class SessionsHistoryModel extends MyBaseModel {
     protected $allowedFields = [
         'session_id',
         'lat',
-        'lng'
+        'lon'
     ];
 
     protected $useTimestamps = true;

@@ -62,7 +62,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         ? 'district'
         : 'city'
 
-    const geolocation = useGeolocation()
+    // const geolocation = useGeolocation()
     const router = useRouter()
     const dispatch = useAppDispatch()
 
@@ -76,7 +76,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         { skip: locationUnset }
     )
 
-    const [introduce] = API.useIntroduceMutation()
+    // const [introduce] = API.useIntroduceMutation()
 
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
@@ -205,11 +205,11 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFiltersOptionsOpen(false)
     }
 
-    useEffect(() => {
-        if (geolocation?.latitude && geolocation?.longitude) {
-            introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
-        }
-    }, [geolocation.latitude, geolocation.longitude])
+    // useEffect(() => {
+    //     if (geolocation?.latitude && geolocation?.longitude) {
+    //         introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
+    //     }
+    // }, [geolocation.latitude, geolocation.longitude])
 
     return (
         <PageLayout>

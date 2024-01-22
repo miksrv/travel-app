@@ -124,12 +124,6 @@ export const API = createApi({
             query: () => 'categories'
         }),
 
-        /* Controller: Introduce */
-        introduce: builder.mutation<any, Maybe<any>>({
-            // invalidatesTags: ['Places'],
-            query: (params) => `introduce${encodeQueryData(params)}`
-        }),
-
         /* Controller: Location */
         locationGetByType: builder.query<
             ApiTypes.ResponseLocationGetByType,
@@ -142,6 +136,16 @@ export const API = createApi({
             Maybe<string>
         >({
             query: (searchString) => `location/search?text=${searchString}`
+        }),
+        locationPutCoordinates: builder.mutation<
+            void,
+            Maybe<ApiTypes.LatLonCoordinate>
+        >({
+            query: (params) => ({
+                body: params,
+                method: 'PUT',
+                url: 'location'
+            })
         }),
 
         /* Controller: Photos */

@@ -40,7 +40,7 @@ class Places extends ResourceController {
     public function list(): ResponseInterface {
         $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
         $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
-        $lon    = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
+        $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $localeLibrary = new LocaleLibrary();
@@ -88,17 +88,17 @@ class Places extends ResourceController {
         }
 
         if ($lat && $lon) {
-            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$lon} - places.lng) * pi()/180 / 2), 2) )) AS distance";
+            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$lon} - places.lon) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $distanceSelect = $session->lng && $session->lat
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lng} - places.lng) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = $session->lon && $session->lat
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
                 : '';
         }
 
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
         $placesModel
-            ->select('places.id, places.category, places.lat, places.lng, places.rating, places.views,
+            ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
                 category.title_en as category_en, category.title_ru as category_ru' .
                 $distanceSelect)
             ->join('category', 'places.category = category.name', 'left');
@@ -139,8 +139,8 @@ class Places extends ResourceController {
 
             $return  = [
                 'id'        => $place->id,
-                'lat'  => (float) $place->lat,
-                'lng' => (float) $place->lng,
+                'lat'       => (float) $place->lat,
+                'lon'       => (float) $place->lon,
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
                 'title'     => $placeTranslations->title($place->id),
@@ -191,8 +191,8 @@ class Places extends ResourceController {
         $placeContent->translate([$id]);
 
         try {
-            $distanceSelect = ($session->lng && $session->lat)
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lng} - places.lng) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = ($session->lon && $session->lat)
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
@@ -249,7 +249,7 @@ class Places extends ResourceController {
                 'created'   => $placeData->created_at ?? null,
                 'updated'   => $placeData->updated_at ?? null,
                 'lat'       => (float) $placeData->lat,
-                'lng'       => (float) $placeData->lng,
+                'lon'       => (float) $placeData->lon,
                 'rating'    => (float) $placeData->rating,
                 'views'     => (int) $placeData->views,
                 'title'     => $placeContent->title($id),
@@ -304,7 +304,7 @@ class Places extends ResourceController {
                 ];
             }
 
-            if ($session->lng && $session->lat) {
+            if ($session->lon && $session->lat) {
                 $response['distance'] = round((float) $placeData->distance, 1);
             }
 
@@ -372,14 +372,14 @@ class Places extends ResourceController {
         $placesModel  = new PlacesModel();
         $userActivity = new UserActivity();
 
-        $geocoder = new Geocoder($input->coordinates->lat, $input->coordinates->lng);
+        $geocoder = new Geocoder($input->coordinates->lat, $input->coordinates->lon);
         $place    = new \App\Entities\Place();
 
         $placeTitle   = strip_tags(html_entity_decode($input->title));
         $placeContent = strip_tags(html_entity_decode($input->content));
 
         $place->lat         = $input->coordinates->lat;
-        $place->lng         = $input->coordinates->lng;
+        $place->lon         = $input->coordinates->lon;
         $place->user_id     = $session->userId;
         $place->category    = $input->category;
         $place->address_en  = $geocoder->addressEn;

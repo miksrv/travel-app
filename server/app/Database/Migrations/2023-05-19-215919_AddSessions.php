@@ -30,7 +30,7 @@ class AddSessions extends Migration {
                 'type' => 'DECIMAL(16,12)',
                 'null' => true,
             ],
-            'lng' => [
+            'lon' => [
                 'type' => 'DECIMAL(16,12)',
                 'null' => true,
             ],

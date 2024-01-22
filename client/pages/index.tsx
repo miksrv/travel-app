@@ -47,8 +47,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
     // const searchParams = useSearchParams()
     // const router = useRouter()
 
-    const [myCoordinates, setMyCoordinates] =
-        useState<ApiTypes.LatLngCoordinate>()
+    // const [myCoordinates, setMyCoordinates] =
+    //     useState<ApiTypes.LatLonCoordinate>()
     const [mapBounds, setMapBounds] = useState<string>()
 
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
@@ -59,7 +59,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
     // const lat = searchParams.get('lat')
     // const lon = searchParams.get('lon')
 
-    const [introduce] = API.useIntroduceMutation()
+    // const [introduce] = API.useIntroduceMutation()
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: poiListData, isFetching } = API.usePoiGetListQuery(
         { bounds: mapBounds, category: category ?? undefined },
@@ -134,45 +134,28 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
         return await router.replace('/' + encodeQueryData(update))
     }
 
-    useEffect(() => {
-        const updateLatitude = round(geolocation?.latitude)
-        const updateLongitude = round(geolocation?.longitude)
-
-        if (
-            updateLatitude &&
-            updateLongitude &&
-            updateLatitude !== myCoordinates?.lat &&
-            updateLongitude !== myCoordinates?.lng
-        ) {
-            setMyCoordinates({
-                lat: updateLatitude,
-                lng: updateLongitude
-            })
-
-            introduce({ lat: updateLatitude, lon: updateLongitude })
-        }
-    }, [geolocation.latitude, geolocation.longitude])
+    // useEffect(() => {
+    //     const updateLatitude = round(geolocation?.latitude)
+    //     const updateLongitude = round(geolocation?.longitude)
+    //
+    //     if (
+    //         updateLatitude &&
+    //         updateLongitude &&
+    //         updateLatitude !== myCoordinates?.lat &&
+    //         updateLongitude !== myCoordinates?.lng
+    //     ) {
+    //         setMyCoordinates({
+    //             lat: updateLatitude,
+    //             lng: updateLongitude
+    //         })
+    //
+    //         introduce({ lat: updateLatitude, lon: updateLongitude })
+    //     }
+    // }, [geolocation.latitude, geolocation.longitude])
 
     return (
         <PageLayout>
             <NextSeo title={t('title')} />
-            {/*<Container className={'mapPageFilters'}>*/}
-            {/*    <Dropdown*/}
-            {/*        clearable={true}*/}
-            {/*        value={category}*/}
-            {/*        placeholder={'Выберите категорию'}*/}
-            {/*        options={categoryData?.items?.map((item) => ({*/}
-            {/*            image: categoryImage(item.name),*/}
-            {/*            key: item.name,*/}
-            {/*            value: item.title*/}
-            {/*        }))}*/}
-            {/*        onSelect={handleChangeCategory}*/}
-            {/*    />*/}
-            {/*    <div>*/}
-            {/*        {'Точек на карте: '}*/}
-            {/*        <strong>{poiListData?.count}</strong>*/}
-            {/*    </div>*/}
-            {/*</Container>*/}
             <Container className={'pageHeader'}>
                 <header>
                     <h1>{t('title')}</h1>
@@ -184,7 +167,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                 <div className={'actions'}>
                     <div>
                         {'Точек на карте: '}
-                        <strong>{poiListData?.count}</strong>
+                        <strong>{poiListData?.count ?? 0}</strong>
                     </div>
                     <Button
                         size={'m'}
@@ -222,7 +205,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
             </Container>
 
             <Dialog
-                contentHeight={'306px'}
+                contentHeight={'280px'}
                 header={'Фильтры'}
                 open={filtersDialogOpen}
                 showBackLink={!!openedOptions}

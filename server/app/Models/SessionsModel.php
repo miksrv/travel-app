@@ -17,7 +17,7 @@ class SessionsModel extends Model {
         'user_ip',
         'user_agent',
         'lat',
-        'lng',
+        'lon',
     ];
 
     protected $useTimestamps = true;

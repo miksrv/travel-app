@@ -23,21 +23,21 @@ class Introduce extends ResourceController {
      * @throws Exception
      * @throws ReflectionException
      */
-    public function hello(): ResponseInterface {
-        $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
-        $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
-
-        $session = new Session($lat, $lon);
-        $session->update();
-
-        $pointAdded = [];
-
-        if ($lat && $lon) {
-            $pointAdded = $this->_updatePlaces($lat, $lon);
-        }
-
-        return $this->respond(['items' => $pointAdded]);
-    }
+//    public function hello(): ResponseInterface {
+//        $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
+//        $lon = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
+//
+//        $session = new Session($lat, $lon);
+//        $session->update();
+//
+//        $pointAdded = [];
+//
+//        if ($lat && $lon) {
+//            $pointAdded = $this->_updatePlaces($lat, $lon);
+//        }
+//
+//        return $this->respond(['items' => $pointAdded]);
+//    }
 
     /**
      * @throws Exception
@@ -92,7 +92,7 @@ class Introduce extends ResourceController {
             $place->overpass_id = $point->id;
             $place->category    = $findOverpassCat->category_map;
             $place->lat    = $point->lat;
-            $place->lng   = $point->lon;
+            $place->lon   = $point->lon;
             $place->address          = $geocoder->address;
             $place->address_country  = $geocoder->countryID;
             $place->address_region   = $geocoder->regionID;

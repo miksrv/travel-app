@@ -15,11 +15,11 @@ class Poi extends ResourceController {
 
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
-            ->select('id, category, lat, lng')
+            ->select('id, category, lat, lon')
             ->where([
-                'lng >=' => $bounds[0],
+                'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
-                'lng <=' =>  $bounds[2],
+                'lon <=' =>  $bounds[2],
                 'lat <=' =>  $bounds[3],
             ]);
 
@@ -42,14 +42,14 @@ class Poi extends ResourceController {
         $bounds      = $this->_getBounds();
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select('photos.place_id, photos.lat, photos.lng, photos.filename, photos.extension')
+            ->select('photos.place_id, photos.lat, photos.lon, photos.filename, photos.extension')
             ->where([
-                'lng >=' => $bounds[0],
+                'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
-                'lng <=' =>  $bounds[2],
+                'lon <=' =>  $bounds[2],
                 'lat <=' =>  $bounds[3],
             ])
-            ->groupBy('photos.lng, photos.lat')
+            ->groupBy('photos.lon, photos.lat')
             ->findAll();
 
         $result = [];
@@ -59,7 +59,7 @@ class Poi extends ResourceController {
                 'filename'  => $photo->filename,
                 'extension' => $photo->extension,
                 'lat'       => $photo->lat,
-                'lng'       => $photo->lng,
+                'lon'       => $photo->lon,
                 'title'     => $photo->title,
                 'placeId'   => $photo->place_id,
             ];

@@ -38,7 +38,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
 
     return (
         <Marker
-            position={[place.lat, place.lng]}
+            position={[place.lat, place.lon]}
             icon={placeMarkerIcon}
             eventHandlers={{
                 click: placeClickHandler

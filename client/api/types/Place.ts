@@ -8,7 +8,7 @@ export type Place = {
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
     lat: number
-    lng: number
+    lon: number
     rating: number
     views: number
     title: string

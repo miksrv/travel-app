@@ -47,12 +47,12 @@ export const toDegreesMinutesAndSeconds = (coordinate: number): string => {
     return `${degrees}°${minutes}’${seconds}"`
 }
 
-export const convertDMS = (lat: number, lng: number): string => {
+export const convertDMS = (lat: number, lon: number): string => {
     const latitude = toDegreesMinutesAndSeconds(lat)
     const latitudeCardinal = lat >= 0 ? 'N' : 'S'
 
-    const longitude = toDegreesMinutesAndSeconds(lng)
-    const longitudeCardinal = lng >= 0 ? 'E' : 'W'
+    const longitude = toDegreesMinutesAndSeconds(lon)
+    const longitudeCardinal = lon >= 0 ? 'E' : 'W'
 
     return `${latitude}${latitudeCardinal} ${longitude}${longitudeCardinal}`
 }
