@@ -1,4 +1,10 @@
-import { Category, LocationObject, Place, Tag } from '@/api/types/Place'
+import {
+    Category,
+    GeoSearchLocation,
+    LocationObject,
+    Place,
+    Tag
+} from '@/api/types/Place'
 
 import { Item } from './Activity'
 import { Photo } from './Photo'
@@ -177,6 +183,10 @@ export interface ResponseLocationGetSearch {
     regions?: LocationObject[]
     districts?: LocationObject[]
     cities?: LocationObject[]
+}
+
+export interface ResponseLocationGetGeoSearch {
+    items?: GeoSearchLocation[]
 }
 
 /* Controller: Tags */

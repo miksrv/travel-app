@@ -73,9 +73,11 @@ $routes->options('auth/(:any)', 'Auth::me');
 
 /* Location */
 $routes->get('location/search', 'Location::search');
+$routes->get('location/geosearch', 'Location::geoSearch');
 $routes->get('location/(:num)', 'Location::show/$1');
 $routes->put('location', 'Location::coordinates');
 $routes->options('location/search', 'Location');
+$routes->options('location/geosearch', 'Location');
 $routes->options('location/(:num)', 'Location');
 $routes->options('location', 'Location');
 

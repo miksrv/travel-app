@@ -157,6 +157,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
             >
                 <InteractiveMap
                     storeMapPosition={true}
+                    enableSearch={true}
                     loading={isFetching}
                     places={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}

@@ -131,6 +131,12 @@ export const API = createApi({
         >({
             query: (params) => `location/${params.id}?type=${params.type}`
         }),
+        locationGetGeosearch: builder.mutation<
+            ApiTypes.ResponseLocationGetGeoSearch,
+            Maybe<string>
+        >({
+            query: (searchString) => `location/geosearch?text=${searchString}`
+        }),
         locationGetSearch: builder.mutation<
             ApiTypes.ResponseLocationGetSearch,
             Maybe<string>

@@ -372,8 +372,10 @@ class Places extends ResourceController {
         $placesModel  = new PlacesModel();
         $userActivity = new UserActivity();
 
-        $geocoder = new Geocoder($input->coordinates->lat, $input->coordinates->lon);
+        $geocoder = new Geocoder();
         $place    = new \App\Entities\Place();
+
+        $geocoder->coordinates($input->coordinates->lat, $input->coordinates->lon);
 
         $placeTitle   = strip_tags(html_entity_decode($input->title));
         $placeContent = strip_tags(html_entity_decode($input->content));

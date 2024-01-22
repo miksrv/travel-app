@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\Session;
 use App\Models\LocationCitiesModel;
@@ -8,6 +9,7 @@ use App\Models\LocationDistrictsModel;
 use App\Models\LocationRegionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Geocoder\Exception\Exception;
 use ReflectionException;
 
 class Location extends ResourceController {
@@ -19,6 +21,7 @@ class Location extends ResourceController {
     }
 
     /**
+     * Update user coordinates
      * @return ResponseInterface
      * @throws ReflectionException
      */
@@ -58,6 +61,21 @@ class Location extends ResourceController {
         $result['cities']    = $this->_prepareSearchData($citiesData);
 
         return $this->respond($result);
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function geoSearch(): ResponseInterface {
+        $text = $this->request->getGet('text', FILTER_SANITIZE_STRING);
+
+        if (!$text) {
+            return $this->failValidationErrors('Please enter search string');
+        }
+
+        $geocoder = new Geocoder();
+
+        return $this->respond(['items' => $geocoder->search($text)]);
     }
 
     /**

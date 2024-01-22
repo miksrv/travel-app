@@ -187,6 +187,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                 )}
                 <InteractiveMap
                     storeMapPosition={true}
+                    enableSearch={true}
                     places={poiListData?.items}
                     onChangeBounds={handleMapBounds}
                     userLatLon={location}

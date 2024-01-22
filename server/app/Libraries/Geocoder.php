@@ -8,6 +8,7 @@ use Config\Services;
 use Geocoder\Exception\Exception;
 use Geocoder\Provider\Nominatim\Nominatim;
 use Geocoder\Provider\Yandex\Yandex;
+use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client;
@@ -25,28 +26,71 @@ class Geocoder {
     public string $addressEn;
     public string $addressRu;
 
+    private string $locale;
+    private $httpClient;
+    private $requestApi;
+    private $provider;
+
+    public function __construct() {
+        $localeLibrary = new LocaleLibrary();
+
+        $this->locale     = $localeLibrary->locale;
+        $this->httpClient = new Client();
+        $this->requestApi = Services::request();
+        $this->provider   =  $this->locale === 'ru'
+            ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
+            : Nominatim::withOpenStreetMapServer($this->httpClient, $this->requestApi->getUserAgent());
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function search($text): array {
+        $result    = [];
+        $geocoder  = new StatefulGeocoder($this->provider, $this->locale);
+        $locations = $geocoder->geocodeQuery(GeocodeQuery::create($text))->all();
+
+        if (empty($locations)) {
+            return $result;
+        }
+
+        foreach ($locations as $location) {
+            $count = count($location->getAdminLevels());
+            $data  = [
+                'lat' => $location->getCoordinates()->getLatitude(),
+                'lon' => $location->getCoordinates()->getLongitude(),
+                'locality' => $location->getLocality(),
+                'country'  => $location->getCountry()->getName(),
+            ];
+
+            if ($count >= 1) {
+                $data['region'] = $location->getAdminLevels()->get(1)->getName();
+            }
+
+            if ($count >= 2) {
+                $data['district'] = $location->getAdminLevels()->get(2)->getName();
+            }
+
+            if ($location->getStreetName()) {
+                $data['street'] = $location->getStreetName() . ($location->getStreetNumber() ? ', ' . $location->getStreetNumber() : '');
+            }
+
+            $result[] = $data;
+        }
+
+        return $result;
+    }
+
     /**
      * @param float $lat
      * @param float $lng
-     * @param string $locale
+     * @return void
      * @throws Exception
      * @throws ReflectionException
      */
-    public function __construct(
-        float $lat,
-        float $lng,
-        string $locale = 'ru'
-    )
-    {
-        $requestApi = Services::request();
-        $httpClient = new Client();
-
-        $provider = $locale === 'ru'
-            ? new Yandex($httpClient, null, getenv('app.geocoder.yandexKey'))
-            : Nominatim::withOpenStreetMapServer($httpClient, $requestApi->getUserAgent());
-
-        $geocoderEn = new StatefulGeocoder($provider, 'en');
-        $geocoderRu = new StatefulGeocoder($provider, 'ru');
+    public function coordinates(float $lat, float $lng): void {
+        $geocoderEn = new StatefulGeocoder($this->provider, 'en');
+        $geocoderRu = new StatefulGeocoder($this->provider, 'ru');
         $locationEn = $geocoderEn->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
         $locationRu = $geocoderRu->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
 

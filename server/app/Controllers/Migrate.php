@@ -88,8 +88,10 @@ class Migrate extends ResourceController {
             // Place version timestamp
             $placeVersionDate = (int) $item->item_version_date !== 0 ? $item->item_version_date : $item->item_datestamp;
 
-            $geocoder = new Geocoder($item->item_latitude, $item->item_longitude, 'ru');
+            $geocoder = new Geocoder();
             $place    = new \App\Entities\Place();
+
+            $geocoder->coordinates($item->item_latitude, $item->item_longitude);
 
             $place->lat         = $item->item_latitude;
             $place->lon         = $item->item_longitude;

@@ -16,6 +16,7 @@ import { Photo, Place } from '@/api/types/Poi'
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
+import SearchControl from '@/components/interactive-map/SearchControl'
 
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
@@ -36,6 +37,7 @@ type MapProps = {
     photos?: Photo[]
     loading?: boolean
     storeMapPosition?: boolean
+    enableSearch?: boolean
     storeMapKey?: string
     centerPoint?: boolean
     userLatLon?: ApiTypes.LatLonCoordinate
@@ -48,6 +50,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     photos,
     loading,
     storeMapPosition,
+    enableSearch,
     storeMapKey,
     centerPoint,
     userLatLon,
@@ -88,6 +91,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                 setCoordinates(currentMapPosition)
             }
         }
+    }
+
+    const handleSelectSearch = (coordinates: ApiTypes.LatLonCoordinate) => {
+        mapRef.current?.setView(
+            [coordinates.lat, coordinates.lon],
+            DEFAULT_MAP_ZOOM
+        )
     }
 
     useEffect(() => {
@@ -148,6 +158,9 @@ const InteractiveMap: React.FC<MapProps> = ({
                         onPhotoClick={onPhotoClick}
                     />
                 ))}
+                {enableSearch && (
+                    <SearchControl onSelectResult={handleSelectSearch} />
+                )}
                 {userLatLon && (
                     <>
                         <div className={styles.controls}>

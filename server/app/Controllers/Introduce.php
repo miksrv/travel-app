@@ -43,85 +43,85 @@ class Introduce extends ResourceController {
      * @throws Exception
      * @throws ReflectionException
      */
-    protected function _updatePlaces(float $lat, float $lon): array {
-        $overpassAPI = new OverpassAPI();
-        $boundingBox = $overpassAPI->getBoundingBox($lat, $lon, .5);
-        $pointsList  = $overpassAPI->get($boundingBox);
-        $pointAdded  = [];
-
-        if (!$pointsList) {
-            return $pointAdded;
-        }
-
-        $placesModel      = new PlacesModel();
-        $activityModel    = new UsersActivityModel();
-        $overpassCatModel = new OverpassCategoryModel();
-
-        foreach ($pointsList as $point) {
-            // If such an overpass_id is already in the database, skip it
-            if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first()) {
-                continue;
-            }
-
-            // If there is no name at all, we simply skip it
-            if (!isset($point->tags['name:en']) && !isset($point->tags['name:ru']) && !isset($point->tags['name'])) {
-                continue;
-            }
-
-            $findOverpassCat = $overpassCatModel->where('name', $point->tags[$point->category])->first();
-            $newPoiName      = $point->tags['name:en'] ?? $point->tags['name:ru'] ?? $point->tags['name'];
-
-            if (!$findOverpassCat) {
-                $overpassCatModel->insert([
-                    'name'        => $point->tags[$point->category],
-                    'category'    => $point->category,
-                    'subcategory' => null,
-                    'title'       => ''
-                ]);
-            }
-
-            // If there is no category for mapping, then we skip this unknown type of POI
-            if (!$findOverpassCat->category_map || !$newPoiName) {
-                continue;
-            }
-
-            $geocoder = new Geocoder($point->lat, $point->lon);
-
-            $place = new \App\Entities\Place();
-
-            $place->overpass_id = $point->id;
-            $place->category    = $findOverpassCat->category_map;
-            $place->lat    = $point->lat;
-            $place->lon   = $point->lon;
-            $place->address          = $geocoder->address;
-            $place->address_country  = $geocoder->countryID;
-            $place->address_region   = $geocoder->regionID;
-            $place->address_district = $geocoder->districtID;
-            $place->address_city     = $geocoder->cityID;
-            $place->tags             = $this->cleanTags($point->tags, $point->category);
-            $placesModel->insert($place);
-
-            $newPlaceId = $placesModel->getInsertID();
-
-            $translationsPlacesModel = new PlacesContentModel();
-            $translation = new \App\Entities\PlaceContent();
-            $translation->place_id   = $newPlaceId;
-            $translation->language   = 'ru';
-            $translation->title      = $newPoiName;
-            $translation->content    = '';
-            $translationsPlacesModel->insert($translation);
-
-            // Make user activity
-//            $activity = new \App\Entities\UserActivity();
-//            $activity->type       = 'place';
-//            $activity->place_id   = $newPlaceId;
-//            $activityModel->insert($activity);
-
-            $pointAdded[] = $newPoiName;
-        }
-
-        return $pointAdded;
-    }
+//    protected function _updatePlaces(float $lat, float $lon): array {
+//        $overpassAPI = new OverpassAPI();
+//        $boundingBox = $overpassAPI->getBoundingBox($lat, $lon, .5);
+//        $pointsList  = $overpassAPI->get($boundingBox);
+//        $pointAdded  = [];
+//
+//        if (!$pointsList) {
+//            return $pointAdded;
+//        }
+//
+//        $placesModel      = new PlacesModel();
+//        $activityModel    = new UsersActivityModel();
+//        $overpassCatModel = new OverpassCategoryModel();
+//
+//        foreach ($pointsList as $point) {
+//            // If such an overpass_id is already in the database, skip it
+//            if ($placesModel->where('overpass_id', $point->id)->withDeleted()->first()) {
+//                continue;
+//            }
+//
+//            // If there is no name at all, we simply skip it
+//            if (!isset($point->tags['name:en']) && !isset($point->tags['name:ru']) && !isset($point->tags['name'])) {
+//                continue;
+//            }
+//
+//            $findOverpassCat = $overpassCatModel->where('name', $point->tags[$point->category])->first();
+//            $newPoiName      = $point->tags['name:en'] ?? $point->tags['name:ru'] ?? $point->tags['name'];
+//
+//            if (!$findOverpassCat) {
+//                $overpassCatModel->insert([
+//                    'name'        => $point->tags[$point->category],
+//                    'category'    => $point->category,
+//                    'subcategory' => null,
+//                    'title'       => ''
+//                ]);
+//            }
+//
+//            // If there is no category for mapping, then we skip this unknown type of POI
+//            if (!$findOverpassCat->category_map || !$newPoiName) {
+//                continue;
+//            }
+//
+//            $geocoder = new Geocoder($point->lat, $point->lon);
+//
+//            $place = new \App\Entities\Place();
+//
+//            $place->overpass_id = $point->id;
+//            $place->category    = $findOverpassCat->category_map;
+//            $place->lat    = $point->lat;
+//            $place->lon   = $point->lon;
+//            $place->address          = $geocoder->address;
+//            $place->address_country  = $geocoder->countryID;
+//            $place->address_region   = $geocoder->regionID;
+//            $place->address_district = $geocoder->districtID;
+//            $place->address_city     = $geocoder->cityID;
+//            $place->tags             = $this->cleanTags($point->tags, $point->category);
+//            $placesModel->insert($place);
+//
+//            $newPlaceId = $placesModel->getInsertID();
+//
+//            $translationsPlacesModel = new PlacesContentModel();
+//            $translation = new \App\Entities\PlaceContent();
+//            $translation->place_id   = $newPlaceId;
+//            $translation->language   = 'ru';
+//            $translation->title      = $newPoiName;
+//            $translation->content    = '';
+//            $translationsPlacesModel->insert($translation);
+//
+//            // Make user activity
+////            $activity = new \App\Entities\UserActivity();
+////            $activity->type       = 'place';
+////            $activity->place_id   = $newPlaceId;
+////            $activityModel->insert($activity);
+//
+//            $pointAdded[] = $newPoiName;
+//        }
+//
+//        return $pointAdded;
+//    }
 
     /**
      * Remove unused tags (name and category) from OverpassAPI
@@ -129,14 +129,14 @@ class Introduce extends ResourceController {
      * @param string $category
      * @return string|null
      */
-    protected function cleanTags(array $tags, string $category): ?string {
-        if (!$tags) {
-            return null;
-        }
-
-        unset($tags[$category]);
-        unset($tags['name']);
-
-        return json_encode($tags);
-    }
+//    protected function cleanTags(array $tags, string $category): ?string {
+//        if (!$tags) {
+//            return null;
+//        }
+//
+//        unset($tags[$category]);
+//        unset($tags['name']);
+//
+//        return json_encode($tags);
+//    }
 }

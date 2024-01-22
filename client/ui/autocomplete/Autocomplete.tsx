@@ -12,6 +12,7 @@ type DropdownOption = {
     key: string | number
     value: string
     type?: string
+    description?: string
 }
 
 interface DropdownProps<T> {
@@ -194,6 +195,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                             >
                                 <button onClick={() => handleSelect(option)}>
                                     <span>{option.value}</span>
+                                    {option?.description && (
+                                        <div className={styles.description}>
+                                            {option.description}
+                                        </div>
+                                    )}
                                 </button>
                             </li>
                         ))}
