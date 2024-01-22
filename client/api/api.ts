@@ -137,12 +137,6 @@ export const API = createApi({
         >({
             query: (params) => `location/${params.id}?type=${params.type}`
         }),
-        locationGetGeocoder: builder.query<
-            any,
-            Maybe<ApiTypes.RequestLocationGetGeocoder>
-        >({
-            query: (params) => `location/geocoder${encodeQueryData(params)}`
-        }),
         locationGetSearch: builder.mutation<
             ApiTypes.ResponseLocationGetSearch,
             Maybe<string>

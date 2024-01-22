@@ -72,10 +72,8 @@ $routes->post('auth/login', 'Auth::login');
 $routes->options('auth/(:any)', 'Auth::me');
 
 /* Location */
-$routes->get('location/geocoder', 'Location::geocoder');
 $routes->get('location/search', 'Location::search');
 $routes->get('location/(:num)', 'Location::show/$1');
-$routes->options('location/geocoder', 'Location');
 $routes->options('location/search', 'Location');
 $routes->options('location/(:num)', 'Location');
 

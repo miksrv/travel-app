@@ -1,19 +1,15 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
-use App\Libraries\Session;
 use App\Models\LocationCitiesModel;
 use App\Models\LocationCountriesModel;
 use App\Models\LocationDistrictsModel;
 use App\Models\LocationRegionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
-use Geocoder\Exception\Exception;
-use ReflectionException;
 
 class Location extends ResourceController {
-    protected string $locale = 'ru';
+    protected string $locale;
 
     function __construct() {
         $localeLibrary = new LocaleLibrary();
@@ -21,25 +17,9 @@ class Location extends ResourceController {
     }
 
     /**
-     * @throws Exception|ReflectionException
+     * @example http://localhost:8080/location/search?text=Орен
+     * @return ResponseInterface
      */
-    public function geocoder(): ResponseInterface {
-        $lat = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
-        $lng = $this->request->getGet('lng', FILTER_VALIDATE_FLOAT);
-
-        $session = new Session();
-
-        if (!$session->isAuth) {
-            return $this->failUnauthorized();
-        }
-
-        $geocoder = new Geocoder($lat, $lng);
-
-        return $this->respond((object) [
-            'address' => $this->locale === 'ru' ? $geocoder->addressRu : $geocoder->addressEn
-        ]);
-    }
-
     public function search(): ResponseInterface {
         $result = [];
         $text   = $this->request->getGet('text', FILTER_SANITIZE_STRING);
@@ -112,13 +92,17 @@ class Location extends ResourceController {
 
     /**
      * @param $locationModel
-     * @param $text
+     * @param string $text
      * @return mixed
      */
     private function _searchResult($locationModel, string $text): mixed {
         return $locationModel->like('title_en', $text)->orLike('title_ru', $text)->findAll();
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
     private function _prepareSearchData(array $data): array {
         $result = [];
 

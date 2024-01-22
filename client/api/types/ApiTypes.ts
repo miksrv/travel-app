@@ -172,11 +172,6 @@ export interface RequestLocationGetByType {
     type?: LocationTypes
 }
 
-export interface RequestLocationGetGeocoder {
-    lat?: number
-    lng?: number
-}
-
 export interface ResponseLocationGetSearch {
     countries?: LocationObject[]
     regions?: LocationObject[]
