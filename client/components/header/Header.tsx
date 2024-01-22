@@ -62,8 +62,8 @@ const Header: React.FC<HeaderProps> = ({
     }, [])
 
     useEffect(() => {
-        const updateLat = round(geolocation?.latitude, 4)
-        const updateLng = round(geolocation?.longitude, 4)
+        const updateLat = round(geolocation?.latitude, 3)
+        const updateLng = round(geolocation?.longitude, 3)
 
         if (
             updateLat &&

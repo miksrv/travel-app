@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import useGeolocation from 'react-hook-geolocation'
 
 import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
@@ -14,10 +13,10 @@ import Input from '@/ui/input'
 import Message from '@/ui/message'
 
 import { API } from '@/api/api'
+import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
-import { round } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -34,10 +33,8 @@ export type PlaceFormErrors = {
 
 const PlaceCreateForm: React.FC<LoginFormProps> = () => {
     const router = useRouter()
-    const geolocation = useGeolocation()
 
-    // const [myCoordinates, setMyCoordinates] =
-    //     useState<ApiTypes.LatLonCoordinate>()
+    const location = useAppSelector((state) => state.application.userLocation)
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
     const [mapBounds, setMapBounds] = useState<string>()
@@ -128,25 +125,6 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         []
     )
 
-    // useEffect(() => {
-    //     const updateLatitude = round(geolocation?.latitude)
-    //     const updateLongitude = round(geolocation?.longitude)
-    //
-    //     if (
-    //         updateLatitude &&
-    //         updateLongitude &&
-    //         updateLatitude !== myCoordinates?.lat &&
-    //         updateLongitude !== myCoordinates?.lng
-    //     ) {
-    //         setMyCoordinates({
-    //             lat: updateLatitude,
-    //             lng: updateLongitude
-    //         })
-    //
-    //         introduce({ lat: updateLatitude, lon: updateLongitude })
-    //     }
-    // }, [geolocation.latitude, geolocation.longitude])
-
     useEffect(() => {
         if (createPlaceData?.id) {
             router.push(`/places/${createPlaceData.id}`)
@@ -211,14 +189,7 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
                     storeMapPosition={true}
                     places={poiListData?.items}
                     onChangeBounds={handleMapBounds}
-                    userLatLng={
-                        geolocation.latitude && geolocation.longitude
-                            ? {
-                                  lat: geolocation.latitude,
-                                  lng: geolocation.longitude
-                              }
-                            : undefined
-                    }
+                    userLatLon={location}
                 />
             </div>
 

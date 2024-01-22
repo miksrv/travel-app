@@ -67,14 +67,15 @@ class Session {
     }
 
     /**
+     * @param string|null $userId
      * @return void
      * @throws ReflectionException
      */
-    #[NoReturn] public function update(): void {
+    #[NoReturn] public function update(string $userId = null): void {
         $this->model->update($this->id, [
             'user_ip'    => $this->ip,
             'user_agent' => $this->ua,
-            'user_id'    => !empty($this->userId) ? $this->userId : null,
+            'user_id'    => $userId ?? $this->userId ?? null,
         ]);
     }
 
@@ -104,17 +105,6 @@ class Session {
 
             $this->lat = $lat;
             $this->lon = $lon;
-        }
-    }
-
-    /**
-     * @param string $userId
-     * @return void
-     * @throws ReflectionException
-     */
-    public function saveUserSession(string $userId): void {
-        if ($this->id && $userId) {
-            $this->model->update($this->id, ['user_id' => $userId]);
         }
     }
 }

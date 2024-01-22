@@ -3,8 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useMemo, useState } from 'react'
-import useGeolocation from 'react-hook-geolocation'
+import React, { useMemo, useState } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
@@ -62,7 +61,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         ? 'district'
         : 'city'
 
-    // const geolocation = useGeolocation()
     const router = useRouter()
     const dispatch = useAppDispatch()
 
@@ -75,8 +73,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         },
         { skip: locationUnset }
     )
-
-    // const [introduce] = API.useIntroduceMutation()
 
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
@@ -204,12 +200,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const handleFiltersBackLink = () => {
         setFiltersOptionsOpen(false)
     }
-
-    // useEffect(() => {
-    //     if (geolocation?.latitude && geolocation?.longitude) {
-    //         introduce({ lat: geolocation.latitude, lon: geolocation.longitude })
-    //     }
-    // }, [geolocation.latitude, geolocation.longitude])
 
     return (
         <PageLayout>

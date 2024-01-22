@@ -1,16 +1,18 @@
-import Leaflet, { LatLngExpression } from 'leaflet'
+import Leaflet from 'leaflet'
 import React from 'react'
 import { Circle, Marker } from 'react-leaflet'
+
+import { ApiTypes } from '@/api/types'
 
 import userAvatar from '@/public/images/no-avatar.png'
 
 import styles from './styles.module.sass'
 
 type MarkerUser = {
-    latLng: LatLngExpression
+    coordinates: ApiTypes.LatLonCoordinate
 }
 
-const MarkerUser: React.FC<MarkerUser> = ({ latLng }) => {
+const MarkerUser: React.FC<MarkerUser> = ({ coordinates }) => {
     const userMarkerIcon = new Leaflet.Icon({
         className: styles.markerUser,
         iconAnchor: [15, 15],
@@ -21,7 +23,7 @@ const MarkerUser: React.FC<MarkerUser> = ({ latLng }) => {
     return (
         <>
             <Circle
-                center={latLng}
+                center={[coordinates.lat, coordinates.lon]}
                 opacity={0.5} //Stroke opacity
                 color={'#227c23'} // Stroke color
                 weight={1} // Stroke width in pixels
@@ -30,7 +32,7 @@ const MarkerUser: React.FC<MarkerUser> = ({ latLng }) => {
                 radius={500}
             />
             <Marker
-                position={latLng}
+                position={[coordinates.lat, coordinates.lon]}
                 icon={userMarkerIcon}
             />
         </>

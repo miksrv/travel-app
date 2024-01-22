@@ -1,22 +1,16 @@
 'use client'
 
 import * as ReactLeaflet from 'react-leaflet'
-import { AccountCircleOutlined } from '@mui/icons-material'
-import { Button } from '@mui/material'
-import {
-    LatLngBounds,
-    LatLngExpression,
-    LatLngLiteral,
-    Map,
-    MapOptions
-} from 'leaflet'
+import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import React, { useEffect, useRef, useState } from 'react'
 import { useMapEvents } from 'react-leaflet'
 
+import Button from '@/ui/button'
 import Loader from '@/ui/loader'
 
+import { ApiTypes } from '@/api/types'
 import { Photo, Place } from '@/api/types/Poi'
 
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
@@ -44,7 +38,7 @@ type MapProps = {
     storeMapPosition?: boolean
     storeMapKey?: string
     centerPoint?: boolean
-    userLatLng?: LatLngLiteral
+    userLatLon?: ApiTypes.LatLonCoordinate
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
@@ -56,7 +50,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     storeMapPosition,
     storeMapKey,
     centerPoint,
-    userLatLng,
+    userLatLon,
     onChangeBounds,
     onPhotoClick,
     ...props
@@ -70,9 +64,9 @@ const InteractiveMap: React.FC<MapProps> = ({
     )
 
     const handleUserPosition = () => {
-        if (userLatLng) {
+        if (userLatLon?.lat && userLatLon?.lon) {
             mapRef.current?.setView(
-                [userLatLng.lat, userLatLng.lng],
+                [userLatLon.lat, userLatLon.lon],
                 DEFAULT_MAP_ZOOM
             )
         }
@@ -154,25 +148,16 @@ const InteractiveMap: React.FC<MapProps> = ({
                         onPhotoClick={onPhotoClick}
                     />
                 ))}
-                {userLatLng && (
+                {userLatLon && (
                     <>
-                        <div className={'leaflet-control'}>
+                        <div className={styles.controls}>
                             <Button
-                                variant={'contained'}
-                                size={'small'}
-                                sx={{
-                                    left: '10px',
-                                    minWidth: '26px',
-                                    mt: 9,
-                                    width: '26px'
-                                }}
-                                color={'primary'}
+                                mode={'primary'}
+                                icon={'User'}
                                 onClick={handleUserPosition}
-                            >
-                                <AccountCircleOutlined fontSize={'small'} />
-                            </Button>
+                            />
                         </div>
-                        <MarkerUser latLng={userLatLng} />
+                        <MarkerUser coordinates={userLatLon} />
                     </>
                 )}
                 {loading && (

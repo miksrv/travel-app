@@ -6,8 +6,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import useGeolocation from 'react-hook-geolocation'
+import React, { useCallback, useMemo, useState } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
@@ -18,14 +17,13 @@ import OptionsList from '@/ui/dropdown/OptionsList'
 
 import { API } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch, wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
+import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 
 import PageLayout from '@/components/page-layout'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
-import { encodeQueryData, round } from '@/functions/helpers'
+import { encodeQueryData } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -38,28 +36,16 @@ interface IndexPageProps {
 }
 
 const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
-    const geolocation = useGeolocation()
     const dispatch = useAppDispatch()
     const router = useRouter()
 
+    const location = useAppSelector((state) => state.application.userLocation)
     const { t } = useTranslation('common', { keyPrefix: 'page.index' })
-
-    // const searchParams = useSearchParams()
-    // const router = useRouter()
-
-    // const [myCoordinates, setMyCoordinates] =
-    //     useState<ApiTypes.LatLonCoordinate>()
     const [mapBounds, setMapBounds] = useState<string>()
-
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
-
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
 
-    // const lat = searchParams.get('lat')
-    // const lon = searchParams.get('lon')
-
-    // const [introduce] = API.useIntroduceMutation()
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: poiListData, isFetching } = API.usePoiGetListQuery(
         { bounds: mapBounds, category: category ?? undefined },
@@ -134,25 +120,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
         return await router.replace('/' + encodeQueryData(update))
     }
 
-    // useEffect(() => {
-    //     const updateLatitude = round(geolocation?.latitude)
-    //     const updateLongitude = round(geolocation?.longitude)
-    //
-    //     if (
-    //         updateLatitude &&
-    //         updateLongitude &&
-    //         updateLatitude !== myCoordinates?.lat &&
-    //         updateLongitude !== myCoordinates?.lng
-    //     ) {
-    //         setMyCoordinates({
-    //             lat: updateLatitude,
-    //             lng: updateLongitude
-    //         })
-    //
-    //         introduce({ lat: updateLatitude, lon: updateLongitude })
-    //     }
-    // }, [geolocation.latitude, geolocation.longitude])
-
     return (
         <PageLayout>
             <NextSeo title={t('title')} />
@@ -193,14 +160,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                     loading={isFetching}
                     places={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}
-                    userLatLng={
-                        geolocation.latitude && geolocation.longitude
-                            ? {
-                                  lat: geolocation.latitude,
-                                  lng: geolocation.longitude
-                              }
-                            : undefined
-                    }
+                    userLatLon={location}
                 />
             </Container>
 

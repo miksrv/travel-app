@@ -182,15 +182,14 @@ class Auth extends ResourceController {
 
     /**
      * @param User $userData
-     * @param int $responseCode
      * @return ResponseInterface
      */
-    private function getJWTForUser(User $userData, int $responseCode = ResponseInterface::HTTP_OK): ResponseInterface {
+    private function getJWTForUser(User $userData): ResponseInterface {
         try {
             helper('jwt');
 
             $session = new Session();
-            $session->saveUserSession($userData->id);
+            $session->update($userData->id);
 
             unset($userData->password);
 
@@ -203,7 +202,7 @@ class Auth extends ResourceController {
         } catch (Exception $e) {
             log_message('error', '{exception}', ['exception' => $e]);
 
-            return $this->fail(['error' => $e->getMessage()], $responseCode);
+            return $this->fail(['error' => $e->getMessage()], ResponseInterface::HTTP_OK);
         }
     }
 
