@@ -41,20 +41,18 @@ interface PlacesPageProps {
     placesList: Place.Place[]
 }
 
-const PlacesPage: NextPage<PlacesPageProps> = (props) => {
-    const {
-        country,
-        region,
-        district,
-        city,
-        category,
-        sort,
-        order,
-        currentPage,
-        placesCount,
-        placesList
-    } = props
-
+const PlacesPage: NextPage<PlacesPageProps> = ({
+    country,
+    region,
+    district,
+    city,
+    category,
+    sort,
+    order,
+    currentPage,
+    placesCount,
+    placesList
+}) => {
     const locationUnset = !country && !region && !district && !city
     const locationType: ApiTypes.LocationTypes = country
         ? 'country'
@@ -64,7 +62,10 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
         ? 'district'
         : 'city'
 
+    const geolocation = useGeolocation()
+    const router = useRouter()
     const dispatch = useAppDispatch()
+
     const { t } = useTranslation('common', { keyPrefix: 'page.places' })
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: locationData } = API.useLocationGetByTypeQuery(
@@ -76,9 +77,6 @@ const PlacesPage: NextPage<PlacesPageProps> = (props) => {
     )
 
     const [introduce] = API.useIntroduceMutation()
-
-    const geolocation = useGeolocation()
-    const router = useRouter()
 
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
