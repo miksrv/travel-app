@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
 
-import { closeAuthDialog, toggleOverlay } from '@/api/applicationSlice'
+import { closeAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import Footer from '@/components/footer'

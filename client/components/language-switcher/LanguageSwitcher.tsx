@@ -6,8 +6,8 @@ import styles from './styles.module.sass'
 
 const LanguageSwitcher: React.FC = () => {
     const { i18n } = useTranslation()
-    const { language: currentLanguage } = i18n
     const router = useRouter()
+    const { language: currentLanguage } = i18n
     const { pathname, asPath, query } = router
 
     const changeLanguage = async (locale: 'en' | 'ru') => {

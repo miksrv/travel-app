@@ -149,6 +149,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                         placeholder={
                             placeholder ?? 'Введите значение для поиска'
                         }
+                        onMouseMove={(e) => e.stopPropagation()}
                         onChange={handleChangeInput}
                     />
                     <span className={styles.arrow}>
@@ -193,7 +194,10 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                                         styles.active
                                 )}
                             >
-                                <button onClick={() => handleSelect(option)}>
+                                <button
+                                    onClick={() => handleSelect(option)}
+                                    onMouseMove={(e) => e.stopPropagation()}
+                                >
                                     <span>{option.value}</span>
                                     {option?.description && (
                                         <div className={styles.description}>

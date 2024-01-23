@@ -3,14 +3,13 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
+import Breadcrumbs from '@/ui/breadcrumbs'
 import Container from '@/ui/container'
 
 import { wrapper } from '@/api/store'
 
 import PageLayout from '@/components/page-layout'
 import PlaceCreateForm from '@/components/place-form'
-
-import Breadcrumbs from '../../ui/breadcrumbs'
 
 const PAGE_TITLE = 'Добавить интересное место'
 
