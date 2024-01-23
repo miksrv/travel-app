@@ -41,7 +41,7 @@ class Visited extends ResourceController {
         }
 
         try {
-            $insertData   = ['user_id' => $session->userData->id, 'place_id' => $input->place];
+            $insertData   = ['user_id' => $session->userId, 'place_id' => $input->place];
             $visitedModel = new UsersVisitedPlacesModel();
             $visitedData  = $visitedModel->where($insertData)->first();
             $placesModel  = new PlacesModel();

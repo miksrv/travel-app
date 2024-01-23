@@ -14,7 +14,7 @@ class Notifications extends ResourceController {
 
         // The list of notifications is available only for the current user.
         // The user will not be able to view the list of notifications for another user.
-        if (!$session->isAuth || $session->userData->id !== $id) {
+        if (!$session->isAuth || $session->userId !== $id) {
             return $this->respond(['result' => false]);
         }
 

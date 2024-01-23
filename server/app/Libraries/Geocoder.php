@@ -27,9 +27,9 @@ class Geocoder {
     public string $addressRu;
 
     private string $locale;
-    private $httpClient;
-    private $requestApi;
-    private $provider;
+    private Client $httpClient;
+    private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $requestApi;
+    private Nominatim|Yandex $provider;
 
     public function __construct() {
         $localeLibrary = new LocaleLibrary();

@@ -28,7 +28,7 @@ class Bookmarks extends ResourceController {
         $bookmarksModel = new UsersBookmarksModel();
         $bookmarkData   = $bookmarksModel
             ->select('id')
-            ->where(['user_id' => $session->userData->id, 'place_id' => $placeId])
+            ->where(['user_id' => $session->userId, 'place_id' => $placeId])
             ->first();
 
         return $this->respond(['result' => !$bookmarkData]);
@@ -52,7 +52,7 @@ class Bookmarks extends ResourceController {
         }
 
         try {
-            $bookmarkData   = ['user_id' => $session->userData->id, 'place_id' => $input->place];
+            $bookmarkData   = ['user_id' => $session->userId, 'place_id' => $input->place];
             $bookmarksModel = new UsersBookmarksModel();
             $bookmarksData  = $bookmarksModel->where($bookmarkData)->first();
             $placesModel    = new PlacesModel();

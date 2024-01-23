@@ -30,7 +30,7 @@ class Rating extends ResourceController {
             $response['count'] = count($ratingData);
 
             foreach ($ratingData as $item) {
-                if ($item->session_id === $session->id || $item->user_id === $session?->userData?->id) {
+                if ($item->session_id === $session->id || $item->user_id === $session?->userId) {
                     $response['vote'] = $item->value;
                 }
 
@@ -79,7 +79,7 @@ class Rating extends ResourceController {
             // Рассчитаем новую оценку для места
             if ($ratingData) {
                 foreach ($ratingData as $item) {
-                    if ($item->session_id === $session->id || $item->user_id === $session?->userData?->id) {
+                    if ($item->session_id === $session->id || $item->user_id === $session?->userId) {
                         $alreadyVoted = $item->id;
                     }
 
@@ -95,7 +95,7 @@ class Rating extends ResourceController {
             // Создаем новую модель рейтинга для сохранения
             $rating = new \App\Entities\Rating();
             $rating->place_id   = $input->place;
-            $rating->user_id    = isset($session->userData) ? $session->userData->id : null;
+            $rating->user_id    = $session->userId ?? null;
             $rating->session_id = $session->id;
             $rating->value      = $inputRating;
 
@@ -121,7 +121,7 @@ class Rating extends ResourceController {
             // If a user gives a rating to a material that is not his own,
             // we will send a notification to the author of the material about the change in the rating of his place
             $userNotify = new UserNotify();
-            if (!$session->isAuth || $placesData->user_id !== $session->userData->id) {
+            if (!$session->isAuth || $placesData->user_id !== $session->userId) {
                 $userNotify->rating($placesData->user_id, $placesData->id);
             }
 

@@ -451,14 +451,14 @@ class Places extends ResourceController {
             $placeEntity  = new \App\Entities\PlaceContent();
             $placeEntity->locale   = 'ru';
             $placeEntity->place_id = $id;
-            $placeEntity->user_id  = $session->userData->id;
+            $placeEntity->user_id  = $session->userId;
             $placeEntity->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeContent->title($id);
             $placeEntity->content  = $updatedContent;
             $placeEntity->delta    = strlen($updatedContent) - strlen($placeContent->content($id));
 
             // If the author of the last edit is the same as the current one,
             // then you need to check when the content was last edited
-            if ($placeContent->author($id) === $session->userData->id) {
+            if ($placeContent->author($id) === $session->userId) {
                 $time = new Time('now');
                 $diff = $time->difference($placeContent->updated($id));
 
@@ -476,7 +476,7 @@ class Places extends ResourceController {
             }
 
             // We add a notification to the author that his material has been edited
-            if ($placeData->user_ud !== $session->userData->id) {
+            if ($placeData->user_id !== $session->userId) {
                 $userNotify = new UserNotify();
                 $userNotify->place($placeContent->author($id), $id);
             }

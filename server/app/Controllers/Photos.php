@@ -119,7 +119,7 @@ class Photos extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $userLocale   = $session->userData->locale ?? 'ru';
+        $userLocale   = $session->user->locale ?? 'ru';
         $userActivity = new UserActivity();
         $placesModel  = new PlacesModel();
         $placesData   = $placesModel->select('id, lat, lng')->find($id);
@@ -160,7 +160,7 @@ class Photos extends ResourceController {
             $photo->lat = $coordinates->lat ?? $placesData->lat;
             $photo->lon = $coordinates->lng ?? $placesData->lon;
             $photo->place_id  = $placesData->id;
-            $photo->user_id   = $session->userData->id;
+            $photo->user_id   = $session->userId;
             $photo->title_en  = $placeContent->title($id);
             $photo->title_ru  = $placeContent->title($id);
             $photo->filename  = $name;
