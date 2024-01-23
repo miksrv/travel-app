@@ -1,33 +1,28 @@
 <?php namespace App\Models;
 
-use App\Entities\UserLevel;
-
 class UsersLevelsModel extends MyBaseModel {
     protected $table      = 'users_levels';
     protected $primaryKey = 'level';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = UserLevel::class;
+    protected $returnType     = \App\Entities\UserLevel::class;
     protected $useSoftDeletes = false;
 
     protected array $hiddenFields = [];
 
-    // The updatable fields
     protected $allowedFields = [
-        'name',
-        'text',
+        'title_en',
+        'title_ru',
         'level',
         'experience'
     ];
 
-    // Validation
-    protected $validationRules = [];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = [];
     protected $afterInsert    = [];

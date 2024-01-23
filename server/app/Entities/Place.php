@@ -7,7 +7,7 @@ class Place extends Entity {
         'id'          => 'string',
         'category'    => 'string',
         'lat'         => 'float',
-        'lng'         => 'float',
+        'lon'         => 'float',
         'rating'      => 'float',
         'views'       => 'integer',
         'address_en'  => 'string',

@@ -14,7 +14,7 @@ class PlacesModel extends MyBaseModel {
     protected $allowedFields = [
         'category',
         'lat',
-        'lng',
+        'lon',
         'rating',
         'views',
         'address_en',
@@ -37,7 +37,7 @@ class PlacesModel extends MyBaseModel {
     protected $validationRules = [
         'category'    => 'required|string|max_length[50]',
         'lat'         => 'decimal',
-        'lng'         => 'decimal',
+        'lon'         => 'decimal',
         'rating'      => 'integer|max_length[1]|greater_than[0]',
         'views'       => 'integer|max_length[5]|greater_than[0]',
         'address_en'  => 'string|max_length[250]',

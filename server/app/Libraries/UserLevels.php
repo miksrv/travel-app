@@ -23,9 +23,13 @@ class UserLevels {
 
     private array $types = ['place', 'photo', 'rating', 'edit'];
 
+    private string $locale;
+
     public function __construct() {
+        $localeLibrary    = new LocaleLibrary();
         $userLevelsModel  = new UsersLevelsModel();
         $this->userLevels = $userLevelsModel->orderBy('experience')->findAll();
+        $this->locale     = $localeLibrary->locale;
     }
 
     /**
@@ -156,7 +160,12 @@ class UserLevels {
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
 
-        return $this->userLevels[$levelIndex];
+        $result = $this->userLevels[$levelIndex];
+        $result->title = $result->{"title_$this->locale"};
+
+        unset($result->title_en, $result->title_ru);
+
+        return $result;
     }
 
     /**

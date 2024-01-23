@@ -5,8 +5,8 @@ use CodeIgniter\Entity\Entity;
 class UserLevel extends Entity {
     protected $casts = [
         'id'         => 'integer',
-        'name'       => 'string',
-        'text'       => 'string',
+        'title_en'   => 'string',
+        'title_ru'   => 'string',
         'level'      => 'integer',
         'experience' => 'integer',
     ];

@@ -13,14 +13,14 @@ class AddUsersLevels extends Migration {
                 'null'       => false,
                 'unique'     => true,
             ],
-            'name' => [
+            'title_en' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 200,
                 'null'       => true,
             ],
-            'text' => [
+            'title_ru' => [
                 'type'       => 'VARCHAR',
-                'constraint' => 255,
+                'constraint' => 200,
                 'null'       => true,
             ],
             'experience' => [

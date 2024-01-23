@@ -70,6 +70,10 @@ class Users extends ResourceController {
             ->select('id, name, level, experience, reputation, website, avatar, created_at, updated_at')
             ->find($id);
 
+        if (!$usersData) {
+            return $this->failNotFound();
+        }
+
         // GET ALL USER REPUTATION
         $placesModel = new PlacesModel();
         $placesData  = $placesModel->select('id')->where('user_id', $id)->findAll();
