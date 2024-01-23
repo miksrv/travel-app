@@ -16,8 +16,7 @@ export type User = {
 }
 
 export type LevelData = {
-    name?: string
-    text?: string
+    title?: string
     level?: number
     experience?: number
     nextLevel?: number

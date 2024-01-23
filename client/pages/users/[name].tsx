@@ -35,7 +35,12 @@ import PageLayout from '@/components/page-layout'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PlacesList from '@/components/places-list'
+import Reputation from '@/components/reputation'
 import UserHeader from '@/components/user/header'
+
+import { formatDate } from '@/functions/helpers'
+
+import userAvatar from '@/public/images/no-avatar.png'
 
 const UserPage: NextPage = () => {
     const router = useRouter()
