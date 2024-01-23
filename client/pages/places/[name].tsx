@@ -29,8 +29,12 @@ interface PlacePageProps {
     nearPlaces?: Place.Place[]
 }
 
-const PlacePage: NextPage<PlacePageProps> = (props) => {
-    const { randomId, place, photoList, nearPlaces } = props
+const PlacePage: NextPage<PlacePageProps> = ({
+    randomId,
+    place,
+    photoList,
+    nearPlaces
+}) => {
     const { t } = useTranslation('common', { keyPrefix: 'page.place' })
     const { data: ratingData, isLoading: ratingLoading } =
         API.useRatingGetListQuery(place?.id!, {

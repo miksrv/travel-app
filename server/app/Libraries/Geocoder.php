@@ -55,19 +55,25 @@ class Geocoder {
         }
 
         foreach ($locations as $location) {
-            $count = count($location->getAdminLevels());
+            if (!$location->getLocality()) {
+                continue;
+            }
+
             $data  = [
                 'lat' => $location->getCoordinates()->getLatitude(),
                 'lon' => $location->getCoordinates()->getLongitude(),
                 'locality' => $location->getLocality(),
-                'country'  => $location->getCountry()->getName(),
             ];
 
-            if ($count >= 1) {
+            if ($location->getCountry()) {
+                $data['country'] = $location->getCountry()->getName();
+            }
+
+            if ($location->getAdminLevels()->has(1)) {
                 $data['region'] = $location->getAdminLevels()->get(1)->getName();
             }
 
-            if ($count >= 2) {
+            if ($location->getAdminLevels()->has(2)) {
                 $data['district'] = $location->getAdminLevels()->get(2)->getName();
             }
 
@@ -97,17 +103,15 @@ class Geocoder {
         $countryTitleEn = $locationEn->getCountry()->getName();
         $countryTitleRu = $locationRu->getCountry()->getName();
 
-        $lvlCount = count($locationEn->getAdminLevels());
-
         $this->_getCountryId($countryTitleEn, $countryTitleRu);
 
-        if ($lvlCount >= 1) {
+        if ($locationEn->getAdminLevels()->has(1) && $locationRu->getAdminLevels()->has(1)) {
             $regionTitleEn = $locationEn->getAdminLevels()->get(1)->getName();
             $regionTitleRu = $locationRu->getAdminLevels()->get(1)->getName();
             $this->_getRegionId($regionTitleEn, $regionTitleRu);
         }
 
-        if ($lvlCount >= 2) {
+        if ($locationEn->getAdminLevels()->has(2) && $locationRu->getAdminLevels()->has(2)) {
             $districtTitleEn = $locationEn->getAdminLevels()->get(2)->getName();
             $districtTitleRu = $locationRu->getAdminLevels()->get(2)->getName();
             $this->_getDistrictId($districtTitleEn, $districtTitleRu);

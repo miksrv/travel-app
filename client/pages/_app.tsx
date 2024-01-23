@@ -2,6 +2,9 @@ import '@/styles/globals.sass'
 import CssBaseline from '@mui/material/CssBaseline'
 import { ruRU } from '@mui/material/locale'
 import { Shadows, ThemeProvider, createTheme } from '@mui/material/styles'
+import dayjs from 'dayjs'
+import 'dayjs/locale/ru'
+import { useTranslation } from 'next-i18next'
 import { appWithTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
@@ -185,7 +188,10 @@ const theme = createTheme(
 )
 
 const App = ({ Component, pageProps }: AppProps) => {
+    const { i18n } = useTranslation()
     const { store } = wrapper.useWrappedStore(pageProps)
+
+    dayjs.locale(i18n?.language ?? 'ru')
 
     return (
         <>
