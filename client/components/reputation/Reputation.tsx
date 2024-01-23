@@ -1,33 +1,22 @@
-import Box from '@mui/material/Box'
 import React from 'react'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
+import styles from './styles.module.sass'
+
 interface ReputationProps {
-    value?: number
+    value: number
 }
 
-const Reputation: React.FC<ReputationProps> = ({ value }) =>
-    value ? (
-        <Box
-            sx={{
-                background:
-                    value && value > 0
-                        ? 'rgb(46, 125, 50)'
-                        : value === 0
-                        ? '#CCC'
-                        : 'rgb(211, 47, 47)',
-                borderRadius: '4px',
-                color: '#FFF',
-                fontSize: '12px',
-                maxHeight: '22px',
-                mt: '-1px',
-                p: '2px 10px',
-                width: 'fit-content'
-            }}
-        >
-            {value}
-        </Box>
-    ) : (
-        <></>
-    )
+const Reputation: React.FC<ReputationProps> = ({ value }) => (
+    <div
+        className={cn(
+            styles.reputation,
+            value > 0 ? styles.green : value < 0 ? styles.red : undefined
+        )}
+    >
+        {value}
+    </div>
+)
 
 export default Reputation

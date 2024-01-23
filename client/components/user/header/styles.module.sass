@@ -1,0 +1,53 @@
+@import ../../../styles/variables
+
+.component
+  margin-top: 15px
+  border-radius: $borderRadius
+  background-color: #FFFFFF
+  position: relative
+  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+
+  .content
+    padding: 20px
+    display: flex
+    justify-content: space-between
+
+    .avatar
+      border-radius: $borderRadius
+
+    .information
+      min-width: 260px
+
+      li
+        display: flex
+        align-items: start
+        margin-bottom: 10px
+
+        &:last-of-type
+          margin-bottom: 0
+
+        svg
+          width: 18px
+          height: 18px
+          fill: #99a2ad
+          margin-right: 5px
+          margin-top: 1px
+
+        .key
+          color: $colorTextSecond
+          margin-right: 5px
+
+        .value
+
+  .header
+    padding: 8px 10px
+    border-bottom-left-radius: $borderRadius
+    border-bottom-right-radius: $borderRadius
+    display: flex
+    text-align: center
+    justify-content: space-between
+    border-top: 0.5px solid rgba(0, 0, 0, 0.12)
+
+    .actions
+      button
+        margin-top: 7px

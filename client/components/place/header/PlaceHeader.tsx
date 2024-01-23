@@ -4,7 +4,6 @@ import React from 'react'
 import Badge from '@/ui/badge'
 import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
 import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'

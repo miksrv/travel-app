@@ -117,7 +117,7 @@ class Geocoder {
             $this->_getDistrictId($districtTitleEn, $districtTitleRu);
         }
 
-        $this->_getcityId($locationEn->getLocality(), $locationRu->getLocality());
+        $this->_getCityId($locationEn->getLocality(), $locationRu->getLocality());
 
         $this->addressEn = $locationEn->getStreetName() . ($locationEn->getStreetNumber() ? ', ' . $locationEn->getStreetNumber() : '');
         $this->addressRu = $locationRu->getStreetName() . ($locationRu->getStreetNumber() ? ', ' . $locationRu->getStreetNumber() : '');
@@ -245,7 +245,7 @@ class Geocoder {
      * @return void
      * @throws ReflectionException
      */
-    private function _getcityId(
+    private function _getCityId(
         ?string $titleEn,
         ?string $titleRu,
     ): void
