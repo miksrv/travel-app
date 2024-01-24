@@ -147,7 +147,7 @@ class UserLevels {
      * @param User $user
      * @return UserLevel|null
      */
-    public function getLevelData(User $user): ?UserLevel {
+    public function getLevelData(User $user): ?object {
         $levelIndex = array_search($user->level, array_column($this->userLevels, 'level'));
 
         if ($levelIndex === false) {
@@ -160,7 +160,7 @@ class UserLevels {
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
 
-        $result = $this->userLevels[$levelIndex];
+        $result = clone $this->userLevels[$levelIndex];
         $result->title = $result->{"title_$this->locale"};
 
         unset($result->title_en, $result->title_ru);

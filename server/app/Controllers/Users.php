@@ -41,7 +41,7 @@ class Users extends ResourceController {
                 'avatar'  => $item->avatar,
                 'level'   => [
                     'level'      => $level->level,
-                    'name'       => $level->name,
+                    'title'      => $level->title,
                     'experience' => $item->experience,
                     'nextLevel'  => $level->nextLevel,
                 ],
