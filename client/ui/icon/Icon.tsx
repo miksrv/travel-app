@@ -90,6 +90,11 @@ const Icon: React.FC<IconProps> = ({ name }) => {
                 <path d='M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z' />
             )
             break
+        case 'LargeLeft':
+            iconToRender = (
+                <path d='M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z' />
+            )
+            break
         case 'Right':
             iconToRender = (
                 <path d='M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z' />
@@ -146,6 +151,11 @@ const Icon: React.FC<IconProps> = ({ name }) => {
         case 'Link':
             iconToRender = (
                 <path d='M3.9 12c0-1.71 1.39-3.1 3.1-3.1h4V7H7c-2.76 0-5 2.24-5 5s2.24 5 5 5h4v-1.9H7c-1.71 0-3.1-1.39-3.1-3.1M8 13h8v-2H8zm9-6h-4v1.9h4c1.71 0 3.1 1.39 3.1 3.1s-1.39 3.1-3.1 3.1h-4V17h4c2.76 0 5-2.24 5-5s-2.24-5-5-5' />
+            )
+            break
+        case 'Award':
+            iconToRender = (
+                <path d='M17 10.43V2H7v8.43c0 .35.18.68.49.86l4.18 2.51-.99 2.34-3.41.29 2.59 2.24L9.07 22 12 20.23 14.93 22l-.78-3.33 2.59-2.24-3.41-.29-.99-2.34 4.18-2.51c.3-.18.48-.5.48-.86m-6 .64-2-1.2V4h2zm4-1.2-2 1.2V4h2z' />
             )
             break
     }

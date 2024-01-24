@@ -1,5 +1,8 @@
 @import ../../styles/variables
 
+.buttonLink
+  text-decoration: none !important
+
 .button
   cursor: pointer
   padding: 6px 10px
@@ -48,21 +51,29 @@
       height: 18px
 
   &.primary
-    background-color: #2688eb
+    background-color: #447bba
     color: #ffffff
 
     svg
       fill: #ffffff
 
     &:hover
-      background-color: #247fdc
+      background-color: #4177b5
+
+    &:active
+      background-color: #3f72b0
 
   &.secondary
-    background-color: rgba(0, 0, 0, 0.04)
-    color: #2688eb
+    background-color: rgba(235,242,250,.99)
+    color: #3770b1
 
     &:hover
-      background-color: rgba(0, 0, 0, 0.08)
+      background-color: rgba(223,234,246,.99)
+      color: #356cac
+
+    &:active
+      background-color: rgba(213,226,241,.99)
+      color: #3368a8
 
   &[disabled]
     opacity: .64

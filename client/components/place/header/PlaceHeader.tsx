@@ -82,6 +82,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
             <div className={styles.actions}>
                 <Button
+                    size={'m'}
                     icon={'EditLocation'}
                     mode={'primary'}
                 >

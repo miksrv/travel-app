@@ -15,6 +15,7 @@ export type Photo = {
     lon: number
     filename: string
     extension: string
+    title?: string
     author?: User
     created?: ApiTypes.DateTimeType
 }

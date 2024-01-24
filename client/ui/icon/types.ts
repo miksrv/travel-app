@@ -15,6 +15,7 @@ export type IconTypes =
     | 'Search'
     | 'UserCircle'
     | 'Left'
+    | 'LargeLeft'
     | 'Right'
     | 'Down'
     | 'Up'
@@ -26,3 +27,4 @@ export type IconTypes =
     | 'Pencil'
     | 'EditLocation'
     | 'Link'
+    | 'Award'

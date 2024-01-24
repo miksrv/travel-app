@@ -68,7 +68,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ breadcrumbs, user }) => {
                         </div>
                     </li>
                     <li>
-                        <Icon name={'DoubleUp'} />
+                        <Icon name={'Award'} />
                         <div className={styles.key}>{'Уровень:'}</div>
                         <div className={styles.value}>
                             [<b>{user?.level?.level}</b>]{' '}
@@ -83,7 +83,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ breadcrumbs, user }) => {
                         </div>
                     </li>
                     <li>
-                        <Icon name={'Up'} />
+                        <Icon name={'DoubleUp'} />
                         <div className={styles.key}>
                             {'Опыта до нового уровня:'}
                         </div>
@@ -106,15 +106,13 @@ const UserHeader: React.FC<UserHeaderProps> = ({ breadcrumbs, user }) => {
                             {formatDate(user?.updated?.date)}
                         </div>
                     </li>
-                    {user?.website && (
-                        <li>
-                            <Icon name={'Link'} />
-                            <div className={styles.key}>
-                                {'Личная страница:'}
-                            </div>
-                            <div className={styles.value}>{user?.website}</div>
-                        </li>
-                    )}
+                    <li>
+                        <Icon name={'Link'} />
+                        <div className={styles.key}>{'Личная страница:'}</div>
+                        <div className={styles.value}>
+                            {user?.website ? user.website : <i>Не указана</i>}
+                        </div>
+                    </li>
                 </ul>
                 <ul className={styles.information}>
                     <li>
@@ -148,23 +146,29 @@ const UserHeader: React.FC<UserHeaderProps> = ({ breadcrumbs, user }) => {
                     </li>
                 </ul>
             </div>
-            <header className={styles.header}>
-                <div>
+            <div className={styles.header}>
+                <header>
                     <h1>{user?.name}</h1>
                     <Breadcrumbs
                         currentPage={user?.name}
-                        links={breadcrumbs}
+                        links={[
+                            {
+                                link: '/users/',
+                                text: 'Путешественники'
+                            }
+                        ]}
                     />
-                </div>
+                </header>
                 <div className={styles.actions}>
                     <Button
-                        icon={'EditLocation'}
+                        size={'m'}
+                        icon={'Pencil'}
                         mode={'primary'}
                     >
-                        {'Настроить'}
+                        {'Редактировать'}
                     </Button>
                 </div>
-            </header>
+            </div>
         </section>
     )
 }

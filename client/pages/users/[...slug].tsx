@@ -20,15 +20,23 @@ import Tabs from '@mui/material/Tabs'
 import Grid from '@mui/material/Unstable_Grid2'
 import { skipToken } from '@reduxjs/toolkit/query'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
 import React, { useState } from 'react'
 
 import Breadcrumbs from '@/ui/breadcrumbs'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
+import styles from '@/ui/dialog/styles.module.sass'
+import Icon from '@/ui/icon'
+import Pagination from '@/ui/pagination'
 
 import { API, IMG_HOST } from '@/api/api'
 import { wrapper } from '@/api/store'
+import { Photo } from '@/api/types/Photo'
+import { User } from '@/api/types/User'
 
 import ActivityList from '@/components/activity-list'
 import PageLayout from '@/components/page-layout'
@@ -36,111 +44,128 @@ import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PlacesList from '@/components/places-list'
 import Reputation from '@/components/reputation'
+import UserGallery from '@/components/user/gallery'
 import UserHeader from '@/components/user/header'
 
 import { formatDate } from '@/functions/helpers'
 
 import userAvatar from '@/public/images/no-avatar.png'
 
-const UserPage: NextPage = () => {
-    const router = useRouter()
-    const routerId = router.query.name
-    const userId = typeof routerId === 'string' ? routerId : skipToken
+const PHOTOS_PER_PAGE = 32
+const PAGES = ['photos', undefined] as const
 
-    const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setPhotoIndex] = useState<number>()
-    const [activeTab, setActiveTab] = React.useState<number>(0)
+type PageType = (typeof PAGES)[number]
 
-    const { data: userData, isLoading } = API.useUsersGetItemQuery(
-        typeof userId === 'string' ? userId : '',
-        {
-            skip: router.isFallback || !routerId
-        }
-    )
+interface UserPageProps {
+    id: string
+    page: PageType | null
+    user?: User
+    photosList?: Photo[]
+    photosCount: number
+    currentPage: number
+}
 
+const UserPage: NextPage<UserPageProps> = ({
+    id,
+    page,
+    user,
+    photosList,
+    photosCount,
+    currentPage
+}) => {
     const { data: dataBookmarks, isLoading: dataBookmarksLoading } =
-        API.usePlacesGetListQuery(
-            {
-                bookmarkUser: userData?.id,
-                limit: 20,
-                offset: 0
-            },
-            {
-                skip: !userData?.id
-            }
-        )
+        API.usePlacesGetListQuery({
+            bookmarkUser: id,
+            limit: 20,
+            offset: 0
+        })
 
     const { data: dataPlaces, isLoading: dataPlacesLoading } =
-        API.usePlacesGetListQuery(
-            {
-                author: userData?.id,
-                limit: 20,
-                offset: 0
-            },
-            {
-                skip: !userData?.id
-            }
-        )
-
-    const { data: dataPhotos, isLoading: dataPhotosLoading } =
-        API.usePhotosGetListQuery(
-            {
-                author: userData?.id
-            },
-            {
-                skip: !userData?.id
-            }
-        )
+        API.usePlacesGetListQuery({
+            author: id,
+            limit: 20,
+            offset: 0
+        })
 
     const { data: dataActivities, isLoading: dataActivitiesLoading } =
-        API.useActivityGetListQuery(
-            {
-                author: userData?.id,
-                limit: 20,
-                offset: 0
-            },
-            {
-                skip: !userData?.id
-            }
-        )
-
-    const nextLevelPercentage = (
-        currentExperience: number,
-        experienceToNextLevel: number
-    ): number => {
-        if (currentExperience < 0 || experienceToNextLevel <= 0) {
-            return 0
-        }
-
-        return Math.min(100, (currentExperience / experienceToNextLevel) * 100)
-    }
-
-    const handlePhotoClick = (index: number) => {
-        setPhotoIndex(index)
-        setShowLightbox(true)
-    }
-
-    const handleCloseLightbox = () => {
-        setShowLightbox(false)
-    }
-
-    const handleTabChange = (_: React.SyntheticEvent, newTab: number) => {
-        setActiveTab(newTab)
-    }
+        API.useActivityGetListQuery({
+            author: id,
+            limit: 20,
+            offset: 0
+        })
 
     return (
         <PageLayout>
-            <NextSeo title={userData?.name} />
+            {!page && (
+                <>
+                    <NextSeo title={user?.name} />
 
-            <UserHeader
-                user={userData}
-                breadcrumbs={[
-                    {
-                        link: '/users/',
-                        text: 'Путешественники'
-                    }
-                ]}
-            />
+                    <UserHeader user={user} />
+
+                    <Container title={'Фотографии'}>
+                        <UserGallery photos={photosList} />
+
+                        {photosCount > 8 && (
+                            <Button
+                                size={'m'}
+                                mode={'secondary'}
+                                stretched={true}
+                                link={`/users/${id}/photos`}
+                                style={{ marginTop: '15px' }}
+                            >
+                                {'Показать все фотографии'}
+                            </Button>
+                        )}
+                    </Container>
+                </>
+            )}
+
+            {page === 'photos' && (
+                <>
+                    <NextSeo title={user?.name} />
+                    <Container className={'pageHeader'}>
+                        <Button
+                            className={'backLink'}
+                            link={`/users/${id}`}
+                            icon={'LargeLeft'}
+                        />
+                        <header>
+                            <h1>{`${user?.name} - Фотографии`}</h1>
+                            <Breadcrumbs
+                                currentPage={'Фотографии'}
+                                links={[
+                                    {
+                                        link: '/users/',
+                                        text: 'Путешественники'
+                                    },
+                                    {
+                                        link: `/users/${id}`,
+                                        text: user?.name || ''
+                                    }
+                                ]}
+                            />
+                        </header>
+                        <div className={'actions'}>
+                            <div>
+                                {'Фотографий: '}
+                                <strong>{photosCount ?? 0}</strong>
+                            </div>
+                        </div>
+                    </Container>
+                    <Container>
+                        <UserGallery photos={photosList} />
+                    </Container>
+                    <Container className={'pagination'}>
+                        <div></div>
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPostCount={photosCount}
+                            perPage={PHOTOS_PER_PAGE}
+                            linkPart={`users/${id}/photos`}
+                        />
+                    </Container>
+                </>
+            )}
 
             {/*<Card sx={{ mb: 2 }}>*/}
             {/*    <CardHeader*/}
@@ -248,26 +273,50 @@ const UserPage: NextPage = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<any>> => {
-            const name = context.params?.name
+        async (context): Promise<GetServerSidePropsResult<UserPageProps>> => {
+            const id = context.params?.slug?.[0]
+            const page = context.params?.slug?.[1] as PageType
+            const locale = context.locale ?? 'en'
+            const currentPage = parseInt(context.query.page as string, 10) || 1
 
-            if (typeof name === 'string') {
-                const data: any = await store.dispatch(
-                    API.endpoints.usersGetItem.initiate(name)
-                )
+            const translations = await serverSideTranslations(locale)
 
-                await Promise.all(
-                    store.dispatch(API.util?.getRunningQueriesThunk())
-                )
-
-                if (data.error?.originalStatus === 404) {
-                    return { notFound: true }
-                }
-
-                return { props: { data } }
+            if (typeof id !== 'string' || !PAGES.includes(page)) {
+                return { notFound: true }
             }
 
-            return { notFound: true }
+            const { data: userData, isError } = await store.dispatch(
+                API.endpoints.usersGetItem.initiate(id)
+            )
+
+            const { data: photosData } = await store.dispatch(
+                API.endpoints.photosGetList.initiate({
+                    author: id,
+                    limit: page === 'photos' ? PHOTOS_PER_PAGE : 8,
+                    offset:
+                        page === 'photos'
+                            ? (currentPage - 1) * PHOTOS_PER_PAGE
+                            : 0
+                })
+            )
+
+            if (isError) {
+                return { notFound: true }
+            }
+
+            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
+
+            return {
+                props: {
+                    ...translations,
+                    currentPage,
+                    id,
+                    page: page ?? null,
+                    photosCount: photosData?.count || 0,
+                    photosList: photosData?.items,
+                    user: userData
+                }
+            }
         }
 )
 

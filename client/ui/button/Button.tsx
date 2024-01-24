@@ -53,6 +53,7 @@ const Button: React.FC<ContainerProps> = ({
 
     return link ? (
         <Link
+            className={styles.buttonLink}
             href={link}
             title={''}
         >

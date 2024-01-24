@@ -2,6 +2,7 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
+use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
@@ -63,6 +64,9 @@ class Photos extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        $localeLibrary = new LocaleLibrary();
+
+        $locale = $localeLibrary->locale;
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
@@ -78,6 +82,10 @@ class Photos extends ResourceController {
         $result = [];
 
         foreach ($photosData as $photo) {
+            $title = $locale === 'ru' ?
+                ($photo->title_ru ?? $photo->title_en) :
+                ($photo->title_en ?? $photo->title_ru);
+
             $result[] = (object) [
                 'id'        => $photo->id,
                 'filename'  => $photo->filename,
@@ -85,7 +93,7 @@ class Photos extends ResourceController {
                 'order'     => $photo->order,
                 'width'     => $photo->width,
                 'height'    => $photo->height,
-                'title'     => $photo->title,
+                'title'     => $title,
                 'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
                 'user'      => $photo->user_id ? [
@@ -285,7 +293,7 @@ class Photos extends ResourceController {
         $photosModel
             ->select(
                 'photos.id, photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
-                    photos.height, photos.order, photos.title_ru, photos.created_at,
+                    photos.height, photos.order, photos.title_ru, photos.title_en, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.user_id = users.id', 'left');
 
