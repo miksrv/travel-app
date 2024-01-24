@@ -19,6 +19,7 @@ import { API } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 
+import Header from '@/components/header'
 import PageLayout from '@/components/page-layout'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
@@ -123,31 +124,29 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
     return (
         <PageLayout>
             <NextSeo title={t('title')} />
-            <Container className={'pageHeader'}>
-                <header>
-                    <h1>{t('title')}</h1>
-                    <Breadcrumbs
-                        currentPage={t('breadcrumb')}
-                        hideHomePage={true}
-                    />
-                </header>
-                <div className={'actions'}>
-                    <div>
-                        {'Точек на карте: '}
-                        <strong>{poiListData?.count ?? 0}</strong>
-                    </div>
-                    <Button
-                        size={'m'}
-                        mode={'primary'}
-                        icon={'Tune'}
-                        onClick={handleClickOpenFiltersDialog}
-                    >
-                        {`Фильтры ${
-                            filtersCount > 0 ? `(${filtersCount})` : ''
-                        }`}
-                    </Button>
-                </div>
-            </Container>
+            <Header
+                title={t('title')}
+                currentPage={t('breadcrumb')}
+                hideHomePage={true}
+                actions={
+                    <>
+                        <div>
+                            {'Точек на карте: '}
+                            <strong>{poiListData?.count ?? 0}</strong>
+                        </div>
+                        <Button
+                            size={'m'}
+                            mode={'primary'}
+                            icon={'Tune'}
+                            onClick={handleClickOpenFiltersDialog}
+                        >
+                            {`Фильтры ${
+                                filtersCount > 0 ? `(${filtersCount})` : ''
+                            }`}
+                        </Button>
+                    </>
+                }
+            />
             <Container
                 style={{
                     height: 'calc(100vh - 200px)',

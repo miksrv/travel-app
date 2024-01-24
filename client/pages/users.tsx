@@ -10,10 +10,9 @@ import { API } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { User } from '@/api/types/User'
 
+import Header from '@/components/header'
 import PageLayout from '@/components/page-layout'
 import UsersList from '@/components/users-list'
-
-import Breadcrumbs from '../ui/breadcrumbs'
 
 const USERS_PER_PAGE = 30
 
@@ -30,12 +29,10 @@ const UsersPage: NextPage<UsersPageProps> = ({
 }) => (
     <PageLayout>
         <NextSeo title={'Путешественники'} />
-        <Container className={'pageHeader'}>
-            <header>
-                <h1>{'Путешественники'}</h1>
-                <Breadcrumbs currentPage={'Путешественники'} />
-            </header>
-        </Container>
+        <Header
+            title={'Путешественники'}
+            currentPage={'Путешественники'}
+        />
 
         <UsersList users={usersList} />
 

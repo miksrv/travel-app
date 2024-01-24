@@ -1,7 +1,6 @@
 import Image from 'next/image'
 import React from 'react'
 
-import Breadcrumbs from '@/ui/breadcrumbs/Breadcrumbs'
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 import Progress from '@/ui/progress'
@@ -9,6 +8,7 @@ import Progress from '@/ui/progress'
 import { IMG_HOST } from '@/api/api'
 import { User } from '@/api/types/User'
 
+import Header from '@/components/header'
 import Reputation from '@/components/reputation'
 
 import { formatDate } from '@/functions/helpers'
@@ -127,20 +127,17 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => (
                 </li>
             </ul>
         </div>
-        <div className={styles.header}>
-            <header>
-                <h1>{user?.name}</h1>
-                <Breadcrumbs
-                    currentPage={user?.name}
-                    links={[
-                        {
-                            link: '/users/',
-                            text: 'Путешественники'
-                        }
-                    ]}
-                />
-            </header>
-            <div className={styles.actions}>
+        <Header
+            title={user?.name}
+            currentPage={user?.name}
+            attachedBottom={true}
+            links={[
+                {
+                    link: '/users/',
+                    text: 'Путешественники'
+                }
+            ]}
+            actions={
                 <Button
                     size={'m'}
                     icon={'Pencil'}
@@ -148,8 +145,8 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => (
                 >
                     {'Редактировать'}
                 </Button>
-            </div>
-        </div>
+            }
+        />
     </section>
 )
 

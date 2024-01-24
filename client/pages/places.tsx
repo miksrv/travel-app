@@ -16,6 +16,7 @@ import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
+import Header from '@/components/header'
 import PageLayout from '@/components/page-layout'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
@@ -204,21 +205,17 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     return (
         <PageLayout>
             <NextSeo title={title} />
-            <Container className={'pageHeader'}>
-                <header>
-                    <h1>{title}</h1>
-                    <Breadcrumbs
-                        currentPage={
-                            category
-                                ? currentCategory
-                                : !locationUnset
-                                ? locationData?.title
-                                : t('breadcrumb')
-                        }
-                        links={breadcrumbsLinks || []}
-                    />
-                </header>
-                <div className={'actions'}>
+            <Header
+                title={title}
+                links={breadcrumbsLinks || []}
+                currentPage={
+                    category
+                        ? currentCategory
+                        : !locationUnset
+                        ? locationData?.title
+                        : t('breadcrumb')
+                }
+                actions={
                     <Button
                         size={'m'}
                         mode={'primary'}
@@ -229,8 +226,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                             filtersCount > 0 ? `(${filtersCount})` : ''
                         }`}
                     </Button>
-                </div>
-            </Container>
+                }
+            />
             <PlacesList places={placesList} />
             <Container className={'pagination'}>
                 <div>

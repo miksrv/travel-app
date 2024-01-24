@@ -14,6 +14,7 @@ import styles from './styles.module.sass'
 type SizeType = 'small' | 'medium'
 
 interface AvatarProps {
+    className?: string
     user?: User
     size?: SizeType
     caption?: string | React.ReactNode
@@ -24,12 +25,13 @@ interface AvatarProps {
 const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : 20)
 
 const UserAvatar: React.FC<AvatarProps> = ({
+    className,
     user,
     size,
     caption,
     showName
 }) => (
-    <div className={styles.userAvatar}>
+    <div className={cn(styles.userAvatar, className)}>
         {user?.id ? (
             <Link
                 className={styles.avatarLink}

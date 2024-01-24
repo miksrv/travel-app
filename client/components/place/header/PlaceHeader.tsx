@@ -2,11 +2,13 @@ import Image from 'next/image'
 import React from 'react'
 
 import Badge from '@/ui/badge'
-import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs/Breadcrumbs'
+import { BreadcrumbLink } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
+
+import Header from '@/components/header'
 
 import {
     addDecimalPoint,
@@ -72,24 +74,21 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                 content={`${place?.distance || '?'} км`}
             />
         </div>
-        <header className={styles.header}>
-            <div>
-                <h1>{place?.title}</h1>
-                <Breadcrumbs
-                    currentPage={place?.title}
-                    links={breadcrumbs}
-                />
-            </div>
-            <div className={styles.actions}>
+        <Header
+            title={place?.title}
+            currentPage={place?.title}
+            attachedBottom={true}
+            links={breadcrumbs}
+            actions={
                 <Button
                     size={'m'}
                     icon={'EditLocation'}
                     mode={'primary'}
                 >
-                    {'Настроить'}
+                    {'Редактировать'}
                 </Button>
-            </div>
-        </header>
+            }
+        />
     </section>
 )
 

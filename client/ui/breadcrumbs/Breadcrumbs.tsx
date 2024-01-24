@@ -8,10 +8,10 @@ export type BreadcrumbLink = {
     text: string
 }
 
-interface BreadcrumbsProps {
+export interface BreadcrumbsProps {
     hideHomePage?: boolean
-    links?: BreadcrumbLink[]
     currentPage?: string
+    links?: BreadcrumbLink[]
 }
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
