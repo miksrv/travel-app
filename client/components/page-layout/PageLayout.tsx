@@ -5,8 +5,8 @@ import Dialog from '@/ui/dialog'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
+import AppBar from '@/components/app-bar'
 import Footer from '@/components/footer'
-import Header from '@/components/header'
 import LanguageSwitcher from '@/components/language-switcher'
 import LoginForm from '@/components/login-form'
 
@@ -75,7 +75,7 @@ const PageLayout: React.FC<PageLayoutProps> = (props) => {
                 <LoginForm />
             </Dialog>
 
-            <Header
+            <AppBar
                 fullSize={fullSize}
                 randomPlaceId={randomPlaceId}
                 onMenuClick={handleOpenSideBar}

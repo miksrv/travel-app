@@ -10,11 +10,11 @@ import { login, logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import Search from '@/components/header/Search'
 import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
 
+import Search from './Search'
 import styles from './styles.module.sass'
 
 interface HeaderProps {
@@ -23,7 +23,7 @@ interface HeaderProps {
     onMenuClick?: () => void
 }
 
-const Header: React.FC<HeaderProps> = ({
+const AppBar: React.FC<HeaderProps> = ({
     randomPlaceId,
     fullSize,
     onMenuClick
@@ -123,4 +123,4 @@ const Header: React.FC<HeaderProps> = ({
     )
 }
 
-export default Header
+export default AppBar
