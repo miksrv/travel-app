@@ -126,7 +126,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 props.zoom || DEFAULT_MAP_ZOOM
             )
         }
-    })
+    }, [])
 
     return (
         <div className={styles.mapContainer}>

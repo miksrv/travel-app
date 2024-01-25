@@ -443,16 +443,18 @@ class Places extends ResourceController {
         // Save place tags
         $updatedTags    = $placeTags->saveTags($input->tags, $id);
         $updatedContent = strip_tags(html_entity_decode($input->content ?? null));
+        $updatedTitle   = strip_tags(html_entity_decode($input->title ?? null));
+        $coordinates    = $input->coordinates ?? null;
 
         // Save place content
-        if ($updatedContent) {
+        if ($updatedContent || $updatedTitle) {
             $userActivity = new UserActivity();
             $contentModel = new PlacesContentModel();
             $placeEntity  = new \App\Entities\PlaceContent();
             $placeEntity->locale   = 'ru';
             $placeEntity->place_id = $id;
             $placeEntity->user_id  = $session->userId;
-            $placeEntity->title    = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : $placeContent->title($id);
+            $placeEntity->title    = $updatedTitle ?? $placeContent->title($id);
             $placeEntity->content  = $updatedContent;
             $placeEntity->delta    = strlen($updatedContent) - strlen($placeContent->content($id));
 
@@ -483,7 +485,9 @@ class Places extends ResourceController {
         }
 
         // In any case, we update the time when the post was last edited
-        $place = new Place();
+        $place      = new Place();
+        $place->lat = $coordinates->lat ? round($coordinates->lat, 5) : $placeData->lat;
+        $place->lon = $coordinates->lon ? round($coordinates->lon, 5) : $placeData->lon;
         $place->updated_at = time();
         $placesModel->update($id, $place);
 

@@ -30,7 +30,16 @@ const Edit: React.FC<EditProps> = ({ place }) => (
         />
 
         <Container>
-            <PlaceForm />
+            <PlaceForm
+                placeId={place?.id}
+                values={{
+                    category: place?.category?.name,
+                    content: place?.content,
+                    coordinates: { lat: place?.lat!, lon: place?.lon! },
+                    tags: place?.tags?.map(({ title }) => title),
+                    title: place?.title
+                }}
+            />
         </Container>
     </>
 )

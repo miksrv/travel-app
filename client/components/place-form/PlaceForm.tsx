@@ -20,7 +20,10 @@ import { categoryImage } from '@/functions/categories'
 
 import styles from './styles.module.sass'
 
-interface LoginFormProps {}
+interface PlaceFormProps {
+    placeId?: string
+    values?: PlaceFormState
+}
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -31,15 +34,22 @@ export type PlaceFormErrors = {
     category?: string
 }
 
-const PlaceForm: React.FC<LoginFormProps> = () => {
+export type PlaceFormState = {
+    title?: string
+    content?: string
+    category?: string
+    tags?: string[]
+    coordinates?: ApiTypes.LatLonCoordinate
+}
+
+const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
     const router = useRouter()
 
     const location = useAppSelector((state) => state.application.userLocation)
-    const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
+    const [formData, setFormData] = useState<PlaceFormState>()
     const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
     const [mapBounds, setMapBounds] = useState<string>()
 
-    // const [introduce] = API.useIntroduceMutation()
     const { data: poiListData } = API.usePoiGetListQuery(
         { bounds: mapBounds },
         { skip: !mapBounds }
@@ -48,10 +58,11 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
 
-    const [
-        createPlace,
-        { data: createPlaceData, isLoading: createPlaceLoading }
-    ] = API.usePlacesPostItemMutation()
+    const [createPlace, { data: createPlaceData, isLoading: createLoading }] =
+        API.usePlacesPostItemMutation()
+
+    const [updatePlace, { data: updatePlaceData, isLoading: updateLoading }] =
+        API.usePlacesPatchItemMutation()
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
@@ -68,13 +79,19 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
     const handleMapBounds = (bounds: LatLngBounds) => {
         const mapCenter = bounds.getCenter()
 
-        setFormData({
-            ...formData,
-            coordinates: {
-                lat: mapCenter.lat,
-                lon: mapCenter.lng
-            }
-        })
+        if (
+            placeId &&
+            formData?.coordinates?.lat &&
+            formData?.coordinates?.lon
+        ) {
+            setFormData({
+                ...formData,
+                coordinates: {
+                    lat: mapCenter.lat,
+                    lon: mapCenter.lng
+                }
+            })
+        }
 
         debounceSetMapBounds(bounds)
     }
@@ -86,6 +103,12 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
     const handleContentChange = (text?: string) => {
         setFormData({ ...formData, content: text || '' })
     }
+
+    useEffect(() => {
+        if (values) {
+            setFormData(values)
+        }
+    }, [placeId])
 
     const handleSubmit = () => {
         const errors: PlaceFormErrors = {
@@ -100,7 +123,14 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
         setFormErrors(errors)
 
         if (!errors.title && !errors.category) {
-            createPlace({ ...formData })
+            if (!placeId) {
+                createPlace({ ...formData })
+            } else {
+                updatePlace({
+                    id: placeId,
+                    ...formData
+                })
+            }
         }
     }
 
@@ -146,6 +176,7 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
                     name={'title'}
                     label={'Заголовок интересного места'}
                     placeholder={'Введите заголовок интересного места'}
+                    value={formData?.title}
                     error={formErrors?.title}
                     onChange={handleChange}
                 />
@@ -186,18 +217,26 @@ const PlaceForm: React.FC<LoginFormProps> = () => {
                     />
                 )}
                 <InteractiveMap
-                    storeMapPosition={true}
                     enableSearch={true}
                     places={poiListData?.items}
-                    onChangeBounds={handleMapBounds}
+                    storeMapPosition={!placeId}
+                    center={
+                        placeId
+                            ? [
+                                  values?.coordinates?.lat!,
+                                  values?.coordinates?.lon!
+                              ]
+                            : undefined
+                    }
                     userLatLon={location}
+                    onChangeBounds={handleMapBounds}
                 />
             </div>
 
             <div className={styles.formElement}>
                 <label>{'Описание'}</label>
                 <ContentEditor
-                    markdown={formData?.content || ''}
+                    markdown={values?.content ?? formData?.content ?? ''}
                     onChange={handleContentChange}
                 />
             </div>
