@@ -80,9 +80,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
         const mapCenter = bounds.getCenter()
 
         if (
-            placeId &&
-            formData?.coordinates?.lat &&
-            formData?.coordinates?.lon
+            !placeId ||
+            (placeId &&
+                formData?.coordinates?.lat &&
+                formData?.coordinates?.lon)
         ) {
             setFormData({
                 ...formData,
@@ -126,9 +127,14 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
             if (!placeId) {
                 createPlace({ ...formData })
             } else {
+                const title = formData?.title?.trim()
+                const content = formData?.content?.trim()
+
                 updatePlace({
+                    ...formData,
+                    content: content !== values?.content ? content : undefined,
                     id: placeId,
-                    ...formData
+                    title: title !== values?.title ? title : undefined
                 })
             }
         }

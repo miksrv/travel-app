@@ -420,8 +420,12 @@ class Places extends ResourceController {
      * @param $id
      * @return ResponseInterface
      * @throws ReflectionException
+     * @throws Exception
      */
     public function update($id = null): ResponseInterface {
+        $localeLibrary = new LocaleLibrary();
+
+        $locale  = $localeLibrary->locale;
         $session = new Session();
         $input   = $this->request->getJSON();
 
@@ -451,12 +455,15 @@ class Places extends ResourceController {
             $userActivity = new UserActivity();
             $contentModel = new PlacesContentModel();
             $placeEntity  = new \App\Entities\PlaceContent();
-            $placeEntity->locale   = 'ru';
+            $placeEntity->locale   = $locale;
             $placeEntity->place_id = $id;
             $placeEntity->user_id  = $session->userId;
-            $placeEntity->title    = $updatedTitle ?? $placeContent->title($id);
-            $placeEntity->content  = $updatedContent;
-            $placeEntity->delta    = strlen($updatedContent) - strlen($placeContent->content($id));
+            $placeEntity->title    = !empty($updatedTitle) ? $updatedTitle : $placeContent->title($id);
+            $placeEntity->content  = !empty($updatedContent) ? $updatedContent : $placeContent->content($id);
+
+            if ($updatedContent) {
+                $placeEntity->delta = strlen($updatedContent) - strlen($placeContent->content($id));
+            }
 
             // If the author of the last edit is the same as the current one,
             // then you need to check when the content was last edited
@@ -485,10 +492,27 @@ class Places extends ResourceController {
         }
 
         // In any case, we update the time when the post was last edited
-        $place      = new Place();
-        $place->lat = $coordinates->lat ? round($coordinates->lat, 5) : $placeData->lat;
-        $place->lon = $coordinates->lon ? round($coordinates->lon, 5) : $placeData->lon;
+        $place = new Place();
         $place->updated_at = time();
+
+        $lat = $coordinates->lat ? round($coordinates->lat, 6) : $placeData->lat;
+        $lon = $coordinates->lon ? round($coordinates->lon, 6) : $placeData->lon;
+
+        // Check and update coordinates, address and location
+        if ($lat !== $placeData->lat || $lon !== $placeData->lon) {
+            $geocoder = new Geocoder();
+            $geocoder->coordinates($lat, $lon);
+
+            $place->lat = $lat;
+            $place->lon = $lon;
+            $place->address_ru  = $geocoder->addressRu;
+            $place->address_en  = $geocoder->addressEn;
+            $place->country_id  = $geocoder->countryId;
+            $place->region_id   = $geocoder->regionId;
+            $place->district_id = $geocoder->districtId;
+            $place->city_id     = $geocoder->cityId;
+        }
+
         $placesModel->update($id, $place);
 
         return $this->respond((object) [
