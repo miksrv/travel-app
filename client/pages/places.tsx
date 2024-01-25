@@ -5,7 +5,6 @@ import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useMemo, useState } from 'react'
 
-import Breadcrumbs from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 import Dialog from '@/ui/dialog'
@@ -16,8 +15,8 @@ import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
+import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PageLayout from '@/components/page-layout'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
@@ -203,7 +202,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     }
 
     return (
-        <PageLayout>
+        <AppLayout>
             <NextSeo title={title} />
             <Header
                 title={title}
@@ -269,7 +268,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     onChangeLocation={handleChangeLocation}
                 />
             </Dialog>
-        </PageLayout>
+        </AppLayout>
     )
 }
 

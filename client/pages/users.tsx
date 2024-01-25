@@ -10,8 +10,8 @@ import { API } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { User } from '@/api/types/User'
 
+import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PageLayout from '@/components/page-layout'
 import UsersList from '@/components/users-list'
 
 const USERS_PER_PAGE = 30
@@ -27,7 +27,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
     usersCount,
     currentPage
 }) => (
-    <PageLayout>
+    <AppLayout>
         <NextSeo title={'Путешественники'} />
         <Header
             title={'Путешественники'}
@@ -47,7 +47,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
                 linkPart={'places'}
             />
         </Container>
-    </PageLayout>
+    </AppLayout>
 )
 
 export const getServerSideProps = wrapper.getServerSideProps(

@@ -15,7 +15,7 @@ import React, { useState } from 'react'
 import { API } from '@/api/api'
 import { Photo, Poi } from '@/api/types'
 
-import PageLayout from '@/components/page-layout'
+import AppLayout from '@/components/app-layout'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 
@@ -91,7 +91,7 @@ const PhotosPage: NextPage = () => {
     }, [page])
 
     return (
-        <PageLayout maxWidth={'lg'}>
+        <AppLayout maxWidth={'lg'}>
             <NextSeo title={PAGE_TITLE} />
             <Card sx={{ mb: 2 }}>
                 <CardHeader
@@ -144,7 +144,7 @@ const PhotosPage: NextPage = () => {
                 count={Math.ceil((data?.count || 0) / PHOTOS_PER_PAGE)}
                 onChange={(_, page) => setPage(page)}
             />
-        </PageLayout>
+        </AppLayout>
     )
 }
 

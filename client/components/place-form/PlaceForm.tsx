@@ -31,7 +31,7 @@ export type PlaceFormErrors = {
     category?: string
 }
 
-const PlaceCreateForm: React.FC<LoginFormProps> = () => {
+const PlaceForm: React.FC<LoginFormProps> = () => {
     const router = useRouter()
 
     const location = useAppSelector((state) => state.application.userLocation)
@@ -213,4 +213,4 @@ const PlaceCreateForm: React.FC<LoginFormProps> = () => {
         </section>
     )
 }
-export default PlaceCreateForm
+export default PlaceForm

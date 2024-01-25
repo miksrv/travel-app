@@ -15,13 +15,13 @@ import { concatClassNames as cn } from '@/functions/helpers'
 import Menu from './Menu'
 import styles from './styles.module.sass'
 
-interface PageLayoutProps {
+interface AppLayoutProps {
     randomPlaceId?: string
     fullSize?: boolean
     children?: React.ReactNode
 }
 
-const PageLayout: React.FC<PageLayoutProps> = (props) => {
+const AppLayout: React.FC<AppLayoutProps> = (props) => {
     const { randomPlaceId, fullSize, children } = props
 
     const dispatch = useAppDispatch()
@@ -102,4 +102,4 @@ const PageLayout: React.FC<PageLayoutProps> = (props) => {
     )
 }
 
-export default PageLayout
+export default AppLayout

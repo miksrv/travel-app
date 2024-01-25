@@ -1,44 +1,31 @@
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import { NextSeo } from 'next-seo'
 import React from 'react'
-
-import Button from '@/ui/button'
-import Container from '@/ui/container'
-import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
 import { wrapper } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
-import { User } from '@/api/types/User'
+import { User as UserType } from '@/api/types/User'
 
-import Header from '@/components/header'
-import PageLayout from '@/components/page-layout'
-import UserGallery from '@/components/user/gallery'
-import UserHeader from '@/components/user/header'
+import AppLayout from '@/components/app-layout'
+import Photos from '@/components/page-user/Photos'
+import User from '@/components/page-user/User'
 
-const PHOTOS_PER_PAGE = 32
+export const PHOTOS_PER_PAGE = 32
 const PAGES = ['photos', undefined] as const
 
 type PageType = (typeof PAGES)[number]
 
-interface UserPageProps {
+export interface UserPageProps {
     id: string
     page: PageType | null
-    user?: User
+    user?: UserType
     photosList?: Photo[]
     photosCount: number
     currentPage: number
 }
 
-const UserPage: NextPage<UserPageProps> = ({
-    id,
-    page,
-    user,
-    photosList,
-    photosCount,
-    currentPage
-}) => {
+const UserPage: NextPage<UserPageProps> = ({ page, ...props }) => {
     // const { data: dataBookmarks, isLoading: dataBookmarksLoading } =
     //     API.usePlacesGetListQuery({
     //         bookmarkUser: id,
@@ -61,66 +48,9 @@ const UserPage: NextPage<UserPageProps> = ({
     //     })
 
     return (
-        <PageLayout>
-            {!page && (
-                <>
-                    <NextSeo title={user?.name} />
-
-                    <UserHeader user={user} />
-
-                    <Container title={'Фотографии'}>
-                        <UserGallery photos={photosList} />
-
-                        {photosCount > 8 && (
-                            <Button
-                                size={'m'}
-                                mode={'secondary'}
-                                stretched={true}
-                                link={`/users/${id}/photos`}
-                                style={{ marginTop: '15px' }}
-                            >
-                                {'Показать все фотографии'}
-                            </Button>
-                        )}
-                    </Container>
-                </>
-            )}
-
-            {page === 'photos' && (
-                <>
-                    <NextSeo title={user?.name} />
-                    <Header
-                        title={`${user?.name} - Фотографии`}
-                        currentPage={'Фотографии'}
-                        backLink={`/users/${id}`}
-                        links={[
-                            {
-                                link: '/users/',
-                                text: 'Путешественники'
-                            },
-                            {
-                                link: `/users/${id}`,
-                                text: user?.name || ''
-                            }
-                        ]}
-                    />
-                    <Container>
-                        <UserGallery photos={photosList} />
-                    </Container>
-                    <Container className={'pagination'}>
-                        <div>
-                            {'Фотографий: '}
-                            <strong>{photosCount ?? 0}</strong>
-                        </div>
-                        <Pagination
-                            currentPage={currentPage}
-                            totalPostCount={photosCount}
-                            perPage={PHOTOS_PER_PAGE}
-                            linkPart={`users/${id}/photos`}
-                        />
-                    </Container>
-                </>
-            )}
+        <AppLayout>
+            {!page && <User {...props} />}
+            {page === 'photos' && <Photos {...props} />}
 
             {/*{activeTab === 0 && (*/}
             {/*    <ActivityList*/}
@@ -145,7 +75,7 @@ const UserPage: NextPage<UserPageProps> = ({
             {/*        loading={dataBookmarksLoading}*/}
             {/*    />*/}
             {/*)}*/}
-        </PageLayout>
+        </AppLayout>
     )
 }
 

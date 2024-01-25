@@ -10,7 +10,7 @@ import styles from './styles.module.sass'
 
 interface HeaderProps extends BreadcrumbsProps {
     title?: string
-    backLink?: string | boolean
+    backLink?: string
     attachedBottom?: boolean
     actions?: React.ReactNode
 }
@@ -29,7 +29,7 @@ const Header: React.FC<HeaderProps> = ({
             <Button
                 className={styles.backLink}
                 icon={'LargeLeft'}
-                link={typeof backLink === 'string' ? backLink : undefined}
+                link={backLink}
             />
         )}
         <header>

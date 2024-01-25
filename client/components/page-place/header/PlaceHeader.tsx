@@ -84,6 +84,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     size={'m'}
                     icon={'EditLocation'}
                     mode={'primary'}
+                    link={`/places/${place?.id}/edit`}
                 >
                     {'Редактировать'}
                 </Button>

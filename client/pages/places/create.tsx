@@ -7,16 +7,16 @@ import Container from '@/ui/container'
 
 import { wrapper } from '@/api/store'
 
+import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PageLayout from '@/components/page-layout'
-import PlaceCreateForm from '@/components/place-form'
+import PlaceForm from '@/components/place-form'
 
 const PAGE_TITLE = 'Добавить интересное место'
 
 interface CreatePlacePageProps {}
 
 const CreatePlacePage: NextPage<CreatePlacePageProps> = () => (
-    <PageLayout>
+    <AppLayout>
         <NextSeo title={PAGE_TITLE} />
         <Header
             title={PAGE_TITLE}
@@ -29,9 +29,9 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => (
             ]}
         />
         <Container>
-            <PlaceCreateForm />
+            <PlaceForm />
         </Container>
-    </PageLayout>
+    </AppLayout>
 )
 
 export const getServerSideProps = wrapper.getServerSideProps(

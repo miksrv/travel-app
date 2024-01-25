@@ -92,7 +92,7 @@ const Icon: React.FC<IconProps> = ({ name }) => {
             break
         case 'LargeLeft':
             iconToRender = (
-                <path d='M17.77 3.77 16 2 6 12l10 10 1.77-1.77L9.54 12z' />
+                <path d='M17.51 3.87 15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12z' />
             )
             break
         case 'Right':

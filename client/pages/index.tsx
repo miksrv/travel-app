@@ -8,7 +8,6 @@ import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import React, { useCallback, useMemo, useState } from 'react'
 
-import Breadcrumbs from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 import Dialog from '@/ui/dialog'
@@ -19,8 +18,8 @@ import { API } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 
+import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PageLayout from '@/components/page-layout'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -122,7 +121,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
     }
 
     return (
-        <PageLayout>
+        <AppLayout>
             <NextSeo title={t('title')} />
             <Header
                 title={t('title')}
@@ -195,7 +194,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                     />
                 )}
             </Dialog>
-        </PageLayout>
+        </AppLayout>
     )
 }
 
