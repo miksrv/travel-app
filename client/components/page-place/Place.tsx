@@ -83,9 +83,11 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
 
             <Container>
                 <h2>{'Ближайшие места рядом'}</h2>
-                {`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
+                <div
+                    className={'headline'}
+                >{`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
                     ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
-                )} км`}
+                )} км`}</div>
             </Container>
             <PlacesList places={nearPlaces} />
         </>

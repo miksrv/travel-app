@@ -1,5 +1,4 @@
 import '@/styles/globals.sass'
-import CssBaseline from '@mui/material/CssBaseline'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import { useTranslation } from 'next-i18next'
@@ -43,7 +42,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             </Head>
             <Provider store={store}>
-                <CssBaseline />
                 <Component {...pageProps} />
             </Provider>
         </>

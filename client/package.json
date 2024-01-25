@@ -16,11 +16,7 @@
         "prettier:fix": "prettier --write ."
     },
     "dependencies": {
-        "@emotion/react": "^11.11.1",
-        "@emotion/styled": "^11.11.0",
         "@mdxeditor/editor": "^1.9.1",
-        "@mui/icons-material": "^5.14.8",
-        "@mui/material": "^5.14.8",
         "@reduxjs/toolkit": "^2.0.1",
         "@types/node": "20.10.8",
         "@types/react": "18.2.47",

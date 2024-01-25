@@ -5,12 +5,11 @@
   justify-content: center
 
   .item
-    color: $colorTextMain
+    color: #7c8795
     vertical-align: middle
     text-align: center
     border-radius: $borderRadius
     text-decoration: none
-    background-color: rgba(0, 16, 61, 0.08)
     width: 32px
     height: 32px
     line-height: 30px
@@ -20,11 +19,12 @@
     transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
 
     &.active, &:active
-      background-color: rgba(0, 16, 61, 0.22)
+      background-color: rgba(0,16,61,.08)
       font-weight: 500
+      color: $colorTextMain
 
     &:hover
-      background-color: rgba(0, 16, 61, 0.1)
+      background-color: rgba(0,16,61,.04)
 
     svg
       margin-top: 6px

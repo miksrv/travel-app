@@ -47,7 +47,7 @@ const Button: React.FC<ContainerProps> = ({
             )}
         >
             {icon && <Icon name={icon} />}
-            {children}
+            <div>{children}</div>
         </button>
     )
 

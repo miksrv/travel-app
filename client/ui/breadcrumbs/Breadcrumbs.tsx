@@ -21,7 +21,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
 }) => (
     <ul
         aria-label={'breadcrumb'}
-        className={styles.component}
+        className={styles.breadcrumbs}
     >
         {!hideHomePage && (
             <li>

@@ -2,6 +2,7 @@ import Link from 'next/link'
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
+import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
@@ -109,13 +110,14 @@ const AppBar: React.FC<HeaderProps> = ({
                             size={'medium'}
                         />
                     ) : (
-                        <Link
-                            href={'/login'}
+                        <Button
+                            link={'/login'}
                             title={'Авторизация на сайте'}
+                            mode={'secondary'}
                             onClick={handleLoginClick}
                         >
                             {'Войти'}
-                        </Link>
+                        </Button>
                     )}
                 </div>
             </div>

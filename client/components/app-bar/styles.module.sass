@@ -1,99 +1,94 @@
 @import ../../styles/variables
 
 .component
-    position: relative
-    z-index: 450
-    color: $colorTextMain
-    background-color: $boxBackground
-    padding: 8px 14px
-    //box-shadow: $boxShadow
-    box-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)
+  position: relative
+  z-index: 450
+  color: $colorTextMain
+  background-color: $boxBackground
+  padding: 8px 14px
+  //box-shadow: $boxShadow
+  box-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)
 
-    .wrapper
-        display: flex
-        max-width: $maxWidth
-        margin: 0 auto
-        align-items: center
-
-    &.fullSize
-        .wrapper
-            max-width: 100%
-
-    .title
-        margin: 0
-        font-size: 1.2857142857142856rem
-        line-height: 1.334
-
-    .hamburgerButton
-        border: none
-        background: transparent
-        padding: 0
-        line-height: 10px
-        margin-right: 10px
-        cursor: pointer
-        opacity: .7
-        transition: opacity .3s
-        display: none
-
-        &:hover
-            opacity: 1
-
-        svg
-            width: 30px
-            height: 30px
-            fill: $colorTextMain
-
-    a
-        svg
-        height: 24px
-        width: 24px
-        fill: #818c99
-
-    @media only screen and (max-width: $mobileMaxWidth)
-        .hamburgerButton
-            display: block
-
-    .rightSection
-        margin-left: auto
-        display: flex
-        align-items: center
-        justify-content: center
-
-.searchComponent
-    border: 1px solid #e0e0e0
-    border-radius: $borderRadius
-    background-color: rgba(242, 243, 245, 0.9)
-    box-sizing: border-box
-    height: 34px
+  .wrapper
     display: flex
+    max-width: $maxWidth
+    margin: 0 auto
     align-items: center
 
-    @media only screen and (min-width: $mobileMaxWidth)
-        margin-left: calc($menuBarWidth - 55px)
+  &.fullSize
+    .wrapper
+      max-width: 100%
+
+  .hamburgerButton
+    border: none
+    background: transparent
+    padding: 0
+    line-height: 10px
+    margin-right: 10px
+    cursor: pointer
+    opacity: .7
+    transition: opacity .3s
+    display: none
 
     &:hover
-        background-color: rgba(242, 243, 245, 0.6)
-
-    input
-        background-color: transparent
-        appearance: none
-        border: 0
-        box-shadow: none
-        box-sizing: border-box
-        color: #000
-        margin: 0
-        padding: 0 12px
-        position: relative
-        width: 30ch
-        height: 100%
-        outline: none
-        transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
-
-        //&:focus
-        //    width: 30ch
+      opacity: 1
 
     svg
-        width: 24px
-        height: 24px
-        margin: 0 -2px 0 10px
-        fill: $colorTextSecond
+      width: 30px
+      height: 30px
+      fill: $colorTextMain
+
+  a
+    svg
+      height: 24px
+      width: 24px
+      fill: #818c99
+
+  @media only screen and (max-width: $mobileMaxWidth)
+    .hamburgerButton
+      display: block
+
+  .rightSection
+    margin-left: auto
+    display: flex
+    align-items: center
+    justify-content: center
+
+.searchComponent
+  border: 1px solid #e0e0e0
+  border-radius: $borderRadius
+  background-color: rgba(242, 243, 245, 0.9)
+  box-sizing: border-box
+  height: 34px
+  display: flex
+  align-items: center
+
+  @media only screen and (min-width: $mobileMaxWidth)
+    margin-left: calc($menuBarWidth - 55px)
+
+  &:hover
+    background-color: rgba(242, 243, 245, 0.6)
+
+  input
+    background-color: transparent
+    appearance: none
+    border: 0
+    box-shadow: none
+    box-sizing: border-box
+    color: #000
+    margin: 0
+    padding: 0 12px
+    position: relative
+    width: 30ch
+    height: 100%
+    outline: none
+    transition: width 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
+
+  //&:focus
+  //    width: 30ch
+
+  svg
+    width: 24px
+    height: 24px
+    margin: 0 -2px 0 10px
+    fill: $colorTextSecond

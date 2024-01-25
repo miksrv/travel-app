@@ -20,7 +20,7 @@ const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
         (hoverRating && hoverRating >= rating)
 
     return (
-        <ul className={styles.component}>
+        <ul className={styles.rating}>
             {[1, 2, 3, 4, 5].map((rating) => (
                 <li
                     key={`ratingItem${rating}`}
