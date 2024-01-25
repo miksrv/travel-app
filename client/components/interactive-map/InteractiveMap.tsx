@@ -40,6 +40,7 @@ type MapProps = {
     enableSearch?: boolean
     storeMapKey?: string
     centerPoint?: boolean
+    fullScreenController?: boolean
     userLatLon?: ApiTypes.LatLonCoordinate
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
@@ -53,6 +54,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     enableSearch,
     storeMapKey,
     centerPoint,
+    fullScreenController,
     userLatLon,
     onChangeBounds,
     onPhotoClick,
@@ -98,6 +100,16 @@ const InteractiveMap: React.FC<MapProps> = ({
             [coordinates.lat, coordinates.lon],
             DEFAULT_MAP_ZOOM
         )
+    }
+
+    const handleToggleFullscreen = async () => {
+        const mapElement = mapRef.current.getContainer()
+
+        if (!document.fullscreenElement) {
+            await mapElement.requestFullscreen()
+        } else {
+            await document.exitFullscreen()
+        }
     }
 
     useEffect(() => {
@@ -161,18 +173,29 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {enableSearch && (
                     <SearchControl onSelectResult={handleSelectSearch} />
                 )}
-                {userLatLon && (
-                    <>
-                        <div className={styles.controls}>
-                            <Button
-                                mode={'primary'}
-                                icon={'User'}
-                                onClick={handleUserPosition}
-                            />
-                        </div>
-                        <MarkerUser coordinates={userLatLon} />
-                    </>
-                )}
+                {fullScreenController && <Button>Click</Button>}
+                <div className={styles.controls}>
+                    {fullScreenController && (
+                        <Button
+                            mode={'secondary'}
+                            icon={
+                                document.fullscreenElement
+                                    ? 'FullscreenOut'
+                                    : 'FullscreenIn'
+                            }
+                            onClick={handleToggleFullscreen}
+                        />
+                    )}
+
+                    {userLatLon && (
+                        <Button
+                            mode={'secondary'}
+                            icon={'User'}
+                            onClick={handleUserPosition}
+                        />
+                    )}
+                </div>
+                {userLatLon && <MarkerUser coordinates={userLatLon} />}
                 {loading && (
                     <div className={styles.loader}>
                         <Loader />

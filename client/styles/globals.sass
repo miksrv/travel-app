@@ -101,9 +101,8 @@ a
 .leaflet-left
   .leaflet-bar, .leaflet-control-layers
     background-color: #fff !important
-    border: 1px solid #999 !important
-    border-color: rgba(0,0,0,.2) !important
-    border-radius: 3px
+    border: .5px solid #999 !important
+    border-radius: $borderRadius
     box-shadow: none !important
 
     a
@@ -117,6 +116,14 @@ a
 
       span
         font-size: 20px
+
+.leaflet-touch .leaflet-bar a:first-child
+  border-top-left-radius: $borderRadius !important
+  border-top-right-radius: $borderRadius !important
+
+.leaflet-touch .leaflet-bar a:last-child
+  border-bottom-left-radius: $borderRadius !important
+  border-bottom-right-radius: $borderRadius !important
 
 .leaflet-popup-close-button
   display: block

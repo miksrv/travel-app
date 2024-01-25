@@ -28,3 +28,5 @@ export type IconTypes =
     | 'EditLocation'
     | 'Link'
     | 'Award'
+    | 'FullscreenIn'
+    | 'FullscreenOut'
