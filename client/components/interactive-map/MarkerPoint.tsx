@@ -1,10 +1,10 @@
-import Skeleton from '@mui/material/Skeleton'
-import Typography from '@mui/material/Typography'
 import Leaflet from 'leaflet'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
+
+import Skeleton from '@/ui/skeleton'
 
 import { API, IMG_HOST } from '@/api/api'
 import { Poi } from '@/api/types'
@@ -36,6 +36,8 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
         }
     }
 
+    console.log('poiData', poiData)
+
     return (
         <Marker
             position={[place.lat, place.lon]}
@@ -46,45 +48,31 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
         >
             {place.id && (
                 <Popup className={styles.popup}>
-                    {!isLoading && poiData ? (
-                        <>
-                            <Link
-                                href={`/places/${place.id}`}
-                                title={poiData?.title}
-                            >
-                                <Image
-                                    className={styles.image}
-                                    src={
-                                        poiData?.photos?.[0]?.filename
-                                            ? `${IMG_HOST}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
-                                            : noPhoto.src
-                                    }
-                                    alt={poiData?.title}
-                                    width={300}
-                                    height={200}
-                                />
-                            </Link>
-                            <Typography
-                                gutterBottom
-                                variant={'body2'}
-                                sx={{ m: 0, p: '5px' }}
-                            >
-                                {poiData?.title}
-                            </Typography>
-                        </>
+                    <Link
+                        href={`/places/${place.id}`}
+                        title={poiData?.title}
+                        className={styles.link}
+                    >
+                        {isLoading || !poiData ? (
+                            <Skeleton />
+                        ) : (
+                            <Image
+                                className={styles.image}
+                                src={
+                                    poiData?.photos?.[0]?.filename
+                                        ? `${IMG_HOST}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
+                                        : noPhoto.src
+                                }
+                                alt={poiData?.title}
+                                width={300}
+                                height={200}
+                            />
+                        )}
+                    </Link>
+                    {isLoading || !poiData ? (
+                        <Skeleton style={{ height: '18px', margin: '6px' }} />
                     ) : (
-                        <>
-                            <Skeleton
-                                sx={{ height: 200, width: 300 }}
-                                animation={'wave'}
-                                variant={'rectangular'}
-                            />
-                            <Skeleton
-                                animation='wave'
-                                height={24}
-                                style={{ margin: '5px' }}
-                            />
-                        </>
+                        <h3 className={styles.title}>{poiData?.title}</h3>
                     )}
                 </Popup>
             )}

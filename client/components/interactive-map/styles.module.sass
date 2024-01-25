@@ -60,6 +60,20 @@
 .popup
   padding: 10px
 
+  .link
+    display: block
+    width: 300px
+    height: 200px
+
+  .image
+    object-fit: cover
+    border-radius: $borderRadius $borderRadius 0 0
+    height: 100%
+
+  .title
+    font-weight: 400
+    margin: 8px 8px
+
   & > div:first-of-type // borders
     border-radius: 4px
 
@@ -70,17 +84,9 @@
       & > p
         margin: 0 !important
 
-      & > a
-        display: block
-        margin-bottom: -4px
-
   & > a:first-of-type // close button
     top: 10px
     right: 10px
-
-  .image
-    object-fit: cover
-    border-radius: 4px 4px 0 0
 
 .markerUser
   border-radius: 50%

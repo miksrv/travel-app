@@ -23,7 +23,7 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-export type MapLayersType = 'Yandex' | 'MabBox' | 'OSM'
+export type MapLayersType = 'MabBox' | 'OSM'
 
 export type MapPositionType = {
     lat: number

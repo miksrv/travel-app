@@ -14,10 +14,6 @@ type MapLayerItem = {
 
 const LayersOptions: MapLayerItem[] = [
     {
-        label: 'Спутник Yandex',
-        layer: 'Yandex'
-    },
-    {
         label: 'Схема (MabBox)',
         layer: 'MabBox'
     },
