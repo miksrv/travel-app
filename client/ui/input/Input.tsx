@@ -4,7 +4,7 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface InputProps extends React.InputHTMLAttributes<unknown> {
+interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
     error?: string
 }

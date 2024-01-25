@@ -168,6 +168,21 @@ const Icon: React.FC<IconProps> = ({ name }) => {
                 <path d='M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z' />
             )
             break
+        case 'Layers':
+            iconToRender = (
+                <path d='m11.99 18.54-7.37-5.73L3 14.07l9 7 9-7-1.63-1.27zM12 16l7.36-5.73L21 9l-9-7-9 7 1.63 1.27zm0-11.47L17.74 9 12 13.47 6.26 9z' />
+            )
+            break
+        case 'RadioButtonUnchecked':
+            iconToRender = (
+                <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8' />
+            )
+            break
+        case 'RadioButtonChecked':
+            iconToRender = (
+                <path d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m-2 15-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8z' />
+            )
+            break
     }
 
     return <svg viewBox='0 0 24 24'>{iconToRender}</svg>

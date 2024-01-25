@@ -9,7 +9,7 @@
     border-radius: $borderRadius
     height: 100%
 
-  .controls
+  .leftControls, .rightControls
     position: absolute
     z-index: 400
     top: 90px
@@ -24,6 +24,24 @@
       &:last-of-type
         margin-bottom: 0
 
+  .rightControls
+    left: auto
+    top: 10px
+    right: 10px
+
+    .mapLayersContainer
+      margin-top: 0
+
+    .mapLayersList
+      margin: -10px
+
+      li
+        padding: 2px 8px
+        border-radius: $borderRadius
+
+        &:hover
+          background-color: #ebedf0
+
   .searchControl
     position: absolute
     z-index: 400
@@ -37,7 +55,7 @@
         border: .5px solid #999 !important
 
     ul
-      border: 1px solid #999 !important
+      border: .5px solid #999 !important
 
 .popup
   padding: 10px

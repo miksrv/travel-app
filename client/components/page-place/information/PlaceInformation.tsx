@@ -198,6 +198,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                     <InteractiveMap
                         zoom={15}
                         center={[place.lat, place.lon]}
+                        enableFullScreen={true}
                         scrollWheelZoom={false}
                         places={[
                             {

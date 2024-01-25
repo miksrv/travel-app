@@ -30,3 +30,6 @@ export type IconTypes =
     | 'Award'
     | 'FullscreenIn'
     | 'FullscreenOut'
+    | 'Layers'
+    | 'RadioButtonUnchecked'
+    | 'RadioButtonChecked'

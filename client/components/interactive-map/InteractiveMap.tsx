@@ -13,6 +13,7 @@ import Loader from '@/ui/loader'
 import { ApiTypes } from '@/api/types'
 import { Photo, Place } from '@/api/types/Poi'
 
+import LayerSwitcherControl from '@/components/interactive-map/LayerSwitcherControl'
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
@@ -22,11 +23,9 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-const DEFAULT_MAP_STORAGE_KEY = 'mapCoordinates'
-const DEFAULT_MAP_ZOOM = 15
-const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
+export type MapLayersType = 'Yandex' | 'MabBox' | 'OSM'
 
-type mapPositionType = {
+export type MapPositionType = {
     lat: number
     lon: number
     zoom: number
@@ -38,13 +37,19 @@ type MapProps = {
     loading?: boolean
     storeMapPosition?: boolean
     enableSearch?: boolean
+    enableFullScreen?: boolean
+    enableLayersSwitcher?: boolean
     storeMapKey?: string
     centerPoint?: boolean
-    fullScreenController?: boolean
     userLatLon?: ApiTypes.LatLonCoordinate
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
+
+const DEFAULT_MAP_STORAGE_KEY = 'mapCoordinates'
+const DEFAULT_MAP_ZOOM = 15
+const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
+const DEFAULT_MAP_LAYER: MapLayersType = 'MabBox'
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
@@ -52,19 +57,21 @@ const InteractiveMap: React.FC<MapProps> = ({
     loading,
     storeMapPosition,
     enableSearch,
+    enableFullScreen,
+    enableLayersSwitcher,
     storeMapKey,
     centerPoint,
-    fullScreenController,
     userLatLon,
     onChangeBounds,
     onPhotoClick,
     ...props
 }) => {
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
-    const [mapPosition, setMapPosition] = useState<mapPositionType>()
+    const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
+    const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const mapRef = useRef<Map | any>()
 
-    const [coordinates, setCoordinates] = useLocalStorage<mapPositionType>(
+    const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
         storeMapKey || DEFAULT_MAP_STORAGE_KEY
     )
 
@@ -151,12 +158,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                 attributionControl={false}
                 ref={mapRef}
             >
-                {/*<ReactLeaflet.TileLayer*/}
-                {/*    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'*/}
-                {/*/>*/}
-                <ReactLeaflet.TileLayer
-                    url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
-                />
+                {mapLayer === 'MabBox' && (
+                    <ReactLeaflet.TileLayer
+                        url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
+                    />
+                )}
+                {mapLayer === 'OSM' && (
+                    <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+                )}
                 {places?.map((place) => (
                     <MarkerPoint
                         key={place.id}
@@ -173,9 +182,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {enableSearch && (
                     <SearchControl onSelectResult={handleSelectSearch} />
                 )}
-                {fullScreenController && <Button>Click</Button>}
-                <div className={styles.controls}>
-                    {fullScreenController && (
+                <div className={styles.leftControls}>
+                    {enableFullScreen && (
                         <Button
                             mode={'secondary'}
                             icon={
@@ -192,6 +200,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                             mode={'secondary'}
                             icon={'User'}
                             onClick={handleUserPosition}
+                        />
+                    )}
+                </div>
+                <div className={styles.rightControls}>
+                    {enableLayersSwitcher && (
+                        <LayerSwitcherControl
+                            currentLayer={mapLayer}
+                            onSwitchMapLayer={setMapLayer}
                         />
                     )}
                 </div>
