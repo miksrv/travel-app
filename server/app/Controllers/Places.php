@@ -377,8 +377,8 @@ class Places extends ResourceController {
 
         $geocoder->coordinates($input->coordinates->lat, $input->coordinates->lon);
 
-        $placeTitle   = strip_tags(html_entity_decode($input->title));
-        $placeContent = strip_tags(html_entity_decode($input->content));
+        $placeTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
+        $placeContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
 
         $place->lat         = $input->coordinates->lat;
         $place->lon         = $input->coordinates->lon;
@@ -445,8 +445,8 @@ class Places extends ResourceController {
         }
 
         // Save place tags
-        $updatedTags    = $placeTags->saveTags($input->tags, $id);
-        $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->conten)) : null;
+        $updatedTags    = $placeTags->saveTags($input->tags ?? [], $id);
+        $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
         $updatedTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
         $coordinates    = $input->coordinates ?? null;
 

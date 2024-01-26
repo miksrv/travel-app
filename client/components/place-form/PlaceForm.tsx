@@ -219,7 +219,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                         src={categoryImage(selectedCategory.key)?.src}
                         alt={''}
                         width={22}
-                        height={25}
+                        height={26}
                     />
                 )}
                 <InteractiveMap
@@ -250,6 +250,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
             <div className={styles.formButtons}>
                 <Button
                     mode={'primary'}
+                    size={'m'}
                     onClick={handleSubmit}
                 >
                     {'Сохранить'}

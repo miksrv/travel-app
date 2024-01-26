@@ -23,11 +23,7 @@ class PlaceTags {
         $localeLibrary = new LocaleLibrary();
         $returnTags    = [];
 
-        if (!$placeId) {
-            return $returnTags;
-        }
-
-        if (empty($tags)) {
+        if (!$placeId || empty($tags)) {
             return $returnTags;
         }
 

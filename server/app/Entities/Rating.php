@@ -8,6 +8,6 @@ class Rating extends Entity {
         'user_id'    => 'string',
         'session_id' => 'string',
         'rating'     => 'string',
-        'value'      => 'integer',
+        'value'      => 'integer'
     ];
 }

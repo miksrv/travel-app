@@ -128,9 +128,10 @@ class Poi extends ResourceController {
 
     /**
      * Getting the map boundaries from the GET parameter
-     * @return array
+     * @return ResponseInterface|array
      */
-    protected function _getBounds(): array {
+    protected function _getBounds(): ResponseInterface | array
+    {
         // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = explode(',', $bounds);

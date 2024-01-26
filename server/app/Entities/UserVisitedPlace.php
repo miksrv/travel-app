@@ -5,6 +5,6 @@ use CodeIgniter\Entity\Entity;
 class UserVisitedPlace extends Entity {
     protected $casts = [
         'user_id'  => 'string',
-        'place_id' => 'integer',
+        'place_id' => 'integer'
     ];
 }

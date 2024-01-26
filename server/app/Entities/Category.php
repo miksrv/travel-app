@@ -8,6 +8,6 @@ class Category extends Entity {
         'title_en'   => 'string',
         'title_ru'   => 'string',
         'content_en' => 'string',
-        'content_ru' => 'string',
+        'content_ru' => 'string'
     ];
 }

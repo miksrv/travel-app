@@ -7,7 +7,7 @@ class Photo extends Entity {
         'place_id'  => 'string',
         'user_id'   => 'string',
         'lat'       => 'float',
-        'lng'       => 'float',
+        'lon'       => 'float',
         'title_en'  => 'string',
         'title_ru'  => 'string',
         'filename'  => 'string',
@@ -15,6 +15,6 @@ class Photo extends Entity {
         'filesize'  => 'integer',
         'width'     => 'integer',
         'height'    => 'integer',
-        'order'     => 'integer',
+        'order'     => 'integer'
     ];
 }

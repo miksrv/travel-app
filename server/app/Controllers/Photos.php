@@ -8,6 +8,7 @@ use App\Libraries\Session;
 use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
+use App\Models\UsersActivityModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -127,12 +128,11 @@ class Photos extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $userLocale   = $session->user->locale ?? 'ru';
         $userActivity = new UserActivity();
         $placesModel  = new PlacesModel();
-        $placesData   = $placesModel->select('id, lat, lng')->find($id);
+        $placesData   = $placesModel->select('id, lat, lon')->find($id);
 
-        $placeContent = new PlacesContent($userLocale);
+        $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
 
         if (!$placesData || !$placesData->id) {
@@ -166,7 +166,7 @@ class Photos extends ResourceController {
             // Save photo to DB
             $photo = new Photo();
             $photo->lat = $coordinates->lat ?? $placesData->lat;
-            $photo->lon = $coordinates->lng ?? $placesData->lon;
+            $photo->lon = $coordinates->lon ?? $placesData->lon;
             $photo->place_id  = $placesData->id;
             $photo->user_id   = $session->userId;
             $photo->title_en  = $placeContent->title($id);
@@ -224,6 +224,10 @@ class Photos extends ResourceController {
 
         $photosModel->delete($id);
 
+        $activityModel = new UsersActivityModel();
+
+        $activityModel->where(['photo_id' => $id, 'user_id' => $session->userId])->delete();
+
         return $this->respondDeleted(['id' => $id]);
     }
 
@@ -278,7 +282,7 @@ class Photos extends ResourceController {
 
         return (object) [
             'lat' => round($lat, 7),
-            'lng' => round($lng, 7)
+            'lon' => round($lng, 7)
         ];
     }
 

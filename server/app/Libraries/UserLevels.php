@@ -45,9 +45,13 @@ class UserLevels {
         $activityModel = new UsersActivityModel();
         $activityData  = $activityModel
             ->selectCount('photo_id', 'photos')
-            ->selectCount('place_id', 'places')
             ->selectCount('rating_id', 'rating')
             ->where('user_id', $user->id)
+            ->first();
+
+        $placesCount = $activityModel
+            ->selectCount('place_id', 'places')
+            ->where(['user_id' => $user->id, 'type' => 'place'])
             ->first();
 
         $editsCount = $activityModel
@@ -56,15 +60,11 @@ class UserLevels {
             ->first();
 
         $statistic = (object) [
-            'places' => (int) $activityData->places ?? 0,
+            'places' => (int) $placesCount->places ?? 0,
             'photos' => (int) $activityData->photos ?? 0,
             'rating' => (int) $activityData->rating ?? 0,
             'edit'   => (int) $editsCount->places ?? 0,
         ];
-
-        $statistic->places = $statistic->edit < $statistic->places
-            ? ($statistic->places - $statistic->edit)
-            : $statistic->edit;
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;

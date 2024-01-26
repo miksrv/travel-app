@@ -9,7 +9,6 @@ class PlaceContent extends Entity {
         'locale'   => 'string',
         'title'    => 'title',
         'content'  => 'content',
-        'delta'    => 'integer',
-
+        'delta'    => 'integer'
     ];
 }

@@ -75,7 +75,11 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
                 {place?.title}
             </Link>
         </h2>
-        <p>{place?.content || 'Нет данных для отображения'}</p>
+        {place?.content ? (
+            <p>{place.content}</p>
+        ) : (
+            <div className={styles.emptyContent}>{'Пока ничего нет'}</div>
+        )}
     </article>
 )
 

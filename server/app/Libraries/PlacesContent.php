@@ -108,9 +108,9 @@ class PlacesContent {
     /**
      * Return title for place by ID
      * @param string $placeId
-     * @return string
+     * @return string|null
      */
-    public function content(string $placeId): string {
+    public function content(string $placeId): string | null {
         return $this->get($placeId, 'content');
     }
 
@@ -145,9 +145,9 @@ class PlacesContent {
      * @param string $id
      * @param string $field
      * @param string|null $version
-     * @return string
+     * @return string|null
      */
-    public function get(string $id, string $field, string $version = null): string {
+    public function get(string $id, string $field, string $version = null): string | null {
         if ($version && isset($this->versions[$id])) {
             $findKey = array_search($version, array_column($this->versions[$id], 'created_at'));
 

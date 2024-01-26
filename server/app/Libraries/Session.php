@@ -33,20 +33,21 @@ class Session {
         $this->model = new SessionsModel();
         $this->user  = validateJWTFromRequest($header);
 
-        $session = $this->model;
+        $sessionId = md5($this->ip . $this->ua);
+        $session   = $this->model;
 
         if ($this->user && $this->user->id) {
             $this->isAuth = true;
             $this->userId = $this->user->id;
             $session->where('user_id', $this->user->id);
         } else {
-            $session->where(['user_ip' => $this->ip, 'user_agent' => $this->ua]);
+            $session->where('id', $sessionId);
         }
 
         $session = $session->first();
 
         if ($session) {
-            $this->id     = $session->id;
+            $this->id     = $sessionId;
             $this->lat    = $session->lat;
             $this->lon    = $session->lon;
             $this->userId = $session->user_id;
@@ -55,14 +56,14 @@ class Session {
         // Если сессии в БД с такими IP и UA нет, то добавляем новую
         if (!$session || !$session->id) {
             $data = (object) [
-                'id'         => md5($this->ip . $this->ua),
+                'id'         => $sessionId,
                 'user_id'    => $this->userId,
                 'user_ip'    => $this->ip,
                 'user_agent' => $this->ua,
             ];
 
             $this->model->insert($data);
-            $this->id = $data->id;
+            $this->id = $sessionId;
         }
     }
 

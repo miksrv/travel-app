@@ -8,6 +8,6 @@ class UserLevel extends Entity {
         'title_en'   => 'string',
         'title_ru'   => 'string',
         'level'      => 'integer',
-        'experience' => 'integer',
+        'experience' => 'integer'
     ];
 }

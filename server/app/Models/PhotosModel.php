@@ -15,7 +15,7 @@ class PhotosModel extends MyBaseModel {
         'place_id',
         'user_id',
         'lat',
-        'lng',
+        'lon',
         'title_en',
         'title_ru',
         'filename',

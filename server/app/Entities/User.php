@@ -12,6 +12,6 @@ class User extends Entity {
         'locale'     => 'string',
         'level'      => 'integer',
         'experience' => 'integer',
-        'reputation' => 'integer',
+        'reputation' => 'integer'
     ];
 }
