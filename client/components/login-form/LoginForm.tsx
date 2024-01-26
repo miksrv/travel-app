@@ -1,11 +1,13 @@
 'use client'
 
+import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
 import Input from '@/ui/input'
 
 import { API } from '@/api/api'
+import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -50,6 +52,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         setLoading?.(isLoading)
     }, [isLoading])
 
+    useEffect(() => {
+        return () => {
+            dispatch(closeAuthDialog())
+        }
+    }, [])
+
     return (
         <div className={styles.loginForm}>
             <LoginGoogleButton
@@ -78,13 +86,30 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
                 />
             </div>
 
-            <Button
-                mode={'primary'}
-                disabled={isLoading || loading}
-                onClick={handleLoginButton}
-            >
-                {'Войти'}
-            </Button>
+            <div className={styles.actions}>
+                <div>
+                    <Link
+                        href={'/registration'}
+                        title={'Регистрация пользователя'}
+                    >
+                        {'Регистрация'}
+                    </Link>
+                    <span className={styles.divider}>{'/'}</span>
+                    <Link
+                        href={'/recovery'}
+                        title={'Восстановление пароля'}
+                    >
+                        {'Забыли пароль?'}
+                    </Link>
+                </div>
+                <Button
+                    mode={'primary'}
+                    disabled={isLoading || loading}
+                    onClick={handleLoginButton}
+                >
+                    {'Войти'}
+                </Button>
+            </div>
         </div>
     )
 }

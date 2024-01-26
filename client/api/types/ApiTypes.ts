@@ -80,6 +80,12 @@ export interface ResponseAuthLogin {
     user?: User
 }
 
+export interface RequestAuthRegistration {
+    name?: string
+    email?: string
+    password?: string
+}
+
 /* Controller: Places */
 export interface ResponsePlacesGetItem extends Place {
     randomId?: string
