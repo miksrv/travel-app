@@ -37,7 +37,7 @@ const AppBar: React.FC<HeaderProps> = ({
 
     const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
-    const randomPlaceQuery = API.usePlacesGetRandomQuery(undefined, {
+    const { data: randomPlace } = API.usePlacesGetRandomQuery(undefined, {
         skip: !!randomPlaceId
     })
 
@@ -93,11 +93,9 @@ const AppBar: React.FC<HeaderProps> = ({
                     <Icon name={'Menu'} />
                 </button>
                 <Search />
-                {(randomPlaceId || randomPlaceQuery?.data?.id) && (
+                {(randomPlaceId || randomPlace?.id) && (
                     <Link
-                        href={`/places/${
-                            randomPlaceId ?? randomPlaceQuery?.data?.id
-                        }`}
+                        href={`/places/${randomPlaceId ?? randomPlace?.id}`}
                         title={'Перейти на случайное место'}
                     >
                         <Icon name={'Question'} />

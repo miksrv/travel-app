@@ -10,6 +10,7 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds   = $this->_getBounds();
 
@@ -25,6 +26,10 @@ class Poi extends ResourceController {
 
         if ($category) {
             $placesData->where('category', $category);
+        }
+
+        if ($author) {
+            $placesData->where('user_id', $author);
         }
 
         $result = $placesData->findAll();

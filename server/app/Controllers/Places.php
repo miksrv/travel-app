@@ -30,7 +30,7 @@ class Places extends ResourceController {
             ->orderBy('id', 'RANDOM')
             ->first();
 
-        return $this->respond($placesData && ['id' => $placesData->id]);
+        return $this->respond(['id' => $placesData->id]);
     }
 
     /**
@@ -446,8 +446,8 @@ class Places extends ResourceController {
 
         // Save place tags
         $updatedTags    = $placeTags->saveTags($input->tags, $id);
-        $updatedContent = strip_tags(html_entity_decode($input->content ?? null));
-        $updatedTitle   = strip_tags(html_entity_decode($input->title ?? null));
+        $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->conten)) : null;
+        $updatedTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
         $coordinates    = $input->coordinates ?? null;
 
         // Save place content

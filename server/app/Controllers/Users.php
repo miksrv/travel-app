@@ -92,11 +92,11 @@ class Users extends ResourceController {
 
             $ratingDataPlus  = $ratingModel->selectSum('value')->where('value >', 2)->whereIn('place_id', $placesIds)->first();
             $ratingDataMinus = $ratingModel->selectSum('value')->where('value <=', 2)->whereIn('place_id', $placesIds)->first();
-            $ratingValue = $ratingDataPlus->value - $ratingDataMinus->value;
-        }
+            $ratingValue     = $ratingDataPlus->value - $ratingDataMinus->value;
 
-        if (!$usersData) {
-            return $this->failNotFound();
+            if ($ratingValue !== $usersData->reputation) {
+                $usersModel->update($usersData->id, ['reputation' => $ratingValue]);
+            }
         }
 
         $result = (object) [
