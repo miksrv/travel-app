@@ -8,7 +8,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useMapEvents } from 'react-leaflet'
 
 import Button from '@/ui/button'
-import Loader from '@/ui/loader'
+import Spinner from '@/ui/spinner'
 
 import { ApiTypes } from '@/api/types'
 import { Photo, Place } from '@/api/types/Poi'
@@ -214,7 +214,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {userLatLon && <MarkerUser coordinates={userLatLon} />}
                 {loading && (
                     <div className={styles.loader}>
-                        <Loader />
+                        <Spinner />
                     </div>
                 )}
                 {onChangeBounds && (

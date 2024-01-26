@@ -495,8 +495,8 @@ class Places extends ResourceController {
         $place = new Place();
         $place->updated_at = time();
 
-        $lat = $coordinates->lat ? round($coordinates->lat, 6) : $placeData->lat;
-        $lon = $coordinates->lon ? round($coordinates->lon, 6) : $placeData->lon;
+        $lat = isset($coordinates->lat) ? round($coordinates->lat, 6) : $placeData->lat;
+        $lon = isset($coordinates->lon) ? round($coordinates->lon, 6) : $placeData->lon;
 
         // Check and update coordinates, address and location
         if ($lat !== $placeData->lat || $lon !== $placeData->lon) {

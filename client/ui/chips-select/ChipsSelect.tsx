@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Chip from '@/ui/chips-select/Chip'
 import Icon from '@/ui/icon'
-import Loader from '@/ui/loader'
+import Spinner from '@/ui/spinner'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -155,7 +155,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
                     />
                     <span className={styles.arrow}>
                         {loading || localLoading ? (
-                            <Loader className={styles.loader} />
+                            <Spinner className={styles.loader} />
                         ) : (
                             <button
                                 className={styles.toggleButton}

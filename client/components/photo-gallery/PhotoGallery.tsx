@@ -3,7 +3,7 @@ import Link from 'next/link'
 import React from 'react'
 
 import Icon from '@/ui/icon'
-import Loader from '@/ui/loader'
+import Spinner from '@/ui/spinner'
 
 import { IMG_HOST } from '@/api/api'
 import { ApiTypes } from '@/api/types'
@@ -37,7 +37,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 className={styles.photoItem}
             >
                 <div className={styles.loader}>
-                    <Loader />
+                    <Spinner />
                 </div>
                 <Image
                     src={photo}

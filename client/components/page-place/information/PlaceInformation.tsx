@@ -194,7 +194,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                 </li>
             </ul>
             <div className={styles.map}>
-                {place?.lat && place?.lon && (
+                {place?.id && (
                     <InteractiveMap
                         zoom={15}
                         center={[place.lat, place.lon]}

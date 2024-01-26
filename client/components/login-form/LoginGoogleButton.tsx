@@ -15,7 +15,7 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import googleLogo from '@/public/images/google-logo.png'
 
-const LOGIN_PATH = 'currentPath'
+export const RETURN_PATH_KEY = 'returnPath'
 
 interface LoginFormProps {
     loading?: boolean
@@ -32,13 +32,13 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
     const router = useRouter()
     const searchParams = useSearchParams()
 
-    const [path, setPath] = useLocalStorage<string>(LOGIN_PATH)
+    const [returnPath, setReturnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
 
     const [authLoginPost, { isLoading, data: authData }] =
         API.useAuthGoogleLoginMutation()
 
     const handleLoginButton = () => {
-        setPath(router.asPath)
+        setReturnPath(router.asPath)
         authLoginPost({})
         onLoading?.(true)
     }
@@ -52,9 +52,9 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
             dispatch(login(authData))
             onSuccessLogin?.()
 
-            if (path) {
-                setPath('')
-                router.push(path)
+            if (returnPath) {
+                setReturnPath('')
+                router.push(returnPath)
             }
         }
     }, [authData])
@@ -82,6 +82,7 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
         >
             <Image
                 src={googleLogo.src}
+                style={{ marginBottom: '3px', verticalAlign: 'middle' }}
                 width={16}
                 height={16}
                 alt={''}

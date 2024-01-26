@@ -2,7 +2,7 @@ import debounce from 'lodash-es/debounce'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Icon from '@/ui/icon'
-import Loader from '@/ui/loader'
+import Spinner from '@/ui/spinner'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -154,7 +154,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                     />
                     <span className={styles.arrow}>
                         {loading || localLoading ? (
-                            <Loader className={styles.loader} />
+                            <Spinner className={styles.loader} />
                         ) : clearable && selectedOption?.key ? (
                             <button
                                 className={styles.clear}

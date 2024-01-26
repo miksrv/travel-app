@@ -150,7 +150,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                 style={{
                     height: 'calc(100vh - 200px)',
                     minHeight: '400px',
-                    padding: 0
+                    padding: '4px'
                 }}
             >
                 <InteractiveMap

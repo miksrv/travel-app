@@ -79,7 +79,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
             </div>
 
             <Button
-                stretched={true}
                 mode={'primary'}
                 disabled={isLoading || loading}
                 onClick={handleLoginButton}
