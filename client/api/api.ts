@@ -15,9 +15,16 @@ export const IMG_HOST =
 
 export const SITE_LINK = process.env.NEXT_PUBLIC_SITE_LINK
 
-function isHydrateAction(action: Action): action is PayloadAction<RootState> {
-    return action.type === HYDRATE
-}
+const isHydrateAction = (action: Action): action is PayloadAction<RootState> =>
+    action.type === HYDRATE
+
+export const isApiValidationErrors = <T>(
+    response: unknown
+): response is ApiTypes.ApiResponseError<T> =>
+    typeof response === 'object' &&
+    response != null &&
+    'messages' in response &&
+    typeof (response as any).messages === 'object'
 
 export const API = createApi({
     baseQuery: fetchBaseQuery({
@@ -90,6 +97,17 @@ export const API = createApi({
                 body: credentials,
                 method: 'POST',
                 url: 'auth/login'
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
+        authPostRegistration: builder.mutation<
+            ApiTypes.ResponseAuthLogin,
+            ApiTypes.RequestAuthRegistration
+        >({
+            query: (credentials) => ({
+                body: credentials,
+                method: 'POST',
+                url: 'auth/registration'
             }),
             transformErrorResponse: (response) => response.data
         }),

@@ -23,19 +23,19 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     const dispatch = useAppDispatch()
     const [loading, setLoading] = useState<boolean>(false)
-    const [formData, setFormState] = useState<ApiTypes.RequestAuthLogin>()
+    const [formState, setFormState] = useState<ApiTypes.RequestAuthLogin>()
     const [authLoginPost, { isLoading, data: authData }] =
         API.useAuthPostLoginMutation()
 
     const handleChange = ({
         target: { name, value }
     }: React.ChangeEvent<HTMLInputElement>) => {
-        setFormState((prev) => ({ ...prev, [name]: value }))
+        setFormState({ ...formState, [name]: value })
     }
 
     const handleLoginButton = () => {
-        if (formData) {
-            authLoginPost(formData)
+        if (formState) {
+            authLoginPost(formState)
             setLoading?.(true)
         }
     }

@@ -1,11 +1,11 @@
 import { NextPage } from 'next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
 
-import { API } from '@/api/api'
+import { API, isApiValidationErrors } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
@@ -15,11 +15,21 @@ const RegistrationPage: NextPage = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const [registration, { data, isLoading, isError }] =
-        API.useAuthPostLoginMutation()
+    const [registration, { data, error, isLoading, isError }] =
+        API.useAuthPostRegistrationMutation()
+
+    const validationErrors = useMemo(
+        () =>
+            isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
+                ? error?.messages
+                : undefined,
+        [error]
+    )
 
     const handleSubmit = (formData?: ApiTypes.RequestAuthRegistration) => {
-        console.log('formData', formData)
+        if (formData) {
+            registration(formData)
+        }
     }
 
     const handleCancel = () => {
@@ -36,6 +46,8 @@ const RegistrationPage: NextPage = () => {
         <Container className={'loginPage'}>
             <NextSeo title={'Регистрация'} />
             <RegistrationForm
+                loading={isLoading}
+                errors={validationErrors}
                 onCancel={handleCancel}
                 onSubmit={handleSubmit}
             />

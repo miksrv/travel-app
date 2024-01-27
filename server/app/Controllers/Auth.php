@@ -22,24 +22,24 @@ class Auth extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-//    public function register(): ResponseInterface {
-//        $rules = [
-//            'name'     => 'required',
-//            'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[user.email]',
-//            'password' => 'required|min_length[8]|max_length[255]'
-//        ];
-//
-//        $input = $this->getRequestInput($this->request);
-//
-//        if (!$this->validateRequest($input, $rules)) {
-//            return $this->failValidationErrors($this->validator->getErrors());
-//        }
-//
-//        $userModel = new UsersModel();
-//        $userModel->save($input);
-//
-//        return $this->getJWTForUser($input['email'], ResponseInterface::HTTP_CREATED);
-//    }
+    public function registration(): ResponseInterface {
+        $rules = [
+            'name'     => 'required|is_unique[users.name]',
+            'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
+            'password' => 'required|min_length[8]|max_length[255]'
+        ];
+
+        $input = $this->getRequestInput($this->request);
+
+        if (!$this->validateRequest($input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $userModel = new UsersModel();
+        $userModel->save($input);
+
+        return $this->getJWTForUser($input['email'], ResponseInterface::HTTP_CREATED);
+    }
 
     /**
      * Google auth

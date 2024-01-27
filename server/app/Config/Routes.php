@@ -67,8 +67,8 @@ $routes->options('users/(:alphanum)', 'Users'); // <- It's working!
 
 $routes->get('auth/me', 'Auth::me');
 $routes->get('auth/google', 'Auth::google');
-$routes->post('auth/register', 'Auth::register');
 $routes->post('auth/login', 'Auth::login');
+$routes->post('auth/registration', 'Auth::registration');
 $routes->options('auth/(:any)', 'Auth::me');
 
 /* Location */
