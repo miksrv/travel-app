@@ -3,7 +3,7 @@
 use Config\Services;
 
 class LocaleLibrary {
-   public string $locale = 'ru';
+   public string $locale = '3';
 
     public function __construct() {
         $request = Services::request();

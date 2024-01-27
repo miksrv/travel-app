@@ -23,7 +23,9 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function registration(): ResponseInterface {
-        $rules = [
+        $this->request->setLocale('en');
+
+        $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
             'password' => 'required|min_length[8]|max_length[255]'
@@ -31,7 +33,7 @@ class Auth extends ResourceController {
 
         $input = $this->getRequestInput($this->request);
 
-        if (!$this->validateRequest($input, $rules)) {
+        if (!$this->validateRequest($input, $validationRules)) {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
