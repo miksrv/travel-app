@@ -40,7 +40,7 @@ class AddUsers extends Migration {
                 'type'       => 'TINYINT',
                 'constraint' => 3,
                 'null'       => false,
-                'default'    => 0
+                'default'    => 1
             ],
             'experience' => [
                 'type'       => 'SMALLINT',

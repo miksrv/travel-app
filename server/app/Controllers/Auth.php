@@ -48,6 +48,7 @@ class Auth extends ResourceController {
         $userData->email     = $input['email'];
         $userData->password  = hashUserPassword($input['password']);
         $userData->auth_type = AUTH_TYPE_NATIVE;
+        $userData->level     = 1;
 
         $userModel->save($userData);
 
@@ -120,6 +121,7 @@ class Auth extends ResourceController {
             $user->auth_type = AUTH_TYPE_GOOGLE;
             $user->locale    = $googleUser->getLocale() === 'ru' ? 'ru' : 'en';
             $user->avatar    = $avatar;
+            $userData->level = 1;
 
             $userModel->insert($user);
             log_message('error', 'New user registered via Google');

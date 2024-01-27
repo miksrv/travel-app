@@ -20,7 +20,7 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const [registration, { data, error, isLoading, isError }] =
+    const [registration, { data, error, isLoading }] =
         API.useAuthPostRegistrationMutation()
 
     const validationErrors = useMemo(
@@ -44,6 +44,7 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
     useEffect(() => {
         if (data?.auth) {
             dispatch(login(data))
+            router.push(`/users/${data?.user?.id}`)
         }
     }, [data])
 
@@ -72,7 +73,7 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    (store) =>
+    () =>
         async (
             context
         ): Promise<GetServerSidePropsResult<RegistrationPageProps>> => {
