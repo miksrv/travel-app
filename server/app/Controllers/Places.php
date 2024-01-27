@@ -23,6 +23,10 @@ use ReflectionException;
 class Places extends ResourceController {
     protected bool $coordinatesAvailable = false;
 
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     public function random(): ResponseInterface{
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
@@ -43,9 +47,7 @@ class Places extends ResourceController {
         $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $localeLibrary = new LocaleLibrary();
-
-        $locale  = $localeLibrary->locale;
+        $locale  = $this->request->getLocale();
         $session = new Session();
         $bookmarksPlacesIds = [];
 
@@ -181,10 +183,10 @@ class Places extends ResourceController {
      * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
-        $locale  = $localeLibrary->locale;
+        $locale  = $this->request->getLocale();
         $session = new Session();
+
+        log_message('error', $locale);
 
         // Load translate library
         $placeContent = new PlacesContent();
@@ -423,10 +425,8 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function update($id = null): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
-        $locale  = $localeLibrary->locale;
         $session = new Session();
+        $locale  = $this->request->getLocale();
         $input   = $this->request->getJSON();
 
         if (!$session->isAuth) {

@@ -20,8 +20,8 @@ class PlaceTags {
      * @throws \ReflectionException
      */
     public function saveTags(array $tags, string $placeId): array {
-        $localeLibrary = new LocaleLibrary();
-        $returnTags    = [];
+        $locale     = $this->request->getLocale();
+        $returnTags = [];
 
         if (!$placeId || empty($tags)) {
             return $returnTags;
@@ -30,10 +30,10 @@ class PlaceTags {
         $this->placeTagsModel->where('place_id', $placeId)->delete();
 
         foreach ($tags as $tag) {
-            $tagData = $this->tagsModel->where(['title_' . $localeLibrary->locale => $tag])->first();
+            $tagData = $this->tagsModel->where(['title_' . $locale => $tag])->first();
 
             if (!$tagData) {
-                $this->tagsModel->insert(['title_' . $localeLibrary->locale => $tag,]);
+                $this->tagsModel->insert(['title_' . $locale => $tag,]);
                 $this->placeTagsModel->insert([
                     'tag_id'   => $this->tagsModel->getInsertID(),
                     'place_id' => $placeId

@@ -21,7 +21,7 @@ class Filters extends BaseConfig {
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
         'cors'          => Cors::class,
-        'auth'          => JWTAuthenticationFilter::class
+        'auth'          => JWTAuthenticationFilter::class,
     ];
 
     /**

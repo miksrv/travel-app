@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\Geocoder;
-use App\Libraries\LocaleLibrary;
 use App\Libraries\Session;
 use App\Models\LocationCitiesModel;
 use App\Models\LocationCountriesModel;
@@ -13,13 +12,6 @@ use Geocoder\Exception\Exception;
 use ReflectionException;
 
 class Location extends ResourceController {
-    protected string $locale;
-
-    function __construct() {
-        $localeLibrary = new LocaleLibrary();
-        $this->locale  = $localeLibrary->locale;
-    }
-
     /**
      * Update user coordinates
      * @return ResponseInterface
@@ -120,8 +112,9 @@ class Location extends ResourceController {
      */
     private function _showResult(object $data): ResponseInterface {
         $result = $data;
+        $locale = $this->request->getLocale();
 
-        $result->title = $result->{"title_$this->locale"};
+        $result->title = $result->{"title_$locale"};
         unset($result->title_en, $result->title_ru);
 
         return $this->respond($result);
@@ -142,10 +135,11 @@ class Location extends ResourceController {
      */
     private function _prepareSearchData(array $data): array {
         $result = [];
+        $locale = $this->request->getLocale();
 
         if ($data) {
             foreach ($data as $item) {
-                $item->title = $item->{"title_{$this->locale}"};
+                $item->title = $item->{"title_$locale"};
                 unset($item->title_en, $item->title_ru);
 
                 $result[] = $item;

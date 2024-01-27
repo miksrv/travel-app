@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Entities\User;
+use App\Libraries\LocaleLibrary;
 use App\Libraries\Session;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -17,14 +18,16 @@ define('AUTH_TYPE_NATIVE', 'native');
 define('AUTH_TYPE_GOOGLE', 'google');
 
 class Auth extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     /**
      * Register a new user
      * @return ResponseInterface
      * @throws ReflectionException
      */
     public function registration(): ResponseInterface {
-        $this->request->setLocale('en');
-
         $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',

@@ -2,10 +2,6 @@
 
 use App\Entities\User;
 use App\Entities\UserLevel;
-use App\Models\PhotosModel;
-use App\Models\PlacesModel;
-use App\Models\RatingModel;
-use App\Models\PlacesContentModel;
 use App\Models\UsersActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
@@ -23,13 +19,10 @@ class UserLevels {
 
     private array $types = ['place', 'photo', 'rating', 'edit'];
 
-    private string $locale;
 
     public function __construct() {
-        $localeLibrary    = new LocaleLibrary();
         $userLevelsModel  = new UsersLevelsModel();
         $this->userLevels = $userLevelsModel->orderBy('experience')->findAll();
-        $this->locale     = $localeLibrary->locale;
     }
 
     /**
@@ -160,8 +153,9 @@ class UserLevels {
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
 
+        $locale = $this->request->getLocale();
         $result = clone $this->userLevels[$levelIndex];
-        $result->title = $result->{"title_$this->locale"};
+        $result->title = $result->{"title_$locale"};
 
         unset($result->title_en, $result->title_ru);
 

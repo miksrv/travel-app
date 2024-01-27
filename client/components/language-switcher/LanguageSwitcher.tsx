@@ -13,8 +13,6 @@ const LanguageSwitcher: React.FC = () => {
     const changeLanguage = async (locale: 'en' | 'ru') => {
         await i18n.changeLanguage(locale)
         await router.push({ pathname, query }, asPath, { locale })
-
-        // router.reload()
     }
 
     return (

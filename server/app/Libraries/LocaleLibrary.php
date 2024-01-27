@@ -3,14 +3,16 @@
 use Config\Services;
 
 class LocaleLibrary {
-   public string $locale = '3';
-
     public function __construct() {
+        $config  = config('App');
         $request = Services::request();
         $header  = $request->header('Locale');
+        $locale  = $header ? $header->getValue() : $config->defaultLocale;
 
-        if (isset($header)) {
-            $this->locale = $header->getValue();
+        if (in_array($locale, $config->supportedLocales)) {
+            $request->setLocale($locale);
+        } else {
+            $request->setLocale($config->defaultLocale);
         }
     }
 }

@@ -1,6 +1,5 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\LocaleLibrary;
 use App\Models\TagsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -11,17 +10,16 @@ class Tags extends ResourceController {
      * @return ResponseInterface
      */
     public function search(): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
         $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
+        $locale = $this->request->getLocale();
 
         $tagsModel = new TagsModel();
-        $tagsData  = $tagsModel->like('title_' . $localeLibrary->locale, $search)->findAll(10);
+        $tagsData  = $tagsModel->like('title_' . $locale, $search)->findAll(10);
         $response  = [];
 
         if ($tagsData) {
             foreach ($tagsData as $item) {
-                $response[] = $item->{"title_$localeLibrary->locale"};
+                $response[] = $item->{"title_$locale"};
             }
         }
 

@@ -37,12 +37,7 @@ export const API = createApi({
                 headers.set('Authorization', token)
             }
 
-            /**
-             * Get locale on API side:
-             * $this->request->header('Locale')
-             */
-
-            headers.set('Locale', i18n?.language || 'ru')
+            headers.set('Locale', i18n?.language ?? 'en')
 
             return headers
         }

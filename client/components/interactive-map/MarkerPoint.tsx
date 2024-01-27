@@ -36,8 +36,6 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
         }
     }
 
-    console.log('poiData', poiData)
-
     return (
         <Marker
             position={[place.lat, place.lon]}

@@ -26,18 +26,14 @@ class Geocoder {
     public string $addressEn;
     public string $addressRu;
 
-    private string $locale;
     private Client $httpClient;
     private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $requestApi;
     private Nominatim|Yandex $provider;
 
     public function __construct() {
-        $localeLibrary = new LocaleLibrary();
-
-        $this->locale     = $localeLibrary->locale;
         $this->httpClient = new Client();
         $this->requestApi = Services::request();
-        $this->provider   =  $this->locale === 'ru'
+        $this->provider   = $this->requestApi->getLocale() === 'ru'
             ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
             : Nominatim::withOpenStreetMapServer($this->httpClient, $this->requestApi->getUserAgent());
     }
@@ -47,7 +43,7 @@ class Geocoder {
      */
     public function search($text): array {
         $result    = [];
-        $geocoder  = new StatefulGeocoder($this->provider, $this->locale);
+        $geocoder  = new StatefulGeocoder($this->provider, $this->requestApi->getLocale());
         $locations = $geocoder->geocodeQuery(GeocodeQuery::create($text))->all();
 
         if (empty($locations)) {

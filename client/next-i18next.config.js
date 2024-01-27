@@ -10,6 +10,7 @@ module.exports = {
     i18n: {
         defaultLocale: 'ru',
         defaultNS: 'common',
+        localeDetection: true,
         localeExtension: 'json',
         /** To avoid issues when deploying to some paas (vercel...) */
         // localePath:

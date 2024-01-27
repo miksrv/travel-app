@@ -1,4 +1,5 @@
-import { NextPage } from 'next'
+import { GetServerSidePropsResult, NextPage } from 'next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
@@ -6,12 +7,14 @@ import React, { useEffect, useMemo } from 'react'
 import Container from '@/ui/container'
 
 import { API, isApiValidationErrors } from '@/api/api'
-import { useAppSelector } from '@/api/store'
+import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import RegistrationForm from '@/components/registration-form'
 
-const RegistrationPage: NextPage = () => {
+interface RegistrationPageProps {}
+
+const RegistrationPage: NextPage<RegistrationPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -43,16 +46,38 @@ const RegistrationPage: NextPage = () => {
     })
 
     return (
-        <Container className={'loginPage'}>
+        <>
             <NextSeo title={'Регистрация'} />
-            <RegistrationForm
-                loading={isLoading}
-                errors={validationErrors}
-                onCancel={handleCancel}
-                onSubmit={handleSubmit}
-            />
-        </Container>
+            <Container
+                className={'loginPage'}
+                title={'Регистрация'}
+            >
+                <RegistrationForm
+                    loading={isLoading}
+                    errors={validationErrors}
+                    onCancel={handleCancel}
+                    onSubmit={handleSubmit}
+                />
+            </Container>
+        </>
     )
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async (
+            context
+        ): Promise<GetServerSidePropsResult<RegistrationPageProps>> => {
+            const locale = context.locale ?? 'ru'
+
+            const translations = await serverSideTranslations(locale)
+
+            return {
+                props: {
+                    ...translations
+                }
+            }
+        }
+)
 
 export default RegistrationPage

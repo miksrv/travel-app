@@ -2,7 +2,6 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
-use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\Session;
 use App\Libraries\UserActivity;
@@ -65,9 +64,7 @@ class Photos extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $localeLibrary = new LocaleLibrary();
-
-        $locale = $localeLibrary->locale;
+        $locale = $this->request->getLocale();
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 

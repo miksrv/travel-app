@@ -1,6 +1,7 @@
 <?php namespace App\Libraries;
 
 use App\Models\PlacesContentModel;
+use Config\Services;
 
 /**
  * Class for find actual translation for place
@@ -23,7 +24,6 @@ class PlacesContent {
     protected array $places = [];
     protected array $versions = [];
     public array $placeIds = [];
-    protected string $locale;
     protected int $trim;
     protected string $search;
 
@@ -39,9 +39,7 @@ class PlacesContent {
      * @param int $trim
      */
     public function __construct(int $trim = 0) {
-        $localeLibrary = new LocaleLibrary();
         $this->model   = new PlacesContentModel();
-        $this->locale  = $localeLibrary->locale;
         $this->trim    = $trim;
 
         $this->model->select(
@@ -202,14 +200,16 @@ class PlacesContent {
      * @return array|void
      */
     private function _findPlaceContent(string $placeId, array $data) {
+        $request = Services::request();
+
         foreach ($data as $item) {
-            if ($item->place_id === $placeId && $item->locale === $this->locale) {
+            if ($item->place_id === $placeId && $item->locale === $request->getLocale()) {
                 return $item;
             }
         }
 
         foreach ($data as $item) {
-            if ($item->place_id === $placeId && $item->locale === ($this->locale === 'ru' ? 'en' : 'ru')) {
+            if ($item->place_id === $placeId && $item->locale === ($request->getLocale() === 'ru' ? 'en' : 'ru')) {
                 return $item;
             }
         }

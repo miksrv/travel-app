@@ -20,6 +20,7 @@ interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
     const { t } = useTranslation('common', { keyPrefix: 'page.place' })
+
     const { data: ratingData, isLoading: ratingLoading } =
         API.useRatingGetListQuery(place?.id!, {
             skip: !place?.id
