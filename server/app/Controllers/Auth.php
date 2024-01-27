@@ -44,9 +44,10 @@ class Auth extends ResourceController {
 
         $userModel = new UsersModel();
         $userData  = new User();
-        $userData->name     = $input['name'];
-        $userData->email    = $input['email'];
-        $userData->password = hashUserPassword($input['password']);
+        $userData->name      = $input['name'];
+        $userData->email     = $input['email'];
+        $userData->password  = hashUserPassword($input['password']);
+        $userData->auth_type = AUTH_TYPE_NATIVE;
 
         $userModel->save($userData);
 
@@ -155,12 +156,6 @@ class Auth extends ResourceController {
         ];
 
         $input = $this->getRequestInput($this->request);
-
-        // Hash new password
-//        helper('jwt_helper');
-//        echo '<pre>';
-//        var_dump(hashUserPassword($input['password']));
-//        exit();
 
         if (!$this->validateRequest($input, $rules, $errors)) {
             return $this->failValidationErrors($this->validator->getErrors());

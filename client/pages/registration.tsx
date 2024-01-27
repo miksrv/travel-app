@@ -7,7 +7,8 @@ import React, { useEffect, useMemo } from 'react'
 import Container from '@/ui/container'
 
 import { API, isApiValidationErrors } from '@/api/api'
-import { useAppSelector, wrapper } from '@/api/store'
+import { login } from '@/api/authSlice'
+import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import RegistrationForm from '@/components/registration-form'
@@ -15,6 +16,7 @@ import RegistrationForm from '@/components/registration-form'
 interface RegistrationPageProps {}
 
 const RegistrationPage: NextPage<RegistrationPageProps> = () => {
+    const dispatch = useAppDispatch()
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -40,6 +42,12 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
     }
 
     useEffect(() => {
+        if (data?.auth) {
+            dispatch(login(data))
+        }
+    }, [data])
+
+    useEffect(() => {
         if (authSlice.isAuth) {
             router.push('/')
         }
@@ -53,7 +61,7 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
                 title={'Регистрация'}
             >
                 <RegistrationForm
-                    loading={isLoading}
+                    loading={isLoading || data?.auth}
                     errors={validationErrors}
                     onCancel={handleCancel}
                     onSubmit={handleSubmit}

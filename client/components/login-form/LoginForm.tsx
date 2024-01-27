@@ -45,6 +45,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
         if (authData?.auth) {
             onSuccessLogin?.()
+            dispatch(closeAuthDialog())
         }
     }, [authData])
 
