@@ -5,6 +5,7 @@ use App\Entities\UserLevel;
 use App\Models\UsersActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
+use Config\Services;
 use ReflectionException;
 
 define('MODIFIER_PLACE', 15);
@@ -141,6 +142,7 @@ class UserLevels {
      * @return UserLevel|null
      */
     public function getLevelData(User $user): ?object {
+        $request    = Services::request();
         $levelIndex = array_search($user->level, array_column($this->userLevels, 'level'));
 
         if ($levelIndex === false) {
@@ -153,7 +155,7 @@ class UserLevels {
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
 
-        $locale = $this->request->getLocale();
+        $locale = $request->getLocale();
         $result = clone $this->userLevels[$levelIndex];
         $result->title = $result->{"title_$locale"};
 

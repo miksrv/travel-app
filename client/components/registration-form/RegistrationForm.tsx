@@ -51,6 +51,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             errors.password = 'Password is required'
         }
 
+        if (formData?.password && formData?.password?.length < 8) {
+            errors.password = 'The minimum password length must be 8 characters'
+        }
+
         if (
             !formData?.repeat_password ||
             formData?.repeat_password !== formData?.password

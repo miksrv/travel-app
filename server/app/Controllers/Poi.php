@@ -1,11 +1,16 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LocaleLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     /**
      * @return ResponseInterface
      */

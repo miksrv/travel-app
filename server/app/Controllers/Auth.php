@@ -28,6 +28,8 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function registration(): ResponseInterface {
+        helper('jwt_helper');
+
         $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
@@ -41,9 +43,14 @@ class Auth extends ResourceController {
         }
 
         $userModel = new UsersModel();
-        $userModel->save($input);
+        $userData  = new User();
+        $userData->name     = $input['name'];
+        $userData->email    = $input['email'];
+        $userData->password = hashUserPassword($input['password']);
 
-        return $this->getJWTForUser($input['email'], ResponseInterface::HTTP_CREATED);
+        $userModel->save($userData);
+
+        return $this->getJWTForUser($userData);
     }
 
     /**
