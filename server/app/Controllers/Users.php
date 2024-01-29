@@ -13,6 +13,7 @@ use ReflectionException;
 class Users extends ResourceController {
     /**
      * @return ResponseInterface
+     * @throws Exception
      */
     public function list(): ResponseInterface {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
@@ -21,9 +22,11 @@ class Users extends ResourceController {
         $userLevels = new UserLevels();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select('users.id, users.name, users.avatar, users.created_at, users.level, users.experience, users.reputation, sessions.updated_at as user_activity')
+            ->select(
+                'users.id, users.name, users.avatar, users.created_at, users.updated_at, users.level, 
+                users.experience, users.reputation, sessions.updated_at as user_activity')
             ->join('sessions', 'users.id = sessions.user_id', 'left')
-            ->orderBy('reputation', 'DESC')
+            ->orderBy('user_activity, users.updated_at', 'DESC')
             ->findAll($limit, $offset);
 
         $result = [];

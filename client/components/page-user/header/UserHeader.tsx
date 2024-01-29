@@ -88,7 +88,11 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => (
                     <Icon name={'Time'} />
                     <div className={styles.key}>{'Был(а) тут:'}</div>
                     <div className={styles.value}>
-                        {formatDate(user?.updated?.date)}
+                        {user?.activity?.date ? (
+                            formatDate(user?.activity?.date)
+                        ) : (
+                            <i>Очень давно</i>
+                        )}
                     </div>
                 </li>
                 <li>

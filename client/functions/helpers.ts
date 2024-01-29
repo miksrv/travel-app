@@ -58,7 +58,7 @@ export const convertDMS = (lat: number, lon: number): string => {
 export const formatDate = (
     date?: string | Date,
     format: string = 'D MMMM YYYY, HH:mm'
-): string => (date ? dayjs(date).format(format) : '')
+): string => (date ? dayjs.utc(date).local().format(format) : '')
 
 export const formatDateUTC = (date?: string | Date): string =>
     date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
