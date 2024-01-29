@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LocaleLibrary;
 use App\Models\CategoryModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -8,6 +9,10 @@ use CodeIgniter\RESTful\ResourceController;
  * Categories API controller (not use now)
  */
 class Categories extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     /**
      * @return ResponseInterface
      */

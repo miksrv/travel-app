@@ -9,10 +9,6 @@ class LocaleLibrary {
         $header  = $request->header('Locale');
         $locale  = $header ? $header->getValue() : $config->defaultLocale;
 
-        if (in_array($locale, $config->supportedLocales)) {
-            $request->setLocale($locale);
-        } else {
-            $request->setLocale($config->defaultLocale);
-        }
+        $request->setLocale(in_array($locale, $config->supportedLocales) ? $locale : $config->defaultLocale);
     }
 }

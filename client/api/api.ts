@@ -41,7 +41,6 @@ export const API = createApi({
 
             return headers
         }
-        // responseHandler: 'content-type'
     }),
     endpoints: (builder) => ({
         /* Controller: Activity */
