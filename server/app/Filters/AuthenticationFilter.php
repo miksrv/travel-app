@@ -8,6 +8,9 @@ use CodeIgniter\HTTP\ResponseInterface;
 use Config\Services;
 use Exception;
 
+/**
+ * DEPRECATED!
+ */
 class AuthenticationFilter implements FilterInterface {
     use ResponseTrait;
 
@@ -17,12 +20,12 @@ class AuthenticationFilter implements FilterInterface {
      * @return RequestInterface|ResponseInterface|true
      */
     public function before(RequestInterface $request, $arguments = null): ResponseInterface|RequestInterface|bool {
-//        if (
-//            $request->getUri()->getPath() === 'auth/register' ||
-//            $request->getUri()->getPath() === 'auth/login'
-//        ) {
-//            return true;
-//        }
+        if (
+            $request->getUri()->getPath() === 'auth/register' ||
+            $request->getUri()->getPath() === 'auth/login'
+        ) {
+            return true;
+        }
 
         $authenticationHeader = $request->getServer('HTTP_AUTHORIZATION') || null;
 

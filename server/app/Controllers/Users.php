@@ -7,6 +7,7 @@ use App\Models\SessionsModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Exception;
 use ReflectionException;
 
 class Users extends ResourceController {
@@ -20,7 +21,8 @@ class Users extends ResourceController {
         $userLevels = new UserLevels();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select('id, name, avatar, created_at, level, experience, reputation')
+            ->select('users.id, users.name, users.avatar, users.created_at, users.level, users.experience, users.reputation, sessions.updated_at as user_activity')
+            ->join('sessions', 'users.id = sessions.user_id', 'left')
             ->orderBy('reputation', 'DESC')
             ->findAll($limit, $offset);
 
@@ -45,8 +47,9 @@ class Users extends ResourceController {
                     'experience' => $item->experience,
                     'nextLevel'  => $level->nextLevel,
                 ],
-                'created' => $item->created_at,
                 'reputation' => $item->reputation,
+                'created'    => $item->created_at,
+                'activity'   => $item->user_activity ? new \DateTime($item->user_activity) : null
             ];
         }
 
@@ -60,14 +63,16 @@ class Users extends ResourceController {
      * @param $id
      * @return ResponseInterface
      * @throws ReflectionException
+     * @throws Exception
      */
     public function show($id = null): ResponseInterface {
-        $userLevels   = new UserLevels();
-        $usersModel   = new UsersModel();
-        $sessionModel = new SessionsModel();
-        $sessionData  = $sessionModel->where('user_id', $id)->first();
-        $usersData    = $usersModel
-            ->select('id, name, level, experience, reputation, website, avatar, created_at, updated_at')
+        $userLevels = new UserLevels();
+        $usersModel = new UsersModel();
+        $usersData  = $usersModel
+            ->select(
+                'users.id, users.name, users.avatar, users.created_at,  users.updated_at, users.level, 
+                users.website, users.experience, users.reputation, sessions.updated_at as user_activity')
+            ->join('sessions', 'users.id = sessions.user_id', 'left')
             ->find($id);
 
         if (!$usersData) {
@@ -108,12 +113,9 @@ class Users extends ResourceController {
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,
-            'updated'    => $usersData->updated_at
+            'updated'    => $usersData->updated_at,
+            'activity'   => $usersData->user_activity ? new \DateTime($usersData->user_activity) : null
         ];
-
-        if ($sessionData && $sessionData->updated_at) {
-            $result->activity = $sessionData->updated_at;
-        }
 
         return $this->respond($result);
     }
