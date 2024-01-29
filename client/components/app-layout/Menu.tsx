@@ -39,7 +39,7 @@ const Menu: React.FC<MenuProps> = ({ onClick }) => {
         },
         {
             icon: 'PlusCircle',
-            link: '/places/create',
+            link: authSlice.isAuth ? '/places/create' : '/login',
             text: 'Добавить место'
         },
         {

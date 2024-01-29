@@ -1,11 +1,12 @@
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import { useRouter } from 'next/dist/client/router'
+import React, { useEffect } from 'react'
 
 import Container from '@/ui/container'
 
-import { wrapper } from '@/api/store'
+import { useAppSelector, wrapper } from '@/api/store'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -15,24 +16,35 @@ const PAGE_TITLE = 'Добавить интересное место'
 
 interface CreatePlacePageProps {}
 
-const CreatePlacePage: NextPage<CreatePlacePageProps> = () => (
-    <AppLayout>
-        <NextSeo title={PAGE_TITLE} />
-        <Header
-            title={PAGE_TITLE}
-            currentPage={'Добавить новое'}
-            links={[
-                {
-                    link: '/places/',
-                    text: 'Интересные места'
-                }
-            ]}
-        />
-        <Container>
-            <PlaceForm />
-        </Container>
-    </AppLayout>
-)
+const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
+    const router = useRouter()
+    const authSlice = useAppSelector((state) => state.auth)
+
+    useEffect(() => {
+        if (!authSlice?.isAuth) {
+            router.push('/login')
+        }
+    }, [])
+
+    return (
+        <AppLayout>
+            <NextSeo title={PAGE_TITLE} />
+            <Header
+                title={PAGE_TITLE}
+                currentPage={'Добавить новое'}
+                links={[
+                    {
+                        link: '/places/',
+                        text: 'Интересные места'
+                    }
+                ]}
+            />
+            <Container>
+                <PlaceForm />
+            </Container>
+        </AppLayout>
+    )
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
     () =>

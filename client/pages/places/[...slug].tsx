@@ -3,7 +3,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import React from 'react'
 
 import { API } from '@/api/api'
-import { wrapper } from '@/api/store'
+import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Photo, Place as PlaceType } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
@@ -24,6 +24,8 @@ export interface PlacePageProps {
 }
 
 const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
+    const authSlice = useAppSelector((state) => state.auth)
+
     // const [setBookmark, { isLoading: bookmarkPutLoading }] =
     //     API.useBookmarksPutPlaceMutation()
     //
@@ -47,8 +49,11 @@ const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
 
     return (
         <AppLayout randomPlaceId={randomId}>
-            {!page && <Place {...props} />}
-            {page === 'edit' && <Edit {...props} />}
+            {page === 'edit' && authSlice?.isAuth ? (
+                <Edit {...props} />
+            ) : (
+                <Place {...props} />
+            )}
         </AppLayout>
     )
 }
