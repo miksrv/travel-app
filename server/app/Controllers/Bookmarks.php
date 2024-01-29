@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Models\PlacesModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -9,15 +9,20 @@ use ReflectionException;
 
 class Bookmarks extends ResourceController {
 
+    protected SessionLibrary $session;
+
+    public function __construct() {
+        $this->session = new SessionLibrary();
+    }
+
     /**
      * Checks whether this place is already in the user's bookmarks or not
      * @return ResponseInterface
      */
     public function check(): ResponseInterface {
         $placeId = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
-        $session = new Session();
 
-        if (!$session->isAuth) {
+        if (!$this->session->isAuth) {
             return $this->respond(['result' => false]);
         }
 
@@ -28,7 +33,7 @@ class Bookmarks extends ResourceController {
         $bookmarksModel = new UsersBookmarksModel();
         $bookmarkData   = $bookmarksModel
             ->select('id')
-            ->where(['user_id' => $session->userId, 'place_id' => $placeId])
+            ->where(['user_id' => $this->session->user?->id, 'place_id' => $placeId])
             ->first();
 
         return $this->respond(['result' => !$bookmarkData]);
@@ -41,9 +46,8 @@ class Bookmarks extends ResourceController {
      */
     public function set(): ResponseInterface {
         $input   = $this->request->getJSON();
-        $session = new Session();
 
-        if (!$session->isAuth) {
+        if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
@@ -52,10 +56,10 @@ class Bookmarks extends ResourceController {
         }
 
         try {
-            $bookmarkData   = ['user_id' => $session->userId, 'place_id' => $input->place];
+            $bookmarkData   = ['user_id' => $this->session->user?->id, 'place_id' => $input->place];
             $bookmarksModel = new UsersBookmarksModel();
-            $bookmarksData  = $bookmarksModel->where($bookmarkData)->first();
             $placesModel    = new PlacesModel();
+            $bookmarksData  = $bookmarksModel->where($bookmarkData)->first();
             $placesData     = $placesModel->find($input->place);
 
             if ($bookmarksData) {

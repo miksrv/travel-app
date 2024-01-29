@@ -5,7 +5,7 @@ use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlaceTags;
 use App\Libraries\PlacesContent;
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PhotosModel;
@@ -23,8 +23,12 @@ use ReflectionException;
 class Places extends ResourceController {
     protected bool $coordinatesAvailable = false;
 
+    protected SessionLibrary $session;
+
     public function __construct() {
         new LocaleLibrary();
+
+        $this->session = new SessionLibrary();
     }
 
     public function random(): ResponseInterface{
@@ -48,7 +52,6 @@ class Places extends ResourceController {
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $locale  = $this->request->getLocale();
-        $session = new Session();
         $bookmarksPlacesIds = [];
 
         // If filtering of interesting places by user bookmark is specified,
@@ -92,8 +95,8 @@ class Places extends ResourceController {
         if ($lat && $lon) {
             $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$lon} - places.lon) * pi()/180 / 2), 2) )) AS distance";
         } else {
-            $distanceSelect = $session->lon && $session->lat
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = $this->session->lon && $this->session->lat
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
                 : '';
         }
 
@@ -183,18 +186,15 @@ class Places extends ResourceController {
      * @throws ReflectionException
      */
     public function show($id = null): ResponseInterface {
-        $locale  = $this->request->getLocale();
-        $session = new Session();
-
-        log_message('error', $locale);
+        $locale = $this->request->getLocale();
 
         // Load translate library
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
 
         try {
-            $distanceSelect = ($session->lon && $session->lat)
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
+            $distanceSelect = ($this->session->lon && $this->session->lat)
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
                 : '';
 
             $placesTagsModel = new PlacesTagsModel();
@@ -243,7 +243,7 @@ class Places extends ResourceController {
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel
                 ->select('id')
-                ->where(['place_id' => $placeData->id, 'session_id' => $session->id])
+                ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
                 ->first();
 
             $response = [
@@ -306,7 +306,7 @@ class Places extends ResourceController {
                 ];
             }
 
-            if ($session->lon && $session->lat) {
+            if ($this->session->lon && $this->session->lat) {
                 $response['distance'] = round((float) $placeData->distance, 1);
             }
 
@@ -367,7 +367,6 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function create(): ResponseInterface {
-        $session = new Session();
         $input   = $this->request->getJSON();
 
         $placeTags    = new PlaceTags();
@@ -384,7 +383,7 @@ class Places extends ResourceController {
 
         $place->lat         = $input->coordinates->lat;
         $place->lon         = $input->coordinates->lon;
-        $place->user_id     = $session->userId;
+        $place->user_id     = $this->session->user?->id;
         $place->category    = $input->category;
         $place->address_en  = $geocoder->addressEn;
         $place->address_ru  = $geocoder->addressRu;
@@ -406,7 +405,7 @@ class Places extends ResourceController {
         $content = new \App\Entities\PlaceContent();
         $content->place_id = $newPlaceId;
         $content->language = 'ru';
-        $content->user_id  = $session->userId;
+        $content->user_id  = $this->session->user?->id;
         $content->title    = $placeTitle;
         $content->content  = $placeContent;
 
@@ -425,11 +424,10 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function update($id = null): ResponseInterface {
-        $session = new Session();
         $locale  = $this->request->getLocale();
         $input   = $this->request->getJSON();
 
-        if (!$session->isAuth) {
+        if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
@@ -457,7 +455,7 @@ class Places extends ResourceController {
             $placeEntity  = new \App\Entities\PlaceContent();
             $placeEntity->locale   = $locale;
             $placeEntity->place_id = $id;
-            $placeEntity->user_id  = $session->userId;
+            $placeEntity->user_id  = $this->session->user?->id;
             $placeEntity->title    = !empty($updatedTitle) ? $updatedTitle : $placeContent->title($id);
             $placeEntity->content  = !empty($updatedContent) ? $updatedContent : $placeContent->content($id);
 
@@ -467,7 +465,7 @@ class Places extends ResourceController {
 
             // If the author of the last edit is the same as the current one,
             // then you need to check when the content was last edited
-            if ($placeContent->author($id) === $session->userId) {
+            if ($placeContent->author($id) === $this->session->user?->id) {
                 $time = new Time('now');
                 $diff = $time->difference($placeContent->updated($id));
 
@@ -485,7 +483,7 @@ class Places extends ResourceController {
             }
 
             // We add a notification to the author that his material has been edited
-            if ($placeData->user_id !== $session->userId) {
+            if ($placeData->user_id !== $this->session->user?->id) {
                 $userNotify = new UserNotify();
                 $userNotify->place($placeContent->author($id), $id);
             }

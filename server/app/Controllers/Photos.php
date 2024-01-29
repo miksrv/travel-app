@@ -3,7 +3,7 @@
 use App\Entities\Photo;
 use App\Entities\Place;
 use App\Libraries\PlacesContent;
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Libraries\UserActivity;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
@@ -22,13 +22,19 @@ use ReflectionException;
  *   - delete($id)
  */
 class Photos extends ResourceController {
+
+    protected SessionLibrary $session;
+
+    public function __construct() {
+        $this->session = new SessionLibrary();
+    }
+
     /**
      * Getting a list of actions available to the user for a photo by their ID
      * @example /photos?ids=1,2,3,4,5
      * @return ResponseInterface
      */
     public function actions(): ResponseInterface {
-        $session = new Session();
         $photos  = $this->request->getGet('ids', FILTER_SANITIZE_SPECIAL_CHARS);
         $IDList  = explode(',', $photos);
 
@@ -47,7 +53,7 @@ class Photos extends ResourceController {
         foreach ($photosData as $photo) {
             $resultData[] = [
                 'id'     => $photo->id,
-                'remove' => $photo->user_id === $session->userId
+                'remove' => $photo->user_id === $this->session->user?->id
             ];
         }
 
@@ -115,13 +121,11 @@ class Photos extends ResourceController {
      * @throws ReflectionException
      */
     public function upload($id = null): ResponseInterface {
-        $session = new Session();
-
         if (!$photo = $this->request->getFile('photo')) {
             return $this->failValidationErrors('No photo for upload');
         }
 
-        if (!$session->isAuth) {
+        if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
@@ -165,7 +169,7 @@ class Photos extends ResourceController {
             $photo->lat = $coordinates->lat ?? $placesData->lat;
             $photo->lon = $coordinates->lon ?? $placesData->lon;
             $photo->place_id  = $placesData->id;
-            $photo->user_id   = $session->userId;
+            $photo->user_id   = $this->session->user?->id;
             $photo->title_en  = $placeContent->title($id);
             $photo->title_ru  = $placeContent->title($id);
             $photo->filename  = $name;
@@ -202,9 +206,7 @@ class Photos extends ResourceController {
     }
 
     public function delete($id = null): ResponseInterface {
-        $session  = new Session();
-
-        if (!$session->isAuth) {
+        if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
@@ -215,7 +217,7 @@ class Photos extends ResourceController {
             return $this->failValidationErrors('No photo found with this ID');
         }
 
-        if ($photoData->user_id !== $session->userId) {
+        if ($photoData->user_id !== $this->session->user?->id) {
             return $this->failValidationErrors('You can not delete this photo');
         }
 
@@ -223,7 +225,7 @@ class Photos extends ResourceController {
 
         $activityModel = new UsersActivityModel();
 
-        $activityModel->where(['photo_id' => $id, 'user_id' => $session->userId])->delete();
+        $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
 
         return $this->respondDeleted(['id' => $id]);
     }

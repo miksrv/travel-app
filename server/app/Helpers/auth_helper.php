@@ -10,13 +10,13 @@ use Firebase\JWT\Key;
  * @param string|null $encodedToken
  * @return User|null
  */
-function validateJWTFromRequest(string $encodedToken = null):? User {
+function validateAuthToken(string $encodedToken = null):? User {
     if (!$encodedToken) {
         return null;
     }
 
-    $userModel = new UsersModel();
-    $secretKey = Services::getSecretKey();
+    $userModel    = new UsersModel();
+    $secretKey    = Services::getSecretKey();
     $decodedToken = JWT::decode($encodedToken, new Key($secretKey, 'HS256'));
 
     return $userModel->findUserByEmailAddress($decodedToken->email);
@@ -26,9 +26,9 @@ function validateJWTFromRequest(string $encodedToken = null):? User {
  * @param string $email
  * @return string
  */
-function getSignedJWTForUser(string $email): string {
+function generateAuthToken(string $email): string {
     $issuedAtTime    = time();
-    $tokenTimeToLive = getenv('JWT_TIME_TO_LIVE');
+    $tokenTimeToLive = getenv('auth.token.live');
     $tokenExpiration = $issuedAtTime + ($tokenTimeToLive);
 
     $payload = [

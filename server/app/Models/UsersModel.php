@@ -1,12 +1,14 @@
 <?php namespace App\Models;
 
+use App\Entities\User;
+
 class UsersModel extends MyBaseModel {
     protected $table      = 'users';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType     = \App\Entities\User::class;
+    protected $returnType     = User::class;
     protected $useSoftDeletes = true;
 
     protected array $hiddenFields = ['deleted_at'];
@@ -79,26 +81,13 @@ class UsersModel extends MyBaseModel {
 
     /**
      * @param string $emailAddress
-     * @return User|null
+     * @return User|array|null
      */
-    public function findUserByEmailAddress(string $emailAddress):? \App\Entities\User {
-        $userData = $this
+    public function findUserByEmailAddress(string $emailAddress): User | array | null
+    {
+        return $this
             ->select('id, name, avatar, email, password')
             ->where(['email' => $emailAddress])
             ->first();
-
-        if (!$userData) {
-            return null;
-        }
-
-        $user = new \App\Entities\User();
-
-        $user->id       = $userData->id;
-        $user->name     = $userData->name;
-        $user->avatar   = $userData->avatar;
-        $user->email    = $userData->email;
-        $user->password = $userData->password;
-
-        return $user;
     }
 }

@@ -2,7 +2,7 @@
 
 use App\Entities\User;
 use App\Libraries\LocaleLibrary;
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -28,8 +28,6 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function registration(): ResponseInterface {
-        helper('jwt_helper');
-
         $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
@@ -43,22 +41,30 @@ class Auth extends ResourceController {
         }
 
         $userModel = new UsersModel();
-        $userData  = new User();
-        $userData->name      = $input['name'];
-        $userData->email     = $input['email'];
-        $userData->password  = hashUserPassword($input['password']);
-        $userData->auth_type = AUTH_TYPE_NATIVE;
-        $userData->level     = 1;
+        $user      = new User();
+        $user->name      = $input['name'];
+        $user->email     = $input['email'];
+        $user->password  = hashUserPassword($input['password']);
+        $user->auth_type = AUTH_TYPE_NATIVE;
+        $user->level     = 1;
 
-        $userModel->save($userData);
+        $userModel->save($user);
 
-        return $this->getJWTForUser($userData);
+        $session = new SessionLibrary();
+        $session->authorization($user);
+
+        return $this->respond([
+            'auth'  => $session->isAuth,
+            'user'  => $session->user,
+            'token' => generateAuthToken($session->user->email),
+        ]);
     }
 
     /**
      * Google auth
      * @link https://console.developers.google.com/
      * @link https://www.webslesson.info/2020/03/google-login-integration-in-codeigniter.html
+     * @throws ReflectionException
      */
     public function google(): ResponseInterface {
         $googleClient = new Google_Client();
@@ -121,7 +127,7 @@ class Auth extends ResourceController {
             $user->auth_type = AUTH_TYPE_GOOGLE;
             $user->locale    = $googleUser->getLocale() === 'ru' ? 'ru' : 'en';
             $user->avatar    = $avatar;
-            $userData->level = 1;
+            $user->level     = 1;
 
             $userModel->insert($user);
             log_message('error', 'New user registered via Google');
@@ -137,13 +143,20 @@ class Auth extends ResourceController {
             return $this->failValidationErrors('You have a different authorization type set to Google');
         }
 
-        // Authorize the user
-        return $this->getJWTForUser($userData);
+        $session = new SessionLibrary();
+        $session->authorization($userData);
+
+        return $this->respond([
+            'auth'  => $session->isAuth,
+            'user'  => $session->user,
+            'token' => generateAuthToken($session->user->email),
+        ]);
     }
 
     /**
      * Authenticate Existing User
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function login(): ResponseInterface {
         $rules = [
@@ -163,56 +176,33 @@ class Auth extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
+        $session   = new SessionLibrary();
         $userModel = new UsersModel();
         $userData  = $userModel->findUserByEmailAddress($input['email']);
+        $session->authorization($userData);
 
-        return $this->getJWTForUser($userData);
+        return $this->respond([
+            'auth'  => $session->isAuth,
+            'user'  => $session->user,
+            'token' => generateAuthToken($session->user->email),
+        ]);
     }
 
     /**
      * @throws Exception
      */
     public function me(): ResponseInterface {
-        $authenticationHeader = $this->request->getServer('HTTP_AUTHORIZATION');
+        $session = new SessionLibrary();
+        $session->update();
 
-        try {
-            helper('jwt');
+        $response = (object) ['auth' => $session->isAuth];
 
-            $userData = validateJWTFromRequest($authenticationHeader);
-
-            return $this->getJWTForUser($userData);
-
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failUnauthorized();
+        if ($session->isAuth && $session->user) {
+            $response->user  = $session->user;
+            $response->token = generateAuthToken($session->user->email);
         }
-    }
 
-    /**
-     * @param User $userData
-     * @return ResponseInterface
-     */
-    private function getJWTForUser(User $userData): ResponseInterface {
-        try {
-            helper('jwt');
-
-            $session = new Session();
-            $session->update($userData->id);
-
-            unset($userData->password);
-
-            return $this->respond([
-                'auth'  => true,
-                'user'  => $userData,
-                'token' => getSignedJWTForUser($userData->email)
-            ]);
-
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->fail(['error' => $e->getMessage()], ResponseInterface::HTTP_OK);
-        }
+        return $this->respond($response);
     }
 
     /**

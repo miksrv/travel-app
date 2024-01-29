@@ -7,14 +7,14 @@ class UserActivity {
     private UsersActivityModel $usersActivityModel;
 
     private UserLevels $userLevels;
-    private Session $session;
+    private SessionLibrary $session;
 
     protected array $types = ['photo', 'place', 'rating', 'edit'];
 
     public function __construct() {
         $this->usersActivityModel = new UsersActivityModel();
         $this->userLevels = new UserLevels();
-        $this->session    = new Session();
+        $this->session    = new SessionLibrary();
     }
 
     /**
@@ -24,7 +24,7 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function photo($photoId, $placeId): bool {
-        return $this->_add('photo', $this->session->userId, $photoId, $placeId);
+        return $this->_add('photo', $this->session->user?->id, $photoId, $placeId);
     }
 
     /**
@@ -33,11 +33,11 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function place($placeId): bool {
-        return $this->_add('place', $this->session->userId, null, $placeId);
+        return $this->_add('place', $this->session->user?->id, null, $placeId);
     }
 
     public function edit($placeId): bool {
-        return $this->_add('edit', $this->session->userId, null, $placeId);
+        return $this->_add('edit', $this->session->user?->id, null, $placeId);
     }
 
     /**
@@ -47,7 +47,7 @@ class UserActivity {
      * @throws ReflectionException
      */
     public function rating($placeId, $ratingId): bool {
-        return $this->_add('rating', $this->session->userId, null, $placeId, $ratingId);
+        return $this->_add('rating', $this->session->user?->id, null, $placeId, $ratingId);
     }
 
     /**
@@ -84,7 +84,7 @@ class UserActivity {
             $this->session->update();
             $this->userLevels->experience(
                 $type,
-                $this->session->userId,
+                $this->session->user?->id,
                 $type === 'photo' ? $photoId : ($type === 'rating' ? $ratingId : $placeId)
             );
 

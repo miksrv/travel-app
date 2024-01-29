@@ -18,6 +18,7 @@ class SessionsModel extends Model {
         'user_agent',
         'lat',
         'lon',
+        'updated_at',
     ];
 
     protected $useTimestamps = true;

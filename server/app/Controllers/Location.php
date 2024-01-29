@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\Geocoder;
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Models\LocationCitiesModel;
 use App\Models\LocationCountriesModel;
 use App\Models\LocationDistrictsModel;
@@ -23,7 +23,7 @@ class Location extends ResourceController {
         $lon = (float) $input->lon;
 
         if ($lat && $lon) {
-            $session = new Session();
+            $session = new SessionLibrary();
             $session->updateLocation($lat, $lon);
         }
 

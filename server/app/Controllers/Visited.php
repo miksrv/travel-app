@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Models\PlacesModel;
 use App\Models\UsersVisitedPlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -30,7 +30,7 @@ class Visited extends ResourceController {
      */
     public function set(): ResponseInterface {
         $input   = $this->request->getJSON();
-        $session = new Session();
+        $session = new SessionLibrary();
 
         if (!$session->isAuth) {
             return $this->failUnauthorized();
@@ -41,7 +41,7 @@ class Visited extends ResourceController {
         }
 
         try {
-            $insertData   = ['user_id' => $session->userId, 'place_id' => $input->place];
+            $insertData   = ['user_id' => $session->user?->id, 'place_id' => $input->place];
             $visitedModel = new UsersVisitedPlacesModel();
             $visitedData  = $visitedModel->where($insertData)->first();
             $placesModel  = new PlacesModel();

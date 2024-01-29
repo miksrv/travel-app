@@ -1,7 +1,7 @@
 <?php namespace Config;
 
-use App\Filters\Cors;
-use App\Filters\JWTAuthenticationFilter;
+use App\Filters\CorsFilter;
+use App\Filters\AuthenticationFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -20,8 +20,8 @@ class Filters extends BaseConfig {
         'honeypot'      => Honeypot::class,
         'invalidchars'  => InvalidChars::class,
         'secureheaders' => SecureHeaders::class,
-        'cors'          => Cors::class,
-        'auth'          => JWTAuthenticationFilter::class,
+        'cors'          => CorsFilter::class,
+//        'auth'          => AuthenticationFilter::class,
     ];
 
     /**
@@ -32,14 +32,16 @@ class Filters extends BaseConfig {
         'before' => [
             // 'honeypot',
             // 'csrf',
-            // 'invalidchars',
+            'invalidchars',
+            // 'auth',
             'cors'
         ],
         'after' => [
             // 'toolbar',
             // 'honeypot',
             // 'secureheaders',
-            'cors',
+            // 'auth',
+            // 'cors',
         ],
     ];
 

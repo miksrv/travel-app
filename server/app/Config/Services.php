@@ -31,6 +31,6 @@ class Services extends BaseService {
      * @return array|false|string
      */
     public static function getSecretKey(): bool|array|string {
-        return getenv('JWT_SECRET_KEY');
+        return getenv('auth.token.secret');
     }
 }

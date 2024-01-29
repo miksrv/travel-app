@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -10,11 +10,11 @@ class Notifications extends ResourceController {
      * @return ResponseInterface
      */
     public function list($id = null): ResponseInterface {
-        $session = new Session();
+        $session = new SessionLibrary();
 
         // The list of notifications is available only for the current user.
         // The user will not be able to view the list of notifications for another user.
-        if (!$session->isAuth || $session->userId !== $id) {
+        if (!$session->isAuth || $session->user?->id !== $id) {
             return $this->respond(['result' => false]);
         }
 

@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Session;
+use App\Libraries\SessionLibrary;
 use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
 use App\Models\PlacesModel;
@@ -12,13 +12,18 @@ use ReflectionException;
 
 class Rating extends ResourceController {
 
+    protected SessionLibrary $session;
+
+    public function __construct() {
+        $this->session = new SessionLibrary();
+    }
+
     /**
      * @param $id
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
         try {
-            $session     = new Session();
             $ratingModel = new RatingModel();
             $ratingData  = $ratingModel->select('value, session_id, user_id')->where(['place_id' => $id])->findAll();
             $response    = ['rating' => 0, 'count'  => 0];
@@ -30,7 +35,7 @@ class Rating extends ResourceController {
             $response['count'] = count($ratingData);
 
             foreach ($ratingData as $item) {
-                if ($item->session_id === $session->id || $item->user_id === $session?->userId) {
+                if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
                     $response['vote'] = $item->value;
                 }
 
@@ -60,7 +65,6 @@ class Rating extends ResourceController {
                 return $this->failValidationErrors('Not enough data to change the rating');
             }
 
-            $session     = new Session();
             $ratingModel = new RatingModel();
             $placesModel = new PlacesModel();
             $usersModel  = new UsersModel();
@@ -79,7 +83,7 @@ class Rating extends ResourceController {
             // Рассчитаем новую оценку для места
             if ($ratingData) {
                 foreach ($ratingData as $item) {
-                    if ($item->session_id === $session->id || $item->user_id === $session?->userId) {
+                    if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
                         $alreadyVoted = $item->id;
                     }
 
@@ -95,8 +99,8 @@ class Rating extends ResourceController {
             // Создаем новую модель рейтинга для сохранения
             $rating = new \App\Entities\Rating();
             $rating->place_id   = $input->place;
-            $rating->user_id    = $session->userId ?? null;
-            $rating->session_id = $session->id;
+            $rating->user_id    = $this->session->user?->id ?? null;
+            $rating->session_id = $this->session->id;
             $rating->value      = $inputRating;
 
             $usersModel->update($placesData->user_id, ['reputation' => $userRating, 'updated_at' => $usersData->updated_at]);
@@ -112,7 +116,7 @@ class Rating extends ResourceController {
             $ratingModel->insert($rating);
 
             /* ACTIVITY */
-            if ($session->isAuth) {
+            if ($this->session->isAuth) {
                 $userActivity = new UserActivity();
                 $userActivity->rating($placesData->id, $ratingModel->getInsertID());
             }
@@ -121,7 +125,7 @@ class Rating extends ResourceController {
             // If a user gives a rating to a material that is not his own,
             // we will send a notification to the author of the material about the change in the rating of his place
             $userNotify = new UserNotify();
-            if (!$session->isAuth || $placesData->user_id !== $session->userId) {
+            if (!$this->session->isAuth || $placesData->user_id !== $this->session->user?->id) {
                 $userNotify->rating($placesData->user_id, $placesData->id);
             }
 

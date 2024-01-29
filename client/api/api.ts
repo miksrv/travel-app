@@ -74,7 +74,7 @@ export const API = createApi({
         }),
 
         /* Controller: Auth */
-        authGetMe: builder.mutation<ApiTypes.ResponseAuthLogin, void>({
+        authGetMe: builder.query<ApiTypes.ResponseAuthLogin, void>({
             query: () => 'auth/me'
         }),
         authGoogleLogin: builder.mutation<

@@ -35,8 +35,10 @@ const AppBar: React.FC<HeaderProps> = ({
     const authorization = useAppSelector((state) => state.auth)
     const location = useAppSelector((state) => state.application.userLocation)
 
-    const [authGetMe, { data: meData, error }] = API.useAuthGetMeMutation()
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
+    const { data: meData, error } = API.useAuthGetMeQuery(undefined, {
+        pollingInterval: 60 * 1000
+    })
     const { data: randomPlace } = API.usePlacesGetRandomQuery(undefined, {
         skip: !!randomPlaceId
     })
@@ -50,17 +52,9 @@ const AppBar: React.FC<HeaderProps> = ({
         if (meData?.auth) {
             dispatch(login(meData))
         } else {
-            if (error) {
-                dispatch(logout())
-            }
+            dispatch(logout())
         }
     }, [meData, error])
-
-    useEffect(() => {
-        if (authorization.token) {
-            authGetMe()
-        }
-    }, [])
 
     useEffect(() => {
         const updateLat = round(geolocation?.latitude, 3)
