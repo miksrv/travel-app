@@ -10,7 +10,6 @@ interface PaginationProps {
 const Popout: React.FC<PaginationProps> = ({ action, children }) => {
     const popoutRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const options = ['Option 1', 'Option 2', 'Option 3']
 
     const toggleDropdown = (event: React.MouseEvent) => {
         event.stopPropagation()
@@ -54,16 +53,6 @@ const Popout: React.FC<PaginationProps> = ({ action, children }) => {
                     {children}
                 </div>
             )}
-
-            {/*{isOpen && (*/}
-            {/*    <ul className={styles.optionsList}>*/}
-            {/*        {options.map((option, index) => (*/}
-            {/*            <li key={index}>*/}
-            {/*                <button>{option}</button>*/}
-            {/*            </li>*/}
-            {/*        ))}*/}
-            {/*    </ul>*/}
-            {/*)}*/}
         </div>
     )
 }

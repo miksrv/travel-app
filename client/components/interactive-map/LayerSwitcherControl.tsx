@@ -20,6 +20,14 @@ const LayersOptions: MapLayerItem[] = [
     {
         label: 'Схема (OSM)',
         layer: 'OSM'
+    },
+    {
+        label: 'Карта (Google)',
+        layer: 'GoogleMap'
+    },
+    {
+        label: 'Спутник (Google)',
+        layer: 'GoogleSat'
     }
 ]
 

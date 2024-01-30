@@ -23,7 +23,7 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-export type MapLayersType = 'MabBox' | 'OSM'
+export type MapLayersType = 'MabBox' | 'OSM' | 'GoogleSat' | 'GoogleMap'
 
 export type MapPositionType = {
     lat: number
@@ -165,6 +165,22 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
                 {mapLayer === 'OSM' && (
                     <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+                )}
+                {mapLayer === 'GoogleMap' && (
+                    <ReactLeaflet.TileLayer
+                        attribution={'Google Maps'}
+                        url={
+                            'https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}'
+                        }
+                    />
+                )}
+                {mapLayer === 'GoogleSat' && (
+                    <ReactLeaflet.TileLayer
+                        attribution={'Google Maps Satellite'}
+                        url={
+                            'https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
+                        }
+                    />
                 )}
                 {places?.map((place) => (
                     <MarkerPoint
