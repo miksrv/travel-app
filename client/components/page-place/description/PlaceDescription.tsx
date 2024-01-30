@@ -28,7 +28,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [savePlace, { isLoading, data: saveData }] =
+    const [savePlace, { isLoading, data: saveData, isSuccess: saveSuccess }] =
         API.usePlacesPatchItemMutation()
 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
@@ -63,7 +63,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }
 
     useEffect(() => {
-        if (saveData?.status && editorMode) {
+        if (saveSuccess && editorMode) {
             setEditorMode(false)
             setLocalContent(saveData?.content)
             setLocalTags(saveData?.tags)

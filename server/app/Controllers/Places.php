@@ -367,6 +367,10 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function create(): ResponseInterface {
+        if (!$this->session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
         $input = $this->request->getJSON();
         $rules = [
             'title'    => 'required|min_length[8]|max_length[200]',
@@ -434,11 +438,21 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function update($id = null): ResponseInterface {
-        $locale  = $this->request->getLocale();
-        $input   = $this->request->getJSON();
-
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
+        }
+
+        $locale = $this->request->getLocale();
+        $input  = $this->request->getJSON();
+        $rules  = [
+            'title'    => 'if_exist|required|min_length[8]|max_length[200]',
+            'category' => 'if_exist|required|is_not_unique[category.name]',
+            'lat'      => 'if_exist|numeric|min_length[3]',
+            'lon'      => 'if_exist|numeric|min_length[3]',
+        ];
+
+        if (!$this->validateData((array) $input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
         }
 
         $placeTags    = new PlaceTags();
@@ -456,7 +470,6 @@ class Places extends ResourceController {
         $updatedTags    = $placeTags->saveTags($input->tags ?? [], $id);
         $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
         $updatedTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
-        $coordinates    = $input->coordinates ?? null;
 
         // Save place content
         if ($updatedContent || $updatedTitle) {
@@ -503,8 +516,8 @@ class Places extends ResourceController {
         $place = new Place();
         $place->updated_at = time();
 
-        $lat = isset($coordinates->lat) ? round($coordinates->lat, 6) : $placeData->lat;
-        $lon = isset($coordinates->lon) ? round($coordinates->lon, 6) : $placeData->lon;
+        $lat = isset($input->lat) ? round($input->lat, 6) : $placeData->lat;
+        $lon = isset($input->lon) ? round($input->lon, 6) : $placeData->lon;
 
         // Check and update coordinates, address and location
         if ($lat !== $placeData->lat || $lon !== $placeData->lon) {
@@ -524,7 +537,6 @@ class Places extends ResourceController {
         $placesModel->update($id, $place);
 
         return $this->respond((object) [
-            'status'  => true,
             'content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id),
             'tags'    => $updatedTags
         ]);

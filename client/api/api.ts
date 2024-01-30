@@ -234,7 +234,8 @@ export const API = createApi({
                 body: data,
                 method: 'PATCH',
                 url: `places/${data.id}`
-            })
+            }),
+            transformErrorResponse: (response) => response.data
         }),
         placesPostItem: builder.mutation<
             ApiTypes.ResponsePlacesPostItem,

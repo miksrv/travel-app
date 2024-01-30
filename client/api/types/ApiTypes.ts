@@ -132,7 +132,6 @@ export interface RequestPlacesPatchItem {
 }
 
 export interface ResponsePlacesPatchItem {
-    status: boolean
     content?: string
     tags?: Tag[]
 }

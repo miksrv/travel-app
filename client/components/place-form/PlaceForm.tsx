@@ -2,7 +2,6 @@ import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import { useRouter } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -17,7 +16,6 @@ import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
-import { validateEmail } from '@/functions/validators'
 
 import styles from './styles.module.sass'
 
@@ -55,9 +53,6 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
-
-    // const [updatePlace, { data: updatePlaceData, isLoading: updateLoading }] =
-    //     API.usePlacesPatchItemMutation()
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
@@ -113,32 +108,6 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         if (validateForm()) {
             onSubmit?.(formData)
         }
-        // const errors: PlaceFormErrors = {
-        //     category: !formData?.category
-        //         ? 'Выберите одну из категорий'
-        //         : undefined,
-        //     title: !formData?.title
-        //         ? 'Введите заголовок интересного места'
-        //         : undefined
-        // }
-        //
-        // setFormErrors(errors)
-        //
-        // if (!errors.title && !errors.category) {
-        //     if (!placeId) {
-        //         createPlace({ ...formData })
-        //     } else {
-        //         const title = formData?.title?.trim()
-        //         const content = formData?.content?.trim()
-        //
-        //         updatePlace({
-        //             ...formData,
-        //             content: content !== values?.content ? content : undefined,
-        //             id: placeId,
-        //             title: title !== values?.title ? title : undefined
-        //         })
-        //     }
-        // }
     }
 
     const categoryOptions = useMemo(

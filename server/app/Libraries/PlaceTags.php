@@ -2,6 +2,8 @@
 
 use App\Models\PlacesTagsModel;
 use App\Models\TagsModel;
+use Config\Services;
+use ReflectionException;
 
 class PlaceTags {
 
@@ -17,10 +19,10 @@ class PlaceTags {
      * @param array $tags
      * @param string $placeId
      * @return array
-     * @throws \ReflectionException
+     * @throws ReflectionException
      */
     public function saveTags(array $tags, string $placeId): array {
-        $locale     = $this->request->getLocale();
+        $locale     = Services::request()->getLocale();
         $returnTags = [];
 
         if (!$placeId || empty($tags)) {
