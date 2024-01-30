@@ -17,37 +17,35 @@ import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
+import { validateEmail } from '@/functions/validators'
 
 import styles from './styles.module.sass'
-
-interface PlaceFormProps {
-    placeId?: string
-    values?: PlaceFormState
-}
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-export type PlaceFormErrors = {
-    title?: string
-    category?: string
+interface PlaceFormProps {
+    placeId?: string
+    loading?: boolean
+    values?: ApiTypes.RequestPlacesPostItem
+    errors?: ApiTypes.RequestPlacesPostItem
+    onSubmit?: (formData?: ApiTypes.RequestPlacesPostItem) => void
+    onCancel?: () => void
 }
 
-export type PlaceFormState = {
-    title?: string
-    content?: string
-    category?: string
-    tags?: string[]
-    coordinates?: ApiTypes.LatLonCoordinate
-}
-
-const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
-    const router = useRouter()
-
+const PlaceForm: React.FC<PlaceFormProps> = ({
+    placeId,
+    loading,
+    values,
+    errors,
+    onSubmit,
+    onCancel
+}) => {
     const location = useAppSelector((state) => state.application.userLocation)
-    const [formData, setFormData] = useState<PlaceFormState>()
-    const [formErrors, setFormErrors] = useState<PlaceFormErrors>()
+    const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
+    const [formErrors, setFormErrors] =
+        useState<ApiTypes.RequestPlacesPostItem>()
     const [mapBounds, setMapBounds] = useState<string>()
 
     const { data: poiListData } = API.usePoiGetListQuery(
@@ -58,18 +56,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
         API.useTagsGetSearchMutation()
 
-    const [createPlace, { data: createPlaceData, isLoading: createLoading }] =
-        API.usePlacesPostItemMutation()
-
-    const [updatePlace, { data: updatePlaceData, isLoading: updateLoading }] =
-        API.usePlacesPatchItemMutation()
+    // const [updatePlace, { data: updatePlaceData, isLoading: updateLoading }] =
+    //     API.usePlacesPatchItemMutation()
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const handleChange = ({
         target: { name, value }
     }: React.ChangeEvent<HTMLInputElement>) => {
-        setFormData((prev) => ({ ...prev, [name]: value }))
+        setFormData({ ...formData, [name]: value })
     }
 
     const handleChangeCategory = (category?: DropdownOption) => {
@@ -79,18 +74,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
     const handleMapBounds = (bounds: LatLngBounds) => {
         const mapCenter = bounds.getCenter()
 
-        if (
-            !placeId ||
-            (placeId &&
-                formData?.coordinates?.lat &&
-                formData?.coordinates?.lon)
-        ) {
+        if (!placeId || (placeId && formData?.lat && formData?.lon)) {
             setFormData({
                 ...formData,
-                coordinates: {
-                    lat: mapCenter.lat,
-                    lon: mapCenter.lng
-                }
+                lat: mapCenter.lat,
+                lon: mapCenter.lng
             })
         }
 
@@ -105,39 +93,52 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
         setFormData({ ...formData, content: text || '' })
     }
 
-    useEffect(() => {
-        if (values) {
-            setFormData(values)
-        }
-    }, [placeId])
+    const validateForm = useCallback(() => {
+        const errors: ApiTypes.RequestPlacesPostItem = {}
 
-    const handleSubmit = () => {
-        const errors: PlaceFormErrors = {
-            category: !formData?.category
-                ? 'Выберите одну из категорий'
-                : undefined,
-            title: !formData?.title
-                ? 'Введите заголовок интересного места'
-                : undefined
+        if (!formData?.title) {
+            errors.title = 'Title is required'
+        }
+
+        if (!formData?.category) {
+            errors.category = 'Category is required'
         }
 
         setFormErrors(errors)
 
-        if (!errors.title && !errors.category) {
-            if (!placeId) {
-                createPlace({ ...formData })
-            } else {
-                const title = formData?.title?.trim()
-                const content = formData?.content?.trim()
+        return !Object.keys(errors).length
+    }, [formData])
 
-                updatePlace({
-                    ...formData,
-                    content: content !== values?.content ? content : undefined,
-                    id: placeId,
-                    title: title !== values?.title ? title : undefined
-                })
-            }
+    const handleSubmit = () => {
+        if (validateForm()) {
+            onSubmit?.(formData)
         }
+        // const errors: PlaceFormErrors = {
+        //     category: !formData?.category
+        //         ? 'Выберите одну из категорий'
+        //         : undefined,
+        //     title: !formData?.title
+        //         ? 'Введите заголовок интересного места'
+        //         : undefined
+        // }
+        //
+        // setFormErrors(errors)
+        //
+        // if (!errors.title && !errors.category) {
+        //     if (!placeId) {
+        //         createPlace({ ...formData })
+        //     } else {
+        //         const title = formData?.title?.trim()
+        //         const content = formData?.content?.trim()
+        //
+        //         updatePlace({
+        //             ...formData,
+        //             content: content !== values?.content ? content : undefined,
+        //             id: placeId,
+        //             title: title !== values?.title ? title : undefined
+        //         })
+        //     }
+        // }
     }
 
     const categoryOptions = useMemo(
@@ -162,10 +163,14 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
     )
 
     useEffect(() => {
-        if (createPlaceData?.id) {
-            router.push(`/places/${createPlaceData.id}`)
+        if (values) {
+            setFormData(values)
         }
-    }, [createPlaceData])
+    }, [placeId])
+
+    useEffect(() => {
+        setFormErrors(errors)
+    }, [errors])
 
     return (
         <section className={styles.component}>
@@ -182,6 +187,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                     name={'title'}
                     label={'Заголовок интересного места'}
                     placeholder={'Введите заголовок интересного места'}
+                    disabled={loading}
                     value={formData?.title}
                     error={formErrors?.title}
                     onChange={handleChange}
@@ -193,6 +199,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                     clearable={true}
                     label={'Категория интересного места'}
                     placeholder={'Выберите категорию'}
+                    disabled={loading}
                     error={formErrors?.category}
                     value={selectedCategory}
                     options={categoryOptions}
@@ -204,6 +211,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                 <ChipsSelect
                     label={'Выберите или добавьте метки интересного места'}
                     placeholder={''}
+                    disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}
                     options={searchResult?.items}
@@ -224,16 +232,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                 )}
                 <InteractiveMap
                     enableSearch={true}
+                    enableLayersSwitcher={true}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
-                    center={
-                        placeId
-                            ? [
-                                  values?.coordinates?.lat!,
-                                  values?.coordinates?.lon!
-                              ]
-                            : undefined
-                    }
+                    center={placeId ? [values?.lat!, values?.lon!] : undefined}
                     userLatLon={location}
                     onChangeBounds={handleMapBounds}
                 />
@@ -247,13 +249,23 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, values }) => {
                 />
             </div>
 
-            <div className={styles.formButtons}>
+            <div className={styles.actions}>
                 <Button
-                    mode={'primary'}
                     size={'m'}
+                    mode={'primary'}
+                    disabled={loading}
                     onClick={handleSubmit}
                 >
                     {'Сохранить'}
+                </Button>
+
+                <Button
+                    size={'m'}
+                    mode={'secondary'}
+                    disabled={loading}
+                    onClick={onCancel}
+                >
+                    {'Отмена'}
                 </Button>
             </div>
         </section>

@@ -245,7 +245,8 @@ export const API = createApi({
                 body: data,
                 method: 'POST',
                 url: 'places'
-            })
+            }),
+            transformErrorResponse: (response) => response.data
         }),
 
         /* Controller: POI */

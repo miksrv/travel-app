@@ -367,7 +367,17 @@ class Places extends ResourceController {
      * @throws Exception
      */
     public function create(): ResponseInterface {
-        $input   = $this->request->getJSON();
+        $input = $this->request->getJSON();
+        $rules = [
+            'title'    => 'required|min_length[8]|max_length[200]',
+            'category' => 'required|is_not_unique[category.name]',
+            'lat'      => 'numeric|min_length[3]',
+            'lon'      => 'numeric|min_length[3]',
+        ];
+
+        if (!$this->validateData((array) $input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
 
         $placeTags    = new PlaceTags();
         $placesModel  = new PlacesModel();
@@ -376,13 +386,13 @@ class Places extends ResourceController {
         $geocoder = new Geocoder();
         $place    = new \App\Entities\Place();
 
-        $geocoder->coordinates($input->coordinates->lat, $input->coordinates->lon);
+        $geocoder->coordinates($input->lat, $input->lon);
 
         $placeTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
         $placeContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
 
-        $place->lat         = $input->coordinates->lat;
-        $place->lon         = $input->coordinates->lon;
+        $place->lat         = $input->lat;
+        $place->lon         = $input->lon;
         $place->user_id     = $this->session->user?->id;
         $place->category    = $input->category;
         $place->address_en  = $geocoder->addressEn;

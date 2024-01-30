@@ -59,7 +59,7 @@ export type LocationTypes = 'country' | 'region' | 'district' | 'city'
 export interface ApiResponseError<T> {
     status: number
     error: number
-    messages: Record<keyof T, string>
+    messages: Record<keyof T, any>
 }
 
 /**
@@ -142,7 +142,8 @@ export interface RequestPlacesPostItem {
     content?: string
     category?: string
     tags?: string[]
-    coordinates?: LatLonCoordinate
+    lat?: number
+    lon?: number
 }
 
 export interface ResponsePlacesPostItem {

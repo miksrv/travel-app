@@ -2,17 +2,17 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
 
+import { API, isApiValidationErrors } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
-
-const PAGE_TITLE = 'Добавить интересное место'
 
 interface CreatePlacePageProps {}
 
@@ -20,17 +20,42 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
+    const [createPlace, { data, error, isLoading, isSuccess }] =
+        API.usePlacesPostItemMutation()
+
+    const validationErrors = useMemo(
+        () =>
+            isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error)
+                ? error?.messages
+                : undefined,
+        [error]
+    )
+
+    const handleCancel = () => {
+        router.back()
+    }
+
+    const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
+        createPlace(formData as ApiTypes.RequestPlacesPostItem)
+    }
+
     useEffect(() => {
         if (!authSlice?.isAuth) {
             router.push('/login')
         }
     }, [])
 
+    useEffect(() => {
+        if (data?.id && isSuccess) {
+            router.push(`/places/${data.id}`)
+        }
+    }, [isSuccess, data])
+
     return (
         <AppLayout>
-            <NextSeo title={PAGE_TITLE} />
+            <NextSeo title={'Добавить интересное место'} />
             <Header
-                title={PAGE_TITLE}
+                title={'Добавить интересное место'}
                 currentPage={'Добавить новое'}
                 links={[
                     {
@@ -40,7 +65,12 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                 ]}
             />
             <Container>
-                <PlaceForm />
+                <PlaceForm
+                    loading={isLoading || isSuccess}
+                    errors={validationErrors}
+                    onSubmit={handleSubmit}
+                    onCancel={handleCancel}
+                />
             </Container>
         </AppLayout>
     )
