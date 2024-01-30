@@ -1,21 +1,19 @@
 'use client'
 
 import {
+    DiffSourceToggleWrapper,
     MDXEditor,
     type MDXEditorMethods,
     type MDXEditorProps,
+    UndoRedo,
+    diffSourcePlugin,
     headingsPlugin,
+    imagePlugin,
+    linkPlugin,
     listsPlugin,
     markdownShortcutPlugin,
     quotePlugin,
-    thematicBreakPlugin
-} from '@mdxeditor/editor'
-import {
-    DiffSourceToggleWrapper,
-    UndoRedo,
-    diffSourcePlugin,
-    imagePlugin,
-    linkPlugin,
+    thematicBreakPlugin,
     toolbarPlugin
 } from '@mdxeditor/editor'
 import type { ForwardedRef } from 'react'

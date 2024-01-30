@@ -7,7 +7,6 @@ export const ACCESS_TOKEN_KEY = 'authToken'
 
 type AuthStateProps = {
     isAuth?: boolean
-    error?: any
     token?: string
     user?: User
 }

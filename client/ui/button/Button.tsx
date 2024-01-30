@@ -11,7 +11,6 @@ import styles from './styles.module.sass'
 interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
     className?: string
     link?: string
-    title?: string
     stretched?: boolean
     size?: 's' | 'm' | 'l'
     mode?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'link'
@@ -23,7 +22,6 @@ interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
 const Button: React.FC<ContainerProps> = ({
     className,
     link,
-    title,
     stretched,
     size,
     mode,

@@ -11,6 +11,8 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
+import AppAuthChecker from '@/components/app-auth-checker'
+
 // https://vkcom.github.io/VKUI/#/SplitLayout
 // https://vkcom.github.io/VKUI/6.0.0-beta.3/#/RichCell
 // https://setproduct.com/material-x
@@ -44,6 +46,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             </Head>
             <Provider store={store}>
+                <AppAuthChecker />
                 <Component {...pageProps} />
             </Provider>
         </>

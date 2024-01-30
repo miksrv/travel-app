@@ -8,7 +8,7 @@ import Popout from '@/ui/popout'
 
 import { API } from '@/api/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
-import { login, logout } from '@/api/authSlice'
+import { logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
@@ -37,9 +37,7 @@ const AppBar: React.FC<HeaderProps> = ({
     const location = useAppSelector((state) => state.application.userLocation)
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
-    const { data: meData, error } = API.useAuthGetMeQuery(undefined, {
-        pollingInterval: 60 * 1000
-    })
+
     const { data: randomPlace } = API.usePlacesGetRandomQuery(undefined, {
         skip: !!randomPlaceId
     })
@@ -53,14 +51,6 @@ const AppBar: React.FC<HeaderProps> = ({
         event.preventDefault()
         dispatch(logout())
     }
-
-    useEffect(() => {
-        if (meData?.auth) {
-            dispatch(login(meData))
-        } else {
-            dispatch(logout())
-        }
-    }, [meData, error])
 
     useEffect(() => {
         const updateLat = round(geolocation?.latitude, 3)
