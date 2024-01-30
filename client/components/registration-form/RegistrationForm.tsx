@@ -75,6 +75,12 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         }
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit()
+        }
+    }
+
     useEffect(() => {
         setFormErrors(errors)
     }, [errors])
@@ -96,6 +102,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     value={formData?.name}
                     error={formErrors?.name}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>
@@ -107,6 +114,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     value={formData?.email}
                     error={formErrors?.email}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>
@@ -119,6 +127,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     value={formData?.password}
                     error={formErrors?.password}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>
@@ -131,6 +140,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     value={formData?.repeat_password}
                     error={formErrors?.repeat_password}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>

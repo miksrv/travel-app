@@ -72,6 +72,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         }
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleLoginButton()
+        }
+    }
+
     const loadingForm = isSuccess || isLoading || loading
 
     useEffect(() => {
@@ -116,6 +122,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
                     name={'email'}
                     error={formErrors?.email}
                     disabled={loadingForm}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>
@@ -127,6 +134,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
                     type={'password'}
                     error={formErrors?.password}
                     disabled={loadingForm}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>

@@ -116,6 +116,12 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         }
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleSubmit()
+        }
+    }
+
     const categoryOptions = useMemo(
         () =>
             categoryData?.items?.map((item) => ({
@@ -167,6 +173,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     disabled={loading}
                     value={formData?.title}
                     error={formErrors?.title}
+                    onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
             </div>

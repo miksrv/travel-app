@@ -5,6 +5,7 @@ import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { useAppSelector, wrapper } from '@/api/store'
@@ -40,7 +41,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     }
 
     useEffect(() => {
-        if (!authSlice?.isAuth) {
+        if (authSlice?.isAuth === false) {
             router.push('/login')
         }
     }, [])
@@ -65,6 +66,8 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                 ]}
             />
             <Container>
+                {!authSlice?.isAuth && <ScreenSpinner />}
+
                 <PlaceForm
                     loading={isLoading || isSuccess}
                     errors={validationErrors}
