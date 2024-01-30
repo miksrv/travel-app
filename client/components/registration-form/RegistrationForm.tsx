@@ -39,10 +39,6 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             errors.name = 'Name is required'
         }
 
-        if (!formData?.email) {
-            errors.email = 'Email is required'
-        }
-
         if (!validateEmail(formData?.email)) {
             errors.email = 'Email is invalid'
         }
