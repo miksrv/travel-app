@@ -10,6 +10,7 @@ import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
@@ -69,7 +70,12 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     const handleMapBounds = (bounds: LatLngBounds) => {
         const mapCenter = bounds.getCenter()
 
-        if (!placeId || (placeId && formData?.lat && formData?.lon)) {
+        if (
+            !placeId ||
+            (placeId &&
+                (formData?.lat || formData?.lat === 0) &&
+                (formData?.lon || formData?.lon === 0))
+        ) {
             setFormData({
                 ...formData,
                 lat: mapCenter.lat,
@@ -143,11 +149,13 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
     return (
         <section className={styles.component}>
-            {(formErrors?.title || formErrors?.category) && (
+            {loading && <ScreenSpinner />}
+
+            {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
                     title={'Исправте ошибки'}
-                    list={[formErrors?.title || '', formErrors?.category || '']}
+                    list={Object.values(formErrors || {})}
                 />
             )}
 

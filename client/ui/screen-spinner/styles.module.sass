@@ -1,9 +1,22 @@
 @import ../../styles/variables
 @import ../../styles/animations
 
+.overlay
+  opacity: 1
+  height: 100%
+  width: 100%
+  z-index: 600
+  position: fixed
+  top: 0
+  left: 0
+
+
 .screenSpinner
-  margin: 18% auto 0
-  width: 350px
+  position: absolute
+  z-index: 605
+  //margin: 43.5% 43.5%
+  left: 43.8%
+  top: 43.8%
   background-color: #FFF
   border-radius: $borderRadius
   box-shadow: 0 0 8px rgba(0,0,0,.12),0 16px 16px rgba(0,0,0,.16)
@@ -13,12 +26,7 @@
   flex-wrap: wrap
 
   svg
-    margin: 40px 0 10px
+    margin: 30px
     width: 50px
     height: 50px
     animation: animation-spin 1s linear infinite
-
-  .text
-    width: 100%
-    text-align: center
-    margin: 20px 0 30px

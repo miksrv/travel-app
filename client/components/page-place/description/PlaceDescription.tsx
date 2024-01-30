@@ -6,6 +6,7 @@ import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
 import Container from '@/ui/container'
 import ContentEditor from '@/ui/content-editor'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -28,7 +29,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [savePlace, { isLoading, data: saveData, isSuccess: saveSuccess }] =
+    const [updatePlace, { data: saveData, isLoading, isSuccess }] =
         API.usePlacesPatchItemMutation()
 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] =
@@ -55,7 +56,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }
 
     const handleSaveEditorClick = async () => {
-        await savePlace({
+        await updatePlace({
             content: editorContent,
             id: placeId!,
             tags: editorTags
@@ -63,7 +64,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }
 
     useEffect(() => {
-        if (saveSuccess && editorMode) {
+        if (isSuccess && editorMode) {
             setEditorMode(false)
             setLocalContent(saveData?.content)
             setLocalTags(saveData?.tags)
@@ -108,6 +109,8 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                 )
             }
         >
+            {isLoading && <ScreenSpinner />}
+
             {isAuth && editorMode ? (
                 <ContentEditor
                     markdown={content || ''}
