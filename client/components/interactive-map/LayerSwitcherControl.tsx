@@ -28,6 +28,10 @@ const LayersOptions: MapLayerItem[] = [
     {
         label: 'Спутник (Google)',
         layer: 'GoogleSat'
+    },
+    {
+        label: 'Спутник (MapBox)',
+        layer: 'MapBoxSat'
     }
 ]
 

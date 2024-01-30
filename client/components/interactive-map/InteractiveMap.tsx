@@ -23,7 +23,12 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-export type MapLayersType = 'MabBox' | 'OSM' | 'GoogleSat' | 'GoogleMap'
+export type MapLayersType =
+    | 'MabBox'
+    | 'OSM'
+    | 'GoogleSat'
+    | 'GoogleMap'
+    | 'MapBoxSat'
 
 export type MapPositionType = {
     lat: number
@@ -180,6 +185,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                         url={
                             'https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
                         }
+                    />
+                )}
+                {mapLayer === 'MapBoxSat' && (
+                    <ReactLeaflet.TileLayer
+                        attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
+                        url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'
+                        accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />
                 )}
                 {places?.map((place) => (
