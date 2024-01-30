@@ -25,6 +25,7 @@ const AppLayout: React.FC<AppLayoutProps> = (props) => {
     const { randomPlaceId, fullSize, children } = props
 
     const dispatch = useAppDispatch()
+    const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
 
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
@@ -87,12 +88,21 @@ const AppLayout: React.FC<AppLayoutProps> = (props) => {
                     sidebarOpen ? styles.opened : styles.closed
                 )}
             >
-                <Menu onClick={handleCloseOverlay} />
+                <Menu
+                    type={'mobile'}
+                    userId={authSlice?.user?.id}
+                    isAuth={authSlice?.isAuth}
+                    onClick={handleCloseOverlay}
+                />
             </aside>
 
             <section className={styles.mainContainer}>
                 <aside className={styles.menubar}>
-                    <Menu />
+                    <Menu
+                        type={'desktop'}
+                        userId={authSlice?.user?.id}
+                        isAuth={authSlice?.isAuth}
+                    />
                     <LanguageSwitcher />
                     <Footer />
                 </aside>

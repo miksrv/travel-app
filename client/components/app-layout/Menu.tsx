@@ -4,8 +4,6 @@ import React from 'react'
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 
-import { useAppSelector } from '@/api/store'
-
 import styles from './styles.module.sass'
 
 export type MenuItemType = {
@@ -15,16 +13,17 @@ export type MenuItemType = {
 }
 
 interface MenuProps {
+    type?: 'mobile' | 'desktop'
+    userId?: string
+    isAuth?: boolean
     onClick?: () => void
 }
 
-const Menu: React.FC<MenuProps> = ({ onClick }) => {
-    const authSlice = useAppSelector((state) => state.auth)
-
+const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
     const menuItems: MenuItemType[] = [
         {
             icon: 'User',
-            link: authSlice.isAuth ? `/users/${authSlice?.user?.id}` : '/login',
+            link: isAuth ? `/users/${userId}` : '/login',
             text: 'Моя страница'
         },
         {
@@ -39,7 +38,7 @@ const Menu: React.FC<MenuProps> = ({ onClick }) => {
         },
         {
             icon: 'PlusCircle',
-            link: authSlice.isAuth ? '/places/create' : '/login',
+            link: isAuth ? '/places/create' : '/login',
             text: 'Добавить место'
         },
         {
@@ -52,7 +51,7 @@ const Menu: React.FC<MenuProps> = ({ onClick }) => {
     return (
         <menu className={styles.menu}>
             {menuItems.map((item) => (
-                <li key={item.link}>
+                <li key={`${type}${item.icon}`}>
                     <Link
                         href={item.link}
                         title={item.text}
