@@ -4,6 +4,7 @@ import useGeolocation from 'react-hook-geolocation'
 
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 
 import { API } from '@/api/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
@@ -46,6 +47,11 @@ const AppBar: React.FC<HeaderProps> = ({
     const handleLoginClick = (event: React.MouseEvent) => {
         event.preventDefault()
         dispatch(openAuthDialog())
+    }
+
+    const handleLogout = (event: React.MouseEvent) => {
+        event.preventDefault()
+        dispatch(logout())
     }
 
     useEffect(() => {
@@ -97,10 +103,35 @@ const AppBar: React.FC<HeaderProps> = ({
                 )}
                 <div className={styles.rightSection}>
                     {authorization.isAuth && authorization?.user ? (
-                        <UserAvatar
-                            user={authorization?.user}
-                            size={'medium'}
-                        />
+                        <Popout
+                            action={
+                                <UserAvatar
+                                    size={'medium'}
+                                    user={authorization?.user}
+                                    disableLink={true}
+                                />
+                            }
+                        >
+                            <ul className={styles.userMenu}>
+                                <li>
+                                    <Link
+                                        href={`/users/${authorization?.user?.id}`}
+                                        title={''}
+                                    >
+                                        {'Профиль'}
+                                    </Link>
+                                </li>
+                                <li>
+                                    <Link
+                                        href={'/'}
+                                        title={''}
+                                        onClick={handleLogout}
+                                    >
+                                        {'Выход'}
+                                    </Link>
+                                </li>
+                            </ul>
+                        </Popout>
                     ) : (
                         <Button
                             link={'/login'}

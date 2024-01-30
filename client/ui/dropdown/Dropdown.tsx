@@ -41,11 +41,11 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
         onOpen
     } = props
 
+    const dropdownRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOption | undefined
     >(undefined)
-    const dropdownRef = useRef<HTMLDivElement>(null)
 
     const toggleDropdown = () => {
         if (onOpen) {

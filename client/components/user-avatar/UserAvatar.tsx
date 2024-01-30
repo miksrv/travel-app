@@ -20,6 +20,7 @@ interface AvatarProps {
     caption?: string | React.ReactNode
     loading?: boolean
     showName?: boolean
+    disableLink?: boolean
 }
 
 const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : 20)
@@ -29,31 +30,30 @@ const UserAvatar: React.FC<AvatarProps> = ({
     user,
     size,
     caption,
-    showName
+    showName,
+    disableLink
 }) => (
     <div className={cn(styles.userAvatar, className)}>
         {user?.id ? (
-            <Link
-                className={styles.avatarLink}
-                href={`/users/${user.id}`}
-                title={`Профиль пользователя ${user?.name}`}
-            >
-                <Image
-                    alt={`Фото профиля пользователя ${user?.name}` || ''}
-                    className={styles.avatarImage}
-                    src={
-                        user?.avatar
-                            ? `${IMG_HOST}avatar/${user.avatar}`
-                            : defaultAvatar.src
-                    }
-                    width={getDimension(size)}
-                    height={getDimension(size)}
-                />
-                <div
-                    aria-hidden={true}
-                    className={styles.avatarBorder}
-                />
-            </Link>
+            disableLink ? (
+                <span className={styles.avatarLink}>
+                    <AvatarImage
+                        user={user}
+                        size={size}
+                    />
+                </span>
+            ) : (
+                <Link
+                    className={styles.avatarLink}
+                    href={`/users/${user.id}`}
+                    title={`Профиль пользователя ${user?.name}`}
+                >
+                    <AvatarImage
+                        user={user}
+                        size={size}
+                    />
+                </Link>
+            )
         ) : (
             <Image
                 alt={''}
@@ -80,6 +80,26 @@ const UserAvatar: React.FC<AvatarProps> = ({
             </div>
         )}
     </div>
+)
+
+const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
+    <>
+        <Image
+            alt={`Фото профиля пользователя ${user?.name}` || ''}
+            className={styles.avatarImage}
+            src={
+                user?.avatar
+                    ? `${IMG_HOST}avatar/${user.avatar}`
+                    : defaultAvatar.src
+            }
+            width={getDimension(size)}
+            height={getDimension(size)}
+        />
+        <div
+            aria-hidden={true}
+            className={styles.avatarBorder}
+        />
+    </>
 )
 
 export default UserAvatar

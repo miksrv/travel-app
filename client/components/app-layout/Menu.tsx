@@ -50,8 +50,8 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
 
     return (
         <menu className={styles.menu}>
-            {menuItems.map((item) => (
-                <li key={`${type}${item.icon}`}>
+            {menuItems.map((item, i) => (
+                <li key={`menu${type}${i}`}>
                     <Link
                         href={item.link}
                         title={item.text}
