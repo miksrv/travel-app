@@ -22,11 +22,6 @@ interface MenuProps {
 const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
     const menuItems: MenuItemType[] = [
         {
-            icon: 'User',
-            link: isAuth ? `/users/${userId}` : '/login',
-            text: 'Моя страница'
-        },
-        {
             icon: 'Map',
             link: '/',
             text: 'Карта интересных мест'
@@ -40,6 +35,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             icon: 'PlusCircle',
             link: isAuth ? '/places/create' : '/login',
             text: 'Добавить место'
+        },
+        {
+            icon: 'User',
+            link: isAuth ? `/users/${userId}` : '/login',
+            text: 'Моя страница'
         },
         {
             icon: 'Users',

@@ -231,172 +231,170 @@ class Places extends ResourceController {
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
 
-        try {
-            $distanceSelect = ($this->session->lon && $this->session->lat)
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
-                : '';
+        if (!$placeContent->title($id)) {
+            return $this->failNotFound();
+        }
 
-            $placesTagsModel = new PlacesTagsModel();
-            $photosModel = new PhotosModel();
-            $placesModel = new PlacesModel();
-            $placeData   = $placesModel
-                ->select(
-                    'places.*,  
+        $distanceSelect = ($this->session->lon && $this->session->lat)
+            ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
+            : '';
+
+        $placesTagsModel = new PlacesTagsModel();
+        $photosModel = new PhotosModel();
+        $placesModel = new PlacesModel();
+        $placeData   = $placesModel
+            ->select(
+                'places.*,  
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                     location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                     location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                     location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
                     location_cities.title_en as city_en, location_cities.title_ru as city_ru,
                     category.title_ru as category_ru, category.title_en as category_en' .
-                    $distanceSelect)
-                ->join('users', 'places.user_id = users.id', 'left')
-                ->join('category', 'places.category = category.name', 'left')
-                ->join('location_countries', 'location_countries.id = places.country_id', 'left')
-                ->join('location_regions', 'location_regions.id = places.region_id', 'left')
-                ->join('location_districts', 'location_districts.id = places.district_id', 'left')
-                ->join('location_cities', 'location_cities.id = places.city_id', 'left')
-                ->find($id);
+                $distanceSelect)
+            ->join('users', 'places.user_id = users.id', 'left')
+            ->join('category', 'places.category = category.name', 'left')
+            ->join('location_countries', 'location_countries.id = places.country_id', 'left')
+            ->join('location_regions', 'location_regions.id = places.region_id', 'left')
+            ->join('location_districts', 'location_districts.id = places.district_id', 'left')
+            ->join('location_cities', 'location_cities.id = places.city_id', 'left')
+            ->find($id);
 
-            if (!$placeData) {
-                return $this->failNotFound();
-            }
-
-            // Find all place photos
-            $placeData->photo = $photosModel
-                ->select(
-                    'photos.user_id, photos.filename, photos.extension, photos.width, photos.place_id, 
-                    photos.height, photos.order, photos.title_ru, photos.created_at,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-                ->join('users', 'photos.user_id = users.id', 'left')
-                ->where(['place_id' => $placeData->id])
-                ->orderBy('photos.order', 'DESC')
-                ->findAll();
-
-            // Collect tags
-            $placeData->tags = $placesTagsModel
-                ->join('tags', 'tags.id = places_tags.tag_id')
-                ->where(['place_id' => $placeData->id])
-                ->findAll();
-
-            // Has the user already voted for this material or not?
-            $ratingModel = new RatingModel();
-            $ratingData  = $ratingModel
-                ->select('id')
-                ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
-                ->first();
-
-            $response = [
-                'id'        => $placeData->id,
-                'created'   => $placeData->created_at ?? null,
-                'updated'   => $placeData->updated_at ?? null,
-                'lat'       => (float) $placeData->lat,
-                'lon'       => (float) $placeData->lon,
-                'rating'    => (float) $placeData->rating,
-                'views'     => (int) $placeData->views,
-                'title'     => $placeContent->title($id),
-                'content'   => $placeContent->content($id),
-                'author'    => [
-                    'id'     => $placeData->user_id,
-                    'name'   => $placeData->user_name,
-                    'avatar' => $placeData->user_avatar
-                ],
-                'category'  => [
-                    'name'  => $placeData->category,
-                    'title' => $placeData->{"category_$locale"},
-                ],
-                'actions'   => [
-                    'rating' => !$ratingData,
-                ],
-                'address'   => [],
-            ];
-
-            if ($placeData->tags) {
-                $tagsTitles = [];
-
-                foreach ($placeData->tags as $tagItem) {
-                    $tagsTitles[] = [
-                        'id'    => $tagItem->id,
-                        'title' => $tagItem->{"title_$locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
-                    ];
-                }
-
-                $response['tags'] = $tagsTitles;
-            }
-
-            $response['address']['street'] = $placeData->{"address_$locale"};
-
-            if ($placeData->photo) {
-                $response['photoCount'] = count($placeData->photo);
-
-                $response['photo'] = [
-                    'filename'  => $placeData->photo[0]->filename,
-                    'extension' => $placeData->photo[0]->extension,
-                    'order'     => $placeData->photo[0]->order,
-                    'width'     => $placeData->photo[0]->width,
-                    'height'    => $placeData->photo[0]->height,
-                    'title'     => $placeData->photo[0]->title,
-                    'placeId'   => $placeData->photo[0]->place,
-                    'created'   => $placeData->photo[0]->created_at,
-                    'author'    => $placeData->photo[0]->user_id ? [
-                        'id'     => $placeData->photo[0]->user_id,
-                        'name'   => $placeData->photo[0]->user_name,
-                        'avatar' => $placeData->photo[0]->user_avatar,
-                    ] : null
-                ];
-            }
-
-            if ($this->session->lon && $this->session->lat) {
-                $response['distance'] = round((float) $placeData->distance, 1);
-            }
-
-            if ($placeData->country_id) {
-                $response['address']['country'] = [
-                    'id'    => $placeData->country_id,
-                    'title' => $placeData->{"country_$locale"}
-                ];
-            }
-
-            if ($placeData->region_id) {
-                $response['address']['region'] = [
-                    'id'    => $placeData->region_id,
-                    'title' => $placeData->{"region_$locale"}
-                ];
-            }
-
-            if ($placeData->district_id) {
-                $response['address']['district'] = [
-                    'id'    => $placeData->district_id,
-                    'title' => $placeData->{"district_$locale"}
-                ];
-            }
-
-            if ($placeData->city_id) {
-                $response['address']['city'] = [
-                    'id'    => $placeData->city_id,
-                    'title' => $placeData->{"city_$locale"}
-                ];
-            }
-
-            // Update view counts
-            $placesModel->update($placeData->id, [
-                'views'      => $placeData->views + 1,
-                'updated_at' => $placeData->updated_at
-            ]);
-
-            // Get random place ID
-            $placesData = $placesModel
-                ->select('id')
-                ->orderBy('id', 'RANDOM')
-                ->first();
-
-                    $response['randomId'] = $placesData->id;
-
-            return $this->respond((object) $response);
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
+        if (!$placeData) {
             return $this->failNotFound();
         }
+
+        // Find all place photos
+        $placeData->photo = $photosModel
+            ->select(
+                'photos.user_id, photos.filename, photos.extension, photos.width, photos.place_id, 
+                    photos.height, photos.order, photos.title_ru, photos.created_at,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
+            ->join('users', 'photos.user_id = users.id', 'left')
+            ->where(['place_id' => $placeData->id])
+            ->orderBy('photos.order', 'DESC')
+            ->findAll();
+
+        // Collect tags
+        $placeData->tags = $placesTagsModel
+            ->join('tags', 'tags.id = places_tags.tag_id')
+            ->where(['place_id' => $placeData->id])
+            ->findAll();
+
+        // Has the user already voted for this material or not?
+        $ratingModel = new RatingModel();
+        $ratingData  = $ratingModel
+            ->select('id')
+            ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
+            ->first();
+
+        $response = [
+            'id'        => $placeData->id,
+            'created'   => $placeData->created_at ?? null,
+            'updated'   => $placeData->updated_at ?? null,
+            'lat'       => (float) $placeData->lat,
+            'lon'       => (float) $placeData->lon,
+            'rating'    => (float) $placeData->rating,
+            'views'     => (int) $placeData->views,
+            'title'     => $placeContent->title($id),
+            'content'   => $placeContent->content($id),
+            'author'    => [
+                'id'     => $placeData->user_id,
+                'name'   => $placeData->user_name,
+                'avatar' => $placeData->user_avatar
+            ],
+            'category'  => [
+                'name'  => $placeData->category,
+                'title' => $placeData->{"category_$locale"},
+            ],
+            'actions'   => [
+                'rating' => !$ratingData,
+            ],
+            'address'   => [],
+        ];
+
+        if ($placeData->tags) {
+            $tagsTitles = [];
+
+            foreach ($placeData->tags as $tagItem) {
+                $tagsTitles[] = [
+                    'id'    => $tagItem->id,
+                    'title' => $tagItem->{"title_$locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
+                ];
+            }
+
+            $response['tags'] = $tagsTitles;
+        }
+
+        $response['address']['street'] = $placeData->{"address_$locale"};
+
+        if ($placeData->photo) {
+            $response['photoCount'] = count($placeData->photo);
+
+            $response['photo'] = [
+                'filename'  => $placeData->photo[0]->filename,
+                'extension' => $placeData->photo[0]->extension,
+                'order'     => $placeData->photo[0]->order,
+                'width'     => $placeData->photo[0]->width,
+                'height'    => $placeData->photo[0]->height,
+                'title'     => $placeData->photo[0]->title,
+                'placeId'   => $placeData->photo[0]->place,
+                'created'   => $placeData->photo[0]->created_at,
+                'author'    => $placeData->photo[0]->user_id ? [
+                    'id'     => $placeData->photo[0]->user_id,
+                    'name'   => $placeData->photo[0]->user_name,
+                    'avatar' => $placeData->photo[0]->user_avatar,
+                ] : null
+            ];
+        }
+
+        if ($this->session->lon && $this->session->lat) {
+            $response['distance'] = round((float) $placeData->distance, 1);
+        }
+
+        if ($placeData->country_id) {
+            $response['address']['country'] = [
+                'id'    => $placeData->country_id,
+                'title' => $placeData->{"country_$locale"}
+            ];
+        }
+
+        if ($placeData->region_id) {
+            $response['address']['region'] = [
+                'id'    => $placeData->region_id,
+                'title' => $placeData->{"region_$locale"}
+            ];
+        }
+
+        if ($placeData->district_id) {
+            $response['address']['district'] = [
+                'id'    => $placeData->district_id,
+                'title' => $placeData->{"district_$locale"}
+            ];
+        }
+
+        if ($placeData->city_id) {
+            $response['address']['city'] = [
+                'id'    => $placeData->city_id,
+                'title' => $placeData->{"city_$locale"}
+            ];
+        }
+
+        // Update view counts
+        $placesModel->update($placeData->id, [
+            'views'      => $placeData->views + 1,
+            'updated_at' => $placeData->updated_at
+        ]);
+
+        // Get random place ID
+        $placesData = $placesModel
+            ->select('id')
+            ->orderBy('id', 'RANDOM')
+            ->first();
+
+        $response['randomId'] = $placesData->id;
+
+        return $this->respond((object) $response);
     }
 
     /**

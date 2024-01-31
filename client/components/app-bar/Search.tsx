@@ -67,10 +67,10 @@ const Search: React.FC<SearchProps> = () => {
         <Autocomplete
             className={styles.search}
             placeholder={'Поиск...'}
+            leftIcon={'Search'}
             hideArrow={!options?.length || !searchString?.length}
             loading={isFetching}
             options={options}
-            leftIcon={'Search'}
             onSearch={handleSearchLocation}
             onSelect={handleSelectLocation}
         />
