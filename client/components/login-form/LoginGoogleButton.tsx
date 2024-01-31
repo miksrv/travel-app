@@ -34,7 +34,7 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
 
     const [returnPath, setReturnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
 
-    const [authLoginPost, { isLoading, data: authData }] =
+    const [authLoginPost, { data: authData, isLoading, isSuccess }] =
         API.useAuthGoogleLoginMutation()
 
     const handleLoginButton = () => {
@@ -53,8 +53,8 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
             onSuccessLogin?.()
 
             if (returnPath) {
-                setReturnPath('')
                 router.push(returnPath)
+                setReturnPath('')
             }
         }
     }, [authData])
@@ -69,8 +69,8 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
     }, [searchParams])
 
     useEffect(() => {
-        onLoading?.(isLoading)
-    }, [isLoading])
+        onLoading?.(isLoading || isSuccess)
+    }, [isLoading, isSuccess])
 
     return (
         <Button

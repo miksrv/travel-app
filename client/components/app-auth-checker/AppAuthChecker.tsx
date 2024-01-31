@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
-import { login, logout } from '@/api/authSlice'
+import { login, setAuth } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 
 const AppAuthChecker: React.FC = () => {
@@ -15,8 +15,8 @@ const AppAuthChecker: React.FC = () => {
         if (isSuccess) {
             if (meData?.auth === true) {
                 dispatch(login(meData))
-            } else {
-                dispatch(logout())
+            } else if (meData?.auth === false) {
+                dispatch(setAuth(false))
             }
         }
     }, [meData])

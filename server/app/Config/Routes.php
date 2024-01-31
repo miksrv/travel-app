@@ -9,6 +9,7 @@ $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce', 'Introduce');
 
 $routes->get('migration', 'Migrate::init');
+$routes->cli('migration', 'Migrate::init');
 
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');

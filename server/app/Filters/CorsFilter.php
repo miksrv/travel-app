@@ -26,9 +26,9 @@ class CorsFilter implements FilterInterface
         header("Access-Control-Allow-Headers: X-API-KEY, Origin,X-Requested-With, Content-Type, Accept, Access-Control-Requested-Method, Authorization, Locale");
         header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PATCH, PUT, DELETE");
 
-        $method = $_SERVER['REQUEST_METHOD'];
+        $method = $_SERVER['REQUEST_METHOD'] ?? null;
 
-        if ($method == "OPTIONS") {
+        if ($method === "OPTIONS") {
             die();
         }
     }

@@ -31,9 +31,10 @@ const authSlice = createSlice({
             state.isAuth = payload?.auth || false
 
             if (payload?.auth && !!payload?.token) {
+                console.log('auth', payload?.auth, payload?.token)
                 localStorage.setItem(ACCESS_TOKEN_KEY, payload?.token || '')
             } else {
-                localStorage.setItem(ACCESS_TOKEN_KEY, '')
+                localStorage.removeItem(ACCESS_TOKEN_KEY)
             }
         },
         logout: (state) => {
@@ -41,11 +42,19 @@ const authSlice = createSlice({
             state.user = undefined
             state.isAuth = false
 
-            localStorage.setItem(ACCESS_TOKEN_KEY, '')
+            localStorage.removeItem(ACCESS_TOKEN_KEY)
+        },
+        setAuth: (state, { payload }: PayloadAction<boolean>) => {
+            state.isAuth = payload
+
+            if (payload === false) {
+                state.token = undefined
+                state.user = undefined
+            }
         }
     }
 })
 
-export const { login, logout } = authSlice.actions
+export const { login, logout, setAuth } = authSlice.actions
 
 export default authSlice.reducer

@@ -20,15 +20,23 @@ use Config\Services;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 5);
+define('MAX_PLACES_PER_ITERATION', 20);
 
 set_time_limit(0);
+
+/**
+ * CLI:
+ * $: cd public
+ * $: php index.php migration
+ */
 
 class Migrate extends ResourceController {
     /**
      * @throws Exception|ReflectionException
      */
-    public function init(): ResponseInterface {
+    public function init(): void {
+        ob_start();
+
         $mapCategories = [
             1 => 'abandoned',     // Заброшенные
             2 => 'construction',  // Техногенные
@@ -286,12 +294,22 @@ class Migrate extends ResourceController {
 
             $inserted[] = $item->item_title;
 
+            echo count($inserted) . ": " . $item->item_title . PHP_EOL;
+
+            flush();
+            ob_flush();
+
             if (count($inserted) >= MAX_PLACES_PER_ITERATION) {
-                return $this->respond($inserted);
+                echo "COMPLETED" . PHP_EOL;
+                exit();
+//                return $this->respond($inserted);
             }
         }
 
-        return $this->respond($inserted);
+        ob_end_flush();
+
+        echo "COMPLETED" . PHP_EOL;
+//        return $this->respond($inserted);
     }
 
     /**
@@ -354,7 +372,6 @@ class Migrate extends ResourceController {
         $user->name       = $userMigrateData->user_name;
         $user->password   = $userMigrateData->user_password;
         $user->email      = $userMigrateData->user_email;
-        $user->level      = 0;
         $user->reputation = $userMigrateData->user_rating;
         $user->website    = $userMigrateData->user_website;
         $user->avatar     = $userMigrateData->user_avatar;

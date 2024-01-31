@@ -92,7 +92,7 @@ const AppBar: React.FC<HeaderProps> = ({
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    {authorization.isAuth && authorization?.user ? (
+                    {authorization.isAuth && authorization?.user && (
                         <Popout
                             action={
                                 <UserAvatar
@@ -122,7 +122,9 @@ const AppBar: React.FC<HeaderProps> = ({
                                 </li>
                             </ul>
                         </Popout>
-                    ) : (
+                    )}
+
+                    {authorization?.isAuth === false && (
                         <Button
                             link={'/login'}
                             title={'Авторизация на сайте'}

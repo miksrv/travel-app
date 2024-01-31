@@ -143,6 +143,12 @@ class Auth extends ResourceController {
             return $this->failValidationErrors('You have a different authorization type set to Google');
         }
 
+        if ($userData->type !== AUTH_TYPE_GOOGLE) {
+            $user = new User();
+            $user->auth_type = AUTH_TYPE_GOOGLE;
+            $userModel->update($userData->id, $user);
+        }
+
         $session = new SessionLibrary();
         $session->authorization($userData);
 

@@ -133,9 +133,9 @@ const InteractiveMap: React.FC<MapProps> = ({
                 coordinates?.lat &&
                 coordinates?.zoom
             ) {
-                mapRef.current?.setView(
-                    [coordinates.lat, coordinates.lon],
-                    coordinates.zoom
+                mapRef?.current?.setView(
+                    [coordinates?.lat, coordinates?.lon],
+                    coordinates?.zoom || DEFAULT_MAP_ZOOM
                 )
             }
 
@@ -150,7 +150,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 props.zoom || DEFAULT_MAP_ZOOM
             )
         }
-    }, [])
+    }, [props.center, props.zoom])
 
     return (
         <div className={styles.mapContainer}>
