@@ -74,6 +74,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         { skip: locationUnset }
     )
 
+    const [filterOpenTitle, setFilterOpenTitle] = useState<string>('')
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
 
@@ -116,6 +117,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         setFiltersOptionsOpen(false)
+        setFilterOpenTitle('')
 
         return await router.push('/places' + encodeQueryData(update))
     }
@@ -131,8 +133,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         return await router.push('/places' + encodeQueryData(filter))
     }
 
-    const handleOpenFilterOptions = () => {
+    const handleOpenFilterOptions = (filterTitle?: string) => {
         setFiltersOptionsOpen(true)
+        setFilterOpenTitle(filterTitle || '')
     }
 
     const handleChangeLocation = async (
@@ -210,6 +213,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
     const handleFiltersBackLink = () => {
         setFiltersOptionsOpen(false)
+        setFilterOpenTitle('')
     }
 
     return (
@@ -254,7 +258,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Dialog
                 contentHeight={'306px'}
-                header={'Фильтры'}
+                header={filterOpenTitle || 'Фильтры'}
                 open={filtersDialogOpen}
                 showBackLink={filtersOptionsOpen}
                 onBackClick={handleFiltersBackLink}

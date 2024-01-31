@@ -23,7 +23,7 @@ interface PlacesFilterPanelProps {
         key: keyof PlacesFilterType,
         value: string | number | undefined
     ) => void
-    onOpenOptions?: (open: boolean) => void
+    onOpenOptions?: (title?: string) => void
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
@@ -103,17 +103,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     }
 
     const handleOpenSort = () => {
-        onOpenOptions?.(true)
+        onOpenOptions?.('Сортировка')
         setOpenedOptions('sort')
     }
 
     const handleOpenOrder = () => {
-        onOpenOptions?.(true)
+        onOpenOptions?.('Порядок')
         setOpenedOptions('order')
     }
 
     const handleOpenOptionsCategory = () => {
-        onOpenOptions?.(true)
+        onOpenOptions?.('Категория')
         setOpenedOptions('category')
     }
 

@@ -40,6 +40,8 @@ class Auth extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
+        helper('auth');
+
         $userModel = new UsersModel();
         $user      = new User();
         $user->name      = $input['name'];
@@ -49,6 +51,10 @@ class Auth extends ResourceController {
         $user->level     = 1;
 
         $userModel->save($user);
+
+        $user->id = $userModel->getInsertID();
+
+        unset($user->password);
 
         $session = new SessionLibrary();
         $session->authorization($user);
