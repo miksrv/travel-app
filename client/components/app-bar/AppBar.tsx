@@ -82,9 +82,11 @@ const AppBar: React.FC<HeaderProps> = ({
                 >
                     <Icon name={'Menu'} />
                 </button>
+                <div className={styles.logo}>{'Местафика'}</div>
                 <Search />
                 {(randomPlaceId || randomPlace?.id) && (
                     <Link
+                        className={styles.iconButton}
                         href={`/places/${randomPlaceId ?? randomPlace?.id}`}
                         title={'Перейти на случайное место'}
                     >

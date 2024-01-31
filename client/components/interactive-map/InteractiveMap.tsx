@@ -161,6 +161,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 minZoom={6}
                 style={{ height: '100%', width: '100%' }}
                 attributionControl={false}
+                scrollWheelZoom={false}
                 ref={mapRef}
             >
                 {mapLayer === 'MabBox' && (

@@ -1,7 +1,9 @@
 import debounce from 'lodash-es/debounce'
+import Image, { StaticImageData } from 'next/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Icon from '@/ui/icon'
+import { IconTypes } from '@/ui/icon/types'
 import Spinner from '@/ui/spinner'
 
 import { concatClassNames as cn } from '@/functions/helpers'
@@ -12,6 +14,7 @@ type DropdownOption = {
     key: string | number
     value: string
     type?: string
+    image?: StaticImageData
     description?: string
 }
 
@@ -21,9 +24,11 @@ interface DropdownProps<T> {
     loading?: boolean
     disabled?: boolean
     clearable?: boolean
+    hideArrow?: boolean
     placeholder?: string
     label?: string
     value?: T
+    leftIcon?: IconTypes
     onSelect?: (option: T) => void
     onSearch?: (value: string) => void
 }
@@ -35,9 +40,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
         disabled,
         loading,
         clearable,
+        hideArrow,
         value,
         placeholder,
         label,
+        leftIcon,
         onSelect,
         onSearch
     } = props
@@ -141,6 +148,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                 )}
             >
                 <div className={styles.searchContainer}>
+                    {leftIcon && (
+                        <span className={styles.leftIcon}>
+                            <Icon name={leftIcon} />
+                        </span>
+                    )}
                     <input
                         type={'text'}
                         value={search || ''}
@@ -163,7 +175,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                             >
                                 <Icon name={'Close'} />
                             </button>
-                        ) : (
+                        ) : !hideArrow ? (
                             <button
                                 className={styles.toggleButton}
                                 type={'button'}
@@ -175,6 +187,8 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                                     <Icon name={'Down'} />
                                 )}
                             </button>
+                        ) : (
+                            <></>
                         )}
                     </span>
                 </div>
@@ -198,7 +212,18 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                                     onClick={() => handleSelect(option)}
                                     onMouseMove={(e) => e.stopPropagation()}
                                 >
-                                    <span>{option.value}</span>
+                                    <div className={styles.content}>
+                                        {option.image && (
+                                            <Image
+                                                className={styles.optionImage}
+                                                src={option.image.src}
+                                                alt={''}
+                                                width={22}
+                                                height={26}
+                                            />
+                                        )}
+                                        <span>{option.value}</span>
+                                    </div>
                                     {option?.description && (
                                         <div className={styles.description}>
                                             {option.description}

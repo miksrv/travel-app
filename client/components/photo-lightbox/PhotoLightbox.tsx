@@ -6,7 +6,7 @@ import { Photo, Poi } from '@/api/types'
 
 import UserAvatar from '@/components/user-avatar'
 
-import { formatDate } from '@/functions/helpers'
+// import { formatDate } from '@/functions/helpers'
 
 interface PhotoLightboxProps {
     photos?: Photo.Photo[] | Poi.Photo[]
@@ -53,9 +53,9 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                             <UserAvatar
                                 size={'medium'}
                                 user={photos[photoIndex]?.author}
-                                text={formatDate(
-                                    photos[photoIndex]?.created?.date
-                                )}
+                                // text={formatDate(
+                                //     photos[photoIndex]?.created?.date
+                                // )}
                             />
                         )
                     }

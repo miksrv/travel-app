@@ -77,7 +77,7 @@ const SearchControl: React.FC<SearchControl> = ({ onSelectResult }) => {
     return (
         <Autocomplete
             className={styles.searchControl}
-            placeholder={'Поиск на карте'}
+            placeholder={'Населенный пункт'}
             clearable={true}
             value={location}
             loading={isLoading}

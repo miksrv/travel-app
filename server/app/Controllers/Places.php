@@ -107,8 +107,17 @@ class Places extends ResourceController {
         $photosModel = new PhotosModel();
         $placesModel
             ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
+                places.country_id, places.region_id, places.district_id, places.city_id,
+                location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
+                location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
+                location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
+                location_cities.title_en as city_en, location_cities.title_ru as city_ru,
                 category.title_en as category_en, category.title_ru as category_ru' .
                 $distanceSelect)
+            ->join('location_countries', 'location_countries.id = places.country_id', 'left')
+            ->join('location_regions', 'location_regions.id = places.region_id', 'left')
+            ->join('location_districts', 'location_districts.id = places.district_id', 'left')
+            ->join('location_cities', 'location_cities.id = places.city_id', 'left')
             ->join('category', 'places.category = category.name', 'left');
 
         // If search or any other filter is not used, then we always use an empty array
@@ -161,6 +170,34 @@ class Places extends ResourceController {
 
             if ($distanceSelect && $place->distance) {
                 $return['distance'] = round((float) $place->distance, 1);
+            }
+
+            if ($place->country_id) {
+                $return['address']['country'] = [
+                    'id'    => (int) $place->country_id,
+                    'title' => $place->{"country_$locale"}
+                ];
+            }
+
+            if ($place->region_id) {
+                $return['address']['region'] = [
+                    'id'    => (int) $place->region_id,
+                    'title' => $place->{"region_$locale"}
+                ];
+            }
+
+            if ($place->district_id) {
+                $return['address']['district'] = [
+                    'id'    => (int) $place->district_id,
+                    'title' => $place->{"district_$locale"}
+                ];
+            }
+
+            if ($place->city_id) {
+                $return['address']['city'] = [
+                    'id'    => (int) $place->city_id,
+                    'title' => $place->{"city_$locale"}
+                ];
             }
 
             if ($photoId !== false && isset($photosData[$photoId])) {
