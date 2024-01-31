@@ -17,6 +17,7 @@ import AppAuthChecker from '@/components/app-auth-checker'
 // https://vkcom.github.io/VKUI/6.0.0-beta.3/#/RichCell
 // https://setproduct.com/material-x
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
+// https://www.tursar.ru/page-dop.php?c=1
 // https://account.travel/things-to-do/california
 // https://dtf.ru/life/2419947-dvachery-doveli-do-suicida-eshe-odnogo-niderlandah-sovershil-suicid-anton-babkin-antonina-babkina
 // https://www.earthcam.com/mapsearch/

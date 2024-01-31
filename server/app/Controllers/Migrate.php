@@ -18,23 +18,50 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use Geocoder\Exception\Exception;
+use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
 define('MAX_PLACES_PER_ITERATION', 20);
 
 set_time_limit(0);
 
-/**
- * CLI:
- * $: cd public
- * $: php index.php migration
- */
-
 class Migrate extends ResourceController {
+
     /**
+     * $: cd public
+     * $: php index.php migrate users
      * @throws Exception|ReflectionException
      */
-    public function init(): void {
+    #[NoReturn] public function users(): void {
+        ob_start();
+
+        $counter = 0;
+        $migrateUsers = new MigrateUsersModel();
+        $allUsersData = $migrateUsers->findAll();
+
+        foreach ($allUsersData as $user) {
+            $counter++;
+            $this->_migrate_user($user->user_id);
+
+            echo $counter . ': ' . $user->user_email . PHP_EOL;
+
+            flush();
+            ob_flush();
+        }
+
+        echo 'Migration Finished';
+
+        ob_end_flush();
+
+        exit();
+    }
+
+    /**
+     * $: cd public
+     * $: php index.php migrate places
+     * @throws Exception|ReflectionException
+     */
+    public function places(): void {
         ob_start();
 
         $mapCategories = [
@@ -360,13 +387,15 @@ class Migrate extends ResourceController {
             return $userData->id;
         }
 
-        $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
-        $avatarDirectory = UPLOAD_AVATARS;
-        if (!is_dir($avatarDirectory)) {
-            mkdir($avatarDirectory,0777, TRUE);
-        }
+        if ($userMigrateData->user_avatar) {
+            $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
+            $avatarDirectory = UPLOAD_AVATARS;
+            if (!is_dir($avatarDirectory)) {
+                mkdir($avatarDirectory,0777, TRUE);
+            }
 
-        file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
+            file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
+        }
 
         $user = new \App\Entities\User();
         $user->name       = $userMigrateData->user_name;

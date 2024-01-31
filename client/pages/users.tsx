@@ -44,7 +44,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
                 currentPage={currentPage}
                 totalPostCount={usersCount}
                 perPage={USERS_PER_PAGE}
-                linkPart={'places'}
+                linkPart={'users'}
             />
         </Container>
     </AppLayout>
