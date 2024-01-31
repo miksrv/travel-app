@@ -50,8 +50,7 @@ class Places extends ResourceController {
         $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
-
-        $locale  = $this->request->getLocale();
+        $locale = $this->request->getLocale();
         $bookmarksPlacesIds = [];
 
         // If filtering of interesting places by user bookmark is specified,
@@ -93,11 +92,15 @@ class Places extends ResourceController {
         }
 
         if ($lat && $lon) {
-            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$lon} - places.lon) * pi()/180 / 2), 2) )) AS distance";
+            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(($lat - abs(lat)) * pi()/180 / 2), 2) +  COS($lat * pi()/180 ) * COS(abs(lat) * pi()/180) *  POWER(SIN(($lon - lon) * pi()/180 / 2), 2) )) AS distance";
         } else {
             $distanceSelect = $this->session->lon && $this->session->lat
                 ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
                 : '';
+        }
+
+        if ($distanceSelect) {
+            $this->coordinatesAvailable = true;
         }
 
         $placesModel = new PlacesModel();
@@ -158,7 +161,6 @@ class Places extends ResourceController {
 
             if ($distanceSelect && $place->distance) {
                 $return['distance'] = round((float) $place->distance, 1);
-                $this->coordinatesAvailable = true;
             }
 
             if ($photoId !== false && isset($photosData[$photoId])) {
@@ -603,7 +605,6 @@ class Places extends ResourceController {
 
         if (in_array($sort, $sortingFields)) {
             $sort = $sort === 'updated_at' ? 'places.updated_at' : $sort;
-
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 

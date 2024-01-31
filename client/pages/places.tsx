@@ -104,6 +104,17 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined
         }
 
+        if (
+            (filter.category !== category ||
+                filter.country !== country ||
+                filter.district !== district ||
+                filter.region !== region ||
+                filter.city !== city) &&
+            currentPage !== 1
+        ) {
+            update.page = undefined
+        }
+
         setFiltersOptionsOpen(false)
 
         return await router.push('/places' + encodeQueryData(update))

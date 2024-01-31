@@ -46,6 +46,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => (
                     />
                     {user?.level?.title}
                     <Progress
+                        className={styles.progress}
                         value={nextLevelPercentage(
                             user?.level?.experience || 0,
                             user?.level?.nextLevel ||

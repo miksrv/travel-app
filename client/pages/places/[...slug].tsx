@@ -10,7 +10,7 @@ import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
 
-const NEAR_PLACES_COUNT = 3
+const NEAR_PLACES_COUNT = 6
 const PAGES = ['edit', undefined] as const
 
 type PageType = (typeof PAGES)[number]
