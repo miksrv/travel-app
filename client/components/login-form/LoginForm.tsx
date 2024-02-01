@@ -26,6 +26,7 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     const dispatch = useAppDispatch()
     const [loading, setLoading] = useState<boolean>(false)
+    const [localeError, setLocaleError] = useState<string>('')
     const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestAuthLogin>()
 
@@ -72,6 +73,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         }
     }
 
+    const handleGoogleError = () => {
+        setLocaleError(
+            'Ошибка авторизации в Google, пожалуйста попробуйте еще раз'
+        )
+    }
+
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             handleLoginButton()
@@ -96,6 +103,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     useEffect(() => {
         return () => {
             dispatch(closeAuthDialog())
+            setLocaleError('')
         }
     }, [])
 
@@ -103,10 +111,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         <div className={styles.loginForm}>
             <LoginGoogleButton
                 loading={loadingForm}
+                onErrorLogin={handleGoogleError}
                 onLoading={setLoading}
             />
 
             <hr />
+
+            {localeError && (
+                <Message
+                    type={'negative'}
+                    title={localeError}
+                />
+            )}
 
             {!!Object.values(formErrors || {})?.length && (
                 <Message

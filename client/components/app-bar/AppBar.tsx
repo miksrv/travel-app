@@ -12,6 +12,7 @@ import { logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
+import AppAuthChecker from '@/components/app-auth-checker'
 import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
@@ -74,6 +75,7 @@ const AppBar: React.FC<HeaderProps> = ({
 
     return (
         <header className={cn(styles.component, fullSize && styles.fullSize)}>
+            <AppAuthChecker />
             <div className={styles.wrapper}>
                 <button
                     className={styles.hamburgerButton}

@@ -47,7 +47,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             </Head>
             <Provider store={store}>
-                <AppAuthChecker />
                 <Component {...pageProps} />
             </Provider>
         </>

@@ -1,17 +1,15 @@
+'use client'
+
 import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
-import { login, setAuth } from '@/api/authSlice'
+import { login, logout } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 
 const AppAuthChecker: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const {
-        data: meData,
-        isSuccess,
-        error
-    } = API.useAuthGetMeQuery(undefined, {
+    const { data: meData, isSuccess } = API.useAuthGetMeQuery(undefined, {
         pollingInterval: 60 * 1000
     })
 
@@ -20,12 +18,10 @@ const AppAuthChecker: React.FC = () => {
             if (meData?.auth === true) {
                 dispatch(login(meData))
             } else if (meData?.auth === false) {
-                dispatch(setAuth(false))
+                dispatch(logout())
             }
         }
     }, [meData])
-
-    console.log('error', error)
 
     return <></>
 }

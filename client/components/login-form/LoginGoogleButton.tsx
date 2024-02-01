@@ -20,12 +20,14 @@ export const RETURN_PATH_KEY = 'returnPath'
 interface LoginFormProps {
     loading?: boolean
     onSuccessLogin?: () => void
+    onErrorLogin?: () => void
     onLoading?: (loading: boolean) => void
 }
 
 const LoginGoogleButton: React.FC<LoginFormProps> = ({
     loading,
     onSuccessLogin,
+    onErrorLogin,
     onLoading
 }) => {
     const dispatch = useAppDispatch()
@@ -34,7 +36,7 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
 
     const [returnPath, setReturnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
 
-    const [authLoginPost, { data: authData, isLoading, isSuccess }] =
+    const [authLoginPost, { data: authData, isLoading, isSuccess, isError }] =
         API.useAuthGoogleLoginMutation()
 
     const handleLoginButton = () => {
@@ -58,6 +60,12 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
             }
         }
     }, [authData])
+
+    useEffect(() => {
+        if (isError) {
+            onErrorLogin?.()
+        }
+    }, [isError])
 
     useEffect(() => {
         const code = searchParams.get('code')
