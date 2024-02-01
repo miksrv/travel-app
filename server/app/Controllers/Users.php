@@ -23,7 +23,7 @@ class Users extends ResourceController {
         $usersData  = $usersModel
             ->select(
                 'users.id, users.name, users.avatar, users.created_at, users.updated_at, users.level, 
-                users.experience, users.reputation, sessions.updated_at as user_activity')
+                users.experience, users.reputation, sessions.activity_at as user_activity')
             ->join('sessions', 'users.id = sessions.user_id', 'left')
             ->orderBy('user_activity, users.updated_at', 'DESC')
             ->findAll($limit, $offset);
@@ -73,7 +73,7 @@ class Users extends ResourceController {
         $usersData  = $usersModel
             ->select(
                 'users.id, users.name, users.avatar, users.created_at,  users.updated_at, users.level, 
-                users.website, users.experience, users.reputation, sessions.updated_at as user_activity')
+                users.website, users.experience, users.reputation, sessions.activity_at as user_activity')
             ->join('sessions', 'users.id = sessions.user_id', 'left')
             ->find($id);
 

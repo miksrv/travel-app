@@ -394,7 +394,13 @@ class Migrate extends ResourceController {
                 mkdir($avatarDirectory,0777, TRUE);
             }
 
-            file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, file_get_contents($userAvatarURL));
+            $avatarImage = @file_get_contents($userAvatarURL);
+
+           if ($avatarImage) {
+               file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, $avatarImage);
+           } else {
+               $userMigrateData->user_avatar = null;
+           }
         }
 
         $user = new \App\Entities\User();
