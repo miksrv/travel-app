@@ -15,11 +15,15 @@ function validateAuthToken(string $encodedToken = null):? User {
         return null;
     }
 
-    $userModel    = new UsersModel();
-    $secretKey    = Services::getSecretKey();
-    $decodedToken = JWT::decode($encodedToken, new Key($secretKey, 'HS256'));
+    try {
+        $userModel    = new UsersModel();
+        $secretKey    = Services::getSecretKey();
+        $decodedToken = JWT::decode($encodedToken, new Key($secretKey, 'HS256'));
 
-    return $userModel->findUserByEmailAddress($decodedToken->email);
+        return $userModel->findUserByEmailAddress($decodedToken->email);
+    } catch (\Throwable $e) {
+        return null;
+    }
 }
 
 /**

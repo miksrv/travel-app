@@ -7,7 +7,11 @@ import { useAppDispatch } from '@/api/store'
 const AppAuthChecker: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const { data: meData, isSuccess } = API.useAuthGetMeQuery(undefined, {
+    const {
+        data: meData,
+        isSuccess,
+        error
+    } = API.useAuthGetMeQuery(undefined, {
         pollingInterval: 60 * 1000
     })
 
@@ -20,6 +24,8 @@ const AppAuthChecker: React.FC = () => {
             }
         }
     }, [meData])
+
+    console.log('error', error)
 
     return <></>
 }
