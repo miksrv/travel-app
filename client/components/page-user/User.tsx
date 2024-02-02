@@ -1,4 +1,5 @@
 import { UserPageProps } from '@/pages/users/[...slug]'
+import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import React from 'react'
 
@@ -10,28 +11,34 @@ import UserHeader from '@/components/page-user/header'
 
 interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
 
-const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => (
-    <>
-        <NextSeo title={user?.name} />
+const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pageUser.user'
+    })
 
-        <UserHeader user={user} />
+    return (
+        <>
+            <NextSeo title={user?.name} />
 
-        <Container title={'Фотографии'}>
-            <UserGallery photos={photosList} />
+            <UserHeader user={user} />
 
-            {photosCount > 8 && (
-                <Button
-                    size={'m'}
-                    mode={'secondary'}
-                    stretched={true}
-                    link={`/users/${id}/photos`}
-                    style={{ marginTop: '15px' }}
-                >
-                    {'Показать все фотографии'}
-                </Button>
-            )}
-        </Container>
-    </>
-)
+            <Container title={t('title')}>
+                <UserGallery photos={photosList} />
+
+                {photosCount > 8 && (
+                    <Button
+                        size={'m'}
+                        mode={'secondary'}
+                        stretched={true}
+                        link={`/users/${id}/photos`}
+                        style={{ marginTop: '15px' }}
+                    >
+                        {t('buttonShowAllPhotos')}
+                    </Button>
+                )}
+            </Container>
+        </>
+    )
+}
 
 export default User

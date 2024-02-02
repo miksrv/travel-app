@@ -21,11 +21,8 @@ class Users extends ResourceController {
         $userLevels = new UserLevels();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select(
-                'users.id, users.name, users.avatar, users.created_at, users.updated_at, users.level, 
-                users.experience, users.reputation, sessions.activity_at as user_activity')
-            ->join('sessions', 'users.id = sessions.user_id', 'left')
-            ->orderBy('user_activity, users.updated_at', 'DESC')
+            ->select('id, name, avatar, created_at, activity_at, updated_at, level, experience, reputation')
+            ->orderBy('activity_at, updated_at', 'DESC')
             ->findAll($limit, $offset);
 
         $result = [];
@@ -51,7 +48,7 @@ class Users extends ResourceController {
                 ],
                 'reputation' => $item->reputation,
                 'created'    => $item->created_at,
-                'activity'   => $item->user_activity ? new \DateTime($item->user_activity) : null
+                'activity'   => $item->activity_at ? new \DateTime($item->activity_at) : null
             ];
         }
 
@@ -71,10 +68,7 @@ class Users extends ResourceController {
         $userLevels = new UserLevels();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
-            ->select(
-                'users.id, users.name, users.avatar, users.created_at,  users.updated_at, users.level, 
-                users.website, users.experience, users.reputation, sessions.activity_at as user_activity')
-            ->join('sessions', 'users.id = sessions.user_id', 'left')
+            ->select('id, name, avatar, created_at, updated_at, activity_at, level, website, experience, reputation')
             ->find($id);
 
         if (!$usersData) {
@@ -116,7 +110,7 @@ class Users extends ResourceController {
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,
             'updated'    => $usersData->updated_at,
-            'activity'   => $usersData->user_activity ? new \DateTime($usersData->user_activity) : null
+            'activity'   => $usersData->activity_at ? new \DateTime($usersData->activity_at) : null
         ];
 
         return $this->respond($result);

@@ -3,6 +3,7 @@
 use App\Entities\User;
 use App\Models\SessionsHistoryModel;
 use App\Models\SessionsModel;
+use App\Models\UsersModel;
 use Config\Services;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
@@ -73,6 +74,11 @@ class SessionLibrary {
      * @throws ReflectionException
      */
     public function update(): static {
+        if ($this->user) {
+            $usersModel = new UsersModel();
+            $usersModel->updateUserActivity($this->user->id);
+        }
+
         if ($this->id) {
             $updateSession = new \App\Entities\Session();
             $updateSession->updated_at = time();

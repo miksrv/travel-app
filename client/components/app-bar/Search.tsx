@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import { useRouter } from 'next/router'
 import React, { useMemo, useState } from 'react'
 
@@ -13,6 +14,9 @@ import styles from './styles.module.sass'
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
 const Search: React.FC<SearchProps> = () => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.appBar.search'
+    })
     const router = useRouter()
 
     const [searchString, setSearchString] = useState<string>('')
@@ -66,7 +70,7 @@ const Search: React.FC<SearchProps> = () => {
     return (
         <Autocomplete
             className={styles.search}
-            placeholder={'Поиск...'}
+            placeholder={t('placeholder')}
             leftIcon={'Search'}
             hideArrow={!options?.length || !searchString?.length}
             loading={isFetching}

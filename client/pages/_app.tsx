@@ -1,6 +1,7 @@
 import '@/styles/globals.sass'
 import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
+import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import { useTranslation } from 'next-i18next'
 import { appWithTranslation } from 'next-i18next'
@@ -10,8 +11,6 @@ import 'react-image-lightbox/style.css'
 import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
-
-import AppAuthChecker from '@/components/app-auth-checker'
 
 // https://vkcom.github.io/VKUI/#/SplitLayout
 // https://vkcom.github.io/VKUI/6.0.0-beta.3/#/RichCell
@@ -29,6 +28,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     const { store } = wrapper.useWrappedStore(pageProps)
 
     dayjs.extend(utc)
+    dayjs.extend(relativeTime)
     dayjs.locale(i18n?.language ?? 'ru')
 
     return (

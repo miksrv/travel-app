@@ -60,6 +60,9 @@ export const formatDate = (
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs.utc(date).local().format(format) : '')
 
+export const timeAgo = (date?: string | Date): string =>
+    date ? dayjs.utc(date).fromNow() : ''
+
 export const formatDateUTC = (date?: string | Date): string =>
     date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
 

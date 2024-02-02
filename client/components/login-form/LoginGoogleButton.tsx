@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import { useSearchParams } from 'next/navigation'
 import { useRouter } from 'next/router'
@@ -30,6 +31,10 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
     onErrorLogin,
     onLoading
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.loginForm.LoginGoogleButton'
+    })
+
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -95,7 +100,7 @@ const LoginGoogleButton: React.FC<LoginFormProps> = ({
                 height={16}
                 alt={''}
             />
-            {'Войти через Google'}
+            {t('buttonLogin')}
         </Button>
     )
 }

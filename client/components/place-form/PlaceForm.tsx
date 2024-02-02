@@ -1,5 +1,6 @@
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
+import { useTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
@@ -41,6 +42,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     onSubmit,
     onCancel
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.placeForm'
+    })
+
     const location = useAppSelector((state) => state.application.userLocation)
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] =
@@ -98,11 +103,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         const errors: ApiTypes.RequestPlacesPostItem = {}
 
         if (!formData?.title) {
-            errors.title = 'Title is required'
+            errors.title = t('errorTitle')
         }
 
         if (!formData?.category) {
-            errors.category = 'Category is required'
+            errors.category = t('errorCategory')
         }
 
         setFormErrors(errors)
@@ -168,8 +173,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <Input
                     name={'title'}
-                    label={'Заголовок интересного места'}
-                    placeholder={'Введите заголовок интересного места'}
+                    label={t('inputTitleLabel')}
+                    placeholder={t('inputTitlePlaceholder')}
                     disabled={loading}
                     value={formData?.title}
                     error={formErrors?.title}
@@ -181,8 +186,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <Dropdown
                     clearable={true}
-                    label={'Категория интересного места'}
-                    placeholder={'Выберите категорию'}
+                    label={t('inputCategoryLabel')}
+                    placeholder={t('inputCategoryPlaceholder')}
                     disabled={loading}
                     error={formErrors?.category}
                     value={selectedCategory}
@@ -193,7 +198,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
             <div className={styles.formElement}>
                 <ChipsSelect
-                    label={'Выберите или добавьте метки интересного места'}
+                    label={t('inputTagsLabel')}
                     placeholder={''}
                     disabled={loading}
                     value={formData?.tags}
@@ -226,7 +231,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             </div>
 
             <div className={styles.formElement}>
-                <label>{'Описание'}</label>
+                <label>{t('inputDescriptionLabel')}</label>
                 <ContentEditor
                     markdown={values?.content ?? formData?.content ?? ''}
                     onChange={handleContentChange}

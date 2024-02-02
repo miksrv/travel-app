@@ -2,7 +2,7 @@ import { SITE_NAME } from '@/pages/_app'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import Container from '@/ui/container'
 
@@ -19,12 +19,22 @@ import { formatDateUTC } from '@/functions/helpers'
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
-    const { t } = useTranslation('common', { keyPrefix: 'page.place' })
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.place'
+    })
 
     const { data: ratingData, isLoading: ratingLoading } =
         API.useRatingGetListQuery(place?.id!, {
             skip: !place?.id
         })
+
+    const nearPlacesDistance = useMemo(
+        () =>
+            Math.max(
+                ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
+            ),
+        [nearPlaces]
+    )
 
     return (
         <>
@@ -60,7 +70,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                 breadcrumbs={[
                     {
                         link: '/places/',
-                        text: t('breadcrumb')
+                        text: t('breadCrumbPlacesLink')
                     }
                 ]}
             />
@@ -83,12 +93,12 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
             />
 
             <Container>
-                <h2>{'Ближайшие места рядом'}</h2>
-                <div
-                    className={'headline'}
-                >{`Найдены несколько ближайших интересных мест в радиусе ${Math.max(
-                    ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
-                )} км`}</div>
+                <h2>{t('nearPlacesTitle')}</h2>
+                <div className={'headline'}>
+                    {t('nearPlacesDescription', {
+                        distance: nearPlacesDistance
+                    })}
+                </div>
             </Container>
             <PlacesList places={nearPlaces} />
         </>

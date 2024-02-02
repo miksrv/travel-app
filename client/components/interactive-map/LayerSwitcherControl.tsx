@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { useState } from 'react'
 
 import Button from '@/ui/button'
@@ -12,29 +13,6 @@ type MapLayerItem = {
     label: string
 }
 
-const LayersOptions: MapLayerItem[] = [
-    {
-        label: 'Схема (MabBox)',
-        layer: 'MabBox'
-    },
-    {
-        label: 'Схема (OSM)',
-        layer: 'OSM'
-    },
-    {
-        label: 'Карта (Google)',
-        layer: 'GoogleMap'
-    },
-    {
-        label: 'Спутник (Google)',
-        layer: 'GoogleSat'
-    },
-    {
-        label: 'Спутник (MapBox)',
-        layer: 'MapBoxSat'
-    }
-]
-
 interface LayerSwitcherControl {
     currentLayer?: MapLayersType
     onSwitchMapLayer?: (layer: MapLayersType) => void
@@ -45,6 +23,32 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControl> = ({
     onSwitchMapLayer
 }) => {
     const [open, setOpen] = useState<boolean>(false)
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.interactiveMap.layerSwitcher'
+    })
+
+    const LayersOptions: MapLayerItem[] = [
+        {
+            label: t('layerMapBox'),
+            layer: 'MabBox'
+        },
+        {
+            label: t('layerOSM'),
+            layer: 'OSM'
+        },
+        {
+            label: t('layerGoogleMap'),
+            layer: 'GoogleMap'
+        },
+        {
+            label: t('layerGoogleSat'),
+            layer: 'GoogleSat'
+        },
+        {
+            label: t('layerMapBoxSat'),
+            layer: 'MapBoxSat'
+        }
+    ]
 
     const handleToogleOpen = () => {
         setOpen(!open)

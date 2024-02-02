@@ -1,6 +1,9 @@
 <?php namespace App\Models;
 
 use App\Entities\User;
+use CodeIgniter\I18n\Time;
+use Exception;
+use ReflectionException;
 
 class UsersModel extends MyBaseModel {
     protected $table      = 'users';
@@ -25,6 +28,8 @@ class UsersModel extends MyBaseModel {
         'website',
         'reputation',
         'created_at',
+        'updated_at',
+        'activity_at',
     ];
 
     protected $useTimestamps = true;
@@ -89,5 +94,21 @@ class UsersModel extends MyBaseModel {
             ->select('id, name, avatar, email, password')
             ->where(['email' => $emailAddress])
             ->first();
+    }
+
+    /**
+     * @param string $userId
+     * @return void
+     * @throws ReflectionException
+     * @throws Exception
+     */
+    public function updateUserActivity(string $userId): void {
+        $userData = $this->select('updated_at')->find($userId);
+
+        $user = new User();
+        $user->updated_at  = $userData->updated_at;
+        $user->activity_at = Time::now();
+
+        $this->update($userId, $user);
     }
 }

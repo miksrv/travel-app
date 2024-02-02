@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
@@ -31,6 +32,7 @@ const AppBar: React.FC<HeaderProps> = ({
     fullSize,
     onMenuClick
 }) => {
+    const { t } = useTranslation('common', { keyPrefix: 'components.appBar' })
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
 
@@ -84,13 +86,13 @@ const AppBar: React.FC<HeaderProps> = ({
                 >
                     <Icon name={'Menu'} />
                 </button>
-                <div className={styles.logo}>{'Местафика'}</div>
+                <div className={styles.logo}>{t('logoTitle')}</div>
                 <Search />
                 {(randomPlaceId || randomPlace?.id) && (
                     <Link
                         className={styles.iconButton}
                         href={`/places/${randomPlaceId ?? randomPlace?.id}`}
-                        title={'Перейти на случайное место'}
+                        title={t('randomPlaceLinkTitle')}
                     >
                         <Icon name={'Question'} />
                     </Link>
@@ -110,9 +112,9 @@ const AppBar: React.FC<HeaderProps> = ({
                                 <li>
                                     <Link
                                         href={`/users/${authorization?.user?.id}`}
-                                        title={''}
+                                        title={t('userProfileTitle')}
                                     >
-                                        {'Профиль'}
+                                        {t('userProfileCaption')}
                                     </Link>
                                 </li>
                                 <li>
@@ -121,7 +123,7 @@ const AppBar: React.FC<HeaderProps> = ({
                                         title={''}
                                         onClick={handleLogout}
                                     >
-                                        {'Выход'}
+                                        {t('userLogout')}
                                     </Link>
                                 </li>
                             </ul>
@@ -131,11 +133,11 @@ const AppBar: React.FC<HeaderProps> = ({
                     {authorization?.isAuth === false && (
                         <Button
                             link={'/login'}
-                            title={'Авторизация на сайте'}
+                            title={t('userLoginTitle')}
                             mode={'secondary'}
                             onClick={handleLoginClick}
                         >
-                            {'Войти'}
+                            {t('userLoginCaption')}
                         </Button>
                     )}
                 </div>

@@ -66,6 +66,10 @@ class AddUsers extends Migration {
             ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
+            'activity_at' => [
+                'type' => 'DATETIME',
+                'null' => true
+            ],
             'deleted_at' => [
                 'type' => 'DATETIME',
                 'null' => true

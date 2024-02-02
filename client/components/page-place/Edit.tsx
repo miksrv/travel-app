@@ -1,4 +1,5 @@
 import { PlacePageProps } from '@/pages/places/[...slug]'
+import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
@@ -14,6 +15,10 @@ import PlaceForm from '@/components/place-form'
 interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Edit: React.FC<EditProps> = ({ place }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placePhotos'
+    })
+
     const router = useRouter()
 
     const [updatePlace, { error, isLoading, isSuccess }] =
@@ -63,16 +68,16 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     return (
         <>
-            <NextSeo title={`${place?.title} - Редактирование`} />
+            <NextSeo title={`${place?.title} - ${t('pageTitle')}`} />
 
             <Header
-                title={`${place?.title} - Редактирование`}
-                currentPage={'Редактирование'}
+                title={`${place?.title} - ${t('pageTitle')}`}
+                currentPage={t('breadCrumbCurrent')}
                 backLink={`/places/${place?.id}`}
                 links={[
                     {
                         link: '/places/',
-                        text: 'Интересные места'
+                        text: t('breadCrumbPlacesLink')
                     },
                     {
                         link: `/places/${place?.id}`,

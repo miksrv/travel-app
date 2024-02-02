@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -25,61 +26,69 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     actions,
     onPhotoClick,
     onPhotoRemoveClick
-}) => (
-    <ul className={styles.photoGallery}>
-        {!photos?.length && !uploadingPhotos?.length && (
-            <div className={styles.emptyList}>{'Нет фотографий'}</div>
-        )}
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.photoGallery'
+    })
 
-        {uploadingPhotos?.map((photo) => (
-            <li
-                key={photo}
-                className={styles.photoItem}
-            >
-                <div className={styles.loader}>
-                    <Spinner />
-                </div>
-                <Image
-                    src={photo}
-                    alt={''}
-                    width={200}
-                    height={150}
-                />
-            </li>
-        ))}
+    return (
+        <ul className={styles.photoGallery}>
+            {!photos?.length && !uploadingPhotos?.length && (
+                <div className={styles.emptyList}>{t('noPhotos')}</div>
+            )}
 
-        {photos?.map((photo, index) => (
-            <li
-                key={photo.filename}
-                className={styles.photoItem}
-            >
-                <Link
-                    className={styles.photoLink}
-                    href={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
-                    title={`${photo.title}. Посмотреть фото ${index + 1}`}
-                    onClick={(event) => {
-                        event.preventDefault()
-                        onPhotoClick?.(index)
-                    }}
+            {uploadingPhotos?.map((photo) => (
+                <li
+                    key={photo}
+                    className={styles.photoItem}
                 >
+                    <div className={styles.loader}>
+                        <Spinner />
+                    </div>
                     <Image
-                        src={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
-                        alt={`${photo.title}, фото ${index + 1}`}
+                        src={photo}
+                        alt={''}
                         width={200}
                         height={150}
                     />
-                </Link>
-                {actions?.find(({ id }) => id === photo.id)?.remove && (
-                    <button
-                        className={styles.removeButton}
-                        onClick={() => onPhotoRemoveClick?.(photo.id)}
+                </li>
+            ))}
+
+            {photos?.map((photo, index) => (
+                <li
+                    key={photo.filename}
+                    className={styles.photoItem}
+                >
+                    <Link
+                        className={styles.photoLink}
+                        href={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                        title={`${photo.title}. ${t('linkPhotoTitle')} ${
+                            index + 1
+                        }`}
+                        onClick={(event) => {
+                            event.preventDefault()
+                            onPhotoClick?.(index)
+                        }}
                     >
-                        <Icon name={'Close'} />
-                    </button>
-                )}
-            </li>
-        ))}
-    </ul>
-)
+                        <Image
+                            src={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                            alt={`${photo.title}, фото ${index + 1}`}
+                            width={200}
+                            height={150}
+                        />
+                    </Link>
+                    {actions?.find(({ id }) => id === photo.id)?.remove && (
+                        <button
+                            className={styles.removeButton}
+                            onClick={() => onPhotoRemoveClick?.(photo.id)}
+                        >
+                            <Icon name={'Close'} />
+                        </button>
+                    )}
+                </li>
+            ))}
+        </ul>
+    )
+}
 
 export default PhotoGallery

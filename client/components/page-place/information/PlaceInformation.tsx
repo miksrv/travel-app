@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -37,10 +38,13 @@ interface PlaceInformationProps {
     // onChangeWasHere?: (wasHere: boolean) => void
 }
 
-const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
-    const { place, ratingValue } = props
-
-    // const authSlice = useAppSelector((state) => state.auth)
+const PlaceInformation: React.FC<PlaceInformationProps> = ({
+    place,
+    ratingValue
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placeInformation'
+    })
 
     // const { data: visitedUsersData, isLoading: visitedUsersLoading } =
     //     API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
@@ -96,7 +100,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
             <ul className={styles.information}>
                 <li>
                     <Icon name={'Star'} />
-                    <div className={styles.key}>{'Оценка пользователей:'}</div>
+                    <div className={styles.key}>{t('userRating')}</div>
                     <div className={styles.value}>
                         <Rating
                             value={ratingValue ?? undefined}
@@ -107,7 +111,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                 </li>
                 <li>
                     <Icon name={'User'} />
-                    <div className={styles.key}>{'Автор материала:'}</div>
+                    <div className={styles.key}>{t('author')}</div>
                     <div className={styles.value}>
                         <UserAvatar
                             user={place?.author}
@@ -117,7 +121,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                 </li>
                 <li>
                     <Icon name={'Point'} />
-                    <div className={styles.key}>{'Координаты места:'}</div>
+                    <div className={styles.key}>{t('coordinates')}</div>
                     <div className={styles.value}>
                         <Link
                             color={'inherit'}
@@ -130,6 +134,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             className={styles.mapLink}
                             color={'inherit'}
                             target={'_blank'}
+                            title={`${place?.title} ${t('linkYandexMapTitle')}`}
                             href={`https://yandex.ru/maps/?pt=${place?.lon},${place?.lat}&spn=0.1,0.1&l=sat,skl&z=14`}
                         >
                             <Image
@@ -143,6 +148,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                             className={styles.mapLink}
                             target={'_blank'}
                             color={'inherit'}
+                            title={`${place?.title} ${t('linkGoogleMapTitle')}`}
                             href={`https://maps.google.com/maps?ll=${place?.lat},${place?.lon}&q=${place?.lat},${place?.lon}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
                         >
                             <Image
@@ -156,30 +162,30 @@ const PlaceInformation: React.FC<PlaceInformationProps> = (props) => {
                 </li>
                 <li>
                     <Icon name={'Time'} />
-                    <div className={styles.key}>{'Место добавлено:'}</div>
+                    <div className={styles.key}>{t('createdTime')}</div>
                     <div className={styles.value}>
                         {formatDate(place?.created?.date)}
                     </div>
                 </li>
                 <li>
                     <Icon name={'Time'} />
-                    <div className={styles.key}>
-                        {'Последнее редактирование:'}
-                    </div>
+                    <div className={styles.key}>{t('editTime')}</div>
                     <div className={styles.value}>
                         {formatDate(place?.updated?.date)}
                     </div>
                 </li>
                 <li>
                     <Icon name={'Address'} />
-                    <div className={styles.key}>{'Адрес:'}</div>
+                    <div className={styles.key}>{t('address')}</div>
                     <div className={styles.value}>
                         {placeAddress?.map((address, i) => (
                             <>
                                 <Link
                                     key={`address${address.type}`}
                                     href={`/places?${address.type}=${address.id}`}
-                                    title={`Интересные места: ${address.name}`}
+                                    title={`${t('addressLinkTitle')} ${
+                                        address.name
+                                    }`}
                                 >
                                     {address.name}
                                 </Link>

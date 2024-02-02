@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { useMemo, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -19,6 +20,10 @@ interface PlacePhotosProps {
 }
 
 const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placePhotos'
+    })
+
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -38,12 +43,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const [
         uploadPhoto,
-        {
-            data: uploadData,
-            isLoading: uploadLoading,
-            isSuccess: uploadSuccess,
-            isError: uploadError
-        }
+        { data: uploadData, isLoading: uploadLoading, isError: uploadError }
     ] = API.usePhotoPostUploadMutation()
 
     const handlePhotoClick = (index: number) => {
@@ -141,14 +141,14 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     return (
         <Container
             className={styles.component}
-            title={'Фотографии'}
+            title={t('title')}
             action={
                 <Button
                     icon={'Camera'}
                     disabled={uploadLoading}
                     onClick={handlePhotoUploadClick}
                 >
-                    {'Загрузить'}
+                    {t('buttonUpload')}
                 </Button>
             }
         >

@@ -1,4 +1,126 @@
 {
+    "components": {
+        "appBar": {
+            "logoTitle": "Местафика",
+            "userProfileCaption": "Моя страница",
+            "userProfileTitle": "Перейти на мою страницу",
+            "userLogout": "Выход",
+            "userLoginCaption": "Войти",
+            "userLoginTitle": "Авторизация на сайте",
+            "randomPlaceLinkTitle": "Перейти на случайное место",
+            "search": {
+                "placeholder": "Поиск мест..."
+            }
+        },
+        "interactiveMap": {
+            "layerSwitcher": {
+                "layerMapBox": "Схема (MabBox)",
+                "layerOSM": "Схема (OSM)",
+                "layerGoogleMap": "Карта (Google)",
+                "layerGoogleSat": "Спутник (Google)",
+                "layerMapBoxSat": "Спутник (MapBox)"
+            },
+            "searchControl": {
+                "placeholder": "Населенный пункт"
+            }
+        },
+        "loginForm": {
+            "errorsMessageTitle": "Исправте ошибки",
+            "errorEmail": "Введенный email адрес не корректный",
+            "errorPassword": "Пароль пользователя обязателен",
+            "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
+            "googleError": "Ошибка авторизации в Google, пожалуйста попробуйте еще раз",
+            "inputEmail": "Email адрес",
+            "inputPassword": "Пароль",
+            "linkRegistrationCaption": "Регистрация",
+            "linkRegistrationTitle": "Регистрация пользователя",
+            "linkRecoveryCaption": "Забыли пароль?",
+            "linkRecoveryTitle": "Восстановление пароля",
+            "buttonLogin": "Войти",
+            "LoginGoogleButton": {
+                "buttonLogin": "Войти через Google"
+            }
+        },
+        "pagePlace": {
+            "edit": {
+                "pageTitle": "Редактирование",
+                "breadCrumbCurrent": "Редактирование",
+                "breadCrumbPlacesLink": "Интересные места"
+            },
+            "place": {
+                "breadCrumbPlacesLink": "Интересные места",
+                "nearPlacesTitle": "Ближайшие места рядом",
+                "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км"
+            },
+            "placeHeader": {
+                "buttonEdit": "Редактировать"
+            },
+            "placeInformation": {
+                "userRating": "Оценка пользователей:",
+                "author": "Автор материала:",
+                "coordinates": "Координаты места:",
+                "createdTime": "Место добавлено:",
+                "editTime": "Последнее редактирование:",
+                "address": "Адрес:",
+                "addressLinkTitle": "Интересные места:",
+                "linkYandexMapTitle": "на Яндекс картах",
+                "linkGoogleMapTitle": "на Google картах"
+            },
+            "placePhotos": {
+                "title": "Фотографии",
+                "buttonUpload": "Загрузить"
+            },
+            "placeDescription": {
+                "title": "Описание",
+                "buttonSave": "Сохранить",
+                "buttonCancel": "Отмена",
+                "buttonEdit": "Редактировать",
+                "emptyContent": "Нет описания",
+                "tagSelectLabel": "Выберите или добавьте метки интересного места"
+            }
+        },
+        "pageUser": {
+            "userHeader": {
+                "reputation": "Репутация:",
+                "level": "Уровень:",
+                "experienceForNewLevel": "Опыта до нового уровня:",
+                "timeRegistration": "Регистрация:",
+                "timeActivity": "Был(а) тут:",
+                "website": "Личная страница:",
+                "notDefined": "Не указана",
+                "statisticActivity": "Статистика активности",
+                "placesAdded": "Добавлено мест:",
+                "photosUploaded": "Загружено фотографий:",
+                "ratingsAdded": "Поставлено оценок:",
+                "editions": "Редактирований:",
+                "breadCrumbUsersLink": "Путешественники",
+                "buttonEdit": "Редактировать"
+            },
+            "photos": {
+                "title": "Фотографии",
+                "breadCrumbLink": "Путешественники",
+                "photos": "Фотографий:"
+            },
+            "user": {
+                "title": "Фотографии",
+                "buttonShowAllPhotos": "Показать все фотографии"
+            }
+        },
+        "photoGallery": {
+            "noPhotos": "Нет фотографий",
+            "linkPhotoTitle": "Фото"
+        },
+        "placeForm": {
+            "errorTitle": "Название обязательно для заполнения",
+            "errorCategory": "Выберите категорию места",
+            "inputTitleLabel": "Заголовок интересного места",
+            "inputTitlePlaceholder": "Введите заголовок интересного места",
+            "inputCategoryLabel": "Категория интересного места",
+            "inputCategoryPlaceholder": "Выберите категорию",
+            "inputTagsLabel": "Выберите или добавьте метки интересного места",
+            "inputDescriptionLabel": "Описание",
+        }
+    },
     "page": {
         "index": {
             "title": "Карта интересных мест",

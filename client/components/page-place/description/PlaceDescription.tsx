@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
@@ -26,6 +27,10 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     content,
     tags
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placeDescription'
+    })
+
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -80,7 +85,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     return (
         <Container
             className={styles.component}
-            title={'Описание'}
+            title={t('title')}
             action={
                 isAuth && editorMode ? (
                     <>
@@ -89,14 +94,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                             disabled={isLoading}
                             onClick={handleSaveEditorClick}
                         >
-                            {'Сохранить'}
+                            {t('buttonSave')}
                         </Button>
                         <Button
                             mode={'secondary'}
                             disabled={isLoading}
                             onClick={handleSetEditorClick}
                         >
-                            {'Отмена'}
+                            {t('buttonCancel')}
                         </Button>
                     </>
                 ) : (
@@ -104,7 +109,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                         icon={'Pencil'}
                         onClick={handleSetEditorClick}
                     >
-                        {'Редактировать'}
+                        {t('buttonEdit')}
                     </Button>
                 )
             }
@@ -119,13 +124,13 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
             ) : localContent ? (
                 <Markdown>{localContent}</Markdown>
             ) : (
-                <div className={styles.emptyContent}>{'Нет описания'}</div>
+                <div className={styles.emptyContent}>{t('emptyContent')}</div>
             )}
 
             {isAuth && editorMode ? (
                 <div className={styles.formElement}>
                     <ChipsSelect
-                        label={'Выберите или добавьте метки интересного места'}
+                        label={t('tagSelectLabel')}
                         placeholder={''}
                         value={editorTags}
                         loading={searchLoading}

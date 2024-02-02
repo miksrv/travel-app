@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { useMemo } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
@@ -13,6 +14,10 @@ interface SearchControl {
 }
 
 const SearchControl: React.FC<SearchControl> = ({ onSelectResult }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.interactiveMap.searchControl'
+    })
+
     const [geoSearch, { data, isLoading }] =
         API.useLocationGetGeosearchMutation()
 
@@ -77,7 +82,7 @@ const SearchControl: React.FC<SearchControl> = ({ onSelectResult }) => {
     return (
         <Autocomplete
             className={styles.searchControl}
-            placeholder={'Населенный пункт'}
+            placeholder={t('placeholder')}
             clearable={true}
             value={location}
             loading={isLoading}

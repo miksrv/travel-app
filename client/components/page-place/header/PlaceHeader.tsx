@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React from 'react'
 
@@ -35,6 +36,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     ratingValue,
     ratingCount
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placeHeader'
+    })
+
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -104,7 +109,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         }
                         onClick={handleEditPlaceClick}
                     >
-                        {'Редактировать'}
+                        {t('buttonEdit')}
                     </Button>
                 }
             />

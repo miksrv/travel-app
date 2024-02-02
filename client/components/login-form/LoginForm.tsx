@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -24,6 +25,10 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.loginForm'
+    })
+
     const dispatch = useAppDispatch()
     const [loading, setLoading] = useState<boolean>(false)
     const [localeError, setLocaleError] = useState<string>('')
@@ -45,15 +50,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         const errors: ApiTypes.RequestAuthLogin = {}
 
         if (!validateEmail(formData?.email)) {
-            errors.email = 'Email is invalid'
+            errors.email = t('errorEmail')
         }
 
         if (!formData?.password) {
-            errors.password = 'Password is required'
+            errors.password = t('errorPassword')
         }
 
         if (formData?.password && formData?.password?.length < 8) {
-            errors.password = 'The minimum password length must be 8 characters'
+            errors.password = t('errorPasswordLength')
         }
 
         setFormErrors(errors)
@@ -74,9 +79,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     }
 
     const handleGoogleError = () => {
-        setLocaleError(
-            'Ошибка авторизации в Google, пожалуйста попробуйте еще раз'
-        )
+        setLocaleError(t('googleError'))
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -127,14 +130,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
             {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
-                    title={'Исправте ошибки'}
+                    title={t('errorsMessageTitle')}
                     list={Object.values(formErrors || {})}
                 />
             )}
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Email адрес'}
+                    label={t('inputEmail')}
                     name={'email'}
                     error={formErrors?.email}
                     disabled={loadingForm}
@@ -145,7 +148,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Пароль'}
+                    label={t('inputPassword')}
                     name={'password'}
                     type={'password'}
                     error={formErrors?.password}
@@ -159,16 +162,16 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
                 <div>
                     <Link
                         href={'/registration'}
-                        title={'Регистрация пользователя'}
+                        title={t('linkRegistrationTitle')}
                     >
-                        {'Регистрация'}
+                        {t('linkRegistrationCaption')}
                     </Link>
                     <span className={styles.divider}>{'/'}</span>
                     <Link
                         href={'/recovery'}
-                        title={'Восстановление пароля'}
+                        title={t('linkRecoveryTitle')}
                     >
-                        {'Забыли пароль?'}
+                        {t('linkRecoveryCaption')}
                     </Link>
                 </div>
                 <Button
@@ -176,7 +179,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
                     disabled={loadingForm}
                     onClick={handleLoginButton}
                 >
-                    {'Войти'}
+                    {t('buttonLogin')}
                 </Button>
             </div>
         </div>
