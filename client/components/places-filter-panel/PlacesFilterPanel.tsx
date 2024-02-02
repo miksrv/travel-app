@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { useEffect, useMemo, useState } from 'react'
 
 import Autocomplete from '@/ui/autocomplete'
@@ -27,57 +28,21 @@ interface PlacesFilterPanelProps {
     onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
 }
 
-const sortOptions: DropdownOption[] = [
-    {
-        key: ApiTypes.SortFields.Views,
-        value: 'Просмотры'
-    },
-    {
-        key: ApiTypes.SortFields.Rating,
-        value: 'Рейтинг'
-    },
-    {
-        key: ApiTypes.SortFields.Created,
-        value: 'Дата добавления'
-    },
-    {
-        key: ApiTypes.SortFields.Updated,
-        value: 'Дата обновления'
-    },
-    {
-        key: ApiTypes.SortFields.Title,
-        value: 'Заголовок'
-    },
-    {
-        key: ApiTypes.SortFields.Distance,
-        value: 'Расстояние'
-    }
-]
-
-const orderOptions: DropdownOption[] = [
-    {
-        key: ApiTypes.SortOrder.ASC,
-        value: 'По возрастанию'
-    },
-    {
-        key: ApiTypes.SortOrder.DESC,
-        value: 'По убыванию'
-    }
-]
-
 type OpenedOptionsType = 'sort' | 'order' | 'category' | undefined
 
-const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
-    const {
-        sort,
-        order,
-        location,
-        category,
-        optionsOpen,
-        onChange,
-        onOpenOptions,
-        onChangeLocation
-    } = props
+const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
+    sort,
+    order,
+    location,
+    category,
+    optionsOpen,
+    onChange,
+    onOpenOptions,
+    onChangeLocation
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.placeFilterPanel'
+    })
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
@@ -86,6 +51,44 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
 
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
+
+    const sortOptions: DropdownOption[] = [
+        {
+            key: ApiTypes.SortFields.Views,
+            value: t('sortViews')
+        },
+        {
+            key: ApiTypes.SortFields.Rating,
+            value: t('sortRating')
+        },
+        {
+            key: ApiTypes.SortFields.Created,
+            value: t('sortCreatedDate')
+        },
+        {
+            key: ApiTypes.SortFields.Updated,
+            value: t('sortModifyDate')
+        },
+        {
+            key: ApiTypes.SortFields.Title,
+            value: t('sortTitle')
+        },
+        {
+            key: ApiTypes.SortFields.Distance,
+            value: t('sortDistance')
+        }
+    ]
+
+    const orderOptions: DropdownOption[] = [
+        {
+            key: ApiTypes.SortOrder.ASC,
+            value: t('orderASC')
+        },
+        {
+            key: ApiTypes.SortOrder.DESC,
+            value: t('orderDESC')
+        }
+    ]
 
     const handleChangeSort = (value: DropdownOption | undefined) => {
         onChange?.('sort', value?.key)
@@ -103,17 +106,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
     }
 
     const handleOpenSort = () => {
-        onOpenOptions?.('Сортировка')
+        onOpenOptions?.(t('dialogCaptionSort'))
         setOpenedOptions('sort')
     }
 
     const handleOpenOrder = () => {
-        onOpenOptions?.('Порядок')
+        onOpenOptions?.(t('dialogCaptionOrder'))
         setOpenedOptions('order')
     }
 
     const handleOpenOptionsCategory = () => {
-        onOpenOptions?.('Категория')
+        onOpenOptions?.(t('dialogCaptionCategory'))
         setOpenedOptions('category')
     }
 
@@ -200,8 +203,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
             {!openedOptions && (
                 <>
                     <Autocomplete
-                        label={'Фильтровать по местоположению'}
-                        placeholder={'Начните вводить название'}
+                        label={t('inputLocationLabel')}
+                        placeholder={t('inputLocationPlaceholder')}
                         clearable={true}
                         value={location}
                         loading={addressLoading}
@@ -211,14 +214,14 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     />
 
                     <Dropdown
-                        label={'Сортировка мест'}
+                        label={t('inputSortLabel')}
                         value={selectedSort}
                         onSelect={handleChangeSort}
                         onOpen={handleOpenSort}
                     />
 
                     <Dropdown
-                        label={'Порядок сортировки'}
+                        label={t('inputOrderLabel')}
                         value={selectedOrder}
                         onSelect={handleChangeOrder}
                         onOpen={handleOpenOrder}
@@ -227,8 +230,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = (props) => {
                     <Dropdown
                         clearable={true}
                         value={selectedCategory}
-                        label={'Фильтровать по категории'}
-                        placeholder={'Выберите категорию'}
+                        label={t('inputCategoryLabel')}
+                        placeholder={t('inputCategoryPlaceholder')}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
                     />

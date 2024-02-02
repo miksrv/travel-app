@@ -119,6 +119,27 @@
             "inputCategoryPlaceholder": "Выберите категорию",
             "inputTagsLabel": "Выберите или добавьте метки интересного места",
             "inputDescriptionLabel": "Описание",
+            "buttonSave": "Сохранить",
+            "buttonCancel": "Отмена"
+        },
+        "placeFilterPanel": {
+            "sortViews": "Просмотры",
+            "sortRating": "Рейтинг",
+            "sortCreatedDate": "Дата добавления",
+            "sortModifyDate": "Дата обновления",
+            "sortTitle": "Заголовок",
+            "sortDistance": "Расстояние",
+            "orderASC": "По возрастанию",
+            "orderDESC": "По убыванию",
+            "dialogCaptionSort": "Сортировка",
+            "dialogCaptionOrder": "Порядок",
+            "dialogCaptionCategory": "Категория",
+            "inputLocationLabel": "Фильтровать по местоположению",
+            "inputLocationPlaceholder": "Начните вводить название",
+            "inputSortLabel": "Сортировка мест",
+            "inputOrderLabel": "Порядок сортировки",
+            "inputCategoryLabel": "Фильтровать по категории",
+            "inputCategoryPlaceholder": "Выберите категорию"
         }
     },
     "page": {

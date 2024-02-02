@@ -245,7 +245,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     disabled={loading}
                     onClick={handleSubmit}
                 >
-                    {'Сохранить'}
+                    {t('buttonSave')}
                 </Button>
 
                 <Button
@@ -254,7 +254,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     disabled={loading}
                     onClick={onCancel}
                 >
-                    {'Отмена'}
+                    {t('buttonCancel')}
                 </Button>
             </div>
         </section>
