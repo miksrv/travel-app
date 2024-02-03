@@ -1,16 +1,19 @@
-import { NextPage } from 'next'
+import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import React, { useEffect } from 'react'
 
 import Container from '@/ui/container'
 
-import { useAppSelector } from '@/api/store'
+import { useAppSelector, wrapper } from '@/api/store'
 
 import LoginForm from '@/components/login-form'
 
-const LoginPage: NextPage = () => {
+interface LoginPageProps {}
+
+const LoginPage: NextPage<LoginPageProps> = () => {
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.login'
     })
@@ -35,5 +38,20 @@ const LoginPage: NextPage = () => {
         </Container>
     )
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(
+    () =>
+        async (context): Promise<GetServerSidePropsResult<LoginPageProps>> => {
+            const locale = context.locale ?? 'en'
+
+            const translations = await serverSideTranslations(locale)
+
+            return {
+                props: {
+                    ...translations
+                }
+            }
+        }
+)
 
 export default LoginPage

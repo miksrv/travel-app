@@ -63,7 +63,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         <div className={styles.value}>
                             {addDecimalPoint(ratingValue || 0)}
                         </div>
-                        <div className={styles.count}>{ratingCount} голоса</div>
+                        <div className={styles.count}>
+                            {t('ratingCount', { count: ratingCount })}
+                        </div>
                     </div>
                 )}
             </div>

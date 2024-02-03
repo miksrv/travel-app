@@ -21,9 +21,11 @@ interface AppLayoutProps {
     children?: React.ReactNode
 }
 
-const AppLayout: React.FC<AppLayoutProps> = (props) => {
-    const { randomPlaceId, fullSize, children } = props
-
+const AppLayout: React.FC<AppLayoutProps> = ({
+    randomPlaceId,
+    fullSize,
+    children
+}) => {
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)

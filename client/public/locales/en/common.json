@@ -1,209 +1,244 @@
 {
     "components": {
         "appBar": {
-            "logoTitle": "Местафика",
-            "userProfileCaption": "Моя страница",
-            "userProfileTitle": "Перейти на мою страницу",
-            "userLogout": "Выход",
-            "userLoginCaption": "Войти",
-            "userLoginTitle": "Авторизация на сайте",
-            "randomPlaceLinkTitle": "Перейти на случайное место",
+            "logoTitle": "Mestafika",
+            "userProfileCaption": "My page",
+            "userProfileTitle": "Go to my page",
+            "userLogout": "Logout",
+            "userLoginCaption": "Sign in",
+            "userLoginTitle": "Authorization on the site",
+            "randomPlaceLinkTitle": "Go to a random place",
             "search": {
-                "placeholder": "Поиск мест..."
+                "placeholder": "Search for places..."
+            }
+        },
+        "appLayout": {
+            "menu": {
+                "index": "Map of places",
+                "places": "Interesting places",
+                "create": "Add a place",
+                "profile": "Personal page",
+                "users": "Travelers"
             }
         },
         "interactiveMap": {
             "layerSwitcher": {
-                "layerMapBox": "Схема (MabBox)",
-                "layerOSM": "Схема (OSM)",
-                "layerGoogleMap": "Карта (Google)",
-                "layerGoogleSat": "Спутник (Google)",
-                "layerMapBoxSat": "Спутник (MapBox)"
+                "layerMapBox": "Scheme (MabBox)",
+                "layerOSM": "Scheme (OSM)",
+                "layerGoogleMap": "Map (Google)",
+                "layerGoogleSat": "Satellite (Google)",
+                "layerMapBoxSat": "Satellite (MapBox)"
             },
             "searchControl": {
-                "placeholder": "Населенный пункт"
+                "placeholder": "Locality"
             }
         },
         "loginForm": {
-            "errorsMessageTitle": "Исправте ошибки",
-            "errorEmail": "Введенный email адрес не корректный",
-            "errorPassword": "Пароль пользователя обязателен",
-            "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
-            "googleError": "Ошибка авторизации в Google, пожалуйста попробуйте еще раз",
-            "inputEmail": "Email адрес",
-            "inputPassword": "Пароль",
-            "linkRegistrationCaption": "Регистрация",
-            "linkRegistrationTitle": "Регистрация пользователя",
-            "linkRecoveryCaption": "Забыли пароль?",
-            "linkRecoveryTitle": "Восстановление пароля",
-            "buttonLogin": "Войти",
+            "errorsMessageTitle": "Fix errors",
+            "errorEmail": "The entered email address is not correct",
+            "errorPassword": "User password is required",
+            "errorPasswordLength": "Password must be at least 8 characters long",
+            "googleError": "Google login error, please try again",
+            "inputEmail": "Email address",
+            "inputPassword": "Password",
+            "linkRegistrationCaption": "Sign up",
+            "linkRegistrationTitle": "User Registration",
+            "linkRecoveryCaption": "Forgot your password?",
+            "linkRecoveryTitle": "Recovery",
+            "buttonLogin": "Login",
             "LoginGoogleButton": {
-                "buttonLogin": "Войти через Google"
+                "buttonLogin": "Login with Google"
             }
         },
         "pagePlace": {
             "edit": {
-                "pageTitle": "Редактирование",
-                "breadCrumbCurrent": "Редактирование",
-                "breadCrumbPlacesLink": "Интересные места"
+                "pageTitle": "Editing",
+                "breadCrumbCurrent": "Editing",
+                "breadCrumbPlacesLink": "Interesting Places"
             },
             "place": {
-                "breadCrumbPlacesLink": "Интересные места",
-                "nearPlacesTitle": "Ближайшие места рядом",
-                "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км"
+                "breadCrumbPlacesLink": "Interesting Places",
+                "nearPlacesTitle": "Nearby Places",
+                "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km"
             },
             "placeHeader": {
-                "buttonEdit": "Редактировать"
+                "buttonEdit": "Edit",
+                "ratingCount_one": "{{count}} vote",
+                "ratingCount_other": "{{count}} votes"
             },
             "placeInformation": {
-                "userRating": "Оценка пользователей:",
-                "author": "Автор материала:",
-                "coordinates": "Координаты места:",
-                "createdTime": "Место добавлено:",
-                "editTime": "Последнее редактирование:",
-                "address": "Адрес:",
-                "addressLinkTitle": "Интересные места:",
-                "linkYandexMapTitle": "на Яндекс картах",
-                "linkGoogleMapTitle": "на Google картах"
+                "userRating": "User Rating:",
+                "author": "Author of the material:",
+                "coordinates": "Location coordinates:",
+                "createdTime": "Place added:",
+                "editTime": "Last edited:",
+                "address": "Address:",
+                "addressLinkTitle": "Points of Interest::",
+                "linkYandexMapTitle": "on Yandex maps",
+                "linkGoogleMapTitle": "on Google Maps"
             },
             "placePhotos": {
-                "title": "Фотографии",
-                "buttonUpload": "Загрузить"
+                "title": "Photos",
+                "buttonUpload": "Upload"
             },
             "placeDescription": {
-                "title": "Описание",
-                "buttonSave": "Сохранить",
-                "buttonCancel": "Отмена",
-                "buttonEdit": "Редактировать",
-                "emptyContent": "Нет описания",
-                "tagSelectLabel": "Выберите или добавьте метки интересного места"
+                "title": "Description",
+                "buttonSave": "Save",
+                "buttonCancel": "Cancel",
+                "buttonEdit": "Edit",
+                "emptyContent": "No description",
+                "tagSelectLabel": "Select or add point of interest labels"
             }
         },
         "pageUser": {
             "userHeader": {
-                "reputation": "Репутация:",
-                "level": "Уровень:",
-                "experienceForNewLevel": "Опыта до нового уровня:",
-                "timeRegistration": "Регистрация:",
-                "timeActivity": "Был(а) тут:",
-                "website": "Личная страница:",
-                "notDefined": "Не указана",
-                "statisticActivity": "Статистика активности",
-                "placesAdded": "Добавлено мест:",
-                "photosUploaded": "Загружено фотографий:",
-                "ratingsAdded": "Поставлено оценок:",
-                "editions": "Редактирований:",
-                "breadCrumbUsersLink": "Путешественники",
-                "buttonEdit": "Редактировать"
+                "reputation": "Reputation:",
+                "level": "Level:",
+                "experienceForNewLevel": "Experience to new level:",
+                "timeRegistration": "Registration:",
+                "timeActivity": "Been here:",
+                "website": "Personal page:",
+                "notDefined": "Not specified",
+                "statisticActivity": "Activity statistics",
+                "placesAdded": "Places added:",
+                "photosUploaded": "Photos Uploaded:",
+                "ratingsAdded": "Ratings:",
+                "editions": "Edits:",
+                "breadCrumbUsersLink": "Travelers",
+                "buttonEdit": "Edit"
             },
             "photos": {
-                "title": "Фотографии",
-                "breadCrumbLink": "Путешественники",
-                "photos": "Фотографий:"
+                "title": "Photos",
+                "breadCrumbLink": "Travelers",
+                "photos": "Photos:"
             },
             "user": {
-                "title": "Фотографии",
-                "buttonShowAllPhotos": "Показать все фотографии"
+                "title": "Photos",
+                "buttonShowAllPhotos": "Show all photos"
             }
         },
         "photoGallery": {
-            "noPhotos": "Нет фотографий",
-            "linkPhotoTitle": "Фото"
+            "noPhotos": "No photos",
+            "linkPhotoTitle": "Photo"
         },
         "placeForm": {
-            "errorTitle": "Название обязательно для заполнения",
-            "errorCategory": "Выберите категорию места",
-            "inputTitleLabel": "Заголовок интересного места",
-            "inputTitlePlaceholder": "Введите заголовок интересного места",
-            "inputCategoryLabel": "Категория интересного места",
-            "inputCategoryPlaceholder": "Выберите категорию",
-            "inputTagsLabel": "Выберите или добавьте метки интересного места",
-            "inputDescriptionLabel": "Описание",
-            "buttonSave": "Сохранить",
-            "buttonCancel": "Отмена"
+            "errorTitle": "Title is required",
+            "errorCategory": "Select a location category",
+            "inputTitleLabel": "Title of the point of interest",
+            "inputTitlePlaceholder": "Enter the title of the place of interest",
+            "inputCategoryLabel": "Point of Interest Category",
+            "inputCategoryPlaceholder": "Select a category",
+            "inputTagsLabel": "Select or add POI tags",
+            "inputDescriptionLabel": "Description",
+            "buttonSave": "Save",
+            "buttonCancel": "Cancel"
         },
         "placeFilterPanel": {
-            "sortViews": "Просмотры",
-            "sortRating": "Рейтинг",
-            "sortCreatedDate": "Дата добавления",
-            "sortModifyDate": "Дата обновления",
-            "sortTitle": "Заголовок",
-            "sortDistance": "Расстояние",
-            "orderASC": "По возрастанию",
-            "orderDESC": "По убыванию",
-            "dialogCaptionSort": "Сортировка",
-            "dialogCaptionOrder": "Порядок",
-            "dialogCaptionCategory": "Категория",
-            "autocompleteLocationLabel": "Фильтровать по местоположению",
-            "autocompleteLocationPlaceholder": "Начните вводить название",
-            "dropdownSortLabel": "Сортировка мест",
-            "dropdownOrderLabel": "Порядок сортировки",
-            "dropdownCategoryLabel": "Фильтровать по категории",
-            "dropdownCategoryPlaceholder": "Выберите категорию"
+            "sortViews": "Views",
+            "sortRating": "Rating",
+            "sortCreatedDate": "Date added",
+            "sortModifyDate": "Date of update",
+            "sortTitle": "Title",
+            "sortDistance": "Distance",
+            "orderASC": "Ascending",
+            "orderDESC": "Descending",
+            "dialogCaptionSort": "Sorting",
+            "dialogCaptionOrder": "Order",
+            "dialogCaptionCategory": "Category",
+            "autocompleteLocationLabel": "Filter by Location",
+            "autocompleteLocationPlaceholder": "Start typing title",
+            "dropdownSortLabel": "Sort places",
+            "dropdownOrderLabel": "Sort Order",
+            "dropdownCategoryLabel": "Filter by Category",
+            "dropdownCategoryPlaceholder": "Select a category"
         },
         "placesList": {
-            "emptyList": "Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.",
+            "emptyList": "There are no interesting places matching your request. Try changing your search terms.",
             "placesListItem": {
-                "noData": "Пока ничего нет"
+                "noData": "Nothing yet"
             }
         },
         "registrationForm": {
-            "errorsMessageTitle": "Исправте ошибки",
-            "errorName": "Имя обязательно для заполнения",
-            "errorEmail": "Некорректный email адрес",
-            "errorPassword": "Пароль обязателен для заполнения",
-            "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
-            "errorPasswordMismatch": "Введенные пароли не совпадают",
-            "inputNameLabel": "Имя пользователя",
-            "inputEmailLabel": "Email адрес",
-            "inputPasswordLabel": "Пароль",
-            "inputPasswordRepeatLabel": "Повторите пароль",
-            "buttonRegistration": "Зарегистрироваться",
-            "buttonCancel": "Отмена"
+            "errorsMessageTitle": "Fix errors",
+            "errorName": "Name is required",
+            "errorEmail": "Invalid email address",
+            "errorPassword": "Password is required",
+            "errorPasswordLength": "Password must be at least 8 characters long",
+            "errorPasswordMismatch": "The entered passwords do not match",
+            "inputNameLabel": "User name",
+            "inputEmailLabel": "Email address",
+            "inputPasswordLabel": "Password",
+            "inputPasswordRepeatLabel": "Repeat password",
+            "buttonRegistration": "Register",
+            "buttonCancel": "Cancel"
         },
         "userAvatar": {
-            "linkTitle": "Профиль пользователя",
-            "avatarImageAlt": "Фото профиля пользователя"
+            "linkTitle": "User Profile",
+            "avatarImageAlt": "User profile photo"
         },
         "userList": {
-            "reputation": "Репутация"
+            "reputation": "Reputation"
         }
     },
     "pages": {
         "places": {
             "createPlacePage": {
-                "title": "Добавить интересное место",
-                "breadCrumbCurrent": "Добавить новое",
-                "breadCrumbPlacesLink": "Интересные места"
+                "title": "Add interesting place",
+                "breadCrumbCurrent": "Add new",
+                "breadCrumbPlacesLink": "Interesting Places"
             },
             "placesPage": {
-                "title": "Интересные места",
-                "breadCrumbPlacesLink": "Интересные места",
-                "breadCrumbCurrent": "Интересные места",
-                "buttonFilters": "Фильтры",
-                "placesCount": "Интересных мест:",
-                "dialogFiltersTitle": "Фильтры"
+                "title": "Interesting places",
+                "breadCrumbPlacesLink": "Interesting Places",
+                "breadCrumbCurrent": "Interesting places",
+                "buttonFilters": "Filters",
+                "placesCount": "Places of interest:",
+                "dialogFiltersTitle": "Filters"
             }
         },
         "index": {
-            "title": "Карта интересных мест",
-            "breadCrumbCurrent": "Карта интересных мест и достопримечательностей",
-            "pointsCount": "Точек на карте:",
-            "buttonFilters": "Фильтры",
-            "dialogFiltersTitle": "Фильтры",
-            "dropdownCategoryLabel": "Фильтровать по категории",
-            "dropdownCategoryPlaceholder": "Выберите категорию"
+            "title": "Map of interesting places",
+            "breadCrumbCurrent": "Map of interesting places and attractions",
+            "pointsCount": "Points on map:",
+            "buttonFilters": "Filters",
+            "dialogFiltersTitle": "Filters",
+            "dropdownCategoryLabel": "Filter by Category",
+            "dropdownCategoryPlaceholder": "Select a category"
         },
         "login": {
-            "title": "Авторизация"
+            "title": "Authorization"
         },
         "registration": {
-            "title": "Регистрация"
+            "title": "Registration"
         },
         "users": {
-            "title": "Путешественники",
-            "breadCrumbCurrent": "Путешественники",
-            "usersCount": "Путешественников:"
+            "title": "Travelers",
+            "breadCrumbCurrent": "Travelers",
+            "usersCount": "Travelers:"
+        }
+    },
+    "ui": {
+        "autocomplete": {
+            "placeholder": "Enter a value to search for",
+            "notFound": "Nothing found yet"
+        },
+        "breadcrumbs": {
+            "homepage": "Home"
+        },
+        "chipSelect": {
+            "placeholder": "Enter a value to search for",
+            "notFound": "Nothing found yet"
+        },
+        "dialogue": {
+            "back": "Back"
+        },
+        "dropdown": {
+            "placeholder": "Select an option"
+        },
+        "pagination": {
+            "nextPage": "Next page",
+            "prevPage": "Previous Page",
+            "page": "Page"
         }
     }
 }

@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useMemo } from 'react'
 
@@ -20,16 +21,18 @@ interface PaginationProps<T> {
     onChangePage?: (page: number) => void
 }
 
-const Pagination: React.FC<PaginationProps<any>> = (props) => {
-    const {
-        currentPage = 1,
-        totalPostCount = 0,
-        linkPart,
-        urlParam,
-        perPage = 4,
-        neighbours = 2,
-        onChangePage
-    } = props
+const Pagination: React.FC<PaginationProps<any>> = ({
+    currentPage = 1,
+    totalPostCount = 0,
+    linkPart,
+    urlParam,
+    perPage = 4,
+    neighbours = 2,
+    onChangePage
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.pagination'
+    })
 
     const pageNeighbours = Math.max(0, Math.min(neighbours, 2))
     const totalPages = Math.ceil(totalPostCount / perPage)
@@ -118,10 +121,10 @@ const Pagination: React.FC<PaginationProps<any>> = (props) => {
                     }
                     title={
                         page === RIGHT_PAGE
-                            ? 'Следующая страница'
+                            ? t('nextPage')
                             : page === LEFT_PAGE
-                            ? 'Предыдущая страница'
-                            : `Страница - ${page}`
+                            ? t('prevPage')
+                            : `${t('page')} - ${page}`
                     }
                     key={page}
                     onClick={(event) => {

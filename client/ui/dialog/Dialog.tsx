@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Icon from '@/ui/icon'
@@ -24,6 +25,10 @@ const Dialog: React.FC<DialogProps> = ({
     onCloseDialog,
     ...props
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.dialog'
+    })
+
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [dialogStyle, setDialogStyle] = useState({})
 
@@ -92,7 +97,7 @@ const Dialog: React.FC<DialogProps> = ({
                             onClick={onBackClick}
                         >
                             <Icon name={'Left'} />
-                            <div>{'Назад'}</div>
+                            <div>{t('back')}</div>
                         </button>
                     )}
                     <h2>{header}</h2>

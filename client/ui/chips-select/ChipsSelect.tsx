@@ -1,4 +1,5 @@
 import debounce from 'lodash-es/debounce'
+import { useTranslation } from 'next-i18next'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
 import Chip from '@/ui/chips-select/Chip'
@@ -21,18 +22,20 @@ interface ChipsSelectProps {
     onSearch?: (value: string) => void
 }
 
-const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
-    const {
-        className,
-        options,
-        disabled,
-        loading,
-        value,
-        placeholder,
-        label,
-        onSelect,
-        onSearch
-    } = props
+const ChipsSelect: React.FC<ChipsSelectProps> = ({
+    className,
+    options,
+    disabled,
+    loading,
+    value,
+    placeholder,
+    label,
+    onSelect,
+    onSearch
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.chipSelect'
+    })
 
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
@@ -147,9 +150,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
                         type={'text'}
                         value={search || ''}
                         className={styles.searchInput}
-                        placeholder={
-                            placeholder ?? 'Введите значение для поиска'
-                        }
+                        placeholder={placeholder ?? t('placeholder')}
                         onKeyDown={handleKeyPress}
                         onChange={handleChangeInput}
                     />
@@ -175,7 +176,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = (props) => {
                     <ul className={styles.optionsList}>
                         {!options?.length && (
                             <li className={styles.emptyItem}>
-                                {'Пока что ничего не найдено'}
+                                {t('notFound')}
                             </li>
                         )}
                         {options?.map((option) => (

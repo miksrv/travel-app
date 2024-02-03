@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image, { StaticImageData } from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -27,19 +28,21 @@ interface DropdownProps<T> {
     onOpen?: () => void
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = (props) => {
-    const {
-        className,
-        options,
-        disabled,
-        clearable,
-        value,
-        placeholder,
-        label,
-        error,
-        onSelect,
-        onOpen
-    } = props
+const Dropdown: React.FC<DropdownProps<any>> = ({
+    className,
+    options,
+    disabled,
+    clearable,
+    value,
+    placeholder,
+    label,
+    error,
+    onSelect,
+    onOpen
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.dropdown'
+    })
 
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -127,7 +130,7 @@ const Dropdown: React.FC<DropdownProps<any>> = (props) => {
                         )}
                         {selectedOption?.value ?? (
                             <span className={styles.placeHolder}>
-                                {placeholder ?? 'Выберите опцию'}
+                                {placeholder ?? t('placeholder')}
                             </span>
                         )}
                     </span>

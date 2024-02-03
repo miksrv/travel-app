@@ -1,4 +1,5 @@
 import debounce from 'lodash-es/debounce'
+import { useTranslation } from 'next-i18next'
 import Image, { StaticImageData } from 'next/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 
@@ -33,21 +34,23 @@ interface DropdownProps<T> {
     onSearch?: (value: string) => void
 }
 
-const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
-    const {
-        className,
-        options,
-        disabled,
-        loading,
-        clearable,
-        hideArrow,
-        value,
-        placeholder,
-        label,
-        leftIcon,
-        onSelect,
-        onSearch
-    } = props
+const Autocomplete: React.FC<DropdownProps<any>> = ({
+    className,
+    options,
+    disabled,
+    loading,
+    clearable,
+    hideArrow,
+    value,
+    placeholder,
+    label,
+    leftIcon,
+    onSelect,
+    onSearch
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.autocomplete'
+    })
 
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocaLoading] = useState<boolean>(false)
@@ -158,9 +161,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                         value={search || ''}
                         defaultValue={selectedOption?.value ?? value?.name}
                         className={styles.searchInput}
-                        placeholder={
-                            placeholder ?? 'Введите значение для поиска'
-                        }
+                        placeholder={placeholder ?? t('placeholder')}
                         onMouseMove={(e) => e.stopPropagation()}
                         onChange={handleChangeInput}
                     />
@@ -196,7 +197,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = (props) => {
                     <ul className={styles.optionsList}>
                         {!options?.length && (
                             <li className={styles.emptyItem}>
-                                {'Пока что ничего не найдено'}
+                                {t('notFound')}
                             </li>
                         )}
                         {options?.map((option) => (

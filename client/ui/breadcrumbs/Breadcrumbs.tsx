@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React from 'react'
 
@@ -18,34 +19,42 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     hideHomePage,
     links,
     currentPage
-}) => (
-    <ul
-        aria-label={'breadcrumb'}
-        className={styles.breadcrumbs}
-    >
-        {!hideHomePage && (
-            <li>
-                <Link
-                    color={'inherit'}
-                    href={'/'}
-                >
-                    Главная
-                </Link>
-            </li>
-        )}
-        {!!links?.length &&
-            links.map(({ link, text }) => (
-                <li key={link}>
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'ui.breadcrumbs'
+    })
+
+    return (
+        <ul
+            aria-label={'breadcrumb'}
+            className={styles.breadcrumbs}
+        >
+            {!hideHomePage && (
+                <li>
                     <Link
-                        href={link}
                         color={'inherit'}
+                        href={'/'}
+                        title={t('homepage')}
                     >
-                        {text}
+                        {t('homepage')}
                     </Link>
                 </li>
-            ))}
-        {currentPage && <li>{currentPage}</li>}
-    </ul>
-)
+            )}
+            {!!links?.length &&
+                links.map(({ link, text }) => (
+                    <li key={link}>
+                        <Link
+                            href={link}
+                            color={'inherit'}
+                            title={text}
+                        >
+                            {text}
+                        </Link>
+                    </li>
+                ))}
+            {currentPage && <li>{currentPage}</li>}
+        </ul>
+    )
+}
 
 export default Breadcrumbs

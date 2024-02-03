@@ -8,6 +8,7 @@ export type IconTypes =
     | 'Photo'
     | 'Ruler'
     | 'Star'
+    | 'FilledStar'
     | 'User'
     | 'Users'
     | 'Point'

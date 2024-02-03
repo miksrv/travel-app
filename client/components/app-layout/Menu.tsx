@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React from 'react'
 
@@ -20,31 +21,35 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.appLayout.menu'
+    })
+
     const menuItems: MenuItemType[] = [
         {
             icon: 'Map',
             link: '/',
-            text: 'Карта интересных мест'
+            text: t('index')
         },
         {
             icon: 'Terrain',
             link: '/places',
-            text: 'Интересные места'
+            text: t('places')
         },
         {
             icon: 'PlusCircle',
             link: isAuth ? '/places/create' : '/login',
-            text: 'Добавить место'
+            text: t('create')
         },
         {
             icon: 'User',
             link: isAuth ? `/users/${userId}` : '/login',
-            text: 'Моя страница'
+            text: t('profile')
         },
         {
             icon: 'Users',
             link: '/users/',
-            text: 'Путешественники'
+            text: t('users')
         }
     ]
 
