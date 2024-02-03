@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
@@ -16,6 +17,10 @@ import RegistrationForm from '@/components/registration-form'
 interface RegistrationPageProps {}
 
 const RegistrationPage: NextPage<RegistrationPageProps> = () => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'pages.registration'
+    })
+
     const dispatch = useAppDispatch()
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
@@ -56,10 +61,10 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
 
     return (
         <>
-            <NextSeo title={'Регистрация'} />
+            <NextSeo title={t('title')} />
             <Container
                 className={'loginPage'}
-                title={'Регистрация'}
+                title={t('title')}
             >
                 <RegistrationForm
                     loading={isLoading || data?.auth}

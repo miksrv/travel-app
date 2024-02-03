@@ -203,8 +203,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
             {!openedOptions && (
                 <>
                     <Autocomplete
-                        label={t('inputLocationLabel')}
-                        placeholder={t('inputLocationPlaceholder')}
+                        label={t('autocompleteLocationLabel')}
+                        placeholder={t('autocompleteLocationPlaceholder')}
                         clearable={true}
                         value={location}
                         loading={addressLoading}
@@ -214,14 +214,14 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                     />
 
                     <Dropdown
-                        label={t('inputSortLabel')}
+                        label={t('dropdownSortLabel')}
                         value={selectedSort}
                         onSelect={handleChangeSort}
                         onOpen={handleOpenSort}
                     />
 
                     <Dropdown
-                        label={t('inputOrderLabel')}
+                        label={t('dropdownOrderLabel')}
                         value={selectedOrder}
                         onSelect={handleChangeOrder}
                         onOpen={handleOpenOrder}
@@ -230,8 +230,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                     <Dropdown
                         clearable={true}
                         value={selectedCategory}
-                        label={t('inputCategoryLabel')}
-                        placeholder={t('inputCategoryPlaceholder')}
+                        label={t('dropdownCategoryLabel')}
+                        placeholder={t('dropdownCategoryPlaceholder')}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
                     />

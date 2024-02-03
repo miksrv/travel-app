@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -32,60 +33,72 @@ const UserAvatar: React.FC<AvatarProps> = ({
     caption,
     showName,
     disableLink
-}) => (
-    <div className={cn(styles.userAvatar, className)}>
-        {user?.id ? (
-            disableLink ? (
-                <span className={styles.avatarLink}>
-                    <AvatarImage
-                        user={user}
-                        size={size}
-                    />
-                </span>
-            ) : (
-                <Link
-                    className={styles.avatarLink}
-                    href={`/users/${user.id}`}
-                    title={`Профиль пользователя ${user?.name}`}
-                >
-                    <AvatarImage
-                        user={user}
-                        size={size}
-                    />
-                </Link>
-            )
-        ) : (
-            <Image
-                alt={''}
-                className={styles.avatarImage}
-                src={defaultAvatar.src}
-                width={getDimension(size)}
-                height={getDimension(size)}
-            />
-        )}
-        {showName && user?.id && (
-            <div
-                className={cn(
-                    styles.info,
-                    size === 'medium' ? styles.medium : styles.small
-                )}
-            >
-                <Link
-                    href={`/users/${user.id}`}
-                    title={`Профиль пользователя ${user?.name}`}
-                >
-                    {user?.name}
-                </Link>
-                {caption && <div className={styles.caption}>{caption}</div>}
-            </div>
-        )}
-    </div>
-)
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.userAvatar'
+    })
 
-const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
+    return (
+        <div className={cn(styles.userAvatar, className)}>
+            {user?.id ? (
+                disableLink ? (
+                    <span className={styles.avatarLink}>
+                        <AvatarImage
+                            user={user}
+                            size={size}
+                            alt={t('avatarImageAlt')}
+                        />
+                    </span>
+                ) : (
+                    <Link
+                        className={styles.avatarLink}
+                        href={`/users/${user.id}`}
+                        title={`${t('linkTitle')} ${user?.name}`}
+                    >
+                        <AvatarImage
+                            user={user}
+                            size={size}
+                            alt={t('avatarImageAlt')}
+                        />
+                    </Link>
+                )
+            ) : (
+                <Image
+                    alt={''}
+                    className={styles.avatarImage}
+                    src={defaultAvatar.src}
+                    width={getDimension(size)}
+                    height={getDimension(size)}
+                />
+            )}
+            {showName && user?.id && (
+                <div
+                    className={cn(
+                        styles.info,
+                        size === 'medium' ? styles.medium : styles.small
+                    )}
+                >
+                    <Link
+                        href={`/users/${user.id}`}
+                        title={`${t('linkTitle')} ${user?.name}`}
+                    >
+                        {user?.name}
+                    </Link>
+                    {caption && <div className={styles.caption}>{caption}</div>}
+                </div>
+            )}
+        </div>
+    )
+}
+
+const AvatarImage: React.FC<AvatarProps & { alt?: string }> = ({
+    user,
+    size,
+    alt
+}) => (
     <>
         <Image
-            alt={`Фото профиля пользователя ${user?.name}` || ''}
+            alt={` ${user?.name}` || ''}
             className={styles.avatarImage}
             src={
                 user?.avatar

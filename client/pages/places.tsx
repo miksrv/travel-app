@@ -52,6 +52,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     placesCount,
     placesList
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'pages.places.placesPage'
+    })
+
     const locationUnset = !country && !region && !district && !city
     const locationType: ApiTypes.LocationTypes = country
         ? 'country'
@@ -64,7 +68,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const { t } = useTranslation('common', { keyPrefix: 'page.places' })
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: locationData } = API.useLocationGetByTypeQuery(
         {
@@ -167,14 +170,17 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             titles.push(currentCategory)
         }
 
-        return `${t('shortTitle')}: ${titles.join(', ')}`
+        return `${t('title')}: ${titles.join(', ')}`
     }, [currentCategory, locationData, locationUnset])
 
     const breadcrumbsLinks = useMemo(() => {
         let breadcrumbs = []
 
         if (category || !locationUnset) {
-            breadcrumbs.push({ link: '/places', text: t('breadcrumb') })
+            breadcrumbs.push({
+                link: '/places',
+                text: t('breadCrumbPlacesLink')
+            })
         }
 
         if (!locationUnset && category) {
@@ -227,7 +233,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         ? currentCategory
                         : !locationUnset
                         ? locationData?.title
-                        : t('breadcrumb')
+                        : t('breadCrumbCurrent')
                 }
                 actions={
                     <Button
@@ -236,7 +242,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         icon={'Tune'}
                         onClick={handleClickOpenFiltersDialog}
                     >
-                        {`Фильтры ${
+                        {`${t('buttonFilters')} ${
                             filtersCount > 0 ? `(${filtersCount})` : ''
                         }`}
                     </Button>
@@ -245,7 +251,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             <PlacesList places={placesList} />
             <Container className={'pagination'}>
                 <div>
-                    {'Интересных мест:'} <strong>{placesCount}</strong>
+                    {t('placesCount')} <strong>{placesCount}</strong>
                 </div>
                 <Pagination
                     currentPage={currentPage}
@@ -258,7 +264,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Dialog
                 contentHeight={'306px'}
-                header={filterOpenTitle || 'Фильтры'}
+                header={filterOpenTitle || t('dialogFiltersTitle')}
                 open={filtersDialogOpen}
                 showBackLink={filtersOptionsOpen}
                 onBackClick={handleFiltersBackLink}

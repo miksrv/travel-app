@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import React from 'react'
@@ -26,29 +27,35 @@ const UsersPage: NextPage<UsersPageProps> = ({
     usersList,
     usersCount,
     currentPage
-}) => (
-    <AppLayout>
-        <NextSeo title={'Путешественники'} />
-        <Header
-            title={'Путешественники'}
-            currentPage={'Путешественники'}
-        />
+}) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'pages.users'
+    })
 
-        <UsersList users={usersList} />
-
-        <Container className={'pagination'}>
-            <div>
-                {'Путешественников:'} <strong>{usersCount}</strong>
-            </div>
-            <Pagination
-                currentPage={currentPage}
-                totalPostCount={usersCount}
-                perPage={USERS_PER_PAGE}
-                linkPart={'users'}
+    return (
+        <AppLayout>
+            <NextSeo title={t('title')} />
+            <Header
+                title={t('title')}
+                currentPage={t('breadCrumbCurrent')}
             />
-        </Container>
-    </AppLayout>
-)
+
+            <UsersList users={usersList} />
+
+            <Container className={'pagination'}>
+                <div>
+                    {t('usersCount')} <strong>{usersCount}</strong>
+                </div>
+                <Pagination
+                    currentPage={currentPage}
+                    totalPostCount={usersCount}
+                    perPage={USERS_PER_PAGE}
+                    linkPart={'users'}
+                />
+            </Container>
+        </AppLayout>
+    )
+}
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>

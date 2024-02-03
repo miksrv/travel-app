@@ -1,5 +1,6 @@
 'use client'
 
+import { useTranslation } from 'next-i18next'
 import React, { useCallback, useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -29,6 +30,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     onSubmit,
     onCancel
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.placesList.registrationForm'
+    })
+
     const [formData, setFormData] = useState<FormDataType>()
     const [formErrors, setFormErrors] = useState<FormDataType>()
 
@@ -36,26 +41,26 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         const errors: FormDataType = {}
 
         if (!formData?.name) {
-            errors.name = 'Name is required'
+            errors.name = t('errorName')
         }
 
         if (!validateEmail(formData?.email)) {
-            errors.email = 'Email is invalid'
+            errors.email = t('errorEmail')
         }
 
         if (!formData?.password) {
-            errors.password = 'Password is required'
+            errors.password = t('errorPassword')
         }
 
         if (formData?.password && formData?.password?.length < 8) {
-            errors.password = 'The minimum password length must be 8 characters'
+            errors.password = t('errorPasswordLength')
         }
 
         if (
             !formData?.repeat_password ||
             formData?.repeat_password !== formData?.password
         ) {
-            errors.repeat_password = 'Password mismatch'
+            errors.repeat_password = t('errorPasswordMismatch')
         }
 
         setFormErrors(errors)
@@ -90,14 +95,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
-                    title={'Исправте ошибки'}
+                    title={t('errorsMessageTitle')}
                     list={Object.values(formErrors || {})}
                 />
             )}
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Имя пользователя'}
+                    label={t('inputNameLabel')}
                     name={'name'}
                     disabled={loading}
                     value={formData?.name}
@@ -109,7 +114,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Email адрес'}
+                    label={t('inputEmailLabel')}
                     name={'email'}
                     disabled={loading}
                     value={formData?.email}
@@ -121,7 +126,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Пароль'}
+                    label={t('inputPasswordLabel')}
                     name={'password'}
                     type={'password'}
                     disabled={loading}
@@ -134,7 +139,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
-                    label={'Повторите пароль'}
+                    label={t('inputPasswordRepeatLabel')}
                     name={'repeat_password'}
                     type={'password'}
                     disabled={loading}
@@ -151,7 +156,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     onClick={handleSubmit}
                 >
-                    {'Зарегистрироваться'}
+                    {t('buttonRegistration')}
                 </Button>
 
                 <Button
@@ -159,7 +164,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     disabled={loading}
                     onClick={onCancel}
                 >
-                    {'Отмена'}
+                    {t('buttonCancel')}
                 </Button>
             </div>
         </div>

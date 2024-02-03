@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -18,69 +19,75 @@ interface PlacesListItemProps {
     place: Place
 }
 
-const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => (
-    <article className={styles.placesListItem}>
-        <section className={styles.photoSection}>
-            <Image
-                className={styles.categoryIcon}
-                src={categoryImage(place.category?.name).src}
-                alt={''}
-                width={22}
-                height={26}
-            />
-            <Link
-                href={`/places/${place.id}`}
-                title={place.title}
-            >
+const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.placesList.placesListItem'
+    })
+
+    return (
+        <article className={styles.placesListItem}>
+            <section className={styles.photoSection}>
                 <Image
-                    className={styles.photo}
-                    alt={place?.photo?.title || ''}
-                    height={180}
-                    width={260}
-                    src={
-                        place?.photo?.filename
-                            ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
-                            : noPhoto.src
-                    }
+                    className={styles.categoryIcon}
+                    src={categoryImage(place.category?.name).src}
+                    alt={''}
+                    width={22}
+                    height={26}
                 />
-            </Link>
-            <div className={styles.bottomPanel}>
-                <Badge
-                    icon={'Photo'}
-                    content={place?.photoCount || 0}
-                />
-                {!!place.rating && (
-                    <Badge
-                        icon={'Star'}
-                        content={place.rating}
+                <Link
+                    href={`/places/${place.id}`}
+                    title={place.title}
+                >
+                    <Image
+                        className={styles.photo}
+                        alt={place?.photo?.title || ''}
+                        height={180}
+                        width={260}
+                        src={
+                            place?.photo?.filename
+                                ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
+                                : noPhoto.src
+                        }
                     />
-                )}
-                <Badge
-                    icon={'Eye'}
-                    content={numberFormatter(place?.views || 0)}
-                />
-                {!!place?.distance && (
+                </Link>
+                <div className={styles.bottomPanel}>
                     <Badge
-                        icon={'Ruler'}
-                        content={numberFormatter(place?.distance || 0)}
+                        icon={'Photo'}
+                        content={place?.photoCount || 0}
                     />
-                )}
-            </div>
-        </section>
-        <h2 className={styles.title}>
-            <Link
-                href={`/places/${place.id}`}
-                title={place.title}
-            >
-                {place?.title}
-            </Link>
-        </h2>
-        {place?.content ? (
-            <p>{place.content}</p>
-        ) : (
-            <div className={styles.emptyContent}>{'Пока ничего нет'}</div>
-        )}
-    </article>
-)
+                    {!!place.rating && (
+                        <Badge
+                            icon={'Star'}
+                            content={place.rating}
+                        />
+                    )}
+                    <Badge
+                        icon={'Eye'}
+                        content={numberFormatter(place?.views || 0)}
+                    />
+                    {!!place?.distance && (
+                        <Badge
+                            icon={'Ruler'}
+                            content={numberFormatter(place?.distance || 0)}
+                        />
+                    )}
+                </div>
+            </section>
+            <h2 className={styles.title}>
+                <Link
+                    href={`/places/${place.id}`}
+                    title={place.title}
+                >
+                    {place?.title}
+                </Link>
+            </h2>
+            {place?.content ? (
+                <p>{place.content}</p>
+            ) : (
+                <div className={styles.emptyContent}>{t('noData')}</div>
+            )}
+        </article>
+    )
+}
 
 export default PlacesListItem

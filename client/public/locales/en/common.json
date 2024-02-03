@@ -134,26 +134,76 @@
             "dialogCaptionSort": "Сортировка",
             "dialogCaptionOrder": "Порядок",
             "dialogCaptionCategory": "Категория",
-            "inputLocationLabel": "Фильтровать по местоположению",
-            "inputLocationPlaceholder": "Начните вводить название",
-            "inputSortLabel": "Сортировка мест",
-            "inputOrderLabel": "Порядок сортировки",
-            "inputCategoryLabel": "Фильтровать по категории",
-            "inputCategoryPlaceholder": "Выберите категорию"
+            "autocompleteLocationLabel": "Фильтровать по местоположению",
+            "autocompleteLocationPlaceholder": "Начните вводить название",
+            "dropdownSortLabel": "Сортировка мест",
+            "dropdownOrderLabel": "Порядок сортировки",
+            "dropdownCategoryLabel": "Фильтровать по категории",
+            "dropdownCategoryPlaceholder": "Выберите категорию"
+        },
+        "placesList": {
+            "emptyList": "Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.",
+            "placesListItem": {
+                "noData": "Пока ничего нет"
+            }
+        },
+        "registrationForm": {
+            "errorsMessageTitle": "Исправте ошибки",
+            "errorName": "Имя обязательно для заполнения",
+            "errorEmail": "Некорректный email адрес",
+            "errorPassword": "Пароль обязателен для заполнения",
+            "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
+            "errorPasswordMismatch": "Введенные пароли не совпадают",
+            "inputNameLabel": "Имя пользователя",
+            "inputEmailLabel": "Email адрес",
+            "inputPasswordLabel": "Пароль",
+            "inputPasswordRepeatLabel": "Повторите пароль",
+            "buttonRegistration": "Зарегистрироваться",
+            "buttonCancel": "Отмена"
+        },
+        "userAvatar": {
+            "linkTitle": "Профиль пользователя",
+            "avatarImageAlt": "Фото профиля пользователя"
+        },
+        "userList": {
+            "reputation": "Репутация"
         }
     },
-    "page": {
+    "pages": {
+        "places": {
+            "createPlacePage": {
+                "title": "Добавить интересное место",
+                "breadCrumbCurrent": "Добавить новое",
+                "breadCrumbPlacesLink": "Интересные места"
+            },
+            "placesPage": {
+                "title": "Интересные места",
+                "breadCrumbPlacesLink": "Интересные места",
+                "breadCrumbCurrent": "Интересные места",
+                "buttonFilters": "Фильтры",
+                "placesCount": "Интересных мест:",
+                "dialogFiltersTitle": "Фильтры"
+            }
+        },
         "index": {
             "title": "Карта интересных мест",
-            "breadcrumb": "Карта интересных мест и достопримечательностей"
+            "breadCrumbCurrent": "Карта интересных мест и достопримечательностей",
+            "pointsCount": "Точек на карте:",
+            "buttonFilters": "Фильтры",
+            "dialogFiltersTitle": "Фильтры",
+            "dropdownCategoryLabel": "Фильтровать по категории",
+            "dropdownCategoryPlaceholder": "Выберите категорию"
         },
-        "places": {
-            "title": "Interesting places",
-            "shortTitle": "Интересные места",
-            "breadcrumb": "Интересные места"
+        "login": {
+            "title": "Авторизация"
         },
-        "place": {
-            "breadcrumb": "Interesting places"
+        "registration": {
+            "title": "Регистрация"
+        },
+        "users": {
+            "title": "Путешественники",
+            "breadCrumbCurrent": "Путешественники",
+            "usersCount": "Путешественников:"
         }
     }
 }

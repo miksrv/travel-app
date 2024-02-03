@@ -1,4 +1,5 @@
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
@@ -18,6 +19,10 @@ import PlaceForm from '@/components/place-form'
 interface CreatePlacePageProps {}
 
 const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'pages.places.createPlacePage'
+    })
+
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -54,14 +59,14 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 
     return (
         <AppLayout>
-            <NextSeo title={'Добавить интересное место'} />
+            <NextSeo title={t('title')} />
             <Header
-                title={'Добавить интересное место'}
-                currentPage={'Добавить новое'}
+                title={t('title')}
+                currentPage={t('breadCrumbCurrent')}
                 links={[
                     {
                         link: '/places/',
-                        text: 'Интересные места'
+                        text: t('breadCrumbPlacesLink')
                     }
                 ]}
             />

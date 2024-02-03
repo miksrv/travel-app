@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React from 'react'
 
@@ -17,47 +18,53 @@ interface UsersListProps {
     users?: User[]
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users }) => (
-    <Container>
-        {users?.map((user) => (
-            <section
-                key={user.id}
-                className={styles.usersListItem}
-            >
-                <UserAvatar
-                    className={styles.avatar}
-                    showName={true}
-                    user={user}
-                    size={'medium'}
-                    caption={formatDate(user?.created?.date, 'D MMMM YYYY')}
-                />
-                <div className={styles.reputation}>
-                    <p>{'Репутация: '}</p>
-                    <Reputation value={user?.reputation || 0} />
-                </div>
-                <div className={styles.level}>
-                    [<b>{user?.level?.level}</b>]
-                    <Image
-                        className={styles.levelImage}
-                        src={levelImage(user?.level?.level)?.src}
-                        alt={''}
-                        width={20}
-                        height={20}
+const UsersList: React.FC<UsersListProps> = ({ users }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.userList'
+    })
+
+    return (
+        <Container>
+            {users?.map((user) => (
+                <section
+                    key={user.id}
+                    className={styles.usersListItem}
+                >
+                    <UserAvatar
+                        className={styles.avatar}
+                        showName={true}
+                        user={user}
+                        size={'medium'}
+                        caption={formatDate(user?.created?.date, 'D MMMM YYYY')}
                     />
-                    {user?.level?.title}
-                    <Progress
-                        className={styles.progress}
-                        value={nextLevelPercentage(
-                            user?.level?.experience || 0,
-                            user?.level?.nextLevel ||
-                                user?.level?.experience ||
-                                0
-                        )}
-                    />
-                </div>
-            </section>
-        ))}
-    </Container>
-)
+                    <div className={styles.reputation}>
+                        <p>{`${t('reputation')}: `}</p>
+                        <Reputation value={user?.reputation || 0} />
+                    </div>
+                    <div className={styles.level}>
+                        [<b>{user?.level?.level}</b>]
+                        <Image
+                            className={styles.levelImage}
+                            src={levelImage(user?.level?.level)?.src}
+                            alt={''}
+                            width={20}
+                            height={20}
+                        />
+                        {user?.level?.title}
+                        <Progress
+                            className={styles.progress}
+                            value={nextLevelPercentage(
+                                user?.level?.experience || 0,
+                                user?.level?.nextLevel ||
+                                    user?.level?.experience ||
+                                    0
+                            )}
+                        />
+                    </div>
+                </section>
+            ))}
+        </Container>
+    )
+}
 
 export default UsersList

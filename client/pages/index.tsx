@@ -36,11 +36,12 @@ interface IndexPageProps {
 }
 
 const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
+    const { t } = useTranslation('common', { keyPrefix: 'pages.index' })
+
     const dispatch = useAppDispatch()
     const router = useRouter()
 
     const location = useAppSelector((state) => state.application.userLocation)
-    const { t } = useTranslation('common', { keyPrefix: 'page.index' })
     const [mapBounds, setMapBounds] = useState<string>()
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
     const [openedOptions, setOpenedOptions] =
@@ -125,12 +126,12 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
             <NextSeo title={t('title')} />
             <Header
                 title={t('title')}
-                currentPage={t('breadcrumb')}
+                currentPage={t('breadCrumbCurrent')}
                 hideHomePage={true}
                 actions={
                     <>
                         <div>
-                            {'Точек на карте: '}
+                            {t('pointsCount')}{' '}
                             <strong>{poiListData?.count ?? 0}</strong>
                         </div>
                         <Button
@@ -139,7 +140,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                             icon={'Tune'}
                             onClick={handleClickOpenFiltersDialog}
                         >
-                            {`Фильтры ${
+                            {`${t('buttonFilters')} ${
                                 filtersCount > 0 ? `(${filtersCount})` : ''
                             }`}
                         </Button>
@@ -167,7 +168,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
 
             <Dialog
                 contentHeight={'280px'}
-                header={'Фильтры'}
+                header={t('dialogFiltersTitle')}
                 open={filtersDialogOpen}
                 showBackLink={!!openedOptions}
                 onBackClick={handleFiltersBackLink}
@@ -189,8 +190,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                         value={categoryOptions?.find(
                             ({ key }) => key === category
                         )}
-                        label={'Фильтровать по категории'}
-                        placeholder={'Выберите категорию'}
+                        label={t('dropdownCategoryLabel')}
+                        placeholder={t('dropdownCategoryPlaceholder')}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
                     />
