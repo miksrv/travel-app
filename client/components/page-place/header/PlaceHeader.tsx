@@ -73,7 +73,8 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                 className={styles.image}
                 alt={place?.photo?.title || ''}
                 height={300}
-                width={1100}
+                width={870}
+                priority={true}
                 src={
                     place?.photo?.filename
                         ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}.${place?.photo?.extension}`

@@ -179,9 +179,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                     <div className={styles.key}>{t('address')}</div>
                     <div className={styles.value}>
                         {placeAddress?.map((address, i) => (
-                            <>
+                            <span key={`address${address.type}`}>
                                 <Link
-                                    key={`address${address.type}`}
                                     href={`/places?${address.type}=${address.id}`}
                                     title={`${t('addressLinkTitle')} ${
                                         address.name
@@ -190,7 +189,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                                     {address.name}
                                 </Link>
                                 {placeAddress.length - 1 !== i && ', '}
-                            </>
+                            </span>
                         ))}
 
                         {place?.address?.street && (

@@ -48,7 +48,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     <Image
                         src={photo}
                         alt={''}
-                        width={200}
+                        width={205}
                         height={150}
                     />
                 </li>
