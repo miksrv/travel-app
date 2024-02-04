@@ -606,19 +606,19 @@ class Places extends ResourceController {
         }
 
         if ($country) {
-            $placesModel->where(['country_id' => $country]);
+            $placesModel->where(['places.country_id' => $country]);
         }
 
         if ($region) {
-            $placesModel->where(['region_id' => $region]);
+            $placesModel->where(['places.region_id' => $region]);
         }
 
         if ($district) {
-            $placesModel->where(['district_id' => $district]);
+            $placesModel->where(['places.district_id' => $district]);
         }
 
         if ($locality) {
-            $placesModel->where(['locality_id' => $locality]);
+            $placesModel->where(['places.locality_id' => $locality]);
         }
 
         if ($category) {

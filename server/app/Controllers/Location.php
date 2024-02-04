@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\Geocoder;
+use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use App\Models\LocationLocalitiesModel;
 use App\Models\LocationCountriesModel;
@@ -12,6 +13,10 @@ use Geocoder\Exception\Exception;
 use ReflectionException;
 
 class Location extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     /**
      * Update user coordinates
      * @return ResponseInterface
