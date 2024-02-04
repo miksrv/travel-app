@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Models\LocationCitiesModel;
+use App\Models\LocationLocalitiesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -9,7 +9,7 @@ class Cities extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $citiesModel = new LocationCitiesModel();
+        $citiesModel = new LocationLocalitiesModel();
         $citiesData  = $citiesModel
             ->select(
                 'address_city.*, address_district.name as district_name, 
@@ -25,30 +25,30 @@ class Cities extends ResourceController {
             return $this->respond(['items'  => $response]);
         }
 
-        foreach ($citiesData as $city) {
+        foreach ($citiesData as $locality) {
             $result = [
-                'id'    => (int) $city->id,
-                'name'  => $city->name,
+                'id'    => (int) $locality->id,
+                'name'  => $locality->name,
             ];
 
-            if ($city->district_name) {
+            if ($locality->district_name) {
                 $result['district'] = [
-                    'id'   => $city->district,
-                    'name' => $city->district_name,
+                    'id'   => $locality->district,
+                    'name' => $locality->district_name,
                 ];
             }
 
-            if ($city->region_name) {
+            if ($locality->region_name) {
                 $result['region'] = [
-                    'id'   => $city->region,
-                    'name' => $city->region_name,
+                    'id'   => $locality->region,
+                    'name' => $locality->region_name,
                 ];
             }
 
-            if ($city->country_name) {
+            if ($locality->country_name) {
                 $result['country'] = [
-                    'id'   => $city->country,
-                    'name' => $city->country_name,
+                    'id'   => $locality->country,
+                    'name' => $locality->country_name,
                 ];
             }
 

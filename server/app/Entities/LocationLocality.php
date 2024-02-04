@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class LocationCity extends Entity {
+class LocationLocality extends Entity {
     protected $casts = [
         'id'          => 'integer',
         'country_id'  => 'integer',

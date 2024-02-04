@@ -49,14 +49,14 @@ export const SortFields = {
 export type SortFields = (typeof SortFields)[keyof typeof SortFields]
 
 export const LocationType = {
-    City: 'city',
     Country: 'country',
     District: 'district',
+    Locality: 'locality',
     Region: 'region'
 } as const
 export type LocationType = (typeof LocationType)[keyof typeof LocationType]
 
-export type LocationTypes = 'country' | 'region' | 'district' | 'city'
+export type LocationTypes = 'country' | 'region' | 'district' | 'locality'
 
 export interface ApiResponseError<T> {
     status: number
@@ -119,7 +119,7 @@ export interface RequestPlacesGetList {
     country?: number | null
     region?: number | null
     district?: number | null
-    city?: number | null
+    locality?: number | null
     limit?: number
     offset?: number
     category?: string | null

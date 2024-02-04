@@ -59,7 +59,7 @@ class AddPlaces extends Migration {
                 'constraint' => 11,
                 'null'       => true
             ],
-            'city_id' => [
+            'locality_id' => [
                 'type'       => 'INT',
                 'constraint' => 11,
                 'null'       => true
@@ -83,7 +83,7 @@ class AddPlaces extends Migration {
         $this->forge->addForeignKey('country_id', 'location_countries', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('region_id', 'location_regions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('district_id', 'location_districts', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('city_id', 'location_cities', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('locality_id', 'location_localities', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('places');
     }
 

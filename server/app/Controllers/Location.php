@@ -2,7 +2,7 @@
 
 use App\Libraries\Geocoder;
 use App\Libraries\SessionLibrary;
-use App\Models\LocationCitiesModel;
+use App\Models\LocationLocalitiesModel;
 use App\Models\LocationCountriesModel;
 use App\Models\LocationDistrictsModel;
 use App\Models\LocationRegionsModel;
@@ -45,7 +45,7 @@ class Location extends ResourceController {
         $countriesData = $this->_searchResult(new LocationCountriesModel(), $text);
         $regionsData   = $this->_searchResult(new LocationRegionsModel(), $text);
         $districtsData = $this->_searchResult(new LocationDistrictsModel(), $text);
-        $citiesData    = $this->_searchResult(new LocationCitiesModel(), $text);
+        $citiesData    = $this->_searchResult(new LocationLocalitiesModel(), $text);
 
         $result['countries'] = $this->_prepareSearchData($countriesData);
         $result['regions']   = $this->_prepareSearchData($regionsData);
@@ -76,7 +76,7 @@ class Location extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        $location = ['country', 'region', 'district', 'city'];
+        $location = ['country', 'region', 'district', 'locality'];
         $type     = $this->request->getGet('type', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!in_array($type, $location)) {
@@ -98,8 +98,8 @@ class Location extends ResourceController {
             return $this->_showResult($districtsModel->find($id));
         }
 
-        if ($type === 'city') {
-            $citiesModel = new LocationCitiesModel();
+        if ($type === 'locality') {
+            $citiesModel = new LocationLocalitiesModel();
             return $this->_showResult($citiesModel->find($id));
         }
 

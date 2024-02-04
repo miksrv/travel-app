@@ -4,7 +4,7 @@ export type PlacesFilterType = {
     country?: number
     region?: number
     district?: number
-    city?: number
+    locality?: number
     category?: string
     order?: ApiTypes.SortOrder
     page?: number

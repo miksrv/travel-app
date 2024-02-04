@@ -45,8 +45,8 @@ const Search: React.FC<SearchProps> = () => {
                     address.push(item.address.district.title)
                 }
 
-                if (item.address?.city) {
-                    address.push(item.address.city.title)
+                if (item.address?.locality) {
+                    address.push(item.address.locality.title)
                 }
 
                 return {

@@ -1,12 +1,12 @@
 <?php namespace App\Models;
 
-class LocationCitiesModel extends MyBaseModel {
-    protected $table      = 'location_cities';
+class LocationLocalitiesModel extends MyBaseModel {
+    protected $table      = 'location_localities';
     protected $primaryKey = 'id';
 
     protected $useAutoIncrement = true;
 
-    protected $returnType     = \App\Entities\LocationCity::class;
+    protected $returnType     = \App\Entities\LocationLocality::class;
     protected $useSoftDeletes = true;
 
     protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];

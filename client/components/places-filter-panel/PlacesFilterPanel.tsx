@@ -155,7 +155,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
             })) || []),
             ...(addressData?.cities?.map((item) => ({
                 key: item.id,
-                type: ApiTypes.LocationType.City,
+                type: ApiTypes.LocationType.Locality,
                 value: item.title
             })) || [])
         ],

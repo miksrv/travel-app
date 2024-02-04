@@ -57,7 +57,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
             'country',
             'region',
             'district',
-            'city'
+            'locality'
         ]
         let address: PlaceAddress[] = []
 

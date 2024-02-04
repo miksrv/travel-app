@@ -1,6 +1,6 @@
 <?php namespace App\Libraries;
 
-use App\Models\LocationCitiesModel;
+use App\Models\LocationLocalitiesModel;
 use App\Models\LocationCountriesModel;
 use App\Models\LocationDistrictsModel;
 use App\Models\LocationRegionsModel;
@@ -21,7 +21,7 @@ class Geocoder {
     public ?int $countryId = null;
     public ?int $regionId = null;
     public ?int $districtId = null;
-    public ?int $cityId = null;
+    public ?int $localityId = null;
 
     public string $addressEn;
     public string $addressRu;
@@ -113,7 +113,7 @@ class Geocoder {
             $this->_getDistrictId($districtTitleEn, $districtTitleRu);
         }
 
-        $this->_getCityId($locationEn->getLocality(), $locationRu->getLocality());
+        $this->_getLocalityId($locationEn->getLocality(), $locationRu->getLocality());
 
         $this->addressEn = $locationEn->getStreetName() . ($locationEn->getStreetNumber() ? ', ' . $locationEn->getStreetNumber() : '');
         $this->addressRu = $locationRu->getStreetName() . ($locationRu->getStreetNumber() ? ', ' . $locationRu->getStreetNumber() : '');
@@ -241,7 +241,7 @@ class Geocoder {
      * @return void
      * @throws ReflectionException
      */
-    private function _getCityId(
+    private function _getLocalityId(
         ?string $titleEn,
         ?string $titleRu,
     ): void
@@ -250,8 +250,8 @@ class Geocoder {
             return;
         }
 
-        $cityModel = new LocationCitiesModel();
-        $cityData  = $cityModel
+        $localityModel = new LocationLocalitiesModel();
+        $localityData  = $localityModel
             ->select('id')
             ->where([
                 'country_id'  => $this->countryId,
@@ -262,20 +262,20 @@ class Geocoder {
             ])
             ->first();
 
-        if ($cityData) {
-            $this->cityId = $cityData->id;
+        if ($localityData) {
+            $this->localityId = $localityData->id;
             return;
         }
 
-        $city = new \App\Entities\LocationCity();
-        $city->country_id  = $this->countryId;
-        $city->region_id   = $this->regionId;
-        $city->district_id = $this->districtId;
-        $city->title_en    = $titleEn;
-        $city->title_ru    = $titleRu;
+        $locality = new \App\Entities\LocationLocality();
+        $locality->country_id  = $this->countryId;
+        $locality->region_id   = $this->regionId;
+        $locality->district_id = $this->districtId;
+        $locality->title_en    = $titleEn;
+        $locality->title_ru    = $titleRu;
 
-        $cityModel->insert($city);
+        $localityModel->insert($locality);
 
-        $this->cityId = $cityModel->getInsertID();
+        $this->localityId = $localityModel->getInsertID();
     }
 }

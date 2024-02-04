@@ -60,7 +60,7 @@ export type Location = {
     country?: LocationObject
     region?: LocationObject
     district?: LocationObject
-    city?: LocationObject
+    locality?: LocationObject
 }
 
 export type GeoSearchLocation = {

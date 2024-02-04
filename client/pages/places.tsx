@@ -31,7 +31,7 @@ interface PlacesPageProps {
     country: number | null
     region: number | null
     district: number | null
-    city: number | null
+    locality: number | null
     category: string | null
     sort: ApiTypes.SortFields
     order: ApiTypes.SortOrder
@@ -44,7 +44,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     country,
     region,
     district,
-    city,
+    locality,
     category,
     sort,
     order,
@@ -56,14 +56,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         keyPrefix: 'pages.places.placesPage'
     })
 
-    const locationUnset = !country && !region && !district && !city
+    const locationUnset = !country && !region && !district && !locality
     const locationType: ApiTypes.LocationTypes = country
         ? 'country'
         : region
         ? 'region'
         : district
         ? 'district'
-        : 'city'
+        : 'locality'
 
     const router = useRouter()
     const dispatch = useAppDispatch()
@@ -71,7 +71,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: locationData } = API.useLocationGetByTypeQuery(
         {
-            id: country ?? region ?? district ?? city,
+            id: country ?? region ?? district ?? locality,
             type: locationType
         },
         { skip: locationUnset }
@@ -83,9 +83,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined,
-        city: city ?? undefined,
         country: country ?? undefined,
         district: district ?? undefined,
+        locality: locality ?? undefined,
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         region: region ?? undefined,
@@ -99,9 +99,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         const filter = { ...initialFilter, [key]: value }
         const update = {
             category: filter.category ?? undefined,
-            city: filter.city ?? undefined,
             country: filter.country ?? undefined,
             district: filter.district ?? undefined,
+            locality: filter.locality ?? undefined,
             order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
             page: filter.page !== 1 ? filter.page : undefined,
             region: filter.region ?? undefined,
@@ -113,7 +113,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 filter.country !== country ||
                 filter.district !== district ||
                 filter.region !== region ||
-                filter.city !== city) &&
+                filter.locality !== locality) &&
             currentPage !== 1
         ) {
             update.page = undefined
@@ -128,9 +128,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const handleClearLocationFilter = async () => {
         const filter = {
             ...initialFilter,
-            city: undefined,
             country: undefined,
             district: undefined,
+            locality: undefined,
             region: undefined
         }
         return await router.push('/places' + encodeQueryData(filter))
@@ -147,7 +147,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         if (!location) {
             await handleClearLocationFilter()
         } else {
-            await handleChangeFilter(location?.type ?? 'city', location?.key)
+            await handleChangeFilter(
+                location?.type ?? 'locality',
+                location?.key
+            )
         }
     }
 
@@ -303,7 +306,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const region = parseInt(context.query.region as string, 10) || null
             const district =
                 parseInt(context.query.district as string, 10) || null
-            const city = parseInt(context.query.city as string, 10) || null
+            const locality =
+                parseInt(context.query.locality as string, 10) || null
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
@@ -319,10 +323,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
                     category,
-                    city,
                     country,
                     district,
                     limit: POST_PER_PAGE,
+                    locality,
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
                     region,
@@ -336,10 +340,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 props: {
                     ...translations,
                     category,
-                    city,
                     country,
                     currentPage,
                     district,
+                    locality,
                     order,
                     placesCount: placesList?.count || 0,
                     placesList: placesList?.items || [],

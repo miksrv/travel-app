@@ -139,7 +139,7 @@ class Migrate extends ResourceController {
             $place->country_id  = $geocoder->countryId;
             $place->region_id   = $geocoder->regionId;
             $place->district_id = $geocoder->districtId;
-            $place->city_id     = $geocoder->cityId;
+            $place->locality_id = $geocoder->localityId;
             $place->created_at  = $item->item_datestamp;
             $place->updated_at  = $placeVersionDate;
 

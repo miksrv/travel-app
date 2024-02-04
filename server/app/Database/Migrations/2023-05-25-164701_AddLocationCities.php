@@ -49,10 +49,10 @@ class AddLocationCities extends Migration {
         $this->forge->addForeignKey('country_id', 'location_countries', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('region_id', 'location_regions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('district_id', 'location_districts', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('location_cities');
+        $this->forge->createTable('location_localities');
     }
 
     public function down() {
-        $this->forge->dropTable('location_cities');
+        $this->forge->dropTable('location_localities');
     }
 }

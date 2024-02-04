@@ -195,7 +195,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
                 {places?.map((place) => (
                     <MarkerPoint
-                        key={place.id}
+                        key={`poi${place.id}`}
                         place={place}
                     />
                 ))}

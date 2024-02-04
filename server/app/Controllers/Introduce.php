@@ -97,7 +97,7 @@ class Introduce extends ResourceController {
 //            $place->address_country  = $geocoder->countryID;
 //            $place->address_region   = $geocoder->regionID;
 //            $place->address_district = $geocoder->districtID;
-//            $place->address_city     = $geocoder->cityID;
+//            $place->address_city     = $geocoder->localityId;
 //            $place->tags             = $this->cleanTags($point->tags, $point->category);
 //            $placesModel->insert($place);
 //

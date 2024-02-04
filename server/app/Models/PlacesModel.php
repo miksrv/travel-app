@@ -22,7 +22,7 @@ class PlacesModel extends MyBaseModel {
         'country_id',
         'region_id',
         'district_id',
-        'city_id',
+        'locality_id',
         'user_id',
         'updated_at',
         'created_at'
@@ -45,7 +45,7 @@ class PlacesModel extends MyBaseModel {
         'country_id'  => 'integer|max_length[5]',
         'region_id'   => 'integer|max_length[5]',
         'district_id' => 'integer|max_length[5]',
-        'city_id'     => 'integer|max_length[5]',
+        'locality_id'     => 'integer|max_length[5]',
         'user_id'     => 'required|string|min_length[3]|max_length[40]',
     ];
     protected $validationMessages   = [];
