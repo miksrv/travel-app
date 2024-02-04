@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
+use App\Libraries\PlacesContent;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -85,50 +86,50 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        try {
-            $photosModel = new PhotosModel();
-            $placesModel = new PlacesModel();
-            $placeData   = $placesModel
-                ->select('places.*, places_content.title, places_content.content')
-                ->join('places_content', 'places.id = places_content.place_id AND locale = "ru"')
-                ->find($id);
+        $locale = $this->request->getLocale();
 
-            if ($placeData) {
-                $placeData->photos = $photosModel
-                    ->select('photos.filename, photos.extension, photos.width, photos.height, photos.order')
-                    ->where(['place_id' => $placeData->id])
-                    ->orderBy('order', 'DESC')
-                    ->findAll();
+        // Load translate library
+        $placeContent = new PlacesContent();
+        $placeContent->translate([$id]);
 
-                $response = [
-                    'id'      => $placeData->id,
-                    'rating'  => (int) $placeData->rating,
-                    'views'   => (int) $placeData->views,
-                    'title'   => strip_tags(html_entity_decode($placeData->title)),
-                    'content' => strip_tags(html_entity_decode($placeData->content))
-                ];
-
-                if ($placeData->photos) {
-                    $response['photosCount'] = count($placeData->photos);
-                    $response['photos']      = [
-                        (object) [
-                            'filename'  => $placeData->photos[0]->filename,
-                            'extension' => $placeData->photos[0]->extension,
-                            'width'     => $placeData->photos[0]->width,
-                            'height'    => $placeData->photos[0]->width
-                        ]
-                    ];
-                }
-
-                return $this->respond($response);
-            }
-
-            return $this->failNotFound();
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
+        if (!$placeContent->title($id)) {
             return $this->failNotFound();
         }
+
+        $photosModel = new PhotosModel();
+        $placesModel = new PlacesModel();
+        $placeData   = $placesModel
+            ->select('id, rating, views')
+            ->find($id);
+
+
+        $placeData->photos = $photosModel
+            ->select('photos.filename, photos.extension, photos.width, photos.height, photos.order')
+            ->where(['place_id' => $placeData->id])
+            ->orderBy('order', 'DESC')
+            ->findAll();
+
+        $response = [
+            'id'      => $placeData->id,
+            'rating'  => (int) $placeData->rating,
+            'views'   => (int) $placeData->views,
+            'title'   => $placeContent->title($id),
+            'content' => $placeContent->content($id),
+        ];
+
+        if ($placeData->photos) {
+            $response['photosCount'] = count($placeData->photos);
+            $response['photos']      = [
+                (object) [
+                    'filename'  => $placeData->photos[0]->filename,
+                    'extension' => $placeData->photos[0]->extension,
+                    'width'     => $placeData->photos[0]->width,
+                    'height'    => $placeData->photos[0]->width
+                ]
+            ];
+        }
+
+        return $this->respond($response);
     }
 
     /**
