@@ -46,7 +46,6 @@ const UserAvatar: React.FC<AvatarProps> = ({
                         <AvatarImage
                             user={user}
                             size={size}
-                            alt={t('avatarImageAlt')}
                         />
                     </span>
                 ) : (
@@ -58,7 +57,6 @@ const UserAvatar: React.FC<AvatarProps> = ({
                         <AvatarImage
                             user={user}
                             size={size}
-                            alt={t('avatarImageAlt')}
                         />
                     </Link>
                 )
@@ -91,14 +89,10 @@ const UserAvatar: React.FC<AvatarProps> = ({
     )
 }
 
-const AvatarImage: React.FC<AvatarProps & { alt?: string }> = ({
-    user,
-    size,
-    alt
-}) => (
+const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
     <>
         <Image
-            alt={alt ?? ` ${user?.name}` ?? ''}
+            alt={''}
             className={styles.avatarImage}
             src={
                 user?.avatar

@@ -173,8 +173,7 @@
             "buttonCancel": "Cancel"
         },
         "userAvatar": {
-            "linkTitle": "User Profile",
-            "avatarImageAlt": "User profile photo"
+            "linkTitle": "User Profile"
         },
         "userList": {
             "reputation": "Reputation"

@@ -174,8 +174,7 @@
             "buttonCancel": "Отмена"
         },
         "userAvatar": {
-            "linkTitle": "Профиль пользователя",
-            "avatarImageAlt": "Фото профиля пользователя"
+            "linkTitle": "Профиль пользователя"
         },
         "userList": {
             "reputation": "Репутация"
