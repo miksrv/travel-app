@@ -5,6 +5,7 @@ use App\Models\PlacesModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Exception;
 use ReflectionException;
 
 class Bookmarks extends ResourceController {

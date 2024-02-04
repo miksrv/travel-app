@@ -150,9 +150,7 @@ class Auth extends ResourceController {
         }
 
         if ($userData->type !== AUTH_TYPE_GOOGLE) {
-            $user = new User();
-            $user->auth_type = AUTH_TYPE_GOOGLE;
-            $userModel->update($userData->id, $user);
+            $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_GOOGLE]);
         }
 
         $session = new SessionLibrary();

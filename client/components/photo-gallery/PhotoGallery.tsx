@@ -72,7 +72,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     >
                         <Image
                             src={`${IMG_HOST}${photo.preview}`}
-                            alt={`${photo.title}, фото ${index + 1}`}
+                            alt={`${photo.title}. ${t('linkPhotoTitle')} ${
+                                index + 1
+                            }`}
                             width={200}
                             height={150}
                         />

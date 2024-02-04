@@ -81,7 +81,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             <div className={styles.bottomPanel}>
                 <Badge
                     icon={'Photo'}
-                    content={place?.photoCount || 0}
+                    content={place?.photos || 0}
                 />
                 <Badge
                     icon={'Eye'}

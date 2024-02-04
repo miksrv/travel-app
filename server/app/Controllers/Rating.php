@@ -9,6 +9,7 @@ use App\Models\RatingModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Exception;
 use ReflectionException;
 
 class Rating extends ResourceController {

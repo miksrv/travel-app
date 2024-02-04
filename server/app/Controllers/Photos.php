@@ -13,6 +13,7 @@ use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
+use Exception;
 use ReflectionException;
 
 /**
@@ -90,8 +91,8 @@ class Photos extends ResourceController {
 
         foreach ($photosData as $photo) {
             $title = $locale === 'ru' ?
-                ($photo->title_ru ?? $photo->title_en) :
-                ($photo->title_en ?? $photo->title_ru);
+                ($photo->title_ru ?: $photo->title_en) :
+                ($photo->title_en ?: $photo->title_ru);
 
             $photoPath = 'uploads/places/' . $photo->place_id . '/' . $photo->filename;
 
@@ -205,23 +206,21 @@ class Photos extends ResourceController {
             exit();
         }
 
-        // Update the time when the place was last edited
-        $place = new Place();
-        $place->updated_at = time();
-        $place->photos     = $placesData->photos + 1;
-        $placesModel->update($id, $place);
+        // Update the time and photos count
+        $placesModel->update($id, ['photos' => $placesData->photos + 1]);
+
+        $photoPath = 'uploads/places/' . $placesData->id . '/';
 
         return $this->respondCreated((object) [
-            'id'        => $photo->id,
-            'full'      => 'uploads/places/' . $placesData->id . $name . '.' . $ext,
-            'preview'   => 'uploads/places/' . $placesData->id . $name . '_preview.' . $ext,
+            'id'        => $photoId,
+            'full'      => $photoPath . $name . '.' . $ext,
+            'preview'   => $photoPath . $name . '_preview.' . $ext,
             // 'filename'  => $photo->filename,
             // 'extension' => $photo->extension,
             // 'width'     => $photo->width,
             // 'height'    => $photo->height,
-            'title'     => $photo->title,
-            'placeId'   => $photo->place_id,
-            'created'   => $photo->created_at
+            'title'     => $photo->title_en ?: $photo->title_ru,
+            'placeId'   => $photo->place_id
         ]);
     }
 
@@ -259,11 +258,8 @@ class Photos extends ResourceController {
 
         $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
 
-        // Update the time when the place was last edited
-        $place = new Place();
-        $place->updated_at = time();
-        $place->photos     = $placesData->photos - 1;
-        $placesModel->update($id, $place);
+        // Update photos count on the current place
+        $placesModel->update($photoData->place_id, ['photos' => $placesData->photos - 1]);
 
         return $this->respondDeleted(['id' => $id]);
     }
@@ -278,49 +274,55 @@ class Photos extends ResourceController {
             return null;
         }
 
-        $info = exif_read_data($file);
+        try {
+            $info = exif_read_data($file);
 
-        if (!isset($info['GPSLatitude']) || !isset($info['GPSLongitude']) ||
-            !isset($info['GPSLatitudeRef']) || !isset($info['GPSLongitudeRef']) ||
-            !in_array($info['GPSLatitudeRef'], array('E','W','N','S')) || !in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
+            if (!isset($info['GPSLatitude']) || !isset($info['GPSLongitude']) ||
+                !isset($info['GPSLatitudeRef']) || !isset($info['GPSLongitudeRef']) ||
+                !in_array($info['GPSLatitudeRef'], array('E','W','N','S')) || !in_array($info['GPSLongitudeRef'], array('E','W','N','S'))) {
 
-            return null;
+                return null;
+            }
+
+            $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
+            $GPSLongitudeRef = strtolower(trim($info['GPSLongitudeRef']));
+
+            $lat_degrees_a = explode('/',$info['GPSLatitude'][0]);
+            $lat_minutes_a = explode('/',$info['GPSLatitude'][1]);
+            $lat_seconds_a = explode('/',$info['GPSLatitude'][2]);
+            $lng_degrees_a = explode('/',$info['GPSLongitude'][0]);
+            $lng_minutes_a = explode('/',$info['GPSLongitude'][1]);
+            $lng_seconds_a = explode('/',$info['GPSLongitude'][2]);
+
+            $lat_degrees = $lat_degrees_a[0] / $lat_degrees_a[1];
+            $lat_minutes = $lat_minutes_a[0] / $lat_minutes_a[1];
+            $lat_seconds = $lat_seconds_a[0] / $lat_seconds_a[1];
+            $lng_degrees = $lng_degrees_a[0] / $lng_degrees_a[1];
+            $lng_minutes = $lng_minutes_a[0] / $lng_minutes_a[1];
+            $lng_seconds = $lng_seconds_a[0] / $lng_seconds_a[1];
+
+            $lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
+            $lng = (float) $lng_degrees+((($lng_minutes*60)+($lng_seconds))/3600);
+
+            // if the latitude is South, make it negative.
+            if ($GPSLatitudeRef  == 's') {
+                $lat *= -1;
+            }
+
+            // if the longitude is west, make it negative
+            if ($GPSLongitudeRef == 'w') {
+                $lng *= -1;
+            }
+
+            return (object) [
+                'lat' => round($lat, 7),
+                'lon' => round($lng, 7)
+            ];
+        } catch (Exception $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return (object) [];
         }
-
-        $GPSLatitudeRef  = strtolower(trim($info['GPSLatitudeRef']));
-        $GPSLongitudeRef = strtolower(trim($info['GPSLongitudeRef']));
-
-        $lat_degrees_a = explode('/',$info['GPSLatitude'][0]);
-        $lat_minutes_a = explode('/',$info['GPSLatitude'][1]);
-        $lat_seconds_a = explode('/',$info['GPSLatitude'][2]);
-        $lng_degrees_a = explode('/',$info['GPSLongitude'][0]);
-        $lng_minutes_a = explode('/',$info['GPSLongitude'][1]);
-        $lng_seconds_a = explode('/',$info['GPSLongitude'][2]);
-
-        $lat_degrees = $lat_degrees_a[0] / $lat_degrees_a[1];
-        $lat_minutes = $lat_minutes_a[0] / $lat_minutes_a[1];
-        $lat_seconds = $lat_seconds_a[0] / $lat_seconds_a[1];
-        $lng_degrees = $lng_degrees_a[0] / $lng_degrees_a[1];
-        $lng_minutes = $lng_minutes_a[0] / $lng_minutes_a[1];
-        $lng_seconds = $lng_seconds_a[0] / $lng_seconds_a[1];
-
-        $lat = (float) $lat_degrees+((($lat_minutes*60)+($lat_seconds))/3600);
-        $lng = (float) $lng_degrees+((($lng_minutes*60)+($lng_seconds))/3600);
-
-        // if the latitude is South, make it negative.
-        if ($GPSLatitudeRef  == 's') {
-            $lat *= -1;
-        }
-
-        // if the longitude is west, make it negative
-        if ($GPSLongitudeRef == 'w') {
-            $lng *= -1;
-        }
-
-        return (object) [
-            'lat' => round($lat, 7),
-            'lon' => round($lng, 7)
-        ];
     }
 
     /**

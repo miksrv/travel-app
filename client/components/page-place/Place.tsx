@@ -52,9 +52,9 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     description: place?.content?.substring(0, 160),
                     images: photoList?.map((photo, index) => ({
                         alt: `${photo.title} - Фото ${index + 1}`,
-                        height: photo.height,
-                        url: `${IMG_HOST}photo/${place?.id}/${photo.filename}_thumb.${photo.extension}`,
-                        width: photo.width
+                        // height: photo.height,
+                        url: `${IMG_HOST}${photo.full}`
+                        // width: photo.width
                     })),
                     siteName: SITE_NAME,
                     title: place?.title,

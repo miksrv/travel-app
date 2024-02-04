@@ -1,6 +1,5 @@
 import { ApiTypes } from '@/api/types'
 
-import { Photo } from './Photo'
 import { User } from './User'
 
 export type Place = {
@@ -19,9 +18,7 @@ export type Place = {
     author?: User
     category?: Category
     address?: Location
-    photo?: Photo
     tags?: Tag[]
-    photoCount?: number
     cover?: {
         full: string
         preview: string
