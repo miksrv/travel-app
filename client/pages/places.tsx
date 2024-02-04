@@ -52,7 +52,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     placesCount,
     placesList
 }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'pages.places.placesPage'
     })
 
@@ -171,7 +171,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return `${t('title')}: ${titles.join(', ')}`
-    }, [currentCategory, locationData, locationUnset])
+    }, [currentCategory, locationData, locationUnset, i18n.language])
 
     const breadcrumbsLinks = useMemo(() => {
         let breadcrumbs = []

@@ -80,7 +80,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     useEffect(() => {
         setLocalContent(content)
         setLocalTags(tags)
-    }, [placeId])
+    }, [content, tags])
 
     return (
         <Container

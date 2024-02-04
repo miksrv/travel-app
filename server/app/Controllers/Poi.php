@@ -86,8 +86,6 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        $locale = $this->request->getLocale();
-
         // Load translate library
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
