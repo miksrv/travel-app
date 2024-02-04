@@ -269,6 +269,17 @@ export interface RequestPoiList {
     category?: string
 }
 
+export interface ResponsePoiItem {
+    id?: string
+    title?: string
+    rating?: number
+    views?: number
+    cover?: {
+        full: string
+        preview: string
+    }
+}
+
 export interface ResponsePoiPlacesList {
     items: poiPlace[]
     count: number

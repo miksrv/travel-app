@@ -254,7 +254,7 @@ export const API = createApi({
 
         /* Controller: POI */
         // TODO
-        poiGetItem: builder.mutation<any, string>({
+        poiGetItem: builder.mutation<ApiTypes.ResponsePoiItem, string>({
             query: (item) => `poi/${item}`
         }),
         poiGetList: builder.query<

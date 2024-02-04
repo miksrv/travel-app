@@ -55,7 +55,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                             <Image
                                 className={styles.image}
                                 src={`${IMG_HOST}${poiData?.cover.preview}`}
-                                alt={poiData?.title}
+                                alt={poiData?.title || ''}
                                 width={300}
                                 height={200}
                             />
