@@ -3,6 +3,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import React from 'react'
 
 import { API } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Photo, Place as PlaceType } from '@/api/types'
 
@@ -63,13 +64,15 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<PlacePageProps>> => {
             const id = context.params?.slug?.[0]
             const page = context.params?.slug?.[1] as PageType
-            const locale = context.locale ?? 'en'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
 
             if (typeof id !== 'string' || !PAGES.includes(page)) {
                 return { notFound: true }
             }
+
+            store.dispatch(setLocale(locale))
 
             const { data: placeData, isError } = await store.dispatch(
                 API.endpoints.placesGetItem.initiate(id)

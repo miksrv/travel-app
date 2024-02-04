@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LocaleLibrary;
 use App\Libraries\UserLevels;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
@@ -10,6 +11,10 @@ use Exception;
 use ReflectionException;
 
 class Users extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
+
     /**
      * @return ResponseInterface
      * @throws Exception

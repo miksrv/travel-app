@@ -32,12 +32,15 @@ export const API = createApi({
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token
+            const locale = (getState() as RootState).application.locale
 
             if (token) {
                 headers.set('Authorization', token)
             }
 
-            headers.set('Locale', i18n?.language ?? 'en')
+            if (locale) {
+                headers.set('Locale', locale)
+            }
 
             return headers
         }

@@ -15,8 +15,9 @@ import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
 import { API } from '@/api/api'
-import { toggleOverlay } from '@/api/applicationSlice'
+import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -204,11 +205,13 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<IndexPageProps>> => {
-            const locale = context.locale ?? 'ru'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const category = (context.query.category as string) || null
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 

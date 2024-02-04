@@ -29,6 +29,8 @@ export type PlaceLocationType = {
     type: LocationType
 }
 
+export type LocaleType = 'en' | 'ru'
+
 export const SortOrder = {
     ASC: 'ASC',
     DESC: 'DESC'

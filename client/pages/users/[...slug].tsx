@@ -3,7 +3,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import React from 'react'
 
 import { API } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 import { Photo } from '@/api/types/Photo'
 import { User as UserType } from '@/api/types/User'
 
@@ -84,7 +86,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<UserPageProps>> => {
             const id = context.params?.slug?.[0]
             const page = context.params?.slug?.[1] as PageType
-            const locale = context.locale ?? 'en'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
             const currentPage = parseInt(context.query.page as string, 10) || 1
 
             const translations = await serverSideTranslations(locale)
@@ -92,6 +94,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             if (typeof id !== 'string' || !PAGES.includes(page)) {
                 return { notFound: true }
             }
+
+            store.dispatch(setLocale(locale))
 
             const { data: userData, isError } = await store.dispatch(
                 API.endpoints.usersGetItem.initiate(id)

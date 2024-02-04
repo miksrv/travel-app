@@ -6,10 +6,12 @@ type ApplicationStateProps = {
     showOverlay?: boolean
     showAuthDialog?: boolean
     userLocation?: ApiTypes.LatLonCoordinate
+    locale?: ApiTypes.LocaleType
 }
 
 const applicationSlice = createSlice({
     initialState: {
+        locale: 'en',
         showAuthDialog: false,
         showOverlay: false
     } as ApplicationStateProps,
@@ -22,6 +24,9 @@ const applicationSlice = createSlice({
         openAuthDialog: (state) => {
             state.showOverlay = true
             state.showAuthDialog = true
+        },
+        setLocale: (state, { payload }: PayloadAction<ApiTypes.LocaleType>) => {
+            state.locale = payload
         },
         setUserLocation: (
             state,
@@ -39,6 +44,7 @@ export const {
     toggleOverlay,
     closeAuthDialog,
     openAuthDialog,
+    setLocale,
     setUserLocation
 } = applicationSlice.actions
 

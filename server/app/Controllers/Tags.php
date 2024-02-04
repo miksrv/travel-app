@@ -1,10 +1,14 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LocaleLibrary;
 use App\Models\TagsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Tags extends ResourceController {
+    public function __construct() {
+        new LocaleLibrary();
+    }
     /**
      * Find all tags by search text
      * @return ResponseInterface

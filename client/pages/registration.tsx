@@ -8,6 +8,7 @@ import React, { useEffect, useMemo } from 'react'
 import Container from '@/ui/container'
 
 import { API, isApiValidationErrors } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -78,13 +79,15 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    () =>
+    (store) =>
         async (
             context
         ): Promise<GetServerSidePropsResult<RegistrationPageProps>> => {
-            const locale = context.locale ?? 'ru'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             return {
                 props: {

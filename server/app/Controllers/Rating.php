@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use App\Libraries\UserActivity;
 use App\Libraries\UserNotify;
@@ -15,6 +16,8 @@ class Rating extends ResourceController {
     protected SessionLibrary $session;
 
     public function __construct() {
+        new LocaleLibrary();
+
         $this->session = new SessionLibrary();
     }
 

@@ -8,7 +8,9 @@ import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 
 import AppLayout from '@/components/app-layout'
@@ -60,11 +62,13 @@ const UsersPage: NextPage<UsersPageProps> = ({
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<UsersPageProps>> => {
-            const locale = context.locale ?? 'ru'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             const { data: usersList } = await store.dispatch(
                 API.endpoints?.usersGetList.initiate({

@@ -11,7 +11,7 @@ import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
-import { toggleOverlay } from '@/api/applicationSlice'
+import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 
@@ -296,7 +296,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
-            const locale = context.locale ?? 'ru'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const country =
                 parseInt(context.query.country as string, 10) || null
@@ -313,6 +313,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 (context.query.order as ApiTypes.SortOrder) || DEFAULT_ORDER
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({

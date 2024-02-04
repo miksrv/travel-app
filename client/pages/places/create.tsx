@@ -9,6 +9,7 @@ import Container from '@/ui/container'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
@@ -85,13 +86,15 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    () =>
+    (store) =>
         async (
             context
         ): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
-            const locale = context.locale ?? 'en'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             return {
                 props: {

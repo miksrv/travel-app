@@ -2,6 +2,7 @@
 
 use App\Entities\Photo;
 use App\Entities\Place;
+use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
 use App\Libraries\UserActivity;
@@ -26,6 +27,8 @@ class Photos extends ResourceController {
     protected SessionLibrary $session;
 
     public function __construct() {
+        new LocaleLibrary();
+
         $this->session = new SessionLibrary();
     }
 

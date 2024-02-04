@@ -7,7 +7,9 @@ import React, { useEffect } from 'react'
 
 import Container from '@/ui/container'
 
+import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 
 import LoginForm from '@/components/login-form'
 
@@ -40,11 +42,13 @@ const LoginPage: NextPage<LoginPageProps> = () => {
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
-    () =>
+    (store) =>
         async (context): Promise<GetServerSidePropsResult<LoginPageProps>> => {
-            const locale = context.locale ?? 'en'
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
 
             return {
                 props: {
