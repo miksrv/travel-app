@@ -10,12 +10,13 @@ class Place extends Entity {
         'lon'         => 'float',
         'rating'      => 'float',
         'views'       => 'integer',
+        'photos'      => 'integer',
         'address_en'  => 'string',
         'address_ru'  => 'string',
         'country_id'  => 'integer',
         'region_id'   => 'integer',
         'district_id' => 'integer',
-        'locality_id'     => 'integer',
+        'locality_id' => 'integer',
         'user_id'     => 'string'
     ];
 }

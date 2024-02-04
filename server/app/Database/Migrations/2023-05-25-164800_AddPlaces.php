@@ -34,6 +34,12 @@ class AddPlaces extends Migration {
                 'null'       => false,
                 'default'    => 0
             ],
+            'photos' => [
+                'type'       => 'SMALLINT',
+                'constraint' => 5,
+                'null'       => false,
+                'default'    => 0
+            ],
             'address_en' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 250,

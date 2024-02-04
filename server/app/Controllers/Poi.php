@@ -94,36 +94,23 @@ class Poi extends ResourceController {
             return $this->failNotFound();
         }
 
-        $photosModel = new PhotosModel();
         $placesModel = new PlacesModel();
         $placeData   = $placesModel
-            ->select('id, rating, views')
+            ->select('id, rating, views, photos')
             ->find($id);
 
-
-        $placeData->photos = $photosModel
-            ->select('photos.filename, photos.extension, photos.width, photos.height, photos.order')
-            ->where(['place_id' => $placeData->id])
-            ->orderBy('order', 'DESC')
-            ->findAll();
-
         $response = [
-            'id'      => $placeData->id,
-            'rating'  => (int) $placeData->rating,
-            'views'   => (int) $placeData->views,
-            'title'   => $placeContent->title($id),
-            'content' => $placeContent->content($id),
+            'id'     => $placeData->id,
+            'rating' => (int) $placeData->rating,
+            'views'  => (int) $placeData->views,
+            'title'  => $placeContent->title($id),
         ];
 
-        if ($placeData->photos) {
-            $response['photosCount'] = count($placeData->photos);
-            $response['photos']      = [
-                (object) [
-                    'filename'  => $placeData->photos[0]->filename,
-                    'extension' => $placeData->photos[0]->extension,
-                    'width'     => $placeData->photos[0]->width,
-                    'height'    => $placeData->photos[0]->width
-                ]
+        // Place cover
+        if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
+            $response['cover'] = [
+                'full'    => 'uploads/places/' . $id . '/cover.jpg',
+                'preview' => 'uploads/places/' . $id . '/cover_preview.jpg',
             ];
         }
 

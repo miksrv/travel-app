@@ -11,8 +11,6 @@ import { Place } from '@/api/types/Place'
 import { categoryImage } from '@/functions/categories'
 import { numberFormatter } from '@/functions/helpers'
 
-import noPhoto from '@/public/images/no-photo-available.png'
-
 import styles from './styles.module.sass'
 
 interface PlacesListItemProps {
@@ -38,23 +36,21 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     href={`/places/${place.id}`}
                     title={place.title}
                 >
-                    <Image
-                        className={styles.photo}
-                        priority={true}
-                        alt={place?.photo?.title || ''}
-                        height={180}
-                        width={280}
-                        src={
-                            place?.photo?.filename
-                                ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}_thumb.${place?.photo?.extension}`
-                                : noPhoto.src
-                        }
-                    />
+                    {place?.cover && (
+                        <Image
+                            className={styles.photo}
+                            priority={true}
+                            alt={place?.photo?.title || ''}
+                            height={180}
+                            width={280}
+                            src={`${IMG_HOST}${place.cover.preview}`}
+                        />
+                    )}
                 </Link>
                 <div className={styles.bottomPanel}>
                     <Badge
                         icon={'Photo'}
-                        content={place?.photoCount || 0}
+                        content={place?.photos || 0}
                     />
                     {!!place.rating && (
                         <Badge

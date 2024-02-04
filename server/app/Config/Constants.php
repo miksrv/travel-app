@@ -93,6 +93,12 @@ define('EVENT_PRIORITY_NORMAL', 100);
  */
 define('EVENT_PRIORITY_HIGH', 10);
 
-defined('UPLOAD_PHOTOS') || define('UPLOAD_PHOTOS', FCPATH . 'photo/');
-defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', FCPATH . 'avatar/');
-defined('UPLOAD_TEMP') || define('UPLOAD_TEMP', FCPATH . 'temp/');
+defined('UPLOADS')        || define('UPLOADS', FCPATH . 'uploads/');
+defined('UPLOAD_PHOTOS')  || define('UPLOAD_PHOTOS', UPLOADS . 'places/');
+defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', UPLOADS . 'users/');
+
+// Place cover image sizes
+defined('PLACE_COVER_WIDTH') || define('PLACE_COVER_WIDTH', 870);
+defined('PLACE_COVER_HEIGHT') || define('PLACE_COVER_HEIGHT', 300);
+defined('PLACE_COVER_PREVIEW_WIDTH') || define('PLACE_COVER_PREVIEW_WIDTH', 285);
+defined('PLACE_COVER_PREVIEW_HEIGHT') || define('PLACE_COVER_PREVIEW_HEIGHT', 180);

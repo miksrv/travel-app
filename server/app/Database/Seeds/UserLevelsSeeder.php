@@ -7,7 +7,7 @@ use CodeIgniter\Database\Seeder;
 
 class UserLevelsSeeder extends Seeder {
     private array $insertData = [
-        [1,  0,     'Novice Traveler',           'Начинающий путешественник'],
+        [1,  0,     'Novice Traveler',           'Начинающий'],
         [2,  50,    'Discoverer',                'Открыватель'],
         [3,  100,   'Novice Tourist',            'Турист-новичок'],
         [4,  200,   'Excursionist',              'Экскурсант'],

@@ -23,11 +23,9 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     onCloseLightBox,
     onChangeIndex
 }) => {
-    const imageUrl = (index: number) =>
-        `${IMG_HOST}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}.${photos?.[index]?.extension}`
-
-    const thumbImageUrl = (index: number) =>
-        `${IMG_HOST}photo/${photos?.[index]?.placeId}/${photos?.[index]?.filename}_thumb.${photos?.[index]?.extension}`
+    const imageUrl = (index: number) => `${IMG_HOST}${photos?.[index]?.full}`
+    const ImagePreviewUrl = (index: number) =>
+        `${IMG_HOST}${photos?.[index]?.preview}`
 
     return (
         <>
@@ -39,12 +37,12 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                         (photoIndex + (photos.length || 0) - 1) %
                             (photos.length || 0)
                     )}
-                    mainSrcThumbnail={thumbImageUrl(photoIndex)}
-                    prevSrcThumbnail={thumbImageUrl(
+                    mainSrcThumbnail={ImagePreviewUrl(photoIndex)}
+                    prevSrcThumbnail={ImagePreviewUrl(
                         (photoIndex + (photos.length || 0) - 1) %
                             (photos.length || 0)
                     )}
-                    nextSrcThumbnail={thumbImageUrl(
+                    nextSrcThumbnail={ImagePreviewUrl(
                         (photoIndex + 1) % (photos.length || 0)
                     )}
                     imageTitle={photos[photoIndex]?.title || ''}

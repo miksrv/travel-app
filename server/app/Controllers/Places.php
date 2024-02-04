@@ -104,10 +104,9 @@ class Places extends ResourceController {
         }
 
         $placesModel = new PlacesModel();
-        $photosModel = new PhotosModel();
         $placesModel
             ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
-                places.country_id, places.region_id, places.district_id, places.locality_id,
+                places.photos, places.country_id, places.region_id, places.district_id, places.locality_id,
                 location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                 location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                 location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
@@ -130,18 +129,10 @@ class Places extends ResourceController {
         // IDs of the places found using the search criteria
         $placesList = $this->_makeListFilters($placesModel, $searchPlacesIds)->get()->getResult();
         $placesIds  = [];
-        $result     = [];
+        $response   = [];
         foreach ($placesList as $place) {
             $placesIds[] = $place->id;
         }
-
-        // Find all photos for all places
-        $photosData = $placesIds
-            ? $photosModel
-                ->havingIn('place_id', $placesIds)
-                ->orderBy('order', 'DESC')
-                ->findAll()
-            : $placesIds;
 
         // We find translations for all objects if no search was used.
         // When searching, we already know translations for all found objects
@@ -149,17 +140,15 @@ class Places extends ResourceController {
             $placeTranslations->translate($placesIds);
         }
 
-        // Map photos and places
+        // Mapping places to array list
         foreach ($placesList as $place) {
-            $photoId = array_search($place->id, array_column($photosData, 'place_id'));
-            $counts  = array_count_values(array_column($photosData, 'place_id'))[$place->id] ?? 0;
-
             $return  = [
                 'id'        => $place->id,
                 'lat'       => (float) $place->lat,
                 'lon'       => (float) $place->lon,
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
+                'photos'    => (int) $place->photos,
                 'title'     => $placeTranslations->title($place->id),
                 'content'   => $placeTranslations->content($place->id),
                 'category'  => [
@@ -200,21 +189,19 @@ class Places extends ResourceController {
                 ];
             }
 
-            if ($photoId !== false && isset($photosData[$photoId])) {
-                $return['photoCount'] = $counts;
-                $return['photo'] = [
-                    'filename'  => $photosData[$photoId]->filename,
-                    'extension' => $photosData[$photoId]->extension,
-                    'width'     => $photosData[$photoId]->width,
-                    'height'    => $photosData[$photoId]->width
+            // Place cover
+            if ($place->photos && file_exists(UPLOAD_PHOTOS . $place->id . '/cover.jpg')) {
+                $return['cover'] = [
+                    'full'    => 'uploads/places/' . $place->id . '/cover.jpg',
+                    'preview' => 'uploads/places/' . $place->id . '/cover_preview.jpg',
                 ];
             }
 
-            $result[] = $return;
+            $response[] = $return;
         }
 
         return $this->respond([
-            'items'  => $result,
+            'items'  => $response,
             'count'  => $this->_makeListFilters($placesModel, $searchPlacesIds)->countAllResults(),
         ]);
     }
@@ -240,11 +227,10 @@ class Places extends ResourceController {
             : '';
 
         $placesTagsModel = new PlacesTagsModel();
-        $photosModel = new PhotosModel();
         $placesModel = new PlacesModel();
         $placeData   = $placesModel
             ->select(
-                'places.*,  
+                'places.*,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                     location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                     location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
@@ -263,17 +249,6 @@ class Places extends ResourceController {
         if (!$placeData) {
             return $this->failNotFound();
         }
-
-        // Find all place photos
-        $placeData->photo = $photosModel
-            ->select(
-                'photos.user_id, photos.filename, photos.extension, photos.width, photos.place_id, 
-                    photos.height, photos.order, photos.title_ru, photos.created_at,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar')
-            ->join('users', 'photos.user_id = users.id', 'left')
-            ->where(['place_id' => $placeData->id])
-            ->orderBy('photos.order', 'DESC')
-            ->findAll();
 
         // Collect tags
         $placeData->tags = $placesTagsModel
@@ -296,6 +271,7 @@ class Places extends ResourceController {
             'lon'       => (float) $placeData->lon,
             'rating'    => (float) $placeData->rating,
             'views'     => (int) $placeData->views,
+            'photos'    => (int) $placeData->photos,
             'title'     => $placeContent->title($id),
             'content'   => $placeContent->content($id),
             'author'    => [
@@ -328,26 +304,6 @@ class Places extends ResourceController {
 
         $response['address']['street'] = $placeData->{"address_$locale"};
 
-        if ($placeData->photo) {
-            $response['photoCount'] = count($placeData->photo);
-
-            $response['photo'] = [
-                'filename'  => $placeData->photo[0]->filename,
-                'extension' => $placeData->photo[0]->extension,
-                'order'     => $placeData->photo[0]->order,
-                'width'     => $placeData->photo[0]->width,
-                'height'    => $placeData->photo[0]->height,
-                'title'     => $placeData->photo[0]->title,
-                'placeId'   => $placeData->photo[0]->place,
-                'created'   => $placeData->photo[0]->created_at,
-                'author'    => $placeData->photo[0]->user_id ? [
-                    'id'     => $placeData->photo[0]->user_id,
-                    'name'   => $placeData->photo[0]->user_name,
-                    'avatar' => $placeData->photo[0]->user_avatar,
-                ] : null
-            ];
-        }
-
         if ($this->session->lon && $this->session->lat) {
             $response['distance'] = round((float) $placeData->distance, 1);
         }
@@ -377,6 +333,14 @@ class Places extends ResourceController {
             $response['address']['locality'] = [
                 'id'    => $placeData->locality_id,
                 'title' => $placeData->{"city_$locale"}
+            ];
+        }
+
+        // Place cover
+        if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
+            $response['cover'] = [
+                'full'    => 'uploads/places/' . $id . '/cover.jpg',
+                'preview' => 'uploads/places/' . $id . '/cover_preview.jpg',
             ];
         }
 

@@ -11,6 +11,8 @@ export type Place = {
 
 export type Photo = {
     placeId: string
+    full: string
+    preview: string
     lat: number
     lon: number
     filename: string

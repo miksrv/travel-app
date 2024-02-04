@@ -61,7 +61,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 >
                     <Link
                         className={styles.photoLink}
-                        href={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                        href={`${IMG_HOST}${photo.full}`}
                         title={`${photo.title}. ${t('linkPhotoTitle')} ${
                             index + 1
                         }`}
@@ -71,7 +71,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         }}
                     >
                         <Image
-                            src={`${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`}
+                            src={`${IMG_HOST}${photo.preview}`}
                             alt={`${photo.title}, фото ${index + 1}`}
                             width={200}
                             height={150}

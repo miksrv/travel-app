@@ -253,6 +253,7 @@ export const API = createApi({
         }),
 
         /* Controller: POI */
+        // TODO
         poiGetItem: builder.mutation<any, string>({
             query: (item) => `poi/${item}`
         }),

@@ -21,7 +21,7 @@ use Geocoder\Exception\Exception;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 20);
+define('MAX_PLACES_PER_ITERATION', 1);
 
 set_time_limit(0);
 
@@ -117,6 +117,9 @@ class Migrate extends ResourceController {
                 }
             }
 
+            // unserialize photos
+            $photos = json_decode($item->item_photos);
+
             // Add or update user
             $placeAuthor = $this->_migrate_user($item->item_author);
 
@@ -133,6 +136,7 @@ class Migrate extends ResourceController {
             $place->user_id     = $placeAuthor;
             $place->rating      = $ratingSum === 0 ? null : round($ratingSum / count($ratingData['scores']), 1);
             $place->views       = $item->item_count_views;
+            $place->photos      = count($photos) ?? 0;
             $place->category    = $mapCategories[$item->item_category];
             $place->address_ru  = $geocoder->addressRu;
             $place->address_en  = $geocoder->addressEn;
@@ -242,14 +246,12 @@ class Migrate extends ResourceController {
             }
 
             // Migrate Photos
-            $photos = json_decode($item->item_photos);
-
             if (is_array($photos)) {
                 if (!is_dir(UPLOAD_PHOTOS)) {
                     mkdir(UPLOAD_PHOTOS,0777, TRUE);
                 }
 
-                foreach ($photos as $photoID) {
+                foreach ($photos as $index => $photoID) {
                     $currentPhoto = $migrateMedia->find($photoID);
 
                     if ($photosModel->where(['filename' => $currentPhoto->item_filename])->withDeleted()->first()) {
@@ -279,7 +281,18 @@ class Migrate extends ResourceController {
                             $image = Services::image('gd'); // imagick
                             $image->withFile($file->getRealPath())
                                 ->fit(512, 384, 'center')
-                                ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_thumb.' . $file->getExtension());
+                                ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_preview.' . $file->getExtension());
+
+                            // If first photo - we automated make place cover
+                            if ($index === 0) {
+                                $image->withFile($file->getRealPath())
+                                    ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT, 'center')
+                                    ->save($photoDirectory . '/cover.jpg');
+
+                                $image->withFile($file->getRealPath())
+                                    ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
+                                    ->save($photoDirectory . '/cover_preview.jpg');
+                            }
 
                             // Add or update user
                             $photoAuthor = $this->_migrate_user($item->item_author);

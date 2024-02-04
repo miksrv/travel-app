@@ -93,8 +93,12 @@ class Photos extends ResourceController {
                 ($photo->title_ru ?? $photo->title_en) :
                 ($photo->title_en ?? $photo->title_ru);
 
+            $photoPath = 'uploads/places/' . $photo->place_id . '/' . $photo->filename;
+
             $result[] = (object) [
                 'id'        => $photo->id,
+                'full'      => $photoPath . '.' . $photo->extension,
+                'preview'   => $photoPath . '_preview.' . $photo->extension,
                 'filename'  => $photo->filename,
                 'extension' => $photo->extension,
                 'order'     => $photo->order,
@@ -134,7 +138,7 @@ class Photos extends ResourceController {
 
         $userActivity = new UserActivity();
         $placesModel  = new PlacesModel();
-        $placesData   = $placesModel->select('id, lat, lon')->find($id);
+        $placesData   = $placesModel->select('id, lat, lon, photos')->find($id);
 
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
@@ -156,11 +160,23 @@ class Photos extends ResourceController {
 
             $file = new File($photoDir . $newName);
             $name = pathinfo($file, PATHINFO_FILENAME);
+            $ext  = $file->getExtension();
 
             $image = Services::image('gd'); // imagick
             $image->withFile($file->getRealPath())
                 ->fit(700, 500, 'center')
-                ->save($photoDir . $name . '_thumb.' . $file->getExtension());
+                ->save($photoDir . $name . '_preview.' . $ext);
+
+            // If this first uploaded photo - we automated make place cover image
+            if ($placesData->photos === 0) {
+                $image->withFile($file->getRealPath())
+                    ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT, 'center')
+                    ->save($photoDir . '/cover.jpg');
+
+                $image->withFile($file->getRealPath())
+                    ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
+                    ->save($photoDir . '/cover_preview.jpg');
+            }
 
             $coordinates = $this->_readPhotoLocation($file->getRealPath());
             $photosModel = new PhotosModel();
@@ -176,7 +192,7 @@ class Photos extends ResourceController {
             $photo->title_en  = $placeContent->title($id);
             $photo->title_ru  = $placeContent->title($id);
             $photo->filename  = $name;
-            $photo->extension = $file->getExtension();
+            $photo->extension = $ext;
             $photo->filesize  = $file->getSize();
             $photo->width     = $width;
             $photo->height    = $height;
@@ -190,13 +206,16 @@ class Photos extends ResourceController {
             exit();
         }
 
-        // Update the time when the post was last edited
+        // Update the time when the place was last edited
         $place = new Place();
         $place->updated_at = time();
+        $place->photos     = $placesData->photos + 1;
         $placesModel->update($id, $place);
 
         return $this->respondCreated((object) [
             'id'        => $photo->id,
+            'full'      => 'uploads/places/' . $placesData->id . $name . '.' . $ext,
+            'preview'   => 'uploads/places/' . $placesData->id . $name . '_preview.' . $ext,
             'filename'  => $photo->filename,
             'extension' => $photo->extension,
             'order'     => $photo->order,
@@ -208,13 +227,16 @@ class Photos extends ResourceController {
         ]);
     }
 
+    /**
+     * @throws ReflectionException
+     */
     public function delete($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
         $photosModel = new PhotosModel();
-        $photoData   = $photosModel->select('id, user_id')->find($id);
+        $photoData   = $photosModel->select('id, user_id, place_id')->find($id);
 
         if (!$photoData) {
             return $this->failValidationErrors('No photo found with this ID');
@@ -224,11 +246,26 @@ class Photos extends ResourceController {
             return $this->failValidationErrors('You can not delete this photo');
         }
 
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel->select('id, photos')->find($photoData->place_id);
+
         $photosModel->delete($id);
+
+        // If this was last photo of place - we need to remove place cover files
+        if ($placesData->photos === 1) {
+            unlink(UPLOAD_PHOTOS . $photoData->place_id . '/cover.jpg');
+            unlink(UPLOAD_PHOTOS . $photoData->place_id . '/cover_preview.jpg');
+        }
 
         $activityModel = new UsersActivityModel();
 
         $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
+
+        // Update the time when the place was last edited
+        $place = new Place();
+        $place->updated_at = time();
+        $place->photos     = $placesData->photos - 1;
+        $placesModel->update($id, $place);
 
         return $this->respondDeleted(['id' => $id]);
     }

@@ -126,6 +126,4 @@ nb-configuration.xml
 /.phpunit.*.cache
 
 # Uploads
-/public/photo/
-/public/avatar/
-/public/temp/
+/public/uploads/

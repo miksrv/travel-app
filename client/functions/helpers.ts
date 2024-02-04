@@ -90,6 +90,7 @@ export const ratingColor = (
 export const addDecimalPoint = (input: number | string): string => {
     const inputValue: string =
         typeof input === 'number' ? input.toString() : input
+
     const isInteger: boolean = inputValue.includes('.')
         ? inputValue.split('.')[1].length === 0
         : true

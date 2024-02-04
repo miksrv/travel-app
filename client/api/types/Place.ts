@@ -11,6 +11,7 @@ export type Place = {
     lon: number
     rating: number
     views: number
+    photos: number
     title: string
     content: string
     difference?: number
@@ -21,8 +22,9 @@ export type Place = {
     photo?: Photo
     tags?: Tag[]
     photoCount?: number
-    actions?: {
-        rating?: boolean
+    cover?: {
+        full: string
+        preview: string
     }
 }
 

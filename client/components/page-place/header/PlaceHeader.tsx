@@ -19,8 +19,6 @@ import {
     ratingColor
 } from '@/functions/helpers'
 
-import noPhoto from '@/public/images/no-photo-available.png'
-
 import styles from './styles.module.sass'
 
 interface PlaceHeaderProps {
@@ -69,18 +67,17 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     </div>
                 )}
             </div>
-            <Image
-                className={styles.image}
-                alt={place?.photo?.title || ''}
-                height={300}
-                width={870}
-                priority={true}
-                src={
-                    place?.photo?.filename
-                        ? `${IMG_HOST}photo/${place?.id}/${place?.photo?.filename}.${place?.photo?.extension}`
-                        : noPhoto.src
-                }
-            />
+            <div className={styles.image}>
+                {place?.cover && (
+                    <Image
+                        alt={place?.photo?.title || ''}
+                        height={300}
+                        width={870}
+                        priority={true}
+                        src={`${IMG_HOST}${place.cover.full}`}
+                    />
+                )}
+            </div>
             <div className={styles.bottomPanel}>
                 <Badge
                     icon={'Photo'}

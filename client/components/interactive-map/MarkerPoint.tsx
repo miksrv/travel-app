@@ -11,8 +11,6 @@ import { Poi } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
 
-import noPhoto from '@/public/images/no-photo-available.png'
-
 import styles from './styles.module.sass'
 
 type MarkerPointProps = {
@@ -53,18 +51,16 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                     >
                         {isLoading || !poiData ? (
                             <Skeleton />
-                        ) : (
+                        ) : poiData?.cover ? (
                             <Image
                                 className={styles.image}
-                                src={
-                                    poiData?.photos?.[0]?.filename
-                                        ? `${IMG_HOST}photo/${place.id}/${poiData?.photos?.[0]?.filename}_thumb.${poiData?.photos?.[0]?.extension}`
-                                        : noPhoto.src
-                                }
+                                src={`${IMG_HOST}${poiData?.cover.preview}`}
                                 alt={poiData?.title}
                                 width={300}
                                 height={200}
                             />
+                        ) : (
+                            <></>
                         )}
                     </Link>
                     {isLoading || !poiData ? (
