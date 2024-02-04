@@ -23,7 +23,6 @@ class PhotosModel extends MyBaseModel {
         'filesize',
         'width',
         'height',
-        'order',
         'created_at',
     ];
 

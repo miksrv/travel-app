@@ -56,7 +56,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
             {photos?.map((photo, index) => (
                 <li
-                    key={photo.filename}
+                    key={photo.id}
                     className={styles.photoItem}
                 >
                     <Link

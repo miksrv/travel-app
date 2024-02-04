@@ -64,12 +64,6 @@ class AddPhotos extends Migration {
                 'constraint' => 5,
                 'null'       => false,
             ],
-            'order' => [
-                'type'       => 'SMALLINT',
-                'constraint' => 5,
-                'null'       => false,
-                'default'    => 0
-            ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
             'deleted_at' => [

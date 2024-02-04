@@ -99,11 +99,10 @@ class Photos extends ResourceController {
                 'id'        => $photo->id,
                 'full'      => $photoPath . '.' . $photo->extension,
                 'preview'   => $photoPath . '_preview.' . $photo->extension,
-                'filename'  => $photo->filename,
-                'extension' => $photo->extension,
-                'order'     => $photo->order,
-                'width'     => $photo->width,
-                'height'    => $photo->height,
+                // 'filename'  => $photo->filename,
+                // 'extension' => $photo->extension,
+                // 'width'     => $photo->width,
+                // 'height'    => $photo->height,
                 'title'     => $title,
                 'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
@@ -216,11 +215,10 @@ class Photos extends ResourceController {
             'id'        => $photo->id,
             'full'      => 'uploads/places/' . $placesData->id . $name . '.' . $ext,
             'preview'   => 'uploads/places/' . $placesData->id . $name . '_preview.' . $ext,
-            'filename'  => $photo->filename,
-            'extension' => $photo->extension,
-            'order'     => $photo->order,
-            'width'     => $photo->width,
-            'height'    => $photo->height,
+            // 'filename'  => $photo->filename,
+            // 'extension' => $photo->extension,
+            // 'width'     => $photo->width,
+            // 'height'    => $photo->height,
             'title'     => $photo->title,
             'placeId'   => $photo->place_id,
             'created'   => $photo->created_at
@@ -336,7 +334,7 @@ class Photos extends ResourceController {
         $photosModel
             ->select(
                 'photos.id, photos.place_id, photos.user_id, photos.filename, photos.extension, photos.width, 
-                    photos.height, photos.order, photos.title_ru, photos.title_en, photos.created_at,
+                    photos.height, photos.title_ru, photos.title_en, photos.created_at,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar')
             ->join('users', 'photos.user_id = users.id', 'left');
 
@@ -348,7 +346,7 @@ class Photos extends ResourceController {
             $photosModel->where(['photos.user_id' => $author]);
         }
 
-        $photosModel->orderBy('photos.order, photos.created_at', 'DESC');
+        $photosModel->orderBy('photos.created_at', 'DESC');
 
         return $photosModel;
     }

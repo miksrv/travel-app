@@ -14,7 +14,6 @@ class Photo extends Entity {
         'extension' => 'string',
         'filesize'  => 'integer',
         'width'     => 'integer',
-        'height'    => 'integer',
-        'order'     => 'integer'
+        'height'    => 'integer'
     ];
 }
