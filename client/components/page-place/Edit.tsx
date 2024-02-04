@@ -16,7 +16,7 @@ interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Edit: React.FC<EditProps> = ({ place }) => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.placePhotos'
+        keyPrefix: 'components.pagePlace.edit'
     })
 
     const router = useRouter()
