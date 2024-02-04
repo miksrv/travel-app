@@ -9,11 +9,11 @@ import { ApiTypes } from '@/api/types'
 
 import styles from './styles.module.sass'
 
-interface SearchControl {
+interface SearchControlProps {
     onSelectResult?: (coordinates: ApiTypes.LatLonCoordinate) => void
 }
 
-const SearchControl: React.FC<SearchControl> = ({ onSelectResult }) => {
+const SearchControl: React.FC<SearchControlProps> = ({ onSelectResult }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.searchControl'
     })

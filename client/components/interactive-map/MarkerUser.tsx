@@ -8,11 +8,11 @@ import userAvatar from '@/public/images/no-avatar.png'
 
 import styles from './styles.module.sass'
 
-type MarkerUser = {
+interface MarkerUserProps {
     coordinates: ApiTypes.LatLonCoordinate
 }
 
-const MarkerUser: React.FC<MarkerUser> = ({ coordinates }) => {
+const MarkerUser: React.FC<MarkerUserProps> = ({ coordinates }) => {
     const userMarkerIcon = new Leaflet.Icon({
         className: styles.markerUser,
         iconAnchor: [15, 15],

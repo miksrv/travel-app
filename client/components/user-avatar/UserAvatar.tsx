@@ -98,7 +98,7 @@ const AvatarImage: React.FC<AvatarProps & { alt?: string }> = ({
 }) => (
     <>
         <Image
-            alt={` ${user?.name}` || ''}
+            alt={alt ?? ` ${user?.name}` ?? ''}
             className={styles.avatarImage}
             src={
                 user?.avatar

@@ -3,8 +3,7 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
-import { useTranslation } from 'next-i18next'
-import { appWithTranslation } from 'next-i18next'
+import { appWithTranslation, useTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
 import Head from 'next/head'
 import 'react-image-lightbox/style.css'
@@ -18,7 +17,6 @@ import { wrapper } from '@/api/store'
 // https://www.atlasobscura.com/places/tunguska-event-epicenter
 // https://www.tursar.ru/page-dop.php?c=1
 // https://account.travel/things-to-do/california
-// https://dtf.ru/life/2419947-dvachery-doveli-do-suicida-eshe-odnogo-niderlandah-sovershil-suicid-anton-babkin-antonina-babkina
 // https://www.earthcam.com/mapsearch/
 
 export const SITE_NAME = 'Название сайта'

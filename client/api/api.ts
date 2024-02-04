@@ -1,6 +1,5 @@
 import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
-import { i18n } from 'next-i18next'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'

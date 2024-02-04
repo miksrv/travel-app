@@ -13,12 +13,12 @@ type MapLayerItem = {
     label: string
 }
 
-interface LayerSwitcherControl {
+interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
     onSwitchMapLayer?: (layer: MapLayersType) => void
 }
 
-const LayerSwitcherControl: React.FC<LayerSwitcherControl> = ({
+const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     currentLayer,
     onSwitchMapLayer
 }) => {

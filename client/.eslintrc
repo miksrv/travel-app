@@ -65,6 +65,7 @@
                 "ignoreStrings": true
             }
         ],
+        "react-hooks/exhaustive-deps": "off",
         "no-console": "warn",
         "no-duplicate-imports": "warn",
         "no-restricted-imports": [
@@ -101,7 +102,7 @@
                 "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ],
-        "react/prop-types": "warn",
+        "react/prop-types": "off",
         "sort-imports": [
             "warn",
             {

@@ -45,7 +45,6 @@ type MapProps = {
     enableFullScreen?: boolean
     enableLayersSwitcher?: boolean
     storeMapKey?: string
-    centerPoint?: boolean
     userLatLon?: ApiTypes.LatLonCoordinate
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
@@ -65,7 +64,6 @@ const InteractiveMap: React.FC<MapProps> = ({
     enableFullScreen,
     enableLayersSwitcher,
     storeMapKey,
-    centerPoint,
     userLatLon,
     onChangeBounds,
     onPhotoClick,

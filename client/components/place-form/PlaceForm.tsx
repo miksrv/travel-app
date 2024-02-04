@@ -47,10 +47,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     })
 
     const location = useAppSelector((state) => state.application.userLocation)
+    const [mapBounds, setMapBounds] = useState<string>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] =
         useState<ApiTypes.RequestPlacesPostItem>()
-    const [mapBounds, setMapBounds] = useState<string>()
 
     const { data: poiListData } = API.usePoiGetListQuery(
         { bounds: mapBounds },
