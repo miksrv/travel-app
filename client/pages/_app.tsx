@@ -18,6 +18,7 @@ import { wrapper } from '@/api/store'
 // https://www.tursar.ru/page-dop.php?c=1
 // https://account.travel/things-to-do/california
 // https://www.earthcam.com/mapsearch/
+// https://github.com/sekoyo/react-image-crop?tab=readme-ov-file#example
 
 export const SITE_NAME = 'Название сайта'
 

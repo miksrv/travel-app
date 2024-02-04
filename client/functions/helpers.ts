@@ -21,13 +21,16 @@ export const numberFormatter = (num: number, digits?: number) => {
         { symbol: 'P', value: 1e15 },
         { symbol: 'E', value: 1e18 }
     ]
+
+    if (num < 1) {
+        return num
+    }
+
     const rx = /\.0+$|(\.[0-9]*[1-9])0+$/
     const item = lookup
         .slice()
         .reverse()
-        .find(function (item) {
-            return num >= item.value
-        })
+        .find((item) => num >= item.value)
 
     return item
         ? (num / item.value).toFixed(digits || 1).replace(rx, '$1') +
