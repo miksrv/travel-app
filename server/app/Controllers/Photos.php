@@ -95,6 +95,7 @@ class Photos extends ResourceController {
 
             $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
 
+            $avatar   = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
             $result[] = (object) [
                 'id'        => $photo->id,
                 'full'      => $photoPath . '.' . $photo->extension,
@@ -109,7 +110,9 @@ class Photos extends ResourceController {
                 'user'      => $photo->user_id ? [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
-                    'avatar' => $photo->user_avatar,
+                    'avatar' => $avatar
+                        ? PATH_AVATARS . $photo->user_id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                        : null
                 ] : null
             ];
         }

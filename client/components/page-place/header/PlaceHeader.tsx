@@ -70,7 +70,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             <div className={styles.image}>
                 {place?.cover && (
                     <Image
-                        alt={place?.photo?.title || ''}
+                        alt={place?.title || ''}
                         height={300}
                         width={870}
                         priority={true}

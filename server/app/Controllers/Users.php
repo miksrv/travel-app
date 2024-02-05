@@ -111,14 +111,16 @@ class Users extends ResourceController {
         $result = (object) [
             'id'         => $usersData->id,
             'name'       => $usersData->name,
-            'avatar'     => $usersData->avatar,
             'level'      => $userLevels->getLevelData($usersData),
             'statistic'  => $userLevels->statistic,
             'reputation' => $ratingValue,
             'website'    => $usersData->website,
             'created'    => $usersData->created_at,
             'updated'    => $usersData->updated_at,
-            'activity'   => $usersData->activity_at ? new \DateTime($usersData->activity_at) : null
+            'activity'   => $usersData->activity_at ? new \DateTime($usersData->activity_at) : null,
+            'avatar'     => $usersData->avatar
+                ? PATH_AVATARS . $usersData->id . '/' . $usersData->avatar
+                : null
         ];
 
         return $this->respond($result);

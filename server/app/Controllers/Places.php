@@ -263,8 +263,7 @@ class Places extends ResourceController {
             ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
             ->first();
 
-        $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
-
+        $avatar   = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
         $response = [
             'id'        => $placeData->id,
             'created'   => $placeData->created_at ?? null,
