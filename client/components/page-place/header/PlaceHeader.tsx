@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import React from 'react'
+import React, { useState } from 'react'
 import 'react-image-crop/src/ReactCrop.scss'
 
 import Badge from '@/ui/badge'
@@ -45,12 +45,20 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
+    const [coverHash, setCoverHash] = useState<string>('')
 
     const handleEditPlaceClick = (event: React.MouseEvent) => {
         if (!authSlice.isAuth) {
             event.stopPropagation()
             dispatch(openAuthDialog())
         }
+    }
+
+    const handleSaveCover = () => {
+        setTimeout(
+            () => setCoverHash(Math.floor(Date.now() / 1000).toString()),
+            400
+        )
     }
 
     return (
@@ -80,7 +88,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         height={300}
                         width={870}
                         priority={true}
-                        src={`${IMG_HOST}${place.cover.full}`}
+                        src={`${IMG_HOST}${place.cover.full}${
+                            coverHash ? `?d=${coverHash}` : ''
+                        }`}
                     />
                 )}
             </div>
@@ -110,6 +120,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         <PlaceCoverEditor
                             placeId={place?.id}
                             photos={photos}
+                            onSaveCover={handleSaveCover}
                         />
 
                         <Button

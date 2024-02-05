@@ -121,6 +121,12 @@
             "noPhotos": "No photos",
             "linkPhotoTitle": "Photo"
         },
+        "placeCoverEditor": {
+            "buttonCover": "Cover",
+            "buttonSave": "Save",
+            "selectPhoto": "Select a photo",
+            "saveNewCover": "Save the new cover"
+        },
         "placeForm": {
             "errorTitle": "Title is required",
             "errorCategory": "Select a location category",

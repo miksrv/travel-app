@@ -548,7 +548,10 @@ class Places extends ResourceController {
         ]);
     }
 
-    public function cover($id = null) {
+    /**
+     * @throws ReflectionException
+     */
+    public function cover($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -574,6 +577,12 @@ class Places extends ResourceController {
 
         $photoDir = UPLOAD_PHOTOS . $id . '/';
         $file = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
+
+        list($width, $height) = getimagesize($file->getRealPath());
+
+        if ($input->width > $width || $input->height > $height) {
+            return $this->failValidationErrors('The cover dimensions cannot exceed the image dimensions');
+        }
 
         $image = Services::image('gd'); // imagick
         $image->withFile($file->getRealPath())

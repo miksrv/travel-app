@@ -16,11 +16,13 @@ import styles from './styles.module.sass'
 interface PlaceCoverEditorProps {
     placeId?: string
     photos?: Photo[]
+    onSaveCover?: () => void
 }
 
 const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     placeId,
-    photos
+    photos,
+    onSaveCover
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placeCoverEditor'
@@ -44,6 +46,9 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
         [selectedPhotoId]
     )
 
+    const disabled =
+        isLoading || !imageCropData?.width || !imageCropData?.height
+
     const handleChangeCoverClick = (event: React.MouseEvent) => {
         if (!authSlice.isAuth) {
             event.stopPropagation()
@@ -61,7 +66,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     }
 
     const handleSaveCover = () => {
-        if (!selectedPhoto?.width || !selectedPhoto?.height) {
+        if (!selectedPhoto?.width || !selectedPhoto?.height || disabled) {
             return
         }
 
@@ -92,17 +97,20 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
         setWidthRatio(ratioW)
         setHeightRatio(ratioH)
 
-        setImageCropData({
-            height: 300 / ratioH,
-            unit: 'px',
-            width: 870 / ratioW,
-            x: 0,
-            y: 0
-        })
+        if (selectedPhoto?.height && selectedPhoto?.width) {
+            setImageCropData({
+                height: (300 / selectedPhoto.height) * 100,
+                unit: '%',
+                width: (870 / selectedPhoto.width) * 100,
+                x: 0,
+                y: 0
+            })
+        }
     }
 
     useEffect(() => {
         handleCoverDialogClose()
+        onSaveCover?.()
     }, [isSuccess])
 
     return (
@@ -113,17 +121,13 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
             >
-                Обложка
+                {t('buttonCover')}
             </Button>
 
             <Dialog
                 contentHeight={'600px'}
                 maxWidth={'800px'}
-                header={
-                    !selectedPhotoId
-                        ? 'Выберите фотографию'
-                        : 'Сохраните новую обложку'
-                }
+                header={!selectedPhotoId ? t('selectPhoto') : t('saveNewCover')}
                 open={coverDialogOpen}
                 showBackLink={!!selectedPhotoId}
                 actions={
@@ -132,9 +136,9 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                             size={'s'}
                             mode={'primary'}
                             onClick={handleSaveCover}
-                            disabled={isLoading || isSuccess}
+                            disabled={disabled}
                         >
-                            Сохранить
+                            {t('buttonSave')}
                         </Button>
                     )
                 }

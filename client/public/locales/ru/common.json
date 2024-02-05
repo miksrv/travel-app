@@ -122,6 +122,12 @@
             "noPhotos": "Нет фотографий",
             "linkPhotoTitle": "Фото"
         },
+        "placeCoverEditor": {
+            "buttonCover": "Обложка",
+            "buttonSave": "Сохранить",
+            "selectPhoto": "Выберите фотографию",
+            "saveNewCover": "Сохраните новую обложку"
+        },
         "placeForm": {
             "errorTitle": "Название обязательно для заполнения",
             "errorCategory": "Выберите категорию места",
