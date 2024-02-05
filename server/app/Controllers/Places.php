@@ -14,9 +14,11 @@ use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
 use App\Models\PlacesContentModel;
 use App\Models\UsersBookmarksModel;
+use CodeIgniter\Files\File;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Services;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
@@ -544,6 +546,48 @@ class Places extends ResourceController {
             'content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id),
             'tags'    => $updatedTags
         ]);
+    }
+
+    public function cover($id = null) {
+        if (!$this->session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $input = $this->request->getJSON();
+
+        if (!isset($input->x) || !isset($input->y) || !$input->photoId || !$input->width || !$input->height) {
+            return $this->failValidationErrors('Incorrect data format when saving cover image');
+        }
+
+        if ($input->width < PLACE_COVER_WIDTH || $input->height < PLACE_COVER_HEIGHT) {
+            return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
+        }
+
+        $placesModel = new PlacesModel();
+        $photosModel = new PhotosModel();
+        $placeData   = $placesModel->select('id')->find($id);
+        $photoData   = $photosModel->select('id, filename, extension')->find($input->photoId);
+
+        if (!$placeData || !$photoData) {
+            return $this->failValidationErrors('There is no point with this ID');
+        }
+
+        $photoDir = UPLOAD_PHOTOS . $id . '/';
+        $file = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
+
+        $image = Services::image('gd'); // imagick
+        $image->withFile($file->getRealPath())
+            ->crop($input->width, $input->height, $input->x, $input->y)
+            ->save($photoDir . 'cover.jpg');
+
+        $file = new File($photoDir . 'cover.jpg');
+        $image->withFile($file->getRealPath())
+            ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
+            ->save($photoDir . '/cover_preview.jpg');
+
+        $placesModel->update($id, ['updated_at' => new Time('now')]);
+
+        return $this->respondUpdated();
     }
 
     /**

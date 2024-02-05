@@ -8,8 +8,8 @@ export type Photo = {
     preview: string
     // filename: string
     // extension: string
-    // width: number
-    // height: number
+    width: number
+    height: number
     title?: string
     author?: User
     created?: ApiTypes.DateTimeType

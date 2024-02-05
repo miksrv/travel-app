@@ -23,9 +23,11 @@ $routes->get('places', 'Places::list');
 $routes->get('places/random', 'Places::random');
 $routes->get('places/(:alphanum)', 'Places::show/$1');
 $routes->post('places', 'Places::create');
+$routes->patch('places/cover/(:alphanum)', 'Places::cover/$1');
 $routes->patch('places/(:alphanum)', 'Places::update/$1');
 $routes->delete('places/(:alphanum)', 'Places::delete/$1');
 $routes->options('places', 'Places');
+$routes->options('places/cover/(:alphanum)', 'Places');
 $routes->options('places/(:alphanum)', 'Places');
 
 $routes->get('photos', 'Photos::list');

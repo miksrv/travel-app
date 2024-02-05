@@ -126,6 +126,15 @@ export interface RequestPlacesGetList {
     excludePlaces?: string[]
 }
 
+export interface RequestPlacesPatchCover {
+    x: number
+    y: number
+    width: number
+    height: number
+    placeId: string
+    photoId: string
+}
+
 export interface RequestPlacesPatchItem {
     id: string
     content?: string

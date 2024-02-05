@@ -1,6 +1,7 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React from 'react'
+import 'react-image-crop/src/ReactCrop.scss'
 
 import Badge from '@/ui/badge'
 import { BreadcrumbLink } from '@/ui/breadcrumbs'
@@ -9,9 +10,11 @@ import Button from '@/ui/button'
 import { IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
+import { Photo } from '@/api/types/Photo'
 import { Place } from '@/api/types/Place'
 
 import Header from '@/components/header'
+import PlaceCoverEditor from '@/components/place-cover-editor'
 
 import {
     addDecimalPoint,
@@ -23,14 +26,16 @@ import styles from './styles.module.sass'
 
 interface PlaceHeaderProps {
     place?: Place
+    photos?: Photo[]
     breadcrumbs?: BreadcrumbLink[]
     ratingValue?: number
     ratingCount?: number
 }
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({
-    breadcrumbs,
     place,
+    photos,
+    breadcrumbs,
     ratingValue,
     ratingCount
 }) => {
@@ -67,6 +72,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     </div>
                 )}
             </div>
+
             <div className={styles.image}>
                 {place?.cover && (
                     <Image
@@ -78,6 +84,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     />
                 )}
             </div>
+
             <div className={styles.bottomPanel}>
                 <Badge
                     icon={'Photo'}
@@ -92,25 +99,33 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     content={`${place?.distance || '?'} км`}
                 />
             </div>
+
             <Header
                 title={place?.title}
                 currentPage={place?.title}
                 attachedBottom={true}
                 links={breadcrumbs}
                 actions={
-                    <Button
-                        size={'m'}
-                        icon={'EditLocation'}
-                        mode={'primary'}
-                        link={
-                            authSlice.isAuth
-                                ? `/places/${place?.id}/edit`
-                                : undefined
-                        }
-                        onClick={handleEditPlaceClick}
-                    >
-                        {t('buttonEdit')}
-                    </Button>
+                    <>
+                        <PlaceCoverEditor
+                            placeId={place?.id}
+                            photos={photos}
+                        />
+
+                        <Button
+                            size={'m'}
+                            icon={'EditLocation'}
+                            mode={'secondary'}
+                            link={
+                                authSlice.isAuth
+                                    ? `/places/${place?.id}/edit`
+                                    : undefined
+                            }
+                            onClick={handleEditPlaceClick}
+                        >
+                            {t('buttonEdit')}
+                        </Button>
+                    </>
                 }
             />
         </section>

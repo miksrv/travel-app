@@ -102,8 +102,8 @@ class Photos extends ResourceController {
                 'preview'   => $photoPath . '_preview.' . $photo->extension,
                 // 'filename'  => $photo->filename,
                 // 'extension' => $photo->extension,
-                // 'width'     => $photo->width,
-                // 'height'    => $photo->height,
+                'width'     => $photo->width,
+                'height'    => $photo->height,
                 'title'     => $title,
                 'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
@@ -219,8 +219,8 @@ class Photos extends ResourceController {
             'preview'   => $photoPath . $name . '_preview.' . $ext,
             // 'filename'  => $photo->filename,
             // 'extension' => $photo->extension,
-            // 'width'     => $photo->width,
-            // 'height'    => $photo->height,
+            'width'     => $photo->width,
+            'height'    => $photo->height,
             'title'     => $photo->title_en ?: $photo->title_ru,
             'placeId'   => $photo->place_id
         ]);

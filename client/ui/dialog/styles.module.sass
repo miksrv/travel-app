@@ -6,7 +6,6 @@
   border-radius: $borderRadius
   border: none
   box-shadow: 0 0 2px rgba(0, 0, 0, 0.08), 0 4px 16px rgba(0, 0, 0, 0.08)
-  max-width: 500px
   width: 100%
   z-index: 600
   max-height: 80vh
@@ -25,6 +24,7 @@
       cursor: pointer
       display: flex
       align-items: center
+      margin-left: 0
 
       svg
         width: 24px
@@ -33,6 +33,13 @@
 
       div
         color: #6d7885
+
+    .actions
+      position: absolute
+      right: 15px
+      top: 13px
+      display: flex
+      align-items: center
 
   .content
     max-height: 70vh

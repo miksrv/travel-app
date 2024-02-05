@@ -9,7 +9,9 @@ interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
     header?: string
     contentHeight?: string
+    maxWidth?: string
     showBackLink?: boolean
+    actions?: React.ReactNode
     children?: React.ReactNode
     onBackClick?: () => void
     onCloseDialog?: () => void
@@ -19,7 +21,9 @@ const Dialog: React.FC<DialogProps> = ({
     open,
     header,
     contentHeight,
+    maxWidth = '500px',
     showBackLink,
+    actions,
     children,
     onBackClick,
     onCloseDialog,
@@ -44,6 +48,7 @@ const Dialog: React.FC<DialogProps> = ({
 
         setDialogStyle({
             // left: `${left}px`,
+            maxWidth,
             top: `${top}px`
         })
     }
@@ -101,6 +106,7 @@ const Dialog: React.FC<DialogProps> = ({
                         </button>
                     )}
                     <h2>{header}</h2>
+                    {actions && <div className={styles.actions}>{actions}</div>}
                 </div>
             )}
             <div

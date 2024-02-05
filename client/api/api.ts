@@ -224,6 +224,20 @@ export const API = createApi({
         placesGetRandom: builder.query<ApiTypes.ResponsePlacesGetRandom, void>({
             query: () => 'places/random'
         }),
+        placesPatchCover: builder.mutation<
+            void,
+            ApiTypes.RequestPlacesPatchCover
+        >({
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.placeId, type: 'Places' }
+            ],
+            query: (data) => ({
+                body: data,
+                method: 'PATCH',
+                url: `places/cover/${data.placeId}`
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
         placesPatchItem: builder.mutation<
             ApiTypes.ResponsePlacesPatchItem,
             ApiTypes.RequestPlacesPatchItem
