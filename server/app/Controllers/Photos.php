@@ -1,7 +1,6 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Photo;
-use App\Entities\Place;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
@@ -94,7 +93,7 @@ class Photos extends ResourceController {
                 ($photo->title_ru ?: $photo->title_en) :
                 ($photo->title_en ?: $photo->title_ru);
 
-            $photoPath = 'uploads/places/' . $photo->place_id . '/' . $photo->filename;
+            $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
 
             $result[] = (object) [
                 'id'        => $photo->id,
@@ -209,7 +208,7 @@ class Photos extends ResourceController {
         // Update the time and photos count
         $placesModel->update($id, ['photos' => $placesData->photos + 1]);
 
-        $photoPath = 'uploads/places/' . $placesData->id . '/';
+        $photoPath = PATH_PHOTOS . $placesData->id . '/';
 
         return $this->respondCreated((object) [
             'id'        => $photoId,

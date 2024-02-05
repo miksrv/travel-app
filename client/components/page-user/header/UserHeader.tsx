@@ -40,7 +40,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         width={160}
                         src={
                             user?.avatar
-                                ? `${IMG_HOST}avatar/${user.avatar}`
+                                ? `${IMG_HOST}${user.avatar}`
                                 : defaultAvatar.src
                         }
                     />

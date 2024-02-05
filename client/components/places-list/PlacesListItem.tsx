@@ -40,7 +40,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         <Image
                             className={styles.photo}
                             priority={true}
-                            alt={place?.photo?.title || ''}
+                            alt={place?.title || ''}
                             height={180}
                             width={280}
                             src={`${IMG_HOST}${place.cover.preview}`}

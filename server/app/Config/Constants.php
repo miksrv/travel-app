@@ -93,9 +93,14 @@ define('EVENT_PRIORITY_NORMAL', 100);
  */
 define('EVENT_PRIORITY_HIGH', 10);
 
+// Absolute uploads path for PHP and API
 defined('UPLOADS')        || define('UPLOADS', FCPATH . 'uploads/');
 defined('UPLOAD_PHOTOS')  || define('UPLOAD_PHOTOS', UPLOADS . 'places/');
 defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', UPLOADS . 'users/');
+
+// Relative uploads path for web
+defined('PATH_PHOTOS') || define('PATH_PHOTOS', 'uploads/places/');
+defined('PATH_AVATARS') || define('PATH_AVATARS', 'uploads/users/');
 
 // Place cover image sizes
 defined('PLACE_COVER_WIDTH') || define('PLACE_COVER_WIDTH', 870);

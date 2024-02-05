@@ -94,11 +94,7 @@ const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
         <Image
             alt={''}
             className={styles.avatarImage}
-            src={
-                user?.avatar
-                    ? `${IMG_HOST}avatar/${user.avatar}`
-                    : defaultAvatar.src
-            }
+            src={user?.avatar ? `${IMG_HOST}${user.avatar}` : defaultAvatar.src}
             width={getDimension(size)}
             height={getDimension(size)}
         />

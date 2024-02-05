@@ -400,22 +400,6 @@ class Migrate extends ResourceController {
             return $userData->id;
         }
 
-        if ($userMigrateData->user_avatar) {
-            $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
-            $avatarDirectory = UPLOAD_AVATARS;
-            if (!is_dir($avatarDirectory)) {
-                mkdir($avatarDirectory,0777, TRUE);
-            }
-
-            $avatarImage = @file_get_contents($userAvatarURL);
-
-           if ($avatarImage) {
-               file_put_contents($avatarDirectory . '/' . $userMigrateData->user_avatar, $avatarImage);
-           } else {
-               $userMigrateData->user_avatar = null;
-           }
-        }
-
         $user = new \App\Entities\User();
         $user->name       = $userMigrateData->user_name;
         $user->password   = $userMigrateData->user_password;
@@ -427,6 +411,34 @@ class Migrate extends ResourceController {
 
         $usersModel->insert($user);
 
-        return $usersModel->getInsertID();
+        $userId = $usersModel->getInsertID();
+
+        if ($userMigrateData->user_avatar) {
+            $userAvatarURL   = 'https://greenexp.ru/uploads/avatars/' . $userMigrateData->user_avatar;
+            $avatarDirectory = UPLOAD_AVATARS . '/' . $userId . '/';
+            if (!is_dir($avatarDirectory)) {
+                mkdir($avatarDirectory,0777, TRUE);
+            }
+
+            $avatarImage = @file_get_contents($userAvatarURL);
+
+            if ($avatarImage) {
+                file_put_contents($avatarDirectory . $userMigrateData->user_avatar, $avatarImage);
+
+                $file = new File($avatarDirectory . $userMigrateData->user_avatar);
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $ext  = $file->getExtension();
+
+                $image = Services::image('gd'); // imagick
+                $image->withFile($file->getRealPath())
+                    ->fit(40, 40, 'center')
+                    ->save($avatarDirectory  . $name . '_preview.' . $ext);
+
+            } else {
+                $usersModel->update($userId, ['avatar' => null]);
+            }
+        }
+
+        return $userId;
     }
 }

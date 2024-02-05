@@ -109,8 +109,8 @@ class Poi extends ResourceController {
         // Place cover
         if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
             $response['cover'] = [
-                'full'    => 'uploads/places/' . $id . '/cover.jpg',
-                'preview' => 'uploads/places/' . $id . '/cover_preview.jpg',
+                'full'    => PATH_PHOTOS . $id . '/cover.jpg',
+                'preview' => PATH_PHOTOS . $id . '/cover_preview.jpg',
             ];
         }
 

@@ -41,11 +41,14 @@ class Users extends ResourceController {
 
         foreach ($usersData as $item) {
             $level    = $userLevels->getLevelData($item);
+            $avatar   = $item->avatar ? explode('.', $item->avatar) : null;
             $result[] = (object) [
-                'id'      => $item->id,
-                'name'    => $item->name,
-                'avatar'  => $item->avatar,
-                'level'   => [
+                'id'     => $item->id,
+                'name'   => $item->name,
+                'avatar' => $avatar
+                    ? PATH_AVATARS . $item->id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                    : null,
+                'level'  => [
                     'level'      => $level->level,
                     'title'      => $level->title,
                     'experience' => $item->experience,

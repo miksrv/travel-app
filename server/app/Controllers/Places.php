@@ -192,8 +192,8 @@ class Places extends ResourceController {
             // Place cover
             if ($place->photos && file_exists(UPLOAD_PHOTOS . $place->id . '/cover.jpg')) {
                 $return['cover'] = [
-                    'full'    => 'uploads/places/' . $place->id . '/cover.jpg',
-                    'preview' => 'uploads/places/' . $place->id . '/cover_preview.jpg',
+                    'full'    => PATH_PHOTOS . $place->id . '/cover.jpg',
+                    'preview' => PATH_PHOTOS . $place->id . '/cover_preview.jpg',
                 ];
             }
 
@@ -263,6 +263,8 @@ class Places extends ResourceController {
             ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
             ->first();
 
+        $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
+
         $response = [
             'id'        => $placeData->id,
             'created'   => $placeData->created_at ?? null,
@@ -277,7 +279,9 @@ class Places extends ResourceController {
             'author'    => [
                 'id'     => $placeData->user_id,
                 'name'   => $placeData->user_name,
-                'avatar' => $placeData->user_avatar
+                'avatar' => $avatar
+                    ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                    : null
             ],
             'category'  => [
                 'name'  => $placeData->category,
@@ -339,8 +343,8 @@ class Places extends ResourceController {
         // Place cover
         if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
             $response['cover'] = [
-                'full'    => 'uploads/places/' . $id . '/cover.jpg',
-                'preview' => 'uploads/places/' . $id . '/cover_preview.jpg',
+                'full'    => PATH_PHOTOS . $id . '/cover.jpg',
+                'preview' => PATH_PHOTOS . $id . '/cover_preview.jpg',
             ];
         }
 
