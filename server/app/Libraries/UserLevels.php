@@ -11,6 +11,7 @@ use ReflectionException;
 define('MODIFIER_PLACE', 15);
 define('MODIFIER_PHOTO', 10);
 define('MODIFIER_RATING', 1);
+define('MODIFIER_COVER', 2);
 define('MODIFIER_EDIT', 5);
 
 class UserLevels {
@@ -18,7 +19,7 @@ class UserLevels {
 
     public object $statistic;
 
-    private array $types = ['place', 'photo', 'rating', 'edit'];
+    private array $types = ['place', 'photo', 'rating', 'edit', 'cover'];
 
 
     public function __construct() {
@@ -108,14 +109,26 @@ class UserLevels {
             return false;
         }
 
-        if ($type === 'place') {
-            $userData->experience += MODIFIER_PLACE;
-        } else if ($type === 'photo') {
-            $userData->experience += MODIFIER_PHOTO;
-        } else if ($type === 'rating') {
-            $userData->experience += MODIFIER_RATING;
-        } else if ($type === 'edit') {
-            $userData->experience += MODIFIER_EDIT;
+        switch ($type) {
+            case 'place' :
+                $userData->experience += MODIFIER_PLACE;
+                break;
+
+            case 'photo' :
+                $userData->experience += MODIFIER_PHOTO;
+                break;
+
+            case 'rating' :
+                $userData->experience += MODIFIER_RATING;
+                break;
+
+            case 'edit' :
+                $userData->experience += MODIFIER_EDIT;
+                break;
+
+            case 'cover' :
+                $userData->experience += MODIFIER_COVER;
+                break;
         }
 
         $calcLevel = $this->_findUserLevel($userData->experience);

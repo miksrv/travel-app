@@ -596,6 +596,9 @@ class Places extends ResourceController {
 
         $placesModel->update($id, ['updated_at' => new Time('now')]);
 
+        $userActivity = new UserActivity();
+        $userActivity->cover($id, $photoData->id);
+
         return $this->respondUpdated();
     }
 
