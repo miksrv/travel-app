@@ -19,8 +19,18 @@ function validateAuthToken(string $encodedToken = null):? User {
         $userModel    = new UsersModel();
         $secretKey    = Services::getSecretKey();
         $decodedToken = JWT::decode($encodedToken, new Key($secretKey, 'HS256'));
+        $userData     = $userModel->findUserByEmailAddress($decodedToken->email);
 
-        return $userModel->findUserByEmailAddress($decodedToken->email);
+        if (!$userData) {
+            return null;
+        }
+
+        if ($userData->avatar) {
+            $avatar = explode('.', $userData->avatar);
+            $userData->avatar = PATH_AVATARS . $userData->id . '/' . $avatar[0] . '_preview.' . $avatar[1];
+        }
+
+        return $userData;
     } catch (\Throwable $e) {
         return null;
     }

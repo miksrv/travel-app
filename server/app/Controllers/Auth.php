@@ -4,6 +4,7 @@ use App\Entities\User;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use App\Models\UsersModel;
+use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\IncomingRequest;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -117,25 +118,38 @@ class Auth extends ResourceController {
             $user   = new User();
             $avatar = '';
 
-            // If a Google user has an avatar, copy it
-            if ($googleUser->getPicture()) {
-                $avatar = md5($googleUser->getName() . AUTH_TYPE_GOOGLE . $googleUser->getEmail()) . 'jpg';
-
-                if (!is_dir(UPLOAD_AVATARS)) {
-                    mkdir(UPLOAD_AVATARS,0777, TRUE);
-                }
-
-                file_put_contents(UPLOAD_AVATARS . '/' . $avatar, file_get_contents($googleUser->getPicture()));
-            }
-
             $user->name      = $googleUser->getName();
             $user->email     = $googleUser->getEmail();
             $user->auth_type = AUTH_TYPE_GOOGLE;
             $user->locale    = $googleUser->getLocale() === 'ru' ? 'ru' : 'en';
-            $user->avatar    = $avatar;
             $user->level     = 1;
 
             $userModel->insert($user);
+
+            // If a Google user has an avatar, copy it
+            if ($googleUser->getPicture()) {
+                $newUserId = $userModel->getInsertID();
+                $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
+                $avatar = md5($googleUser->getName() . AUTH_TYPE_GOOGLE . $googleUser->getEmail()) . '.jpg';
+
+                if (!is_dir($avatarDirectory)) {
+                    mkdir($avatarDirectory,0777, TRUE);
+                }
+
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($googleUser->getPicture()));
+
+                $file = new File($avatarDirectory . $avatar);
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $ext  = $file->getExtension();
+
+                $image = Services::image('gd'); // imagick
+                $image->withFile($file->getRealPath())
+                    ->fit(40, 40, 'center')
+                    ->save($avatarDirectory  . $name . '_preview.' . $ext);
+
+                $userModel->update($newUserId, ['avatar' => $avatar]);
+            }
+
             log_message('error', 'New user registered via Google');
 
             $userData = $user;
