@@ -9,6 +9,7 @@ import AppBar from '@/components/app-bar'
 import Footer from '@/components/footer'
 import LanguageSwitcher from '@/components/language-switcher'
 import LoginForm from '@/components/login-form'
+import Snackbar from '@/components/snackbar'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -110,6 +111,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 </aside>
                 <main className={styles.main}>{children}</main>
             </section>
+
+            <Snackbar />
         </div>
     )
 }

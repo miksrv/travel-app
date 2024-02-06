@@ -39,34 +39,31 @@ class LevelsLibrary {
     public function calculate(User $user): static {
         $activityModel = new ActivityModel();
         $activityData  = $activityModel
-            ->selectCount('photo_id', 'photos')
-            ->selectCount('rating_id', 'rating')
+            ->select('type')
             ->where('user_id', $user->id)
-            ->first();
-
-        $placesCount = $activityModel
-            ->selectCount('place_id', 'places')
-            ->where(['user_id' => $user->id, 'type' => 'place'])
-            ->first();
-
-        $editsCount = $activityModel
-            ->selectCount('place_id', 'places')
-            ->where(['user_id' => $user->id, 'type' => 'edit'])
-            ->first();
+            ->findAll();
 
         $statistic = (object) [
-            'places' => (int) $placesCount->places ?? 0,
-            'photos' => (int) $activityData->photos ?? 0,
-            'rating' => (int) $activityData->rating ?? 0,
-            'edit'   => (int) $editsCount->places ?? 0,
+            'place'  => 0,
+            'photo'  => 0,
+            'rating' => 0,
+            'edit'   => 0,
+            'cover'  => 0,
         ];
+
+        if ($activityData) {
+            foreach ($activityData as $activity) {
+                $statistic->{$activity->type}++;
+            }
+        }
 
         // CALCULATE USER EXPERIENCE
         $experience = 0;
-        $experience += $statistic->places * MODIFIER_PLACE;
-        $experience += $statistic->photos * MODIFIER_PHOTO;
+        $experience += $statistic->place * MODIFIER_PLACE;
+        $experience += $statistic->photo * MODIFIER_PHOTO;
         $experience += $statistic->rating * MODIFIER_RATING;
         $experience += $statistic->edit * MODIFIER_EDIT;
+        $experience += $statistic->cover * MODIFIER_COVER;
 
         $this->statistic = $statistic;
 
@@ -77,71 +74,16 @@ class LevelsLibrary {
         // as a result of the calculation, then we will update the user data in the database
         if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
             $userModel  = new UsersModel();
-            $userNotify = new NotifyLibrary();
-
-            $userModel->update($user->id, [
-                'level'      => $calcLevel->level,
-                'experience' => $experience
-            ]);
+            $userModel->update($user->id, ['level' => $calcLevel->level, 'experience' => $experience]);
 
              if ($calcLevel->level !== $user->level) {
-                 $userNotify->level($user->id);
+                 $notify = new NotifyLibrary();
+                 $notify->push('level', $user->id);
              }
         }
 
         return $this;
     }
-
-
-//    public function experience(string $type, string $userId, string $objectId): bool {
-//        $userModel  = new UsersModel();
-//        $userNotify = new NotifyLibrary();
-//        $userData   = $userModel->select('id, experience, level')->find($userId);
-//
-//        if (!in_array($type, $this->types) || !$userId || !$userData) {
-//            return false;
-//        }
-//
-//        switch ($type) {
-//            case 'place' :
-//                $userData->experience += MODIFIER_PLACE;
-//                break;
-//
-//            case 'photo' :
-//                $userData->experience += MODIFIER_PHOTO;
-//                break;
-//
-//            case 'rating' :
-//                $userData->experience += MODIFIER_RATING;
-//                break;
-//
-//            case 'edit' :
-//                $userData->experience += MODIFIER_EDIT;
-//                break;
-//
-//            case 'cover' :
-//                $userData->experience += MODIFIER_COVER;
-//                break;
-//        }
-//
-//        $calcLevel = $this->_findUserLevel($userData->experience);
-//
-//        if ($calcLevel->level !== $userData->level) {
-//            $userNotify->level($userId);
-//            $userModel->update($userData->id, [
-//                'level'      => $calcLevel->level,
-//                'experience' => $userData->experience
-//            ]);
-//
-//            return true;
-//        }
-//
-//        $userNotify->experience($userId, $objectId);
-//        $userModel->update($userData->id, ['experience' => $userData->experience]);
-//
-//        return true;
-//    }
-
 
     /**
      * NEW MAIN FUNCTION

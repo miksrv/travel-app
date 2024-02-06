@@ -10,6 +10,7 @@ import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
+import { addNotification } from '@/api/snackbarSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 

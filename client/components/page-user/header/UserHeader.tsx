@@ -123,13 +123,13 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     <li>
                         <div className={styles.key}>{t('placesAdded')}</div>
                         <div className={styles.value}>
-                            {user?.statistic?.places}
+                            {user?.statistic?.place}
                         </div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('photosUploaded')}</div>
                         <div className={styles.value}>
-                            {user?.statistic?.photos}
+                            {user?.statistic?.photo}
                         </div>
                     </li>
                     <li>
@@ -142,6 +142,12 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         <div className={styles.key}>{t('editions')}</div>
                         <div className={styles.value}>
                             {user?.statistic?.edit}
+                        </div>
+                    </li>
+                    <li>
+                        <div className={styles.key}>{t('covers')}</div>
+                        <div className={styles.value}>
+                            {user?.statistic?.cover}
                         </div>
                     </li>
                 </ul>

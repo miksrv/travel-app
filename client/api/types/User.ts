@@ -23,8 +23,9 @@ export type LevelData = {
 }
 
 export type Statistic = {
-    places: number
-    photos: number
+    place: number
+    photo: number
     rating: number
     edit: number
+    cover: number
 }

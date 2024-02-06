@@ -9,6 +9,7 @@ import {
 
 import applicationSlice from '@/api/applicationSlice'
 import authSlice from '@/api/authSlice'
+import snackbarSlice from '@/api/snackbarSlice'
 
 import { API } from './api'
 
@@ -19,6 +20,7 @@ export const store = () =>
         reducer: {
             application: applicationSlice,
             auth: authSlice,
+            snackbar: snackbarSlice,
             [API.reducerPath]: API.reducer
         }
     })
