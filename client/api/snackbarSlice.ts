@@ -2,8 +2,6 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import uniqueId from 'lodash-es/uniqueId'
 
-import { store } from '@/api/store'
-
 type Notification = {
     id: string
     title?: string
@@ -23,22 +21,33 @@ const initialState: SnackbarStateProps = {
 
 export const addNotification = createAsyncThunk(
     'snackbar/addNotification',
-    async (notification: Omit<Notification, 'id' | 'createdAt'>) => ({
-        ...notification,
-        createdAt: Date.now(),
-        id: uniqueId()
-    })
+    async (
+        notification: Omit<Notification, 'id' | 'createdAt'>,
+        { dispatch }
+    ) => {
+        const newNotification: Notification = {
+            ...notification,
+            createdAt: Date.now(),
+            id: uniqueId()
+        }
+
+        dispatch(snackbarSlice.actions.addNotification(newNotification))
+
+        setTimeout(() => {
+            dispatch(deleteNotification(newNotification.id))
+        }, 5000)
+
+        return newNotification
+    }
 )
 
 const snackbarSlice = createSlice({
-    extraReducers: (builder) => {
-        builder.addCase(addNotification.fulfilled, (state, action) => {
-            state.notifications.push(action.payload)
-        })
-    },
     initialState,
     name: 'snackbar',
     reducers: {
+        addNotification(state, action: PayloadAction<Notification>) {
+            state.notifications.push(action.payload)
+        },
         deleteAllNotifications(state) {
             state.notifications = []
         },

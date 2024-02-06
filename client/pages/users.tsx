@@ -2,14 +2,15 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
-import { wrapper } from '@/api/store'
+import { addNotification } from '@/api/snackbarSlice'
+import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 
@@ -33,6 +34,30 @@ const UsersPage: NextPage<UsersPageProps> = ({
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.users'
     })
+
+    const dispatch = useAppDispatch()
+
+    useEffect(() => {
+        dispatch(
+            addNotification({
+                content: 'Содержание новой нотификации',
+                title: 'My first notification',
+                type: 'info'
+            })
+        )
+
+        setTimeout(
+            () =>
+                dispatch(
+                    addNotification({
+                        content: 'Содержание новой нотификации',
+                        title: 'My SECOND notification',
+                        type: 'info'
+                    })
+                ),
+            1000
+        )
+    }, [])
 
     return (
         <AppLayout>
