@@ -1,16 +1,16 @@
 <?php namespace App\Libraries;
 
 use App\Entities\UserNotification;
-use App\Models\UsersNotifications;
+use App\Models\UsersNotificationsModel;
 use ReflectionException;
 
-class UserNotify {
-    private UsersNotifications $userNotifyModel;
+class NotifyLibrary {
+    private UsersNotificationsModel $model;
 
-    protected array $types = ['photo', 'place', 'rating', 'edit', 'experience', 'level', 'achievements'];
+    protected array $types = ['photo', 'place', 'rating', 'edit', 'cover', 'experience', 'level', 'achievements'];
 
     public function __construct() {
-        $this->userNotifyModel = new UsersNotifications();
+        $this->model = new UsersNotificationsModel();
     }
 
     /**
@@ -99,10 +99,27 @@ class UserNotify {
         $userNotify->object_id = $objectId;
         $userNotify->type      = $type;
 
-        if ($this->userNotifyModel->insert($userNotify)) {
+        if ($this->model->insert($userNotify)) {
             return true;
         }
 
         return false;
+    }
+
+    /**
+     * @param string $type One of: 'photo', 'place', 'rating', 'edit', 'cover', 'experience', 'level', 'achievements'
+     * @param string $userId
+     * @param string|null $activity
+     * @throws ReflectionException
+     */
+    public function push(string $type, string $userId, string|null $activity = null): void
+    {
+        $notification = new UserNotification();
+        $notification->type        = $type;
+        $notification->user_id     = $userId;
+        $notification->activity_id = $activity;
+
+        $model = new UsersNotificationsModel();
+        $model->insert($notification);
     }
 }

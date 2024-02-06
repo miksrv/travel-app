@@ -14,7 +14,7 @@ class AddUsersNotifications extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type' => 'ENUM("photo", "place", "rating", "edit", "experience", "level", "achievements")',
+                'type' => 'ENUM("photo", "place", "rating", "edit", "cover", "experience", "level", "achievements")',
                 'null' => false,
             ],
             'read' => [
@@ -26,7 +26,7 @@ class AddUsersNotifications extends Migration {
                 'constraint' => 15,
                 'null'       => true
             ],
-            'object_id' => [
+            'activity_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
                 'null'       => true
@@ -36,6 +36,7 @@ class AddUsersNotifications extends Migration {
 
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('activity_id', 'activity', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('users_notifications');
     }
 

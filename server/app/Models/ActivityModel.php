@@ -1,18 +1,19 @@
 <?php namespace App\Models;
 
-class UsersActivityModel extends MyBaseModel {
-    protected $table            = 'users_activity';
+class ActivityModel extends MyBaseModel {
+    protected $table            = 'activity';
     protected $primaryKey       = 'id';
 
     protected $useAutoIncrement = false;
 
-    protected $returnType       = \App\Entities\UserActivity::class;
+    protected $returnType       = \App\Entities\Activity::class;
     protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['id'];
 
     protected $allowedFields = [
         'type',
+        'session_id',
         'user_id',
         'photo_id',
         'place_id',

@@ -2,7 +2,7 @@
 
 use App\Entities\UserNotification;
 
-class UsersNotifications extends MyBaseModel {
+class UsersNotificationsModel extends MyBaseModel {
     protected $table            = 'users_notifications';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;
@@ -12,7 +12,7 @@ class UsersNotifications extends MyBaseModel {
     protected $allowedFields = [
         'type',
         'user_id',
-        'object_id'
+        'activity_id'
     ];
 
     // Dates

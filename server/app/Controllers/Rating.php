@@ -2,8 +2,7 @@
 
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
-use App\Libraries\UserActivity;
-use App\Libraries\UserNotify;
+use App\Libraries\ActivityLibrary;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\UsersModel;
@@ -120,18 +119,8 @@ class Rating extends ResourceController {
             $ratingModel->insert($rating);
 
             /* ACTIVITY */
-            if ($this->session->isAuth) {
-                $userActivity = new UserActivity();
-                $userActivity->rating($placesData->id, $ratingModel->getInsertID());
-            }
-
-            /* NOTIFICATIONS */
-            // If a user gives a rating to a material that is not his own,
-            // we will send a notification to the author of the material about the change in the rating of his place
-            $userNotify = new UserNotify();
-            if (!$this->session->isAuth || $placesData->user_id !== $this->session->user?->id) {
-                $userNotify->rating($placesData->user_id, $placesData->id);
-            }
+            $activity = new ActivityLibrary();
+            $activity->owner($placesData->user_id)->rating($placesData->id, $ratingModel->getInsertID());
 
             return $this->respondCreated();
         } catch (Exception $e) {

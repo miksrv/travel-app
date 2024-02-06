@@ -1,13 +1,13 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\Geocoder;
-use App\Libraries\OverpassAPI;
+//use App\Libraries\Geocoder;
+//use App\Libraries\OverpassAPI;
 use App\Libraries\Session;
-use App\Libraries\UserActivity;
-use App\Models\OverpassCategoryModel;
-use App\Models\PlacesModel;
-use App\Models\PlacesContentModel;
-use App\Models\UsersActivityModel;
+//use App\Libraries\ActivityLibrary;
+//use App\Models\OverpassCategoryModel;
+//use App\Models\PlacesModel;
+//use App\Models\PlacesContentModel;
+//use App\Models\ActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;

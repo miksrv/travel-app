@@ -2,7 +2,7 @@
 
 use App\Entities\User;
 use App\Entities\UserLevel;
-use App\Models\UsersActivityModel;
+use App\Models\ActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
 use Config\Services;
@@ -14,7 +14,7 @@ define('MODIFIER_RATING', 1);
 define('MODIFIER_COVER', 2);
 define('MODIFIER_EDIT', 5);
 
-class UserLevels {
+class LevelsLibrary {
     private array $userLevels;
 
     public object $statistic;
@@ -37,7 +37,7 @@ class UserLevels {
      * @throws ReflectionException
      */
     public function calculate(User $user): static {
-        $activityModel = new UsersActivityModel();
+        $activityModel = new ActivityModel();
         $activityData  = $activityModel
             ->selectCount('photo_id', 'photos')
             ->selectCount('rating_id', 'rating')
@@ -77,7 +77,7 @@ class UserLevels {
         // as a result of the calculation, then we will update the user data in the database
         if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
             $userModel  = new UsersModel();
-            $userNotify = new UserNotify();
+            $userNotify = new NotifyLibrary();
 
             $userModel->update($user->id, [
                 'level'      => $calcLevel->level,
@@ -92,21 +92,71 @@ class UserLevels {
         return $this;
     }
 
+
+//    public function experience(string $type, string $userId, string $objectId): bool {
+//        $userModel  = new UsersModel();
+//        $userNotify = new NotifyLibrary();
+//        $userData   = $userModel->select('id, experience, level')->find($userId);
+//
+//        if (!in_array($type, $this->types) || !$userId || !$userData) {
+//            return false;
+//        }
+//
+//        switch ($type) {
+//            case 'place' :
+//                $userData->experience += MODIFIER_PLACE;
+//                break;
+//
+//            case 'photo' :
+//                $userData->experience += MODIFIER_PHOTO;
+//                break;
+//
+//            case 'rating' :
+//                $userData->experience += MODIFIER_RATING;
+//                break;
+//
+//            case 'edit' :
+//                $userData->experience += MODIFIER_EDIT;
+//                break;
+//
+//            case 'cover' :
+//                $userData->experience += MODIFIER_COVER;
+//                break;
+//        }
+//
+//        $calcLevel = $this->_findUserLevel($userData->experience);
+//
+//        if ($calcLevel->level !== $userData->level) {
+//            $userNotify->level($userId);
+//            $userModel->update($userData->id, [
+//                'level'      => $calcLevel->level,
+//                'experience' => $userData->experience
+//            ]);
+//
+//            return true;
+//        }
+//
+//        $userNotify->experience($userId, $objectId);
+//        $userModel->update($userData->id, ['experience' => $userData->experience]);
+//
+//        return true;
+//    }
+
+
     /**
-     * Add points for user experience
+     * NEW MAIN FUNCTION
+     *
      * @param string $type
      * @param string $userId
-     * @param string $objectId
-     * @return bool
+     * @param string $activity
      * @throws ReflectionException
      */
-    public function experience(string $type, string $userId, string $objectId): bool {
+    public function push(string $type, string $userId, string $activity): void {
         $userModel  = new UsersModel();
-        $userNotify = new UserNotify();
         $userData   = $userModel->select('id, experience, level')->find($userId);
 
         if (!in_array($type, $this->types) || !$userId || !$userData) {
-            return false;
+            return ;
         }
 
         switch ($type) {
@@ -132,23 +182,18 @@ class UserLevels {
         }
 
         $calcLevel = $this->_findUserLevel($userData->experience);
+        $notify    = new NotifyLibrary();
 
         if ($calcLevel->level !== $userData->level) {
-            $userNotify->level($userId);
-            $userModel->update($userData->id, [
-                'level'      => $calcLevel->level,
-                'experience' => $userData->experience
-            ]);
-
-            return true;
+            $notify->push('level', $userId);
+            $userModel->update($userData->id, ['level' => $calcLevel->level, 'experience' => $userData->experience]);
+        } else {
+            $notify->push('experience', $userId);
+            $userModel->update($userData->id, ['experience' => $userData->experience]);
         }
-
-        $userNotify->experience($userId, $objectId);
-        $userModel->update($userData->id, ['experience' => $userData->experience]);
-
-        return true;
     }
-    
+
+
     /**
      * We simply find the current user level in the database and return it, no calculations required
      * @param User $user

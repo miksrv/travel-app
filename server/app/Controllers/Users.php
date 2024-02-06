@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
-use App\Libraries\UserLevels;
+use App\Libraries\LevelsLibrary;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\UsersModel;
@@ -23,7 +23,7 @@ class Users extends ResourceController {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
-        $userLevels = new UserLevels();
+        $userLevels = new LevelsLibrary();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
             ->select('id, name, avatar, created_at, activity_at, updated_at, level, experience, reputation')
@@ -73,7 +73,7 @@ class Users extends ResourceController {
      * @throws Exception
      */
     public function show($id = null): ResponseInterface {
-        $userLevels = new UserLevels();
+        $userLevels = new LevelsLibrary();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
             ->select('id, name, avatar, created_at, updated_at, activity_at, level, website, experience, reputation')

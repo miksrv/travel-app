@@ -6,8 +6,7 @@ use App\Libraries\LocaleLibrary;
 use App\Libraries\PlaceTags;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
-use App\Libraries\UserActivity;
-use App\Libraries\UserNotify;
+use App\Libraries\ActivityLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
@@ -391,7 +390,6 @@ class Places extends ResourceController {
 
         $placeTags    = new PlaceTags();
         $placesModel  = new PlacesModel();
-        $userActivity = new UserActivity();
 
         $geocoder = new Geocoder();
         $place    = new \App\Entities\Place();
@@ -431,7 +429,8 @@ class Places extends ResourceController {
 
         $placesContentModel->insert($content);
 
-        $userActivity->place($newPlaceId);
+        $activity = new ActivityLibrary();
+        $activity->place($newPlaceId);
 
         return $this->respondCreated((object) ['id' => $newPlaceId]);
     }
@@ -464,6 +463,7 @@ class Places extends ResourceController {
         $placeTags    = new PlaceTags();
         $placesModel  = new PlacesModel();
         $placeContent = new PlacesContent();
+        $activity     = new ActivityLibrary();
         $placeData    = $placesModel->find($id);
 
         $placeContent->translate([$id]);
@@ -479,7 +479,6 @@ class Places extends ResourceController {
 
         // Save place content
         if ($updatedContent || $updatedTitle) {
-            $userActivity = new UserActivity();
             $contentModel = new PlacesContentModel();
             $placeEntity  = new \App\Entities\PlaceContent();
             $placeEntity->locale   = $locale;
@@ -504,17 +503,11 @@ class Places extends ResourceController {
                     $contentModel->update($placeContent->id($id), $placeEntity);
                 } else {
                     $contentModel->insert($placeEntity);
-                    $userActivity->edit($id);
+                    $activity->owner($placeData->user_id)->edit($id);
                 }
             } else {
                 $contentModel->insert($placeEntity);
-                $userActivity->edit($id);
-            }
-
-            // We add a notification to the author that his material has been edited
-            if ($placeData->user_id !== $this->session->user?->id) {
-                $userNotify = new UserNotify();
-                $userNotify->place($placeContent->author($id), $id);
+                $activity->owner($placeData->user_id)->edit($id);
             }
         }
 
@@ -568,7 +561,7 @@ class Places extends ResourceController {
 
         $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
-        $placeData   = $placesModel->select('id')->find($id);
+        $placeData   = $placesModel->select('id, user_id')->find($id);
         $photoData   = $photosModel->select('id, filename, extension')->find($input->photoId);
 
         if (!$placeData || !$photoData) {
@@ -596,8 +589,8 @@ class Places extends ResourceController {
 
         $placesModel->update($id, ['updated_at' => new Time('now')]);
 
-        $userActivity = new UserActivity();
-        $userActivity->cover($id, $photoData->id);
+        $userActivity = new ActivityLibrary();
+        $userActivity->owner($placeData->user_id)->cover($id, $photoData->id);
 
         return $this->respondUpdated();
     }

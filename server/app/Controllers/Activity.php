@@ -2,7 +2,7 @@
 
 use App\Libraries\PlacesContent;
 use App\Models\CategoryModel;
-use App\Models\UsersActivityModel;
+use App\Models\ActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -32,30 +32,30 @@ class Activity extends ResourceController {
         $categoriesModel = new CategoryModel();
         $categoriesData  = $categoriesModel->findAll();
 
-        $activityModel = new UsersActivityModel();
+        $activityModel = new ActivityModel();
         $activityModel
             ->select(
-                'users_activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
+                'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
                 users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
-            ->join('places', 'users_activity.place_id = places.id', 'left')
-            ->join('photos', 'users_activity.photo_id = photos.id', 'left')
-            ->join('users', 'users_activity.user_id = users.id', 'left');
+            ->join('places', 'activity.place_id = places.id', 'left')
+            ->join('photos', 'activity.photo_id = photos.id', 'left')
+            ->join('users', 'activity.user_id = users.id', 'left');
 
         if ($lastDate) {
-            $activityModel->where('users_activity.created_at < ', $lastDate);
+            $activityModel->where('activity.created_at < ', $lastDate);
         }
 
         if ($author) {
-            $activityModel->where('users_activity.user_id', $author);
+            $activityModel->where('activity.user_id', $author);
         }
 
         if ($place) {
-            $activityModel->where('users_activity.place_id', $place);
+            $activityModel->where('activity.place_id', $place);
         }
 
         $activityData = $activityModel
-            ->whereIn('users_activity.type', ['photo', 'place', 'edit'])
-            ->orderBy('users_activity.created_at, users_activity.type', 'DESC')
+            ->whereIn('activity.type', ['photo', 'place', 'edit'])
+            ->orderBy('activity.created_at, activity.type', 'DESC')
             ->findAll($limit, $offset);
 
         $placesIds = [];

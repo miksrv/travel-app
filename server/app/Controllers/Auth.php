@@ -150,9 +150,6 @@ class Auth extends ResourceController {
                 $userModel->update($newUserId, ['avatar' => $avatar]);
             }
 
-            log_message('error', 'New user registered via Google');
-
-
             $userData = $user;
             $userData->id = $newUserId;
         }

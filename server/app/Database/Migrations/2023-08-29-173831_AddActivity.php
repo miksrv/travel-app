@@ -2,7 +2,7 @@
 
 use CodeIgniter\Database\Migration;
 
-class AddUsersActivity extends Migration {
+class AddActivity extends Migration {
     public function up() {
         $this->forge->addField([
             'id' => [
@@ -14,6 +14,11 @@ class AddUsersActivity extends Migration {
             'type' => [
                 'type' => 'ENUM("photo", "place", "rating", "edit", "cover")',
                 'null' => false,
+            ],
+            'session_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 32,
+                'null'       => true,
             ],
             'user_id' => [
                 'type'       => 'VARCHAR',
@@ -44,14 +49,15 @@ class AddUsersActivity extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
+        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('photo_id', 'photos', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('rating_id', 'rating', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('users_activity');
+        $this->forge->createTable('activity');
     }
 
     public function down() {
-        $this->forge->dropTable('users_activity');
+        $this->forge->dropTable('activity');
     }
 }

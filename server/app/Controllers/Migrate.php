@@ -11,10 +11,9 @@ use App\Models\TagsModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\PlacesContentModel;
-use App\Models\UsersActivityModel;
+use App\Models\ActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
-use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use Geocoder\Exception\Exception;
@@ -89,7 +88,7 @@ class Migrate extends ResourceController {
 
         $placesContentModel = new PlacesContentModel();
 
-        $activityModel  = new UsersActivityModel();
+        $activityModel  = new ActivityModel();
         $migratePlaces  = new MigratePlacesModel();
         $migrateHistory = new MigratePlacesHistoryModel();
         $migrateMedia   = new MigrateMediaModel();
@@ -180,7 +179,7 @@ class Migrate extends ResourceController {
             $placesContentModel->insert($content);
 
             // Make user activity
-            $activity = new \App\Entities\UserActivity();
+            $activity = new \App\Entities\Activity();
             $activity->type       = $item->item_version_date !== 0 ? 'edit' : 'place';
             $activity->user_id    = $placeAuthor;
             $activity->place_id   = $newPlaceId;
@@ -207,7 +206,7 @@ class Migrate extends ResourceController {
                     $content->created_at = $placeVersionItem->item_datestamp;
                     $placesContentModel->insert($content);
 
-                    $activity = new \App\Entities\UserActivity();
+                    $activity = new \App\Entities\Activity();
                     $activity->type       = $key === 0 ? 'place' : 'edit';
                     $activity->user_id    = $historyUser;
                     $activity->place_id   = $newPlaceId;
@@ -234,7 +233,7 @@ class Migrate extends ResourceController {
 
                     $ratingModel->insert($rating);
 
-                    $activity = new \App\Entities\UserActivity();
+                    $activity = new \App\Entities\Activity();
                     $activity->type       = 'rating';
                     $activity->user_id    = $ratingAuthor ?? null;
                     $activity->place_id   = $newPlaceId;
@@ -316,7 +315,7 @@ class Migrate extends ResourceController {
 
                             sleep(0.2);
 
-                            $activity = new \App\Entities\UserActivity();
+                            $activity = new \App\Entities\Activity();
                             $activity->type       = 'photo';
                             $activity->user_id    = $placeAuthor;
                             $activity->place_id   = $newPlaceId;

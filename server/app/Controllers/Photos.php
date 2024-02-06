@@ -4,10 +4,10 @@ use App\Entities\Photo;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
-use App\Libraries\UserActivity;
+use App\Libraries\ActivityLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
-use App\Models\UsersActivityModel;
+use App\Models\ActivityModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -138,9 +138,8 @@ class Photos extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $userActivity = new UserActivity();
-        $placesModel  = new PlacesModel();
-        $placesData   = $placesModel->select('id, lat, lon, photos')->find($id);
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel->select('id, lat, lon, photos, user_id')->find($id);
 
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
@@ -202,7 +201,8 @@ class Photos extends ResourceController {
 
             $photoId = $photosModel->getInsertID();
 
-            $userActivity->photo($photoId, $placesData->id);
+            $activity = new ActivityLibrary();
+            $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
         } else {
             echo $photo->getErrorString();
             exit();
@@ -256,8 +256,7 @@ class Photos extends ResourceController {
             unlink(UPLOAD_PHOTOS . $photoData->place_id . '/cover_preview.jpg');
         }
 
-        $activityModel = new UsersActivityModel();
-
+        $activityModel = new ActivityModel();
         $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
 
         // Update photos count on the current place
