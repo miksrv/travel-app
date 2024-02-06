@@ -20,7 +20,7 @@ use Geocoder\Exception\Exception;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 1);
+define('MAX_PLACES_PER_ITERATION', 20);
 
 set_time_limit(0);
 

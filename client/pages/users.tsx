@@ -37,27 +37,27 @@ const UsersPage: NextPage<UsersPageProps> = ({
 
     const dispatch = useAppDispatch()
 
-    useEffect(() => {
-        dispatch(
-            addNotification({
-                content: 'Содержание новой нотификации',
-                title: 'My first notification',
-                type: 'info'
-            })
-        )
-
-        setTimeout(
-            () =>
-                dispatch(
-                    addNotification({
-                        content: 'Содержание новой нотификации',
-                        title: 'My SECOND notification',
-                        type: 'info'
-                    })
-                ),
-            1000
-        )
-    }, [])
+    // useEffect(() => {
+    //     dispatch(
+    //         addNotification({
+    //             content: 'Содержание новой нотификации',
+    //             title: 'My first notification',
+    //             type: 'info'
+    //         })
+    //     )
+    //
+    //     setTimeout(
+    //         () =>
+    //             dispatch(
+    //                 addNotification({
+    //                     content: 'Содержание новой нотификации',
+    //                     title: 'My SECOND notification',
+    //                     type: 'info'
+    //                 })
+    //             ),
+    //         1000
+    //     )
+    // }, [])
 
     return (
         <AppLayout>
