@@ -7,7 +7,8 @@
     display: flex
     flex-direction: column
     user-select: none
-    max-width: 320px
+    max-width: 280px
+    width: 100%
 
     .notification
         transition: transform .32s cubic-bezier(0.4,0,0.2,1)
@@ -16,19 +17,37 @@
         border-radius: $borderRadius
         box-shadow: 0 0 8px rgba(0,0,0,.12), 0 16px 16px rgba(0,0,0,.16)
         background-color: #FFF
-        padding: 12px
+        padding: 8px 12px
         margin-bottom: 10px
         display: flex
         align-items: center
         position: relative
+        width: 100%
 
         .before
-            margin-right: 12px
+            margin: 0 9px 0 3px
+            display: flex
+            align-items: center
+
+            img
+                margin-bottom: -8px
 
             svg
                 fill: $colorLinkSvg
-                width: 24px
-                height: 24px
+                width: 26px
+                height: 26px
+
+            &.success
+                svg
+                    fill: $greenColor
+
+            &.warning
+                svg
+                    fill: $orangeColor
+
+            &.error
+                svg
+                    fill: $redColor
 
         .closeButton
             position: absolute

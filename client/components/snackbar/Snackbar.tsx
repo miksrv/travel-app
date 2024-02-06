@@ -5,6 +5,8 @@ import Icon from '@/ui/icon'
 import { deleteNotification } from '@/api/snackbarSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 interface FooterProps {}
@@ -22,32 +24,45 @@ const Snackbar: React.FC<FooterProps> = () => {
 
     return (
         <div className={styles.snackbar}>
-            <div className={styles.notification}>
-                <div className={styles.before}>
-                    <Icon name={'Award'} />
-                </div>
-                <div className={styles.body}>
-                    <span className={styles.title}>
-                        Этот сервис рекомендует один друг
-                    </span>
-                    <span className={styles.content}>
-                        Вы можете порекомендовать сервис в дополнительном меню
-                    </span>
-                </div>
-                <button
-                    className={styles.closeButton}
-                    onClick={() => handleCloseNotification('1')}
-                >
-                    <Icon name={'Close'} />
-                </button>
-            </div>
-
             {notifications.map((notification) => (
                 <div
                     key={notification.id}
                     className={styles.notification}
                 >
-                    {notification.title}
+                    {(notification.icon || notification.type) && (
+                        <div
+                            className={cn(
+                                styles.before,
+                                notification?.type && styles[notification.type]
+                            )}
+                        >
+                            {notification.type === 'success' ? (
+                                <Icon name={'CheckCircle'} />
+                            ) : notification.type === 'error' ? (
+                                <Icon name={'ReportError'} />
+                            ) : (
+                                notification.icon
+                            )}
+                        </div>
+                    )}
+                    <div className={styles.body}>
+                        {notification.title && (
+                            <span className={styles.title}>
+                                {notification.title}
+                            </span>
+                        )}
+                        {notification.content && (
+                            <span className={styles.content}>
+                                {notification.content}
+                            </span>
+                        )}
+                    </div>
+                    <button
+                        className={styles.closeButton}
+                        onClick={() => handleCloseNotification(notification.id)}
+                    >
+                        <Icon name={'Close'} />
+                    </button>
                 </div>
             ))}
         </div>

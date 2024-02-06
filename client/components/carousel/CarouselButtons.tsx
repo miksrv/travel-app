@@ -1,7 +1,3 @@
-import {
-    ArrowBackIosOutlined,
-    ArrowForwardIosOutlined
-} from '@mui/icons-material'
 import React, { PropsWithChildren } from 'react'
 
 import styles from './styles.module.sass'
@@ -22,7 +18,7 @@ export const PrevButton: React.FC<PropType> = (props) => {
             type={'button'}
             {...restProps}
         >
-            <ArrowBackIosOutlined />
+            {/*<ArrowBackIosOutlined />*/}
             {children}
         </button>
     )
@@ -37,7 +33,7 @@ export const NextButton: React.FC<PropType> = (props) => {
             type={'button'}
             {...restProps}
         >
-            <ArrowForwardIosOutlined />
+            {/*<ArrowForwardIosOutlined />*/}
             {children}
         </button>
     )

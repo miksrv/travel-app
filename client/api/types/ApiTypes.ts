@@ -1,13 +1,13 @@
+import { Item } from './Activity'
+import { ApiNotification } from './ApiNotification'
+import { Photo } from './Photo'
 import {
     Category,
     GeoSearchLocation,
     LocationObject,
     Place,
     Tag
-} from '@/api/types/Place'
-
-import { Item } from './Activity'
-import { Photo } from './Photo'
+} from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { User } from './User'
 
@@ -210,6 +210,10 @@ export interface ResponseLocationGetSearch {
 
 export interface ResponseLocationGetGeoSearch {
     items?: GeoSearchLocation[]
+}
+
+export interface ResponseNotificationsGetList {
+    items?: ApiNotification[]
 }
 
 /* Controller: Tags */

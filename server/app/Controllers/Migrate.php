@@ -29,7 +29,7 @@ class Migrate extends ResourceController {
     /**
      * $: cd public
      * $: php index.php migrate users
-     * @throws Exception|ReflectionException
+     * @throws ReflectionException
      */
     #[NoReturn] public function users(): void {
         ob_start();

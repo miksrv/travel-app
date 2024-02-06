@@ -34,3 +34,5 @@ export type IconTypes =
     | 'Layers'
     | 'RadioButtonUnchecked'
     | 'RadioButtonChecked'
+    | 'CheckCircle'
+    | 'ReportError'

@@ -21,6 +21,10 @@ class AddUsersNotifications extends Migration {
                 'type'    => 'BOOLEAN',
                 'default' => false,
             ],
+            'meta' => [
+                'type' => 'TEXT',
+                'null' => true
+            ],
             'user_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,

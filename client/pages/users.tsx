@@ -35,14 +35,14 @@ const UsersPage: NextPage<UsersPageProps> = ({
         keyPrefix: 'pages.users'
     })
 
-    const dispatch = useAppDispatch()
-
+    // const dispatch = useAppDispatch()
+    //
     // useEffect(() => {
     //     dispatch(
     //         addNotification({
     //             content: 'Содержание новой нотификации',
-    //             title: 'My first notification',
-    //             type: 'info'
+    //             title: 'My first notification'
+    //             // type: 'success'
     //         })
     //     )
     //
@@ -52,7 +52,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
     //                 addNotification({
     //                     content: 'Содержание новой нотификации',
     //                     title: 'My SECOND notification',
-    //                     type: 'info'
+    //                     type: 'error'
     //                 })
     //             ),
     //         1000

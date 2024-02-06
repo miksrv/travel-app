@@ -120,7 +120,8 @@ export const API = createApi({
         }),
         bookmarksPutPlace: builder.mutation<void, ApiTypes.RequestBookmarkSet>({
             invalidatesTags: (res, err, arg) => [
-                { id: arg.place, type: 'Bookmarks' }
+                { id: arg.place, type: 'Bookmarks' },
+                { type: 'Notifications' }
             ],
             query: (data) => ({
                 body: data,
@@ -168,6 +169,15 @@ export const API = createApi({
             })
         }),
 
+        /* Controller: Notifications */
+        notificationsGetList: builder.query<
+            ApiTypes.ResponseNotificationsGetList,
+            void
+        >({
+            providesTags: ['Notifications'],
+            query: () => 'notifications'
+        }),
+
         /* Controller: Photos */
         photoDeleteItem: builder.mutation<
             ApiTypes.ResponsePhotoDeleteItem,
@@ -184,7 +194,8 @@ export const API = createApi({
         >({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.place, type: 'Photos' },
-                { id: arg.place, type: 'Activity' }
+                { id: arg.place, type: 'Activity' },
+                { type: 'Notifications' }
             ],
             query: (data) => ({
                 body: data.formData,
@@ -229,7 +240,8 @@ export const API = createApi({
             ApiTypes.RequestPlacesPatchCover
         >({
             invalidatesTags: (res, err, arg) => [
-                { id: arg.placeId, type: 'Places' }
+                { id: arg.placeId, type: 'Places' },
+                { type: 'Notifications' }
             ],
             query: (data) => ({
                 body: data,
@@ -244,7 +256,8 @@ export const API = createApi({
         >({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.id, type: 'Places' },
-                { type: 'Activity' }
+                { type: 'Activity' },
+                { type: 'Notifications' }
             ],
             query: (data) => ({
                 body: data,
@@ -257,7 +270,11 @@ export const API = createApi({
             ApiTypes.ResponsePlacesPostItem,
             ApiTypes.RequestPlacesPostItem
         >({
-            invalidatesTags: [{ type: 'Places' }, { type: 'Activity' }],
+            invalidatesTags: [
+                { type: 'Places' },
+                { type: 'Activity' },
+                { type: 'Notifications' }
+            ],
             query: (data) => ({
                 body: data,
                 method: 'POST',
@@ -267,7 +284,6 @@ export const API = createApi({
         }),
 
         /* Controller: POI */
-        // TODO
         poiGetItem: builder.mutation<ApiTypes.ResponsePoiItem, string>({
             query: (item) => `poi/${item}`
         }),
@@ -289,11 +305,16 @@ export const API = createApi({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         }),
+
         ratingPutScore: builder.mutation<
             ApiTypes.ResponseRatingSet,
             ApiTypes.RequestRatingSet
         >({
-            invalidatesTags: [{ type: 'Rating' }, { type: 'Activity' }],
+            invalidatesTags: [
+                { type: 'Rating' },
+                { type: 'Activity' },
+                { type: 'Notifications' }
+            ],
             query: (data) => ({
                 body: data,
                 method: 'PUT',
@@ -335,7 +356,8 @@ export const API = createApi({
         }),
         visitedPutPlace: builder.mutation<void, ApiTypes.RequestVisitedSet>({
             invalidatesTags: (res, err, arg) => [
-                { id: arg.place, type: 'Visited' }
+                { id: arg.place, type: 'Visited' },
+                { type: 'Notifications' }
             ],
             query: (data) => ({
                 body: data,
@@ -358,7 +380,8 @@ export const API = createApi({
         'Photos',
         'Rating',
         'Visited',
-        'Users'
+        'Users',
+        'Notifications'
     ]
 })
 

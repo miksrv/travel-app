@@ -68,7 +68,7 @@ class LevelsLibrary {
         $this->statistic = $statistic;
 
         // Let's see what level the user should actually have
-        $calcLevel = $this->_findUserLevel($experience);
+        $calcLevel = $this->getUserLevel($experience);
 
         // If we consider that the user’s actual experience or level does not correspond to that obtained
         // as a result of the calculation, then we will update the user data in the database
@@ -78,7 +78,7 @@ class LevelsLibrary {
 
              if ($calcLevel->level !== $user->level) {
                  $notify = new NotifyLibrary();
-                 $notify->push('level', $user->id);
+                 $notify->push('level', $user->id, null, $calcLevel);
              }
         }
 
@@ -101,36 +101,40 @@ class LevelsLibrary {
             return ;
         }
 
+        $experience = 0;
+
         switch ($type) {
             case 'place' :
-                $userData->experience += MODIFIER_PLACE;
+                $experience = MODIFIER_PLACE;
                 break;
 
             case 'photo' :
-                $userData->experience += MODIFIER_PHOTO;
+                $experience = MODIFIER_PHOTO;
                 break;
 
             case 'rating' :
-                $userData->experience += MODIFIER_RATING;
+                $experience = MODIFIER_RATING;
                 break;
 
             case 'edit' :
-                $userData->experience += MODIFIER_EDIT;
+                $experience = MODIFIER_EDIT;
                 break;
 
             case 'cover' :
-                $userData->experience += MODIFIER_COVER;
+                $experience = MODIFIER_COVER;
                 break;
         }
 
-        $calcLevel = $this->_findUserLevel($userData->experience);
+        $userData->experience += $experience;
+
+        $calcLevel = $this->getUserLevel($userData->experience);
         $notify    = new NotifyLibrary();
 
         if ($calcLevel->level !== $userData->level) {
-            $notify->push('level', $userId);
+            $notify->push('level', $userId, $activity, $calcLevel);
             $userModel->update($userData->id, ['level' => $calcLevel->level, 'experience' => $userData->experience]);
         } else {
-            $notify->push('experience', $userId);
+            $notify->push('experience', $userId, $activity, ['value' => $experience]);
             $userModel->update($userData->id, ['experience' => $userData->experience]);
         }
     }
@@ -157,6 +161,18 @@ class LevelsLibrary {
 
         $locale = $request->getLocale();
         $result = clone $this->userLevels[$levelIndex];
+        $result->title = $result->{"title_$locale"};
+
+        unset($result->title_en, $result->title_ru);
+
+        return $result;
+    }
+
+    protected function getUserLevel(int $experience): UserLevel {
+        $request = Services::request();
+        $level   = $this->_findUserLevel($experience);
+        $locale  = $request->getLocale();
+        $result  = clone $level;
         $result->title = $result->{"title_$locale"};
 
         unset($result->title_en, $result->title_ru);

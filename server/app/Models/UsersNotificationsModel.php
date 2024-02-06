@@ -5,12 +5,18 @@ use App\Entities\UserNotification;
 class UsersNotificationsModel extends MyBaseModel {
     protected $table            = 'users_notifications';
     protected $primaryKey       = 'id';
+
     protected $useAutoIncrement = false;
+
     protected $returnType       = UserNotification::class;
     protected $useSoftDeletes   = false;
 
+    protected array $hiddenFields = ['user_id, activity_id, created_at'];
+
     protected $allowedFields = [
         'type',
+        'read',
+        'meta',
         'user_id',
         'activity_id'
     ];
@@ -33,7 +39,7 @@ class UsersNotificationsModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
