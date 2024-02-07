@@ -3,13 +3,15 @@ import { createAsyncThunk } from '@reduxjs/toolkit'
 import uniqueId from 'lodash-es/uniqueId'
 import React from 'react'
 
-export type Notification = {
-    id: string
-    title?: string
-    content?: React.ReactNode
-    icon?: React.ReactNode
-    type?: 'success' | 'error'
-}
+import { Notification } from '@/api/types/Notification'
+
+// export type Notification = {
+//     id: string
+//     title?: string
+//     content?: React.ReactNode
+//     icon?: React.ReactNode
+//     type?: 'success' | 'error'
+// }
 
 type SnackbarStateProps = {
     notifications: Notification[]
@@ -35,9 +37,9 @@ export const addNotification = createAsyncThunk(
 
         dispatch(snackbarSlice.actions.addNotification(newNotification))
 
-        setTimeout(() => {
-            dispatch(deleteNotification(newNotification.id))
-        }, 5000)
+        // setTimeout(() => {
+        //     dispatch(deleteNotification(newNotification.id))
+        // }, 5000)
 
         return newNotification
     }

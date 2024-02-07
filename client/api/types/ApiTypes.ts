@@ -1,5 +1,5 @@
 import { Item } from './Activity'
-import { ApiNotification } from './ApiNotification'
+import { Notification } from './Notification'
 import { Photo } from './Photo'
 import {
     Category,
@@ -213,7 +213,7 @@ export interface ResponseLocationGetGeoSearch {
 }
 
 export interface ResponseNotificationsGetList {
-    items?: ApiNotification[]
+    items?: Notification[]
 }
 
 /* Controller: Tags */

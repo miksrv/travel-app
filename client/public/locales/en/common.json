@@ -184,6 +184,16 @@
         },
         "userList": {
             "reputation": "Reputation"
+        },
+        "notification": {
+            "level": "New level!",
+            "achievements": "New achievement!",
+            "cover": "New cover loaded",
+            "edit": "Place edited",
+            "rating": "New assessment",
+            "place": "New place added",
+            "photo": "New photo uploaded",
+            "experience": "experience"
         }
     },
     "pages": {

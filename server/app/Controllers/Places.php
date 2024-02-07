@@ -76,15 +76,15 @@ class Places extends ResourceController {
         }
 
         // Load translate library
-        $placeTranslations = new PlacesContent(350);
+        $placeContent = new PlacesContent(350);
 
         // When searching, we search by criteria in the translation array to return object IDs
         if ($search) {
-            $placeTranslations->search($search);
+            $placeContent->search($search);
 
             // At the same time, if we did not find anything based on the search conditions,
             // we immediately return an empty array and do not execute the code further
-            if (empty($placeTranslations->placeIds)) {
+            if (empty($placeContent->placeIds)) {
                 return $this->respond([
                     'items'  => [],
                     'count'  => 0,
@@ -123,7 +123,7 @@ class Places extends ResourceController {
         // If search or any other filter is not used, then we always use an empty array
         $searchPlacesIds = !$search && !$bookmarksUser
             ? []
-            : array_unique(array_merge($placeTranslations->placeIds, $bookmarksPlacesIds));
+            : array_unique(array_merge($placeContent->placeIds, $bookmarksPlacesIds));
 
         // Find all places
         // If a search was enabled, the second argument to the _makeListFilters function will contain the
@@ -138,7 +138,7 @@ class Places extends ResourceController {
         // We find translations for all objects if no search was used.
         // When searching, we already know translations for all found objects
         if (!$search) {
-            $placeTranslations->translate($placesIds);
+            $placeContent->translate($placesIds);
         }
 
         // Mapping places to array list
@@ -150,8 +150,8 @@ class Places extends ResourceController {
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
                 'photos'    => (int) $place->photos,
-                'title'     => $placeTranslations->title($place->id),
-                'content'   => $placeTranslations->content($place->id),
+                'title'     => $placeContent->title($place->id),
+                'content'   => $placeContent->content($place->id),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->{"category_$locale"},

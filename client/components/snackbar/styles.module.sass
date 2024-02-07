@@ -10,81 +10,81 @@
     max-width: 280px
     width: 100%
 
-    .notification
-        transition: transform .32s cubic-bezier(0.4,0,0.2,1)
-        animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
+.notification
+    transition: transform .32s cubic-bezier(0.4,0,0.2,1)
+    animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
 
-        border-radius: $borderRadius
-        box-shadow: 0 0 8px rgba(0,0,0,.12), 0 16px 16px rgba(0,0,0,.16)
-        background-color: #FFF
-        padding: 8px 12px
-        margin-bottom: 10px
+    border-radius: $borderRadius
+    box-shadow: 0 0 8px rgba(0,0,0,.12), 0 16px 16px rgba(0,0,0,.16)
+    background-color: #FFF
+    padding: 8px 12px
+    margin-bottom: 10px
+    display: flex
+    align-items: center
+    position: relative
+    width: 100%
+
+    .before
+        margin-right: 9px
         display: flex
         align-items: center
-        position: relative
-        width: 100%
 
-        .before
-            margin: 0 9px 0 3px
-            display: flex
-            align-items: center
+        .placeImage
+            border-radius: $borderRadius
 
-            img
-                margin-bottom: -8px
+        svg
+            fill: $colorLinkSvg
+            width: 26px
+            height: 26px
 
+        &.success
             svg
-                fill: $colorLinkSvg
-                width: 26px
-                height: 26px
+                fill: $greenColor
 
-            &.success
-                svg
-                    fill: $greenColor
-
-            &.warning
-                svg
-                    fill: $orangeColor
-
-            &.error
-                svg
-                    fill: $redColor
-
-        .closeButton
-            position: absolute
-            border: none
-            background: none
-            margin: 0
-            padding: 0
-            right: 2px
-            top: 2px
-            cursor: pointer
-
-            &:hover
-                opacity: .6
-
+        &.warning
             svg
-                width: 12px
-                height: 12px
-                fill: $colorTextSecond
+                fill: $orangeColor
 
-        .body
-            display: flex
+        &.error
+            svg
+                fill: $redColor
+
+    .closeButton
+        position: absolute
+        border: none
+        background: none
+        margin: 0
+        padding: 0
+        right: 2px
+        top: 2px
+        cursor: pointer
+
+        &:hover
+            opacity: .6
+
+        svg
+            width: 12px
+            height: 12px
+            fill: $colorTextSecond
+
+    .body
+        display: flex
+        flex: 1
+        overflow: hidden
+        align-items: flex-start
+        flex-direction: column
+
+        .title
+            color: $colorTextMain
+            display: -webkit-box
             flex: 1
+            width: 100%
+            -webkit-line-clamp: 3
+            -webkit-box-orient: vertical
             overflow: hidden
-            align-items: flex-start
-            flex-direction: column
 
-            .title
-                color: $colorTextMain
-                display: -webkit-box
-                flex: 1
-                width: 100%
-                -webkit-line-clamp: 3
-                -webkit-box-orient: vertical
-                overflow: hidden
-
-            .content
-                color: $colorTextSecond
+        .content
+            color: $colorTextSecond
 
 @keyframes snackbar-horizontal
     0%

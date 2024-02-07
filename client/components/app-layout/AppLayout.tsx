@@ -1,14 +1,11 @@
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
-import Icon from '@/ui/icon'
 
 import { API } from '@/api/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
-import { Notification, addNotification } from '@/api/snackbarSlice'
+import { addNotification } from '@/api/snackbarSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import { ActivityType, ApiNotification } from '@/api/types/ApiNotification'
 
 import AppBar from '@/components/app-bar'
 import Footer from '@/components/footer'
@@ -17,7 +14,6 @@ import LoginForm from '@/components/login-form'
 import Snackbar from '@/components/snackbar'
 
 import { concatClassNames as cn } from '@/functions/helpers'
-import { levelImage } from '@/functions/userLevels'
 
 import Menu from './Menu'
 import styles from './styles.module.sass'
@@ -59,72 +55,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         dispatch(closeAuthDialog())
     }
 
-    const notifyExpActivity = (activity?: ActivityType) => {
-        if (activity === 'photo') {
-            return 'Фотография загружена'
-        }
-
-        if (activity === 'place') {
-            return 'Место добавлено'
-        }
-
-        if (activity === 'rating') {
-            return 'Рейтинг изменен'
-        }
-
-        if (activity === 'edit') {
-            return 'Место отредактировано'
-        }
-
-        if (activity === 'cover') {
-            return 'Обложка изменена'
-        }
-
-        return 'Что-то произошло'
-    }
-
-    const notificationContent = (notification: ApiNotification) => {
-        const result: Notification = {
-            content:
-                notification.type === 'experience'
-                    ? `+${notification?.meta?.value} опыта`
-                    : notification.type === 'level'
-                    ? `${notification?.meta?.title} (${notification?.meta?.level})`
-                    : notification.type,
-            icon:
-                notification.type === 'experience' ? (
-                    <Icon name={'DoubleUp'} />
-                ) : notification.type === 'level' ? (
-                    <Image
-                        className={styles.levelImage}
-                        src={levelImage(notification?.meta?.level)?.src}
-                        alt={''}
-                        width={26}
-                        height={26}
-                    />
-                ) : (
-                    <></>
-                ),
-            id: notification.id,
-            title:
-                notification.type === 'level'
-                    ? 'Новый уровень!'
-                    : notification.type === 'experience'
-                    ? notifyExpActivity(notification?.activity)
-                    : notification.type
-        }
-
-        return result
-    }
-
     useEffect(() => {
-        const unread = notifications?.items?.filter(({ read }) => !read)
-
-        if (unread?.length) {
-            unread.forEach((item) => {
-                dispatch(addNotification(notificationContent(item)))
-            })
-        }
+        notifications?.items?.forEach((item) => {
+            dispatch(addNotification(item))
+        })
     }, [notifications])
 
     useEffect(() => {

@@ -1,3 +1,4 @@
+import { Place } from '@/api/types/Place'
 import { LevelData } from '@/api/types/User'
 
 export type ActivityType = 'photo' | 'place' | 'rating' | 'edit' | 'cover'
@@ -16,11 +17,10 @@ export type ExperienceData = {
     value?: number
 }
 
-export type ApiNotification = {
+export type Notification = {
     id: string
     type?: Types
-    read?: boolean
     meta?: LevelData & ExperienceData
-    value?: string
     activity?: ActivityType
+    place?: Pick<Place, 'id' | 'title' | 'cover'>
 }
