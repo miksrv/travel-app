@@ -1,33 +1,37 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { createAsyncThunk } from '@reduxjs/toolkit'
 import uniqueId from 'lodash-es/uniqueId'
-import React from 'react'
 
+import { RootState } from '@/api/store'
 import { Notification } from '@/api/types/Notification'
-
-// export type Notification = {
-//     id: string
-//     title?: string
-//     content?: React.ReactNode
-//     icon?: React.ReactNode
-//     type?: 'success' | 'error'
-// }
 
 type SnackbarStateProps = {
     notifications: Notification[]
+    deleted: string[]
 }
 
 const initialState: SnackbarStateProps = {
+    deleted: [],
     notifications: []
 }
 
 export const addNotification = createAsyncThunk(
     'snackbar/addNotification',
-    async (notification: Notification, { dispatch }) => {
+    async (notification: Notification, { dispatch, getState }) => {
+        if (
+            (getState() as RootState).snackbar.deleted.includes(notification.id)
+        ) {
+            snackbarSlice.actions.deleteNotification(notification.id)
+
+            return
+        }
+
         const newNotification: Notification = {
             ...notification,
             id: notification.id || uniqueId()
         }
+
+        dispatch(snackbarSlice.actions.hideNotification(newNotification.id))
 
         if (notification.id) {
             dispatch(
@@ -37,9 +41,9 @@ export const addNotification = createAsyncThunk(
 
         dispatch(snackbarSlice.actions.addNotification(newNotification))
 
-        // setTimeout(() => {
-        //     dispatch(deleteNotification(newNotification.id))
-        // }, 5000)
+        setTimeout(() => {
+            dispatch(deleteNotification(newNotification.id))
+        }, 5000)
 
         return newNotification
     }
@@ -56,9 +60,13 @@ const snackbarSlice = createSlice({
             state.notifications = []
         },
         deleteNotification(state, action: PayloadAction<string>) {
+            state.deleted = [...state.deleted, action.payload]
             state.notifications = state.notifications.filter(
                 (notification) => notification.id !== action.payload
             )
+        },
+        hideNotification(state, action: PayloadAction<string>) {
+            state.deleted = [...state.deleted, action.payload]
         }
     }
 })

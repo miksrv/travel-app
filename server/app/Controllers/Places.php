@@ -582,7 +582,6 @@ class Places extends ResourceController {
             ->crop($input->width, $input->height, $input->x, $input->y)
             ->save($photoDir . 'cover.jpg');
 
-        $file = new File($photoDir . 'cover.jpg');
         $image->withFile($file->getRealPath())
             ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
             ->save($photoDir . '/cover_preview.jpg');

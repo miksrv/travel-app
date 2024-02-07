@@ -214,6 +214,7 @@ export interface ResponseLocationGetGeoSearch {
 
 export interface ResponseNotificationsGetList {
     items?: Notification[]
+    count?: number
 }
 
 /* Controller: Tags */

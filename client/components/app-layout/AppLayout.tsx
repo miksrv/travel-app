@@ -2,9 +2,7 @@ import React, { useEffect, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
 
-import { API } from '@/api/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
-import { addNotification } from '@/api/snackbarSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import AppBar from '@/components/app-bar'
@@ -33,14 +31,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
 
-    const { data: notifications } = API.useNotificationsGetListQuery(
-        undefined,
-        {
-            pollingInterval: 30 * 1000,
-            skip: !authSlice.isAuth
-        }
-    )
-
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
 
     const handleCloseOverlay = () => {
@@ -54,12 +44,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     const handleCloseAuthDialog = () => {
         dispatch(closeAuthDialog())
     }
-
-    useEffect(() => {
-        notifications?.items?.forEach((item) => {
-            dispatch(addNotification(item))
-        })
-    }, [notifications])
 
     useEffect(() => {
         if (application?.showOverlay || sidebarOpen) {

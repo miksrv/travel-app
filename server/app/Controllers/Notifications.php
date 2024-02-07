@@ -21,22 +21,28 @@ class Notifications extends ResourceController {
         }
 
         $result = [];
-        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
+        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
-
-        // Мы должны сразу обновить все сообщения в read ==== 1
 
         $notifyModel = new UsersNotificationsModel();
         $notifyData  = $notifyModel
             ->select('users_notifications.*, activity.type as activity_type, activity.place_id')
             ->join('activity', 'activity.id = users_notifications.activity_id', 'left')
+            ->where('read', false)
             ->where('users_notifications.user_id', $session->user->id)
+            ->where('users_notifications.created_at >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)')
             ->orderBy('read, created_at', 'DESC')
             ->findAll($limit, $offset);
 
+        $notifyCount = $notifyModel
+            ->select('id')
+            ->where('users_notifications.user_id', $session->user->id)
+            ->countAllResults();
+
         if (!$notifyData) {
             return $this->respond([
-                'items' => $result
+                'items' => $result,
+                'count' => $notifyCount
             ]);
         }
         $placeContent = new PlacesContent(350);
@@ -48,23 +54,16 @@ class Notifications extends ResourceController {
             if ($notify->place_id && $notify->type !== 'level' && $notify->type !== 'achievements') {
                 $placesIds[] = $notify->place_id;
             }
-
-            $result[]    = [
-                'id'       => $notify->id,
-                'type'     => $notify->type,
-                'activity' => $notify->activity_type,
-                'meta'     => $notify->meta,
-            ];
         }
 
         if ($placesIds) {
-            $placesData = $placesModel->whereIn('places.id', $placesIds)->findAll();
+            $placesData = $placesModel->select('id, photos')->whereIn('id', $placesIds)->findAll();
             $placeContent->translate($placesIds);
         }
 
         foreach ($notifyData as $notify) {
             $findPlace = array_search($notify->place_id, array_column($placesData, 'id'));
-            $placeData = $findPlace ? $placesData[$findPlace] : null;
+            $placeData = $findPlace !== false ? $placesData[$findPlace] : null;
             $result[]  = [
                 'id'       => $notify->id,
                 'type'     => $notify->type,
@@ -80,8 +79,17 @@ class Notifications extends ResourceController {
             ];
         }
 
+        // Update all showed notifications
+        $notifyModel
+            ->set('read', true)
+            ->where('read', false)
+            ->where('users_notifications.user_id', $session->user->id)
+            ->where('users_notifications.created_at >= DATE_SUB(NOW(), INTERVAL 15 MINUTE)')
+            ->update();
+
         return $this->respond([
-            'items' => $result
+            'items' => $result,
+            'count' => $notifyCount
         ]);
     }
 }
