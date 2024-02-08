@@ -10,19 +10,23 @@
     max-width: 280px
     width: 100%
 
-.notification
-    transition: transform .32s cubic-bezier(0.4,0,0.2,1)
-    animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
+    .notification
+        transition: transform .32s cubic-bezier(0.4,0,0.2,1)
+        animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
+        border-radius: $borderRadius
+        box-shadow: 0 0 8px rgba(0,0,0,.12), 0 16px 16px rgba(0,0,0,.16)
+        padding: 8px 12px
 
-    border-radius: $borderRadius
-    box-shadow: 0 0 8px rgba(0,0,0,.12), 0 16px 16px rgba(0,0,0,.16)
+.notification
     background-color: #FFF
-    padding: 8px 12px
-    margin-bottom: 10px
     display: flex
     align-items: center
     position: relative
     width: 100%
+    margin-bottom: 10px
+
+    &.unread
+        background-color: #f2f3f5
 
     .before
         margin-right: 9px
@@ -84,6 +88,10 @@
             overflow: hidden
 
         .content
+            color: $colorTextSecond
+
+        .datetime
+            font-size: $fontSizeCaption
             color: $colorTextSecond
 
 @keyframes snackbar-horizontal

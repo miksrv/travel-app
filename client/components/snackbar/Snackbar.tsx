@@ -21,7 +21,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     const appState = useAppSelector((state) => state)
 
-    const { data } = API.useNotificationsGetListQuery(undefined, {
+    const { data } = API.useNotificationsGetUpdatesQuery(undefined, {
         pollingInterval: 15 * 1000,
         skip: !appState.auth.isAuth
     })

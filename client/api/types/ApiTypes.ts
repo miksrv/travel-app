@@ -212,7 +212,13 @@ export interface ResponseLocationGetGeoSearch {
     items?: GeoSearchLocation[]
 }
 
-export interface ResponseNotificationsGetList {
+/* Controller: Notifications */
+export interface RequestNotificationsGetList {
+    limit?: number
+    offset?: number
+}
+
+export interface ResponseNotificationsGet {
     items?: Notification[]
     count?: number
 }

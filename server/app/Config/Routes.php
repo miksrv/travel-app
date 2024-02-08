@@ -40,7 +40,11 @@ $routes->options('photos/actions', 'Photos');
 $routes->options('photos/(:alphanum)', 'Photos');
 $routes->options('photos/upload/(:alphanum)', 'Photos');
 
-$routes->get('notifications', 'Notifications::list');
+$routes->get('notifications/updates', 'Notifications::updates');
+$routes->get('notifications/list', 'Notifications::list');
+$routes->delete('notifications', 'Notifications::clear');
+$routes->options('notifications/updates', 'Notifications');
+$routes->options('notifications/list', 'Notifications');
 $routes->options('notifications', 'Notifications');
 
 $routes->get('countries', 'Countries::list');

@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
-import React, { useEffect } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Button from '@/ui/button'
@@ -11,10 +11,15 @@ import Popout from '@/ui/popout'
 import { API } from '@/api/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
 import { logout } from '@/api/authSlice'
+import {
+    deleteAllNotifications,
+    setUnreadCounter
+} from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import AppAuthChecker from '@/components/app-auth-checker'
+import Notification from '@/components/snackbar/Notification'
 import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
@@ -37,13 +42,34 @@ const AppBar: React.FC<HeaderProps> = ({
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
 
+    const notifyContainerRef = useRef<HTMLDivElement>(null)
+
     const appState = useAppSelector((state) => state)
+
+    const [notifyShow, setNotifyShow] = useState<boolean>(false)
+    const [notifyPage, setNotifyPage] = useState<number>(1)
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
 
-    const { data: randomPlace } = API.usePlacesGetRandomQuery(undefined, {
-        skip: !!randomPlaceId
-    })
+    const [clearNotification, { isLoading: loadingClear }] =
+        API.useNotificationsDeleteMutation()
+    const { data: randomPlace, refetch } = API.usePlacesGetRandomQuery(
+        undefined,
+        {
+            skip: !!randomPlaceId
+        }
+    )
+
+    const { data: notifyData, isFetching: notifyFetching } =
+        API.useNotificationsGetListQuery(
+            {
+                limit: 15,
+                offset: (notifyPage - 1) * 15
+            },
+            {
+                skip: !notifyShow
+            }
+        )
 
     const handleLoginClick = (event: React.MouseEvent) => {
         event.preventDefault()
@@ -53,6 +79,19 @@ const AppBar: React.FC<HeaderProps> = ({
     const handleLogout = (event: React.MouseEvent) => {
         event.preventDefault()
         dispatch(logout())
+    }
+
+    const handleNotificationsClick = () => {
+        if (!notifyShow) {
+            setNotifyShow(true)
+        }
+    }
+
+    const handleClearNotificationsClick = async () => {
+        await clearNotification()
+        dispatch(setUnreadCounter(0))
+        dispatch(deleteAllNotifications())
+        refetch()
     }
 
     useEffect(() => {
@@ -74,6 +113,47 @@ const AppBar: React.FC<HeaderProps> = ({
             updateLocation(data)
         }
     }, [geolocation.latitude, geolocation.longitude])
+
+    useEffect(() => {
+        const unreadCount = notifyData?.items?.filter(
+            ({ read }) => !read
+        )?.length
+
+        if (unreadCount) {
+            const newUnreadValue = appState.notification.counter - unreadCount
+            dispatch(setUnreadCounter(newUnreadValue < 0 ? 0 : newUnreadValue))
+        }
+    }, [notifyData])
+
+    useEffect(() => {
+        const onScroll = () => {
+            const targetDiv = notifyContainerRef.current
+            if (!targetDiv) return
+
+            const scrolledToBottom =
+                targetDiv.scrollTop + targetDiv.clientHeight >=
+                targetDiv.scrollHeight - 20
+
+            if (
+                notifyData?.count &&
+                scrolledToBottom &&
+                !notifyFetching &&
+                !!notifyData?.items?.length &&
+                notifyData?.count > notifyData?.items?.length
+            ) {
+                setNotifyPage(notifyPage + 1)
+            }
+        }
+
+        const targetDiv = notifyContainerRef.current
+        if (!targetDiv) return
+
+        targetDiv.addEventListener('scroll', onScroll)
+
+        return () => {
+            targetDiv.removeEventListener('scroll', onScroll)
+        }
+    }, [notifyPage, notifyFetching, notifyData])
 
     return (
         <header className={cn(styles.component, fullSize && styles.fullSize)}>
@@ -100,16 +180,51 @@ const AppBar: React.FC<HeaderProps> = ({
                 <div className={styles.rightSection}>
                     {appState.auth.isAuth && appState.auth?.user && (
                         <>
-                            <button
-                                className={styles.notificationsButton}
-                                onClick={onMenuClick}
+                            <Popout
+                                action={
+                                    <button
+                                        className={styles.notificationsButton}
+                                        onClick={handleNotificationsClick}
+                                    >
+                                        <Icon name={'Notifications'} />
+                                        <Counter
+                                            className={styles.notifyCounter}
+                                            value={
+                                                appState.notification.counter
+                                            }
+                                        />
+                                    </button>
+                                }
                             >
-                                <Icon name={'Notifications'} />
-                                <Counter
-                                    className={styles.notifyCounter}
-                                    value={appState.notification.counter}
-                                />
-                            </button>
+                                <>
+                                    <div
+                                        className={styles.notificationsContent}
+                                        ref={notifyContainerRef}
+                                    >
+                                        {notifyData?.items?.map((item) => (
+                                            <Notification
+                                                key={item.id}
+                                                showDate={true}
+                                                {...item}
+                                            />
+                                        ))}
+                                    </div>
+                                    <div className={styles.notifyButton}>
+                                        <Button
+                                            mode={'secondary'}
+                                            stretched={true}
+                                            disabled={
+                                                loadingClear || notifyFetching
+                                            }
+                                            onClick={
+                                                handleClearNotificationsClick
+                                            }
+                                        >
+                                            {'Очистить'}
+                                        </Button>
+                                    </div>
+                                </>
+                            </Popout>
                             <Popout
                                 action={
                                     <UserAvatar

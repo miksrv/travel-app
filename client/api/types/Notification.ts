@@ -1,3 +1,4 @@
+import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import { LevelData } from '@/api/types/User'
 
@@ -19,8 +20,10 @@ export type ExperienceData = {
 
 export type Notification = {
     id: string
+    read?: boolean
     type?: Types
     meta?: LevelData & ExperienceData
     activity?: ActivityType
     place?: Pick<Place, 'id' | 'title' | 'cover'>
+    created?: ApiTypes.DateTimeType
 }

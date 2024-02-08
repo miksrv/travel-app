@@ -8,22 +8,32 @@ import Icon from '@/ui/icon'
 import { IMG_HOST } from '@/api/api'
 import { Notification as NotificationType } from '@/api/types/Notification'
 
-import { concatClassNames as cn } from '@/functions/helpers'
+import { concatClassNames as cn, formatDate } from '@/functions/helpers'
 import { levelImage } from '@/functions/userLevels'
 
 import styles from './styles.module.sass'
 
 interface NotificationProps extends NotificationType {
+    showDate?: boolean
     onClose?: (id: string) => void
 }
 
-const Notification: React.FC<NotificationProps> = ({ onClose, ...props }) => {
+const Notification: React.FC<NotificationProps> = ({
+    showDate,
+    onClose,
+    ...props
+}) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.notification'
     })
 
     return (
-        <div className={styles.notification}>
+        <div
+            className={cn(
+                styles.notification,
+                props?.read === false && styles.unread
+            )}
+        >
             <div className={cn(styles.before)}>
                 <NotificationIcon {...props} />
             </div>
@@ -51,13 +61,20 @@ const Notification: React.FC<NotificationProps> = ({ onClose, ...props }) => {
                         <></>
                     )}
                 </span>
+                {showDate && (
+                    <div className={styles.datetime}>
+                        {formatDate(props.created?.date)}
+                    </div>
+                )}
             </div>
-            <button
-                className={styles.closeButton}
-                onClick={() => onClose?.(props.id)}
-            >
-                <Icon name={'Close'} />
-            </button>
+            {onClose && (
+                <button
+                    className={styles.closeButton}
+                    onClick={() => onClose?.(props.id)}
+                >
+                    <Icon name={'Close'} />
+                </button>
+            )}
         </div>
     )
 }

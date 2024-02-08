@@ -4,6 +4,7 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
+import { RequestNotificationsGetList } from '@/api/types/ApiTypes'
 
 import { encodeQueryData } from '@/functions/helpers'
 
@@ -170,12 +171,31 @@ export const API = createApi({
         }),
 
         /* Controller: Notifications */
+        notificationsDelete: builder.mutation<void, void>({
+            query: () => ({
+                method: 'DELETE',
+                url: 'notifications'
+            })
+        }),
         notificationsGetList: builder.query<
-            ApiTypes.ResponseNotificationsGetList,
+            ApiTypes.ResponseNotificationsGet,
+            Maybe<ApiTypes.RequestNotificationsGetList>
+        >({
+            forceRefetch: ({ currentArg, previousArg }) =>
+                currentArg !== previousArg,
+            merge: (currentCache, newItems) => {
+                currentCache.items?.push(...(newItems?.items || []))
+            },
+            providesTags: ['Notifications'],
+            query: (params) => `notifications/list${encodeQueryData(params)}`,
+            serializeQueryArgs: ({ endpointName }) => endpointName
+        }),
+        notificationsGetUpdates: builder.query<
+            ApiTypes.ResponseNotificationsGet,
             void
         >({
             providesTags: ['Notifications'],
-            query: () => 'notifications'
+            query: () => 'notifications/updates'
         }),
 
         /* Controller: Photos */
