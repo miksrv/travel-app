@@ -10,6 +10,10 @@
             "randomPlaceLinkTitle": "Перейти на случайное место",
             "search": {
                 "placeholder": "Поиск мест..."
+            },
+            "notifications": {
+                "noData": "Нет уведомлений",
+                "clearButton": "Очистить"
             }
         },
         "appLayout": {

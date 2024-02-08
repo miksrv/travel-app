@@ -75,6 +75,7 @@
     line-height: 10px
     margin-right: 20px
     cursor: pointer
+    margin-top: 4px
 
     .notifyCounter
       position: absolute
@@ -89,11 +90,32 @@
       &:hover, &:focus
         opacity: .7
 
-  .notifyButton
+  .notifyFooter
     padding: 4px
 
+  .noData
+    text-align: center
+    color: $colorTextSecond
+    height: 140px
+    min-width: 260px
+    display: flex
+    align-items: center
+    justify-content: center
+
+  .loader
+    height: 140px
+    min-width: 260px
+    display: flex
+    align-items: center
+    justify-content: center
+
+    svg
+      width: 32px
+      height: 32px
+      fill: $colorTextSecond
+
   .notificationsContent
-    min-height: 30px
+    min-height: 140px
     max-height: 280px
     min-width: 260px
     padding: 0
