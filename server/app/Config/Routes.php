@@ -73,8 +73,9 @@ $routes->options('activity', 'Activity');
 
 $routes->get('users', 'Users::list');
 $routes->get('users/(:alphanum)', 'Users::show/$1');
+$routes->patch('users/(:alphanum)', 'Users::update/$1');
 $routes->options('users', 'Users');
-$routes->options('users/(:alphanum)', 'Users'); // <- It's working!
+$routes->options('users/(:alphanum)', 'Users');
 
 $routes->get('auth/me', 'Auth::me');
 $routes->get('auth/google', 'Auth::google');

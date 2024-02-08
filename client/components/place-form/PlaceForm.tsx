@@ -165,7 +165,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
-                    title={'Исправте ошибки'}
+                    title={t('errorsMessageTitle')}
                     list={Object.values(formErrors || {})}
                 />
             )}

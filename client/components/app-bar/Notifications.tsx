@@ -28,7 +28,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
     const notifyContainerRef = useRef<HTMLDivElement>(null)
 
-    const appState = useAppSelector((state) => state)
+    const notifyCounter = useAppSelector((state) => state.notification.counter)
 
     const [notifyShow, setNotifyShow] = useState<boolean>(false)
     const [notifyPage, setNotifyPage] = useState<number>(1)
@@ -70,7 +70,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
         )?.length
 
         if (unreadCount) {
-            const newUnreadValue = appState.notification.counter - unreadCount
+            const newUnreadValue = notifyCounter - unreadCount
             dispatch(setUnreadCounter(newUnreadValue < 0 ? 0 : newUnreadValue))
         }
     }, [notifyData])
@@ -108,16 +108,19 @@ const Notifications: React.FC<NotificationsProps> = () => {
     return (
         <Popout
             action={
-                <button
+                <div
                     className={styles.notificationsButton}
+                    role={'button'}
+                    tabIndex={0}
+                    onKeyDown={() => {}}
                     onClick={handleNotificationsClick}
                 >
                     <Icon name={'Notifications'} />
                     <Counter
                         className={styles.notifyCounter}
-                        value={appState.notification.counter}
+                        value={notifyCounter}
                     />
-                </button>
+                </div>
             }
         >
             <>

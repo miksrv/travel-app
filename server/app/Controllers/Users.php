@@ -2,6 +2,7 @@
 
 use App\Libraries\LocaleLibrary;
 use App\Libraries\LevelsLibrary;
+use App\Libraries\SessionLibrary;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\UsersModel;
@@ -124,5 +125,46 @@ class Users extends ResourceController {
         ];
 
         return $this->respond($result);
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function update($id = null) {
+        $session = new SessionLibrary();
+
+        if (!$session->isAuth || $session->user?->id !== $id) {
+            return $this->failUnauthorized();
+        }
+
+        $input = $this->request->getJSON();
+        $rules = [
+            'name'    => 'if_exist|is_unique[users.name]',
+            'website' => 'if_exist|min_length[6]|max_length[150]|string'
+        ];
+
+        if (!$this->validateData((array) $input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $updateData = [];
+
+        if (isset($input->name)) {
+            $updateData['name'] = $input->name;
+        }
+
+        if (isset($input->website)) {
+            $updateData['website'] = $input->website;
+        }
+
+        if (empty($updateData)) {
+            return $this->failValidationErrors('No data for update');
+        }
+
+
+        $userModel = new UsersModel();
+        $userModel->update($id, $updateData);
+
+        return $this->respondUpdated();
     }
 }

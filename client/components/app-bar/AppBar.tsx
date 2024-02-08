@@ -37,7 +37,10 @@ const AppBar: React.FC<HeaderProps> = ({
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
 
-    const appState = useAppSelector((state) => state)
+    const appAuth = useAppSelector((state) => state.auth)
+    const useLocation = useAppSelector(
+        (state) => state.application.userLocation
+    )
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
 
@@ -62,8 +65,8 @@ const AppBar: React.FC<HeaderProps> = ({
         if (
             updateLat &&
             updateLng &&
-            updateLat !== appState.application.userLocation?.lat &&
-            updateLng !== appState.application.userLocation?.lon
+            updateLat !== useLocation?.lat &&
+            updateLng !== useLocation?.lon
         ) {
             const data: ApiTypes.LatLonCoordinate = {
                 lat: updateLat,
@@ -98,14 +101,14 @@ const AppBar: React.FC<HeaderProps> = ({
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    {appState.auth.isAuth && appState.auth?.user && (
+                    {appAuth.isAuth && appAuth?.user && (
                         <>
                             <Notifications />
                             <Popout
                                 action={
                                     <UserAvatar
                                         size={'medium'}
-                                        user={appState.auth.user}
+                                        user={appAuth.user}
                                         disableLink={true}
                                     />
                                 }
@@ -113,7 +116,7 @@ const AppBar: React.FC<HeaderProps> = ({
                                 <ul className={styles.userMenu}>
                                     <li>
                                         <Link
-                                            href={`/users/${appState.auth.user?.id}`}
+                                            href={`/users/${appAuth.user?.id}`}
                                             title={t('userProfileTitle')}
                                         >
                                             {t('userProfileCaption')}
@@ -133,7 +136,7 @@ const AppBar: React.FC<HeaderProps> = ({
                         </>
                     )}
 
-                    {appState.auth.isAuth === false && (
+                    {appAuth.isAuth === false && (
                         <Button
                             link={'/login'}
                             title={t('userLoginTitle')}

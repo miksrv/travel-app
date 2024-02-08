@@ -19,11 +19,12 @@ interface SnackbarProps {}
 const Snackbar: React.FC<SnackbarProps> = () => {
     const dispatch = useAppDispatch()
 
-    const appState = useAppSelector((state) => state)
+    const notifications = useAppSelector((state) => state.notification.list)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const { data } = API.useNotificationsGetUpdatesQuery(undefined, {
         pollingInterval: 15 * 1000,
-        skip: !appState.auth.isAuth
+        skip: !isAuth
     })
 
     const handleCloseNotification = (id: string) => {
@@ -46,7 +47,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     return (
         <div className={styles.snackbar}>
-            {appState.notification.list?.map((notification) => (
+            {notifications?.map((notification) => (
                 <Notification
                     key={notification.id}
                     onClose={handleCloseNotification}

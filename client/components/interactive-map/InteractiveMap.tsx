@@ -129,7 +129,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                 storeMapPosition &&
                 coordinates?.lon &&
                 coordinates?.lat &&
-                coordinates?.zoom
+                coordinates?.zoom &&
+                mapRef?.current?.setView
             ) {
                 mapRef?.current?.setView(
                     [coordinates?.lat, coordinates?.lon],

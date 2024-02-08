@@ -6,6 +6,7 @@ import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
+import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
@@ -15,11 +16,11 @@ import { ApiTypes } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PlaceForm from '@/components/place-form'
+import UserForm from '@/components/user-form'
 
-interface CreatePlacePageProps {}
+interface SettingsUserPageProps {}
 
-const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
+const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.places.createPlacePage'
     })
@@ -27,12 +28,19 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const [createPlace, { data, error, isLoading, isSuccess }] =
-        API.usePlacesPostItemMutation()
+    const { data: userData } = API.useUsersGetItemQuery(
+        authSlice.user?.id || '',
+        {
+            skip: !authSlice.user?.id
+        }
+    )
+
+    const [updateProfile, { data, error, isLoading, isSuccess, isError }] =
+        API.useUsersPatchProfileMutation()
 
     const validationErrors = useMemo(
         () =>
-            isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error)
+            isApiValidationErrors<ApiTypes.RequestUsersPatch>(error)
                 ? error?.messages
                 : undefined,
         [error]
@@ -42,8 +50,18 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
-        createPlace(formData as ApiTypes.RequestPlacesPostItem)
+    const handleSubmit = (formData?: ApiTypes.RequestUsersPatch) => {
+        updateProfile({
+            id: authSlice.user?.id,
+            name:
+                formData?.name !== authSlice.user?.name
+                    ? formData?.name
+                    : undefined,
+            website:
+                formData?.website !== authSlice.user?.website
+                    ? formData?.website
+                    : undefined
+        })
     }
 
     useEffect(() => {
@@ -53,29 +71,35 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     }, [])
 
     useEffect(() => {
-        if (data?.id && isSuccess) {
-            router.push(`/places/${data.id}`)
+        if (isSuccess) {
+            router.push(`/users/${authSlice.user?.id}`)
         }
     }, [isSuccess, data])
 
     return (
         <AppLayout>
-            <NextSeo title={t('title')} />
+            <NextSeo title={'Редактирование профиля'} />
             <Header
-                title={t('title')}
-                currentPage={t('breadCrumbCurrent')}
+                title={'Редактирование профиля'}
+                currentPage={'Редактирование профиля'}
+                backLink={`/users/${authSlice.user?.id}`}
                 links={[
                     {
-                        link: '/places/',
-                        text: t('breadCrumbPlacesLink')
+                        link: '/users/',
+                        text: 'Путешественники'
+                    },
+                    {
+                        link: `/users/${authSlice.user?.id}`,
+                        text: authSlice.user?.name || 'Моя страница'
                     }
                 ]}
             />
             <Container>
                 {!authSlice?.isAuth && <ScreenSpinner />}
 
-                <PlaceForm
+                <UserForm
                     loading={isLoading || isSuccess}
+                    values={userData}
                     errors={validationErrors}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
@@ -89,7 +113,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (
             context
-        ): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
+        ): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
@@ -104,4 +128,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 )
 
-export default CreatePlacePage
+export default SettingsUserPage

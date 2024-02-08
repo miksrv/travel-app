@@ -3,11 +3,12 @@ import React, { useEffect, useRef, useState } from 'react'
 import styles from './styles.module.sass'
 
 interface PaginationProps {
+    position?: 'left' | 'right'
     action?: React.ReactNode | string
     children?: React.ReactNode
 }
 
-const Popout: React.FC<PaginationProps> = ({ action, children }) => {
+const Popout: React.FC<PaginationProps> = ({ position, action, children }) => {
     const popoutRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -48,7 +49,7 @@ const Popout: React.FC<PaginationProps> = ({ action, children }) => {
             {isOpen && (
                 <div
                     className={styles.content}
-                    style={{ left: '-123px' }}
+                    style={position === 'left' ? { left: 0 } : { right: 0 }}
                 >
                     {children}
                 </div>

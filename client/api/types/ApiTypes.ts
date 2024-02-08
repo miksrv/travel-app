@@ -320,4 +320,10 @@ export interface RequestUsersGetList {
     offset?: number
 }
 
+export interface RequestUsersPatch {
+    id?: string
+    name?: string
+    website?: string
+}
+
 export interface ResponseUsersGetItem extends User {}

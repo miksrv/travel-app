@@ -371,6 +371,18 @@ export const API = createApi({
             providesTags: ['Users'],
             query: (params) => `users${encodeQueryData(params)}`
         }),
+        usersPatchProfile: builder.mutation<void, ApiTypes.RequestUsersPatch>({
+            invalidatesTags: (res, err, arg) => [
+                { id: arg.id, type: 'Users' },
+                { type: 'Users' }
+            ],
+            query: (data) => ({
+                body: data,
+                method: 'PATCH',
+                url: `users/${data.id}`
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
 
         /* Controller: Visited */
         visitedGetUsersList: builder.query<

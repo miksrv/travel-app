@@ -7,6 +7,7 @@ import Icon from '@/ui/icon'
 import Progress from '@/ui/progress'
 
 import { IMG_HOST } from '@/api/api'
+import { useAppSelector } from '@/api/store'
 import { User } from '@/api/types/User'
 
 import Header from '@/components/header'
@@ -27,6 +28,8 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pageUser.userHeader'
     })
+
+    const appAuth = useAppSelector((state) => state.auth)
 
     return (
         <section className={styles.component}>
@@ -163,13 +166,17 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     }
                 ]}
                 actions={
-                    <Button
-                        size={'m'}
-                        icon={'Pencil'}
-                        mode={'primary'}
-                    >
-                        {t('buttonEdit')}
-                    </Button>
+                    appAuth.isAuth &&
+                    appAuth.user?.id === user?.id && (
+                        <Button
+                            size={'m'}
+                            icon={'Pencil'}
+                            mode={'secondary'}
+                            link={'/users/settings'}
+                        >
+                            {t('buttonEdit')}
+                        </Button>
+                    )
                 }
             />
         </section>

@@ -38,7 +38,7 @@
             }
         },
         "loginForm": {
-            "errorsMessageTitle": "Исправте ошибки",
+            "errorsMessageTitle": "Исправьте ошибки",
             "errorEmail": "Введенный email адрес не корректный",
             "errorPassword": "Пароль пользователя обязателен",
             "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
@@ -134,6 +134,7 @@
             "saveNewCover": "Сохраните новую обложку"
         },
         "placeForm": {
+            "errorsMessageTitle": "Исправьте ошибки",
             "errorTitle": "Название обязательно для заполнения",
             "errorCategory": "Выберите категорию места",
             "inputTitleLabel": "Заголовок интересного места",
@@ -171,7 +172,7 @@
             }
         },
         "registrationForm": {
-            "errorsMessageTitle": "Исправте ошибки",
+            "errorsMessageTitle": "Исправьте ошибки",
             "errorName": "Имя обязательно для заполнения",
             "errorEmail": "Некорректный email адрес",
             "errorPassword": "Пароль обязателен для заполнения",

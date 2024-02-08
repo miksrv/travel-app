@@ -133,6 +133,7 @@
             "saveNewCover": "Save the new cover"
         },
         "placeForm": {
+            "errorsMessageTitle": "Fix errors",
             "errorTitle": "Title is required",
             "errorCategory": "Select a location category",
             "inputTitleLabel": "Title of the point of interest",
