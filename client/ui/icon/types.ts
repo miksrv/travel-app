@@ -36,3 +36,4 @@ export type IconTypes =
     | 'RadioButtonChecked'
     | 'CheckCircle'
     | 'ReportError'
+    | 'Notifications'

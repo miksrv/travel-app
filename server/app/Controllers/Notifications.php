@@ -6,10 +6,12 @@ use App\Models\PlacesModel;
 use App\Models\UsersNotificationsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 class Notifications extends ResourceController {
     /**
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function list(): ResponseInterface {
         $session = new SessionLibrary();
@@ -36,7 +38,9 @@ class Notifications extends ResourceController {
 
         $notifyCount = $notifyModel
             ->select('id')
+            ->where('read', false)
             ->where('users_notifications.user_id', $session->user->id)
+            ->where('users_notifications.created_at < DATE_SUB(NOW(), INTERVAL 15 MINUTE)')
             ->countAllResults();
 
         if (!$notifyData) {

@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 
 import Button from '@/ui/button'
+import Counter from '@/ui/counter'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 
@@ -36,8 +37,7 @@ const AppBar: React.FC<HeaderProps> = ({
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
 
-    const authorization = useAppSelector((state) => state.auth)
-    const location = useAppSelector((state) => state.application.userLocation)
+    const appState = useAppSelector((state) => state)
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
 
@@ -62,8 +62,8 @@ const AppBar: React.FC<HeaderProps> = ({
         if (
             updateLat &&
             updateLng &&
-            updateLat !== location?.lat &&
-            updateLng !== location?.lon
+            updateLat !== appState.application.userLocation?.lat &&
+            updateLng !== appState.application.userLocation?.lon
         ) {
             const data: ApiTypes.LatLonCoordinate = {
                 lat: updateLat,
@@ -98,39 +98,51 @@ const AppBar: React.FC<HeaderProps> = ({
                     </Link>
                 )}
                 <div className={styles.rightSection}>
-                    {authorization.isAuth && authorization?.user && (
-                        <Popout
-                            action={
-                                <UserAvatar
-                                    size={'medium'}
-                                    user={authorization?.user}
-                                    disableLink={true}
+                    {appState.auth.isAuth && appState.auth?.user && (
+                        <>
+                            <button
+                                className={styles.notificationsButton}
+                                onClick={onMenuClick}
+                            >
+                                <Icon name={'Notifications'} />
+                                <Counter
+                                    className={styles.notifyCounter}
+                                    value={appState.notification.counter}
                                 />
-                            }
-                        >
-                            <ul className={styles.userMenu}>
-                                <li>
-                                    <Link
-                                        href={`/users/${authorization?.user?.id}`}
-                                        title={t('userProfileTitle')}
-                                    >
-                                        {t('userProfileCaption')}
-                                    </Link>
-                                </li>
-                                <li>
-                                    <Link
-                                        href={'/'}
-                                        title={''}
-                                        onClick={handleLogout}
-                                    >
-                                        {t('userLogout')}
-                                    </Link>
-                                </li>
-                            </ul>
-                        </Popout>
+                            </button>
+                            <Popout
+                                action={
+                                    <UserAvatar
+                                        size={'medium'}
+                                        user={appState.auth.user}
+                                        disableLink={true}
+                                    />
+                                }
+                            >
+                                <ul className={styles.userMenu}>
+                                    <li>
+                                        <Link
+                                            href={`/users/${appState.auth.user?.id}`}
+                                            title={t('userProfileTitle')}
+                                        >
+                                            {t('userProfileCaption')}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
+                                            href={'/'}
+                                            title={''}
+                                            onClick={handleLogout}
+                                        >
+                                            {t('userLogout')}
+                                        </Link>
+                                    </li>
+                                </ul>
+                            </Popout>
+                        </>
                     )}
 
-                    {authorization?.isAuth === false && (
+                    {appState.auth.isAuth === false && (
                         <Button
                             link={'/login'}
                             title={t('userLoginTitle')}

@@ -6,8 +6,9 @@ import { API } from '@/api/api'
 import {
     addNotification,
     deleteAllNotifications,
-    deleteNotification
-} from '@/api/snackbarSlice'
+    deleteNotification,
+    setUnreadCounter
+} from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import Notification from './Notification'
@@ -18,14 +19,11 @@ interface SnackbarProps {}
 const Snackbar: React.FC<SnackbarProps> = () => {
     const dispatch = useAppDispatch()
 
-    const authSlice = useAppSelector((state) => state.auth)
-    const notificationsList = useAppSelector(
-        (state) => state.snackbar.notifications
-    )
+    const appState = useAppSelector((state) => state)
 
     const { data } = API.useNotificationsGetListQuery(undefined, {
-        pollingInterval: 30 * 1000,
-        skip: !authSlice.isAuth
+        pollingInterval: 15 * 1000,
+        skip: !appState.auth.isAuth
     })
 
     const handleCloseNotification = (id: string) => {
@@ -36,7 +34,9 @@ const Snackbar: React.FC<SnackbarProps> = () => {
         data?.items?.forEach((item) => {
             dispatch(addNotification(item))
         })
-    }, [data?.items])
+
+        dispatch(setUnreadCounter(data?.count ?? 0))
+    }, [data])
 
     useEffect(() => {
         return () => {
@@ -46,7 +46,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     return (
         <div className={styles.snackbar}>
-            {notificationsList.map((notification) => (
+            {appState.notification.list?.map((notification) => (
                 <Notification
                     key={notification.id}
                     onClose={handleCloseNotification}
