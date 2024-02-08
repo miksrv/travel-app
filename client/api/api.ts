@@ -4,7 +4,6 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import { RequestNotificationsGetList } from '@/api/types/ApiTypes'
 
 import { encodeQueryData } from '@/functions/helpers'
 
@@ -172,6 +171,7 @@ export const API = createApi({
 
         /* Controller: Notifications */
         notificationsDelete: builder.mutation<void, void>({
+            invalidatesTags: [{ type: 'Notifications' }],
             query: () => ({
                 method: 'DELETE',
                 url: 'notifications'
@@ -183,8 +183,16 @@ export const API = createApi({
         >({
             forceRefetch: ({ currentArg, previousArg }) =>
                 currentArg !== previousArg,
-            merge: (currentCache, newItems) => {
-                currentCache.items?.push(...(newItems?.items || []))
+            merge: (currentCache, newItems, { arg }) => {
+                if (
+                    (arg?.offset as number) === 0 &&
+                    newItems?.count === 0 &&
+                    currentCache.items
+                ) {
+                    currentCache.items.length = 0
+                } else {
+                    currentCache.items?.push(...(newItems?.items || []))
+                }
             },
             providesTags: ['Notifications'],
             query: (params) => `notifications/list${encodeQueryData(params)}`,

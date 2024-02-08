@@ -42,8 +42,8 @@ const Notifications: React.FC<NotificationsProps> = () => {
         isFetching: notifyFetching
     } = API.useNotificationsGetListQuery(
         {
-            limit: 15,
-            offset: (notifyPage - 1) * 15
+            limit: 5,
+            offset: (notifyPage - 1) * 5
         },
         {
             skip: !notifyShow
@@ -57,6 +57,8 @@ const Notifications: React.FC<NotificationsProps> = () => {
     }
 
     const handleClearNotificationsClick = async () => {
+        setNotifyPage(1)
+
         await clearNotification()
         dispatch(setUnreadCounter(0))
         dispatch(deleteAllNotifications())

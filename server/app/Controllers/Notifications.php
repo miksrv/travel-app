@@ -63,6 +63,8 @@ class Notifications extends ResourceController {
 
     /**
      * We get a page-by-page list of all notifications of the current user
+     * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function list(): ResponseInterface {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 10;
@@ -73,7 +75,7 @@ class Notifications extends ResourceController {
             ->join('activity', 'activity.id = users_notifications.activity_id', 'left')
             ->where('users_notifications.user_id', $this->session->user->id)
             ->orderBy('created_at', 'DESC')
-            ->findAll($limit, $offset);
+            ->findAll(abs($limit), abs($offset));
 
         $notifyCount = $this->model
             ->select('id')
@@ -98,9 +100,9 @@ class Notifications extends ResourceController {
      * @return void
      */
     public function clear(): void {
-        $this->model
-            ->where('users_notifications.user_id', $this->session->user->id)
-            ->delete();
+//        $this->model
+//            ->where('users_notifications.user_id', $this->session->user->id)
+//            ->delete();
     }
 
     /**

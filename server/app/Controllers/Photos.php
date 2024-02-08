@@ -77,7 +77,7 @@ class Photos extends ResourceController {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
-        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll($limit, $offset);
+        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll(abs($limit), abs($offset));
 
         if (empty($photosData)) {
             return $this->respond([

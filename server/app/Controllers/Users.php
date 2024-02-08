@@ -28,7 +28,7 @@ class Users extends ResourceController {
         $usersData  = $usersModel
             ->select('id, name, avatar, created_at, activity_at, updated_at, level, experience, reputation')
             ->orderBy('activity_at, updated_at', 'DESC')
-            ->findAll($limit, $offset);
+            ->findAll(abs($limit), abs($offset));
 
         $result = [];
 
