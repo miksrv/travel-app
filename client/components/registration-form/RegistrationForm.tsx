@@ -31,7 +31,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     onCancel
 }) => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'components.placesList.registrationForm'
+        keyPrefix: 'components.registrationForm'
     })
 
     const [formData, setFormData] = useState<FormDataType>()

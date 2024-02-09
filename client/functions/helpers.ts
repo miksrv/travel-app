@@ -11,6 +11,18 @@ export const encodeQueryData = (data: any): string => {
     return ret.length ? '?' + ret.join('&') : ''
 }
 
+export const makeActiveLink = (link: string) => {
+    if (link === '') {
+        return ''
+    }
+
+    if (link.includes('http://') || link.includes('https://')) {
+        return link
+    } else {
+        return `https://${link}`
+    }
+}
+
 export const numberFormatter = (num: number, digits?: number) => {
     const lookup = [
         { symbol: '', value: 1 },

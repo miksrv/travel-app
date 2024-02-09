@@ -1,13 +1,18 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\ActivityLibrary;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\LevelsLibrary;
 use App\Libraries\SessionLibrary;
+use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\RatingModel;
 use App\Models\UsersModel;
+use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
+use CodeIgniter\I18n\Time;
 use CodeIgniter\RESTful\ResourceController;
+use Config\Services;
 use Exception;
 use ReflectionException;
 
@@ -164,6 +169,108 @@ class Users extends ResourceController {
 
         $userModel = new UsersModel();
         $userModel->update($id, $updateData);
+
+        return $this->respondUpdated();
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    public function avatar(): ResponseInterface {
+        $session    = new SessionLibrary();
+        $usersModel = new UsersModel();
+
+        if (!$session->isAuth || !$session->user?->id) {
+            return $this->failUnauthorized();
+        }
+
+        if (!$photo = $this->request->getFile('avatar')) {
+            return $this->failValidationErrors('No photo for upload');
+        }
+
+        if (!$user = $usersModel->find($session->user?->id)) {
+            return $this->failValidationErrors('User not found');
+        }
+
+        if (!$photo->hasMoved()) {
+            $avatarDir = UPLOAD_AVATARS . $session->user->id . '/';
+            $newName   = $photo->getRandomName();
+            $photo->move($avatarDir, $newName, true);
+
+            $file = new File($avatarDir . $newName);
+            $name = pathinfo($file, PATHINFO_FILENAME);
+            $ext = $file->getExtension();
+
+            list($width, $height) = getimagesize($file->getRealPath());
+
+            // Calculating Aspect Ratio
+            $orientation = $width > $height ? 'h' : 'v';
+            $width = $orientation === 'h' ? $width : $height;
+            $height = $orientation === 'h' ? $height : $width;
+
+            // If the uploaded image dimensions exceed the maximum
+            if ($width > PHOTO_MAX_WIDTH || $height > PHOTO_MAX_HEIGHT) {
+                $image = Services::image('gd');
+                $image->withFile($file->getRealPath())
+                    ->fit(PHOTO_MAX_WIDTH, PHOTO_MAX_HEIGHT)
+                    ->reorient()
+                    ->save($avatarDir . $name . '.' . $ext);
+            }
+
+            $image = Services::image('gd'); // imagick
+            $image->withFile($file->getRealPath())
+                ->fit(40, 40, 'center')
+                ->save($avatarDir . $name . '_preview.' . $ext);
+
+            // Remove old avatar
+            if ($user->avatar) {
+                $avatar = explode('.', $user->avatar);
+
+                unlink(UPLOAD_AVATARS . $user->id . '/' . $user->avatar);
+                unlink(UPLOAD_AVATARS . $user->id . '/' . $avatar[0] . '_preview.' . $avatar[1]);
+            }
+
+            $usersModel->update($user->id, ['avatar' => $name . '.' . $ext]);
+
+            return $this->respondUpdated();
+        }
+
+        return $this->failValidationErrors($photo->getErrorString());
+    }
+
+    public function crop(): ResponseInterface {
+        $session    = new SessionLibrary();
+        $usersModel = new UsersModel();
+
+        if (!$session->isAuth || !$session->user?->id) {
+            return $this->failUnauthorized();
+        }
+
+        if (!$user = $usersModel->find($session->user?->id)) {
+            return $this->failValidationErrors('User not found');
+        }
+
+        $input = $this->request->getJSON();
+
+        if (!isset($input->x) || !isset($input->y) || !$input->width || !$input->height) {
+            return $this->failValidationErrors('Incorrect data format when saving cover image');
+        }
+
+        if ($input->width < 100 || $input->height < 100) {
+            return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
+        }
+
+        $avatarDir = UPLOAD_AVATARS . $user->id . '/';
+        $file = new File($avatarDir . $user->avatar);
+        $filename = explode('.', $user->avatar);
+
+        list($width, $height) = getimagesize($file->getRealPath());
+
+        $image = Services::image('gd'); // imagick
+        $image->withFile($file->getRealPath())
+            ->crop($input->width, $input->height, $input->x, $input->y)
+            ->resize(100, 100)
+            ->save($avatarDir . $filename[0] . '_preview.' . $filename[1]);
 
         return $this->respondUpdated();
     }

@@ -1,5 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
+import Link from 'next/link'
 import React from 'react'
 
 import Button from '@/ui/button'
@@ -12,8 +13,9 @@ import { User } from '@/api/types/User'
 
 import Header from '@/components/header'
 import Reputation from '@/components/reputation'
+import UserAvatarEditor from '@/components/user-avatar-editor'
 
-import { formatDate, timeAgo } from '@/functions/helpers'
+import { formatDate, makeActiveLink, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
 import defaultAvatar from '@/public/images/no-avatar.png'
@@ -112,7 +114,14 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         <div className={styles.key}>{t('website')}</div>
                         <div className={styles.value}>
                             {user?.website ? (
-                                user.website
+                                <Link
+                                    href={makeActiveLink(user.website)}
+                                    className={'external'}
+                                    target={'_blank'}
+                                    title={''}
+                                >
+                                    {user.website}
+                                </Link>
                             ) : (
                                 <i>{t('notDefined')}</i>
                             )}
@@ -168,14 +177,18 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                 actions={
                     appAuth.isAuth &&
                     appAuth.user?.id === user?.id && (
-                        <Button
-                            size={'m'}
-                            icon={'Pencil'}
-                            mode={'secondary'}
-                            link={'/users/settings'}
-                        >
-                            {t('buttonEdit')}
-                        </Button>
+                        <>
+                            <UserAvatarEditor />
+
+                            <Button
+                                size={'m'}
+                                icon={'Pencil'}
+                                mode={'secondary'}
+                                link={'/users/settings'}
+                            >
+                                {t('buttonEdit')}
+                            </Button>
+                        </>
                     )
                 }
             />

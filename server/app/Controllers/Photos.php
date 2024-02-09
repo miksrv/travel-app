@@ -130,12 +130,12 @@ class Photos extends ResourceController {
      * @throws ReflectionException
      */
     public function upload($id = null): ResponseInterface {
-        if (!$photo = $this->request->getFile('photo')) {
-            return $this->failValidationErrors('No photo for upload');
-        }
-
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
+        }
+
+        if (!$photo = $this->request->getFile('photo')) {
+            return $this->failValidationErrors('No photo for upload');
         }
 
         $placesModel = new PlacesModel();
@@ -163,6 +163,24 @@ class Photos extends ResourceController {
             $name = pathinfo($file, PATHINFO_FILENAME);
             $ext  = $file->getExtension();
 
+            list($width, $height) = getimagesize($file->getRealPath());
+
+            // Calculating Aspect Ratio
+            $orientation = $width > $height ? 'h' : 'v';
+            $width       = $orientation === 'h' ? $width : $height;
+            $height      = $orientation === 'h' ? $height : $width;
+
+            // If the uploaded image dimensions exceed the maximum
+            if ($width > PHOTO_MAX_WIDTH || $height > PHOTO_MAX_HEIGHT) {
+                $image = Services::image('gd');
+                $image->withFile($file->getRealPath())
+                    ->fit(PHOTO_MAX_WIDTH, PHOTO_MAX_HEIGHT)
+                    ->reorient()
+                    ->save($photoDir . $name . '.' . $ext);
+
+                list($width, $height) = getimagesize($file->getRealPath());
+            }
+
             $image = Services::image('gd'); // imagick
             $image->withFile($file->getRealPath())
                 ->fit(700, 500, 'center')
@@ -181,8 +199,6 @@ class Photos extends ResourceController {
 
             $coordinates = $this->_readPhotoLocation($file->getRealPath());
             $photosModel = new PhotosModel();
-
-            list($width, $height) = getimagesize($file->getRealPath());
 
             // Save photo to DB
             $photo = new Photo();
@@ -204,8 +220,7 @@ class Photos extends ResourceController {
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
         } else {
-            echo $photo->getErrorString();
-            exit();
+            return $this->failValidationErrors($photo->getErrorString());
         }
 
         // Update the time and photos count

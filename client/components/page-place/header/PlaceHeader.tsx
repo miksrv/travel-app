@@ -1,7 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React, { useState } from 'react'
-import 'react-image-crop/src/ReactCrop.scss'
 
 import Badge from '@/ui/badge'
 import { BreadcrumbLink } from '@/ui/breadcrumbs'
@@ -26,7 +25,6 @@ import styles from './styles.module.sass'
 
 interface PlaceHeaderProps {
     place?: Place
-    photos?: Photo[]
     breadcrumbs?: BreadcrumbLink[]
     ratingValue?: number
     ratingCount?: number
@@ -34,7 +32,6 @@ interface PlaceHeaderProps {
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     place,
-    photos,
     breadcrumbs,
     ratingValue,
     ratingCount
@@ -119,7 +116,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     <>
                         <PlaceCoverEditor
                             placeId={place?.id}
-                            photos={photos}
                             onSaveCover={handleSaveCover}
                         />
 

@@ -4,12 +4,18 @@ import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
 import { login, logout } from '@/api/authSlice'
-import { useAppDispatch } from '@/api/store'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 
 const AppAuthChecker: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const { data: meData, isSuccess } = API.useAuthGetMeQuery(undefined, {
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
+
+    const {
+        data: meData,
+        refetch,
+        isSuccess
+    } = API.useAuthGetMeQuery(undefined, {
         pollingInterval: 60 * 1000
     })
 
@@ -21,7 +27,13 @@ const AppAuthChecker: React.FC = () => {
                 dispatch(logout())
             }
         }
-    }, [meData])
+    }, [meData?.auth])
+
+    useEffect(() => {
+        if (isAuth !== meData?.auth) {
+            refetch()
+        }
+    }, [isAuth])
 
     return <></>
 }

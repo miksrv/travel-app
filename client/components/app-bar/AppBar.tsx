@@ -124,6 +124,14 @@ const AppBar: React.FC<HeaderProps> = ({
                                     </li>
                                     <li>
                                         <Link
+                                            href={'/users/settings'}
+                                            title={t('userSettingsTitle')}
+                                        >
+                                            {t('userSettingsCaption')}
+                                        </Link>
+                                    </li>
+                                    <li>
+                                        <Link
                                             href={'/'}
                                             title={''}
                                             onClick={handleLogout}

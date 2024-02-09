@@ -41,6 +41,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     useEffect(() => {
         return () => {
+            // TODO Сразу после авторизации не показываются моментальные уведомления из-за редиректов
             dispatch(deleteAllNotifications())
         }
     }, [])

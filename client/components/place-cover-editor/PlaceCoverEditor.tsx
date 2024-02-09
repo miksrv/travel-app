@@ -2,6 +2,7 @@ import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React, { useEffect, useMemo, useState } from 'react'
 import ReactCrop, { type Crop } from 'react-image-crop'
+import 'react-image-crop/src/ReactCrop.scss'
 
 import Button from '@/ui/button'
 import Dialog from '@/ui/dialog'
@@ -9,19 +10,16 @@ import Dialog from '@/ui/dialog'
 import { API, IMG_HOST } from '@/api/api'
 import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Photo } from '@/api/types/Photo'
 
 import styles from './styles.module.sass'
 
 interface PlaceCoverEditorProps {
     placeId?: string
-    photos?: Photo[]
     onSaveCover?: () => void
 }
 
 const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     placeId,
-    photos,
     onSaveCover
 }) => {
     const { t } = useTranslation('common', {
@@ -30,6 +28,9 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
 
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
+
+    const { data: photosData, isLoading: photoLoading } =
+        API.usePhotosGetListQuery({ place: placeId })
 
     const [updateCover, { isLoading, isSuccess }] =
         API.usePlacesPatchCoverMutation()
@@ -42,7 +43,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const [imageCropData, setImageCropData] = useState<Crop>()
 
     const selectedPhoto = useMemo(
-        () => photos?.find(({ id }) => id === selectedPhotoId),
+        () => photosData?.items?.find(({ id }) => id === selectedPhotoId),
         [selectedPhotoId]
     )
 
@@ -125,8 +126,8 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
             </Button>
 
             <Dialog
-                contentHeight={'600px'}
-                maxWidth={'800px'}
+                contentHeight={'490px'}
+                maxWidth={'700px'}
                 header={!selectedPhotoId ? t('selectPhoto') : t('saveNewCover')}
                 open={coverDialogOpen}
                 showBackLink={!!selectedPhotoId}
@@ -149,7 +150,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
             >
                 {!selectedPhotoId ? (
                     <ul className={styles.coverPhotosList}>
-                        {photos?.map((photo) => (
+                        {photosData?.items?.map((photo) => (
                             <li key={`coverDialog${photo.id}`}>
                                 <Image
                                     src={`${IMG_HOST}${photo.preview}`}
@@ -162,26 +163,33 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                                 />
                             </li>
                         ))}
+                        {!photoLoading && !photosData?.items?.length && (
+                            <div className={styles.noPhotos}>
+                                {t('noPhotos')}
+                            </div>
+                        )}
                     </ul>
                 ) : (
-                    <ReactCrop
-                        crop={imageCropData}
-                        aspect={870 / 300}
-                        minWidth={870 / widthRatio}
-                        minHeight={300 / heightRatio}
-                        onChange={(c, p) => setImageCropData(p)}
-                    >
-                        <img
-                            src={`${IMG_HOST}${selectedPhoto?.full}`}
-                            onLoad={handleImageLoad}
-                            alt={''}
-                            style={{
-                                height: '100%',
-                                objectFit: 'cover',
-                                width: '100%'
-                            }}
-                        />
-                    </ReactCrop>
+                    <div className={styles.innerContainer}>
+                        <ReactCrop
+                            crop={imageCropData}
+                            aspect={870 / 300}
+                            minWidth={870 / widthRatio}
+                            minHeight={300 / heightRatio}
+                            onChange={(c, p) => setImageCropData(p)}
+                        >
+                            <img
+                                src={`${IMG_HOST}${selectedPhoto?.full}`}
+                                onLoad={handleImageLoad}
+                                alt={''}
+                                style={{
+                                    height: '100%',
+                                    objectFit: 'cover',
+                                    width: '100%'
+                                }}
+                            />
+                        </ReactCrop>
+                    </div>
                 )}
             </Dialog>
         </>

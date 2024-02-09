@@ -73,6 +73,8 @@ $routes->options('activity', 'Activity');
 
 $routes->get('users', 'Users::list');
 $routes->get('users/(:alphanum)', 'Users::show/$1');
+$routes->post('users/avatar', 'Users::avatar');
+$routes->patch('users/crop', 'Users::crop');
 $routes->patch('users/(:alphanum)', 'Users::update/$1');
 $routes->options('users', 'Users');
 $routes->options('users/(:alphanum)', 'Users');

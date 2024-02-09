@@ -4,6 +4,8 @@
             "logoTitle": "Mestafika",
             "userProfileCaption": "My page",
             "userProfileTitle": "Go to my page",
+            "userSettingsCaption": "Settings",
+            "userSettingsTitle": "Go to profile editing",
             "userLogout": "Logout",
             "userLoginCaption": "Sign in",
             "userLoginTitle": "Authorization on the site",
@@ -130,7 +132,8 @@
             "buttonCover": "Cover",
             "buttonSave": "Save",
             "selectPhoto": "Select a photo",
-            "saveNewCover": "Save the new cover"
+            "saveNewCover": "Save the new cover",
+            "noPhotos": "No photos uploaded"
         },
         "placeForm": {
             "errorsMessageTitle": "Fix errors",

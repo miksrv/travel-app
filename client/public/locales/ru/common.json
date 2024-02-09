@@ -4,6 +4,8 @@
             "logoTitle": "Местафика",
             "userProfileCaption": "Моя страница",
             "userProfileTitle": "Перейти на мою страницу",
+            "userSettingsCaption": "Настройки",
+            "userSettingsTitle": "Перейти в редактирование профиля",
             "userLogout": "Выход",
             "userLoginCaption": "Войти",
             "userLoginTitle": "Авторизация на сайте",
@@ -131,7 +133,8 @@
             "buttonCover": "Обложка",
             "buttonSave": "Сохранить",
             "selectPhoto": "Выберите фотографию",
-            "saveNewCover": "Сохраните новую обложку"
+            "saveNewCover": "Сохраните новую обложку",
+            "noPhotos": "Нет загруженных фотографий"
         },
         "placeForm": {
             "errorsMessageTitle": "Исправьте ошибки",

@@ -125,7 +125,7 @@ class ActivityLibrary {
         }
 
         // Send notification to place owner
-        if ($this->owner && $this->owner !== $session->user?->id) {
+        if (isset($this->owner) && $this->owner !== $session->user?->id) {
             $notify = new NotifyLibrary();
             $notify->push($type, $this->owner, $model->getInsertID());
         }
