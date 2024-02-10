@@ -655,6 +655,7 @@ class Places extends ResourceController {
 
         if (in_array($sort, $sortingFields)) {
             $sort = $sort === 'updated_at' ? 'places.updated_at' : $sort;
+            $sort = $sort === 'created_at' ? 'places.created_at' : $sort;
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 
