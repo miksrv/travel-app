@@ -65,7 +65,6 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
 
             <PlaceHeader
                 place={place}
-                photos={photoList}
                 ratingValue={ratingData?.rating ?? place?.rating}
                 ratingCount={ratingData?.count}
                 breadcrumbs={[

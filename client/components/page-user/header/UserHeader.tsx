@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
@@ -33,6 +33,8 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
 
     const appAuth = useAppSelector((state) => state.auth)
 
+    const [replaceAvatar, setReplaceAvatar] = useState<string>('')
+
     return (
         <section className={styles.component}>
             <div className={styles.content}>
@@ -45,7 +47,11 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         width={160}
                         src={
                             user?.avatar
-                                ? `${IMG_HOST}${user.avatar}`
+                                ? `${IMG_HOST}${
+                                      replaceAvatar
+                                          ? replaceAvatar
+                                          : user.avatar
+                                  }`
                                 : defaultAvatar.src
                         }
                     />
@@ -178,7 +184,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     appAuth.isAuth &&
                     appAuth.user?.id === user?.id && (
                         <>
-                            <UserAvatarEditor />
+                            <UserAvatarEditor onSaveAvatar={setReplaceAvatar} />
 
                             <Button
                                 size={'m'}

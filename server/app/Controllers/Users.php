@@ -282,8 +282,8 @@ class Users extends ResourceController {
             ->resize(100, 100)
             ->save($userAvatarDir . $name[0] . '_preview.' . $name[1]);
 
-        $usersModel->update($user->id, ['avatar' => $name[0] . '.' . $name[1]]);
+        $usersModel->update($user->id, ['avatar' => $rand]);
 
-        return $this->respondUpdated();
+        return $this->respondUpdated(['filepath' => PATH_AVATARS . $user->id . '/' . $rand]);
     }
 }

@@ -328,6 +328,10 @@ export interface RequestUsersCropAvatar {
     filename: string
 }
 
+export interface ResponseUsersCropAvatar {
+    filepath: string
+}
+
 export interface RequestUsersPatch {
     id?: string
     name?: string

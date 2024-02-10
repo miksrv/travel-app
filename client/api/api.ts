@@ -76,6 +76,7 @@ export const API = createApi({
 
         /* Controller: Auth */
         authGetMe: builder.query<ApiTypes.ResponseAuthLogin, void>({
+            providesTags: ['Profile'],
             query: () => 'auth/me'
         }),
         authGoogleLogin: builder.mutation<
@@ -372,10 +373,10 @@ export const API = createApi({
             query: (params) => `users${encodeQueryData(params)}`
         }),
         usersPatchCropAvatar: builder.mutation<
-            void,
+            ApiTypes.ResponseUsersCropAvatar,
             ApiTypes.RequestUsersCropAvatar
         >({
-            invalidatesTags: () => [{ type: 'Users' }],
+            invalidatesTags: () => ['Users', 'Profile'],
             query: (data) => ({
                 body: data,
                 method: 'PATCH',
@@ -399,7 +400,6 @@ export const API = createApi({
             ApiTypes.ResponseUserUploadAvatar,
             any
         >({
-            invalidatesTags: () => [{ type: 'Users' }],
             query: (data) => ({
                 body: data.formData,
                 method: 'POST',
@@ -445,6 +445,7 @@ export const API = createApi({
         'Rating',
         'Visited',
         'Users',
+        'Profile',
         'Notifications'
     ]
 })

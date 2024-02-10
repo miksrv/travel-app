@@ -1,6 +1,5 @@
 import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactCrop, { type Crop } from 'react-image-crop'
 import 'react-image-crop/src/ReactCrop.scss'
 
@@ -26,10 +25,10 @@ type ImageSizesType = {
 }
 
 interface UserAvatarProps {
-    onSaveCover?: () => void
+    onSaveAvatar?: (filepath: string) => void
 }
 
-const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
+const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.userAvatarEditor'
     })
@@ -39,12 +38,10 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
     const inputFile = useRef<HTMLInputElement>(null)
     const imageRef = useRef<HTMLImageElement>(null)
 
-    const [
-        uploadAvatar,
-        { data: uploadData, isLoading: uploadLoading, isSuccess }
-    ] = API.useUsersPostUploadAvatarMutation()
+    const [uploadAvatar, { data: uploadData, isLoading: uploadLoading }] =
+        API.useUsersPostUploadAvatarMutation()
 
-    const [cropAvatar, { isLoading: cropLoading }] =
+    const [cropAvatar, { data: cropData, isLoading: cropLoading, isSuccess }] =
         API.useUsersPatchCropAvatarMutation()
 
     const [uploadedFile, setUploadedFile] =
@@ -73,7 +70,6 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
         setCoverDialogOpen(false)
         setSelectedFile(undefined)
         setImageSizes(undefined)
-
         setUploadedFile(undefined)
     }
 
@@ -152,12 +148,12 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
         setImageSizes(sizes)
     }
 
-    // useEffect(() => {
-    //     handleCoverDialogClose()
-    //     onSaveCover?.()
-    // }, [isSuccess])
+    useEffect(() => {
+        handleCoverDialogClose()
+        onSaveAvatar?.(cropData?.filepath || '')
+    }, [isSuccess])
 
-    // Фото загрузилось во временную директорию
+    // The photo was uploaded to a temporary directory
     useEffect(() => {
         if (uploadData?.filename) {
             setUploadedFile(uploadData)
