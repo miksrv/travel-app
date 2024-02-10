@@ -51,7 +51,7 @@ class Users extends ResourceController {
                 'id'     => $item->id,
                 'name'   => $item->name,
                 'avatar' => $avatar
-                    ? PATH_AVATARS . $item->id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                    ? PATH_AVATARS . $item->id . '/' . $avatar[0] . '_small.' . $avatar[1]
                     : null,
                 'level'  => [
                     'level'      => $level->level,
@@ -113,6 +113,7 @@ class Users extends ResourceController {
             }
         }
 
+        $avatar = $usersData->avatar ? explode('.', $usersData->avatar) : null;
         $result = (object) [
             'id'         => $usersData->id,
             'name'       => $usersData->name,
@@ -124,7 +125,7 @@ class Users extends ResourceController {
             'updated'    => $usersData->updated_at,
             'activity'   => $usersData->activity_at ? new \DateTime($usersData->activity_at) : null,
             'avatar'     => $usersData->avatar
-                ? PATH_AVATARS . $usersData->id . '/' . $usersData->avatar
+                ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
                 : null
         ];
 
@@ -132,10 +133,11 @@ class Users extends ResourceController {
     }
 
     /**
+     * @param $id
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function update($id = null) {
+    public function update($id = null): ResponseInterface {
         $session = new SessionLibrary();
 
         if (!$session->isAuth || $session->user?->id !== $id) {
@@ -178,7 +180,6 @@ class Users extends ResourceController {
      */
     public function avatar(): ResponseInterface {
         $session    = new SessionLibrary();
-        $usersModel = new UsersModel();
 
         if (!$session->isAuth || !$session->user?->id) {
             return $this->failUnauthorized();
@@ -186,10 +187,6 @@ class Users extends ResourceController {
 
         if (!$photo = $this->request->getFile('avatar')) {
             return $this->failValidationErrors('No photo for upload');
-        }
-
-        if (!$user = $usersModel->find($session->user?->id)) {
-            return $this->failValidationErrors('User not found');
         }
 
         if (!$photo->hasMoved()) {
@@ -257,7 +254,7 @@ class Users extends ResourceController {
             return $this->failValidationErrors('Incorrect data format when saving cover image');
         }
 
-        if ($input->width < AVATAR_PREVIEW_WIDTH || $input->height < AVATAR_PREVIEW_HEIGHT) {
+        if ($input->width < AVATAR_SMALL_WIDTH || $input->height < AVATAR_SMALL_HEIGHT) {
             return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
         }
 
@@ -268,7 +265,8 @@ class Users extends ResourceController {
             $avatar = explode('.', $user->avatar);
 
             @unlink($userAvatarDir . $user->avatar);
-            @unlink($userAvatarDir . $avatar[0] . '_preview.' . $avatar[1]);
+            @unlink($userAvatarDir . $avatar[0] . '_small.' . $avatar[1]);
+            @unlink($userAvatarDir . $avatar[0] . '_medium.' . $avatar[1]);
         }
 
         if (!is_dir($userAvatarDir)) {
@@ -283,11 +281,16 @@ class Users extends ResourceController {
         $image = Services::image('gd'); // imagick
         $image->withFile($userAvatarDir . $rand)
             ->crop($input->width, $input->height, $input->x, $input->y)
-            ->resize(AVATAR_PREVIEW_WIDTH, AVATAR_PREVIEW_HEIGHT)
-            ->save($userAvatarDir . $name[0] . '_preview.' . $name[1]);
+            ->resize(AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT)
+            ->save($userAvatarDir . $name[0] . '_small.' . $name[1]);
+
+        $image->withFile($userAvatarDir . $rand)
+            ->crop($input->width, $input->height, $input->x, $input->y)
+            ->resize(AVATAR_MEDIUM_WIDTH, AVATAR_MEDIUM_HEIGHT)
+            ->save($userAvatarDir . $name[0] . '_medium.' . $name[1]);
 
         $usersModel->update($user->id, ['avatar' => $rand]);
 
-        return $this->respondUpdated(['filepath' => PATH_AVATARS . $user->id . '/' . $rand]);
+        return $this->respondUpdated(['filepath' => PATH_AVATARS . $user->id . '/' . $name[0] . '_medium.' . $name[1]]);
     }
 }

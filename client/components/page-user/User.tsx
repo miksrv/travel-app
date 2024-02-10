@@ -33,7 +33,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         link={`/users/${id}/photos`}
                         style={{ marginTop: '15px' }}
                     >
-                        {t('buttonShowAllPhotos')}
+                        {`${t('buttonShowAllPhotos')} (${photosCount})`}
                     </Button>
                 )}
             </Container>

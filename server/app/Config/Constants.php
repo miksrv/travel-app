@@ -119,5 +119,7 @@ defined('PHOTO_PREVIEW_HEIGHT') || define('PHOTO_PREVIEW_HEIGHT', 500);
 // Avatar photo max images
 defined('AVATAR_MAX_WIDTH') || define('AVATAR_MAX_WIDTH', 4048);
 defined('AVATAR_MAX_HEIGHT') || define('AVATAR_MAX_HEIGHT', 3036);
-defined('AVATAR_PREVIEW_WIDTH') || define('AVATAR_PREVIEW_WIDTH', 100);
-defined('AVATAR_PREVIEW_HEIGHT') || define('AVATAR_PREVIEW_HEIGHT', 100);
+defined('AVATAR_MEDIUM_WIDTH') || define('AVATAR_MEDIUM_WIDTH', 400);
+defined('AVATAR_MEDIUM_HEIGHT') || define('AVATAR_MEDIUM_HEIGHT', 400);
+defined('AVATAR_SMALL_WIDTH') || define('AVATAR_SMALL_WIDTH', 100);
+defined('AVATAR_SMALL_HEIGHT') || define('AVATAR_SMALL_HEIGHT', 100);

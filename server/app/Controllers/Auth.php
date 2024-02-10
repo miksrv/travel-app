@@ -144,8 +144,12 @@ class Auth extends ResourceController {
 
                 $image = Services::image('gd'); // imagick
                 $image->withFile($file->getRealPath())
-                    ->fit(40, 40, 'center')
-                    ->save($avatarDirectory  . $name . '_preview.' . $ext);
+                    ->fit(AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_small.' . $ext);
+
+                $image->withFile($file->getRealPath())
+                    ->fit(AVATAR_MEDIUM_WIDTH, AVATAR_MEDIUM_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_medium.' . $ext);
 
                 $userModel->update($newUserId, ['avatar' => $avatar]);
             }

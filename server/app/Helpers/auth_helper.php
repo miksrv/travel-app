@@ -27,7 +27,7 @@ function validateAuthToken(string $encodedToken = null):? User {
 
         if ($userData->avatar) {
             $avatar = explode('.', $userData->avatar);
-            $userData->avatar = PATH_AVATARS . $userData->id . '/' . $avatar[0] . '_preview.' . $avatar[1];
+            $userData->avatar = PATH_AVATARS . $userData->id . '/' . $avatar[0] . '_small.' . $avatar[1];
         }
 
         return $userData;

@@ -280,7 +280,7 @@ class Places extends ResourceController {
                 'id'     => $placeData->user_id,
                 'name'   => $placeData->user_name,
                 'avatar' => $avatar
-                    ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                    ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
                     : null
             ],
             'category'  => [

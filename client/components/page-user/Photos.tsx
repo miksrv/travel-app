@@ -45,8 +45,7 @@ const Photos: React.FC<PhotosProps> = ({
             </Container>
             <Container className={'pagination'}>
                 <div>
-                    {t('photos')}
-                    <strong>{photosCount ?? 0}</strong>
+                    {t('photos')} <strong>{photosCount ?? 0}</strong>
                 </div>
                 <Pagination
                     currentPage={currentPage}

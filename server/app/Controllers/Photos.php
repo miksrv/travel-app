@@ -111,7 +111,7 @@ class Photos extends ResourceController {
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
                     'avatar' => $avatar
-                        ? PATH_AVATARS . $photo->user_id . '/' . $avatar[0] . '_preview.' . $avatar[1]
+                        ? PATH_AVATARS . $photo->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
                         : null
                 ] : null
             ];
