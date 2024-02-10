@@ -12,6 +12,12 @@
     display: flex
     justify-content: space-between
 
+    @media only screen and (max-width: $mobileMaxWidth)
+      flex-direction: column
+
+      ul
+        margin-top: 20px
+
     .avatar
       min-width: 260px
       height: 240px
@@ -24,6 +30,9 @@
       background-repeat: no-repeat
       background-size: cover
       object-fit: cover
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        width: 100%
 
     .levelImage
       margin: 0 2px
