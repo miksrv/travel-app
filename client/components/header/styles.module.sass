@@ -41,5 +41,13 @@
     align-items: center
     margin-left: auto
 
+    div
+      @media only screen and (max-width: $mobileMaxWidth)
+        display: none
+
     button
       margin-left: 10px
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        svg
+          margin: 0

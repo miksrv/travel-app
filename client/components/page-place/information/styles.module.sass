@@ -4,8 +4,14 @@
   display: flex
   justify-content: space-between
 
+  @media only screen and (max-width: $mobileMaxWidth)
+    flex-direction: column
+
   .information
     width: 55%
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      width: 100%
 
     li
       display: flex
@@ -46,3 +52,8 @@
     width: 40%
     flex-grow: 1
     min-width: 300px
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      height: 200px
+      width: 100%
+      margin-top: 20px
