@@ -82,7 +82,8 @@
                 "address": "Адрес:",
                 "addressLinkTitle": "Интересные места:",
                 "linkYandexMapTitle": "на Яндекс картах",
-                "linkGoogleMapTitle": "на Google картах"
+                "linkGoogleMapTitle": "на Google картах",
+                "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "placePhotos": {
                 "title": "Фотографии",
@@ -113,7 +114,8 @@
                 "editions": "Редактирований:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
-                "buttonEdit": "Редактировать"
+                "buttonEdit": "Редактировать",
+                "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "photos": {
                 "title": "Фотографии",
@@ -192,7 +194,8 @@
             "linkTitle": "Профиль пользователя"
         },
         "userList": {
-            "reputation": "Репутация"
+            "reputation": "Репутация",
+            "registerDateFormat": "D MMMM YYYY"
         },
         "notification": {
             "level": "Новый уровень!",
@@ -202,7 +205,8 @@
             "rating": "Поставлена новая оценка",
             "place": "Добавлено новое место",
             "photo": "Загружено новое фото",
-            "experience": "опыта"
+            "experience": "опыта",
+            "dateFormat": "D MMMM YYYY, HH:mm"
         },
         "userAvatarEditor": {
             "buttonAvatar": "Аватар",

@@ -81,7 +81,8 @@
                 "address": "Address:",
                 "addressLinkTitle": "Points of Interest::",
                 "linkYandexMapTitle": "on Yandex maps",
-                "linkGoogleMapTitle": "on Google Maps"
+                "linkGoogleMapTitle": "on Google Maps",
+                "dateFormat": "MMMM D, YYYY, h:mm A"
             },
             "placePhotos": {
                 "title": "Photos",
@@ -112,7 +113,8 @@
                 "editions": "Edits:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
-                "buttonEdit": "Edit"
+                "buttonEdit": "Edit",
+                "dateFormat": "MMM D, YYYY, h:mm A"
             },
             "photos": {
                 "title": "Photos",
@@ -191,7 +193,8 @@
             "linkTitle": "User Profile"
         },
         "userList": {
-            "reputation": "Reputation"
+            "reputation": "Reputation",
+            "registerDateFormat": "MMMM D, YYYY"
         },
         "notification": {
             "level": "New level!",
@@ -201,7 +204,8 @@
             "rating": "New assessment",
             "place": "New place added",
             "photo": "New photo uploaded",
-            "experience": "experience"
+            "experience": "experience",
+            "dateFormat": "MMMM D, YYYY, h:mm A"
         },
         "userAvatarEditor": {
             "buttonAvatar": "Avatar",

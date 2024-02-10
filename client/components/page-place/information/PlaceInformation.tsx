@@ -164,14 +164,14 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                     <Icon name={'Time'} />
                     <div className={styles.key}>{t('createdTime')}</div>
                     <div className={styles.value}>
-                        {formatDate(place?.created?.date)}
+                        {formatDate(place?.created?.date, t('dateFormat'))}
                     </div>
                 </li>
                 <li>
                     <Icon name={'Time'} />
                     <div className={styles.key}>{t('editTime')}</div>
                     <div className={styles.value}>
-                        {formatDate(place?.updated?.date)}
+                        {formatDate(place?.updated?.date, t('dateFormat'))}
                     </div>
                 </li>
                 <li>

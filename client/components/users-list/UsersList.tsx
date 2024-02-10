@@ -35,7 +35,10 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                         showName={true}
                         user={user}
                         size={'medium'}
-                        caption={formatDate(user?.created?.date, 'D MMMM YYYY')}
+                        caption={formatDate(
+                            user?.created?.date,
+                            t('registerDateFormat')
+                        )}
                     />
                     <div className={styles.reputation}>
                         <p>{`${t('reputation')}: `}</p>

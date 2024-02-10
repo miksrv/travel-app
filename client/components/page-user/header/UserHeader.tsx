@@ -103,7 +103,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                             {t('timeRegistration')}
                         </div>
                         <div className={styles.value}>
-                            {formatDate(user?.created?.date)}
+                            {formatDate(user?.created?.date, t('dateFormat'))}
                         </div>
                     </li>
                     <li>

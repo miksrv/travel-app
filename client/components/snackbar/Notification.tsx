@@ -63,7 +63,7 @@ const Notification: React.FC<NotificationProps> = ({
                 </span>
                 {showDate && (
                     <div className={styles.datetime}>
-                        {formatDate(props.created?.date)}
+                        {formatDate(props.created?.date, t('dateFormat'))}
                     </div>
                 )}
             </div>
