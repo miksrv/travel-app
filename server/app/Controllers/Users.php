@@ -271,6 +271,10 @@ class Users extends ResourceController {
             @unlink($userAvatarDir . $avatar[0] . '_preview.' . $avatar[1]);
         }
 
+        if (!is_dir($userAvatarDir)) {
+            mkdir($userAvatarDir,0777, TRUE);
+        }
+
         $file = new File(UPLOAD_TEMPORARY . $input->filename);
         $rand = $file->getRandomName();
         $file->move(UPLOAD_AVATARS . $user->id, $rand, true);

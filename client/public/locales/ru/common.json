@@ -203,6 +203,13 @@
             "place": "Добавлено новое место",
             "photo": "Загружено новое фото",
             "experience": "опыта"
+        },
+        "userAvatarEditor": {
+            "buttonAvatar": "Аватар",
+            "buttonSave": "Сохранить",
+            "buttonUpload": "Загрузить",
+            "dialogTitleUpload": "Загрузить новый аватар",
+            "dialogTitleSave": "Сохранить размеры"
         }
     },
     "pages": {

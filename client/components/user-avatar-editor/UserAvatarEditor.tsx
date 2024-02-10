@@ -5,6 +5,7 @@ import 'react-image-crop/src/ReactCrop.scss'
 
 import Button from '@/ui/button'
 import Dialog from '@/ui/dialog'
+import Spinner from '@/ui/spinner'
 
 import { API, IMG_HOST } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
@@ -50,7 +51,6 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [imageCropData, setImageCropData] = useState<Crop>()
     const [imageSizes, setImageSizes] = useState<ImageSizesType>()
-    const [selectedFile, setSelectedFile] = useState<File>()
 
     const disabled =
         cropLoading ||
@@ -68,7 +68,6 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     const handleCoverDialogClose = () => {
         dispatch(toggleOverlay(false))
         setCoverDialogOpen(false)
-        setSelectedFile(undefined)
         setImageSizes(undefined)
         setUploadedFile(undefined)
     }
@@ -115,7 +114,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         uploadAvatar({ formData })
     }
 
-    // Выбираем фото для загрузки
+    // Select a photo to upload
     const handleImageLoad = () => {
         if (imageSizes || !imageRef?.current) {
             return
@@ -168,19 +167,19 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
             >
-                Аватар
+                {t('buttonAvatar')}
             </Button>
 
             <Dialog
                 contentHeight={'500px'}
                 maxWidth={'700px'}
                 header={
-                    !selectedFile
-                        ? 'Загрузите фотографию'
-                        : 'Отредактируйте и сохраните'
+                    !uploadedFile
+                        ? t('dialogTitleUpload')
+                        : t('dialogTitleSave')
                 }
                 open={coverDialogOpen}
-                showBackLink={!!selectedFile}
+                showBackLink={!!uploadedFile}
                 actions={
                     <Button
                         size={'s'}
@@ -188,71 +187,77 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                         onClick={handleSaveCover}
                         disabled={disabled}
                     >
-                        Сохранить
+                        {t('buttonSave')}
                     </Button>
                 }
                 onBackClick={() => {
-                    setSelectedFile(undefined)
+                    setUploadedFile(undefined)
                     setImageSizes(undefined)
                 }}
                 onCloseDialog={handleCoverDialogClose}
             >
-                <div className={styles.innerContainer}>
-                    {!uploadedFile ? (
-                        <>
-                            <input
-                                ref={inputFile}
-                                style={{ display: 'none' }}
-                                type={'file'}
-                                accept={'image/png, image/gif, image/jpeg'}
-                                onChange={handleSelectedFilesUpload}
-                            />
+                {!uploadLoading ? (
+                    <div className={styles.innerContainer}>
+                        {!uploadedFile ? (
+                            <>
+                                <input
+                                    ref={inputFile}
+                                    style={{ display: 'none' }}
+                                    type={'file'}
+                                    accept={'image/png, image/gif, image/jpeg'}
+                                    onChange={handleSelectedFilesUpload}
+                                />
 
-                            <Button
-                                icon={'Camera'}
-                                mode={'primary'}
-                                size={'m'}
-                                disabled={uploadLoading}
-                                onClick={handlePhotoUploadClick}
+                                <Button
+                                    icon={'Camera'}
+                                    mode={'primary'}
+                                    size={'m'}
+                                    disabled={uploadLoading}
+                                    onClick={handlePhotoUploadClick}
+                                >
+                                    {t('buttonUpload')}
+                                </Button>
+                            </>
+                        ) : (
+                            <ReactCrop
+                                circularCrop={true}
+                                crop={imageCropData}
+                                aspect={1}
+                                minHeight={
+                                    // 50% in px of width
+                                    imageSizes
+                                        ? imageSizes.halfRealSize /
+                                          imageSizes.ratioHeight
+                                        : 500
+                                }
+                                minWidth={
+                                    // 50% in px of height
+                                    imageSizes
+                                        ? imageSizes.halfRealSize /
+                                          imageSizes.ratioWidth
+                                        : 500
+                                }
+                                onChange={(c, p) => setImageCropData(p)}
                             >
-                                Загрузить
-                            </Button>
-                        </>
-                    ) : (
-                        <ReactCrop
-                            circularCrop={true}
-                            crop={imageCropData}
-                            aspect={1}
-                            minHeight={
-                                // 50% in px of width
-                                imageSizes
-                                    ? imageSizes.halfRealSize /
-                                      imageSizes.ratioHeight
-                                    : 500
-                            }
-                            minWidth={
-                                // 50% in px of height
-                                imageSizes
-                                    ? imageSizes.halfRealSize /
-                                      imageSizes.ratioWidth
-                                    : 500
-                            }
-                            onChange={(c, p) => setImageCropData(p)}
-                        >
-                            <img
-                                ref={imageRef}
-                                src={`${IMG_HOST}${uploadedFile.filepath}`}
-                                onLoad={handleImageLoad}
-                                alt={''}
-                                style={{
-                                    height: '100%',
-                                    objectFit: 'revert-layer',
-                                    width: '100%'
-                                }}
-                            />
-                        </ReactCrop>
-                    )}
-                </div>
+                                <img
+                                    ref={imageRef}
+                                    src={`${IMG_HOST}${uploadedFile.filepath}`}
+                                    onLoad={handleImageLoad}
+                                    alt={''}
+                                    style={{
+                                        height: '100%',
+                                        objectFit: 'revert-layer',
+                                        width: '100%'
+                                    }}
+                                />
+                            </ReactCrop>
+                        )}
+                    </div>
+                ) : (
+                    <div className={styles.loader}>
+                        <Spinner />
+                    </div>
+                )}
             </Dialog>
         </>
     )
