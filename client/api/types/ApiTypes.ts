@@ -320,10 +320,25 @@ export interface RequestUsersGetList {
     offset?: number
 }
 
+export interface RequestUsersCropAvatar {
+    x: number
+    y: number
+    width: number
+    height: number
+    filename: string
+}
+
 export interface RequestUsersPatch {
     id?: string
     name?: string
     website?: string
+}
+
+export interface ResponseUserUploadAvatar {
+    filename: string
+    filepath: string
+    width: number
+    height: number
 }
 
 export interface ResponseUsersGetItem extends User {}

@@ -371,7 +371,10 @@ export const API = createApi({
             providesTags: ['Users'],
             query: (params) => `users${encodeQueryData(params)}`
         }),
-        usersPatchCropAvatar: builder.mutation<void, any>({
+        usersPatchCropAvatar: builder.mutation<
+            void,
+            ApiTypes.RequestUsersCropAvatar
+        >({
             invalidatesTags: () => [{ type: 'Users' }],
             query: (data) => ({
                 body: data,
@@ -392,7 +395,10 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        usersPostUploadAvatar: builder.mutation<any, any>({
+        usersPostUploadAvatar: builder.mutation<
+            ApiTypes.ResponseUserUploadAvatar,
+            any
+        >({
             invalidatesTags: () => [{ type: 'Users' }],
             query: (data) => ({
                 body: data.formData,

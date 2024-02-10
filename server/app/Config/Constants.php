@@ -97,10 +97,12 @@ define('EVENT_PRIORITY_HIGH', 10);
 defined('UPLOADS')        || define('UPLOADS', FCPATH . 'uploads/');
 defined('UPLOAD_PHOTOS')  || define('UPLOAD_PHOTOS', UPLOADS . 'places/');
 defined('UPLOAD_AVATARS') || define('UPLOAD_AVATARS', UPLOADS . 'users/');
+defined('UPLOAD_TEMPORARY') || define('UPLOAD_TEMPORARY', UPLOADS . 'temp/');
 
 // Relative uploads path for web
 defined('PATH_PHOTOS') || define('PATH_PHOTOS', 'uploads/places/');
 defined('PATH_AVATARS') || define('PATH_AVATARS', 'uploads/users/');
+defined('PATH_TEMPORARY') || define('PATH_TEMPORARY', 'uploads/temp/');
 
 // Place cover image sizes
 defined('PLACE_COVER_WIDTH') || define('PLACE_COVER_WIDTH', 870);

@@ -7,9 +7,10 @@ import 'react-image-crop/src/ReactCrop.scss'
 import Button from '@/ui/button'
 import Dialog from '@/ui/dialog'
 
-import { API } from '@/api/api'
-import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
+import { API, IMG_HOST } from '@/api/api'
+import { toggleOverlay } from '@/api/applicationSlice'
+import { useAppDispatch } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 
 import styles from './styles.module.sass'
 
@@ -38,11 +39,16 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
     const inputFile = useRef<HTMLInputElement>(null)
     const imageRef = useRef<HTMLImageElement>(null)
 
-    const [uploadAvatar, { isLoading: uploadLoading, isSuccess }] =
-        API.useUsersPostUploadAvatarMutation()
+    const [
+        uploadAvatar,
+        { data: uploadData, isLoading: uploadLoading, isSuccess }
+    ] = API.useUsersPostUploadAvatarMutation()
 
     const [cropAvatar, { isLoading: cropLoading }] =
         API.useUsersPatchCropAvatarMutation()
+
+    const [uploadedFile, setUploadedFile] =
+        useState<ApiTypes.ResponseUserUploadAvatar>()
 
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [imageCropData, setImageCropData] = useState<Crop>()
@@ -55,7 +61,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
         !imageCropData?.width ||
         !imageCropData?.height ||
         !imageSizes ||
-        !selectedFile
+        !uploadedFile
 
     const handleChangeCoverClick = () => {
         dispatch(toggleOverlay(true))
@@ -67,18 +73,30 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
         setCoverDialogOpen(false)
         setSelectedFile(undefined)
         setImageSizes(undefined)
+
+        setUploadedFile(undefined)
     }
 
     const handleSaveCover = () => {
-        if (!imageSizes || !selectedFile || disabled) {
+        if (!imageSizes || !uploadedFile || disabled) {
             return
         }
 
-        const formData = new FormData()
-
-        formData.append('avatar', selectedFile)
-
-        uploadAvatar({ formData })
+        cropAvatar({
+            filename: uploadedFile.filename,
+            height: Math.round(
+                imageSizes.realHeight * ((imageCropData?.height || 0) / 100)
+            ),
+            width: Math.round(
+                imageSizes.realWidth * ((imageCropData?.width || 0) / 100)
+            ),
+            x: Math.round(
+                imageSizes.realWidth * ((imageCropData?.x || 0) / 100)
+            ),
+            y: Math.round(
+                imageSizes.realHeight * ((imageCropData?.y || 0) / 100)
+            )
+        })
     }
 
     const handlePhotoUploadClick = () => {
@@ -90,7 +108,15 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
     ) => {
         const files = event.target.files
 
-        setSelectedFile(files?.[0])
+        if (!files?.[0]) {
+            return
+        }
+
+        const formData = new FormData()
+
+        formData.append('avatar', files[0])
+
+        uploadAvatar({ formData })
     }
 
     // Выбираем фото для загрузки
@@ -126,28 +152,17 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
         setImageSizes(sizes)
     }
 
-    useEffect(() => {
-        if (!imageSizes) {
-            return
-        }
+    // useEffect(() => {
+    //     handleCoverDialogClose()
+    //     onSaveCover?.()
+    // }, [isSuccess])
 
-        cropAvatar({
-            height: Math.round(
-                imageSizes.realHeight * ((imageCropData?.height || 0) / 100)
-            ),
-            width: Math.round(
-                imageSizes.realWidth * ((imageCropData?.width || 0) / 100)
-            ),
-            x: Math.round(
-                imageSizes.realWidth * ((imageCropData?.x || 0) / 100)
-            ),
-            y: Math.round(
-                imageSizes.realHeight * ((imageCropData?.y || 0) / 100)
-            )
-        })
-        // handleCoverDialogClose()
-        // onSaveCover?.()
-    }, [isSuccess])
+    // Фото загрузилось во временную директорию
+    useEffect(() => {
+        if (uploadData?.filename) {
+            setUploadedFile(uploadData)
+        }
+    }, [uploadData])
 
     return (
         <>
@@ -187,7 +202,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
                 onCloseDialog={handleCoverDialogClose}
             >
                 <div className={styles.innerContainer}>
-                    {!selectedFile ? (
+                    {!uploadedFile ? (
                         <>
                             <input
                                 ref={inputFile}
@@ -230,7 +245,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveCover }) => {
                         >
                             <img
                                 ref={imageRef}
-                                src={URL.createObjectURL(selectedFile)}
+                                src={`${IMG_HOST}${uploadedFile.filepath}`}
                                 onLoad={handleImageLoad}
                                 alt={''}
                                 style={{
