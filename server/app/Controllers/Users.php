@@ -204,15 +204,15 @@ class Users extends ResourceController {
 
             // Calculating Aspect Ratio
             $orientation = $width > $height ? 'h' : 'v';
-            $width = $orientation === 'h' ? $width : $height;
+            $width  = $orientation === 'h' ? $width : $height;
             $height = $orientation === 'h' ? $height : $width;
 
             // If the uploaded image dimensions exceed the maximum
-            if ($width > PHOTO_MAX_WIDTH || $height > PHOTO_MAX_HEIGHT) {
+            if ($width > AVATAR_MAX_WIDTH || $height > AVATAR_MAX_HEIGHT) {
                 $image = Services::image('gd');
                 $image->withFile(UPLOAD_TEMPORARY . $filename)
-                    ->fit(PHOTO_MAX_WIDTH, PHOTO_MAX_HEIGHT)
-                    ->reorient()
+                    ->fit(AVATAR_MAX_WIDTH, AVATAR_MAX_HEIGHT)
+                    ->reorient(true)
                     ->save(UPLOAD_TEMPORARY . $filename);
 
                 list($width, $height) = getimagesize(UPLOAD_TEMPORARY . $filename);
@@ -257,7 +257,7 @@ class Users extends ResourceController {
             return $this->failValidationErrors('Incorrect data format when saving cover image');
         }
 
-        if ($input->width < 100 || $input->height < 100) {
+        if ($input->width < AVATAR_PREVIEW_WIDTH || $input->height < AVATAR_PREVIEW_HEIGHT) {
             return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
         }
 
@@ -283,7 +283,7 @@ class Users extends ResourceController {
         $image = Services::image('gd'); // imagick
         $image->withFile($userAvatarDir . $rand)
             ->crop($input->width, $input->height, $input->x, $input->y)
-            ->resize(100, 100)
+            ->resize(AVATAR_PREVIEW_WIDTH, AVATAR_PREVIEW_HEIGHT)
             ->save($userAvatarDir . $name[0] . '_preview.' . $name[1]);
 
         $usersModel->update($user->id, ['avatar' => $rand]);

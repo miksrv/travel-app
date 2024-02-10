@@ -175,7 +175,7 @@ class Photos extends ResourceController {
                 $image = Services::image('gd');
                 $image->withFile($file->getRealPath())
                     ->fit(PHOTO_MAX_WIDTH, PHOTO_MAX_HEIGHT)
-                    ->reorient()
+                    ->reorient(true)
                     ->save($photoDir . $name . '.' . $ext);
 
                 list($width, $height) = getimagesize($file->getRealPath());
@@ -183,7 +183,7 @@ class Photos extends ResourceController {
 
             $image = Services::image('gd'); // imagick
             $image->withFile($file->getRealPath())
-                ->fit(700, 500, 'center')
+                ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT, 'center')
                 ->save($photoDir . $name . '_preview.' . $ext);
 
             // If this first uploaded photo - we automated make place cover image
@@ -220,7 +220,7 @@ class Photos extends ResourceController {
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
         } else {
-            return $this->failValidationErrors($photo->getErrorString());
+           return  $this->failValidationErrors($photo->getErrorString());
         }
 
         // Update the time and photos count

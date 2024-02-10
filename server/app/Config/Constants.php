@@ -113,3 +113,11 @@ defined('PLACE_COVER_PREVIEW_HEIGHT') || define('PLACE_COVER_PREVIEW_HEIGHT', 18
 // PLace photo max images
 defined('PHOTO_MAX_WIDTH') || define('PHOTO_MAX_WIDTH', 4048);
 defined('PHOTO_MAX_HEIGHT') || define('PHOTO_MAX_HEIGHT', 3036);
+defined('PHOTO_PREVIEW_WIDTH') || define('PHOTO_PREVIEW_WIDTH', 700);
+defined('PHOTO_PREVIEW_HEIGHT') || define('PHOTO_PREVIEW_HEIGHT', 500);
+
+// Avatar photo max images
+defined('AVATAR_MAX_WIDTH') || define('AVATAR_MAX_WIDTH', 4048);
+defined('AVATAR_MAX_HEIGHT') || define('AVATAR_MAX_HEIGHT', 3036);
+defined('AVATAR_PREVIEW_WIDTH') || define('AVATAR_PREVIEW_WIDTH', 100);
+defined('AVATAR_PREVIEW_HEIGHT') || define('AVATAR_PREVIEW_HEIGHT', 100);

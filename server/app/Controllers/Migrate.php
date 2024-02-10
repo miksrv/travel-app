@@ -279,7 +279,7 @@ class Migrate extends ResourceController {
                             list($width, $height) = getimagesize($file->getRealPath());
                             $image = Services::image('gd'); // imagick
                             $image->withFile($file->getRealPath())
-                                ->fit(512, 384, 'center')
+                                ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT, 'center')
                                 ->save($photoDirectory . '/' . $currentPhoto->item_filename . '_preview.' . $file->getExtension());
 
                             // If first photo - we automated make place cover
@@ -430,7 +430,7 @@ class Migrate extends ResourceController {
 
                 $image = Services::image('gd'); // imagick
                 $image->withFile($file->getRealPath())
-                    ->fit(40, 40, 'center')
+                    ->fit(AVATAR_PREVIEW_WIDTH, AVATAR_PREVIEW_HEIGHT, 'center')
                     ->save($avatarDirectory  . $name . '_preview.' . $ext);
 
             } else {
