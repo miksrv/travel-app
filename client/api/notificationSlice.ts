@@ -1,5 +1,4 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import { createAsyncThunk } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import uniqueId from 'lodash-es/uniqueId'
 
 import { RootState } from '@/api/store'

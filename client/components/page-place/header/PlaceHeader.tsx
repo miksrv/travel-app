@@ -9,7 +9,6 @@ import Button from '@/ui/button'
 import { IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Photo } from '@/api/types/Photo'
 import { Place } from '@/api/types/Place'
 
 import Header from '@/components/header'

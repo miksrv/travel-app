@@ -253,7 +253,7 @@
         },
         "settingsUserPage": {
             "title": "Edit Profile",
-            "breadCrumbUsersLink":"Travelers",
+            "breadCrumbUsersLink": "Travelers",
             "breadCrumbMyPageLink": "My Page"
         }
     },
