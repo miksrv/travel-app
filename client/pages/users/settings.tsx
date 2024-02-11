@@ -6,7 +6,6 @@ import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
-import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
@@ -78,19 +77,19 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
     return (
         <AppLayout>
-            <NextSeo title={'Редактирование профиля'} />
+            <NextSeo title={t('title')} />
             <Header
-                title={'Редактирование профиля'}
-                currentPage={'Редактирование профиля'}
+                title={t('title')}
+                currentPage={t('title')}
                 backLink={`/users/${authSlice.user?.id}`}
                 links={[
                     {
                         link: '/users/',
-                        text: 'Путешественники'
+                        text: t('breadCrumbUsersLink')
                     },
                     {
                         link: `/users/${authSlice.user?.id}`,
-                        text: authSlice.user?.name || 'Моя страница'
+                        text: authSlice.user?.name || t('breadCrumbMyPageLink')
                     }
                 ]}
             />

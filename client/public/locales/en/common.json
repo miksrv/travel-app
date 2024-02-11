@@ -250,6 +250,11 @@
             "title": "Travelers",
             "breadCrumbCurrent": "Travelers",
             "usersCount": "Travelers:"
+        },
+        "settingsUserPage": {
+            "title": "Edit Profile",
+            "breadCrumbUsersLink":"Travelers",
+            "breadCrumbMyPageLink": "My Page"
         }
     },
     "ui": {

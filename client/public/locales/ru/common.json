@@ -251,6 +251,11 @@
             "title": "Путешественники",
             "breadCrumbCurrent": "Путешественники",
             "usersCount": "Путешественников:"
+        },
+        "settingsUserPage": {
+            "title": "Редактирование профиля",
+            "breadCrumbUsersLink": "Путешественники",
+            "breadCrumbMyPageLink": "Моя страница"
         }
     },
     "ui": {
