@@ -8,6 +8,8 @@ const nextConfig = {
     images: {
         unoptimized: true
     },
+    // output: 'standalone',
+
     transpilePackages: [
         '@mdxeditor/editor',
         'react-diff-view',
