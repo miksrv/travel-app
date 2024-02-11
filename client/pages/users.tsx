@@ -2,15 +2,14 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React, { useEffect } from 'react'
+import React from 'react'
 
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
-import { addNotification } from '@/api/snackbarSlice'
-import { useAppDispatch, wrapper } from '@/api/store'
+import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 

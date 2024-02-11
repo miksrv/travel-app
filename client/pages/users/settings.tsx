@@ -34,7 +34,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
         }
     )
 
-    const [updateProfile, { data, error, isLoading, isSuccess, isError }] =
+    const [updateProfile, { data, error, isLoading, isSuccess }] =
         API.useUsersPatchProfileMutation()
 
     const validationErrors = useMemo(
