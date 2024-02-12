@@ -11,15 +11,6 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
-// https://vkcom.github.io/VKUI/#/SplitLayout
-// https://vkcom.github.io/VKUI/6.0.0-beta.3/#/RichCell
-// https://setproduct.com/material-x
-// https://www.atlasobscura.com/places/tunguska-event-epicenter
-// https://www.tursar.ru/page-dop.php?c=1
-// https://account.travel/things-to-do/california
-// https://www.earthcam.com/mapsearch/
-// https://github.com/sekoyo/react-image-crop?tab=readme-ov-file#example
-
 export const SITE_NAME = 'Название сайта'
 
 const App = ({ Component, pageProps }: AppProps) => {

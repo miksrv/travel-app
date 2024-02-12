@@ -73,14 +73,14 @@ jobs:
           SSH_KEY: ${{secrets.SSH_KEY}}
         run: |
           mkdir -p ~/.ssh/
-          echo "$SSH_KEY" > ~/.ssh/authorized_keys
-          chmod 400 ~/.ssh/authorized_keys
+          echo "$SSH_KEY" > ~/.ssh/deploy
+          chmod 400 ~/.ssh/deploy
           cat >>~/.ssh/config <<END
           Host vps
             HostName $SSH_HOST
             Port $SSH_PORT
             User $SSH_USER
-            IdentityFile ~/.ssh/authorized_keys
+            IdentityFile ~/.ssh/deploy
             StrictHostKeyChecking no
           END
 
