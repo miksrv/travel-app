@@ -1,120 +1,119 @@
-# name: UI Deploy
+name: UI Deploy
 
-# on:
-#   push:
-#     branches:
-#       - main
-#     paths:
-#       - 'client/**/*'
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'client/**/*'
 
-# jobs:
-#   ui-ssh-deploy:
-#     runs-on: ubuntu-latest
+jobs:
+  ui-ssh-deploy:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - uses: actions/checkout@v3
+    steps:
+      - uses: actions/checkout@v3
 
-#       - name: Install Node.js
-#         uses: actions/setup-node@v2
-#         with:
-#           node-version: 18
-#           cache: 'yarn'
-#           cache-dependency-path: 'client/yarn.lock'
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 20
+          cache: 'yarn'
+          cache-dependency-path: 'client/yarn.lock'
 
-#       - name: Cache node modules
-#         uses: actions/cache@v3
-#         id: cache-npm
-#         with:
-#           path: |
-#             client/node_modules
-#             ~/.npm
-#             ${{ github.workspace }}/.next/cache
-#           key: ${{ runner.os }}-modules-${{ hashFiles('client/yarn.lock') }}
-#           restore-keys: |
-#             ${{ runner.os }}-modules-
-#             ${{ runner.os }}-
+      - name: Cache node modules
+        uses: actions/cache@v3
+        id: cache-npm
+        with:
+          path: |
+            client/node_modules
+            ~/.npm
+            ${{ github.workspace }}/.next/cache
+          key: ${{ runner.os }}-modules-${{ hashFiles('client/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-modules-
+            ${{ runner.os }}-
 
-#       - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
-#         name: Install dependencies
-#         working-directory: client
-#         run: yarn install
+      - if: ${{ steps.cache-npm.outputs.cache-hit != 'true' }}
+        name: Install dependencies
+        working-directory: client
+        run: yarn install
 
-#       - name: Cache UI build
-#         uses: actions/cache@v3
-#         id: cache-build
-#         with:
-#           path: client/out
-#           key: ${{ runner.os }}-build-${{ hashFiles('client/**/*.ts', 'client/**/*.tsx') }}
-#           restore-keys: |
-#             ${{ runner.os }}-build-
-#             ${{ runner.os }}-
+      - name: Cache UI build
+        uses: actions/cache@v3
+        id: cache-build
+        with:
+          path: client/out
+          key: ${{ runner.os }}-build-${{ hashFiles('client/**/*.ts', 'client/**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
 
-#       - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
-#         name: Configure Client
-#         run: |
-#           echo "NEXT_PUBLIC_API_HOST = '${{ secrets.NEXT_PUBLIC_API_HOST }}'
-#           NEXT_PUBLIC_LAT = 51.7
-#           NEXT_PUBLIC_LON = 55.2" > .env
-#         working-directory: client
+      - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
+        name: Configure Client
+        run: |
+          echo "NEXT_PUBLIC_MAPBOX_TOKEN = '${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}'
+          NEXT_PUBLIC_API_HOST = '${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}'
+          NEXT_PUBLIC_SITE_LINK = '${{ secrets.NEXT_PUBLIC_SITE_LINK }}'" > .env
+        working-directory: client
 
-#       - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
-#         name: Build UI
-#         run: |
-#           export dateNow=$(date +"%d.%m.%Y %H:%M")
-#           echo "export const update = '$dateNow'" > update.ts
-#           yarn build
-# #          yarn export <- This is not needed if we use NodeJS server
-#         working-directory: client
+      - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
+        name: Build UI
+        run: |
+          export dateNow=$(date +"%d.%m.%Y %H:%M")
+          echo "export const update = '$dateNow'" > update.ts
+          yarn build
+        working-directory: client
 
-#       - name: Configure SSH
-#         env:
-#           SSH_HOST: ${{secrets.SSH_HOST}}
-#           SSH_PORT: ${{secrets.SSH_PORT}}
-#           SSH_USER: ${{secrets.SSH_USER}}
-#           SSH_KEY: ${{secrets.SSH_KEY}}
-#         run: |
-#           mkdir -p ~/.ssh/
-#           echo "$SSH_KEY" > ~/.ssh/authorized_keys
-#           chmod 400 ~/.ssh/authorized_keys
-#           cat >>~/.ssh/config <<END
-#           Host vps
-#             HostName $SSH_HOST
-#             Port $SSH_PORT
-#             User $SSH_USER
-#             IdentityFile ~/.ssh/authorized_keys
-#             StrictHostKeyChecking no
-#           END
+      - name: Configure SSH
+        env:
+          SSH_HOST: ${{secrets.SSH_HOST}}
+          SSH_PORT: ${{secrets.SSH_PORT}}
+          SSH_USER: ${{secrets.SSH_USER}}
+          SSH_KEY: ${{secrets.SSH_KEY}}
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_KEY" > ~/.ssh/authorized_keys
+          chmod 400 ~/.ssh/authorized_keys
+          cat >>~/.ssh/config <<END
+          Host vps
+            HostName $SSH_HOST
+            Port $SSH_PORT
+            User $SSH_USER
+            IdentityFile ~/.ssh/authorized_keys
+            StrictHostKeyChecking no
+          END
 
-#       # If we just use nginx and the application is exported to plain HTML
-#       #- name: Send files
-#       #  run: rsync -avz -e ssh ./client/out/ vps:/var/www/astro.miksoft.pro
+      # If we just use nginx and the application is exported to plain HTML
+      #- name: Send files
+      #  run: rsync -avz -e ssh ./client/out/ vps:/var/www/astro.miksoft.pro
 
-#       # If we run NextJS on a Node server using PM2
-#       - name: Send files
-#         run: |
-#           ssh vps "cd /var/www/astro.miksoft.pro && rm -r .next"
-#           rsync -avz -e ssh client/.next/standalone/ vps:/var/www/astro.miksoft.pro
-#           rsync -avz -e ssh client/.next/static vps:/var/www/astro.miksoft.pro/.next
-#           rsync -avz -e ssh client/public vps:/var/www/astro.miksoft.pro
+      # If we run NextJS on a Node server using PM2
+      - name: Send files
+        run: |
+          ssh vps "cd /var/www/geometki.com && rm -r .next"
+          rsync -avz -e ssh client/.next/standalone/ vps:/var/www/geometki.com
+          rsync -avz -e ssh client/.next/static vps:/var/www/geometki.com/.next
+          rsync -avz -e ssh client/public vps:/var/www/geometki.com
 
-#       # For the first launch of the application on the server:
-#       # pm2 start "node server.js" --name astro.miksoft.pro
-#       - name: Restart PM2
-#         run: ssh vps "cd /var/www/astro.miksoft.pro && pm2 restart astro.miksoft.pro"
+      # For the first launch of the application on the server:
+      # pm2 start "node server.js" --name astro.miksoft.pro
+      - name: Restart PM2
+        run: ssh vps "pm2 restart geometki.com"
 
-#       # If for deployment we use not SSH, but an FTP connection
-#       # - name: Export UI
-#       #  working-directory: client
-#       #  run: yarn export
-#       #
-#       # - name: Install LFTP
-#       #  run: sudo apt install lftp
-#       #
-#       # - name: Configure LFTP
-#       #  run: mkdir ~/.lftp && echo "set ssl:verify-certificate false;" >> ~/.lftp/rc
-#       #
-#       # - name: Load Secrets
-#       #  run: echo "machine ${{ secrets.FTP_HOSTNAME }} login ${{ secrets.FTP_USERNAME }} password ${{ secrets.FTP_PASSWORD }}" > ~/.netrc
-#       #
-#       # - name: Upload Folder
-#       #  run: lftp -e "mirror --parallel=100 -R client/out/ /" ${{ secrets.FTP_HOSTNAME }}
+      # If for deployment we use not SSH, but an FTP connection
+      # - name: Export UI
+      #  working-directory: client
+      #  run: yarn export
+      #
+      # - name: Install LFTP
+      #  run: sudo apt install lftp
+      #
+      # - name: Configure LFTP
+      #  run: mkdir ~/.lftp && echo "set ssl:verify-certificate false;" >> ~/.lftp/rc
+      #
+      # - name: Load Secrets
+      #  run: echo "machine ${{ secrets.FTP_HOSTNAME }} login ${{ secrets.FTP_USERNAME }} password ${{ secrets.FTP_PASSWORD }}" > ~/.netrc
+      #
+      # - name: Upload Folder
+      #  run: lftp -e "mirror --parallel=100 -R client/out/ /" ${{ secrets.FTP_HOSTNAME }}

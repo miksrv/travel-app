@@ -8,7 +8,7 @@ const nextConfig = {
     images: {
         unoptimized: true
     },
-    // output: 'standalone',
+    output: 'standalone',
 
     transpilePackages: [
         '@mdxeditor/editor',
