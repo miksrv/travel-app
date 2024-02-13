@@ -9,6 +9,7 @@ on:
 
 jobs:
   ui-ssh-deploy:
+    name: Production
     runs-on: ubuntu-latest
 
     steps:

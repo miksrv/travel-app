@@ -10,7 +10,9 @@
  # https://github.com/codeigniter4/CodeIgniter4/blob/develop/.github/workflows/deploy-apidocs.yml
  jobs:
    api-ssh-deploy:
+     name: Production
      runs-on: ubuntu-latest
+
      steps:
        - uses: actions/checkout@v3
 
@@ -18,7 +20,7 @@
        - name: Setup PHP
          uses: shivammathur/setup-php@v2
          with:
-           php-version: 8.0
+           php-version: 8.2
            extensions: mbstring, intl, curl, dom
            coverage: none
 
