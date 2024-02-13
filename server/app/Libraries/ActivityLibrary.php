@@ -5,7 +5,7 @@ use CodeIgniter\I18n\Time;
 use Exception;
 use ReflectionException;
 
-const ACTIVITY_FLOOD_MIN = 30;
+const ACTIVITY_FLOOD_MIN = 35;
 
 class ActivityLibrary {
     private string $owner;
