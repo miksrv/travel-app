@@ -79,7 +79,7 @@ const AppBar: React.FC<HeaderProps> = ({
     }, [geolocation.latitude, geolocation.longitude])
 
     return (
-        <header className={cn(styles.component, fullSize && styles.fullSize)}>
+        <header className={cn(styles.appBar, fullSize && styles.fullSize)}>
             <AppAuthChecker />
             <div className={styles.wrapper}>
                 <button
@@ -91,18 +91,19 @@ const AppBar: React.FC<HeaderProps> = ({
                 </button>
                 <div className={styles.logo}>{t('logoTitle')}</div>
                 <Search />
-                {(randomPlaceId || randomPlace?.id) && (
-                    <Link
-                        className={styles.iconButton}
-                        href={`/places/${randomPlaceId ?? randomPlace?.id}`}
-                        title={t('randomPlaceLinkTitle')}
-                    >
-                        <Icon name={'Question'} />
-                    </Link>
-                )}
                 <div className={styles.rightSection}>
                     {appAuth.isAuth && appAuth?.user && (
                         <>
+                            {(randomPlaceId || randomPlace?.id) && (
+                                <Link
+                                    href={`/places/${
+                                        randomPlaceId ?? randomPlace?.id
+                                    }`}
+                                    title={t('randomPlaceLinkTitle')}
+                                >
+                                    <Icon name={'RandomLocation'} />
+                                </Link>
+                            )}
                             <Notifications />
                             <Popout
                                 action={

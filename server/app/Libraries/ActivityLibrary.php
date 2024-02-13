@@ -45,8 +45,8 @@ class ActivityLibrary {
     /**
      * @throws ReflectionException
      */
-    public function cover($placeId, $photoId): void {
-        $this->_add('cover', $photoId, $placeId);
+    public function cover($placeId): void {
+        $this->_add('cover', null, $placeId);
     }
 
     /**

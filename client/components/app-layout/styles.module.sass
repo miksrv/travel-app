@@ -58,6 +58,9 @@ $sideBarWidth: 300px
         max-width: $maxWidth
         margin: 0 auto
 
+        @media only screen and (max-width: $mobileMaxWidth)
+            padding-top: 54px
+
         .menubar
             width: $menuBarWidth
             min-width: $menuBarWidth
@@ -107,7 +110,7 @@ $sideBarWidth: 300px
             //animation: animation-fadeIn .32s ease
 
     .sidebar
-        position: absolute
+        position: fixed
         background-color: #fff
         width: $sideBarWidth
         height: 100vh

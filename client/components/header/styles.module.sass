@@ -41,9 +41,10 @@
     align-items: center
     margin-left: auto
 
-    div
-      @media only screen and (max-width: $mobileMaxWidth)
-        display: none
+    @media only screen and (max-width: $mobileMaxWidth)
+      & > button, & > a > button
+        div
+          display: none
 
     button
       margin-left: 10px

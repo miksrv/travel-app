@@ -22,7 +22,6 @@ export type IconTypes =
     | 'Up'
     | 'DoubleUp'
     | 'Close'
-    | 'Question'
     | 'Tune'
     | 'PlusCircle'
     | 'Pencil'
@@ -37,3 +36,5 @@ export type IconTypes =
     | 'CheckCircle'
     | 'ReportError'
     | 'Notifications'
+    | 'Gps'
+    | 'RandomLocation'

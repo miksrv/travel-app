@@ -1,6 +1,6 @@
 @import ../../styles/variables
 
-.component
+.appBar
   position: relative
   z-index: 450
   color: $colorTextMain
@@ -8,6 +8,10 @@
   padding: 8px 14px
   //box-shadow: $boxShadow
   box-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08)
+
+  @media only screen and (max-width: $mobileMaxWidth)
+    position: fixed
+    width: 100%
 
   .wrapper
     display: flex
@@ -47,8 +51,19 @@
     @media only screen and (max-width: $mobileMaxWidth)
       display: none
 
-  .iconButton
-    margin-left: 20px
+  @media only screen and (max-width: $mobileMaxWidth)
+    .hamburgerButton
+      display: block
+
+  .rightSection
+    margin-left: auto
+    display: flex
+    align-items: center
+    justify-content: center
+    padding-left: 10px
+
+    & > div
+      margin-left: 10px
 
     svg
       margin-top: 5px
@@ -59,23 +74,6 @@
       &:hover, &:focus
         opacity: .7
 
-
-  @media only screen and (max-width: $mobileMaxWidth)
-    .hamburgerButton
-      display: block
-
-  .rightSection
-    margin-left: auto
-    display: flex
-    align-items: center
-    justify-content: center
-
-    & > div
-      margin-left: 20px
-
-      &:first-of-type
-        margin-left: 0
-
   .notificationsButton
     position: relative
     border: none
@@ -83,20 +81,11 @@
     padding: 0
     line-height: 10px
     cursor: pointer
-    margin-top: 4px
 
     .notifyCounter
       position: absolute
       top: -3px
       right: -3px
-
-    svg
-      height: 24px
-      width: 24px
-      fill: #818c99
-
-      &:hover, &:focus
-        opacity: .7
 
   .notifyFooter
     padding: 4px

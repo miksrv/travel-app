@@ -226,7 +226,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {userLatLon && (
                         <Button
                             mode={'secondary'}
-                            icon={'User'}
+                            icon={'Gps'}
                             onClick={handleUserPosition}
                         />
                     )}

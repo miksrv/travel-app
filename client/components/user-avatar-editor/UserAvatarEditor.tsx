@@ -245,9 +245,9 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     onLoad={handleImageLoad}
                                     alt={''}
                                     style={{
-                                        height: '100%',
-                                        objectFit: 'revert-layer',
-                                        width: '100%'
+                                        height: '100%'
+                                        // objectFit: 'contain',
+                                        // width: '100%'
                                     }}
                                 />
                             </ReactCrop>
