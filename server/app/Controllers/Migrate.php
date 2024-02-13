@@ -2,10 +2,12 @@
 
 use App\Libraries\Geocoder;
 use App\Models\MigrateMediaModel;
+use App\Models\MigratePlacesComments;
 use App\Models\MigratePlacesHistoryModel;
 use App\Models\MigratePlacesModel;
 use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
+use App\Models\PlacesCommentsModel;
 use App\Models\PlacesTagsModel;
 use App\Models\TagsModel;
 use App\Models\PlacesModel;
@@ -32,25 +34,89 @@ class Migrate extends ResourceController {
      * @throws ReflectionException
      */
     #[NoReturn] public function users(): void {
-        ob_start();
-
         $counter = 0;
         $migrateUsers = new MigrateUsersModel();
         $allUsersData = $migrateUsers->findAll();
 
-        foreach ($allUsersData as $user) {
+        foreach ($allUsersData as $comment) {
             $counter++;
-            $this->_migrate_user($user->user_id);
-
-            echo $counter . ': ' . $user->user_email . PHP_EOL;
-
-            flush();
-            ob_flush();
+            $this->_migrate_user($comment->item_author);
         }
 
-        echo 'Migration Finished';
+        echo 'Migration Finished: ' . $counter;
 
-        ob_end_flush();
+        exit();
+    }
+
+    /**
+     * $: cd public
+     * $: php index.php migrate comments
+     * @throws ReflectionException
+     */
+    #[NoReturn] public function comments(): void {
+        $counter = 0;
+        $placesContentModel = new PlacesContentModel();
+        $migratePlaces   = new MigratePlacesModel();
+        $migrateComments = new MigratePlacesComments();
+        $commentsModel   = new PlacesCommentsModel();
+        $activityModel   = new ActivityModel();
+
+        $allCommentsData = $migrateComments
+            ->where('item_type', 'places')
+            ->orderBy('item_answer', 'ASC')
+            ->findAll();
+
+        foreach ($allCommentsData as $comment) {
+            if ($commentsModel
+                ->where('content', strip_tags(html_entity_decode($comment->item_comment)))
+                ->first()
+            ) {
+                continue;
+            }
+
+            $migratePlace = $migratePlaces->select('item_title')->where('item_id', $comment->item_material)->first();
+
+            if (!$migratePlace) {
+                continue;
+            }
+
+            $placeData = $placesContentModel->where('title', strip_tags(html_entity_decode($migratePlace->item_title)))->first();
+
+            if (empty($placeData)) {
+                continue;
+            }
+
+            if ((int) $comment->item_answer !== 0) {
+                $answerMigrate = $migrateComments->select('item_comment')->find($comment->item_answer);
+                $findAnswer    = $commentsModel->where('content', strip_tags(html_entity_decode($answerMigrate->item_comment)));
+
+                $answerId = $findAnswer->id;
+            } else {
+                $answerId = null;
+            }
+
+            $userId = $this->_migrate_user($comment->item_author);
+
+            $commentEntity = new \App\Entities\Comment();
+            $commentEntity->place_id   = $placeData->place_id;
+            $commentEntity->user_id    = $userId;
+            $commentEntity->answer_id  = $answerId;
+            $commentEntity->content    = strip_tags(html_entity_decode($comment->item_comment));
+            $commentEntity->created_at = $comment->item_datestamp;
+            $commentsModel->insert($commentEntity);
+
+            $activity = new \App\Entities\Activity();
+            $activity->type       = 'comment';
+            $activity->user_id    = $userId;
+            $activity->place_id   = $placeData->place_id;
+            $activity->photo_id   = null;
+            $activity->created_at = $comment->item_datestamp;
+            $activityModel->insert($activity);
+
+            $counter++;
+        }
+
+        echo 'Migration Finished: ' . $counter;
 
         exit();
     }

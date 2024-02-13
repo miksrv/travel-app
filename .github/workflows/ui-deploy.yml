@@ -44,7 +44,7 @@ jobs:
         uses: actions/cache@v3
         id: cache-build
         with:
-          path: client/out
+          path: client/.next
           key: ${{ runner.os }}-build-${{ hashFiles('client/**/*.ts', 'client/**/*.tsx') }}
           restore-keys: |
             ${{ runner.os }}-build-
@@ -54,7 +54,7 @@ jobs:
         name: Configure Client
         run: |
           echo "NEXT_PUBLIC_MAPBOX_TOKEN = '${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}'
-          NEXT_PUBLIC_API_HOST = '${{ secrets.NEXT_PUBLIC_MAPBOX_TOKEN }}'
+          NEXT_PUBLIC_API_HOST = '${{ secrets.NEXT_PUBLIC_API_HOST }}'
           NEXT_PUBLIC_SITE_LINK = '${{ secrets.NEXT_PUBLIC_SITE_LINK }}'" > .env
         working-directory: client
 

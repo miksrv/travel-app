@@ -45,7 +45,7 @@
             "php spark serve"
         ],
         "kill": "pkill -9 php",
-        "migration:create": "php spark migrate:create AddUsersAchievements",
+        "migration:create": "php spark migrate:create AddPlacesComments",
         "migration:status": "php spark migrate:status",
         "migration:rollback": "php spark migrate:rollback",
         "migration:run": "php spark migrate",

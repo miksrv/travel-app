@@ -12,7 +12,7 @@ class AddActivity extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type' => 'ENUM("photo", "place", "rating", "edit", "cover")',
+                'type' => 'ENUM("photo", "place", "rating", "edit", "cover", "comment")',
                 'null' => false,
             ],
             'session_id' => [

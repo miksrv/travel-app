@@ -8,8 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce', 'Introduce');
 
-$routes->get('migrate/places', 'Migrate::places');
+//$routes->get('migrate/places', 'Migrate::places');
 $routes->cli('migrate/places', 'Migrate::places');
+$routes->cli('migrate/comments', 'Migrate::comments');
 $routes->cli('migrate/users', 'Migrate::users');
 
 $routes->get('poi', 'Poi::list');
