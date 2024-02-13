@@ -1,7 +1,7 @@
 {
     "components": {
         "appBar": {
-            "logoTitle": "Mestafika",
+            "logoTitle": "Geometki",
             "userProfileCaption": "My page",
             "userProfileTitle": "Go to my page",
             "userSettingsCaption": "Settings",

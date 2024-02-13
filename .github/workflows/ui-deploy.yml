@@ -100,7 +100,7 @@ jobs:
       # For the first launch of the application on the server:
       # pm2 start "node server.js" --name astro.miksoft.pro
       - name: Restart PM2
-        run: ssh vps "pm2 restart geometki.com"
+        run: ssh vps "cd /var/www/geometki.com && pm2 restart geometki.com"
 
       # If for deployment we use not SSH, but an FTP connection
       # - name: Export UI
