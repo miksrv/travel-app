@@ -60,7 +60,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     className={styles.photoItem}
                 >
                     <Link
-                        className={styles.photoLink}
+                        className={styles.link}
                         href={`${IMG_HOST}${photo.full}`}
                         title={`${photo.title}. ${t('linkPhotoTitle')} ${
                             index + 1

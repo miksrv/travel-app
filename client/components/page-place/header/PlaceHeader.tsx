@@ -100,10 +100,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     icon={'Eye'}
                     content={place?.views || 0}
                 />
-                <Badge
-                    icon={'Ruler'}
-                    content={`${place?.distance || '?'} км`}
-                />
+                {/*<Badge*/}
+                {/*    icon={'Ruler'}*/}
+                {/*    content={`${place?.distance || '?'} км`}*/}
+                {/*/>*/}
             </div>
 
             <Header
