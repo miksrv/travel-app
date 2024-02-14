@@ -115,10 +115,26 @@ const InteractiveMap: React.FC<MapProps> = ({
     const handleToggleFullscreen = async () => {
         const mapElement = mapRef.current.getContainer()
 
-        if (!document.fullscreenElement) {
-            await mapElement.requestFullscreen()
-        } else {
-            await document.exitFullscreen()
+        if (mapElement.requestFullscreen) {
+            // Full screen mode supported
+            if (!document.fullscreenElement) {
+                await mapElement.requestFullscreen()
+            } else {
+                await document.exitFullscreen()
+            }
+        } else if (mapElement.webkitRequestFullscreen) {
+            // For Safari on iOS devices
+            const fullscreenElement =
+                // @ts-ignore
+                document.webkitFullscreenElement ||
+                // @ts-ignore
+                document.webkitCurrentFullScreenElement
+            if (!fullscreenElement) {
+                await mapElement.webkitRequestFullscreen()
+            } else {
+                // @ts-ignore
+                await document.webkitExitFullscreen()
+            }
         }
     }
 

@@ -5,7 +5,7 @@
 
   .label
     display: block
-    color: #6d7885
+    color: $inputLabelColor
     overflow: hidden
     padding-bottom: 4px
     padding-top: 2px
@@ -24,12 +24,12 @@
       width: 100%
       line-height: 20px
       position: relative
-      background-color: #f2f3f5
+      background-color: $inputBackgroundColor
       -webkit-tap-highlight-color: transparent
       align-items: center
       border-radius: $borderRadius
       box-sizing: border-box
-      border: 0.5px solid #cbcccd
+      border: 0.5px solid $borderInputColor
       color: $colorTextMain
       height: 34px
       margin: 0
@@ -52,14 +52,15 @@
         width: 90%
         height: inherit
         padding-left: 12px
+        padding-bottom: 0
 
       &:focus, &:active, &:hover
         outline: none
-        border-color: #1976d2
+        border-color: $inputFocusBorderColor
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
-        color: #000
+        color: $colorTextMain
 
       span
         overflow: hidden
@@ -81,7 +82,7 @@
         svg
           width: 24px
           height: 24px
-          fill: #6d7885
+          fill: $inputLabelColor
 
       .clear, .toggleButton
         background: transparent
@@ -96,7 +97,7 @@
           height: 18px !important
 
           &:hover
-            fill: #3d434b
+            fill: $inputLabelColorHover
 
     &.open
       .searchContainer
@@ -110,8 +111,8 @@
     .optionsList
       position: absolute
       background-color: #FFFFFF
-      box-shadow: 0 0 2px rgba(0,0,0,0), 0 4px 16px rgba(0,0,0,.08)
-      border: 1px solid #e0e0e0
+      box-shadow: $boxShadow2
+      border: 1px solid $borderDropdownColor
       list-style: none
       padding: 0
       width: 100%
@@ -155,7 +156,7 @@
             flex-basis: 100%
 
         &:hover, &.active
-          background-color: #f2f3f5
+          background-color: $inputBackgroundColor
 
         &:last-of-type
           border-bottom-left-radius: 8px

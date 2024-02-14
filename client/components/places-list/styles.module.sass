@@ -13,7 +13,7 @@
   position: relative
   background: #fff
   border-radius: $borderRadius
-  box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+  box-shadow: $boxShadow3
   height: 345px
   max-width: 300px
   overflow: hidden
@@ -23,6 +23,7 @@
   @media only screen and (max-width: $mobileMaxWidth)
     flex-basis: 100%
     max-width: 100%
+    height: 405px
 
   //&:hover
     //box-shadow: 0 0 15px rgba(0, 0, 0, .2)
@@ -33,6 +34,9 @@
     background-image: url('/images/no-image.svg')
     background-position: center
     background-size: cover
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      height: 220px
 
     & > a
       display: block
@@ -56,6 +60,9 @@
       border-top-right-radius: $borderRadius
       object-fit: cover
       margin-bottom: -5px
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        height: 220px
 
     .bottomPanel
       position: absolute

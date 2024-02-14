@@ -5,7 +5,7 @@
 
   .label
     display: block
-    color: #6d7885
+    color: $inputLabelColor
     overflow: hidden
     padding-bottom: 6px
     padding-top: 2px
@@ -16,7 +16,7 @@
   .formField
     line-height: 20px
     position: relative
-    background-color: #f2f3f5
+    background-color: $inputBackgroundColor
     -webkit-tap-highlight-color: transparent
     align-items: center
     border-radius: $borderRadius
@@ -29,11 +29,11 @@
       background: transparent
       border-width: 0.5px
       border-style: solid
-      border-color: #cbcccd
+      border-color: $borderInputColor
       border-radius: inherit
       box-shadow: none
       box-sizing: border-box
-      color: #000
+      color: $colorTextMain
       height: 36px
       margin: 0
       padding: 0 12px
@@ -44,7 +44,7 @@
 
       &:focus, &:active
         outline: none
-        border-color: #1976d2
+        border-color: $inputFocusBorderColor
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
   &.error

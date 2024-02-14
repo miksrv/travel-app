@@ -97,6 +97,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     isAuth={authSlice?.isAuth}
                     onClick={handleCloseOverlay}
                 />
+                <div className={styles.content}>
+                    <LanguageSwitcher />
+                    <Footer />
+                </div>
             </aside>
 
             <section className={styles.mainContainer}>
