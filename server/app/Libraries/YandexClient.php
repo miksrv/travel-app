@@ -62,7 +62,10 @@ class YandexClient {
         return $this->token = $response->access_token;
     }
 
-    public function fetchUserInfo() {
+    /**
+     * @return object|null
+     */
+    public function fetchUserInfo():? object {
         $response = $this->client
             ->setHeader('Authorization', 'OAuth ' . $this->token)
             ->request(
@@ -71,11 +74,9 @@ class YandexClient {
             );
 
         if ($response->getStatusCode() !== 200) {
-            return false;
+            return null;
         }
 
-        $response = json_decode($response->getBody());
-
-        return $response;
+        return json_decode($response->getBody());
     }
 }

@@ -245,9 +245,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         icon={'Tune'}
                         onClick={handleClickOpenFiltersDialog}
                     >
-                        {`${t('buttonFilters')} ${
-                            filtersCount > 0 ? `(${filtersCount})` : ''
-                        }`}
+                        {t('buttonFilters')}
+                        {filtersCount > 0 && ` (${filtersCount})`}
                     </Button>
                 }
             />

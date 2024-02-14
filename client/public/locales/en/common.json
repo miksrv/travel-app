@@ -272,7 +272,7 @@
             "placeholder": "Enter a value to search for",
             "notFound": "Nothing found yet"
         },
-        "dialogue": {
+        "dialog": {
             "back": "Back"
         },
         "dropdown": {
