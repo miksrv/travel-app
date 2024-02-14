@@ -5,6 +5,7 @@ import React, { useState } from 'react'
 import Badge from '@/ui/badge'
 import { BreadcrumbLink } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
+import RatingColored from '@/ui/rating-colored'
 
 import { IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -14,11 +15,7 @@ import { Place } from '@/api/types/Place'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
-import {
-    addDecimalPoint,
-    concatClassNames as cn,
-    ratingColor
-} from '@/functions/helpers'
+import { addDecimalPoint } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -60,20 +57,18 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     return (
         <section className={styles.component}>
             <div className={styles.topPanel}>
-                {!!ratingCount && (
-                    <div
-                        className={cn(
-                            styles.rating,
-                            styles[ratingColor(ratingValue || 0)]
-                        )}
+                {!!ratingCount && ratingValue && (
+                    <RatingColored
+                        className={styles.rating}
+                        value={ratingValue}
                     >
                         <div className={styles.value}>
-                            {addDecimalPoint(ratingValue || 0)}
+                            {addDecimalPoint(ratingValue)}
                         </div>
                         <div className={styles.count}>
                             {t('ratingCount', { count: ratingCount })}
                         </div>
-                    </div>
+                    </RatingColored>
                 )}
             </div>
 

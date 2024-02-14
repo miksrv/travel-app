@@ -10,23 +10,36 @@
   top: 0
   left: 0
 
-
 .screenSpinner
   position: absolute
   z-index: 605
-  //margin: 43.5% 43.5%
-  left: 43.8%
-  top: 43.8%
-  background-color: #FFF
-  border-radius: $borderRadius
-  box-shadow: 0 0 8px rgba(0,0,0,.12),0 16px 16px rgba(0,0,0,.16)
+  height: 100%
+  width: 100%
   display: flex
   align-items: center
   justify-content: center
-  flex-wrap: wrap
+  left: 0
+  top: 0
 
-  svg
-    margin: 30px
-    width: 50px
-    height: 50px
-    animation: animation-spin 1s linear infinite
+  .container
+    background-color: #FFF
+    border-radius: $borderRadius
+    box-shadow: 0 0 8px rgba(0,0,0,.12),0 16px 16px rgba(0,0,0,.16)
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    flex-wrap: wrap
+    min-height: 130px
+    min-width: 130px
+
+    svg
+      margin: 30px
+      width: 50px
+      height: 50px
+      animation: animation-spin 1s linear infinite
+
+    .text
+      margin: 0 20px 20px
+      min-width: 200px
+      text-align: center

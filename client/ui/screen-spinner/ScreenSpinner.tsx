@@ -6,9 +6,11 @@ import Spinner from '@/ui/spinner'
 
 import styles from './styles.module.sass'
 
-interface ScreenSpinnerProps {}
+interface ScreenSpinnerProps {
+    text?: string
+}
 
-const ScreenSpinner: React.FC<ScreenSpinnerProps> = () => {
+const ScreenSpinner: React.FC<ScreenSpinnerProps> = ({ text }) => {
     useEffect(() => {
         const globalDiv = document.createElement('div')
 
@@ -23,7 +25,10 @@ const ScreenSpinner: React.FC<ScreenSpinnerProps> = () => {
 
     return (
         <div className={styles.screenSpinner}>
-            <Spinner />
+            <div className={styles.container}>
+                <Spinner />
+                {text && <div className={styles.text}>{text}</div>}
+            </div>
         </div>
     )
 }

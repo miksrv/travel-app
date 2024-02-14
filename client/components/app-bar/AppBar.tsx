@@ -92,18 +92,17 @@ const AppBar: React.FC<HeaderProps> = ({
                 <div className={styles.logo}>{t('logoTitle')}</div>
                 <Search />
                 <div className={styles.rightSection}>
+                    {(randomPlaceId || randomPlace?.id) && (
+                        <Link
+                            href={`/places/${randomPlaceId ?? randomPlace?.id}`}
+                            title={t('randomPlaceLinkTitle')}
+                        >
+                            <Icon name={'RandomLocation'} />
+                        </Link>
+                    )}
+
                     {appAuth.isAuth && appAuth?.user && (
                         <>
-                            {(randomPlaceId || randomPlace?.id) && (
-                                <Link
-                                    href={`/places/${
-                                        randomPlaceId ?? randomPlace?.id
-                                    }`}
-                                    title={t('randomPlaceLinkTitle')}
-                                >
-                                    <Icon name={'RandomLocation'} />
-                                </Link>
-                            )}
                             <Notifications />
                             <Popout
                                 action={
@@ -150,6 +149,7 @@ const AppBar: React.FC<HeaderProps> = ({
                             link={'/login'}
                             title={t('userLoginTitle')}
                             mode={'secondary'}
+                            className={styles.loginButton}
                             onClick={handleLoginClick}
                         >
                             {t('userLoginCaption')}

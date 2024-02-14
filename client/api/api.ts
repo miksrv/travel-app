@@ -79,11 +79,12 @@ export const API = createApi({
             providesTags: ['Profile'],
             query: () => 'auth/me'
         }),
-        authGoogleLogin: builder.mutation<
+        authLoginService: builder.mutation<
             ApiTypes.ResponseAuthLogin,
-            ApiTypes.RequestAuthGoogle
+            ApiTypes.RequestAuthService
         >({
-            query: (params) => `auth/google${encodeQueryData(params)}`,
+            query: ({ service, code }) =>
+                `auth/${service}${code ? `?code=${code}` : ''}`,
             transformErrorResponse: (response) => response.data
         }),
         authPostLogin: builder.mutation<

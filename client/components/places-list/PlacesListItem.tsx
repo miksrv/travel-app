@@ -4,12 +4,13 @@ import Link from 'next/link'
 import React from 'react'
 
 import Badge from '@/ui/badge'
+import RatingColored from '@/ui/rating-colored'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
-import { numberFormatter } from '@/functions/helpers'
+import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -32,6 +33,16 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     width={22}
                     height={26}
                 />
+
+                {!!place.rating && (
+                    <RatingColored
+                        className={styles.rating}
+                        value={place.rating}
+                    >
+                        {addDecimalPoint(place.rating)}
+                    </RatingColored>
+                )}
+
                 <Link
                     href={`/places/${place.id}`}
                     title={place.title}
@@ -52,12 +63,6 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         icon={'Photo'}
                         content={place?.photos || 0}
                     />
-                    {!!place.rating && (
-                        <Badge
-                            icon={'Star'}
-                            content={place.rating}
-                        />
-                    )}
                     <Badge
                         icon={'Eye'}
                         content={numberFormatter(place?.views || 0)}

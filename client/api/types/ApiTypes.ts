@@ -29,6 +29,8 @@ export type PlaceLocationType = {
     type: LocationType
 }
 
+export type AuthServiceType = 'google' | 'yandex'
+
 export type LocaleType = 'en' | 'ru'
 
 export const SortOrder = {
@@ -77,7 +79,9 @@ export interface RequestAuthLogin {
     email?: string
     password?: string
 }
-export interface RequestAuthGoogle {
+
+export interface RequestAuthService {
+    service: AuthServiceType
     code?: string
 }
 

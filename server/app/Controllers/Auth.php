@@ -3,6 +3,7 @@
 use App\Entities\User;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
+use App\Libraries\YandexClient;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -17,6 +18,7 @@ use ReflectionException;
 
 define('AUTH_TYPE_NATIVE', 'native');
 define('AUTH_TYPE_GOOGLE', 'google');
+define('AUTH_TYPE_YANDEX', 'yandex');
 
 class Auth extends ResourceController {
     public function __construct() {
@@ -115,8 +117,7 @@ class Auth extends ResourceController {
 
         // If there is no user with this email, then register a new user
         if (!$userData) {
-            $user   = new User();
-
+            $user = new User();
             $user->name      = $googleUser->getName();
             $user->email     = $googleUser->getEmail();
             $user->auth_type = AUTH_TYPE_GOOGLE;
@@ -168,6 +169,103 @@ class Auth extends ResourceController {
 
         if ($userData->auth_type !== AUTH_TYPE_GOOGLE) {
             $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_GOOGLE]);
+        }
+
+        $session = new SessionLibrary();
+        $session->authorization($userData);
+
+        return $this->respond([
+            'auth'  => $session->isAuth,
+            'user'  => $session->user,
+            'token' => generateAuthToken($session->user->email),
+        ]);
+    }
+
+    /**
+     * @link https://oauth.yandex.ru/
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function yandex(): ResponseInterface {
+        $yandexClient = new YandexClient();
+
+        $yandexClient->setClientId(getenv('auth.yandex.clientID'));
+        $yandexClient->setClientSecret(getenv('auth.yandex.secret'));
+        $yandexClient->setRedirectUri(getenv('auth.yandex.redirect'));
+
+        $authCode = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        // If there is no authorization code, then the user has not yet logged in to Yandex.
+        if (!$authCode) {
+            return $this->respond([
+                'auth'     => false,
+                'redirect' => $yandexClient->createAuthUrl(),
+            ]);
+        }
+
+        $yandexClient->fetchAccessTokenWithAuthCode($authCode);
+        $yandexUser  = $yandexClient->fetchUserInfo();
+        $yandexEmail = strtolower($yandexUser->default_email);
+
+        // Successful authorization, look for a user with the same email in the database
+        $userModel = new UsersModel();
+        $userData  = $userModel->findUserByEmailAddress($yandexEmail);
+
+        // If there is no user with this email, then register a new user
+        if (!$userData) {
+            $user = new User();
+            $user->name      = $yandexUser->real_name;
+            $user->email     = $yandexEmail;
+            $user->auth_type = AUTH_TYPE_YANDEX;
+            $user->locale    = $this->request->getLocale();
+            $user->level     = 1;
+
+            $userModel->insert($user);
+
+            $newUserId = $userModel->getInsertID();
+
+            // If a Google user has an avatar, copy it
+            if (!$yandexUser->is_avatar_empty && $yandexUser->default_avatar_id) {
+                $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
+                $yandexAvatarUrl = "https://avatars.yandex.net/get-yapic/{$yandexUser->default_avatar_id}/islands-200";
+                $avatar = md5($yandexUser->real_name . AUTH_TYPE_YANDEX . $yandexEmail) . '.jpg';
+
+                if (!is_dir($avatarDirectory)) {
+                    mkdir($avatarDirectory,0777, TRUE);
+                }
+
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($yandexAvatarUrl));
+
+                $file = new File($avatarDirectory . $avatar);
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $ext  = $file->getExtension();
+
+                $image = Services::image('gd'); // imagick
+                $image->withFile($file->getRealPath())
+                    ->fit(AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_small.' . $ext);
+
+                $image->withFile($file->getRealPath())
+                    ->fit(AVATAR_MEDIUM_WIDTH, AVATAR_MEDIUM_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_medium.' . $ext);
+
+                $userModel->update($newUserId, ['avatar' => $avatar]);
+            }
+
+            $userData = $user;
+            $userData->id = $newUserId;
+        }
+
+        // All migrated users will not have an authorization type in the database, so it will be possible to
+        // either recover the password or log in through Google or another system.
+        // But if the authorization type is already specified, you should authorize only this way.
+        if ($userData->auth_type !== null && $userData->auth_type !== AUTH_TYPE_YANDEX) {
+            log_message('error', 'The user cannot log in because he has a different type of account authorization');
+            return $this->failValidationErrors('You have a different authorization type set to Yandex');
+        }
+
+        if ($userData->auth_type !== AUTH_TYPE_YANDEX) {
+            $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_YANDEX]);
         }
 
         $session = new SessionLibrary();

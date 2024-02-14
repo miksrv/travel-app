@@ -28,7 +28,7 @@ class AddUsers extends Migration {
                 'null'       => false
             ],
             'auth_type'      => [
-                'type'       => 'ENUM("native", "google")',
+                'type'       => 'ENUM("native", "google", "yandex")',
                 'null'       => true
             ],
             'locale' => [

@@ -44,7 +44,7 @@
             "errorEmail": "Введенный email адрес не корректный",
             "errorPassword": "Пароль пользователя обязателен",
             "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
-            "googleError": "Ошибка авторизации в Google, пожалуйста попробуйте еще раз",
+            "serviceAuthError": "Ошибка авторизации через сервис, пожалуйста попробуйте еще раз",
             "inputEmail": "Email адрес",
             "inputPassword": "Пароль",
             "linkRegistrationCaption": "Регистрация",
@@ -52,9 +52,8 @@
             "linkRecoveryCaption": "Забыли пароль?",
             "linkRecoveryTitle": "Восстановление пароля",
             "buttonLogin": "Войти",
-            "LoginGoogleButton": {
-                "buttonLogin": "Войти через Google"
-            }
+            "loginGoogle": "Войти через Google",
+            "loginYandex": "Войти через Яндекс"
         },
         "pagePlace": {
             "edit": {
@@ -240,6 +239,10 @@
             "dialogFiltersTitle": "Фильтры",
             "dropdownCategoryLabel": "Фильтровать по категории",
             "dropdownCategoryPlaceholder": "Выберите категорию"
+        },
+        "auth": {
+            "title": "Авторизация",
+            "pleaseWait": "Пожалуйста, подождите..."
         },
         "login": {
             "title": "Авторизация"

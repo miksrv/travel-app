@@ -3,6 +3,7 @@ import React from 'react'
 
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
+import Spinner from '@/ui/spinner'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -12,6 +13,7 @@ interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
     className?: string
     link?: string
     stretched?: boolean
+    loading?: boolean
     size?: 's' | 'm' | 'l'
     mode?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'link'
     variant?: 'positive' | 'negative' | 'neutral'
@@ -23,6 +25,7 @@ const Button: React.FC<ContainerProps> = ({
     className,
     link,
     stretched,
+    loading,
     size,
     mode,
     variant,
@@ -44,8 +47,14 @@ const Button: React.FC<ContainerProps> = ({
                 !children && styles.noText
             )}
         >
-            {icon && <Icon name={icon} />}
-            <div>{children}</div>
+            {loading ? (
+                <Spinner />
+            ) : (
+                <>
+                    {icon && <Icon name={icon} />}
+                    <div>{children}</div>
+                </>
+            )}
         </button>
     )
 

@@ -76,8 +76,8 @@ class Rating extends ResourceController {
             $ratingData  = $ratingModel->where('place_id', $placesData->id)->findAll();
 
             $inputRating  = (int) $input->score;
-            $ratingValue  = $inputRating;
             $alreadyVoted = null; // Пользователь меняет свою оценку? Будем тут хранить ID записи рейтинга
+            $ratingValue  = $inputRating;
 
             if (!$placesData) {
                 return $this->failNotFound();
@@ -88,12 +88,15 @@ class Rating extends ResourceController {
                 foreach ($ratingData as $item) {
                     if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
                         $alreadyVoted = $item->id;
+                        continue;
                     }
 
                     $ratingValue += $item->value;
                 }
 
-                $ratingValue = round($ratingValue / (count($ratingData) + 1), 1);
+                $ratingValue = $ratingValue
+                    ? round($ratingValue / (count($ratingData) + ($alreadyVoted ? 0 : 1)), 1)
+                    : null;
             }
 
             // Теперь изменим репутацию автора материала

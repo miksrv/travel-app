@@ -1,7 +1,9 @@
 'use client'
 
 import { useTranslation } from 'next-i18next'
+import Image from 'next/image'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -14,11 +16,15 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import LoginGoogleButton from '@/components/login-form/LoginGoogleButton'
-
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
 
+import googleLogo from '@/public/images/google-logo.png'
+import yandexLogo from '@/public/images/yandex-logo.png'
+
 import styles from './styles.module.sass'
+
+export const RETURN_PATH_KEY = 'returnPath'
 
 interface LoginFormProps {
     onSuccessLogin?: () => void
@@ -30,13 +36,33 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     })
 
     const dispatch = useAppDispatch()
-    const [loading, setLoading] = useState<boolean>(false)
+    const router = useRouter()
+
+    const [, setReturnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
+
     const [localeError, setLocaleError] = useState<string>('')
     const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestAuthLogin>()
 
-    const [authLoginPost, { isLoading, data: authData, error, isSuccess }] =
-        API.useAuthPostLoginMutation()
+    const [
+        authLoginNative,
+        {
+            data: authData,
+            isLoading: nativeLoading,
+            isSuccess: nativeSuccess,
+            error
+        }
+    ] = API.useAuthPostLoginMutation()
+
+    const [
+        authLoginService,
+        {
+            data: serviceData,
+            isLoading: serviceLoading,
+            isSuccess: serviceSuccess,
+            isError: serviceError
+        }
+    ] = API.useAuthLoginServiceMutation()
 
     const validationErrors = useMemo(
         () =>
@@ -74,12 +100,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
     const handleLoginButton = () => {
         if (validateForm() && formData) {
-            authLoginPost(formData)
+            authLoginNative(formData)
         }
     }
 
-    const handleGoogleError = () => {
-        setLocaleError(t('googleError'))
+    const handleLoginServiceButton = (service: ApiTypes.AuthServiceType) => {
+        setReturnPath(router.asPath)
+        authLoginService({ service })
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
@@ -88,7 +115,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
         }
     }
 
-    const loadingForm = isSuccess || isLoading || loading
+    const loadingForm =
+        nativeLoading || nativeSuccess || serviceLoading || serviceSuccess
 
     useEffect(() => {
         setFormErrors(validationErrors)
@@ -104,6 +132,18 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     }, [authData])
 
     useEffect(() => {
+        if (serviceData?.redirect) {
+            window.location.href = serviceData.redirect
+        }
+    }, [serviceData?.redirect])
+
+    useEffect(() => {
+        if (serviceError) {
+            setLocaleError(t('googleError'))
+        }
+    }, [serviceError])
+
+    useEffect(() => {
         return () => {
             dispatch(closeAuthDialog())
             setLocaleError('')
@@ -112,13 +152,40 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
     return (
         <div className={styles.loginForm}>
-            <LoginGoogleButton
-                loading={loadingForm}
-                onErrorLogin={handleGoogleError}
-                onLoading={setLoading}
-            />
+            <div className={styles.loginServiceButtons}>
+                <Button
+                    stretched={true}
+                    size={'m'}
+                    mode={'secondary'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('google')}
+                >
+                    <Image
+                        src={googleLogo.src}
+                        style={{}}
+                        width={20}
+                        height={20}
+                        alt={''}
+                    />
+                    {t('loginGoogle')}
+                </Button>
 
-            <hr />
+                <Button
+                    stretched={true}
+                    size={'m'}
+                    mode={'secondary'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('yandex')}
+                >
+                    <Image
+                        src={yandexLogo.src}
+                        width={20}
+                        height={20}
+                        alt={''}
+                    />
+                    {t('loginYandex')}
+                </Button>
+            </div>
 
             {localeError && (
                 <Message

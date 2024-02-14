@@ -44,7 +44,7 @@
             "errorEmail": "The entered email address is not correct",
             "errorPassword": "User password is required",
             "errorPasswordLength": "Password must be at least 8 characters long",
-            "googleError": "Google login error, please try again",
+            "serviceAuthError": "Authorization error through the service, please try again",
             "inputEmail": "Email address",
             "inputPassword": "Password",
             "linkRegistrationCaption": "Sign up",
@@ -52,9 +52,8 @@
             "linkRecoveryCaption": "Forgot your password?",
             "linkRecoveryTitle": "Recovery",
             "buttonLogin": "Login",
-            "LoginGoogleButton": {
-                "buttonLogin": "Login with Google"
-            }
+            "loginGoogle": "Login with Google",
+            "loginYandex": "Login with Yandex"
         },
         "pagePlace": {
             "edit": {
@@ -239,6 +238,10 @@
             "dialogFiltersTitle": "Filters",
             "dropdownCategoryLabel": "Filter by Category",
             "dropdownCategoryPlaceholder": "Select a category"
+        },
+        "auth": {
+            "title": "Authorization",
+            "pleaseWait": "Please wait..."
         },
         "login": {
             "title": "Authorization"

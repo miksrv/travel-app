@@ -150,7 +150,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
             />
             <Container
                 style={{
-                    height: 'calc(100vh - 100px)',
+                    height: 'calc(100vh - 165px)',
                     minHeight: '400px',
                     padding: '4px'
                 }}

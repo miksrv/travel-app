@@ -146,7 +146,7 @@ class Users extends ResourceController {
 
         $input = $this->request->getJSON();
         $rules = [
-            'name'    => 'if_exist|is_unique[users.name]',
+            'name'    => 'if_exist|min_length[6]|max_length[150]|is_unique[users.name]',
             'website' => 'if_exist|min_length[6]|max_length[150]|string'
         ];
 

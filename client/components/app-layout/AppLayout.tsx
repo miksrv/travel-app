@@ -58,7 +58,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }, [application?.showOverlay, sidebarOpen])
 
     return (
-        <div className={cn(styles.component, fullSize && styles.fullSize)}>
+        <div className={cn(styles.appLayout, fullSize && styles.fullSize)}>
             <div
                 role={'button'}
                 tabIndex={0}

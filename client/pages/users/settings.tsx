@@ -57,7 +57,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                     ? formData?.name
                     : undefined,
             website:
-                formData?.website !== authSlice.user?.website
+                formData?.website &&
+                formData.website !== authSlice.user?.website
                     ? formData?.website
                     : undefined
         })

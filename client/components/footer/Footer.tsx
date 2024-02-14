@@ -9,7 +9,7 @@ import styles from './styles.module.sass'
 const Footer: React.FC = () => (
     <footer className={styles.footer}>
         <div>
-            {'Copyright ©'} {formatDate(new Date(), 'YYYY')}
+            {'Copyright ©'} {packageInfo.name} {formatDate(new Date(), 'YYYY')}
         </div>
         <div>
             {'Version'} <span>{packageInfo.version}</span>{' '}

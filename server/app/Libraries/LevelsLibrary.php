@@ -8,18 +8,19 @@ use App\Models\UsersModel;
 use Config\Services;
 use ReflectionException;
 
-define('MODIFIER_PLACE', 15);
+define('MODIFIER_PLACE', 20);
 define('MODIFIER_PHOTO', 10);
 define('MODIFIER_RATING', 1);
 define('MODIFIER_COVER', 2);
 define('MODIFIER_EDIT', 5);
+define('MODIFIER_COMMENT', 15);
 
 class LevelsLibrary {
     private array $userLevels;
 
     public object $statistic;
 
-    private array $types = ['place', 'photo', 'rating', 'edit', 'cover'];
+    private array $types = ['place', 'photo', 'rating', 'edit', 'cover', 'comment'];
 
 
     public function __construct() {
@@ -44,11 +45,12 @@ class LevelsLibrary {
             ->findAll();
 
         $statistic = (object) [
-            'place'  => 0,
-            'photo'  => 0,
-            'rating' => 0,
-            'edit'   => 0,
-            'cover'  => 0,
+            'place'   => 0,
+            'photo'   => 0,
+            'rating'  => 0,
+            'edit'    => 0,
+            'cover'   => 0,
+            'comment' => 0
         ];
 
         if ($activityData) {
@@ -64,6 +66,7 @@ class LevelsLibrary {
         $experience += $statistic->rating * MODIFIER_RATING;
         $experience += $statistic->edit * MODIFIER_EDIT;
         $experience += $statistic->cover * MODIFIER_COVER;
+        $experience += $statistic->comment * MODIFIER_COMMENT;
 
         $this->statistic = $statistic;
 
@@ -122,6 +125,10 @@ class LevelsLibrary {
 
             case 'cover' :
                 $experience = MODIFIER_COVER;
+                break;
+
+            case 'comment' :
+                $experience = MODIFIER_COMMENT;
                 break;
         }
 

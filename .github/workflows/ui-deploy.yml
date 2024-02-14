@@ -61,7 +61,7 @@ jobs:
       - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
         name: Build UI
         run: |
-          export dateNow=$(date +"%d.%m.%Y %H:%M")
+          export dateNow=$(date +"%Y-%m-%dT%H:%M")
           echo "export const update = '$dateNow'" > update.ts
           yarn build
         working-directory: client
@@ -89,7 +89,7 @@ jobs:
       #- name: Send files
       #  run: rsync -avz -e ssh ./client/out/ vps:/var/www/astro.miksoft.pro
 
-      # If we run NextJS on a Node server using PM2
+      # If we run Next.js on a Node server using PM2
       - name: Send files
         run: |
           ssh vps "cd /var/www/geometki.com && rm -r .next"
@@ -101,7 +101,7 @@ jobs:
       # For the first launch of the application on the server:
       # pm2 start "node server.js" --name astro.miksoft.pro
       - name: Restart PM2
-        run: ssh vps "/home/deploy/.nvm/versions/node/v20.11.0/bin/pm2 restart geometki.com"
+        run: ssh vps "pm2 restart geometki.com"
 
       # If for deployment we use not SSH, but an FTP connection
       # - name: Export UI
