@@ -35,7 +35,6 @@
            path: ${{ steps.composer-cache.outputs.dir }}
            key: ${{ runner.os }}-composer-${{ hashFiles('server/composer.lock') }}
            restore-keys: ${{ runner.os }}-composer-
-         working-directory: server
 
        - name: Install dependencies
          run: composer install --no-dev --no-progress --prefer-dist --optimize-autoloader

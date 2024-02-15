@@ -73,7 +73,7 @@ class GoogleClient {
      * STEP 3: Get user info
      * @return object|null
      */
-    public function fetchUserInfo() {
+    public function fetchUserInfo(): ?object {
         $response = $this->client
             ->setHeader('Authorization', 'Bearer ' . $this->token)
             ->post('https://www.googleapis.com/oauth2/v3/userinfo');
