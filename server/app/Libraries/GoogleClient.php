@@ -1,5 +1,8 @@
 <?php namespace App\Libraries;
 
+/**
+ * @link https://console.developers.google.com/
+ */
 class GoogleClient {
     private string $clientId;
 

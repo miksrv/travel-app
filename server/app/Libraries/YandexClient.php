@@ -1,5 +1,8 @@
 <?php namespace App\Libraries;
 
+/**
+ * @link https://oauth.yandex.ru/
+ */
 class YandexClient {
     private string $clientId;
 

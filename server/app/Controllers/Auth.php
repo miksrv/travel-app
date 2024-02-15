@@ -71,7 +71,6 @@ class Auth extends ResourceController {
     /**
      * Google auth
      * @link https://console.developers.google.com/
-     * @link https://www.webslesson.info/2020/03/google-login-integration-in-codeigniter.html
      * @throws ReflectionException
      */
     public function google(): ResponseInterface {
