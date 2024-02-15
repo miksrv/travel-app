@@ -1,6 +1,6 @@
 <?php namespace App\Libraries;
 
-class YandexClient {
+class GoogleClient {
     private string $clientId;
 
     private string $redirectUri;
@@ -34,10 +34,13 @@ class YandexClient {
         $params = [
             'client_id'     => $this->clientId,
             'redirect_uri'  => $this->redirectUri,
-            'response_type' => 'code'
+            'response_type' => 'code',
+            'scope'         => 'https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile',
+            'access_type'   => 'offline',
+            'prompt'        => 'consent'
         ];
 
-        return 'https://oauth.yandex.ru/authorize?' . urldecode(http_build_query($params));
+        return 'https://accounts.google.com/o/oauth2/auth?' . urldecode(http_build_query($params));
     }
 
     /**
@@ -50,8 +53,9 @@ class YandexClient {
             'grant_type'    => 'authorization_code',
             'code'          => $authCode,
             'client_id'     => $this->clientId,
-            'client_secret' => $this->secret
-        ]))->post('https://oauth.yandex.ru/token');
+            'client_secret' => $this->secret,
+            'redirect_uri'  => $this->redirectUri,
+        ]))->post('https://accounts.google.com/o/oauth2/token');
 
         if ($response->getStatusCode() !== 200) {
             return '';
@@ -66,13 +70,10 @@ class YandexClient {
      * STEP 3: Get user info
      * @return object|null
      */
-    public function fetchUserInfo():? object {
+    public function fetchUserInfo() {
         $response = $this->client
-            ->setHeader('Authorization', 'OAuth ' . $this->token)
-            ->request(
-                'POST',
-                'https://login.yandex.ru/info'
-            );
+            ->setHeader('Authorization', 'Bearer ' . $this->token)
+            ->post('https://www.googleapis.com/oauth2/v3/userinfo');
 
         if ($response->getStatusCode() !== 200) {
             return null;

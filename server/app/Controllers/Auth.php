@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Entities\User;
+use App\Libraries\GoogleClient;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use App\Libraries\YandexClient;
@@ -12,8 +13,6 @@ use CodeIgniter\RESTful\ResourceController;
 use CodeIgniter\Validation\Exceptions\ValidationException;
 use Config\Services;
 use Exception;
-use Google_Client;
-use Google_Service_Oauth2;
 use ReflectionException;
 
 define('AUTH_TYPE_NATIVE', 'native');
@@ -76,17 +75,14 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function google(): ResponseInterface {
-        $googleClient = new Google_Client();
-
+        $googleClient = new GoogleClient();
         $googleClient->setClientId(getenv('auth.google.clientID'));
         $googleClient->setClientSecret(getenv('auth.google.secret'));
         $googleClient->setRedirectUri(getenv('auth.google.redirect'));
-        $googleClient->addScope('email');
-        $googleClient->addScope('profile');
 
         $authCode = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        // If there is no authorization code, then the user has not yet logged in to Google.
+        // If there is no authorization code, then the user has not yet logged in to Yandex.
         if (!$authCode) {
             return $this->respond([
                 'auth'     => false,
@@ -94,34 +90,24 @@ class Auth extends ResourceController {
             ]);
         }
 
-        $token = $googleClient->fetchAccessTokenWithAuthCode($authCode);
+        $googleClient->fetchAccessTokenWithAuthCode($authCode);
+        $googleUser = $googleClient->fetchUserInfo();
 
-        if (isset($token['error'])) {
-            log_message('error', '{error}', ['error' => $token['error']]);
-            return $this->failValidationErrors('Google login error');
-        }
-
-        $googleClient->setAccessToken($token['access_token']);
-        $googleService = new Google_Service_Oauth2($googleClient);
-        $googleUser    = $googleService->userinfo->get();
-
-        // If we have not received the user's email, we return an error
-        if (!$googleUser->email) {
-            log_message('error', 'When trying to authorize via Google API, the users email did not arrive');
+        if (!$googleUser || !$googleUser->email) {
             return $this->failValidationErrors('Google login error');
         }
 
         // Successful authorization, look for a user with the same email in the database
         $userModel = new UsersModel();
-        $userData  = $userModel->findUserByEmailAddress($googleUser->getEmail());
+        $userData  = $userModel->findUserByEmailAddress($googleUser->email);
 
         // If there is no user with this email, then register a new user
         if (!$userData) {
             $user = new User();
-            $user->name      = $googleUser->getName();
-            $user->email     = $googleUser->getEmail();
+            $user->name      = $googleUser->name;
+            $user->email     = $googleUser->email;
             $user->auth_type = AUTH_TYPE_GOOGLE;
-            $user->locale    = $googleUser->getLocale() === 'ru' ? 'ru' : 'en';
+            $user->locale    = $googleUser->locale === 'ru' ? 'ru' : 'en';
             $user->level     = 1;
 
             $userModel->insert($user);
@@ -129,15 +115,15 @@ class Auth extends ResourceController {
             $newUserId = $userModel->getInsertID();
 
             // If a Google user has an avatar, copy it
-            if ($googleUser->getPicture()) {
+            if ($googleUser->picture) {
                 $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
-                $avatar = md5($googleUser->getName() . AUTH_TYPE_GOOGLE . $googleUser->getEmail()) . '.jpg';
+                $avatar = md5($googleUser->name . AUTH_TYPE_GOOGLE . $googleUser->email) . '.jpg';
 
                 if (!is_dir($avatarDirectory)) {
                     mkdir($avatarDirectory,0777, TRUE);
                 }
 
-                file_put_contents($avatarDirectory . $avatar, file_get_contents($googleUser->getPicture()));
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($googleUser->picture));
 
                 $file = new File($avatarDirectory . $avatar);
                 $name = pathinfo($file, PATHINFO_FILENAME);
@@ -181,6 +167,7 @@ class Auth extends ResourceController {
         ]);
     }
 
+
     /**
      * @link https://oauth.yandex.ru/
      * @return ResponseInterface
@@ -206,6 +193,10 @@ class Auth extends ResourceController {
         $yandexClient->fetchAccessTokenWithAuthCode($authCode);
         $yandexUser  = $yandexClient->fetchUserInfo();
         $yandexEmail = strtolower($yandexUser->default_email);
+
+        if (!$yandexUser || !$yandexEmail) {
+            return $this->failValidationErrors('Yandex login error');
+        }
 
         // Successful authorization, look for a user with the same email in the database
         $userModel = new UsersModel();
