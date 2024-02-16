@@ -22,7 +22,7 @@ use Geocoder\Exception\Exception;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 20);
+define('MAX_PLACES_PER_ITERATION', 100);
 
 set_time_limit(0);
 
@@ -164,11 +164,15 @@ class Migrate extends ResourceController {
         $inserted = [];
 
         foreach ($migratePlace as $item) {
-            if ($placesContentModel
-                ->where('title', strip_tags(html_entity_decode($item->item_title)))
-                ->join('places', 'places_content.place_id = places.id')
-                ->first()
-            ) {
+//            if ($placesContentModel
+//                ->where('title', strip_tags(html_entity_decode($item->item_title)))
+//                ->join('places', 'places_content.place_id = places.id')
+//                ->first()
+//            ) {
+//                continue;
+//            }
+
+            if ($item->migrate_id !== null) {
                 continue;
             }
 
@@ -215,6 +219,8 @@ class Migrate extends ResourceController {
             $placesModel->insert($place);
 
             $newPlaceId = $placesModel->getInsertID();
+
+            $migratePlaces->update($item->item_id, ['migrate_id' => $newPlaceId]);
 
             // Add new tags
             $tagsArray = explode(',', $item->item_tags);

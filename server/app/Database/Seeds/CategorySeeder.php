@@ -128,7 +128,7 @@ class CategorySeeder extends Seeder {
         ],
         [
             'name'       => 'nature',
-            'title_en'   => 'Природный объектNatural object',
+            'title_en'   => 'Natural object',
             'title_ru'   => 'Природный объект',
             'content_en' => 'Interesting natural objects - dells, valleys, gorges.',
             'content_ru' => 'Интересные природные объекты - лощины, долины, ущелья.'

@@ -52,6 +52,8 @@ class AddPlacesContent extends Migration {
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addKey('title', false, false, 'place_title');
+        $this->forge->addKey('content', false, false, 'place_content');
         $this->forge->createTable('places_content');
     }
 

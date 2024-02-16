@@ -104,9 +104,16 @@ class Users extends ResourceController {
                 $placesIds[] = $place->id;
             }
 
-            $ratingDataPlus  = $ratingModel->selectCount('value')->where('value >', 2)->whereIn('place_id', $placesIds)->first();
-            $ratingDataMinus = $ratingModel->selectCount('value')->where('value <=', 2)->whereIn('place_id', $placesIds)->first();
-            $ratingValue     = $ratingDataPlus->value - $ratingDataMinus->value;
+            $ratingData  = $ratingModel->select('value')->whereIn('place_id', $placesIds)->findAll();
+            $ratingValue = 0;
+
+            if ($ratingData) {
+                helper('rating');
+
+                foreach ($ratingData as $ratingItem) {
+                    $ratingValue = $ratingValue + transformRating($ratingItem->value);
+                }
+            }
 
             if ($ratingValue !== $usersData->reputation) {
                 $usersModel->update($usersData->id, ['reputation' => $ratingValue]);

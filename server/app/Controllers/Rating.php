@@ -83,6 +83,8 @@ class Rating extends ResourceController {
                 return $this->failNotFound();
             }
 
+            helper('rating');
+
             // Рассчитаем новую оценку для места
             if ($ratingData) {
                 foreach ($ratingData as $item) {
@@ -100,7 +102,7 @@ class Rating extends ResourceController {
             }
 
             // Теперь изменим репутацию автора материала
-            $userRating = $usersData->reputation + ($inputRating > 2 ? 1 : -1);
+            $userRating = $usersData->reputation + transformRating($inputRating);
 
             // Создаем новую модель рейтинга для сохранения
             $rating = new \App\Entities\Rating();

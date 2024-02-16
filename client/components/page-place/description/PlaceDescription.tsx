@@ -82,6 +82,10 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
         setLocalTags(tags)
     }, [content, tags])
 
+    useEffect(() => {
+        setEditorMode(false)
+    }, [placeId])
+
     return (
         <Container
             className={styles.component}
