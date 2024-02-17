@@ -66,7 +66,8 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                             {addDecimalPoint(ratingValue ?? place?.rating)}
                         </div>
                         <div className={styles.count}>
-                            {t('ratingCount', { count: ratingCount })}
+                            {ratingCount &&
+                                t('ratingCount', { count: ratingCount })}
                         </div>
                     </RatingColored>
                 )}
