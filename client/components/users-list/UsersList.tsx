@@ -11,7 +11,7 @@ import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 import styles from '@/components/users-list/styles.module.sass'
 
-import { formatDate } from '@/functions/helpers'
+import { formatDate, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
 interface UsersListProps {
@@ -35,10 +35,7 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                         showName={true}
                         user={user}
                         size={'medium'}
-                        caption={formatDate(
-                            user?.created?.date,
-                            t('registerDateFormat')
-                        )}
+                        caption={timeAgo(user?.created?.date, true)}
                     />
                     <div className={styles.reputation}>
                         <p>{`${t('reputation')}: `}</p>

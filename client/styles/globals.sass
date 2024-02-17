@@ -95,6 +95,12 @@ a
   justify-content: space-between
   align-items: center
 
+  @media only screen and (max-width: $mobileMaxWidth)
+    justify-content: center
+
+    & > div:first-of-type
+      display: none
+
 .photos
   position: absolute
   bottom: 0

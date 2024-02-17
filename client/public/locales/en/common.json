@@ -72,11 +72,11 @@
                 "ratingCount_other": "{{count}} votes"
             },
             "placeInformation": {
-                "userRating": "User Rating:",
-                "author": "Author of the material:",
-                "coordinates": "Location coordinates:",
-                "createdTime": "Place added:",
-                "editTime": "Last edited:",
+                "userRating": "Your rating:",
+                "author": "Author:",
+                "coordinates": "Coordinates:",
+                "createdTime": "Added:",
+                "editTime": "Edited:",
                 "address": "Address:",
                 "addressLinkTitle": "Points of Interest::",
                 "linkYandexMapTitle": "on Yandex maps",
@@ -106,14 +106,14 @@
                 "website": "Personal page:",
                 "notDefined": "Not specified",
                 "statisticActivity": "Activity statistics",
-                "placesAdded": "Places added:",
-                "photosUploaded": "Photos Uploaded:",
+                "placesAdded": "Places:",
+                "photosUploaded": "Photos:",
                 "ratingsAdded": "Ratings:",
                 "editions": "Edits:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
                 "buttonEdit": "Edit",
-                "dateFormat": "MMM D, YYYY, h:mm A"
+                "dateFormat": "MMM D, YYYY"
             },
             "photos": {
                 "title": "Photos",
@@ -192,8 +192,7 @@
             "linkTitle": "User Profile"
         },
         "userList": {
-            "reputation": "Reputation",
-            "registerDateFormat": "MMMM D, YYYY"
+            "reputation": "Reputation"
         },
         "notification": {
             "level": "New level!",

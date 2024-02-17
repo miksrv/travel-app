@@ -75,8 +75,10 @@ export const formatDate = (
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs.utc(date).local().format(format) : '')
 
-export const timeAgo = (date?: string | Date): string =>
-    date ? dayjs.utc(date).fromNow() : ''
+export const timeAgo = (
+    date?: string | Date,
+    withoutSuffix?: boolean
+): string => (date ? dayjs.utc(date).fromNow(withoutSuffix) : '')
 
 export const formatDateUTC = (date?: string | Date): string =>
     date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
@@ -99,7 +101,11 @@ export const ratingColor = (
         ? 'green'
         : 'gray'
 
-export const addDecimalPoint = (input: number | string): string => {
+export const addDecimalPoint = (input: number | string | undefined): string => {
+    if (!input) {
+        return ''
+    }
+
     const inputValue: string =
         typeof input === 'number' ? input.toString() : input
 

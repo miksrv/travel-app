@@ -73,10 +73,10 @@
                 "ratingCount_many": "{{count}} голосов"
             },
             "placeInformation": {
-                "userRating": "Оценка пользователей:",
-                "author": "Автор материала:",
-                "coordinates": "Координаты места:",
-                "createdTime": "Место добавлено:",
+                "userRating": "Ваша оценка:",
+                "author": "Автор:",
+                "coordinates": "Координаты:",
+                "createdTime": "Добавлено:",
                 "editTime": "Отредактировано:",
                 "address": "Адрес:",
                 "addressLinkTitle": "Интересные места:",
@@ -107,14 +107,14 @@
                 "website": "Личная страница:",
                 "notDefined": "Не указана",
                 "statisticActivity": "Статистика активности",
-                "placesAdded": "Добавлено мест:",
-                "photosUploaded": "Загружено фотографий:",
-                "ratingsAdded": "Поставлено оценок:",
+                "placesAdded": "Геометок:",
+                "photosUploaded": "Фотографий:",
+                "ratingsAdded": "Оценок:",
                 "editions": "Редактирований:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
                 "buttonEdit": "Редактировать",
-                "dateFormat": "D MMMM YYYY, HH:mm"
+                "dateFormat": "D MMMM YYYY"
             },
             "photos": {
                 "title": "Фотографии",
@@ -193,8 +193,7 @@
             "linkTitle": "Профиль пользователя"
         },
         "userList": {
-            "reputation": "Репутация",
-            "registerDateFormat": "D MMMM YYYY"
+            "reputation": "Репутация"
         },
         "notification": {
             "level": "Новый уровень!",

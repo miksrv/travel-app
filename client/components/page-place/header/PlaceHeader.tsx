@@ -57,13 +57,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     return (
         <section className={styles.component}>
             <div className={styles.topPanel}>
-                {!!ratingCount && ratingValue && (
+                {(place?.rating || (!!ratingCount && ratingValue)) && (
                     <RatingColored
                         className={styles.rating}
                         value={ratingValue}
                     >
                         <div className={styles.value}>
-                            {addDecimalPoint(ratingValue)}
+                            {addDecimalPoint(ratingValue ?? place?.rating)}
                         </div>
                         <div className={styles.count}>
                             {t('ratingCount', { count: ratingCount })}
