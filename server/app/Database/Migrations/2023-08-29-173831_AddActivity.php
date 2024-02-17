@@ -49,7 +49,7 @@ class AddActivity extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'RESTRICT');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('photo_id', 'photos', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');

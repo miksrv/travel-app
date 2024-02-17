@@ -21,11 +21,6 @@ class AddSessions extends Migration {
                 'constraint' => 300,
                 'null'       => false,
             ],
-            'user_agent' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 300,
-                'null'       => false,
-            ],
             'lat' => [
                 'type' => 'DECIMAL(16,12)',
                 'null' => true,

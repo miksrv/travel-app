@@ -16,6 +16,7 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
+import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
 
@@ -23,8 +24,6 @@ import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 
 import styles from './styles.module.sass'
-
-export const RETURN_PATH_KEY = 'returnPath'
 
 interface LoginFormProps {
     onSuccessLogin?: () => void
@@ -38,7 +37,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
     const dispatch = useAppDispatch()
     const router = useRouter()
 
-    const [, setReturnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
+    const [, setReturnPath] = useLocalStorage<string>(LOCAL_STORGE.RETURN_PATH)
 
     const [localeError, setLocaleError] = useState<string>('')
     const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()

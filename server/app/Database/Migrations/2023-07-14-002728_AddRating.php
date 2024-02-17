@@ -42,7 +42,7 @@ class AddRating extends Migration {
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('session_id', 'sessions', 'id', 'CASCADE', 'RESTRICT');
         $this->forge->createTable('rating');
     }
 

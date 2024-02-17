@@ -15,7 +15,6 @@ class SessionsModel extends Model {
         'id',
         'user_id',
         'user_ip',
-        'user_agent',
         'lat',
         'lon',
         'updated_at',

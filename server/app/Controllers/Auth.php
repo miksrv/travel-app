@@ -20,8 +20,12 @@ define('AUTH_TYPE_GOOGLE', 'google');
 define('AUTH_TYPE_YANDEX', 'yandex');
 
 class Auth extends ResourceController {
+    private SessionLibrary $session;
+
     public function __construct() {
         new LocaleLibrary();
+
+        $this->session = new SessionLibrary();
     }
 
     /**
@@ -30,6 +34,10 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function registration(): ResponseInterface {
+        if ($this->session->isAuth) {
+            return $this->failForbidden('Already authorized');
+        }
+
         $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
@@ -58,14 +66,9 @@ class Auth extends ResourceController {
 
         unset($user->password);
 
-        $session = new SessionLibrary();
-        $session->authorization($user);
+        $this->session->authorization($user);
 
-        return $this->respond([
-            'auth'  => $session->isAuth,
-            'user'  => $session->user,
-            'token' => generateAuthToken($session->user->email),
-        ]);
+        return $this->responseAuth();
     }
 
     /**
@@ -74,6 +77,10 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function google(): ResponseInterface {
+        if ($this->session->isAuth) {
+            return $this->failForbidden('Already authorized');
+        }
+
         $googleClient = new GoogleClient();
         $googleClient->setClientId(getenv('auth.google.clientID'));
         $googleClient->setClientSecret(getenv('auth.google.secret'));
@@ -156,14 +163,9 @@ class Auth extends ResourceController {
             $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_GOOGLE]);
         }
 
-        $session = new SessionLibrary();
-        $session->authorization($userData);
+        $this->session->authorization($userData);
 
-        return $this->respond([
-            'auth'  => $session->isAuth,
-            'user'  => $session->user,
-            'token' => generateAuthToken($session->user->email),
-        ]);
+        return $this->responseAuth();
     }
 
 
@@ -173,6 +175,10 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function yandex(): ResponseInterface {
+        if ($this->session->isAuth) {
+            return $this->failForbidden('Already authorized');
+        }
+
         $yandexClient = new YandexClient();
 
         $yandexClient->setClientId(getenv('auth.yandex.clientID'));
@@ -258,14 +264,9 @@ class Auth extends ResourceController {
             $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_YANDEX]);
         }
 
-        $session = new SessionLibrary();
-        $session->authorization($userData);
+        $this->session->authorization($userData);
 
-        return $this->respond([
-            'auth'  => $session->isAuth,
-            'user'  => $session->user,
-            'token' => generateAuthToken($session->user->email),
-        ]);
+        return $this->responseAuth();
     }
 
     /**
@@ -274,6 +275,10 @@ class Auth extends ResourceController {
      * @throws ReflectionException
      */
     public function login(): ResponseInterface {
+        if ($this->session->isAuth) {
+            return $this->failForbidden('Already authorized');
+        }
+
         $rules = [
             'email'    => 'required|min_length[6]|max_length[50]|valid_email',
             'password' => 'required|min_length[8]|max_length[255]|validateUser[email, password]'
@@ -291,30 +296,28 @@ class Auth extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
-        $session   = new SessionLibrary();
         $userModel = new UsersModel();
         $userData  = $userModel->findUserByEmailAddress($input['email']);
-        $session->authorization($userData);
 
-        return $this->respond([
-            'auth'  => $session->isAuth,
-            'user'  => $session->user,
-            'token' => generateAuthToken($session->user->email),
-        ]);
+        $this->session->authorization($userData);
+
+        return $this->responseAuth();
     }
 
     /**
      * @throws Exception
      */
     public function me(): ResponseInterface {
-        $session = new SessionLibrary();
-        $session->update();
+        $this->session->update();
 
-        $response = (object) ['auth' => $session->isAuth];
+        $response = (object) [
+            'session' => $this->session->id,
+            'auth'    => $this->session->isAuth
+        ];
 
-        if ($session->isAuth && $session->user) {
-            $response->user  = $session->user;
-            $response->token = generateAuthToken($session->user->email);
+        if ($this->session->isAuth && $this->session->user) {
+            $response->user  = $this->session->user;
+            $response->token = generateAuthToken($this->session->user->email);
         }
 
         return $this->respond($response);
@@ -363,5 +366,17 @@ class Auth extends ResourceController {
         }
 
         return $input;
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    protected function responseAuth(): ResponseInterface {
+        return $this->respond([
+            'session' => $this->session->id,
+            'auth'    => $this->session->isAuth,
+            'user'    => $this->session->user,
+            'token'   => generateAuthToken($this->session->user->email),
+        ]);
     }
 }

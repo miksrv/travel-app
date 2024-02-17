@@ -3,11 +3,18 @@
 import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
-import { login, logout } from '@/api/authSlice'
+import { login, logout, saveSession } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
+
+import { LOCAL_STORGE } from '@/functions/constants'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 const AppAuthChecker: React.FC = () => {
     const dispatch = useAppDispatch()
+
+    const [session, setSession] = useLocalStorage<string>(
+        LOCAL_STORGE.AUTH_SESSION
+    )
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -21,6 +28,11 @@ const AppAuthChecker: React.FC = () => {
 
     useEffect(() => {
         if (isSuccess) {
+            if (meData?.session && session !== meData.session) {
+                setSession(meData.session)
+                dispatch(saveSession(meData.session))
+            }
+
             if (meData?.auth === true) {
                 dispatch(login(meData))
             } else if (meData?.auth === false) {

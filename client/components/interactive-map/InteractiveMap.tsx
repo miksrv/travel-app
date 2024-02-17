@@ -19,6 +19,7 @@ import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
 import SearchControl from '@/components/interactive-map/SearchControl'
 
+import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
@@ -50,7 +51,6 @@ type MapProps = {
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
 
-const DEFAULT_MAP_STORAGE_KEY = 'mapCoordinates'
 const DEFAULT_MAP_ZOOM = 15
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 const DEFAULT_MAP_LAYER: MapLayersType = 'MabBox'
@@ -75,7 +75,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     const mapRef = useRef<Map | any>()
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
-        storeMapKey || DEFAULT_MAP_STORAGE_KEY
+        storeMapKey || LOCAL_STORGE.MAP_CENTER
     )
 
     const handleUserPosition = () => {

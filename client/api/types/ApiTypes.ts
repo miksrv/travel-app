@@ -86,6 +86,7 @@ export interface RequestAuthService {
 }
 
 export interface ResponseAuthLogin {
+    session?: string
     redirect?: string
     token?: string
     auth?: boolean

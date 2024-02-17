@@ -22,7 +22,7 @@ use Geocoder\Exception\Exception;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
-define('MAX_PLACES_PER_ITERATION', 100);
+define('MAX_PLACES_PER_ITERATION', 50);
 
 set_time_limit(0);
 
@@ -187,7 +187,7 @@ class Migrate extends ResourceController {
             }
 
             // unserialize photos
-            $photos = json_decode($item->item_photos);
+            $photos = $item->item_photos ? json_decode($item->item_photos) : [];
 
             // Add or update user
             $placeAuthor = $this->_migrate_user($item->item_author);

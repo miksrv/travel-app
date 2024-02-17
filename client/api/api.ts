@@ -31,10 +31,15 @@ export const API = createApi({
         prepareHeaders: (headers, { getState }) => {
             // By default, if we have a token in the store, let's use that for authenticated requests
             const token = (getState() as RootState).auth.token
+            const session = (getState() as RootState).auth.session
             const locale = (getState() as RootState).application.locale
 
             if (token) {
                 headers.set('Authorization', token)
+            }
+
+            if (session) {
+                headers.set('Session', session)
             }
 
             if (locale) {

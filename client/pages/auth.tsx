@@ -14,8 +14,7 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import { RETURN_PATH_KEY } from '@/components/login-form/LoginForm'
-
+import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 interface LoginPageProps {}
@@ -24,7 +23,7 @@ const LoginYandexPage: NextPage<LoginPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [returnPath] = useLocalStorage<string>(RETURN_PATH_KEY)
+    const [returnPath] = useLocalStorage<string>(LOCAL_STORGE.RETURN_PATH)
 
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.auth'
@@ -47,7 +46,7 @@ const LoginYandexPage: NextPage<LoginPageProps> = () => {
             if (returnPath) {
                 const returnLink = returnPath
 
-                localStorage.removeItem(RETURN_PATH_KEY)
+                localStorage.removeItem(LOCAL_STORGE.RETURN_PATH)
 
                 router.push(returnLink)
             } else {

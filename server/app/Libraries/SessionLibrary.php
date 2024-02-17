@@ -18,7 +18,6 @@ class SessionLibrary {
     private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $request;
     private SessionsModel $model;
     private string $ip;
-    private string $ua;
 
     public function __construct() {
         helper('auth');
@@ -26,24 +25,30 @@ class SessionLibrary {
         $this->model   = new SessionsModel();
         $this->request = Services::request();
 
-        $header = $this->request->getServer('HTTP_AUTHORIZATION') ?? null;
+        $token   = $this->request->getServer('HTTP_AUTHORIZATION') ?? null;
+        $session = $this->request->getHeaderLine('Session') ?? null;
 
         $this->ip   = $this->request->getIPAddress();
-        $this->ua   = $this->request->getUserAgent()->getAgentString();
-        $this->user = validateAuthToken($header);
+        $this->user = validateAuthToken($token);
 
         if (
-            $this->ua === 'node' &&
+            $this->request->getUserAgent()->getAgentString() === 'node' &&
             $this->ip === $this->request->getServer('REMOTE_ADDR')
         ) {
-            return $this;
+            return ;
         }
 
         if ($this->user) {
             $this->isAuth = true;
             $this->model->where('user_id', $this->user->id);
         } else {
-            $this->model->where(['user_ip' => $this->ip, 'user_agent' => $this->ua]);
+            if ($session) {
+                $this->model
+                    ->where('id', str_replace('"', '', $session))
+                    ->orWhere('user_ip', $this->ip);
+            } else {
+                $this->model->where('user_ip', $this->ip);
+            }
         }
 
         $sessionData = $this->model->orderBy('updated_at', 'DESC')->first();
@@ -52,11 +57,7 @@ class SessionLibrary {
             $this->id  = $sessionData->id;
             $this->lat = $sessionData->lat ?? null;
             $this->lon = $sessionData->lon ?? null;
-
-            return $this;
         }
-
-        return $this;
     }
 
     /**
@@ -82,11 +83,10 @@ class SessionLibrary {
         if ($this->id) {
             $updateSession = new \App\Entities\Session();
             $updateSession->updated_at = time();
+            $updateSession->user_ip    = $this->ip;
 
             if ($this->user && $this->user->id) {
-                $updateSession->user_id    = $this->user->id;
-                $updateSession->user_ip    = $this->ip;
-                $updateSession->user_agent = $this->ua;
+                $updateSession->user_id = $this->user->id;
             }
 
             $this->model->update($this->id, $updateSession);
@@ -95,10 +95,9 @@ class SessionLibrary {
         }
 
         $session = new \App\Entities\Session();
-        $session->id         = uniqid('s', true);
-        $session->user_ip    = $this->ip;
-        $session->user_agent = $this->ua;
-        $session->user_id    = $this->user ? $this->user->id : null;
+        $session->id      = uniqid('s', true);
+        $session->user_ip = $this->ip;
+        $session->user_id = $this->user ? $this->user->id : null;
 
         $this->model->insert($session);
 
