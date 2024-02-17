@@ -224,7 +224,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     enableLayersSwitcher={true}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
-                    center={placeId ? [values?.lat!, values?.lon!] : undefined}
+                    center={
+                        placeId && formData
+                            ? [formData?.lat!, formData?.lon!]
+                            : undefined
+                    }
                     userLatLon={location}
                     onChangeBounds={handleMapBounds}
                 />

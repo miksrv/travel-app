@@ -35,7 +35,7 @@ class Geocoder {
         $this->requestApi = Services::request();
         $this->provider   = $this->requestApi->getLocale() === 'ru'
             ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
-            : Nominatim::withOpenStreetMapServer($this->httpClient, $this->requestApi->getUserAgent());
+            : Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
     }
 
     /**

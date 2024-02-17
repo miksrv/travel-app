@@ -38,9 +38,9 @@ class Migrate extends ResourceController {
         $migrateUsers = new MigrateUsersModel();
         $allUsersData = $migrateUsers->findAll();
 
-        foreach ($allUsersData as $comment) {
+        foreach ($allUsersData as $user) {
             $counter++;
-            $this->_migrate_user($comment->item_author);
+            $this->_migrate_user($user->user_id);
         }
 
         echo 'Migration Finished: ' . $counter;
@@ -63,7 +63,7 @@ class Migrate extends ResourceController {
 
         $allCommentsData = $migrateComments
             ->where('item_type', 'places')
-            ->orderBy('item_answer', 'ASC')
+            ->orderBy('item_answer', 'DESC')
             ->findAll();
 
         foreach ($allCommentsData as $comment) {
@@ -86,7 +86,7 @@ class Migrate extends ResourceController {
                 continue;
             }
 
-            if ((int) $comment->item_answer !== 0) {
+            if ($comment->item_answer !== 0) {
                 $answerMigrate = $migrateComments->select('item_comment')->find($comment->item_answer);
                 $findAnswer    = $commentsModel->where('content', strip_tags(html_entity_decode($answerMigrate->item_comment)));
 

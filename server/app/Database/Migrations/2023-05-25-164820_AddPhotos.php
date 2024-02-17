@@ -22,11 +22,11 @@ class AddPhotos extends Migration {
                 'null'       => true,
             ],
             'lat' => [
-                'type' => 'DECIMAL(16,12)',
+                'type' => 'DECIMAL(10,6)',
                 'null' => false,
             ],
             'lon' => [
-                'type' => 'DECIMAL(16,12)',
+                'type' => 'DECIMAL(10,6)',
                 'null' => false,
             ],
             'title_en' => [

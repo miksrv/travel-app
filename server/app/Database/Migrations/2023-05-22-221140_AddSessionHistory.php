@@ -17,11 +17,11 @@ class AddSessionHistory extends Migration {
                 'null'       => false,
             ],
             'lat' => [
-                'type' => 'DECIMAL(16,12)',
+                'type' => 'DECIMAL(10,6)',
                 'null' => false,
             ],
             'lon' => [
-                'type' => 'DECIMAL(16,12)',
+                'type' => 'DECIMAL(10,6)',
                 'null' => false,
             ],
             'created_at DATETIME default current_timestamp',

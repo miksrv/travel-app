@@ -533,6 +533,11 @@ class Places extends ResourceController {
             $place->locality_id = $geocoder->localityId;
         }
 
+        // Change category
+        if ($input?->category) {
+            $place->category = $input->category;
+        }
+
         $placesModel->update($id, $place);
 
         return $this->respond((object) [
