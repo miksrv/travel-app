@@ -14,6 +14,7 @@ import { Place } from '@/api/types/Place'
 
 import UserAvatar from '@/components/user-avatar'
 
+import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
 
 import googleLogo from '@/public/images/google-logo.png'
@@ -120,6 +121,28 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                     </div>
                 </li>
                 <li>
+                    <Icon name={'Terrain'} />
+                    <div className={styles.key}>{t('category')}</div>
+                    <div className={styles.value}>
+                        <Image
+                            className={styles.categoryImage}
+                            src={categoryImage(place?.category?.name)?.src}
+                            alt={''}
+                            width={15}
+                            height={18}
+                            style={{ marginRight: '4px' }}
+                        />
+                        <Link
+                            href={`/places?category=${place?.category?.name}`}
+                            title={`${place?.category?.title} - ${t(
+                                'allCategoryPlaces'
+                            )}`}
+                        >
+                            {place?.category?.title}
+                        </Link>
+                    </div>
+                </li>
+                <li>
                     <Icon name={'Point'} />
                     <div className={styles.key}>{t('coordinates')}</div>
                     <div className={styles.value}>
@@ -177,7 +200,10 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                 <li>
                     <Icon name={'Address'} />
                     <div className={styles.key}>{t('address')}</div>
-                    <div className={styles.value}>
+                    <div
+                        className={styles.value}
+                        style={{ display: 'block' }}
+                    >
                         {placeAddress?.map((address, i) => (
                             <span key={`address${address.type}`}>
                                 <Link

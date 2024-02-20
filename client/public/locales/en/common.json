@@ -74,6 +74,8 @@
             "placeInformation": {
                 "userRating": "Your rating:",
                 "author": "Author:",
+                "category": "Category:",
+                "allCategoryPlaces": "Все интересные места категории",
                 "coordinates": "Coordinates:",
                 "createdTime": "Added:",
                 "editTime": "Edited:",
