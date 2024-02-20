@@ -240,7 +240,7 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         }),
         photoRotateItem: builder.mutation<
-            ApiTypes.ResponsePhotoDeleteItem,
+            ApiTypes.ResponsePhotoRotateItem,
             string
         >({
             query: (photoId) => ({

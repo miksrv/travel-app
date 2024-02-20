@@ -150,18 +150,16 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
      * After rotate photo - add time hash for rotated photo
      */
     React.useEffect(() => {
-        const hash = Math.floor(Date.now() / 1000).toString()
-
         setLocalPhotos(
             localPhotos?.map((photo) => ({
                 ...photo,
                 full:
                     photo.id === rotateData?.id
-                        ? `${photo.full}?d=${hash}`
+                        ? rotateData?.full!
                         : photo.full,
                 preview:
                     photo.id === rotateData?.id
-                        ? `${photo.preview}?d=${hash}`
+                        ? rotateData?.preview!
                         : photo.preview
             }))
         )

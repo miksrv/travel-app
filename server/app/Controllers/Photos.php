@@ -284,6 +284,7 @@ class Photos extends ResourceController {
     /**
      * @param $id
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function rotate($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
@@ -298,18 +299,29 @@ class Photos extends ResourceController {
         }
 
         $photoDir = UPLOAD_PHOTOS . $photoData->place_id . '/';
-        $file = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
-
-        $image = Services::image('gd'); // imagick
+        $file  = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
+        $image = Services::image('gd');
+        $name  = pathinfo($file->getRandomName(), PATHINFO_FILENAME);
         $image->withFile($file->getRealPath())
             ->rotate(90)
-            ->save($photoDir . $photoData->filename . '.' . $photoData->extension);
+            ->save($photoDir . $name . '.' . $photoData->extension);
 
-        $image->withFile($file->getRealPath())
+        $image->withFile($photoDir . $name . '.' . $photoData->extension)
             ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT)
-            ->save($photoDir . $photoData->filename . '_preview.' . $photoData->extension);
+            ->save($photoDir . $name . '_preview.' . $photoData->extension);
 
-        return $this->respondDeleted(['id' => $id]);
+        unlink($photoDir . $photoData->filename . '.' . $photoData->extension);
+        unlink($photoDir . $photoData->filename . '_preview.' . $photoData->extension);
+
+        $photosModel->update($id, ['filename' => $name]);
+
+        $photoPath = PATH_PHOTOS . $photoData->place_id . '/' . $name;
+
+        return $this->respondDeleted([
+            'id'      => $id,
+            'full'    => $photoPath . '.' . $photoData->extension,
+            'preview' => $photoPath . '_preview.' . $photoData->extension,
+        ]);
     }
 
     /**

@@ -179,6 +179,12 @@ export interface ResponsePhotoDeleteItem {
     id?: string
 }
 
+export interface ResponsePhotoRotateItem {
+    id?: string
+    full?: string
+    preview?: string
+}
+
 export interface ResponsePhotosGetList {
     items?: Photo[]
     count?: number
