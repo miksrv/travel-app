@@ -534,7 +534,7 @@ class Places extends ResourceController {
         }
 
         // Change category
-        if ($input?->category) {
+        if (isset($input->category)) {
             $place->category = $input->category;
         }
 
