@@ -19,12 +19,12 @@
     .link
       display: block
       width: 100%
+      font-size: 0
 
     img
       object-fit: cover
       width: 100%
       height: 100%
-      margin-bottom: -4px
       border-radius: $borderRadius
       background-image: url('/images/no-image.svg')
       background-position: center
@@ -50,22 +50,25 @@
         width: 32px
         height: 32px
 
-    .removeButton
-      border: none
+    .actions
       z-index: 1
       position: absolute
-      cursor: pointer
-      padding: 4px 4px 2px 4px
-      border-radius: $borderRadius
-      top: 6px
-      right: 10px
-      background-color: rgba(0, 0, 0, .6)
-      opacity: .4
+      top: 5px
+      right: 5px
 
-      svg
-        width: 16px
-        height: 16px
-        fill: #FFFFFF
+      button
+        border: none
+        cursor: pointer
+        padding: 4px 4px 0 4px
+        border-radius: $borderRadius
+        background-color: rgba(0, 0, 0, .6)
+        opacity: .4
+        margin-left: 5px
 
-      &:hover
-        opacity: 1
+        svg
+          width: 16px
+          height: 16px
+          fill: #FFFFFF
+
+        &:hover
+          opacity: 1

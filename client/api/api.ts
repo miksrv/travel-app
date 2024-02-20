@@ -239,6 +239,15 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
+        photoRotateItem: builder.mutation<
+            ApiTypes.ResponsePhotoDeleteItem,
+            string
+        >({
+            query: (photoId) => ({
+                method: 'PATCH',
+                url: `photos/rotate/${photoId}`
+            })
+        }),
         photosGetActions: builder.query<
             ApiTypes.ResponsePhotosGetActions,
             Maybe<ApiTypes.RequestPhotosGetActions>

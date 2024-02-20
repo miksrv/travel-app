@@ -38,3 +38,4 @@ export type IconTypes =
     | 'Notifications'
     | 'Gps'
     | 'RandomLocation'
+    | 'Rotate'

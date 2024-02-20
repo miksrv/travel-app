@@ -41,6 +41,9 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
         API.usePhotoDeleteItemMutation()
 
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
+        API.usePhotoRotateItemMutation()
+
     const [
         uploadPhoto,
         { data: uploadData, isLoading: uploadLoading, isError: uploadError }
@@ -54,6 +57,12 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const handlePhotoRemoveClick = (photoId: string) => {
         if (isAuth && !deleteLoading) {
             deletePhoto(photoId)
+        }
+    }
+
+    const handlePhotoRotateClick = (photoId: string) => {
+        if (isAuth && !rotateLoading) {
+            rotatePhoto(photoId)
         }
     }
 
@@ -133,6 +142,27 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
     }, [deleteData])
 
+    /**
+     * After rotate photo - add time hash for rotated photo
+     */
+    React.useEffect(() => {
+        const hash = Math.floor(Date.now() / 1000).toString()
+
+        setLocalPhotos(
+            localPhotos?.map((photo) => ({
+                ...photo,
+                full:
+                    photo.id === rotateData?.id
+                        ? `${photo.full}?d=${hash}`
+                        : photo.full,
+                preview:
+                    photo.id === rotateData?.id
+                        ? `${photo.preview}?d=${hash}`
+                        : photo.preview
+            }))
+        )
+    }, [rotateData])
+
     React.useEffect(() => {
         setSelectedFiles([])
         setLocalPhotos(photos || [])
@@ -158,6 +188,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 uploadingPhotos={uploadingPhotos}
                 onPhotoClick={handlePhotoClick}
                 onPhotoRemoveClick={handlePhotoRemoveClick}
+                onPhotoRotateClick={handlePhotoRotateClick}
             />
 
             <PhotoLightbox

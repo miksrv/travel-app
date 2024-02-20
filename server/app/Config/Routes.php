@@ -35,11 +35,13 @@ $routes->get('photos', 'Photos::list');
 $routes->get('photos/actions', 'Photos::actions');
 $routes->post('photos', 'Photos::create');
 $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
+$routes->patch('photos/rotate/(:alphanum)', 'Photos::rotate/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
 $routes->options('photos/actions', 'Photos');
 $routes->options('photos/(:alphanum)', 'Photos');
 $routes->options('photos/upload/(:alphanum)', 'Photos');
+$routes->options('photos/rotate/(:alphanum)', 'Photos');
 
 $routes->get('notifications/updates', 'Notifications::updates');
 $routes->get('notifications/list', 'Notifications::list');

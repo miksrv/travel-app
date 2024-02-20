@@ -18,6 +18,7 @@ interface PhotoGalleryProps {
     uploadingPhotos?: string[]
     onPhotoClick?: (index: number) => void
     onPhotoRemoveClick?: (photoId: string) => void
+    onPhotoRotateClick?: (photoId: string) => void
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
@@ -25,7 +26,8 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     uploadingPhotos,
     actions,
     onPhotoClick,
-    onPhotoRemoveClick
+    onPhotoRemoveClick,
+    onPhotoRotateClick
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
@@ -79,14 +81,24 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             height={150}
                         />
                     </Link>
-                    {actions?.find(({ id }) => id === photo.id)?.remove && (
-                        <button
-                            className={styles.removeButton}
-                            onClick={() => onPhotoRemoveClick?.(photo.id)}
-                        >
-                            <Icon name={'Close'} />
-                        </button>
-                    )}
+
+                    <div className={styles.actions}>
+                        {actions?.find(({ id }) => id === photo.id)?.rotate && (
+                            <button
+                                onClick={() => onPhotoRotateClick?.(photo.id)}
+                            >
+                                <Icon name={'Rotate'} />
+                            </button>
+                        )}
+
+                        {actions?.find(({ id }) => id === photo.id)?.remove && (
+                            <button
+                                onClick={() => onPhotoRemoveClick?.(photo.id)}
+                            >
+                                <Icon name={'Close'} />
+                            </button>
+                        )}
+                    </div>
                 </li>
             ))}
         </ul>

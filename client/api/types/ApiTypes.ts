@@ -73,6 +73,7 @@ export interface ApiResponseError<T> {
 export type ItemActionType = {
     id?: string
     remove?: boolean
+    rotate?: boolean
 }
 
 export interface RequestAuthLogin {
