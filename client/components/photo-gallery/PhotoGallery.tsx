@@ -15,6 +15,7 @@ import styles from './styles.module.sass'
 interface PhotoGalleryProps {
     photos?: Photo[]
     actions?: ApiTypes.ItemActionType[]
+    photoLoading?: string
     uploadingPhotos?: string[]
     onPhotoClick?: (index: number) => void
     onPhotoRemoveClick?: (photoId: string) => void
@@ -24,6 +25,7 @@ interface PhotoGalleryProps {
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
     uploadingPhotos,
+    photoLoading,
     actions,
     onPhotoClick,
     onPhotoRemoveClick,
@@ -61,6 +63,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     key={photo.id}
                     className={styles.photoItem}
                 >
+                    {photo.id === photoLoading && (
+                        <div className={styles.loader}>
+                            <Spinner />
+                        </div>
+                    )}
+
                     <Link
                         className={styles.link}
                         href={`${IMG_HOST}${photo.full}`}
@@ -86,6 +94,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         {actions?.find(({ id }) => id === photo.id)?.rotate && (
                             <button
                                 onClick={() => onPhotoRotateClick?.(photo.id)}
+                                disabled={!!photoLoading}
                             >
                                 <Icon name={'Rotate'} />
                             </button>
@@ -94,6 +103,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         {actions?.find(({ id }) => id === photo.id)?.remove && (
                             <button
                                 onClick={() => onPhotoRemoveClick?.(photo.id)}
+                                disabled={!!photoLoading}
                             >
                                 <Icon name={'Close'} />
                             </button>

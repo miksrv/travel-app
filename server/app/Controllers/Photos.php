@@ -284,7 +284,6 @@ class Photos extends ResourceController {
     /**
      * @param $id
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function rotate($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
