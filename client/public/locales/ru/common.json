@@ -214,6 +214,9 @@
             "buttonUpload": "Загрузить",
             "dialogTitleUpload": "Загрузить новый аватар",
             "dialogTitleSave": "Сохранить размеры"
+        },
+        "photoLightbox": {
+            "dateFormat": "D MMMM YYYY, HH:mm"
         }
     },
     "pages": {

@@ -108,7 +108,7 @@ class Photos extends ResourceController {
                 'title'     => $title,
                 'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
-                'user'      => $photo->user_id ? [
+                'author'    => $photo->user_id ? [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
                     'avatar' => $avatar

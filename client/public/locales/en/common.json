@@ -213,6 +213,9 @@
             "buttonUpload": "Upload",
             "dialogTitleUpload": "Upload new avatar",
             "dialogTitleSave": "Save dimensions"
+        },
+        "photoLightbox": {
+            "dateFormat": "MMMM D, YYYY, h:mm A"
         }
     },
     "pages": {
