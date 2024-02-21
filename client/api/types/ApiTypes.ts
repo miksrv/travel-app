@@ -241,6 +241,8 @@ export interface ResponseTagsGetSearch {
     items?: string[]
 }
 
+export interface ResponseTagsGetItem extends Tag {}
+
 /* Controller: Place */
 export interface ResponseCategoriesGetList extends Place {
     items?: Category[]

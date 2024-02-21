@@ -24,7 +24,7 @@ const Photos: React.FC<PhotosProps> = ({
 
     return (
         <>
-            <NextSeo title={user?.name} />
+            <NextSeo title={`${user?.name} - ${t('title')}`} />
             <Header
                 title={`${user?.name} - ${t('title')}`}
                 currentPage={t('title')}

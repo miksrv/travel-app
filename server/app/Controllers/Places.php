@@ -84,7 +84,10 @@ class Places extends ResourceController {
                     $tag[] = $item->place_id;
                 }
             } else {
-                $tag = null;
+                return $this->respond([
+                    'items'  => [],
+                    'count'  => 0,
+                ]);
             }
         }
 

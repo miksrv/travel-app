@@ -14,7 +14,7 @@ import { API } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
-import { Category, LocationObject } from '@/api/types/Place'
+import { Category, LocationObject, Tag } from '@/api/types/Place'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -32,6 +32,7 @@ interface PlacesPageProps {
     categoriesData: Category[]
     locationType: ApiTypes.LocationTypes | null
     locationData: LocationObject | null
+    tagData: Tag | null
     country: number | null
     region: number | null
     district: number | null
@@ -49,6 +50,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     categoriesData,
     locationType,
     locationData,
+    tagData,
     country,
     region,
     district,
@@ -152,13 +154,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     )?.title
 
     const title = useMemo(() => {
+        const titleTag = tagData?.title ? ` #${tagData.title}` : ''
         const titlePage =
             initialFilter?.page && initialFilter.page > 1
                 ? ` - ${t('titlePage')} ${initialFilter.page}`
                 : ''
 
         if (!currentCategory && !locationType) {
-            return t('title') + titlePage
+            return t('title') + titleTag + titlePage
         }
 
         let titles = []
@@ -171,7 +174,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             titles.push(currentCategory)
         }
 
-        return `${t('title')}: ${titles.join(', ')}` + titlePage
+        return `${t('title')}: ${titles.join(', ')}` + titleTag + titlePage
     }, [
         currentCategory,
         locationData,
@@ -183,7 +186,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadcrumbsLinks = useMemo(() => {
         let breadcrumbs = []
 
-        if (category || locationType) {
+        if (category || locationType || tagData) {
             breadcrumbs.push({
                 link: '/places',
                 text: t('breadCrumbPlacesLink')
@@ -198,7 +201,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return breadcrumbs
-    }, [category, locationData, locationType])
+    }, [category, locationData, locationType, tagData])
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -240,6 +243,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         ? currentCategory
                         : locationType
                         ? locationData?.title
+                        : tagData?.title
+                        ? `#${tagData?.title}`
                         : t('breadCrumbCurrent')
                 }
                 actions={
@@ -344,6 +349,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                       })
                   )
 
+            const tagData = !tag
+                ? null
+                : await store.dispatch(API.endpoints?.tagsGetItem.initiate(tag))
+
             const { data: categoriesData } = await store.dispatch(
                 API.endpoints?.categoriesGetList.initiate()
             )
@@ -381,7 +390,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     placesList: placesList?.items || [],
                     region,
                     sort,
-                    tag
+                    tag,
+                    tagData: tagData?.data || null
                 }
             }
         }
