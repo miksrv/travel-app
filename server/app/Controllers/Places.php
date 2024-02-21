@@ -664,6 +664,6 @@ class Places extends ResourceController {
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 
-        return $placesModel->limit($limit <= 0 || $limit > 20 ? 20 : $limit, abs($offset));
+        return $placesModel->limit($limit <= 0 || $limit > 21 ? 21 : $limit, abs($offset));
     }
 }

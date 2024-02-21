@@ -88,7 +88,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
     return (
         <Container
-            className={styles.component}
+            className={styles.placeDescription}
             title={t('title')}
             action={
                 isAuth && editorMode ? (
@@ -126,7 +126,9 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                     onChange={setEditorContent}
                 />
             ) : localContent ? (
-                <Markdown>{localContent}</Markdown>
+                <div className={styles.content}>
+                    <Markdown>{localContent}</Markdown>
+                </div>
             ) : (
                 <div className={styles.emptyContent}>{t('emptyContent')}</div>
             )}
