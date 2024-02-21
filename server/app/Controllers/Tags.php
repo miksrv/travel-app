@@ -30,6 +30,10 @@ class Tags extends ResourceController {
         return $this->respond(['items' => $response]);
     }
 
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
     public function show($id = null): ResponseInterface {
         $tagsModel = new TagsModel();
         $tagsData  = $tagsModel->find($id);
