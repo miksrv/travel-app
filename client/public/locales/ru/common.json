@@ -232,7 +232,8 @@
                 "breadCrumbCurrent": "Интересные места",
                 "buttonFilters": "Фильтры",
                 "placesCount": "Интересных мест:",
-                "dialogFiltersTitle": "Фильтры"
+                "dialogFiltersTitle": "Фильтры",
+                "titlePage": "Страница"
             }
         },
         "index": {

@@ -121,6 +121,7 @@ export interface RequestPlacesGetList {
     author?: string
     lat?: number
     lon?: number
+    tag?: string | null
     search?: string
     country?: number | null
     region?: number | null

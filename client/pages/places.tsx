@@ -14,6 +14,7 @@ import { API } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
+import { Category, LocationObject } from '@/api/types/Place'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -28,11 +29,15 @@ const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
 const POST_PER_PAGE = 21
 
 interface PlacesPageProps {
+    categoriesData: Category[]
+    locationType: ApiTypes.LocationTypes | null
+    locationData: LocationObject | null
     country: number | null
     region: number | null
     district: number | null
     locality: number | null
     category: string | null
+    tag: string | null
     sort: ApiTypes.SortFields
     order: ApiTypes.SortOrder
     currentPage: number
@@ -41,11 +46,15 @@ interface PlacesPageProps {
 }
 
 const PlacesPage: NextPage<PlacesPageProps> = ({
+    categoriesData,
+    locationType,
+    locationData,
     country,
     region,
     district,
     locality,
     category,
+    tag,
     sort,
     order,
     currentPage,
@@ -56,26 +65,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         keyPrefix: 'pages.places.placesPage'
     })
 
-    const locationUnset = !country && !region && !district && !locality
-    const locationType: ApiTypes.LocationTypes = country
-        ? 'country'
-        : region
-        ? 'region'
-        : district
-        ? 'district'
-        : 'locality'
-
     const router = useRouter()
     const dispatch = useAppDispatch()
-
-    const { data: categoryData } = API.useCategoriesGetListQuery()
-    const { data: locationData } = API.useLocationGetByTypeQuery(
-        {
-            id: country ?? region ?? district ?? locality,
-            type: locationType
-        },
-        { skip: locationUnset }
-    )
 
     const [filterOpenTitle, setFilterOpenTitle] = useState<string>('')
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
@@ -89,7 +80,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         region: region ?? undefined,
-        sort: sort !== DEFAULT_SORT ? sort : undefined
+        sort: sort !== DEFAULT_SORT ? sort : undefined,
+        tag: tag ?? undefined
     }
 
     const handleChangeFilter = async (
@@ -105,7 +97,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
             page: filter.page !== 1 ? filter.page : undefined,
             region: filter.region ?? undefined,
-            sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined
+            sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined,
+            tag: filter.tag ?? undefined
         }
 
         if (
@@ -154,18 +147,23 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
     }
 
-    const currentCategory = categoryData?.items?.find(
+    const currentCategory = categoriesData?.find(
         ({ name }) => name === category
     )?.title
 
     const title = useMemo(() => {
-        if (!currentCategory && locationUnset) {
-            return t('title')
+        const titlePage =
+            initialFilter?.page && initialFilter.page > 1
+                ? ` - ${t('titlePage')} ${initialFilter.page}`
+                : ''
+
+        if (!currentCategory && !locationType) {
+            return t('title') + titlePage
         }
 
         let titles = []
 
-        if (!locationUnset) {
+        if (locationType) {
             titles.push(locationData?.title)
         }
 
@@ -173,20 +171,26 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             titles.push(currentCategory)
         }
 
-        return `${t('title')}: ${titles.join(', ')}`
-    }, [currentCategory, locationData, locationUnset, i18n.language])
+        return `${t('title')}: ${titles.join(', ')}` + titlePage
+    }, [
+        currentCategory,
+        locationData,
+        locationType,
+        i18n.language,
+        initialFilter
+    ])
 
     const breadcrumbsLinks = useMemo(() => {
         let breadcrumbs = []
 
-        if (category || !locationUnset) {
+        if (category || locationType) {
             breadcrumbs.push({
                 link: '/places',
                 text: t('breadCrumbPlacesLink')
             })
         }
 
-        if (!locationUnset && category) {
+        if (locationType && category) {
             breadcrumbs.push({
                 link: `/places?${locationType}=${locationData?.id}`,
                 text: locationData?.title!
@@ -194,12 +198,12 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return breadcrumbs
-    }, [category, locationData, locationUnset])
+    }, [category, locationData, locationType])
 
     const filtersCount = useMemo(() => {
         let count = 0
 
-        if (!locationUnset) {
+        if (locationType) {
             count++
         }
 
@@ -208,7 +212,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return count
-    }, [category, locationUnset])
+    }, [category, locationType])
 
     const handleClickOpenFiltersDialog = () => {
         dispatch(toggleOverlay(true))
@@ -234,7 +238,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 currentPage={
                     category
                         ? currentCategory
-                        : !locationUnset
+                        : locationType
                         ? locationData?.title
                         : t('breadCrumbCurrent')
                 }
@@ -278,7 +282,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     category={category}
                     optionsOpen={filtersOptionsOpen}
                     location={
-                        locationData && !locationUnset
+                        locationData && locationType
                             ? {
                                   key: locationData.id,
                                   type: locationType,
@@ -310,6 +314,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
+            const tag = (context.query.tag as string) || null
             const sort =
                 (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
             const order =
@@ -317,7 +322,31 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const translations = await serverSideTranslations(locale)
 
+            const locationType: ApiTypes.LocationTypes | null =
+                !country && !region && !district && !locality
+                    ? null
+                    : country
+                    ? 'country'
+                    : region
+                    ? 'region'
+                    : district
+                    ? 'district'
+                    : 'locality'
+
             store.dispatch(setLocale(locale))
+
+            const locationData = !locationType
+                ? null
+                : await store.dispatch(
+                      API.endpoints?.locationGetByType.initiate({
+                          id: country ?? region ?? district ?? locality,
+                          type: locationType
+                      })
+                  )
+
+            const { data: categoriesData } = await store.dispatch(
+                API.endpoints?.categoriesGetList.initiate()
+            )
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
@@ -329,7 +358,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
                     region,
-                    sort: sort
+                    sort: sort,
+                    tag
                 })
             )
 
@@ -338,16 +368,20 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
+                    categoriesData: categoriesData?.items || [],
                     category,
                     country,
                     currentPage,
                     district,
                     locality,
+                    locationData: locationData?.data || null,
+                    locationType,
                     order,
                     placesCount: placesList?.count || 0,
                     placesList: placesList?.items || [],
                     region,
-                    sort
+                    sort,
+                    tag
                 }
             }
         }

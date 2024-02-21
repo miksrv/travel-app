@@ -50,11 +50,12 @@ class Places extends ResourceController {
         $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
         $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
+        $tag    = $this->request->getGet('tag', FILTER_SANITIZE_SPECIAL_CHARS);
         $search = $this->request->getGet('search', FILTER_SANITIZE_SPECIAL_CHARS);
         $locale = $this->request->getLocale();
         $bookmarksPlacesIds = [];
 
-        // If filtering of interesting places by user bookmark is specified,
+        // if filtering of interesting places by user bookmark is specified,
         // then we find all the bookmarks of this user, and then extract all the IDs of places in the bookmarks
         if ($bookmarksUser) {
             $bookmarksModel = new UsersBookmarksModel();
@@ -64,6 +65,26 @@ class Places extends ResourceController {
                 foreach ($bookmarksData as $bookmark) {
                     $bookmarksPlacesIds[] = $bookmark->place;
                 }
+            }
+        }
+
+        // if filtering by tag ID
+        if ($tag) {
+            $placesTagsModel = new PlacesTagsModel();
+            $placesTagsData  = $placesTagsModel
+                ->select('place_id')
+                ->where('tag_id', $tag)
+                ->groupBy('place_id')
+                ->findAll();
+
+            if (!empty($placesTagsData)) {
+                $tag = [];
+
+                foreach ($placesTagsData as $item) {
+                    $tag[] = $item->place_id;
+                }
+            } else {
+                $tag = null;
             }
         }
 
@@ -121,9 +142,9 @@ class Places extends ResourceController {
             ->join('category', 'places.category = category.name', 'left');
 
         // If search or any other filter is not used, then we always use an empty array
-        $searchPlacesIds = !$search && !$bookmarksUser
+        $searchPlacesIds = !$search && !$bookmarksUser && !$tag
             ? []
-            : array_unique(array_merge($placeContent->placeIds, $bookmarksPlacesIds));
+            : array_unique(array_merge($placeContent->placeIds, $bookmarksPlacesIds, $tag));
 
         // Find all places
         // If a search was enabled, the second argument to the _makeListFilters function will contain the

@@ -151,7 +151,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                         {localTags?.map((tag) => (
                             <li key={tag.id}>
                                 <Link
-                                    href={`/tags/${tag.id}`}
+                                    href={`/places?tag=${tag.id}`}
                                     title={''}
                                 >
                                     {`#${tag.title}`}
