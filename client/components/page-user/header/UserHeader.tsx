@@ -15,7 +15,12 @@ import Header from '@/components/header'
 import Reputation from '@/components/reputation'
 import UserAvatarEditor from '@/components/user-avatar-editor'
 
-import { formatDate, makeActiveLink, timeAgo } from '@/functions/helpers'
+import {
+    formatDate,
+    makeActiveLink,
+    removeProtocolFromUrl,
+    timeAgo
+} from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
 import defaultAvatar from '@/public/images/no-avatar.png'
@@ -126,7 +131,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                     target={'_blank'}
                                     title={''}
                                 >
-                                    {user.website}
+                                    {removeProtocolFromUrl(user.website)}
                                 </Link>
                             ) : (
                                 <i>{t('notDefined')}</i>

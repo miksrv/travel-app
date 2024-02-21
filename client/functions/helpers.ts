@@ -23,6 +23,9 @@ export const makeActiveLink = (link: string) => {
     }
 }
 
+export const removeProtocolFromUrl = (url: string): string =>
+    url.replace(/^https?:\/\//, '')
+
 export const numberFormatter = (num: number, digits?: number) => {
     const lookup = [
         { symbol: '', value: 1 },
