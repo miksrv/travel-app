@@ -39,6 +39,8 @@ interface PlacesPageProps {
     locality: number | null
     category: string | null
     tag: string | null
+    lat: number | null
+    lon: number | null
     sort: ApiTypes.SortFields
     order: ApiTypes.SortOrder
     currentPage: number
@@ -57,6 +59,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     locality,
     category,
     tag,
+    lat,
+    lon,
     sort,
     order,
     currentPage,
@@ -78,7 +82,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         category: category ?? undefined,
         country: country ?? undefined,
         district: district ?? undefined,
+        lat: lat ?? undefined,
         locality: locality ?? undefined,
+        lon: lon ?? undefined,
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         region: region ?? undefined,
@@ -95,7 +101,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             category: filter.category ?? undefined,
             country: filter.country ?? undefined,
             district: filter.district ?? undefined,
+            lat: filter.lat ?? undefined,
             locality: filter.locality ?? undefined,
+            lon: filter.lon ?? undefined,
             order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
             page: filter.page !== 1 ? filter.page : undefined,
             region: filter.region ?? undefined,
@@ -321,6 +329,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
+            const lat = parseFloat(context.query.lat as string) || null
+            const lon = parseFloat(context.query.lon as string) || null
             const tag = (context.query.tag as string) || null
             const sort =
                 (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
@@ -364,8 +374,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     category,
                     country,
                     district,
+                    lat,
                     limit: POST_PER_PAGE,
                     locality,
+                    lon,
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
                     region,
@@ -384,9 +396,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     country,
                     currentPage,
                     district,
+                    lat,
                     locality,
                     locationData: locationData?.data || null,
                     locationType,
+                    lon,
                     order,
                     placesCount: placesList?.count || 0,
                     placesList: placesList?.items || [],

@@ -8,6 +8,8 @@ export type PlacesFilterType = {
     category?: string
     page?: number
     tag?: string
+    lat?: number
+    lon?: number
     order?: ApiTypes.SortOrder
     sort?: ApiTypes.SortFields
 }
