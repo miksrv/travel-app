@@ -96,13 +96,14 @@ class Poi extends ResourceController {
 
         $placesModel = new PlacesModel();
         $placeData   = $placesModel
-            ->select('id, rating, views, photos')
+            ->select('id, rating, views, photos, photos')
             ->find($id);
 
         $response = [
             'id'     => $placeData->id,
             'rating' => (int) $placeData->rating,
             'views'  => (int) $placeData->views,
+            'photos' => (int) $placeData->photos,
             'title'  => $placeContent->title($id),
         ];
 

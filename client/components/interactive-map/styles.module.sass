@@ -70,6 +70,18 @@
     background-image: url('/images/no-image.svg')
     background-position: center
     background-size: cover
+    position: relative
+
+    .rating
+      position: absolute
+      left: 8px
+      top: 8px
+
+    .bottomPanel
+      position: absolute
+      bottom: 10px
+      left: 10px
+      display: flex
 
   .image
     object-fit: cover
@@ -77,7 +89,7 @@
     height: 100%
 
   .title
-    font-size: $fontSizeParagraph
+    font-size: $fontSize
     font-weight: 400
     margin: 8px 8px
 
