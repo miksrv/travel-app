@@ -3,7 +3,8 @@ import { Categories } from '@/api/types/Place'
 import { Place as PlaceType } from '@/api/types/Place'
 import { User } from '@/api/types/User'
 
-export type Place = Pick<PlaceType, 'id' | 'lat' | 'lon'> & {
+export type Place = Pick<PlaceType, 'lat' | 'lon'> & {
+    id?: string
     category: Categories
 }
 
