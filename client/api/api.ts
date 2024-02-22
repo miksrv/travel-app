@@ -349,7 +349,6 @@ export const API = createApi({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         }),
-
         ratingPutScore: builder.mutation<
             ApiTypes.ResponseRatingSet,
             ApiTypes.RequestRatingSet
@@ -365,6 +364,11 @@ export const API = createApi({
                 url: 'rating'
             }),
             transformErrorResponse: (response) => response.data
+        }),
+
+        /* Controller: Sitemap */
+        sitemapGetList: builder.query<ApiTypes.ResponseSitemapGet, void>({
+            query: (item) => 'sitemap'
         }),
 
         /* Controller: Tags */
