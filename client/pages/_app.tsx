@@ -12,8 +12,6 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
-export const SITE_NAME = 'Название сайта'
-
 const App = ({ Component, pageProps }: AppProps) => {
     const { i18n } = useTranslation()
     const { store } = wrapper.useWrappedStore(pageProps)

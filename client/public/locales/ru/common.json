@@ -62,6 +62,7 @@
                 "breadCrumbPlacesLink": "Интересные места"
             },
             "place": {
+                "siteName": "Геометки - Интересные места",
                 "breadCrumbPlacesLink": "Интересные места",
                 "nearPlacesTitle": "Ближайшие места рядом",
                 "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км"
