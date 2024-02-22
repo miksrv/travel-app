@@ -62,6 +62,7 @@
                 "breadCrumbPlacesLink": "Interesting Places"
             },
             "place": {
+                "siteName": "Geometki - Interesting Places",
                 "breadCrumbPlacesLink": "Interesting Places",
                 "nearPlacesTitle": "Nearby Places",
                 "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km"
