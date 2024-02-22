@@ -1,6 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Badge from '@/ui/badge'
 import { BreadcrumbLink } from '@/ui/breadcrumbs'
@@ -15,7 +15,7 @@ import { Place } from '@/api/types/Place'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
-import { addDecimalPoint } from '@/functions/helpers'
+import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -38,7 +38,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
-    const [coverHash, setCoverHash] = useState<string>('')
+    const [coverHash, setCoverHash] = useState<string | number>('')
 
     const handleEditPlaceClick = (event: React.MouseEvent) => {
         if (!authSlice.isAuth) {
@@ -53,6 +53,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             400
         )
     }
+
+    useEffect(() => {
+        setCoverHash(dateToUnixTime(place?.updated?.date))
+    }, [])
 
     return (
         <section className={styles.component}>

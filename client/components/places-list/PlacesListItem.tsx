@@ -11,7 +11,11 @@ import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
-import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
+import {
+    addDecimalPoint,
+    dateToUnixTime,
+    numberFormatter
+} from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -95,7 +99,9 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             alt={place?.title || ''}
                             height={180}
                             width={280}
-                            src={`${IMG_HOST}${place.cover.preview}`}
+                            src={`${IMG_HOST}${
+                                place.cover.preview
+                            }?d=${dateToUnixTime(place.updated?.date)}`}
                         />
                     )}
                 </Link>

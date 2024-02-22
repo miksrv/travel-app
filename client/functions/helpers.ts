@@ -78,6 +78,8 @@ export const formatDate = (
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs.utc(date).local().format(format) : '')
 
+export const dateToUnixTime = (date?: string | Date) => dayjs(date).unix()
+
 export const timeAgo = (
     date?: string | Date,
     withoutSuffix?: boolean

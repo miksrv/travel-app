@@ -43,8 +43,9 @@ class Places extends ResourceController {
     }
 
     /**
-     * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      * @return ResponseInterface
+     * @throws \Exception
+     * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      */
     public function list(): ResponseInterface {
         $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -131,7 +132,8 @@ class Places extends ResourceController {
         $placesModel = new PlacesModel();
         $placesModel
             ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
-                places.photos, places.country_id, places.region_id, places.district_id, places.locality_id,
+                places.photos, places.country_id, places.region_id, places.district_id, places.locality_id, 
+                places.updated_at,
                 location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                 location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                 location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
@@ -176,6 +178,7 @@ class Places extends ResourceController {
                 'photos'    => (int) $place->photos,
                 'title'     => $placeContent->title($place->id),
                 'content'   => $placeContent->content($place->id),
+                'updated'   => new \DateTime($place->updated_at),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->{"category_$locale"},
