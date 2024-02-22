@@ -117,3 +117,7 @@ $routes->get('visited/(:alphanum)', 'Visited::place/$1');
 $routes->put('visited', 'Visited::set');
 $routes->options('visited', 'Visited');
 $routes->options('visited/(:alphanum)', 'Visited');
+
+/* Sitemap */
+$routes->get('sitemap', 'Sitemap::index');
+$routes->options('sitemap', 'Sitemap');
