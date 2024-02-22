@@ -23,6 +23,11 @@ export type DateTimeType = {
     timezone: string
 }
 
+export type SitemapItem = {
+    id: string
+    updated: DateTimeType
+}
+
 export type PlaceLocationType = {
     value: string
     key: number
@@ -239,6 +244,12 @@ export interface ResponseNotificationsGet {
 /* Controller: Tags */
 export interface ResponseTagsGetSearch {
     items?: string[]
+}
+
+/* Controller: Sitemap */
+export interface ResponseSitemapGet {
+    places?: SitemapItem[]
+    users?: SitemapItem[]
 }
 
 export interface ResponseTagsGetItem extends Tag {}
