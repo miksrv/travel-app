@@ -239,6 +239,15 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
+        photoRotateItem: builder.mutation<
+            ApiTypes.ResponsePhotoRotateItem,
+            string
+        >({
+            query: (photoId) => ({
+                method: 'PATCH',
+                url: `photos/rotate/${photoId}`
+            })
+        }),
         photosGetActions: builder.query<
             ApiTypes.ResponsePhotosGetActions,
             Maybe<ApiTypes.RequestPhotosGetActions>
@@ -359,6 +368,11 @@ export const API = createApi({
         }),
 
         /* Controller: Tags */
+        tagsGetItem: builder.query<ApiTypes.ResponseTagsGetItem, Maybe<string>>(
+            {
+                query: (item) => `tags/${item}`
+            }
+        ),
         tagsGetSearch: builder.mutation<
             ApiTypes.ResponseTagsGetSearch,
             Maybe<string>

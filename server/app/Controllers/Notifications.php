@@ -97,12 +97,17 @@ class Notifications extends ResourceController {
 
     /**
      * Delete all notifications for the current user
-     * @return void
+     * @return ResponseInterface
      */
-    public function clear(): void {
-//        $this->model
-//            ->where('users_notifications.user_id', $this->session->user->id)
-//            ->delete();
+    public function clear(): ResponseInterface {
+        $this->model
+            ->where('users_notifications.user_id', $this->session->user->id)
+            ->delete();
+
+        return $this->respondDeleted([
+            'items' => [],
+            'count' => 0
+        ]);
     }
 
     /**

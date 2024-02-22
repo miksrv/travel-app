@@ -23,6 +23,9 @@ export const makeActiveLink = (link: string) => {
     }
 }
 
+export const removeProtocolFromUrl = (url: string): string =>
+    url.replace(/^https?:\/\//, '')
+
 export const numberFormatter = (num: number, digits?: number) => {
     const lookup = [
         { symbol: '', value: 1 },
@@ -74,6 +77,8 @@ export const formatDate = (
     date?: string | Date,
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs.utc(date).local().format(format) : '')
+
+export const dateToUnixTime = (date?: string | Date) => dayjs(date).unix()
 
 export const timeAgo = (
     date?: string | Date,

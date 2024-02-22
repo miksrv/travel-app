@@ -1,7 +1,7 @@
 {
     "components": {
         "appBar": {
-            "logoTitle": "Геометки",
+            "logoTitle": "GEOMETKI",
             "userProfileCaption": "Моя страница",
             "userProfileTitle": "Перейти на мою страницу",
             "userSettingsCaption": "Настройки",
@@ -75,6 +75,8 @@
             "placeInformation": {
                 "userRating": "Ваша оценка:",
                 "author": "Автор:",
+                "category": "Категория:",
+                "allCategoryPlaces": "Все интересные места категории",
                 "coordinates": "Координаты:",
                 "createdTime": "Добавлено:",
                 "editTime": "Отредактировано:",
@@ -212,6 +214,9 @@
             "buttonUpload": "Загрузить",
             "dialogTitleUpload": "Загрузить новый аватар",
             "dialogTitleSave": "Сохранить размеры"
+        },
+        "photoLightbox": {
+            "dateFormat": "D MMMM YYYY, HH:mm"
         }
     },
     "pages": {
@@ -227,7 +232,8 @@
                 "breadCrumbCurrent": "Интересные места",
                 "buttonFilters": "Фильтры",
                 "placesCount": "Интересных мест:",
-                "dialogFiltersTitle": "Фильтры"
+                "dialogFiltersTitle": "Фильтры",
+                "titlePage": "Страница"
             }
         },
         "index": {

@@ -73,6 +73,7 @@ export interface ApiResponseError<T> {
 export type ItemActionType = {
     id?: string
     remove?: boolean
+    rotate?: boolean
 }
 
 export interface RequestAuthLogin {
@@ -120,6 +121,7 @@ export interface RequestPlacesGetList {
     author?: string
     lat?: number
     lon?: number
+    tag?: string | null
     search?: string
     country?: number | null
     region?: number | null
@@ -178,6 +180,12 @@ export interface ResponsePhotoDeleteItem {
     id?: string
 }
 
+export interface ResponsePhotoRotateItem {
+    id?: string
+    full?: string
+    preview?: string
+}
+
 export interface ResponsePhotosGetList {
     items?: Photo[]
     count?: number
@@ -232,6 +240,8 @@ export interface ResponseNotificationsGet {
 export interface ResponseTagsGetSearch {
     items?: string[]
 }
+
+export interface ResponseTagsGetItem extends Tag {}
 
 /* Controller: Place */
 export interface ResponseCategoriesGetList extends Place {

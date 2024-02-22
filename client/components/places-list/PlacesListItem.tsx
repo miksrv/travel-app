@@ -1,18 +1,29 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import Badge from '@/ui/badge'
 import RatingColored from '@/ui/rating-colored'
 
 import { IMG_HOST } from '@/api/api'
+import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
 import { categoryImage } from '@/functions/categories'
-import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
+import {
+    addDecimalPoint,
+    dateToUnixTime,
+    numberFormatter
+} from '@/functions/helpers'
 
 import styles from './styles.module.sass'
+
+type PlaceAddress = {
+    id?: number
+    name?: string
+    type: ApiTypes.LocationTypes
+}
 
 interface PlacesListItemProps {
     place: Place
@@ -22,6 +33,40 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placesList.placesListItem'
     })
+
+    const placeAddress: PlaceAddress[] = useMemo(() => {
+        let address: PlaceAddress[] = []
+
+        if (place?.address?.country?.id) {
+            address.push({
+                id: place.address.country.id,
+                name: place.address.country.title,
+                type: 'country'
+            })
+        }
+
+        if (place?.address?.locality?.id) {
+            address.push({
+                id: place.address.locality.id,
+                name: place.address.locality.title,
+                type: 'locality'
+            })
+        } else if (place?.address?.district?.id) {
+            address.push({
+                id: place.address.district.id,
+                name: place.address.district.title,
+                type: 'district'
+            })
+        } else if (place?.address?.region?.id) {
+            address.push({
+                id: place.address.region.id,
+                name: place.address.region.title,
+                type: 'region'
+            })
+        }
+
+        return address
+    }, [place?.address])
 
     return (
         <article className={styles.placesListItem}>
@@ -54,10 +99,13 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             alt={place?.title || ''}
                             height={180}
                             width={280}
-                            src={`${IMG_HOST}${place.cover.preview}`}
+                            src={`${IMG_HOST}${
+                                place.cover.preview
+                            }?d=${dateToUnixTime(place.updated?.date)}`}
                         />
                     )}
                 </Link>
+
                 <div className={styles.bottomPanel}>
                     <Badge
                         icon={'Photo'}
@@ -75,6 +123,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     )}
                 </div>
             </section>
+
             <h2 className={styles.title}>
                 <Link
                     href={`/places/${place.id}`}
@@ -83,6 +132,21 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {place?.title}
                 </Link>
             </h2>
+
+            <div className={styles.address}>
+                {placeAddress?.map((address, i) => (
+                    <span key={`address${address.type}${place.id}`}>
+                        <Link
+                            href={`/places?${address.type}=${address.id}`}
+                            title={`${t('addressLinkTitle')} ${address.name}`}
+                        >
+                            {address.name}
+                        </Link>
+                        {placeAddress.length - 1 !== i && ', '}
+                    </span>
+                ))}
+            </div>
+
             {place?.content ? (
                 <p>{place.content}</p>
             ) : (

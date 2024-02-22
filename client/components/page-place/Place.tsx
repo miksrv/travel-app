@@ -19,7 +19,7 @@ import { formatDateUTC } from '@/functions/helpers'
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.place'
     })
 
@@ -52,10 +52,11 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     description: place?.content?.substring(0, 160),
                     images: photoList?.map((photo, index) => ({
                         alt: `${photo.title} - Фото ${index + 1}`,
-                        // height: photo.height,
-                        url: `${IMG_HOST}${photo.full}`
-                        // width: photo.width
+                        height: photo.height,
+                        url: `${IMG_HOST}${photo.full}`,
+                        width: photo.width
                     })),
+                    locale: i18n.language,
                     siteName: SITE_NAME,
                     title: place?.title,
                     type: 'article',

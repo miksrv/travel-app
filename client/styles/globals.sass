@@ -62,6 +62,16 @@ a
 .bodyScrollLock
   overflow: hidden
 
+/* NotFound 404 */
+.page404
+  text-align: center
+  margin: 10% auto 0
+
+  h2
+    margin-top: 1em
+    font-size: 2em
+    font-weight: 200
+
 /* Login Page */
 .loginPage
   margin: 8% auto 0 !important
@@ -106,6 +116,7 @@ a
   bottom: 0
   width: 100%
 
+/* Leaflet */
 .leaflet-marker-pane
   .poiPhoto
     border-radius: 50%
@@ -158,19 +169,6 @@ a
     max-height: 400px
     border-radius: 4px
 
-/* TODO: for activity place history changes */
-.red
-  color: #ed5151
-
-.green
-  color: green
-
-.MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline
-  outline: none !important
-  border-width: 0.5px !important
-  border-color: $inputFocusBorderColor !important
-  box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem !important
-
 .leaflet-top, .leaflet-bottom, .leaflet-control
   z-index: 400 !important
 
@@ -178,6 +176,10 @@ a
 .ril__toolbarItem
   & > span
     color: #FFFFFF
+
+.ril-caption-content
+  & *
+    color: #FFFFFF !important
 
 /* Main Page */
 .mapPageFilters

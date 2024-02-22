@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import React from 'react'
 import Lightbox from 'react-image-lightbox'
 
@@ -6,7 +7,7 @@ import { Photo, Poi } from '@/api/types'
 
 import UserAvatar from '@/components/user-avatar'
 
-// import { formatDate } from '@/functions/helpers'
+import { formatDate } from '@/functions/helpers'
 
 interface PhotoLightboxProps {
     photos?: Photo.Photo[] | Poi.Photo[]
@@ -23,6 +24,10 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     onCloseLightBox,
     onChangeIndex
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.photoLightbox'
+    })
+
     const imageUrl = (index: number) => `${IMG_HOST}${photos?.[index]?.full}`
     const ImagePreviewUrl = (index: number) =>
         `${IMG_HOST}${photos?.[index]?.preview}`
@@ -50,10 +55,12 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                         photos[photoIndex]?.author && (
                             <UserAvatar
                                 size={'medium'}
+                                showName={true}
                                 user={photos[photoIndex]?.author}
-                                // text={formatDate(
-                                //     photos[photoIndex]?.created?.date
-                                // )}
+                                caption={formatDate(
+                                    photos[photoIndex]?.created?.date,
+                                    t('dateFormat')
+                                )}
                             />
                         )
                     }

@@ -9,6 +9,7 @@ $routes->get('introduce', 'Introduce::hello');
 $routes->options('introduce', 'Introduce');
 
 //$routes->get('migrate/places', 'Migrate::places');
+$routes->cli('migrate/fix', 'Migrate::fixedActivity');
 $routes->cli('migrate/places', 'Migrate::places');
 $routes->cli('migrate/comments', 'Migrate::comments');
 $routes->cli('migrate/users', 'Migrate::users');
@@ -35,11 +36,13 @@ $routes->get('photos', 'Photos::list');
 $routes->get('photos/actions', 'Photos::actions');
 $routes->post('photos', 'Photos::create');
 $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
+$routes->patch('photos/rotate/(:alphanum)', 'Photos::rotate/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
 $routes->options('photos/actions', 'Photos');
 $routes->options('photos/(:alphanum)', 'Photos');
 $routes->options('photos/upload/(:alphanum)', 'Photos');
+$routes->options('photos/rotate/(:alphanum)', 'Photos');
 
 $routes->get('notifications/updates', 'Notifications::updates');
 $routes->get('notifications/list', 'Notifications::list');
@@ -99,7 +102,9 @@ $routes->options('location', 'Location');
 
 /* Tags */
 $routes->get('tags', 'Tags::search');
+$routes->get('tags/(:alphanum)', 'Tags::show/$1');
 $routes->options('tags', 'Tags');
+$routes->options('tags/(:alphanum)', 'Tags');
 
 /* Bookmarks */
 $routes->get('bookmarks', 'Bookmarks::check');

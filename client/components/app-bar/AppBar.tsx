@@ -1,4 +1,6 @@
 import { useTranslation } from 'next-i18next'
+import { Fredoka } from 'next/font/google'
+import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
@@ -18,6 +20,8 @@ import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
 
+import logo from '@/public/images/geometki.svg'
+
 import Notifications from './Notifications'
 import Search from './Search'
 import styles from './styles.module.sass'
@@ -27,6 +31,11 @@ interface HeaderProps {
     fullSize?: boolean
     onMenuClick?: () => void
 }
+
+const fredoka = Fredoka({
+    display: 'swap',
+    subsets: ['latin']
+})
 
 const AppBar: React.FC<HeaderProps> = ({
     randomPlaceId,
@@ -89,8 +98,23 @@ const AppBar: React.FC<HeaderProps> = ({
                 >
                     <Icon name={'Menu'} />
                 </button>
-                <div className={styles.logo}>{t('logoTitle')}</div>
+
+                <Link
+                    href={'/'}
+                    title={''}
+                    className={cn(fredoka.className, styles.logo)}
+                >
+                    <Image
+                        src={logo}
+                        alt={''}
+                        width={22}
+                        height={22}
+                    />
+                    {t('logoTitle')}
+                </Link>
+
                 <Search />
+
                 <div className={styles.rightSection}>
                     {(randomPlaceId || randomPlace?.id) && (
                         <Link

@@ -28,6 +28,7 @@ const UserGallery: React.FC<UserGalleryProps> = ({ photos }) => {
                 photos={photos}
                 onPhotoClick={handlePhotoClick}
             />
+
             <PhotoLightbox
                 photos={photos}
                 photoIndex={photoIndex}

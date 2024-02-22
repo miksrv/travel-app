@@ -13,8 +13,6 @@ use Config\Services;
 use Exception;
 use ReflectionException;
 
-use function PHPUnit\Framework\fileExists;
-
 class Users extends ResourceController {
     public function __construct() {
         new LocaleLibrary();
@@ -256,7 +254,7 @@ class Users extends ResourceController {
             !isset($input->width) ||
             !isset($input->height) ||
             !isset($input->filename) ||
-            !fileExists(UPLOAD_TEMPORARY . $input->filename))
+            !file_exists(UPLOAD_TEMPORARY . $input->filename))
         {
             return $this->failValidationErrors('Incorrect data format when saving cover image');
         }

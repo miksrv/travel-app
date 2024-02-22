@@ -6,7 +6,8 @@ export type PlacesFilterType = {
     district?: number
     locality?: number
     category?: string
-    order?: ApiTypes.SortOrder
     page?: number
+    tag?: string
+    order?: ApiTypes.SortOrder
     sort?: ApiTypes.SortFields
 }

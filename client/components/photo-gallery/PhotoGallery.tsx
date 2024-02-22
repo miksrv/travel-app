@@ -15,17 +15,21 @@ import styles from './styles.module.sass'
 interface PhotoGalleryProps {
     photos?: Photo[]
     actions?: ApiTypes.ItemActionType[]
+    photoLoading?: string
     uploadingPhotos?: string[]
     onPhotoClick?: (index: number) => void
     onPhotoRemoveClick?: (photoId: string) => void
+    onPhotoRotateClick?: (photoId: string) => void
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
     uploadingPhotos,
+    photoLoading,
     actions,
     onPhotoClick,
-    onPhotoRemoveClick
+    onPhotoRemoveClick,
+    onPhotoRotateClick
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
@@ -59,6 +63,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     key={photo.id}
                     className={styles.photoItem}
                 >
+                    {photo.id === photoLoading && (
+                        <div className={styles.loader}>
+                            <Spinner />
+                        </div>
+                    )}
+
                     <Link
                         className={styles.link}
                         href={`${IMG_HOST}${photo.full}`}
@@ -79,14 +89,26 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             height={150}
                         />
                     </Link>
-                    {actions?.find(({ id }) => id === photo.id)?.remove && (
-                        <button
-                            className={styles.removeButton}
-                            onClick={() => onPhotoRemoveClick?.(photo.id)}
-                        >
-                            <Icon name={'Close'} />
-                        </button>
-                    )}
+
+                    <div className={styles.actions}>
+                        {actions?.find(({ id }) => id === photo.id)?.rotate && (
+                            <button
+                                onClick={() => onPhotoRotateClick?.(photo.id)}
+                                disabled={!!photoLoading}
+                            >
+                                <Icon name={'Rotate'} />
+                            </button>
+                        )}
+
+                        {actions?.find(({ id }) => id === photo.id)?.remove && (
+                            <button
+                                onClick={() => onPhotoRemoveClick?.(photo.id)}
+                                disabled={!!photoLoading}
+                            >
+                                <Icon name={'Close'} />
+                            </button>
+                        )}
+                    </div>
                 </li>
             ))}
         </ul>

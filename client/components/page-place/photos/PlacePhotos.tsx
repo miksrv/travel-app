@@ -29,6 +29,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
+    const [photoLoading, setPhotoLoading] = useState<string>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
@@ -40,6 +41,9 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
         API.usePhotoDeleteItemMutation()
+
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
+        API.usePhotoRotateItemMutation()
 
     const [
         uploadPhoto,
@@ -53,7 +57,15 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const handlePhotoRemoveClick = (photoId: string) => {
         if (isAuth && !deleteLoading) {
+            setPhotoLoading(photoId)
             deletePhoto(photoId)
+        }
+    }
+
+    const handlePhotoRotateClick = (photoId: string) => {
+        if (isAuth && !rotateLoading) {
+            setPhotoLoading(photoId)
+            rotatePhoto(photoId)
         }
     }
 
@@ -131,7 +143,29 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
      */
     React.useEffect(() => {
         setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
+        setPhotoLoading(undefined)
     }, [deleteData])
+
+    /**
+     * After rotate photo - add time hash for rotated photo
+     */
+    React.useEffect(() => {
+        setLocalPhotos(
+            localPhotos?.map((photo) => ({
+                ...photo,
+                full:
+                    photo.id === rotateData?.id
+                        ? rotateData?.full!
+                        : photo.full,
+                preview:
+                    photo.id === rotateData?.id
+                        ? rotateData?.preview!
+                        : photo.preview
+            }))
+        )
+
+        setPhotoLoading(undefined)
+    }, [rotateData])
 
     React.useEffect(() => {
         setSelectedFiles([])
@@ -156,8 +190,10 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 photos={localPhotos}
                 actions={actionsData?.items}
                 uploadingPhotos={uploadingPhotos}
+                photoLoading={photoLoading}
                 onPhotoClick={handlePhotoClick}
                 onPhotoRemoveClick={handlePhotoRemoveClick}
+                onPhotoRotateClick={handlePhotoRotateClick}
             />
 
             <PhotoLightbox

@@ -56,7 +56,8 @@ class Photos extends ResourceController {
         foreach ($photosData as $photo) {
             $resultData[] = [
                 'id'     => $photo->id,
-                'remove' => $photo->user_id === $this->session->user?->id
+                'remove' => $photo->user_id === $this->session->user?->id,
+                'rotate' => $this->session->isAuth
             ];
         }
 
@@ -107,7 +108,7 @@ class Photos extends ResourceController {
                 'title'     => $title,
                 'placeId'   => $photo->place_id,
                 'created'   => $photo->created_at,
-                'user'      => $photo->user_id ? [
+                'author'    => $photo->user_id ? [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
                     'avatar' => $avatar
@@ -278,6 +279,49 @@ class Photos extends ResourceController {
         $placesModel->update($photoData->place_id, ['photos' => $placesData->photos - 1]);
 
         return $this->respondDeleted(['id' => $id]);
+    }
+
+    /**
+     * @param $id
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function rotate($id = null): ResponseInterface {
+        if (!$this->session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $photosModel = new PhotosModel();
+        $photoData   = $photosModel->select('id, place_id, filename, extension')->find($id);
+
+        if (!$photoData) {
+            return $this->failValidationErrors('No photo found with this ID');
+        }
+
+        $photoDir = UPLOAD_PHOTOS . $photoData->place_id . '/';
+        $file  = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
+        $image = Services::image('gd');
+        $name  = pathinfo($file->getRandomName(), PATHINFO_FILENAME);
+        $image->withFile($file->getRealPath())
+            ->rotate(90)
+            ->save($photoDir . $name . '.' . $photoData->extension);
+
+        $image->withFile($photoDir . $name . '.' . $photoData->extension)
+            ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT)
+            ->save($photoDir . $name . '_preview.' . $photoData->extension);
+
+        unlink($photoDir . $photoData->filename . '.' . $photoData->extension);
+        unlink($photoDir . $photoData->filename . '_preview.' . $photoData->extension);
+
+        $photosModel->update($id, ['filename' => $name]);
+
+        $photoPath = PATH_PHOTOS . $photoData->place_id . '/' . $name;
+
+        return $this->respondDeleted([
+            'id'      => $id,
+            'full'    => $photoPath . '.' . $photoData->extension,
+            'preview' => $photoPath . '_preview.' . $photoData->extension,
+        ]);
     }
 
     /**

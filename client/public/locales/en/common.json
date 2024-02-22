@@ -1,7 +1,7 @@
 {
     "components": {
         "appBar": {
-            "logoTitle": "Geometki",
+            "logoTitle": "GEOMETKI",
             "userProfileCaption": "My page",
             "userProfileTitle": "Go to my page",
             "userSettingsCaption": "Settings",
@@ -74,6 +74,8 @@
             "placeInformation": {
                 "userRating": "Your rating:",
                 "author": "Author:",
+                "category": "Category:",
+                "allCategoryPlaces": "Все интересные места категории",
                 "coordinates": "Coordinates:",
                 "createdTime": "Added:",
                 "editTime": "Edited:",
@@ -211,6 +213,9 @@
             "buttonUpload": "Upload",
             "dialogTitleUpload": "Upload new avatar",
             "dialogTitleSave": "Save dimensions"
+        },
+        "photoLightbox": {
+            "dateFormat": "MMMM D, YYYY, h:mm A"
         }
     },
     "pages": {
@@ -226,7 +231,8 @@
                 "breadCrumbCurrent": "Interesting places",
                 "buttonFilters": "Filters",
                 "placesCount": "Places of interest:",
-                "dialogFiltersTitle": "Filters"
+                "dialogFiltersTitle": "Filters",
+                "titlePage": "Page"
             }
         },
         "index": {

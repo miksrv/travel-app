@@ -29,4 +29,25 @@ class Tags extends ResourceController {
 
         return $this->respond(['items' => $response]);
     }
+
+    /**
+     * @param $id
+     * @return ResponseInterface
+     */
+    public function show($id = null): ResponseInterface {
+        $tagsModel = new TagsModel();
+        $tagsData  = $tagsModel->find($id);
+        $locale    = $this->request->getLocale();
+
+        if (!$tagsData) {
+            return $this->failNotFound();
+        }
+
+        return $this->respond([
+            'id'    => $tagsData->id,
+            'title' => $locale === 'en' && $tagsData->title_en
+                ? $tagsData->title_en
+                : $tagsData->title_ru
+        ]);
+    }
 }
