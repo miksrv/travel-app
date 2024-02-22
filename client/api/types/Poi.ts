@@ -1,12 +1,10 @@
 import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
+import { Place as PlaceType } from '@/api/types/Place'
 import { User } from '@/api/types/User'
 
-export type Place = {
-    id?: string
+export type Place = Pick<PlaceType, 'id' | 'lat' | 'lon'> & {
     category: Categories
-    lat: number
-    lon: number
 }
 
 export type Photo = {

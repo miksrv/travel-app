@@ -4,12 +4,15 @@ import Link from 'next/link'
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
+import Badge from '@/ui/badge'
+import RatingColored from '@/ui/rating-colored'
 import Skeleton from '@/ui/skeleton'
 
 import { API, IMG_HOST } from '@/api/api'
 import { Poi } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
+import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -23,7 +26,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
 
     const placeMarkerIcon = new Leaflet.Icon({
         className: styles.markerPoint,
-        iconAnchor: [10, 10],
+        iconAnchor: [9, 30],
         iconSize: [17, 20],
         iconUrl: categoryImage(place.category).src
     })
@@ -49,18 +52,36 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                         title={poiData?.title}
                         className={styles.link}
                     >
-                        {isLoading || !poiData ? (
-                            <Skeleton />
-                        ) : poiData?.cover ? (
-                            <Image
-                                className={styles.image}
-                                src={`${IMG_HOST}${poiData?.cover.preview}`}
-                                alt={poiData?.title || ''}
-                                width={300}
-                                height={200}
-                            />
-                        ) : (
-                            <></>
+                        {(isLoading || !poiData) && <Skeleton />}
+
+                        {!isLoading && poiData && (
+                            <>
+                                <RatingColored
+                                    className={styles.rating}
+                                    value={poiData.rating}
+                                >
+                                    {addDecimalPoint(poiData.rating)}
+                                </RatingColored>
+                                <Image
+                                    className={styles.image}
+                                    src={`${IMG_HOST}${poiData?.cover?.preview}`}
+                                    alt={poiData?.title || ''}
+                                    width={300}
+                                    height={200}
+                                />
+                                <div className={styles.bottomPanel}>
+                                    <Badge
+                                        icon={'Photo'}
+                                        content={poiData?.photos || 0}
+                                    />
+                                    <Badge
+                                        icon={'Eye'}
+                                        content={numberFormatter(
+                                            poiData?.views || 0
+                                        )}
+                                    />
+                                </div>
+                            </>
                         )}
                     </Link>
                     {isLoading || !poiData ? (
