@@ -3,6 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import React, { useMemo } from 'react'
 
+import Button from '@/ui/button'
 import Container from '@/ui/container'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
@@ -101,6 +102,16 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                 </div>
             </Container>
             <PlacesList places={nearPlaces} />
+
+            <Button
+                size={'m'}
+                mode={'primary'}
+                stretched={true}
+                link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
+                style={{ marginTop: '15px' }}
+            >
+                Все места рядом
+            </Button>
         </>
     )
 }

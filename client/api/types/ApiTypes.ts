@@ -124,8 +124,8 @@ export interface RequestPlacesGetList {
     order?: SortOrder
     bookmarkUser?: string
     author?: string
-    lat?: number
-    lon?: number
+    lat?: number | null
+    lon?: number | null
     tag?: string | null
     search?: string
     country?: number | null
