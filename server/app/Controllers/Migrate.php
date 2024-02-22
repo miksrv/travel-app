@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\Geocoder;
+use App\Libraries\LevelsLibrary;
 use App\Models\MigrateMediaModel;
 use App\Models\MigratePlacesComments;
 use App\Models\MigratePlacesHistoryModel;
@@ -27,6 +28,125 @@ define('MAX_PLACES_PER_ITERATION', 50);
 set_time_limit(0);
 
 class Migrate extends ResourceController {
+
+    /**
+     * php index.php migrate fix
+     * @throws ReflectionException
+     */
+    public function fixedActivity(): void {
+        $placesModel   = new PlacesModel();
+        $photosModel   = new PhotosModel();
+        $contentModel  = new PlacesContentModel();
+        $ratingsModel  = new RatingModel();
+
+        $activityModel = new ActivityModel();
+        $usersModel    = new UsersModel();
+        $usersData     = $usersModel->select('id, name, level, experience')->findAll();
+
+        $counter = 0 ;
+
+        foreach ($usersData as $user) {
+            // Places
+            $placesIds  = [];
+            $placesData = $placesModel->select('id, created_at')->where('user_id', $user->id)->findAll();
+            if ($placesData) {
+                foreach ($placesData as $place) {
+                    $activity = new \App\Entities\Activity();
+                    $activity->type       = 'place';
+                    $activity->session_id = null;
+                    $activity->user_id    = $user->id;
+                    $activity->photo_id   = null;
+                    $activity->place_id   = $place->id;
+                    $activity->rating_id  = null;
+                    $activity->created_at = $place->created_at;
+                    $activityModel->insert($activity);
+
+                    $placesIds[] = $place->id;
+                }
+            }
+
+            // Photos
+            $photosData = $photosModel->select('id, place_id, created_at')->where('user_id', $user->id)->findAll();
+            if ($photosData) {
+                foreach ($photosData as $photo) {
+                    $activity = new \App\Entities\Activity();
+                    $activity->type       = 'photo';
+                    $activity->session_id = null;
+                    $activity->user_id    = $user->id;
+                    $activity->photo_id   = $photo->id;
+                    $activity->place_id   = $photo->place_id;
+                    $activity->rating_id  = null;
+                    $activity->created_at = $photo->created_at;
+                    $activityModel->insert($activity);
+                }
+            }
+
+            // Ratings
+            $ratingData = $ratingsModel->select('id, place_id, created_at')->where('user_id', $user->id)->findAll();
+            if ($ratingData) {
+                foreach ($ratingData as $rating) {
+                    $activity = new \App\Entities\Activity();
+                    $activity->type       = 'rating';
+                    $activity->session_id = null;
+                    $activity->user_id    = $user->id;
+                    $activity->photo_id   = null;
+                    $activity->place_id   = $rating->place_id;
+                    $activity->rating_id  = $rating->id;
+                    $activity->created_at = $rating->created_at;
+                    $activityModel->insert($activity);
+                }
+            }
+
+            // Content
+            $contentData = $contentModel->select('id, place_id, created_at')->where('user_id', $user->id)->orderBy('created_at', 'ASC')->findAll();
+            if ($contentData) {
+                $userContentPlaces = [];
+
+                foreach ($contentData as $content) {
+                    if (
+                        in_array($content->place_id, $placesIds) && // Если пользователь автор места
+                        !in_array($content->place_id, $userContentPlaces) // Если это перый place ID в итерации
+                    ) {
+                        $userContentPlaces[] = $content->place_id;
+                        continue;
+                    }
+
+                    $activity = new \App\Entities\Activity();
+                    $activity->type       = 'edit';
+                    $activity->session_id = null;
+                    $activity->user_id    = $user->id;
+                    $activity->photo_id   = null;
+                    $activity->place_id   = $content->place_id;
+                    $activity->rating_id  = null;
+                    $activity->created_at = $content->created_at;
+                    $activityModel->insert($activity);
+                }
+            }
+
+            $userLevels = new LevelsLibrary();
+            $userLevels->calculate($user);
+
+            $counter++;
+
+        }
+
+        echo "Completed: " . $counter;
+
+        $ratingSessionData = $ratingsModel->where(['user_id' => null, 'session_id !=' => null])->findAll();
+        if ($ratingSessionData) {
+            foreach ($ratingSessionData as $ratingItem) {
+                $activity = new \App\Entities\Activity();
+                $activity->type       = 'edit';
+                $activity->session_id = $ratingItem->session_id;
+                $activity->user_id    = null;
+                $activity->photo_id   = null;
+                $activity->place_id   = $ratingItem->place_id;
+                $activity->rating_id  = null;
+                $activity->created_at = $ratingItem->created_at;
+                $activityModel->insert($activity);
+            }
+        }
+    }
 
     /**
      * $: cd public
