@@ -186,7 +186,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadcrumbsLinks = useMemo(() => {
         let breadcrumbs = []
 
-        if (category || locationType || tagData) {
+        if (category || locationType || tagData || currentPage > 1) {
             breadcrumbs.push({
                 link: '/places',
                 text: t('breadCrumbPlacesLink')
@@ -201,7 +201,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return breadcrumbs
-    }, [category, locationData, locationType, tagData])
+    }, [category, locationData, locationType, tagData, currentPage])
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -245,6 +245,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         ? locationData?.title
                         : tagData?.title
                         ? `#${tagData?.title}`
+                        : currentPage > 1
+                        ? `${t('titlePage')} ${initialFilter.page}`
                         : t('breadCrumbCurrent')
                 }
                 actions={

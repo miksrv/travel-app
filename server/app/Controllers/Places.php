@@ -90,6 +90,8 @@ class Places extends ResourceController {
                     'count'  => 0,
                 ]);
             }
+        } else {
+            $tag = [];
         }
 
         // Filtering by user bookmarks (like any other) - if we don’t find a single place in the bookmarks, we return an empty array

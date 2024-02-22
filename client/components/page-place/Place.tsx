@@ -1,4 +1,3 @@
-import { SITE_NAME } from '@/pages/_app'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
@@ -57,7 +56,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                         width: photo.width
                     })),
                     locale: i18n.language,
-                    siteName: SITE_NAME,
+                    siteName: t('siteName'),
                     title: place?.title,
                     type: 'article',
                     url: SITE_LINK
