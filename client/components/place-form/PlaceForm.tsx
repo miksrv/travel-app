@@ -210,13 +210,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             </div>
 
             <div className={styles.mapContainer}>
+                <div className={styles.verticalLine} />
+                <div className={styles.horizontalLine} />
                 {selectedCategory && (
                     <Image
                         className={styles.categoryImage}
                         src={categoryImage(selectedCategory.key)?.src}
                         alt={''}
-                        width={22}
-                        height={26}
+                        width={17}
+                        height={20}
                     />
                 )}
                 <InteractiveMap

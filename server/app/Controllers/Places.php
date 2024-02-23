@@ -526,9 +526,9 @@ class Places extends ResourceController {
                 $time = new Time('now');
                 $diff = $time->difference($placeContent->updated($id));
 
-                // If the last time a user edited this content was less than or equal to 30 minutes,
+                // If the last time a user edited this content was less than or equal to 3 months,
                 // then we will simply update the data and will not add a new version
-                if (abs($diff->getMinutes()) <= 30) {
+                if (abs($diff->getMonths()) <= 3) {
                     $contentModel->update($placeContent->id($id), $placeEntity);
                 } else {
                     $contentModel->insert($placeEntity);
