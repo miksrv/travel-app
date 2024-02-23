@@ -6,6 +6,8 @@ import React from 'react'
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
+import { SITE_LINK } from '@/api/api'
+
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
 
@@ -18,13 +20,18 @@ const Photos: React.FC<PhotosProps> = ({
     photosCount,
     currentPage
 }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.photos'
     })
 
     return (
         <>
-            <NextSeo title={`${user?.name} - ${t('title')}`} />
+            <NextSeo
+                title={`${user?.name} - ${t('title')}`}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }users/${id}/photos`}
+            />
             <Header
                 title={`${user?.name} - ${t('title')}`}
                 currentPage={t('title')}

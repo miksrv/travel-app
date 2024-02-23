@@ -2,12 +2,12 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
-import { API } from '@/api/api'
+import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -30,39 +30,35 @@ const UsersPage: NextPage<UsersPageProps> = ({
     usersCount,
     currentPage
 }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'pages.users'
     })
 
-    // const dispatch = useAppDispatch()
-    //
-    // useEffect(() => {
-    //     dispatch(
-    //         addNotification({
-    //             content: 'Содержание новой нотификации',
-    //             title: 'My first notification'
-    //             // type: 'success'
-    //         })
-    //     )
-    //
-    //     setTimeout(
-    //         () =>
-    //             dispatch(
-    //                 addNotification({
-    //                     content: 'Содержание новой нотификации',
-    //                     title: 'My SECOND notification',
-    //                     type: 'error'
-    //                 })
-    //             ),
-    //         1000
-    //     )
-    // }, [])
+    const title = useMemo(() => {
+        const titlePage =
+            currentPage && currentPage > 1
+                ? ` - ${t('titlePage')} ${currentPage}`
+                : ''
+
+        return t('title') + titlePage
+    }, [currentPage, i18n.language])
 
     return (
         <AppLayout>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                title={title}
+                description={`${title} - ${usersList
+                    ?.map(({ name }) => name)
+                    .join(', ')
+                    .substring(0, 160)}`}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }users${
+                    currentPage && currentPage > 1 ? '?page=' + currentPage : ''
+                }`}
+            />
             <Header
-                title={t('title')}
+                title={title}
                 currentPage={t('breadCrumbCurrent')}
             />
 

@@ -7,6 +7,7 @@ import React, { useEffect } from 'react'
 
 import Container from '@/ui/container'
 
+import { SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -16,7 +17,7 @@ import LoginForm from '@/components/login-form'
 interface LoginPageProps {}
 
 const LoginPage: NextPage<LoginPageProps> = () => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'pages.login'
     })
 
@@ -35,7 +36,14 @@ const LoginPage: NextPage<LoginPageProps> = () => {
 
     return (
         <Container className={'loginPage'}>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                nofollow={true}
+                noindex={true}
+                title={t('title')}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }login`}
+            />
             <LoginForm onSuccessLogin={handleSuccessLogin} />
         </Container>
     )

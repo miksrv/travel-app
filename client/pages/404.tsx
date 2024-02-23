@@ -1,4 +1,5 @@
 import { NextPage } from 'next'
+import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
@@ -9,6 +10,10 @@ interface NotFoundProps {}
 
 const NotFound: NextPage<NotFoundProps> = () => (
     <div className={'page404'}>
+        <NextSeo
+            nofollow={true}
+            noindex={true}
+        />
         <Image
             src={logo}
             alt={''}

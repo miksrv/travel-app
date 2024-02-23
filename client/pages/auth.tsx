@@ -68,7 +68,11 @@ const LoginYandexPage: NextPage<LoginPageProps> = () => {
 
     return (
         <>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                nofollow={true}
+                noindex={true}
+                title={t('title')}
+            />
             <ScreenSpinner text={t('pleaseWait')} />
         </>
     )

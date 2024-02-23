@@ -78,7 +78,11 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
     return (
         <AppLayout>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                noindex={true}
+                nofollow={true}
+                title={t('title')}
+            />
             <Header
                 title={t('title')}
                 currentPage={t('title')}

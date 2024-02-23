@@ -10,7 +10,7 @@ import Container from '@/ui/container'
 import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
-import { API } from '@/api/api'
+import { API, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
@@ -136,6 +136,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             locality: undefined,
             region: undefined
         }
+
         return await router.push('/places' + encodeQueryData(filter))
     }
 
@@ -242,7 +243,16 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
     return (
         <AppLayout>
-            <NextSeo title={title} />
+            <NextSeo
+                title={title}
+                description={`${title} - ${placesList
+                    ?.map(({ title }) => title)
+                    .join(', ')
+                    .substring(0, 160)}`}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }places${encodeQueryData(initialFilter)}`}
+            />
             <Header
                 title={title}
                 links={breadcrumbsLinks || []}

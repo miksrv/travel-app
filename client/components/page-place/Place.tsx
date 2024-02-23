@@ -36,11 +36,16 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
         [nearPlaces]
     )
 
+    const pageUrl = `${SITE_LINK}${i18n.language === 'en' ? 'en/' : ''}places/${
+        place?.id
+    }`
+
     return (
         <>
             <NextSeo
                 title={place?.title}
                 description={place?.content?.substring(0, 160)}
+                canonical={pageUrl}
                 openGraph={{
                     article: {
                         authors: [`${SITE_LINK}users/${place?.author?.id}`],
@@ -51,7 +56,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     },
                     description: place?.content?.substring(0, 160),
                     images: photoList?.map((photo, index) => ({
-                        alt: `${photo.title} - Фото ${index + 1}`,
+                        alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
                         url: `${IMG_HOST}${photo.full}`,
                         width: photo.width
@@ -60,7 +65,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     siteName: t('siteName'),
                     title: place?.title,
                     type: 'article',
-                    url: SITE_LINK
+                    url: pageUrl
                 }}
             />
 
@@ -110,7 +115,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                 link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                 style={{ marginTop: '15px' }}
             >
-                Все места рядом
+                {t('allNearPlacesButton')}
             </Button>
         </>
     )
