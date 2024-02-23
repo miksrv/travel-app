@@ -66,6 +66,7 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
                 noindex={true}
                 nofollow={true}
                 title={t('title')}
+                description={t('title')}
                 canonical={`${SITE_LINK}${
                     i18n.language === 'en' ? 'en/' : ''
                 }registration`}

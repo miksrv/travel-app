@@ -40,6 +40,7 @@ const LoginPage: NextPage<LoginPageProps> = () => {
                 nofollow={true}
                 noindex={true}
                 title={t('title')}
+                description={t('title')}
                 canonical={`${SITE_LINK}${
                     i18n.language === 'en' ? 'en/' : ''
                 }login`}

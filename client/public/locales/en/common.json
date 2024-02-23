@@ -239,6 +239,7 @@
         },
         "index": {
             "title": "Map of interesting places",
+            "description": "Map of interesting places and attractions",
             "breadCrumbCurrent": "Map of interesting places and attractions",
             "pointsCount": "Points on map:",
             "buttonFilters": "Filters",
