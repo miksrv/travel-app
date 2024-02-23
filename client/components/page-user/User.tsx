@@ -11,8 +11,6 @@ import { IMG_HOST, SITE_LINK } from '@/api/api'
 import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
 
-import { formatDateUTC } from '@/functions/helpers'
-
 interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
 
 const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
