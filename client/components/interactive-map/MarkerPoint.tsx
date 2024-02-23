@@ -26,7 +26,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
 
     const placeMarkerIcon = new Leaflet.Icon({
         className: styles.markerPoint,
-        iconAnchor: [9, 30],
+        iconAnchor: [8.5, 10],
         iconSize: [17, 20],
         iconUrl: categoryImage(place.category).src
     })
