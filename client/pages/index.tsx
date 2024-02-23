@@ -126,6 +126,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
         <AppLayout>
             <NextSeo
                 title={t('title')}
+                description={t('description')}
                 canonical={`${SITE_LINK}${i18n.language === 'en' ? 'en' : ''}`}
             />
             <Header
