@@ -6,7 +6,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, SITE_LINK, isApiValidationErrors } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 
 import Header from '@/components/header'
@@ -15,7 +15,7 @@ import PlaceForm from '@/components/place-form'
 interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Edit: React.FC<EditProps> = ({ place }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.edit'
     })
 
@@ -68,7 +68,13 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     return (
         <>
-            <NextSeo title={`${place?.title} - ${t('pageTitle')}`} />
+            <NextSeo
+                title={`${place?.title} - ${t('pageTitle')}`}
+                description={''}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }places/${place?.id}/edit`}
+            />
 
             <Header
                 title={`${place?.title} - ${t('pageTitle')}`}

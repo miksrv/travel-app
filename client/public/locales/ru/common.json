@@ -65,7 +65,8 @@
                 "siteName": "Геометки - Интересные места",
                 "breadCrumbPlacesLink": "Интересные места",
                 "nearPlacesTitle": "Ближайшие места рядом",
-                "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км"
+                "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км",
+                "allNearPlacesButton": "Все места рядом"
             },
             "placeHeader": {
                 "buttonEdit": "Редактировать",
@@ -258,8 +259,11 @@
         },
         "users": {
             "title": "Путешественники",
+            "siteName": "Геометки - Интересные места",
+            "description": "Персональная страница автора и путешественника сервиса geometki.com",
             "breadCrumbCurrent": "Путешественники",
-            "usersCount": "Путешественников:"
+            "usersCount": "Путешественников:",
+            "titlePage": "Страница"
         },
         "settingsUserPage": {
             "title": "Редактирование профиля",

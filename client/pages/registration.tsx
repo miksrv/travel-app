@@ -7,7 +7,7 @@ import React, { useEffect, useMemo } from 'react'
 
 import Container from '@/ui/container'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, SITE_LINK, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
@@ -18,7 +18,7 @@ import RegistrationForm from '@/components/registration-form'
 interface RegistrationPageProps {}
 
 const RegistrationPage: NextPage<RegistrationPageProps> = () => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'pages.registration'
     })
 
@@ -62,7 +62,14 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
 
     return (
         <>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                noindex={true}
+                nofollow={true}
+                title={t('title')}
+                canonical={`${SITE_LINK}${
+                    i18n.language === 'en' ? 'en/' : ''
+                }registration`}
+            />
             <Container
                 className={'loginPage'}
                 title={t('title')}

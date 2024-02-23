@@ -65,7 +65,8 @@
                 "siteName": "Geometki - Interesting Places",
                 "breadCrumbPlacesLink": "Interesting Places",
                 "nearPlacesTitle": "Nearby Places",
-                "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km"
+                "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km",
+                "allNearPlacesButton": "All places nearby"
             },
             "placeHeader": {
                 "buttonEdit": "Edit",
@@ -257,8 +258,11 @@
         },
         "users": {
             "title": "Travelers",
+            "siteName": "Geometki - Interesting Places",
+            "description": "Personal page of the author and traveler of the geometki.com service",
             "breadCrumbCurrent": "Travelers",
-            "usersCount": "Travelers:"
+            "usersCount": "Travelers:",
+            "titlePage": "Page"
         },
         "settingsUserPage": {
             "title": "Edit Profile",

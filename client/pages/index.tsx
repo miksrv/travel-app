@@ -14,7 +14,7 @@ import Dialog from '@/ui/dialog'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
-import { API } from '@/api/api'
+import { API, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -37,7 +37,7 @@ interface IndexPageProps {
 }
 
 const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
-    const { t } = useTranslation('common', { keyPrefix: 'pages.index' })
+    const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.index' })
 
     const dispatch = useAppDispatch()
     const router = useRouter()
@@ -124,7 +124,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
 
     return (
         <AppLayout>
-            <NextSeo title={t('title')} />
+            <NextSeo
+                title={t('title')}
+                canonical={`${SITE_LINK}${i18n.language === 'en' ? 'en' : ''}`}
+            />
             <Header
                 title={t('title')}
                 currentPage={t('breadCrumbCurrent')}
