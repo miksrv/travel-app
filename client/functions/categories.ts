@@ -3,12 +3,15 @@ import { StaticImageData } from 'next/image'
 import { Place } from '@/api/types'
 
 import abandoned from '@/public/images/poi/abandoned.png'
+import animals from '@/public/images/poi/animals.png'
 import archeology from '@/public/images/poi/archeology.png'
 import battlefield from '@/public/images/poi/battlefield.png'
+import bridge from '@/public/images/poi/bridge.png'
 import camping from '@/public/images/poi/camping.png'
 import castle from '@/public/images/poi/castle.png'
 import cave from '@/public/images/poi/cave.png'
 import construction from '@/public/images/poi/construction.png'
+import death from '@/public/images/poi/death.png'
 import factory from '@/public/images/poi/factory.png'
 import fort from '@/public/images/poi/fort.png'
 import manor from '@/public/images/poi/manor.png'
@@ -18,6 +21,7 @@ import monument from '@/public/images/poi/monument.png'
 import mountain from '@/public/images/poi/mountain.png'
 import museum from '@/public/images/poi/museum.png'
 import nature from '@/public/images/poi/nature.png'
+import radiation from '@/public/images/poi/radiation.png'
 import religious from '@/public/images/poi/religious.png'
 import spring from '@/public/images/poi/spring.png'
 import transport from '@/public/images/poi/transport.png'
@@ -28,6 +32,18 @@ export const categoryImage = (category?: Place.Categories): StaticImageData => {
     switch (category) {
         case Place.Categories.battlefield:
             return battlefield
+
+        case Place.Categories.animals:
+            return animals
+
+        case Place.Categories.death:
+            return death
+
+        case Place.Categories.radiation:
+            return radiation
+
+        case Place.Categories.bridge:
+            return bridge
 
         case Place.Categories.fort:
             return fort

@@ -27,6 +27,10 @@ export type Place = {
 
 export enum Categories {
     battlefield = 'battlefield',
+    animals = 'animals',
+    bridge = 'bridge',
+    radiation = 'radiation',
+    death = 'death',
     fort = 'fort',
     transport = 'transport',
     abandoned = 'abandoned',
