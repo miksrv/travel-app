@@ -18,12 +18,14 @@ import styles from './styles.module.sass'
 
 interface AppLayoutProps {
     randomPlaceId?: string
+    className?: string
     fullSize?: boolean
     children?: React.ReactNode
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({
     randomPlaceId,
+    className,
     fullSize,
     children
 }) => {
@@ -58,7 +60,13 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }, [application?.showOverlay, sidebarOpen])
 
     return (
-        <div className={cn(styles.appLayout, fullSize && styles.fullSize)}>
+        <div
+            className={cn(
+                className,
+                styles.appLayout,
+                fullSize && styles.fullSize
+            )}
+        >
             <div
                 role={'button'}
                 tabIndex={0}

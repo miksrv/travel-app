@@ -123,7 +123,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
     }
 
     return (
-        <AppLayout>
+        <AppLayout className={'mainLayout'}>
             <NextSeo
                 title={t('title')}
                 description={t('description')}
@@ -132,6 +132,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
             <Header
                 title={t('title')}
                 currentPage={t('breadCrumbCurrent')}
+                className={'mainHeader'}
                 hideHomePage={true}
                 actions={
                     <>
@@ -152,18 +153,13 @@ const IndexPage: NextPage<IndexPageProps> = ({ category }) => {
                     </>
                 }
             />
-            <Container
-                style={{
-                    height: 'calc(100vh - 165px)',
-                    minHeight: '400px',
-                    padding: '4px'
-                }}
-            >
+            <Container className={'mainContainer'}>
                 <InteractiveMap
                     storeMapPosition={true}
                     enableSearch={true}
                     enableFullScreen={true}
                     enableLayersSwitcher={true}
+                    scrollWheelZoom={false}
                     loading={isFetching}
                     places={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}

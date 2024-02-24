@@ -229,8 +229,9 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                     <InteractiveMap
                         zoom={15}
                         center={[place.lat, place.lon]}
-                        enableFullScreen={true}
+                        enableFullScreen={false}
                         scrollWheelZoom={false}
+                        dragging={false}
                         places={[
                             {
                                 category: place.category?.name!,

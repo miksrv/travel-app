@@ -80,6 +80,32 @@ a
   @media only screen and (max-width: $mobileMaxWidth)
     width: 96% !important
 
+/* Index (map) page */
+.mainLayout
+  & > section > main
+    @media only screen and (max-width: $mobileMaxWidth)
+      padding: 0 !important
+      margin-bottom: 0 !important
+
+.mainHeader
+  @media only screen and (max-width: $mobileMaxWidth)
+    display: none !important
+
+.mainContainer
+  height: calc(100vh - 165px)
+  min-height: 300px
+  padding: 4px !important
+
+  @media only screen and (max-width: $mobileMaxWidth)
+    height: calc(100vh - 50px)
+    margin: 0 !important
+    padding: 0 !important
+    box-shadow: none !important
+    border-radius: 0 !important
+
+    & > div
+      border-radius: 0 !important
+
 /* Text formatting in the place content */
 .placeContent
   p
