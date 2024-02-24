@@ -122,12 +122,12 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
             {isAuth && editorMode ? (
                 <ContentEditor
-                    markdown={content || ''}
+                    markdown={localContent ?? content ?? ''}
                     onChange={setEditorContent}
                 />
-            ) : localContent ? (
+            ) : content || localContent ? (
                 <div className={styles.content}>
-                    <Markdown>{localContent}</Markdown>
+                    <Markdown>{localContent ?? content}</Markdown>
                 </div>
             ) : (
                 <div className={styles.emptyContent}>{t('emptyContent')}</div>
