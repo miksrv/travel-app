@@ -11,6 +11,7 @@ import styles from './styles.module.sass'
 interface HeaderProps extends BreadcrumbsProps {
     title?: string
     backLink?: string
+    className?: string
     attachedBottom?: boolean
     actions?: React.ReactNode
 }
@@ -18,12 +19,17 @@ interface HeaderProps extends BreadcrumbsProps {
 const Header: React.FC<HeaderProps> = ({
     title,
     backLink,
+    className,
     attachedBottom,
     actions,
     ...props
 }) => (
     <Container
-        className={cn(styles.header, attachedBottom && styles.attachedBottom)}
+        className={cn(
+            className,
+            styles.header,
+            attachedBottom && styles.attachedBottom
+        )}
     >
         {backLink && (
             <Button

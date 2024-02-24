@@ -64,7 +64,6 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     locale: i18n.language,
                     siteName: t('siteName'),
                     title: place?.title,
-                    type: 'article',
                     url: pageUrl
                 }}
             />
