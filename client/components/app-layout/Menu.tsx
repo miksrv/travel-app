@@ -5,10 +5,14 @@ import React from 'react'
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch } from '@/api/store'
+
 import styles from './styles.module.sass'
 
 export type MenuItemType = {
     icon?: IconTypes
+    auth?: boolean
     link: string
     text: string
 }
@@ -25,6 +29,8 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         keyPrefix: 'components.appLayout.menu'
     })
 
+    const dispatch = useAppDispatch()
+
     const menuItems: MenuItemType[] = [
         {
             icon: 'Map',
@@ -37,13 +43,15 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('places')
         },
         {
+            auth: true,
             icon: 'PlusCircle',
-            link: isAuth ? '/places/create' : '/login',
+            link: '/places/create',
             text: t('create')
         },
         {
+            auth: true,
             icon: 'User',
-            link: isAuth ? `/users/${userId}` : '/login',
+            link: `/users/${userId}`,
             text: t('profile')
         },
         {
@@ -53,6 +61,15 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         }
     ]
 
+    const handleClick = (event: React.MouseEvent, item: MenuItemType) => {
+        if (item.auth && !isAuth) {
+            event.preventDefault()
+            dispatch(openAuthDialog())
+        }
+
+        onClick?.()
+    }
+
     return (
         <menu className={styles.menu}>
             {menuItems.map((item, i) => (
@@ -60,7 +77,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
                     <Link
                         href={item.link}
                         title={item.text}
-                        onClick={onClick}
+                        onClick={(event) => handleClick(event, item)}
                     >
                         {item.icon && <Icon name={item.icon} />}
                         {item.text}

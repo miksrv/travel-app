@@ -170,7 +170,6 @@ const AppBar: React.FC<HeaderProps> = ({
 
                     {appAuth.isAuth === false && (
                         <Button
-                            link={'/login'}
                             title={t('userLoginTitle')}
                             mode={'secondary'}
                             className={styles.loginButton}

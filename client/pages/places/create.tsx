@@ -48,9 +48,9 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 
     useEffect(() => {
         if (authSlice?.isAuth === false) {
-            router.push('/login')
+            router.push('/places')
         }
-    }, [])
+    })
 
     useEffect(() => {
         if (data?.id && isSuccess) {
