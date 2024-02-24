@@ -368,7 +368,7 @@ export const API = createApi({
 
         /* Controller: Sitemap */
         sitemapGetList: builder.query<ApiTypes.ResponseSitemapGet, void>({
-            query: (item) => 'sitemap'
+            query: () => 'sitemap'
         }),
 
         /* Controller: Tags */
