@@ -66,9 +66,9 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
     useEffect(() => {
         if (authSlice?.isAuth === false) {
-            router.push('/login')
+            router.push('/users')
         }
-    }, [])
+    })
 
     useEffect(() => {
         if (isSuccess) {
