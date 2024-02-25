@@ -30,7 +30,7 @@ export enum Categories {
     bridge = 'bridge',
     radiation = 'radiation',
     death = 'death',
-    fort = 'fort',
+    military = 'military',
     transport = 'transport',
     abandoned = 'abandoned',
     mine = 'mine',

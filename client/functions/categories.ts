@@ -11,9 +11,9 @@ import castle from '@/public/images/poi/castle.png'
 import cave from '@/public/images/poi/cave.png'
 import construction from '@/public/images/poi/construction.png'
 import death from '@/public/images/poi/death.png'
-import fort from '@/public/images/poi/fort.png'
 import manor from '@/public/images/poi/manor.png'
 import memorial from '@/public/images/poi/memorial.png'
+import military from '@/public/images/poi/military.png'
 import mine from '@/public/images/poi/mine.png'
 import monument from '@/public/images/poi/monument.png'
 import mountain from '@/public/images/poi/mountain.png'
@@ -40,8 +40,8 @@ export const categoryImage = (category?: Place.Categories): StaticImageData => {
         case Place.Categories.bridge:
             return bridge
 
-        case Place.Categories.fort:
-            return fort
+        case Place.Categories.military:
+            return military
 
         case Place.Categories.transport:
             return transport

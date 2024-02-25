@@ -263,7 +263,7 @@ class Migrate extends ResourceController {
             11 => 'memorial',     // Статуи
             12 => 'manor',        // Усадьбы
             13 => 'cave',         // Пещеры
-            14 => 'fort',         // Доты
+            14 => 'military',     // Доты
             15 => 'mountain',     // Горы
             16 => 'construction', // Другое
         ];
