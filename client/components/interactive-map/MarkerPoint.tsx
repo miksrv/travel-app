@@ -62,13 +62,17 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                 >
                                     {addDecimalPoint(poiData.rating)}
                                 </RatingColored>
-                                <Image
-                                    className={styles.image}
-                                    src={`${IMG_HOST}${poiData?.cover?.preview}`}
-                                    alt={poiData?.title || ''}
-                                    width={300}
-                                    height={200}
-                                />
+
+                                {poiData?.cover && (
+                                    <Image
+                                        className={styles.image}
+                                        src={`${IMG_HOST}${poiData.cover?.preview}`}
+                                        alt={poiData?.title || ''}
+                                        width={300}
+                                        height={200}
+                                    />
+                                )}
+
                                 <div className={styles.bottomPanel}>
                                     <Badge
                                         icon={'Photo'}
