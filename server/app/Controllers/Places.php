@@ -522,7 +522,7 @@ class Places extends ResourceController {
 
             // If the author of the last edit is the same as the current one,
             // then you need to check when the content was last edited
-            if ($placeContent->author($id) === $this->session->user?->id) {
+            if ($placeContent->author($id) === $this->session->user?->id && $placeContent->locale($id) === $locale) {
                 $time = new Time('now');
                 $diff = $time->difference($placeContent->updated($id));
 
