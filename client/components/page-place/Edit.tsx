@@ -51,9 +51,12 @@ const Edit: React.FC<EditProps> = ({ place }) => {
     const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
         const title = formData?.title?.trim()
         const content = formData?.content?.trim()
-
         updatePlace({
             ...formData,
+            category:
+                formData?.category !== place?.category?.name
+                    ? formData?.category
+                    : undefined,
             content: content !== place?.content ? content : undefined,
             id: place?.id!,
             title: title !== place?.title ? title : undefined

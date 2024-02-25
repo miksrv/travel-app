@@ -296,7 +296,7 @@ export const API = createApi({
         }),
         placesPatchItem: builder.mutation<
             ApiTypes.ResponsePlacesPatchItem,
-            ApiTypes.RequestPlacesPatchItem
+            ApiTypes.RequestPlacesPostItem
         >({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.id, type: 'Places' },
@@ -312,7 +312,7 @@ export const API = createApi({
         }),
         placesPostItem: builder.mutation<
             ApiTypes.ResponsePlacesPostItem,
-            ApiTypes.RequestPlacesPostItem
+            Omit<ApiTypes.RequestPlacesPostItem, 'id'>
         >({
             invalidatesTags: [
                 { type: 'Places' },
