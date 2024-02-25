@@ -147,19 +147,13 @@ export interface RequestPlacesPatchCover {
     photoId: string
 }
 
-export interface RequestPlacesPatchItem {
-    id: string
-    content?: string
-    title?: string
-    tags?: string[]
-}
-
 export interface ResponsePlacesPatchItem {
     content?: string
     tags?: Tag[]
 }
 
 export interface RequestPlacesPostItem {
+    id?: string
     title?: string
     content?: string
     category?: string

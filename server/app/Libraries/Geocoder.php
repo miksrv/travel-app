@@ -33,9 +33,11 @@ class Geocoder {
     public function __construct() {
         $this->httpClient = new Client();
         $this->requestApi = Services::request();
-        $this->provider   = $this->requestApi->getLocale() === 'ru'
-            ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
-            : Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
+        $this->provider   = new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'));
+
+//        $this->provider   = $this->requestApi->getLocale() === 'ru'
+//            ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
+//            : Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
     }
 
     /**
