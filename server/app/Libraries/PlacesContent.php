@@ -122,6 +122,15 @@ class PlacesContent {
     }
 
     /**
+     * Return locale for translation place by ID
+     * @param string $placeId
+     * @return string
+     */
+    public function locale(string $placeId): string {
+        return $this->get($placeId, 'locale');
+    }
+
+    /**
      * Return updated time for translation place by ID
      * @param string $placeId
      * @return string
