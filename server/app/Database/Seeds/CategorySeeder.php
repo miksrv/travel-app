@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder {
             'content_ru' => 'Места исторических военных сражений, стычек или любых отметин, которые остались на местах битв. К такому типу относятся окопы, военные полигоны, воронки от бомб или места испытания различных видов вооружений.'
         ],
         [
-            'name'       => 'fort',
+            'name'       => 'military',
             'title_en'   => 'Bunker',
             'title_ru'   => 'Укрепление',
             'content_en' => 'Military fort, bunkers and bunkers, fortifications, free-standing defensive structures that have historical significance.',

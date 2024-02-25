@@ -17,11 +17,11 @@ class Categories extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $categoriesModel = new CategoryModel();
-        $categoriesData  = $categoriesModel->findAll();
-
         $locale = $this->request->getLocale();
         $result = [];
+
+        $categoriesModel = new CategoryModel();
+        $categoriesData  = $categoriesModel->orderBy("title_$locale", 'ASC')->findAll();
 
         if ($categoriesData) {
             foreach ($categoriesData as $item) {
