@@ -153,6 +153,15 @@
             "buttonSave": "Save",
             "buttonCancel": "Cancel"
         },
+        "userForm": {
+            "errorsMessageTitle": "Correct errors",
+            "inputNameLabel": "Your name on the site",
+            "inputNamePlaceholder": "Inputs your username",
+            "inputWebsiteLabel": "Personal Page",
+            "inputWebsitePlaceholder": "Link to your social network page",
+            "buttonSave": "Save",
+            "buttonCancel": "Cancel"
+        },
         "placeFilterPanel": {
             "sortViews": "Views",
             "sortRating": "Rating",

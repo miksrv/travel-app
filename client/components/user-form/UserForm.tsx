@@ -26,7 +26,7 @@ const UserForm: React.FC<UserFormProps> = ({
     onCancel
 }) => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'components.placeForm'
+        keyPrefix: 'components.userForm'
     })
 
     const [formData, setFormData] = useState<ApiTypes.RequestUsersPatch>()
@@ -82,7 +82,7 @@ const UserForm: React.FC<UserFormProps> = ({
             {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
-                    title={'Исправьте ошибки'}
+                    title={t('errorsMessageTitle')}
                     list={Object.values(formErrors || {})}
                 />
             )}
@@ -90,8 +90,8 @@ const UserForm: React.FC<UserFormProps> = ({
             <div className={styles.formElement}>
                 <Input
                     name={'name'}
-                    label={'Ваше имя на сайта'}
-                    placeholder={'Введиет свое имя пользователя'}
+                    label={t('inputNameLabel')}
+                    placeholder={t('inputNamePlaceholder')}
                     disabled={loading}
                     value={formData?.name}
                     error={formErrors?.name}
@@ -103,8 +103,8 @@ const UserForm: React.FC<UserFormProps> = ({
             <div className={styles.formElement}>
                 <Input
                     name={'website'}
-                    label={'Персональная страница'}
-                    placeholder={'Ссылка на вашу страницу в социальной сети'}
+                    label={t('inputWebsiteLabel')}
+                    placeholder={t('inputWebsitePlaceholder')}
                     disabled={loading}
                     value={formData?.website}
                     error={formErrors?.website}
