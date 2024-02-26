@@ -154,6 +154,15 @@
             "buttonSave": "Сохранить",
             "buttonCancel": "Отмена"
         },
+        "userForm": {
+            "errorsMessageTitle": "Исправьте ошибки",
+            "inputNameLabel": "Ваше имя на сайта",
+            "inputNamePlaceholder": "Введиет свое имя пользователя",
+            "inputWebsiteLabel": "Персональная страница",
+            "inputWebsitePlaceholder": "Ссылка на вашу страницу в социальной сети",
+            "buttonSave": "Сохранить",
+            "buttonCancel": "Отмена"
+        },
         "placeFilterPanel": {
             "sortViews": "Просмотры",
             "sortRating": "Рейтинг",
