@@ -26,7 +26,7 @@ h1
 h2
   margin: 0
   font-size: $fontSizeTitleH2
-  font-weight: 400
+  font-weight: 500
 
 h3, h4, h5, h6
   margin: 0
@@ -35,6 +35,9 @@ h3, h4, h5, h6
 p
   font-size: $fontSizeParagraph
 
+  &:first-of-type
+    margin-top: 0
+
 code, blockquote
   white-space: normal
 
@@ -42,6 +45,11 @@ ul
   margin: 0
   padding: 0
   list-style: none
+
+  &.normal
+    margin: 0 0 0 30px
+    list-style: disc
+    font-size: $fontSizeParagraph
 
 .headline
   font-size: $fontSizeHeadline
@@ -58,6 +66,22 @@ a
   &.external
     &:after
       content: " " url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAoAAAAKCAYAAACNMs+9AAAAVklEQVR4Xn3PgQkAMQhDUXfqTu7kTtkpd5RA8AInfArtQ2iRXFWT2QedAfttj2FsPIOE1eCOlEuoWWjgzYaB/IkeGOrxXhqB+uA9Bfcm0lAZuh+YIeAD+cAqSz4kCMUAAAAASUVORK5CYII=)
+
+  &.helpLink
+    height: 16px
+    width: 16px
+    background: $headerSvgColor
+    color: #FFFFFF
+    display: inline-block
+    line-height: 16px
+    border-radius: 50%
+    text-align: center
+    opacity: .4
+    text-decoration: none
+    transition: opacity 167ms ease-out
+
+    &:hover
+      opacity: .8
 
 .bodyScrollLock
   overflow: hidden
@@ -76,9 +100,19 @@ a
 .levelsPage
   .levelContainer
     margin-bottom: 10px
+    padding-bottom: 10px
+    border-bottom: 1px solid #d7d8d9
+    display: flex
+    justify-content: space-between
+    align-items: center
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      flex-direction: column
+      align-items: flex-start
 
     &:last-of-type
       margin-bottom: 0
+      border-bottom: 0
 
   .levelTitle
     display: flex

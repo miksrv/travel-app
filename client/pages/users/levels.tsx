@@ -14,7 +14,6 @@ import { ApiTypes } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
 
 import { levelImage } from '@/functions/userLevels'
@@ -25,21 +24,43 @@ interface LevelsPageProps {
 
 const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
     const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.levels'
+        keyPrefix: 'pages.users.levels'
     })
 
     return (
         <AppLayout>
             <NextSeo
-                title={''}
+                title={t('title')}
                 canonical={`${SITE_LINK}${
                     i18n.language === 'en' ? 'en/' : ''
                 }levels`}
             />
             <Header
-                title={''}
-                currentPage={t('breadCrumbCurrent')}
+                title={t('title')}
+                currentPage={t('title')}
+                links={[
+                    {
+                        link: '/users/',
+                        text: t('breadCrumbUsersLink')
+                    }
+                ]}
             />
+
+            <Container>
+                <p>{t('descriptionPart1')}</p>
+                <p>{t('descriptionPart2')}</p>
+                <h2 style={{ marginBottom: '5px' }}>{t('awardsSubtitle')}</h2>
+                <ul className={'normal'}>
+                    {levels?.awards &&
+                        Object.entries(levels.awards)?.map(([key, value]) => (
+                            <li key={key}>
+                                {t(`awards.${key}`)}
+                                {': '}
+                                <strong>{`+${value}`}</strong> {t('experience')}
+                            </li>
+                        ))}
+                </ul>
+            </Container>
 
             <Container className={'levelsPage'}>
                 {levels?.items?.map((level) => (
@@ -47,18 +68,20 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                         key={`level${level.level}`}
                         className={'levelContainer'}
                     >
-                        <div className={'levelTitle'}>
-                            Уровень {level.level}
-                            <Image
-                                src={levelImage(level.level)?.src}
-                                alt={''}
-                                width={26}
-                                height={26}
-                            />
-                            {level.title}
-                        </div>
-                        <div className={'experience'}>
-                            Нужно опыта: {level.experience}
+                        <div>
+                            <div className={'levelTitle'}>
+                                {t('level', { level: level.level })}
+                                <Image
+                                    src={levelImage(level.level)?.src}
+                                    alt={''}
+                                    width={26}
+                                    height={26}
+                                />
+                                {level.title}
+                            </div>
+                            <div className={'experience'}>
+                                {t('needExp', { experience: level.experience })}
+                            </div>
                         </div>
                         <UserAvatarGroup
                             users={level.users}

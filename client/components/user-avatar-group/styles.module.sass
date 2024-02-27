@@ -27,3 +27,15 @@
 
   .totalCountText
     margin-left: 15px !important
+    font-size: $fontSizeParagraph
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      display: none
+
+  .mobileCount
+    margin-left: 15px !important
+    font-weight: 600
+    display: none
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      display: block

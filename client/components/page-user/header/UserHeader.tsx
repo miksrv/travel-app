@@ -89,7 +89,12 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                 width={20}
                                 height={20}
                             />{' '}
-                            {user?.level?.title}
+                            <Link
+                                href={'/users/levels'}
+                                title={''}
+                            >
+                                {user?.level?.title}
+                            </Link>
                         </div>
                     </li>
                     <li>
