@@ -112,10 +112,14 @@ class Location extends ResourceController {
     }
 
     /**
-     * @param object $data
+     * @param object|null $data
      * @return ResponseInterface
      */
-    private function _showResult(object $data): ResponseInterface {
+    private function _showResult(?object $data): ResponseInterface {
+        if (!$data) {
+            return $this->respond(null);
+        }
+
         $result = $data;
         $locale = $this->request->getLocale();
 
