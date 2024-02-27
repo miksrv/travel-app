@@ -8,13 +8,6 @@ use App\Models\UsersModel;
 use Config\Services;
 use ReflectionException;
 
-define('MODIFIER_PLACE', 20);
-define('MODIFIER_PHOTO', 10);
-define('MODIFIER_RATING', 1);
-define('MODIFIER_COVER', 2);
-define('MODIFIER_EDIT', 5);
-define('MODIFIER_COMMENT', 15);
-
 class LevelsLibrary {
     private array $userLevels;
 

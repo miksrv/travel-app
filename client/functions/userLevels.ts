@@ -29,6 +29,7 @@ import rank26 from '@/public/images/levels/rank_26.png'
 import rank27 from '@/public/images/levels/rank_27.png'
 import rank28 from '@/public/images/levels/rank_28.png'
 import rank29 from '@/public/images/levels/rank_29.png'
+import rank30 from '@/public/images/levels/rank_30.png'
 
 export const levelImage = (level?: number): StaticImageData => {
     switch (level) {
@@ -90,6 +91,8 @@ export const levelImage = (level?: number): StaticImageData => {
             return rank28
         case 29:
             return rank29
+        case 30:
+            return rank30
 
         default:
             return rank1

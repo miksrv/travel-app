@@ -146,6 +146,11 @@ export const API = createApi({
             query: () => 'categories'
         }),
 
+        /* Controller: Levels */
+        levelsGetList: builder.query<ApiTypes.ResponseLevelsGetList, void>({
+            query: () => 'levels'
+        }),
+
         /* Controller: Location */
         locationGetByType: builder.query<
             ApiTypes.ResponseLocationGetByType,

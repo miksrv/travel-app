@@ -100,6 +100,10 @@ $routes->options('location/geosearch', 'Location');
 $routes->options('location/(:num)', 'Location');
 $routes->options('location', 'Location');
 
+/* Levels */
+$routes->get('levels', 'Levels::list');
+$routes->options('levels', 'Levels');
+
 /* Tags */
 $routes->get('tags', 'Tags::search');
 $routes->get('tags/(:alphanum)', 'Tags::show/$1');
