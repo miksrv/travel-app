@@ -6,7 +6,7 @@ import React from 'react'
 import { IMG_HOST } from '@/api/api'
 import { User } from '@/api/types/User'
 
-import { concatClassNames as cn } from '@/functions/helpers'
+import { concatClassNames as cn, minutesAgo } from '@/functions/helpers'
 
 import defaultAvatar from '@/public/images/no-avatar.png'
 
@@ -22,42 +22,42 @@ interface AvatarProps {
     loading?: boolean
     showName?: boolean
     disableLink?: boolean
+    hideOnlineIcon?: boolean
 }
 
 const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : 20)
 
-const UserAvatar: React.FC<AvatarProps> = ({
-    className,
-    user,
-    size,
-    caption,
-    showName,
-    disableLink
-}) => {
+const UserAvatar: React.FC<AvatarProps> = (props) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.userAvatar'
     })
+
+    const { className, user, size, caption, showName, disableLink } = props
 
     return (
         <div className={cn(styles.userAvatar, className)}>
             {user?.id ? (
                 disableLink ? (
-                    <span className={styles.avatarLink}>
-                        <AvatarImage
-                            user={user}
-                            size={size}
-                        />
+                    <span
+                        className={styles.avatarLink}
+                        style={{
+                            height: getDimension(size),
+                            width: getDimension(size)
+                        }}
+                    >
+                        <AvatarImage {...props} />
                     </span>
                 ) : (
                     <Link
                         className={styles.avatarLink}
                         href={`/users/${user.id}`}
                         title={`${t('linkTitle')} ${user?.name}`}
+                        style={{
+                            height: getDimension(size),
+                            width: getDimension(size)
+                        }}
                     >
-                        <AvatarImage
-                            user={user}
-                            size={size}
-                        />
+                        <AvatarImage {...props} />
                     </Link>
                 )
             ) : (
@@ -69,6 +69,7 @@ const UserAvatar: React.FC<AvatarProps> = ({
                     height={getDimension(size)}
                 />
             )}
+
             {showName && user?.id && (
                 <div
                     className={cn(
@@ -89,7 +90,7 @@ const UserAvatar: React.FC<AvatarProps> = ({
     )
 }
 
-const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
+const AvatarImage: React.FC<AvatarProps> = ({ user, size, hideOnlineIcon }) => (
     <>
         <Image
             alt={''}
@@ -98,10 +99,17 @@ const AvatarImage: React.FC<AvatarProps> = ({ user, size }) => (
             width={getDimension(size)}
             height={getDimension(size)}
         />
+
         <div
             aria-hidden={true}
             className={styles.avatarBorder}
         />
+
+        {!hideOnlineIcon &&
+            user?.activity?.date &&
+            minutesAgo(user.activity.date) <= 15 && (
+                <div className={styles.online} />
+            )}
     </>
 )
 

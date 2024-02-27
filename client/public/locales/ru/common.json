@@ -206,7 +206,8 @@
             "linkTitle": "Профиль пользователя"
         },
         "userList": {
-            "reputation": "Репутация"
+            "reputation": "Репутация",
+            "level": "Уровень"
         },
         "notification": {
             "level": "Новый уровень!",

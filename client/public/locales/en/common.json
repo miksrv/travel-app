@@ -205,7 +205,8 @@
             "linkTitle": "User Profile"
         },
         "userList": {
-            "reputation": "Reputation"
+            "reputation": "Reputation",
+            "level": "Level"
         },
         "notification": {
             "level": "New level!",

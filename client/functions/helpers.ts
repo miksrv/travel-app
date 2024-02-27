@@ -85,6 +85,9 @@ export const timeAgo = (
     withoutSuffix?: boolean
 ): string => (date ? dayjs.utc(date).fromNow(withoutSuffix) : '')
 
+export const minutesAgo = (date?: string | Date): number =>
+    date ? dayjs().diff(dayjs.utc(date), 'minute') : 99999999
+
 export const formatDateUTC = (date?: string | Date): string =>
     date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
 
