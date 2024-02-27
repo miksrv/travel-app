@@ -9,7 +9,7 @@ import {
     Tag
 } from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
-import { User } from './User'
+import { LevelData, User } from './User'
 
 /** General Types **/
 export type LatLonCoordinate = {
@@ -248,9 +248,27 @@ export interface ResponseSitemapGet {
 
 export interface ResponseTagsGetItem extends Tag {}
 
-/* Controller: Place */
+/* Controller: Categories */
 export interface ResponseCategoriesGetList extends Place {
     items?: Category[]
+}
+
+/* Controller: Levels */
+export interface ResponseLevelsGetList {
+    awards?: {
+        place?: number
+        photo?: number
+        rating?: number
+        cover?: number
+        edit?: number
+        comment?: number
+    }
+    items?: Array<
+        LevelData & {
+            count?: number
+            users?: Pick<User, 'id' | 'avatar' | 'name'>[]
+        }
+    >
 }
 
 /* Controller: Rating */

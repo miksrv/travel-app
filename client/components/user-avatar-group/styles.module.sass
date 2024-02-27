@@ -1,0 +1,41 @@
+@import ../../styles/variables
+
+.avatarsGroup
+  display: flex
+  align-items: center
+  box-sizing: border-box
+  margin: 0
+
+  & > div:not(:first-of-type)
+    margin-left: -5px
+
+    & > a > img
+      border: 1px solid #FFFFFF
+
+  .totalCountAvatar
+    width: 32px
+    height: 32px
+    background: #99a2ad
+    color: #FFFFFF
+    border-radius: 50%
+    display: flex
+    justify-content: center
+    align-items: center
+    border: 1px solid #FFFFFF
+    font-size: $fontSizeCaption
+    z-index: 10
+
+  .totalCountText
+    margin-left: 15px !important
+    font-size: $fontSizeParagraph
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      display: none
+
+  .mobileCount
+    margin-left: 15px !important
+    font-weight: 600
+    display: none
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      display: block

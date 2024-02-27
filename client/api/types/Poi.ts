@@ -1,6 +1,5 @@
 import { ApiTypes } from '@/api/types'
-import { Categories } from '@/api/types/Place'
-import { Place as PlaceType } from '@/api/types/Place'
+import { Categories, Place as PlaceType } from '@/api/types/Place'
 import { User } from '@/api/types/User'
 
 export type Place = Pick<PlaceType, 'lat' | 'lon'> & {
