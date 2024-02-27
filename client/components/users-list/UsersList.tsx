@@ -11,7 +11,6 @@ import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 import styles from '@/components/users-list/styles.module.sass'
 
-import { timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
 interface UsersListProps {
