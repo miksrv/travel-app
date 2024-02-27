@@ -21,7 +21,7 @@ interface SettingsUserPageProps {}
 
 const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'pages.settingsUserPage'
+        keyPrefix: 'pages.users.settings'
     })
 
     const router = useRouter()

@@ -12,7 +12,7 @@ import defaultAvatar from '@/public/images/no-avatar.png'
 
 import styles from './styles.module.sass'
 
-type SizeType = 'small' | 'medium'
+type SizeType = 'small' | 'tiny' | 'medium'
 
 interface AvatarProps {
     className?: string
@@ -25,7 +25,8 @@ interface AvatarProps {
     hideOnlineIcon?: boolean
 }
 
-const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : 20)
+const getDimension = (size?: SizeType) =>
+    size === 'medium' ? 36 : size === 'tiny' ? 32 : 20
 
 const UserAvatar: React.FC<AvatarProps> = (props) => {
     const { t } = useTranslation('common', {

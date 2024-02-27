@@ -204,6 +204,9 @@
         "userAvatar": {
             "linkTitle": "User Profile"
         },
+        "userAvatarGroup": {
+            "totalUsers": "<strong>{{count}}</strong> more travelers"
+        },
         "userList": {
             "reputation": "Reputation",
             "level": "Level"
@@ -273,12 +276,30 @@
             "description": "Personal page of the author and traveler of the geometki.com service",
             "breadCrumbCurrent": "Travelers",
             "usersCount": "Travelers:",
-            "titlePage": "Page"
-        },
-        "settingsUserPage": {
-            "title": "Edit Profile",
-            "breadCrumbUsersLink": "Travelers",
-            "breadCrumbMyPageLink": "My Page"
+            "titlePage": "Page",
+            "settings": {
+                "title": "Edit Profile",
+                "breadCrumbUsersLink": "Travelers",
+                "breadCrumbMyPageLink": "My Page"
+            },
+            "levels": {
+                "title": "User levels",
+                "breadCrumbUsersLink": "Travelers",
+                "descriptionPart1": "Registration on the geometki.com service provides additional features to users, including the ability to add their own geotags, access private places, upload their own photos, edit tags, descriptions and geotag locations, as well as the ability to edit other users' geotags and much more.",
+                "descriptionPart2": "By performing various activities, users earn experience by reaching a certain level of experience, which allows them to advance to new levels. Each new level opens up additional benefits and opportunities for users. The list of privileges available at each level is constantly expanding, providing users with a wider range of functionality.",
+                "awardsSubtitle": "How much experience is given for completing actions",
+                "level": "Level {{level}}",
+                "experience": "experience",
+                "needExp": "Experience required: {{experience}}",
+                "awards": {
+                    "place": "Adding place",
+                    "photo": "Uploading photo",
+                    "rating": "Rating",
+                    "cover": "Cover Edit",
+                    "edit": "Edit description",
+                    "comment": "Writing a comment"
+                }
+            }
         }
     },
     "ui": {

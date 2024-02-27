@@ -20,7 +20,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints?.sitemapGetList.initiate()
             )
 
-            const staticPages = ['places', 'users'].map(
+            const staticPages = ['places', 'users', 'users/levels'].map(
                 (staticPagePath) => SITE_LINK + staticPagePath
             )
 
