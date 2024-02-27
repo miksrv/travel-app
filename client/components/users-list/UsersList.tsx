@@ -35,22 +35,27 @@ const UsersList: React.FC<UsersListProps> = ({ users }) => {
                         showName={true}
                         user={user}
                         size={'medium'}
-                        caption={timeAgo(user?.created?.date, true)}
+                        caption={
+                            <>
+                                <Image
+                                    className={styles.levelImage}
+                                    src={levelImage(user?.level?.level)?.src}
+                                    alt={''}
+                                    width={16}
+                                    height={16}
+                                />
+                                {user?.level?.level} {t('level')}
+                            </>
+                        }
                     />
+
                     <div className={styles.reputation}>
                         <p>{`${t('reputation')}: `}</p>
                         <Reputation value={user?.reputation || 0} />
                     </div>
+
                     <div className={styles.level}>
-                        [<b>{user?.level?.level}</b>]
-                        <Image
-                            className={styles.levelImage}
-                            src={levelImage(user?.level?.level)?.src}
-                            alt={''}
-                            width={20}
-                            height={20}
-                        />
-                        {user?.level?.title}
+                        <p>{user?.level?.title}</p>
                         <Progress
                             className={styles.progress}
                             value={nextLevelPercentage(

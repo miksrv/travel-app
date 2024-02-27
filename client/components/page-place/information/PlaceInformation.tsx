@@ -117,6 +117,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                         <UserAvatar
                             user={place?.author}
                             showName={true}
+                            hideOnlineIcon={true}
                         />
                     </div>
                 </li>

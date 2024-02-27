@@ -2,7 +2,7 @@
 
 .usersListItem
   display: flex
-  justify-content: flex-start
+  justify-content: space-between
   align-items: center
   margin-bottom: 10px
   padding-bottom: 10px
@@ -13,17 +13,17 @@
     border-bottom: none
     padding-bottom: 0
 
-  .avatar
+  & > div
     width: 33%
-    min-width: 150px
-    max-width: 200px
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      width: 50%
+
+  .avatar
 
   .reputation
     display: flex
     align-items: center
-    width: 33%
-    min-width: 150px
-    max-width: 200px
 
     p
       padding: 0
@@ -34,14 +34,20 @@
       width: 30px
       min-width: auto
       margin: 0 10px
+      justify-content: end
 
       p
         display: none
 
+  .levelImage
+    margin-right: 3px
+
   .level
-    .levelImage
-      margin: 0 2px 1px
-      vertical-align: middle
+    @media only screen and (max-width: $mobileMaxWidth)
+      display: none
+
+    p
+      margin: 0
 
     .progress
       margin-top: 4px

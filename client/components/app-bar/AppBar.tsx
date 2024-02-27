@@ -134,6 +134,7 @@ const AppBar: React.FC<HeaderProps> = ({
                                         size={'medium'}
                                         user={appAuth.user}
                                         disableLink={true}
+                                        hideOnlineIcon={true}
                                     />
                                 }
                             >
