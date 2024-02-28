@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 import React from 'react'
 import Lightbox from 'react-image-lightbox'
 
@@ -50,7 +51,18 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                     nextSrcThumbnail={ImagePreviewUrl(
                         (photoIndex + 1) % (photos.length || 0)
                     )}
-                    imageTitle={photos[photoIndex]?.title || ''}
+                    imageTitle={
+                        photos[photoIndex]?.placeId ? (
+                            <Link
+                                href={`/places/${photos[photoIndex].placeId}`}
+                                title={photos[photoIndex]?.title}
+                            >
+                                {photos[photoIndex]?.title}
+                            </Link>
+                        ) : (
+                            photos[photoIndex]?.title
+                        )
+                    }
                     imageCaption={
                         photos[photoIndex]?.author && (
                             <UserAvatar
