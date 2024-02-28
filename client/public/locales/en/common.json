@@ -20,7 +20,7 @@
         },
         "appLayout": {
             "menu": {
-                "index": "Map of places",
+                "map": "Map of places",
                 "places": "Interesting places",
                 "create": "Add a place",
                 "profile": "Personal page",
@@ -234,6 +234,13 @@
         }
     },
     "pages": {
+        "index": {
+            "title": "Interesting places and attractions",
+            "description": "Interesting places and attractions",
+            "buttonAllPlaces": "All places of interest",
+            "titleActiveUsers": "Active Users",
+            "titleLastPhotos": "Last uploaded photos"
+        },
         "places": {
             "createPlacePage": {
                 "title": "Add interesting place",
@@ -250,10 +257,10 @@
                 "titlePage": "Page"
             }
         },
-        "index": {
+        "map": {
             "title": "Map of interesting places",
             "description": "Map of interesting places and attractions",
-            "breadCrumbCurrent": "Map of interesting places and attractions",
+            "breadCrumbCurrent": "Map of interesting places",
             "pointsCount": "Points on map:",
             "buttonFilters": "Filters",
             "dialogFiltersTitle": "Filters",
@@ -263,9 +270,6 @@
         "auth": {
             "title": "Authorization",
             "pleaseWait": "Please wait..."
-        },
-        "login": {
-            "title": "Authorization"
         },
         "registration": {
             "title": "Registration"

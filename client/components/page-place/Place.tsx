@@ -109,7 +109,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
 
             <Button
                 size={'m'}
-                mode={'primary'}
+                mode={'secondary'}
                 stretched={true}
                 link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                 style={{ marginTop: '15px' }}

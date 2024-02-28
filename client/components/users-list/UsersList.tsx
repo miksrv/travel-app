@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import React from 'react'
 
-import Container from '@/ui/container'
+import Container, { ContainerProps } from '@/ui/container'
 import Progress from '@/ui/progress'
 
 import { User } from '@/api/types/User'
@@ -13,17 +13,17 @@ import styles from '@/components/users-list/styles.module.sass'
 
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
-interface UsersListProps {
+interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer'> {
     users?: User[]
 }
 
-const UsersList: React.FC<UsersListProps> = ({ users }) => {
+const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.userList'
     })
 
     return (
-        <Container>
+        <Container {...props}>
             {users?.map((user) => (
                 <section
                     key={user.id}

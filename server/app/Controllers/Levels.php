@@ -49,7 +49,7 @@ class Levels extends ResourceController {
             $data->users = $usersModel
                 ->select('id, name, avatar')
                 ->where('level', $level->level)
-                ->orderBy('updated_at')
+                ->orderBy('activity_at, updated_at', 'DESC')
                 ->findAll(10);
 
             if ($data->users) {

@@ -32,6 +32,7 @@ const Photos: React.FC<PhotosProps> = ({
                     i18n.language === 'en' ? 'en/' : ''
                 }users/${id}/photos`}
             />
+
             <Header
                 title={`${user?.name} - ${t('title')}`}
                 currentPage={t('title')}
@@ -47,9 +48,9 @@ const Photos: React.FC<PhotosProps> = ({
                     }
                 ]}
             />
-            <Container>
-                <UserGallery photos={photosList} />
-            </Container>
+
+            <UserGallery photos={photosList} />
+
             <Container className={'pagination'}>
                 <div>
                     {t('photos')} <strong>{photosCount ?? 0}</strong>
