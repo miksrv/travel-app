@@ -23,6 +23,7 @@ class PlaceTags {
      */
     public function saveTags(array $tags, string $placeId): array {
         $locale     = Services::request()->getLocale();
+        $updatedIds = [];
         $returnTags = [];
 
         if (!$placeId || empty($tags)) {
@@ -32,10 +33,13 @@ class PlaceTags {
         $this->placeTagsModel->where('place_id', $placeId)->delete();
 
         foreach ($tags as $tag) {
-            $tagData = $this->tagsModel->where(['title_' . $locale => $tag])->first();
+            $tagData = $this->tagsModel
+                ->where('title_ru', $tag)
+                ->orWhere('title_en', $tag)
+                ->first();
 
             if (!$tagData) {
-                $this->tagsModel->insert(['title_' . $locale => $tag,]);
+                $this->tagsModel->insert(['title_' . $locale => $tag]);
                 $this->placeTagsModel->insert([
                     'tag_id'   => $this->tagsModel->getInsertID(),
                     'place_id' => $placeId
@@ -47,6 +51,12 @@ class PlaceTags {
                 ];
 
             } else {
+                // We check that there are no identical IDs. This can happen if the same tag is added in two languages,
+                // that is, the array of $tags tags comes as ['озеро', 'lake'] and both refer to the same tag in the database
+                if (in_array($tagData->id, $updatedIds)) {
+                    continue;
+                }
+
                 $this->placeTagsModel->insert([
                     'tag_id'   => $tagData->id,
                     'place_id' => $placeId
@@ -56,6 +66,8 @@ class PlaceTags {
                     'id'    => $tagData->id,
                     'title' => $tag,
                 ];
+
+                $updatedIds[] = $tagData->id;
             }
         }
 

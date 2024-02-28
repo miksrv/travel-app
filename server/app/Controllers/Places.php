@@ -325,10 +325,12 @@ class Places extends ResourceController {
         if ($placeData->tags) {
             $tagsTitles = [];
 
-            foreach ($placeData->tags as $tagItem) {
+            foreach ($placeData->tags as $tag) {
                 $tagsTitles[] = [
-                    'id'    => $tagItem->id,
-                    'title' => $tagItem->{"title_$locale"} ?? $tagItem->title_en ?? $tagItem->title_ru
+                    'id'    => $tag->id,
+                    'title' => $locale === 'en' && !empty($tag->title_en)
+                        ? $tag->title_en
+                        : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en)
                 ];
             }
 
