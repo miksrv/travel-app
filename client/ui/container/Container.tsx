@@ -4,13 +4,14 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
     className?: string
     compact?: boolean
     action?: React.ReactNode
     header?: React.ReactNode
     children?: React.ReactNode
+    footer?: React.ReactNode
 }
 
 const Container: React.FC<ContainerProps> = ({
@@ -20,6 +21,7 @@ const Container: React.FC<ContainerProps> = ({
     action,
     header,
     children,
+    footer,
     ...props
 }) => (
     <section
@@ -34,6 +36,7 @@ const Container: React.FC<ContainerProps> = ({
             </div>
         )}
         {children}
+        {footer}
     </section>
 )
 

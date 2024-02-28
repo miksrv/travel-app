@@ -34,8 +34,8 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
     const menuItems: MenuItemType[] = [
         {
             icon: 'Map',
-            link: '/',
-            text: t('index')
+            link: '/map',
+            text: t('map')
         },
         {
             icon: 'Terrain',

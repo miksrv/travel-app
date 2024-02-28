@@ -4,7 +4,6 @@ import { NextSeo } from 'next-seo'
 import React from 'react'
 
 import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 import { IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -48,21 +47,23 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
             <UserHeader user={user} />
 
-            <Container title={t('title')}>
-                <UserGallery photos={photosList} />
-
-                {photosCount > 8 && (
-                    <Button
-                        size={'m'}
-                        mode={'secondary'}
-                        stretched={true}
-                        link={`/users/${id}/photos`}
-                        style={{ marginTop: '15px' }}
-                    >
-                        {`${t('buttonShowAllPhotos')} (${photosCount})`}
-                    </Button>
-                )}
-            </Container>
+            <UserGallery
+                title={t('title')}
+                photos={photosList}
+                footer={
+                    photosCount > 8 && (
+                        <Button
+                            size={'m'}
+                            mode={'secondary'}
+                            stretched={true}
+                            link={`/users/${id}/photos`}
+                            style={{ marginTop: '15px' }}
+                        >
+                            {`${t('buttonShowAllPhotos')} (${photosCount})`}
+                        </Button>
+                    )
+                }
+            />
         </>
     )
 }

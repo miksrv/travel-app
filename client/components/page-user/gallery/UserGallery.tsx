@@ -1,15 +1,17 @@
 import React, { useState } from 'react'
 
+import Container, { ContainerProps } from '@/ui/container'
+
 import { Photo } from '@/api/types/Photo'
 
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 
-interface UserGalleryProps {
+interface UserGalleryProps extends Pick<ContainerProps, 'title' | 'footer'> {
     photos?: Photo[]
 }
 
-const UserGallery: React.FC<UserGalleryProps> = ({ photos }) => {
+const UserGallery: React.FC<UserGalleryProps> = ({ photos, ...props }) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
 
@@ -23,7 +25,7 @@ const UserGallery: React.FC<UserGalleryProps> = ({ photos }) => {
     }
 
     return (
-        <>
+        <Container {...props}>
             <PhotoGallery
                 photos={photos}
                 onPhotoClick={handlePhotoClick}
@@ -36,7 +38,7 @@ const UserGallery: React.FC<UserGalleryProps> = ({ photos }) => {
                 onChangeIndex={setPhotoIndex}
                 onCloseLightBox={handleCloseLightbox}
             />
-        </>
+        </Container>
     )
 }
 

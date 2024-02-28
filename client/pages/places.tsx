@@ -279,7 +279,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     </Button>
                 }
             />
+
             <PlacesList places={placesList} />
+
             <Container className={'pagination'}>
                 <div>
                     {t('placesCount')} <strong>{placesCount}</strong>
