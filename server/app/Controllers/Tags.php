@@ -17,13 +17,18 @@ class Tags extends ResourceController {
         $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
         $locale = $this->request->getLocale();
 
-        $tagsModel = new TagsModel();
-        $tagsData  = $tagsModel->like('title_' . $locale, $search)->findAll(10);
         $response  = [];
+        $tagsModel = new TagsModel();
+        $tagsData  = $tagsModel
+            ->like('title_ru', $search)
+            ->orLike('title_en', $search)
+            ->findAll(10);
 
         if ($tagsData) {
             foreach ($tagsData as $item) {
-                $response[] = $item->{"title_$locale"};
+                $response[] = $locale === 'en' && !empty($item->title_en)
+                    ? $item->title_en
+                    : (!empty($item->title_ru) ? $item->title_ru : $item->title_en);
             }
         }
 
@@ -45,9 +50,9 @@ class Tags extends ResourceController {
 
         return $this->respond([
             'id'    => $tagsData->id,
-            'title' => $locale === 'en' && $tagsData->title_en
+            'title' => $locale === 'en' && !empty($tagsData->title_en)
                 ? $tagsData->title_en
-                : $tagsData->title_ru
+                : (!empty($tagsData->title_ru) ? $tagsData->title_ru : $tagsData->title_en)
         ]);
     }
 }
