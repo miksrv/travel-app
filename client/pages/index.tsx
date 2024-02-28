@@ -33,7 +33,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
     const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.index' })
 
     return (
-        <AppLayout className={'mainLayout'}>
+        <AppLayout>
             <NextSeo
                 title={t('title')}
                 description={t('description')}
@@ -78,6 +78,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const translations = await serverSideTranslations(locale)
 
+            store.dispatch(setLocale(locale))
+
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
                     limit: 3,
@@ -97,8 +99,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     limit: 8
                 })
             )
-
-            store.dispatch(setLocale(locale))
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
