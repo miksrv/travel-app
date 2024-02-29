@@ -21,6 +21,8 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     const router = useRouter()
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
     const [updatePlace, { error, isLoading, isSuccess }] =
         API.usePlacesPatchItemMutation()
 
@@ -72,11 +74,11 @@ const Edit: React.FC<EditProps> = ({ place }) => {
     return (
         <>
             <NextSeo
+                nofollow={true}
+                noindex={true}
                 title={`${place?.title} - ${t('pageTitle')}`}
                 description={''}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }places/${place?.id}/edit`}
+                canonical={`${canonicalUrl}places/${place?.id}/edit`}
             />
 
             <Header

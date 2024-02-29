@@ -78,6 +78,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined,
         country: country ?? undefined,
@@ -249,10 +251,11 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     ?.map(({ title }) => title)
                     .join(', ')
                     .substring(0, 160)}`}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }places${encodeQueryData(initialFilter)}`}
+                canonical={`${canonicalUrl}places${encodeQueryData(
+                    initialFilter
+                )}`}
             />
+
             <Header
                 title={title}
                 links={breadcrumbsLinks || []}

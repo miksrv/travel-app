@@ -223,6 +223,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                 )}
                 <InteractiveMap
                     enableSearch={true}
+                    enableFullScreen={true}
                     enableLayersSwitcher={true}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}

@@ -11,7 +11,7 @@
             "userLoginTitle": "Authorization on the site",
             "randomPlaceLinkTitle": "Go to a random place",
             "search": {
-                "placeholder": "Search for places..."
+                "placeholder": "Search places"
             },
             "notifications": {
                 "noData": "No notifications",
@@ -121,8 +121,10 @@
             },
             "photos": {
                 "title": "Photos",
+                "description": "All traveler photos",
                 "breadCrumbLink": "Travelers",
-                "photos": "Photos:"
+                "photos": "Photos:",
+                "page": "Page"
             },
             "user": {
                 "title": "Photos",
@@ -209,7 +211,8 @@
         },
         "userList": {
             "reputation": "Reputation",
-            "level": "Level"
+            "level": "Level",
+            "emptyList": "Something went wrong and there are no users here."
         },
         "notification": {
             "level": "New level!",
@@ -288,6 +291,7 @@
             },
             "levels": {
                 "title": "User levels",
+                "description": "User levels on the geometki.com service",
                 "breadCrumbUsersLink": "Travelers",
                 "descriptionPart1": "Registration on the geometki.com service provides additional features to users, including the ability to add their own geotags, access private places, upload their own photos, edit tags, descriptions and geotag locations, as well as the ability to edit other users' geotags and much more.",
                 "descriptionPart2": "By performing various activities, users earn experience by reaching a certain level of experience, which allows them to advance to new levels. Each new level opens up additional benefits and opportunities for users. The list of privileges available at each level is constantly expanding, providing users with a wider range of functionality.",
