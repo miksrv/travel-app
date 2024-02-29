@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
 import React, { useMemo } from 'react'
-import { Article } from 'schema-dts'
+import { Article, BreadcrumbList } from 'schema-dts'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -45,7 +45,26 @@ const Place: React.FC<PlaceProps> = ({
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const schema: Article = {
+    const breadCrumbSchema: BreadcrumbList = {
+        // @ts-ignore
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                item: `${canonicalUrl}places`,
+                name: t('breadCrumbPlacesLink'),
+                position: 1
+            },
+            {
+                '@type': 'ListItem',
+                name: place?.title,
+                position: 2
+            }
+        ]
+    }
+
+    const articleSchema: Article = {
         // @ts-ignore
         '@context': 'https://schema.org',
         '@type': 'Article',
@@ -82,7 +101,17 @@ const Place: React.FC<PlaceProps> = ({
         dateModified: formatDateISO(place?.updated?.date),
         datePublished: formatDateISO(place?.created?.date),
         headline: place?.title,
-        image: IMG_HOST ? IMG_HOST + place?.cover?.preview : undefined,
+        image: photoList?.length
+            ? photoList?.map((photo) => ({
+                  '@type': 'ImageObject',
+                  author: photo.author?.name,
+                  caption: photo.title,
+                  contentUrl: `${IMG_HOST}${photo?.full}`,
+                  height: `${photo.height}px`,
+                  url: `${IMG_HOST}${photo?.full}`,
+                  width: `${photo.width}px`
+              }))
+            : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
             userInteractionCount: place?.views
@@ -95,7 +124,15 @@ const Place: React.FC<PlaceProps> = ({
             <Head>
                 <script
                     type={'application/ld+json'}
-                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(articleSchema)
+                    }}
+                />
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(breadCrumbSchema)
+                    }}
                 />
             </Head>
 

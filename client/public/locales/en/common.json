@@ -62,7 +62,7 @@
                 "breadCrumbPlacesLink": "Interesting Places"
             },
             "place": {
-                "siteName": "Geometki - Interesting Places",
+                "siteName": "Geometki",
                 "breadCrumbPlacesLink": "Interesting Places",
                 "nearPlacesTitle": "Nearby Places",
                 "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km",
@@ -128,7 +128,8 @@
             },
             "user": {
                 "title": "Photos",
-                "buttonShowAllPhotos": "Show all photos"
+                "buttonShowAllPhotos": "Show all photos",
+                "breadCrumbUsersLink": "Travelers"
             }
         },
         "photoGallery": {
