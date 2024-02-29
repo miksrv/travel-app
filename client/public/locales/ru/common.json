@@ -62,7 +62,7 @@
                 "breadCrumbPlacesLink": "Интересные места"
             },
             "place": {
-                "siteName": "Геометки - Интересные места",
+                "siteName": "Геометки",
                 "breadCrumbPlacesLink": "Интересные места",
                 "nearPlacesTitle": "Ближайшие места рядом",
                 "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км",
@@ -129,7 +129,8 @@
             },
             "user": {
                 "title": "Фотографии",
-                "buttonShowAllPhotos": "Показать все фотографии"
+                "buttonShowAllPhotos": "Показать все фотографии",
+                "breadCrumbUsersLink": "Путешественники"
             }
         },
         "photoGallery": {

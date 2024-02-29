@@ -1,7 +1,9 @@
 import { UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import React from 'react'
+import { BreadcrumbList, ProfilePage } from 'schema-dts'
 
 import Button from '@/ui/button'
 
@@ -9,6 +11,8 @@ import { IMG_HOST, SITE_LINK } from '@/api/api'
 
 import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
+
+import { formatDateISO } from '@/functions/helpers'
 
 interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
 
@@ -19,8 +23,56 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
+    const breadCrumbSchema: BreadcrumbList = {
+        // @ts-ignore
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            {
+                '@type': 'ListItem',
+                item: `${canonicalUrl}places`,
+                name: t('breadCrumbUsersLink'),
+                position: 1
+            },
+            {
+                '@type': 'ListItem',
+                name: user?.name,
+                position: 2
+            }
+        ]
+    }
+
+    const personSchema: ProfilePage = {
+        // @ts-ignore
+        '@context': 'https://schema.org',
+        '@type': 'ProfilePage',
+        dateCreated: formatDateISO(user?.created?.date),
+        dateModified: formatDateISO(user?.updated?.date),
+        mainEntity: {
+            '@type': 'Person',
+            identifier: user?.id,
+            image: user?.avatar ? `${IMG_HOST}${user.avatar}` : undefined,
+            name: user?.name
+        }
+    }
+
     return (
         <>
+            <Head>
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(personSchema)
+                    }}
+                />
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(breadCrumbSchema)
+                    }}
+                />
+            </Head>
+
             <NextSeo
                 title={user?.name}
                 canonical={`${canonicalUrl}users/${user?.id}`}
@@ -38,7 +90,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                     },
                     siteName: t('siteName'),
                     title: user?.name,
-                    type: 'profile',
+                    type: 'http://ogp.me/ns/profile#',
                     url: `${canonicalUrl}users/${user?.id}`
                 }}
             />
