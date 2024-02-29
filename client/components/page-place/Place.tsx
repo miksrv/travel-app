@@ -36,16 +36,14 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
         [nearPlaces]
     )
 
-    const pageUrl = `${SITE_LINK}${i18n.language === 'en' ? 'en/' : ''}places/${
-        place?.id
-    }`
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     return (
         <>
             <NextSeo
                 title={place?.title}
                 description={place?.content?.substring(0, 160)}
-                canonical={pageUrl}
+                canonical={`${canonicalUrl}places/${place?.id}`}
                 openGraph={{
                     article: {
                         authors: [`${SITE_LINK}users/${place?.author?.id}`],
@@ -64,7 +62,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     locale: i18n.language,
                     siteName: t('siteName'),
                     title: place?.title,
-                    url: pageUrl
+                    url: `${canonicalUrl}places/${place?.id}`
                 }}
             />
 

@@ -48,6 +48,8 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
     const { data: categoryData } = API.useCategoriesGetListQuery()
     const { data: poiListData, isFetching } = API.usePoiGetListQuery(
         { bounds: mapBounds, category: category ?? undefined },
@@ -127,8 +129,9 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
             <NextSeo
                 title={t('title')}
                 description={t('description')}
-                canonical={`${SITE_LINK}${i18n.language === 'en' ? 'en' : ''}`}
+                canonical={`${canonicalUrl}map`}
             />
+
             <Header
                 title={t('title')}
                 currentPage={t('breadCrumbCurrent')}
@@ -152,6 +155,7 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
                     </>
                 }
             />
+
             <Container className={'mainContainer'}>
                 <InteractiveMap
                     storeMapPosition={true}

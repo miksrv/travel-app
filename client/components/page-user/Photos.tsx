@@ -24,17 +24,19 @@ const Photos: React.FC<PhotosProps> = ({
         keyPrefix: 'components.pageUser.photos'
     })
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+    const pageTitle = currentPage > 1 ? ` - ${t('page')} ${currentPage}` : ''
+
     return (
         <>
             <NextSeo
-                title={`${user?.name} - ${t('title')}`}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }users/${id}/photos`}
+                title={`${user?.name} - ${t('title')}${pageTitle}`}
+                description={`${user?.name} - ${t('description')}${pageTitle}`}
+                canonical={`${canonicalUrl}users/${id}/photos`}
             />
 
             <Header
-                title={`${user?.name} - ${t('title')}`}
+                title={`${user?.name} - ${t('title')}${pageTitle}`}
                 currentPage={t('title')}
                 backLink={`/users/${id}`}
                 links={[

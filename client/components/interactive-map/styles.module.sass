@@ -11,7 +11,7 @@
 
   .leftControls, .rightControls
     position: absolute
-    z-index: 400
+    z-index: 402
     top: 90px
     left: 10px
 
@@ -44,13 +44,13 @@
 
   .searchControl
     position: absolute
-    z-index: 400
+    z-index: 402
     top: 10px
     left: 56px
     min-width: 300px
 
     @media only screen and (max-width: $mobileMaxWidth)
-      min-width: 288px
+      min-width: 240px
 
     & > div
       & > div
@@ -58,6 +58,7 @@
         border: .5px solid #999 !important
 
     ul
+      top: 33px !important
       border: .5px solid #999 !important
 
 .popup

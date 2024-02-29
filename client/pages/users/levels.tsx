@@ -27,13 +27,14 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
         keyPrefix: 'pages.users.levels'
     })
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
     return (
         <AppLayout>
             <NextSeo
                 title={t('title')}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }levels`}
+                canonical={`${canonicalUrl}users/levels`}
+                description={t('description')}
             />
             <Header
                 title={t('title')}

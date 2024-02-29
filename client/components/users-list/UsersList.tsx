@@ -22,9 +22,9 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
         keyPrefix: 'components.userList'
     })
 
-    return (
+    return users?.length ? (
         <Container {...props}>
-            {users?.map((user) => (
+            {users.map((user) => (
                 <section
                     key={user.id}
                     className={styles.usersListItem}
@@ -68,6 +68,8 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                 </section>
             ))}
         </Container>
+    ) : (
+        <Container className={styles.emptyList}>{t('emptyList')}</Container>
     )
 }
 

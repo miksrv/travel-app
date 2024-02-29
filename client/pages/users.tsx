@@ -34,6 +34,8 @@ const UsersPage: NextPage<UsersPageProps> = ({
         keyPrefix: 'pages.users'
     })
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
     const title = useMemo(() => {
         const titlePage =
             currentPage && currentPage > 1
@@ -51,12 +53,11 @@ const UsersPage: NextPage<UsersPageProps> = ({
                     ?.map(({ name }) => name)
                     .join(', ')
                     .substring(0, 160)}`}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }users${
+                canonical={`${canonicalUrl}users${
                     currentPage && currentPage > 1 ? '?page=' + currentPage : ''
                 }`}
             />
+
             <Header
                 title={title}
                 currentPage={t('breadCrumbCurrent')}

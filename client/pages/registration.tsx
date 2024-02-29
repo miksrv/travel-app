@@ -67,9 +67,6 @@ const RegistrationPage: NextPage<RegistrationPageProps> = () => {
                 nofollow={true}
                 title={t('title')}
                 description={t('title')}
-                canonical={`${SITE_LINK}${
-                    i18n.language === 'en' ? 'en/' : ''
-                }registration`}
             />
             <Container
                 className={'loginPage'}

@@ -17,15 +17,13 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         keyPrefix: 'components.pageUser.user'
     })
 
-    const pageUrl = `${SITE_LINK}${i18n.language === 'en' ? 'en/' : ''}places/${
-        user?.id
-    }`
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     return (
         <>
             <NextSeo
                 title={user?.name}
-                canonical={pageUrl}
+                canonical={`${canonicalUrl}users/${user?.id}`}
                 description={`${user?.name} - ${t('description')}`}
                 openGraph={{
                     images: photosList?.map((photo, index) => ({
@@ -41,7 +39,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                     siteName: t('siteName'),
                     title: user?.name,
                     type: 'profile',
-                    url: pageUrl
+                    url: `${canonicalUrl}users/${user?.id}`
                 }}
             />
 
