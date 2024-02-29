@@ -121,7 +121,7 @@ const Place: React.FC<PlaceProps> = ({
                     locale: i18n.language,
                     siteName: t('siteName'),
                     title: place?.title,
-                    type: 'article',
+                    type: 'http://ogp.me/ns/article#',
                     url: `${canonicalUrl}places/${place?.id}`
                 }}
             />
