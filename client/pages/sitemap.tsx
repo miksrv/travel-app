@@ -20,9 +20,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints?.sitemapGetList.initiate()
             )
 
-            const staticPages = ['places', 'users', 'users/levels'].map(
-                (staticPagePath) => SITE_LINK + staticPagePath
-            )
+            const staticPages = ['map', 'places', 'users', 'users/levels']
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
@@ -41,29 +39,48 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let sitemap =
                 '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 
-            sitemap += staticPages
-                .map(
-                    (url) => `
+            const makeUrlNode = (
+                url: string,
+                date: string,
+                freq: 'monthly' | 'daily',
+                priority: string = '1.0'
+            ) => `
             <url>
-              <loc>${url}</loc>
-              <lastmod>${new Date().toISOString()}</lastmod>
-              <changefreq>monthly</changefreq>
-              <priority>0.8</priority>
+              <loc>${SITE_LINK}${url}</loc>
+              <lastmod>${date}</lastmod>
+              <changefreq>${freq}</changefreq>
+              <priority>${priority}</priority>
             </url>
           `
+
+            // Static RU Locale
+            sitemap += staticPages
+                .map((url) =>
+                    makeUrlNode(url, new Date().toISOString(), 'monthly', '0.8')
                 )
                 .join('')
 
+            // Static EN Locale
+            sitemap += staticPages
+                .map((url) =>
+                    makeUrlNode(
+                        'en/' + url,
+                        new Date().toISOString(),
+                        'monthly',
+                        '0.8'
+                    )
+                )
+                .join('')
+
+            // Dynamic RU Locale
             sitemap += [...placesPages, ...usersPages]
-                .map(
-                    (page) => `
-            <url>
-              <loc>${SITE_LINK + page.link}</loc>
-              <lastmod>${page.update}</lastmod>
-              <changefreq>daily</changefreq>
-              <priority>1.0</priority>
-            </url>
-          `
+                .map((page) => makeUrlNode(page.link, page.update, 'daily'))
+                .join('')
+
+            // Dynamic EN Locale
+            sitemap += [...placesPages, ...usersPages]
+                .map((page) =>
+                    makeUrlNode('en/' + page.link, page.update, 'daily')
                 )
                 .join('')
 
