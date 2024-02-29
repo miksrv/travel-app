@@ -206,6 +206,7 @@ const Place: React.FC<PlaceProps> = ({
                 size={'m'}
                 mode={'secondary'}
                 stretched={true}
+                noIndex={true}
                 link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                 style={{ marginTop: '15px' }}
             >
