@@ -1,7 +1,9 @@
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import React, { useMemo } from 'react'
+import { Article } from 'schema-dts'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -14,11 +16,16 @@ import PlaceInformation from '@/components/page-place/information'
 import PlacePhotos from '@/components/page-place/photos'
 import PlacesList from '@/components/places-list'
 
-import { formatDateUTC } from '@/functions/helpers'
+import { formatDateISO, formatDateUTC } from '@/functions/helpers'
 
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
-const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
+const Place: React.FC<PlaceProps> = ({
+    place,
+    photoList,
+    nearPlaces,
+    voteCount
+}) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.place'
     })
@@ -38,8 +45,60 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
+    const schema: Article = {
+        // @ts-ignore
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        accessMode: ['textual', 'visual'],
+        // Google support only this types:
+        // https://developers.google.com/search/docs/appearance/structured-data/review-snippet
+        // aggregateRating: {
+        //     '@type': 'AggregateRating',
+        //     bestRating: 5,
+        //     ratingCount: voteCount,
+        //     ratingValue: place?.rating
+        // },
+        articleBody: place?.content,
+        author: {
+            '@type': 'Person',
+            name: place?.author?.name,
+            url: `${canonicalUrl}users/${place?.author?.id}`
+        },
+        contentLocation: {
+            '@type': 'Place',
+            address: {
+                '@type': 'PostalAddress',
+                addressCountry: place?.address?.country?.title,
+                addressLocality: place?.address?.locality?.title,
+                addressRegion: place?.address?.region?.title,
+                streetAddress: place?.address?.street
+            },
+            geo: {
+                '@type': 'GeoCoordinates',
+                latitude: place?.lat,
+                longitude: place?.lon
+            }
+        },
+        dateModified: formatDateISO(place?.updated?.date),
+        datePublished: formatDateISO(place?.created?.date),
+        headline: place?.title,
+        image: IMG_HOST ? IMG_HOST + place?.cover?.preview : undefined,
+        interactionStatistic: {
+            '@type': 'InteractionCounter',
+            userInteractionCount: place?.views
+        },
+        wordCount: place?.content.trim().split(/\s+/).length
+    }
+
     return (
         <>
+            <Head>
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+                />
+            </Head>
+
             <NextSeo
                 title={place?.title}
                 description={place?.content?.substring(0, 160)}
@@ -53,7 +112,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                         tags: place?.tags?.map(({ title }) => title)
                     },
                     description: place?.content?.substring(0, 160),
-                    images: photoList?.map((photo, index) => ({
+                    images: photoList?.slice(0, 3).map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
                         url: `${IMG_HOST}${photo.full}`,
@@ -62,6 +121,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     locale: i18n.language,
                     siteName: t('siteName'),
                     title: place?.title,
+                    type: 'article',
                     url: `${canonicalUrl}places/${place?.id}`
                 }}
             />
@@ -69,7 +129,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
             <PlaceHeader
                 place={place}
                 ratingValue={ratingData?.rating ?? place?.rating}
-                ratingCount={ratingData?.count}
+                ratingCount={ratingData?.count ?? voteCount}
                 breadcrumbs={[
                     {
                         link: '/places/',

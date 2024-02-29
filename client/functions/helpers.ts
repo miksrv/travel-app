@@ -80,6 +80,9 @@ export const formatDate = (
 
 export const dateToUnixTime = (date?: string | Date) => dayjs(date).unix()
 
+export const formatDateISO = (date?: string | Date): string =>
+    dayjs(date).toISOString()
+
 export const timeAgo = (
     date?: string | Date,
     withoutSuffix?: boolean
