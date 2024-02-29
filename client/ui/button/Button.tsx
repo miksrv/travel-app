@@ -12,6 +12,7 @@ import styles from './styles.module.sass'
 interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
     className?: string
     link?: string
+    noIndex?: boolean
     stretched?: boolean
     loading?: boolean
     size?: 's' | 'm' | 'l'
@@ -24,6 +25,7 @@ interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
 const Button: React.FC<ContainerProps> = ({
     className,
     link,
+    noIndex,
     stretched,
     loading,
     size,
@@ -63,6 +65,7 @@ const Button: React.FC<ContainerProps> = ({
             className={styles.buttonLink}
             href={link}
             title={''}
+            rel={noIndex ? 'noindex nofollow' : ''}
         >
             {button}
         </Link>
