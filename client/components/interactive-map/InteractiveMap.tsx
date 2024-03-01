@@ -63,7 +63,7 @@ const DEFAULT_MAP_LAYER: MapLayers = MapLayersType.OSM
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
-    layer,
+    // layer,
     loading,
     storeMapPosition,
     enableSearch,

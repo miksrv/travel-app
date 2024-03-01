@@ -32,13 +32,13 @@ export type AuthServiceType = 'google' | 'yandex'
 
 export type LocaleType = 'en' | 'ru'
 
-export const SortOrder = {
+export const SortOrderTypes = {
     ASC: 'ASC',
     DESC: 'DESC'
 } as const
-export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+export type SortOrder = (typeof SortOrderTypes)[keyof typeof SortOrderTypes]
 
-export const SortFields = {
+export const SortFieldsTypes = {
     Category: 'category',
     Created: 'created_at',
     Distance: 'distance',
@@ -47,7 +47,7 @@ export const SortFields = {
     Updated: 'updated_at',
     Views: 'views'
 } as const
-export type SortFields = (typeof SortFields)[keyof typeof SortFields]
+export type SortFields = (typeof SortFieldsTypes)[keyof typeof SortFieldsTypes]
 
 export const LocationType = {
     Country: 'country',
