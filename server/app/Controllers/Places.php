@@ -12,6 +12,7 @@ use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\RatingModel;
 use App\Models\PlacesContentModel;
+use App\Models\TagsModel;
 use App\Models\UsersBookmarksModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\I18n\Time;
@@ -71,24 +72,36 @@ class Places extends ResourceController {
 
         // if filtering by tag ID
         if ($tag) {
-            $placesTagsModel = new PlacesTagsModel();
-            $placesTagsData  = $placesTagsModel
-                ->select('place_id')
-                ->where('tag_id', $tag)
-                ->groupBy('place_id')
-                ->findAll();
+            $tagModel = new TagsModel();
+            $tagData  = $tagModel
+                ->select('id')
+                ->orWhere(['title_ru' => $tag, 'title_en' => $tag])
+                ->first();
 
-            if (!empty($placesTagsData)) {
-                $tag = [];
-
-                foreach ($placesTagsData as $item) {
-                    $tag[] = $item->place_id;
-                }
-            } else {
+            if (!$tagData || !$tagData->id) {
                 return $this->respond([
                     'items'  => [],
                     'count'  => 0,
                 ]);
+            }
+
+            $placesTagsModel = new PlacesTagsModel();
+            $placesTagsData  = $placesTagsModel
+                ->select('place_id')
+                ->where('tag_id', $tagData->id)
+                ->groupBy('place_id')
+                ->findAll();
+
+            if (empty($placesTagsData)) {
+                return $this->respond([
+                    'items'  => [],
+                    'count'  => 0,
+                ]);
+            }
+
+            $tag = [];
+            foreach ($placesTagsData as $item) {
+                $tag[] = $item->place_id;
             }
         } else {
             $tag = [];
@@ -292,7 +305,7 @@ class Places extends ResourceController {
         // Collect tags
         $placeData->tags = $placesTagsModel
             ->join('tags', 'tags.id = places_tags.tag_id')
-            ->where(['place_id' => $placeData->id])
+            ->where('place_id', $placeData->id)
             ->findAll();
 
         // Has the user already voted for this material or not?
@@ -335,12 +348,9 @@ class Places extends ResourceController {
             $tagsTitles = [];
 
             foreach ($placeData->tags as $tag) {
-                $tagsTitles[] = [
-                    'id'    => $tag->id,
-                    'title' => $locale === 'en' && !empty($tag->title_en)
-                        ? $tag->title_en
-                        : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en)
-                ];
+                $tagsTitles[] = $locale === 'en' && !empty($tag->title_en)
+                    ? $tag->title_en
+                    : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en);
             }
 
             $response['tags'] = $tagsTitles;
@@ -513,7 +523,7 @@ class Places extends ResourceController {
         }
 
         // Save place tags
-        $updatedTags    = $placeTags->saveTags($input->tags ?? [], $id);
+        $updatedTags    = isset($input->tags) ? $placeTags->saveTags($input->tags, $id) : null;
         $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
         $updatedTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
 

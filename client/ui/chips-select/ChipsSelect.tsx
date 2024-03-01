@@ -77,7 +77,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     }
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value
+        const value = event.target.value?.trim()
 
         if (value.length > 0) {
             setLocaLoading(true)

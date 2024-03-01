@@ -18,7 +18,7 @@ export type Place = {
     author?: User
     category?: Category
     address?: Location
-    tags?: Tag[]
+    tags?: string[]
     cover?: {
         full: string
         preview: string
@@ -76,10 +76,5 @@ export type GeoSearchLocation = {
 
 export type LocationObject = {
     id: number
-    title: string
-}
-
-export type Tag = {
-    id: string
     title: string
 }

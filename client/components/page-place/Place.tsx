@@ -144,7 +144,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                         modifiedTime: formatDateUTC(place?.updated?.date),
                         publishedTime: formatDateUTC(place?.created?.date),
                         section: place?.category?.name,
-                        tags: place?.tags?.map(({ title }) => title)
+                        tags: place?.tags
                     },
                     description: place?.content?.substring(0, 160),
                     images: photoList?.slice(0, 3).map((photo, index) => ({

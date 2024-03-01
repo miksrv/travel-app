@@ -9,19 +9,23 @@ class Tags extends ResourceController {
     public function __construct() {
         new LocaleLibrary();
     }
+
     /**
      * Find all tags by search text
      * @return ResponseInterface
      */
     public function search(): ResponseInterface {
-        $search = $this->request->getGet('search', FILTER_SANITIZE_STRING);
+        $search = trim($this->request->getGet('search', FILTER_SANITIZE_STRING));
         $locale = $this->request->getLocale();
+
+        if (strlen($search) === 0 || strlen($search) >= 30) {
+            return $this->respond(['items' => []]);
+        }
 
         $response  = [];
         $tagsModel = new TagsModel();
         $tagsData  = $tagsModel
-            ->like('title_ru', $search)
-            ->orLike('title_en', $search)
+            ->orLike(['title_ru' => $search, 'title_en' => $search])
             ->findAll(10);
 
         if ($tagsData) {
@@ -33,26 +37,5 @@ class Tags extends ResourceController {
         }
 
         return $this->respond(['items' => $response]);
-    }
-
-    /**
-     * @param $id
-     * @return ResponseInterface
-     */
-    public function show($id = null): ResponseInterface {
-        $tagsModel = new TagsModel();
-        $tagsData  = $tagsModel->find($id);
-        $locale    = $this->request->getLocale();
-
-        if (!$tagsData) {
-            return $this->failNotFound();
-        }
-
-        return $this->respond([
-            'id'    => $tagsData->id,
-            'title' => $locale === 'en' && !empty($tagsData->title_en)
-                ? $tagsData->title_en
-                : (!empty($tagsData->title_ru) ? $tagsData->title_ru : $tagsData->title_en)
-        ]);
     }
 }
