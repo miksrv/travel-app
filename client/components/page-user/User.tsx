@@ -42,7 +42,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         ]
     }
 
-    const personSchema: ProfilePage = {
+    const userSchema: ProfilePage = {
         // @ts-ignore
         '@context': 'https://schema.org',
         '@type': 'ProfilePage',
@@ -62,13 +62,13 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(personSchema)
+                        __html: JSON.stringify(breadCrumbSchema)
                     }}
                 />
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(breadCrumbSchema)
+                        __html: JSON.stringify(userSchema)
                     }}
                 />
             </Head>

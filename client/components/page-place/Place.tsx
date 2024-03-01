@@ -64,7 +64,7 @@ const Place: React.FC<PlaceProps> = ({
         ]
     }
 
-    const articleSchema: Article = {
+    const placeSchema: Article = {
         // @ts-ignore
         '@context': 'https://schema.org',
         '@type': 'Article',
@@ -80,6 +80,9 @@ const Place: React.FC<PlaceProps> = ({
         articleBody: place?.content,
         author: {
             '@type': 'Person',
+            image: place?.author?.avatar
+                ? `${IMG_HOST}${place?.author?.avatar}`
+                : undefined,
             name: place?.author?.name,
             url: `${canonicalUrl}users/${place?.author?.id}`
         },
@@ -125,13 +128,13 @@ const Place: React.FC<PlaceProps> = ({
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(articleSchema)
+                        __html: JSON.stringify(breadCrumbSchema)
                     }}
                 />
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(breadCrumbSchema)
+                        __html: JSON.stringify(placeSchema)
                     }}
                 />
             </Head>

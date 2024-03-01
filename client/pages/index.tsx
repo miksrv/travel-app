@@ -2,6 +2,7 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import Head from 'next/head'
 import React from 'react'
 
 import Button from '@/ui/button'
@@ -19,6 +20,8 @@ import UserGallery from '@/components/page-user/gallery'
 import PlacesList from '@/components/places-list'
 import UsersList from '@/components/users-list'
 
+import { ListItemSchema, PlaceSchema, UserSchema } from '@/functions/schema'
+
 interface IndexPageProps {
     placesList: Place.Place[]
     usersList: User[]
@@ -32,12 +35,33 @@ const IndexPage: NextPage<IndexPageProps> = ({
 }) => {
     const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.index' })
 
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
+
     return (
         <AppLayout>
+            <Head>
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(
+                            ListItemSchema([
+                                ...placesList.map((place) =>
+                                    PlaceSchema(place, canonicalUrl)
+                                ),
+                                ...usersList.map((user) => UserSchema(user))
+                            ])
+                        )
+                    }}
+                />
+            </Head>
+
             <NextSeo
                 title={t('title')}
-                description={t('description')}
-                canonical={`${SITE_LINK}${i18n.language === 'en' ? 'en' : ''}`}
+                description={`${t('description')} - ${placesList
+                    ?.map(({ title }) => title)
+                    .join(', ')
+                    .substring(0, 160)}`}
+                canonical={canonicalUrl}
             />
 
             <Header
