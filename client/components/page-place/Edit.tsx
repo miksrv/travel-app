@@ -12,8 +12,7 @@ import { ApiTypes } from '@/api/types'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
 
-interface EditProps
-    extends Omit<PlacePageProps, 'randomId' | 'page' | 'voteCount'> {}
+interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Edit: React.FC<EditProps> = ({ place }) => {
     const { t, i18n } = useTranslation('common', {

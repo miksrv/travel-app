@@ -5,7 +5,7 @@
 // import Image from 'next/image'
 // import Link from 'next/link'
 // import React, { useState } from 'react'
-// import Gallery from 'react-photo-gallery'
+// import Gallery from 'react-photo-gallery' yarn add react-photo-gallery
 //
 // import { IMG_HOST } from '@/api/api'
 // import { ActivityTypes, Item } from '@/api/types/Activity'
