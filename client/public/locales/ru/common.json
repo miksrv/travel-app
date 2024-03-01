@@ -30,7 +30,8 @@
         "interactiveMap": {
             "layerSwitcher": {
                 "layerMapBox": "Схема (MabBox)",
-                "layerOSM": "Схема (OSM)",
+                "layerOSM": "Схема (Street Map)",
+                "layerOCM": "Схема (Cycle Map)",
                 "layerGoogleMap": "Карта (Google)",
                 "layerGoogleSat": "Спутник (Google)",
                 "layerMapBoxSat": "Спутник (MapBox)"
