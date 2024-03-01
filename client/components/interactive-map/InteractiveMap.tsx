@@ -24,13 +24,15 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-export type MapLayersType =
-    | 'MabBox'
-    | 'OSM'
-    | 'OCM'
-    | 'GoogleSat'
-    | 'GoogleMap'
-    | 'MapBoxSat'
+export const MapLayersType = {
+    GoogleMap: 'GoogleMap',
+    GoogleSat: 'GoogleSat',
+    MapBox: 'MapBox',
+    MapBoxSat: 'MapBoxSat',
+    OCM: 'OCM',
+    OSM: 'OSM'
+} as const
+export type MapLayers = (typeof MapLayersType)[keyof typeof MapLayersType]
 
 export type MapPositionType = {
     lat: number
@@ -41,12 +43,14 @@ export type MapPositionType = {
 type MapProps = {
     places?: Place[]
     photos?: Photo[]
+    layer?: MapLayers
     loading?: boolean
     storeMapPosition?: boolean
     enableSearch?: boolean
     enableFullScreen?: boolean
     enableLayersSwitcher?: boolean
     storeMapKey?: string
+    fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
@@ -54,24 +58,26 @@ type MapProps = {
 
 const DEFAULT_MAP_ZOOM = 15
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
-const DEFAULT_MAP_LAYER: MapLayersType = 'OSM'
+const DEFAULT_MAP_LAYER: MapLayers = MapLayersType.OSM
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
+    layer,
     loading,
     storeMapPosition,
     enableSearch,
     enableFullScreen,
     enableLayersSwitcher,
     storeMapKey,
+    fullMapLink,
     userLatLon,
     onChangeBounds,
     onPhotoClick,
     ...props
 }) => {
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
-    const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
+    const [mapLayer, setMapLayer] = useState<MapLayers>(DEFAULT_MAP_LAYER)
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const mapRef = useRef<Map | any>()
 
@@ -143,6 +149,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         if (typeof coordinates !== 'undefined') {
             if (
                 !readyStorage &&
+                !props.center &&
                 storeMapPosition &&
                 coordinates?.lon &&
                 coordinates?.lat &&
@@ -168,6 +175,13 @@ const InteractiveMap: React.FC<MapProps> = ({
         }
     }, [props.center, props.zoom])
 
+    // TODO Change layer
+    // useEffect(() => {
+    //     if (layer && Object.values(MapLayersType).includes(layer)) {
+    //
+    //     }
+    // }, [])
+
     return (
         <div className={styles.mapContainer}>
             <ReactLeaflet.MapContainer
@@ -179,20 +193,20 @@ const InteractiveMap: React.FC<MapProps> = ({
                 attributionControl={false}
                 ref={mapRef}
             >
-                {mapLayer === 'OCM' && (
+                {mapLayer === MapLayersType.OCM && (
                     <ReactLeaflet.TileLayer
                         url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
                     />
                 )}
-                {mapLayer === 'MabBox' && (
+                {mapLayer === MapLayersType.MapBox && (
                     <ReactLeaflet.TileLayer
                         url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
                     />
                 )}
-                {mapLayer === 'OSM' && (
+                {mapLayer === MapLayersType.OSM && (
                     <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
                 )}
-                {mapLayer === 'GoogleMap' && (
+                {mapLayer === MapLayersType.GoogleMap && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps'}
                         url={
@@ -200,7 +214,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         }
                     />
                 )}
-                {mapLayer === 'GoogleSat' && (
+                {mapLayer === MapLayersType.GoogleSat && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps Satellite'}
                         url={
@@ -208,7 +222,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         }
                     />
                 )}
-                {mapLayer === 'MapBoxSat' && (
+                {mapLayer === MapLayersType.MapBoxSat && (
                     <ReactLeaflet.TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'
@@ -249,6 +263,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                             mode={'secondary'}
                             icon={'Gps'}
                             onClick={handleUserPosition}
+                        />
+                    )}
+
+                    {fullMapLink && (
+                        <Button
+                            mode={'secondary'}
+                            icon={'External'}
+                            link={fullMapLink}
                         />
                     )}
                 </div>

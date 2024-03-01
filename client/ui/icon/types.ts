@@ -39,3 +39,4 @@ export type IconTypes =
     | 'Gps'
     | 'RandomLocation'
     | 'Rotate'
+    | 'External'
