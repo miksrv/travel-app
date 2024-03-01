@@ -1,3 +1,4 @@
+// yarn add embla-carousel-react
 // import useEmblaCarousel, {
 //     EmblaCarouselType,
 //     EmblaOptionsType

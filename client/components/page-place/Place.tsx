@@ -20,12 +20,7 @@ import { formatDateISO, formatDateUTC } from '@/functions/helpers'
 
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
-const Place: React.FC<PlaceProps> = ({
-    place,
-    photoList,
-    nearPlaces,
-    voteCount
-}) => {
+const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.place'
     })
@@ -169,7 +164,7 @@ const Place: React.FC<PlaceProps> = ({
             <PlaceHeader
                 place={place}
                 ratingValue={ratingData?.rating ?? place?.rating}
-                ratingCount={ratingData?.count ?? voteCount}
+                ratingCount={ratingData?.count}
                 breadcrumbs={[
                     {
                         link: '/places/',

@@ -18,7 +18,6 @@ type PageType = (typeof PAGES)[number]
 
 export interface PlacePageProps {
     randomId?: string
-    voteCount?: number
     page: PageType | null
     place?: PlaceType.Place
     photoList?: Photo.Photo[]
@@ -98,10 +97,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 })
             )
 
-            const { data: ratingData } = await store.dispatch(
-                API.endpoints?.ratingGetList.initiate(id)
-            )
-
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
             return {
@@ -111,8 +106,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,
-                    randomId: placeData?.randomId,
-                    voteCount: ratingData?.count || 0
+                    randomId: placeData?.randomId
                 }
             }
         }
