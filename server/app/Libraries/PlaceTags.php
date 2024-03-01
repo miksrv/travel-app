@@ -26,11 +26,16 @@ class PlaceTags {
         $updatedIds = [];
         $returnTags = [];
 
-        if (!$placeId || empty($tags)) {
+        if (!$placeId) {
             return $returnTags;
         }
 
         $this->placeTagsModel->where('place_id', $placeId)->delete();
+
+        // If we just remove all tags
+        if (empty($tags)) {
+            return $returnTags;
+        }
 
         foreach ($tags as $tag) {
             $tagData = $this->tagsModel
@@ -45,10 +50,7 @@ class PlaceTags {
                     'place_id' => $placeId
                 ]);
 
-                $returnTags[] = [
-                    'id'    => $this->tagsModel->getInsertID(),
-                    'title' => $tag,
-                ];
+                $returnTags[] = $tag;
 
             } else {
                 // We check that there are no identical IDs. This can happen if the same tag is added in two languages,
@@ -62,11 +64,7 @@ class PlaceTags {
                     'place_id' => $placeId
                 ]);
 
-                $returnTags[] = [
-                    'id'    => $tagData->id,
-                    'title' => $tag,
-                ];
-
+                $returnTags[] = $tag;
                 $updatedIds[] = $tagData->id;
             }
         }

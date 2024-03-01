@@ -32,7 +32,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
             content: place?.content,
             lat: place?.lat!,
             lon: place?.lon!,
-            tags: place?.tags?.map(({ title }) => title),
+            tags: place?.tags,
             title: place?.title
         }),
         [place?.id]

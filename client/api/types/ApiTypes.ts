@@ -1,13 +1,7 @@
 import { Item } from './Activity'
 import { Notification } from './Notification'
 import { Photo } from './Photo'
-import {
-    Category,
-    GeoSearchLocation,
-    LocationObject,
-    Place,
-    Tag
-} from './Place'
+import { Category, GeoSearchLocation, LocationObject, Place } from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { LevelData, User } from './User'
 
@@ -149,7 +143,7 @@ export interface RequestPlacesPatchCover {
 
 export interface ResponsePlacesPatchItem {
     content?: string
-    tags?: Tag[]
+    tags?: string[]
 }
 
 export interface RequestPlacesPostItem {
@@ -245,8 +239,6 @@ export interface ResponseSitemapGet {
     places?: SitemapItem[]
     users?: SitemapItem[]
 }
-
-export interface ResponseTagsGetItem extends Tag {}
 
 /* Controller: Categories */
 export interface ResponseCategoriesGetList extends Place {

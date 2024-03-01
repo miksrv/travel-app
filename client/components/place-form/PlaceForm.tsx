@@ -127,6 +127,12 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         }
     }
 
+    const handleSearchTags = (value: string) => {
+        if (value?.length > 0) {
+            searchTags(value)
+        }
+    }
+
     const categoryOptions = useMemo(
         () =>
             categoryData?.items?.map((item) => ({
@@ -204,7 +210,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     value={formData?.tags}
                     loading={searchLoading}
                     options={searchResult?.items}
-                    onSearch={(value) => searchTags(value)}
+                    onSearch={handleSearchTags}
                     onSelect={handleSelectTags}
                 />
             </div>

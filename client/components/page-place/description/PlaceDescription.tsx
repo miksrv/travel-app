@@ -12,14 +12,13 @@ import ScreenSpinner from '@/ui/screen-spinner'
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Tag } from '@/api/types/Place'
 
 import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
     placeId?: string
     content?: string
-    tags?: Tag[]
+    tags?: string[]
 }
 
 const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
@@ -44,13 +43,13 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const [editorContent, setEditorContent] = useState<string>()
     const [editorTags, setEditorTags] = useState<string[]>()
 
-    const [localTags, setLocalTags] = useState<Tag[]>()
+    const [localTags, setLocalTags] = useState<string[]>()
     const [localContent, setLocalContent] = useState<string>()
 
     const handleSetEditorClick = () => {
         if (isAuth) {
             setEditorMode(!editorMode)
-            setEditorTags(localTags?.map(({ title }) => title))
+            setEditorTags(localTags)
         } else {
             dispatch(openAuthDialog())
         }
@@ -58,6 +57,12 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
     const handleSelectTags = (value: string[]) => {
         setEditorTags(value)
+    }
+
+    const handleSearchTags = (value: string) => {
+        if (value?.length > 0) {
+            searchTags(value)
+        }
     }
 
     const handleSaveEditorClick = async () => {
@@ -141,20 +146,20 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                         value={editorTags}
                         loading={searchLoading}
                         options={searchResult?.items}
-                        onSearch={(value) => searchTags(value)}
+                        onSearch={handleSearchTags}
                         onSelect={handleSelectTags}
                     />
                 </div>
             ) : (
-                localTags?.length && (
+                !!localTags?.length && (
                     <ul className={styles.tagList}>
-                        {localTags?.map((tag) => (
-                            <li key={tag.id}>
+                        {localTags?.map((tag, i) => (
+                            <li key={`tag${i}`}>
                                 <Link
-                                    href={`/places?tag=${tag.id}`}
+                                    href={`/places?tag=${tag}`}
                                     title={''}
                                 >
-                                    {`#${tag.title}`}
+                                    {`#${tag}`}
                                 </Link>
                             </li>
                         ))}
