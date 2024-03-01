@@ -52,13 +52,13 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         keyPrefix: 'ui.autocomplete'
     })
 
+    const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocaLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOption | undefined
     >(undefined)
-    const dropdownRef = useRef<HTMLDivElement>(null)
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)

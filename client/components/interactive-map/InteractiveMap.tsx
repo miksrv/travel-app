@@ -27,6 +27,7 @@ import styles from './styles.module.sass'
 export type MapLayersType =
     | 'MabBox'
     | 'OSM'
+    | 'OCM'
     | 'GoogleSat'
     | 'GoogleMap'
     | 'MapBoxSat'
@@ -53,7 +54,7 @@ type MapProps = {
 
 const DEFAULT_MAP_ZOOM = 15
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
-const DEFAULT_MAP_LAYER: MapLayersType = 'MabBox'
+const DEFAULT_MAP_LAYER: MapLayersType = 'OSM'
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
@@ -178,6 +179,11 @@ const InteractiveMap: React.FC<MapProps> = ({
                 attributionControl={false}
                 ref={mapRef}
             >
+                {mapLayer === 'OCM' && (
+                    <ReactLeaflet.TileLayer
+                        url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
+                    />
+                )}
                 {mapLayer === 'MabBox' && (
                     <ReactLeaflet.TileLayer
                         url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
@@ -255,11 +261,12 @@ const InteractiveMap: React.FC<MapProps> = ({
                     )}
                 </div>
                 {userLatLon && <MarkerUser coordinates={userLatLon} />}
-                {loading && (
-                    <div className={styles.loader}>
-                        <Spinner />
-                    </div>
-                )}
+                <div
+                    className={styles.loader}
+                    style={{ display: loading ? 'block' : 'none' }}
+                >
+                    <Spinner />
+                </div>
                 {onChangeBounds && (
                     <MapEvents onChangeBounds={handleChangeBounds} />
                 )}

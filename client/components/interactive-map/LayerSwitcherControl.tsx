@@ -1,5 +1,5 @@
 import { useTranslation } from 'next-i18next'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -22,19 +22,25 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     currentLayer,
     onSwitchMapLayer
 }) => {
+    const layersContainerRef = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState<boolean>(false)
+
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.layerSwitcher'
     })
 
     const LayersOptions: MapLayerItem[] = [
         {
-            label: t('layerMapBox'),
-            layer: 'MabBox'
-        },
-        {
             label: t('layerOSM'),
             layer: 'OSM'
+        },
+        {
+            label: t('layerOCM'),
+            layer: 'OCM'
+        },
+        {
+            label: t('layerMapBox'),
+            layer: 'MabBox'
         },
         {
             label: t('layerGoogleMap'),
@@ -50,8 +56,17 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
         }
     ]
 
-    const handleToogleOpen = () => {
+    const handleToggleOpen = () => {
         setOpen(!open)
+    }
+
+    const handleClickOutside = (event: MouseEvent) => {
+        if (
+            layersContainerRef.current &&
+            !layersContainerRef.current.contains(event.target as Node)
+        ) {
+            setOpen(false)
+        }
     }
 
     const handleSwitchMapLayer = (
@@ -61,13 +76,21 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
         onSwitchMapLayer?.(event.target.id as MapLayersType)
     }
 
+    useEffect(() => {
+        document.addEventListener('mousedown', handleClickOutside)
+
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside)
+        }
+    }, [])
+
     return (
-        <>
+        <div ref={layersContainerRef}>
             {!open ? (
                 <Button
                     mode={'secondary'}
                     icon={'Layers'}
-                    onClick={handleToogleOpen}
+                    onClick={handleToggleOpen}
                 />
             ) : (
                 <Container className={styles.mapLayersContainer}>
@@ -87,7 +110,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                     </ul>
                 </Container>
             )}
-        </>
+        </div>
     )
 }
 
