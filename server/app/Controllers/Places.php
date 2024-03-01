@@ -135,13 +135,14 @@ class Places extends ResourceController {
         $placesModel
             ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
                 places.photos, places.country_id, places.region_id, places.district_id, places.locality_id, 
-                places.updated_at,
+                places.updated_at, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                 location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                 location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                 location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
                 location_localities.title_en as city_en, location_localities.title_ru as city_ru,
                 category.title_en as category_en, category.title_ru as category_ru' .
                 $distanceSelect)
+            ->join('users', 'places.user_id = users.id', 'left')
             ->join('location_countries', 'location_countries.id = places.country_id', 'left')
             ->join('location_regions', 'location_regions.id = places.region_id', 'left')
             ->join('location_districts', 'location_districts.id = places.district_id', 'left')
@@ -171,7 +172,8 @@ class Places extends ResourceController {
 
         // Mapping places to array list
         foreach ($placesList as $place) {
-            $return  = [
+            $avatar = $place->user_avatar ? explode('.', $place->user_avatar) : null;
+            $return = [
                 'id'        => $place->id,
                 'lat'       => (float) $place->lat,
                 'lon'       => (float) $place->lon,
@@ -184,7 +186,14 @@ class Places extends ResourceController {
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->{"category_$locale"},
-                ]
+                ],
+                'author'    => [
+                    'id'     => $place->user_id,
+                    'name'   => $place->user_name,
+                    'avatar' => $avatar
+                        ? PATH_AVATARS . $place->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                        : null
+                ],
             ];
 
             if ($distanceSelect && $place->distance) {

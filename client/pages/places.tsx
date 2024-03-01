@@ -3,7 +3,9 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
+import Head from 'next/head'
 import React, { useMemo, useState } from 'react'
+import { BreadcrumbList } from 'schema-dts'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -23,6 +25,7 @@ import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
+import { ListItemSchema, PlaceSchema } from '@/functions/schema'
 
 const DEFAULT_SORT = ApiTypes.SortFields.Updated
 const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
@@ -214,6 +217,16 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         return breadcrumbs
     }, [category, locationData, locationType, tagData, currentPage])
 
+    const breadCrumbCurrent = category
+        ? currentCategory
+        : locationType
+        ? locationData?.title
+        : tagData?.title
+        ? `#${tagData?.title}`
+        : currentPage > 1
+        ? `${t('titlePage')} ${initialFilter.page}`
+        : t('breadCrumbCurrent')
+
     const filtersCount = useMemo(() => {
         let count = 0
 
@@ -243,8 +256,50 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle('')
     }
 
+    const breadCrumbSchema: BreadcrumbList = {
+        // @ts-ignore
+        '@context': 'https://schema.org',
+        '@type': 'BreadcrumbList',
+        itemListElement: [
+            // @ts-ignore
+            ...(breadcrumbsLinks?.map((link, i) => ({
+                '@type': 'ListItem',
+                item: canonicalUrl + link.link,
+                name: link.text,
+                position: i + 1
+            })) || []),
+            {
+                // @ts-ignore
+                '@type': 'ListItem',
+                name: breadCrumbCurrent,
+                position: breadcrumbsLinks?.length + 1
+            }
+        ]
+    }
+
     return (
         <AppLayout>
+            <Head>
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(breadCrumbSchema)
+                    }}
+                />
+                <script
+                    type={'application/ld+json'}
+                    dangerouslySetInnerHTML={{
+                        __html: JSON.stringify(
+                            ListItemSchema(
+                                placesList.map((place) =>
+                                    PlaceSchema(place, canonicalUrl)
+                                )
+                            )
+                        )
+                    }}
+                />
+            </Head>
+
             <NextSeo
                 title={title}
                 description={`${title} - ${placesList
@@ -259,17 +314,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             <Header
                 title={title}
                 links={breadcrumbsLinks || []}
-                currentPage={
-                    category
-                        ? currentCategory
-                        : locationType
-                        ? locationData?.title
-                        : tagData?.title
-                        ? `#${tagData?.title}`
-                        : currentPage > 1
-                        ? `${t('titlePage')} ${initialFilter.page}`
-                        : t('breadCrumbCurrent')
-                }
+                currentPage={breadCrumbCurrent}
                 actions={
                     <Button
                         size={'m'}
