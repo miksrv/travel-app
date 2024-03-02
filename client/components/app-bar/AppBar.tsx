@@ -1,5 +1,4 @@
 import { useTranslation } from 'next-i18next'
-import { Fredoka } from 'next/font/google'
 import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect } from 'react'
@@ -20,7 +19,7 @@ import UserAvatar from '@/components/user-avatar'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
 
-import logo from '@/public/images/geometki.svg'
+import logo from '@/public/images/geometki.png'
 
 import Notifications from './Notifications'
 import Search from './Search'
@@ -31,11 +30,6 @@ interface HeaderProps {
     fullSize?: boolean
     onMenuClick?: () => void
 }
-
-const fredoka = Fredoka({
-    display: 'swap',
-    subsets: ['latin']
-})
 
 const AppBar: React.FC<HeaderProps> = ({
     randomPlaceId,
@@ -102,15 +96,14 @@ const AppBar: React.FC<HeaderProps> = ({
                 <Link
                     href={'/'}
                     title={''}
-                    className={cn(fredoka.className, styles.logo)}
+                    className={styles.logo}
                 >
                     <Image
                         src={logo}
                         alt={''}
-                        width={22}
-                        height={22}
+                        width={140}
+                        height={28}
                     />
-                    {t('logoTitle')}
                 </Link>
 
                 <Search />
