@@ -221,6 +221,14 @@ const Icon: React.FC<IconProps> = ({ name }) => {
                 <path d='M19 19H5V5h7V3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2v-7h-2zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3z' />
             )
             break
+        case 'Telegram':
+            iconToRender = (
+                <path
+                    transform='translate(-2, 0)'
+                    d='M9.78 18.65l.28-4.23 7.68-6.92c.34-.31-.07-.46-.52-.19L7.74 13.3 3.64 12c-.88-.25-.89-.86.2-1.3l15.97-6.16c.73-.33 1.43.18 1.15 1.3l-2.72 12.81c-.19.91-.74 1.13-1.5.71L12.6 16.3l-1.99 1.93c-.23.23-.42.42-.83.42z'
+                />
+            )
+            break
     }
 
     return <svg viewBox='0 0 24 24'>{iconToRender}</svg>

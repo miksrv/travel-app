@@ -101,7 +101,7 @@ const AppBar: React.FC<HeaderProps> = ({
                     <Image
                         src={logo}
                         alt={''}
-                        width={140}
+                        width={138}
                         height={28}
                     />
                 </Link>
