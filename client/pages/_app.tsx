@@ -45,6 +45,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                     href='/favicon-16x16.png'
                 />
                 <link
+                    rel='icon'
+                    href='/favicon.ico'
+                    type='image/x-icon'
+                />
+                <link
                     rel='manifest'
                     href='/site.webmanifest'
                 />
