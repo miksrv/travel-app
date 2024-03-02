@@ -1,6 +1,7 @@
 .next
 .vscode
 .github
+site.webmanifest
 node_modules
 out
 coverage
