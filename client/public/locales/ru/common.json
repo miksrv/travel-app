@@ -1,7 +1,6 @@
 {
     "components": {
         "appBar": {
-            "logoTitle": "GEOMETKI",
             "userProfileCaption": "Моя страница",
             "userProfileTitle": "Перейти на мою страницу",
             "userSettingsCaption": "Настройки",
