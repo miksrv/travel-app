@@ -23,7 +23,8 @@
                 "places": "Interesting places",
                 "create": "Add a place",
                 "profile": "Personal page",
-                "users": "Travelers"
+                "users": "Travelers",
+                "telegram": "Project diary"
             }
         },
         "interactiveMap": {

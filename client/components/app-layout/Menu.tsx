@@ -58,6 +58,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             icon: 'Users',
             link: '/users/',
             text: t('users')
+        },
+        {
+            icon: 'Telegram',
+            link: 'https://t.me/geometki',
+            text: t('telegram')
         }
     ]
 

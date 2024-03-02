@@ -40,3 +40,4 @@ export type IconTypes =
     | 'RandomLocation'
     | 'Rotate'
     | 'External'
+    | 'Telegram'
