@@ -10,6 +10,6 @@ export type PlacesFilterType = {
     tag?: string
     lat?: number
     lon?: number
-    order?: ApiTypes.SortOrderType
+    order?: ApiTypes.SortOrdersType
     sort?: ApiTypes.SortFieldsType
 }

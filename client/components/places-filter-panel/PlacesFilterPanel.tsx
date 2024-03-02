@@ -8,7 +8,6 @@ import OptionsList from '@/ui/dropdown/OptionsList'
 import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 
-import { MapLayers } from '@/components/interactive-map/InteractiveMap'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -17,7 +16,7 @@ import styles from './styles.module.sass'
 
 interface PlacesFilterPanelProps {
     sort?: ApiTypes.SortFieldsType
-    order?: ApiTypes.SortOrderType
+    order?: ApiTypes.SortOrdersType
     location?: ApiTypes.PlaceLocationType
     category?: string | null
     optionsOpen?: boolean
@@ -66,11 +65,11 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
 
     const orderOptions: DropdownOption[] = useMemo(
         () =>
-            Object.values(ApiTypes.SortOrder).map((order) => ({
+            Object.values(ApiTypes.SortOrders).map((order) => ({
                 key: order,
                 value: t(`order.${order}`)
             })),
-        [ApiTypes.SortOrder]
+        [ApiTypes.SortOrders]
     )
 
     const handleChangeSort = (value: DropdownOption | undefined) => {

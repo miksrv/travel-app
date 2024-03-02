@@ -92,7 +92,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     lat: placeData?.lat,
                     limit: NEAR_PLACES_COUNT,
                     lon: placeData?.lon,
-                    order: ApiTypes.SortOrder.ASC,
+                    order: ApiTypes.SortOrders.ASC,
                     sort: ApiTypes.SortFields.Distance
                 })
             )

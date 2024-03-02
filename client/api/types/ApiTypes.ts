@@ -32,11 +32,11 @@ export type AuthServiceType = 'google' | 'yandex'
 
 export type LocaleType = 'en' | 'ru'
 
-export const SortOrder = {
+export const SortOrders = {
     ASC: 'ASC',
     DESC: 'DESC'
 } as const
-export type SortOrderType = (typeof SortOrder)[keyof typeof SortOrder]
+export type SortOrdersType = (typeof SortOrders)[keyof typeof SortOrders]
 
 export const SortFields = {
     Category: 'category',
@@ -115,7 +115,7 @@ export interface ResponsePlacesGetRandom {
 
 export interface RequestPlacesGetList {
     sort?: SortFieldsType
-    order?: SortOrderType
+    order?: SortOrdersType
     bookmarkUser?: string
     author?: string
     lat?: number | null
