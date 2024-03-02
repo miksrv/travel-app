@@ -29,12 +29,12 @@
         },
         "interactiveMap": {
             "layerSwitcher": {
-                "layerMapBox": "Схема (MabBox)",
-                "layerOSM": "Схема (Street Map)",
-                "layerOCM": "Схема (Cycle Map)",
-                "layerGoogleMap": "Карта (Google)",
-                "layerGoogleSat": "Спутник (Google)",
-                "layerMapBoxSat": "Спутник (MapBox)"
+                "MapBox": "Схема (MabBox)",
+                "OSM": "Схема (Street Map)",
+                "OCM": "Схема (Cycle Map)",
+                "GoogleMap": "Карта (Google)",
+                "GoogleSat": "Спутник (Google)",
+                "MapBoxSat": "Спутник (MapBox)"
             },
             "searchControl": {
                 "placeholder": "Населенный пункт"
@@ -168,14 +168,18 @@
             "buttonCancel": "Отмена"
         },
         "placeFilterPanel": {
-            "sortViews": "Просмотры",
-            "sortRating": "Рейтинг",
-            "sortCreatedDate": "Дата добавления",
-            "sortModifyDate": "Дата обновления",
-            "sortTitle": "Заголовок",
-            "sortDistance": "Расстояние",
-            "orderASC": "По возрастанию",
-            "orderDESC": "По убыванию",
+            "sort": {
+                "views": "Просмотры",
+                "rating": "Рейтинг",
+                "created_at": "Дата добавления",
+                "updated_at": "Дата обновления",
+                "title": "Заголовок",
+                "distance": "Расстояние"
+            },
+            "order": {
+                "ASC": "По возрастанию",
+                "DESC": "По убыванию"
+            },
             "dialogCaptionSort": "Сортировка",
             "dialogCaptionOrder": "Порядок",
             "dialogCaptionCategory": "Категория",

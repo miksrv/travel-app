@@ -5,13 +5,8 @@ import Button from '@/ui/button'
 import Container from '@/ui/container'
 import RadioButton from '@/ui/radio-button'
 
-import { MapLayersType } from './InteractiveMap'
+import { MapLayers, MapLayersType } from './InteractiveMap'
 import styles from './styles.module.sass'
-
-type MapLayerItem = {
-    layer: MapLayersType
-    label: string
-}
 
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
@@ -28,33 +23,6 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.layerSwitcher'
     })
-
-    const LayersOptions: MapLayerItem[] = [
-        {
-            label: t('layerOSM'),
-            layer: 'OSM'
-        },
-        {
-            label: t('layerOCM'),
-            layer: 'OCM'
-        },
-        {
-            label: t('layerMapBox'),
-            layer: 'MabBox'
-        },
-        {
-            label: t('layerGoogleMap'),
-            layer: 'GoogleMap'
-        },
-        {
-            label: t('layerGoogleSat'),
-            layer: 'GoogleSat'
-        },
-        {
-            label: t('layerMapBoxSat'),
-            layer: 'MapBoxSat'
-        }
-    ]
 
     const handleToggleOpen = () => {
         setOpen(!open)
@@ -95,13 +63,13 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
             ) : (
                 <Container className={styles.mapLayersContainer}>
                     <ul className={styles.mapLayersList}>
-                        {LayersOptions.map((item) => (
-                            <li key={item.layer}>
+                        {Object.values(MapLayers).map((layer) => (
+                            <li key={layer}>
                                 <RadioButton
-                                    id={item.layer}
-                                    label={item.label}
+                                    id={layer}
+                                    label={t(layer)}
                                     name={'layerType'}
-                                    checked={currentLayer === item.layer}
+                                    checked={currentLayer === layer}
                                     onChange={handleSwitchMapLayer}
                                     onClick={() => setOpen(false)}
                                 />

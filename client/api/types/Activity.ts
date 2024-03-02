@@ -11,10 +11,10 @@ export const ActivityTypes = {
     Place: 'place',
     Rating: 'rating'
 } as const
-export type ActivityTypes = (typeof ActivityTypes)[keyof typeof ActivityTypes]
+export type ActivityEnum = (typeof ActivityTypes)[keyof typeof ActivityTypes]
 
 export type Item = {
-    type: ActivityTypes
+    type: ActivityEnum
     place?: Place
     photos?: Photo[]
     rating?: Rating

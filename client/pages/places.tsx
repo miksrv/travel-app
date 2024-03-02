@@ -28,7 +28,7 @@ import { encodeQueryData } from '@/functions/helpers'
 import { ListItemSchema, PlaceSchema } from '@/functions/schema'
 
 const DEFAULT_SORT = ApiTypes.SortFields.Updated
-const DEFAULT_ORDER = ApiTypes.SortOrder.DESC
+const DEFAULT_ORDER = ApiTypes.SortOrders.DESC
 const POST_PER_PAGE = 21
 
 interface PlacesPageProps {
@@ -43,8 +43,8 @@ interface PlacesPageProps {
     tag: string | null
     lat: number | null
     lon: number | null
-    sort: ApiTypes.SortFields
-    order: ApiTypes.SortOrder
+    sort: ApiTypes.SortFieldsType
+    order: ApiTypes.SortOrdersType
     currentPage: number
     placesCount: number
     placesList: Place.Place[]
@@ -391,9 +391,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const lon = parseFloat(context.query.lon as string) || null
             const tag = (context.query.tag as string) || null
             const sort =
-                (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
+                (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
             const order =
-                (context.query.order as ApiTypes.SortOrder) || DEFAULT_ORDER
+                (context.query.order as ApiTypes.SortOrdersType) ||
+                DEFAULT_ORDER
 
             const translations = await serverSideTranslations(locale)
 

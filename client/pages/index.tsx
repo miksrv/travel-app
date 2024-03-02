@@ -107,7 +107,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
                     limit: 3,
-                    order: ApiTypes.SortOrder.DESC,
+                    order: ApiTypes.SortOrders.DESC,
                     sort: ApiTypes.SortFields.Updated
                 })
             )

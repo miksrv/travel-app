@@ -1,4 +1,4 @@
-import { LatLngBounds } from 'leaflet'
+import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
@@ -6,7 +6,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
-import React, { useCallback, useMemo, useState } from 'react'
+import { useSearchParams } from 'next/navigation'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
@@ -24,7 +25,7 @@ import Header from '@/components/header'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
-import { encodeQueryData } from '@/functions/helpers'
+import { encodeQueryData, round } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -39,10 +40,16 @@ interface MapPageProps {
 const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.map' })
 
+    const searchParams = useSearchParams()
     const dispatch = useAppDispatch()
     const router = useRouter()
 
     const location = useAppSelector((state) => state.application.userLocation)
+
+    const [initMapCoords, setInitMapCoords] = useState<LatLngExpression>()
+    const [initMapZoom, setInitMapZoom] = useState<number>()
+    // const [initMapLayer, setInitMapLayer] = useState<MapLayersType>()
+
     const [mapBounds, setMapBounds] = useState<string>()
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
     const [openedOptions, setOpenedOptions] =
@@ -59,13 +66,6 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined
     }
-
-    const debounceSetMapBounds = useCallback(
-        debounce((bounds: LatLngBounds) => {
-            setMapBounds(bounds.toBBoxString())
-        }, 500),
-        []
-    )
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -124,6 +124,39 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
         return await router.replace('/' + encodeQueryData(update))
     }
 
+    const debounceSetMapBounds = useCallback(
+        debounce((bounds: LatLngBounds, zoom: number) => {
+            const mapCenter = bounds.getCenter()
+            const lat = round(mapCenter.lat, 4)
+            const lon = round(mapCenter.lng, 4)
+
+            router.replace(`/map?c=${lat},${lon}&z=${zoom}`)
+
+            setMapBounds(bounds.toBBoxString())
+        }, 500),
+        []
+    )
+
+    useEffect(() => {
+        const coords = searchParams.get('c')
+        const zoom = searchParams.get('z')
+        // const layer = searchParams.get('l')
+
+        if (coords) {
+            const splitCords = coords.split(',')
+            const lat = parseFloat(splitCords[0])
+            const lon = parseFloat(splitCords[1])
+
+            if (lat && lon) {
+                setInitMapCoords([lat, lon])
+            }
+        }
+
+        if (zoom && Number(zoom) >= 6 && Number(zoom) <= 18) {
+            setInitMapZoom(Number(zoom))
+        }
+    }, [])
+
     return (
         <AppLayout className={'mainLayout'}>
             <NextSeo
@@ -158,11 +191,13 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
 
             <Container className={'mainContainer'}>
                 <InteractiveMap
+                    center={initMapCoords}
+                    zoom={initMapZoom}
+                    // layer={initMapLayer}
                     storeMapPosition={true}
                     enableSearch={true}
                     enableFullScreen={true}
                     enableLayersSwitcher={true}
-                    scrollWheelZoom={false}
                     loading={isFetching}
                     places={poiListData?.items}
                     onChangeBounds={debounceSetMapBounds}

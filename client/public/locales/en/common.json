@@ -29,12 +29,12 @@
         },
         "interactiveMap": {
             "layerSwitcher": {
-                "layerMapBox": "Scheme (MabBox)",
-                "layerOSM": "Scheme (Street Map)",
-                "layerOCM": "Scheme (Cycle Map)",
-                "layerGoogleMap": "Map (Google)",
-                "layerGoogleSat": "Satellite (Google)",
-                "layerMapBoxSat": "Satellite (MapBox)"
+                "MapBox": "Scheme (MabBox)",
+                "OSM": "Scheme (Street Map)",
+                "OCM": "Scheme (Cycle Map)",
+                "GoogleMap": "Map (Google)",
+                "GoogleSat": "Satellite (Google)",
+                "MapBoxSat": "Satellite (MapBox)"
             },
             "searchControl": {
                 "placeholder": "Locality"
@@ -167,14 +167,18 @@
             "buttonCancel": "Cancel"
         },
         "placeFilterPanel": {
-            "sortViews": "Views",
-            "sortRating": "Rating",
-            "sortCreatedDate": "Date added",
-            "sortModifyDate": "Date of update",
-            "sortTitle": "Title",
-            "sortDistance": "Distance",
-            "orderASC": "Ascending",
-            "orderDESC": "Descending",
+            "sort": {
+                "views": "Views",
+                "rating": "Rating",
+                "created_at": "Date added",
+                "updated_at": "Date of update",
+                "title": "Title",
+                "distance": "Distance"
+            },
+            "order": {
+                "ASC": "Ascending",
+                "DESC": "Descending"
+            },
             "dialogCaptionSort": "Sorting",
             "dialogCaptionOrder": "Order",
             "dialogCaptionCategory": "Category",
