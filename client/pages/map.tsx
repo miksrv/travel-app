@@ -48,7 +48,7 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
 
     const [initMapCoords, setInitMapCoords] = useState<LatLngExpression>()
     const [initMapZoom, setInitMapZoom] = useState<number>()
-    // const [initMapLayer, setInitMapLayer] = useState<MapLayers>()
+    // const [initMapLayer, setInitMapLayer] = useState<MapLayersType>()
 
     const [mapBounds, setMapBounds] = useState<string>()
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)

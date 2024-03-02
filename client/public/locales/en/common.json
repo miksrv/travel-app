@@ -167,14 +167,18 @@
             "buttonCancel": "Cancel"
         },
         "placeFilterPanel": {
-            "sortViews": "Views",
-            "sortRating": "Rating",
-            "sortCreatedDate": "Date added",
-            "sortModifyDate": "Date of update",
-            "sortTitle": "Title",
-            "sortDistance": "Distance",
-            "orderASC": "Ascending",
-            "orderDESC": "Descending",
+            "sort": {
+                "views": "Views",
+                "rating": "Rating",
+                "created_at": "Date added",
+                "updated_at": "Date of update",
+                "title": "Title",
+                "distance": "Distance"
+            },
+            "order": {
+                "ASC": "Ascending",
+                "DESC": "Descending"
+            },
             "dialogCaptionSort": "Sorting",
             "dialogCaptionOrder": "Order",
             "dialogCaptionCategory": "Category",

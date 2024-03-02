@@ -43,8 +43,8 @@ interface PlacesPageProps {
     tag: string | null
     lat: number | null
     lon: number | null
-    sort: ApiTypes.SortFields
-    order: ApiTypes.SortOrder
+    sort: ApiTypes.SortFieldsType
+    order: ApiTypes.SortOrderType
     currentPage: number
     placesCount: number
     placesList: Place.Place[]
@@ -391,9 +391,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const lon = parseFloat(context.query.lon as string) || null
             const tag = (context.query.tag as string) || null
             const sort =
-                (context.query.sort as ApiTypes.SortFields) || DEFAULT_SORT
+                (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
             const order =
-                (context.query.order as ApiTypes.SortOrder) || DEFAULT_ORDER
+                (context.query.order as ApiTypes.SortOrderType) || DEFAULT_ORDER
 
             const translations = await serverSideTranslations(locale)
 

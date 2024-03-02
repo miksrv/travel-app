@@ -9,8 +9,8 @@ import { MapLayers, MapLayersType } from './InteractiveMap'
 import styles from './styles.module.sass'
 
 interface LayerSwitcherControlProps {
-    currentLayer?: MapLayers
-    onSwitchMapLayer?: (layer: MapLayers) => void
+    currentLayer?: MapLayersType
+    onSwitchMapLayer?: (layer: MapLayersType) => void
 }
 
 const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
@@ -41,7 +41,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
         setOpen(false)
-        onSwitchMapLayer?.(event.target.id as MapLayers)
+        onSwitchMapLayer?.(event.target.id as MapLayersType)
     }
 
     useEffect(() => {
@@ -63,7 +63,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
             ) : (
                 <Container className={styles.mapLayersContainer}>
                     <ul className={styles.mapLayersList}>
-                        {Object.values(MapLayersType).map((layer) => (
+                        {Object.values(MapLayers).map((layer) => (
                             <li key={layer}>
                                 <RadioButton
                                     id={layer}

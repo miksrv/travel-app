@@ -24,7 +24,7 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
-export const MapLayersType = {
+export const MapLayers = {
     GoogleMap: 'GoogleMap',
     GoogleSat: 'GoogleSat',
     MapBox: 'MapBox',
@@ -32,7 +32,7 @@ export const MapLayersType = {
     OCM: 'OCM',
     OSM: 'OSM'
 } as const
-export type MapLayers = (typeof MapLayersType)[keyof typeof MapLayersType]
+export type MapLayersType = (typeof MapLayers)[keyof typeof MapLayers]
 
 export type MapPositionType = {
     lat: number
@@ -43,7 +43,7 @@ export type MapPositionType = {
 type MapProps = {
     places?: Place[]
     photos?: Photo[]
-    layer?: MapLayers
+    layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
     enableSearch?: boolean
@@ -58,7 +58,7 @@ type MapProps = {
 
 const DEFAULT_MAP_ZOOM = 15
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
-const DEFAULT_MAP_LAYER: MapLayers = MapLayersType.OSM
+const DEFAULT_MAP_LAYER: MapLayersType = MapLayers.OSM
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
@@ -77,7 +77,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     ...props
 }) => {
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
-    const [mapLayer, setMapLayer] = useState<MapLayers>(DEFAULT_MAP_LAYER)
+    const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const mapRef = useRef<Map | any>()
 
@@ -177,7 +177,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 
     // TODO Change layer
     // useEffect(() => {
-    //     if (layer && Object.values(MapLayersType).includes(layer)) {
+    //     if (layer && Object.values(MapLayers).includes(layer)) {
     //
     //     }
     // }, [])
@@ -193,20 +193,20 @@ const InteractiveMap: React.FC<MapProps> = ({
                 attributionControl={false}
                 ref={mapRef}
             >
-                {mapLayer === MapLayersType.OCM && (
+                {mapLayer === MapLayers.OCM && (
                     <ReactLeaflet.TileLayer
                         url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
                     />
                 )}
-                {mapLayer === MapLayersType.MapBox && (
+                {mapLayer === MapLayers.MapBox && (
                     <ReactLeaflet.TileLayer
                         url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
                     />
                 )}
-                {mapLayer === MapLayersType.OSM && (
+                {mapLayer === MapLayers.OSM && (
                     <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
                 )}
-                {mapLayer === MapLayersType.GoogleMap && (
+                {mapLayer === MapLayers.GoogleMap && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps'}
                         url={
@@ -214,7 +214,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         }
                     />
                 )}
-                {mapLayer === MapLayersType.GoogleSat && (
+                {mapLayer === MapLayers.GoogleSat && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps Satellite'}
                         url={
@@ -222,7 +222,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         }
                     />
                 )}
-                {mapLayer === MapLayersType.MapBoxSat && (
+                {mapLayer === MapLayers.MapBoxSat && (
                     <ReactLeaflet.TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'

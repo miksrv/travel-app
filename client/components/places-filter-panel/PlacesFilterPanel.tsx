@@ -8,6 +8,7 @@ import OptionsList from '@/ui/dropdown/OptionsList'
 import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 
+import { MapLayers } from '@/components/interactive-map/InteractiveMap'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -15,8 +16,8 @@ import { categoryImage } from '@/functions/categories'
 import styles from './styles.module.sass'
 
 interface PlacesFilterPanelProps {
-    sort?: ApiTypes.SortFields
-    order?: ApiTypes.SortOrder
+    sort?: ApiTypes.SortFieldsType
+    order?: ApiTypes.SortOrderType
     location?: ApiTypes.PlaceLocationType
     category?: string | null
     optionsOpen?: boolean
@@ -52,43 +53,25 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     const [openedOptions, setOpenedOptions] =
         useState<OpenedOptionsType>(undefined)
 
-    const sortOptions: DropdownOption[] = [
-        {
-            key: ApiTypes.SortFields.Views,
-            value: t('sortViews')
-        },
-        {
-            key: ApiTypes.SortFields.Rating,
-            value: t('sortRating')
-        },
-        {
-            key: ApiTypes.SortFields.Created,
-            value: t('sortCreatedDate')
-        },
-        {
-            key: ApiTypes.SortFields.Updated,
-            value: t('sortModifyDate')
-        },
-        {
-            key: ApiTypes.SortFields.Title,
-            value: t('sortTitle')
-        },
-        {
-            key: ApiTypes.SortFields.Distance,
-            value: t('sortDistance')
-        }
-    ]
+    const sortOptions: DropdownOption[] = useMemo(
+        () =>
+            Object.values(ApiTypes.SortFields)
+                ?.filter((sort) => sort !== ApiTypes.SortFields.Category)
+                .map((sort) => ({
+                    key: sort,
+                    value: t(`sort.${sort}`)
+                })),
+        [ApiTypes.SortFields]
+    )
 
-    const orderOptions: DropdownOption[] = [
-        {
-            key: ApiTypes.SortOrder.ASC,
-            value: t('orderASC')
-        },
-        {
-            key: ApiTypes.SortOrder.DESC,
-            value: t('orderDESC')
-        }
-    ]
+    const orderOptions: DropdownOption[] = useMemo(
+        () =>
+            Object.values(ApiTypes.SortOrder).map((order) => ({
+                key: order,
+                value: t(`order.${order}`)
+            })),
+        [ApiTypes.SortOrder]
+    )
 
     const handleChangeSort = (value: DropdownOption | undefined) => {
         onChange?.('sort', value?.key)
