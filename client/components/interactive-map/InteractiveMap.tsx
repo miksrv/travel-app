@@ -268,6 +268,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                     {fullMapLink && (
                         <Button
+                            noIndex={true}
                             mode={'secondary'}
                             icon={'External'}
                             link={fullMapLink}
