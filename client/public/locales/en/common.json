@@ -128,7 +128,8 @@
                 "page": "Page"
             },
             "user": {
-                "title": "Photos",
+                "photos": "Photos",
+                "places": "Added places",
                 "buttonShowAllPhotos": "Show all photos",
                 "breadCrumbUsersLink": "Travelers"
             }

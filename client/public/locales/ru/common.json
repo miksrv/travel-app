@@ -129,7 +129,8 @@
                 "page": "Страница"
             },
             "user": {
-                "title": "Фотографии",
+                "photos": "Фотографии",
+                "places": "Добавленные места",
                 "buttonShowAllPhotos": "Показать все фотографии",
                 "breadCrumbUsersLink": "Путешественники"
             }

@@ -1,0 +1,101 @@
+@import ../../styles/variables
+
+.emptyList
+  text-align: center
+  padding: 10px
+  color: $colorTextSecond
+
+.placeFlatItem
+  position: relative
+  background: #fff
+  width: 100%
+  border-bottom: .5px solid $borderBottomColor
+  display: flex
+  padding-bottom: 10px
+  margin-bottom: 10px
+  align-items: center
+
+  @media only screen and (max-width: $mobileMaxWidth)
+    align-items: flex-start
+
+  &:last-of-type
+    margin-bottom: 0
+    padding-bottom: 0
+    border-bottom: none
+
+  .photoSection
+    position: relative
+    height: 50px
+    width: 100px
+    background-image: url('/images/no-image.svg')
+    background-position: center
+    background-size: cover
+    margin-right: 10px
+    border-radius: $borderRadius
+
+    & > a
+      display: block
+      width: 100%
+      height: 100%
+      font-size: 0
+
+    .photo
+      width: 100%
+      min-width: 80px
+      border-radius: $borderRadius
+      object-fit: cover
+
+  .title
+    margin: 0 0 5px 0
+    display: flex
+    align-items: center
+    font-size: $fontSizeParagraph
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      align-items: flex-start
+
+    img
+      margin-right: 5px
+
+    a
+      color: $colorTextMain
+      text-decoration: none
+      font-weight: 400
+      //white-space: pre
+      //text-overflow: ellipsis
+      //overflow: hidden
+
+  .bottomPanel
+    display: flex
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      flex-direction: column
+
+    .statistic
+      display: flex
+
+    .icon, .address
+      font-size: $fontSizeHeadline
+      color: $colorTextSecond
+
+      a
+        color: $colorTextSecond
+
+    .icon
+      display: flex
+      align-items: center
+
+      &:after
+        content: '·'
+        margin: 0 4px
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        &:last-of-type
+          &:after
+            display: none
+
+      svg
+        width: 14px
+        height: 14px
+        margin-right: 5px
+        fill: $colorTextSecond

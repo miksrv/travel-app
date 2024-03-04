@@ -13,19 +13,23 @@ const RIGHT_PAGE = 'RIGHT'
 
 interface PaginationProps<T> {
     currentPage?: number
-    totalPostCount?: number
+    totalItemsCount?: number
     linkPart?: string
     urlParam?: T
     perPage?: number
     neighbours?: number
+    disableScroll?: boolean
+    hideArrows?: boolean
     onChangePage?: (page: number) => void
 }
 
 const Pagination: React.FC<PaginationProps<any>> = ({
     currentPage = 1,
-    totalPostCount = 0,
+    totalItemsCount = 0,
     linkPart,
     urlParam,
+    disableScroll,
+    hideArrows,
     perPage = 4,
     neighbours = 2,
     onChangePage
@@ -35,7 +39,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
     })
 
     const pageNeighbours = Math.max(0, Math.min(neighbours, 2))
-    const totalPages = Math.ceil(totalPostCount / perPage)
+    const totalPages = Math.ceil(totalItemsCount / perPage)
 
     const link = `/${linkPart}`
 
@@ -62,23 +66,20 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             const leftSpill = startPage > 2
             const rightSpill = endPage < beforeLastPage
 
-            const leftSpillPage = LEFT_PAGE
-            const rightSpillPage = RIGHT_PAGE
-
             if (leftSpill && !rightSpill) {
                 const extraPages = range(
                     startPage - singleSpillOffset,
                     startPage - 1
                 )
-                pages = [leftSpillPage, ...extraPages, ...pages]
+                pages = [LEFT_PAGE, ...extraPages, ...pages]
             } else if (!leftSpill && rightSpill) {
                 const extraPages = range(
                     endPage + 1,
                     endPage + singleSpillOffset
                 )
-                pages = [...pages, ...extraPages, rightSpillPage]
+                pages = [...pages, ...extraPages, RIGHT_PAGE]
             } else if (leftSpill && rightSpill) {
-                pages = [leftSpillPage, ...pages, rightSpillPage]
+                pages = [LEFT_PAGE, ...pages, RIGHT_PAGE]
             }
 
             return [1, ...pages, totalPages]
@@ -92,57 +93,64 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             aria-label={'Pages Pagination'}
             className={styles.pagination}
         >
-            {fetchPageNumbers.map((page) => (
-                <Link
-                    className={cn(
-                        styles.item,
-                        currentPage === page ? styles.active : undefined
-                    )}
-                    href={
-                        page === RIGHT_PAGE
-                            ? `${link}${encodeQueryData({
-                                  ...urlParam,
-                                  page: currentPage + 1
-                              })}`
-                            : page === LEFT_PAGE
-                            ? `${link}${encodeQueryData({
-                                  ...urlParam,
-                                  page: currentPage - 1
-                              })}`
-                            : page === 1
-                            ? `${link}${encodeQueryData({
-                                  ...urlParam,
-                                  page: undefined
-                              })}`
-                            : `${link}${encodeQueryData({
-                                  ...urlParam,
-                                  page
-                              })}`
-                    }
-                    title={
-                        page === RIGHT_PAGE
-                            ? t('nextPage')
-                            : page === LEFT_PAGE
-                            ? t('prevPage')
-                            : `${t('page')} - ${page}`
-                    }
-                    key={page}
-                    onClick={(event) => {
-                        if (onChangePage) {
-                            event.preventDefault()
-                            onChangePage(Number(page))
+            {fetchPageNumbers
+                .filter((page) =>
+                    !hideArrows
+                        ? true
+                        : page !== RIGHT_PAGE && page !== LEFT_PAGE
+                )
+                .map((page) => (
+                    <Link
+                        scroll={!disableScroll}
+                        className={cn(
+                            styles.item,
+                            currentPage === page ? styles.active : undefined
+                        )}
+                        href={
+                            page === RIGHT_PAGE
+                                ? `${link}${encodeQueryData({
+                                      ...urlParam,
+                                      page: currentPage + 1
+                                  })}`
+                                : page === LEFT_PAGE
+                                ? `${link}${encodeQueryData({
+                                      ...urlParam,
+                                      page: currentPage - 1
+                                  })}`
+                                : page === 1
+                                ? `${link}${encodeQueryData({
+                                      ...urlParam,
+                                      page: undefined
+                                  })}`
+                                : `${link}${encodeQueryData({
+                                      ...urlParam,
+                                      page
+                                  })}`
                         }
-                    }}
-                >
-                    {page === RIGHT_PAGE ? (
-                        <Icon name={'Right'} />
-                    ) : page === LEFT_PAGE ? (
-                        <Icon name={'Left'} />
-                    ) : (
-                        <>{page}</>
-                    )}
-                </Link>
-            ))}
+                        title={
+                            page === RIGHT_PAGE
+                                ? t('nextPage')
+                                : page === LEFT_PAGE
+                                ? t('prevPage')
+                                : `${t('page')} - ${page}`
+                        }
+                        key={page}
+                        onClick={(event) => {
+                            if (onChangePage) {
+                                event.preventDefault()
+                                onChangePage(Number(page))
+                            }
+                        }}
+                    >
+                        {page === RIGHT_PAGE ? (
+                            <Icon name={'Right'} />
+                        ) : page === LEFT_PAGE ? (
+                            <Icon name={'Left'} />
+                        ) : (
+                            <>{page}</>
+                        )}
+                    </Link>
+                ))}
         </nav>
     )
 }

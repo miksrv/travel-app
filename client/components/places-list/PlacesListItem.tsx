@@ -7,9 +7,9 @@ import Badge from '@/ui/badge'
 import RatingColored from '@/ui/rating-colored'
 
 import { IMG_HOST } from '@/api/api'
-import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
+import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
 import {
     addDecimalPoint,
@@ -18,12 +18,6 @@ import {
 } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
-
-type PlaceAddress = {
-    id?: number
-    name?: string
-    type: ApiTypes.LocationTypes
-}
 
 interface PlacesListItemProps {
     place: Place
@@ -34,39 +28,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
         keyPrefix: 'components.placesList.placesListItem'
     })
 
-    const placeAddress: PlaceAddress[] = useMemo(() => {
-        let address: PlaceAddress[] = []
-
-        if (place?.address?.country?.id) {
-            address.push({
-                id: place.address.country.id,
-                name: place.address.country.title,
-                type: 'country'
-            })
-        }
-
-        if (place?.address?.locality?.id) {
-            address.push({
-                id: place.address.locality.id,
-                name: place.address.locality.title,
-                type: 'locality'
-            })
-        } else if (place?.address?.district?.id) {
-            address.push({
-                id: place.address.district.id,
-                name: place.address.district.title,
-                type: 'district'
-            })
-        } else if (place?.address?.region?.id) {
-            address.push({
-                id: place.address.region.id,
-                name: place.address.region.title,
-                type: 'region'
-            })
-        }
-
-        return address
-    }, [place?.address])
+    const placeAddress = useMemo(
+        () => addressToString(place.address),
+        [place?.address]
+    )
 
     return (
         <article className={styles.placesListItem}>

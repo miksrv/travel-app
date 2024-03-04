@@ -71,7 +71,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
                 </div>
                 <Pagination
                     currentPage={currentPage}
-                    totalPostCount={usersCount}
+                    totalItemsCount={usersCount}
                     perPage={USERS_PER_PAGE}
                     linkPart={'users'}
                 />

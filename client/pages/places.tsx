@@ -334,7 +334,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 </div>
                 <Pagination
                     currentPage={currentPage}
-                    totalPostCount={placesCount}
+                    totalItemsCount={placesCount}
                     perPage={POST_PER_PAGE}
                     urlParam={initialFilter}
                     linkPart={'places'}

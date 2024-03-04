@@ -11,7 +11,8 @@ import { SITE_LINK } from '@/api/api'
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
 
-interface PhotosProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
+interface PhotosProps
+    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {}
 
 const Photos: React.FC<PhotosProps> = ({
     id,
@@ -57,9 +58,10 @@ const Photos: React.FC<PhotosProps> = ({
                 <div>
                     {t('photos')} <strong>{photosCount ?? 0}</strong>
                 </div>
+
                 <Pagination
                     currentPage={currentPage}
-                    totalPostCount={photosCount}
+                    totalItemsCount={photosCount}
                     perPage={PHOTOS_PER_PAGE}
                     linkPart={`users/${id}/photos`}
                 />
