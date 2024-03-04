@@ -13,6 +13,7 @@ import Spinner from '@/ui/spinner'
 import { ApiTypes } from '@/api/types'
 import { Photo, Place } from '@/api/types/Poi'
 
+import CoordinatesControl from '@/components/interactive-map/CoordinatesControl'
 import LayerSwitcherControl from '@/components/interactive-map/LayerSwitcherControl'
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
@@ -48,6 +49,7 @@ type MapProps = {
     storeMapPosition?: boolean
     enableSearch?: boolean
     enableFullScreen?: boolean
+    enableCoordsControl?: boolean
     enableLayersSwitcher?: boolean
     storeMapKey?: string
     fullMapLink?: string
@@ -68,6 +70,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     storeMapPosition,
     enableSearch,
     enableFullScreen,
+    enableCoordsControl,
     enableLayersSwitcher,
     storeMapKey,
     fullMapLink,
@@ -143,6 +146,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                 await document.webkitExitFullscreen()
             }
         }
+    }
+
+    const handleSetCoordinates = (lat: number, lon: number) => {
+        mapRef?.current?.setView(
+            [lat, lon],
+            coordinates?.zoom || DEFAULT_MAP_ZOOM
+        )
     }
 
     useEffect(() => {
@@ -245,6 +255,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {enableSearch && (
                     <SearchControl onSelectResult={handleSelectSearch} />
                 )}
+
                 <div className={styles.leftControls}>
                     {enableFullScreen && (
                         <Button
@@ -275,6 +286,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         />
                     )}
                 </div>
+
                 <div className={styles.rightControls}>
                     {enableLayersSwitcher && (
                         <LayerSwitcherControl
@@ -283,6 +295,16 @@ const InteractiveMap: React.FC<MapProps> = ({
                         />
                     )}
                 </div>
+
+                <div className={styles.bottomControls}>
+                    {enableCoordsControl && (
+                        <CoordinatesControl
+                            coordinates={mapRef?.current?.getCenter()}
+                            onSetCoordinates={handleSetCoordinates}
+                        />
+                    )}
+                </div>
+
                 {userLatLon && <MarkerUser coordinates={userLatLon} />}
                 <div
                     className={styles.loader}

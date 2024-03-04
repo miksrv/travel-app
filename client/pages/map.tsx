@@ -197,6 +197,7 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
                     storeMapPosition={true}
                     enableSearch={true}
                     enableFullScreen={true}
+                    enableCoordsControl={true}
                     enableLayersSwitcher={true}
                     loading={isFetching}
                     places={poiListData?.items}
