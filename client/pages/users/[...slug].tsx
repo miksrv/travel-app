@@ -7,6 +7,7 @@ import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Photo } from '@/api/types/Photo'
+import { Place } from '@/api/types/Place'
 import { User as UserType } from '@/api/types/User'
 
 import AppLayout from '@/components/app-layout'
@@ -14,6 +15,7 @@ import Photos from '@/components/page-user/Photos'
 import User from '@/components/page-user/User'
 
 export const PHOTOS_PER_PAGE = 32
+export const PLACES_PER_PAGE = 10
 const PAGES = ['photos', undefined] as const
 
 type PageType = (typeof PAGES)[number]
@@ -23,7 +25,9 @@ export interface UserPageProps {
     page: PageType | null
     user?: UserType
     photosList?: Photo[]
+    placesList?: Place[]
     photosCount: number
+    placesCount: number
     currentPage: number
 }
 
@@ -101,6 +105,14 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints.usersGetItem.initiate(id)
             )
 
+            const { data: placesData } = await store.dispatch(
+                API.endpoints?.placesGetList.initiate({
+                    author: id,
+                    limit: PLACES_PER_PAGE,
+                    offset: (currentPage - 1) * PLACES_PER_PAGE
+                })
+            )
+
             const { data: photosData } = await store.dispatch(
                 API.endpoints.photosGetList.initiate({
                     author: id,
@@ -125,7 +137,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     id,
                     page: page ?? null,
                     photosCount: photosData?.count || 0,
-                    photosList: photosData?.items,
+                    photosList: photosData?.items || [],
+                    placesCount: placesData?.count || 0,
+                    placesList: placesData?.items || [],
                     user: userData
                 }
             }

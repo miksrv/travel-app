@@ -1,4 +1,4 @@
-import { UserPageProps } from '@/pages/users/[...slug]'
+import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
@@ -6,17 +6,27 @@ import React from 'react'
 import { BreadcrumbList, ProfilePage } from 'schema-dts'
 
 import Button from '@/ui/button'
+import Pagination from '@/ui/pagination'
 
 import { IMG_HOST, SITE_LINK } from '@/api/api'
 
 import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
+import PlacesListFlat from '@/components/places-list-flat'
 
 import { formatDateISO } from '@/functions/helpers'
 
 interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
 
-const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
+const User: React.FC<UserProps> = ({
+    id,
+    user,
+    currentPage,
+    photosList,
+    placesList,
+    placesCount,
+    photosCount
+}) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.user'
     })
@@ -98,7 +108,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
             <UserHeader user={user} />
 
             <UserGallery
-                title={t('title')}
+                title={t('photos')}
                 photos={photosList}
                 footer={
                     photosCount > 8 && (
@@ -111,6 +121,24 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         >
                             {`${t('buttonShowAllPhotos')} (${photosCount})`}
                         </Button>
+                    )
+                }
+            />
+
+            <PlacesListFlat
+                title={t('places')}
+                places={placesList}
+                action={
+                    placesCount > PHOTOS_PER_PAGE && (
+                        <Pagination
+                            hideArrows={true}
+                            disableScroll={true}
+                            neighbours={1}
+                            currentPage={currentPage}
+                            totalItemsCount={placesCount}
+                            perPage={PHOTOS_PER_PAGE}
+                            linkPart={`users/${id}`}
+                        />
                     )
                 }
             />
