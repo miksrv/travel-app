@@ -25,6 +25,12 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
+export const MapObjects = {
+    Photos: 'Photos',
+    Places: 'Places'
+} as const
+export type MapObjectsType = (typeof MapObjects)[keyof typeof MapObjects]
+
 export const MapLayers = {
     GoogleMap: 'GoogleMap',
     GoogleSat: 'GoogleSat',
@@ -54,6 +60,7 @@ type MapProps = {
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
+    onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
@@ -61,6 +68,7 @@ type MapProps = {
 const DEFAULT_MAP_ZOOM = 15
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 const DEFAULT_MAP_LAYER: MapLayersType = MapLayers.OSM
+const DEFAULT_MAP_TYPE: MapObjectsType = MapObjects.Places
 
 const InteractiveMap: React.FC<MapProps> = ({
     places,
@@ -75,14 +83,17 @@ const InteractiveMap: React.FC<MapProps> = ({
     storeMapKey,
     fullMapLink,
     userLatLon,
+    onChangeMapType,
     onChangeBounds,
     onPhotoClick,
     ...props
 }) => {
-    const [readyStorage, setReadyStorage] = useState<boolean>(false)
-    const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
-    const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const mapRef = useRef<Map | any>()
+
+    const [readyStorage, setReadyStorage] = useState<boolean>(false)
+    const [mapPosition, setMapPosition] = useState<MapPositionType>()
+    const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
+    const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
         storeMapKey || LOCAL_STORGE.MAP_CENTER
@@ -113,6 +124,11 @@ const InteractiveMap: React.FC<MapProps> = ({
                 setCoordinates(currentMapPosition)
             }
         }
+    }
+
+    const handleSwitchMapType = (type: MapObjectsType) => {
+        setMapType(type)
+        onChangeMapType?.(type)
     }
 
     const handleSelectSearch = (coordinates: ApiTypes.LatLonCoordinate) => {
@@ -185,6 +201,10 @@ const InteractiveMap: React.FC<MapProps> = ({
         }
     }, [props.center, props.zoom])
 
+    useEffect(() => {
+        onChangeMapType?.(mapType)
+    }, [])
+
     // TODO Change layer
     // useEffect(() => {
     //     if (layer && Object.values(MapLayers).includes(layer)) {
@@ -247,11 +267,12 @@ const InteractiveMap: React.FC<MapProps> = ({
                 ))}
                 {photos?.map((photo) => (
                     <MarkerPhoto
-                        key={photo.filename}
+                        key={`photo${photo.lat}_${photo.lon}`}
                         photo={photo}
                         onPhotoClick={onPhotoClick}
                     />
                 ))}
+
                 {enableSearch && (
                     <SearchControl onSelectResult={handleSelectSearch} />
                 )}
@@ -291,7 +312,9 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {enableLayersSwitcher && (
                         <LayerSwitcherControl
                             currentLayer={mapLayer}
+                            currentType={mapType}
                             onSwitchMapLayer={setMapLayer}
+                            onSwitchMapType={handleSwitchMapType}
                         />
                     )}
                 </div>

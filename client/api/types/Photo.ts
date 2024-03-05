@@ -6,8 +6,6 @@ export type Photo = {
     id: string
     full: string
     preview: string
-    // filename: string
-    // extension: string
     width: number
     height: number
     title?: string
