@@ -8,7 +8,7 @@ export type Place = Pick<PlaceType, 'lat' | 'lon'> & {
 
 export type Photo = Pick<
     PhotoType,
-    'title' | 'preview' | 'full' | 'placeId'
+    'title' | 'preview' | 'full' | 'placeId' | 'author' | 'created'
 > & {
     lat: number
     lon: number
