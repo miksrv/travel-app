@@ -1,6 +1,6 @@
 {
     "name": "geometki",
-    "version": "1.0.19",
+    "version": "1.0.20",
     "private": true,
     "engines": {
         "node": ">=20.11.0"

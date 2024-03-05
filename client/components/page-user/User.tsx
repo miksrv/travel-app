@@ -1,4 +1,4 @@
-import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
@@ -129,14 +129,14 @@ const User: React.FC<UserProps> = ({
                 title={t('places')}
                 places={placesList}
                 action={
-                    placesCount > PHOTOS_PER_PAGE && (
+                    placesCount > PLACES_PER_PAGE && (
                         <Pagination
                             hideArrows={true}
                             disableScroll={true}
                             neighbours={1}
                             currentPage={currentPage}
                             totalItemsCount={placesCount}
-                            perPage={PHOTOS_PER_PAGE}
+                            perPage={PLACES_PER_PAGE}
                             linkPart={`users/${id}`}
                         />
                     )
