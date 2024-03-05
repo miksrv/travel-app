@@ -49,12 +49,16 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                     />
 
                     <div className={styles.reputation}>
-                        <p>{`${t('reputation')}: `}</p>
+                        <noindex>
+                            <p>{`${t('reputation')}: `}</p>
+                        </noindex>
                         <Reputation value={user?.reputation || 0} />
                     </div>
 
                     <div className={styles.level}>
-                        <p>{user?.level?.title}</p>
+                        <noindex>
+                            <p>{user?.level?.title}</p>
+                        </noindex>
                         <Progress
                             className={styles.progress}
                             value={nextLevelPercentage(
