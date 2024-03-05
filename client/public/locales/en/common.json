@@ -34,7 +34,9 @@
                 "OCM": "Scheme (Cycle Map)",
                 "GoogleMap": "Map (Google)",
                 "GoogleSat": "Satellite (Google)",
-                "MapBoxSat": "Satellite (MapBox)"
+                "MapBoxSat": "Satellite (MapBox)",
+                "Photos": "Photos",
+                "Places": "Places"
             },
             "searchControl": {
                 "placeholder": "Locality"
@@ -272,6 +274,7 @@
             "description": "Map of interesting places and attractions",
             "breadCrumbCurrent": "Map of interesting places",
             "pointsCount": "Points on map:",
+            "photosCount": "Photos on map:",
             "buttonFilters": "Filters",
             "dialogFiltersTitle": "Filters",
             "dropdownCategoryLabel": "Filter by Category",

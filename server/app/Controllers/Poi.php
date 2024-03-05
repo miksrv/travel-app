@@ -50,15 +50,17 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function photos(): ResponseInterface {
-        $bounds      = $this->_getBounds();
+        $locale = $this->request->getLocale();
+        $bounds = $this->_getBounds();
+
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select('photos.place_id, photos.lat, photos.lon, photos.filename, photos.extension')
+            ->select('place_id, lat, lon, filename, extension, title_en, title_ru')
             ->where([
                 'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
-                'lon <=' =>  $bounds[2],
-                'lat <=' =>  $bounds[3],
+                'lon <=' => $bounds[2],
+                'lat <=' => $bounds[3],
             ])
             ->groupBy('photos.lon, photos.lat')
             ->findAll();
@@ -66,18 +68,24 @@ class Poi extends ResourceController {
         $result = [];
 
         foreach ($photosData as $photo) {
-            $result[] = (object) [
-                'filename'  => $photo->filename,
-                'extension' => $photo->extension,
+            $title = $locale === 'ru' ?
+                ($photo->title_ru ?: $photo->title_en) :
+                ($photo->title_en ?: $photo->title_ru);
+
+            $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
+            $result[]  = (object) [
+                'full'      => $photoPath . '.' . $photo->extension,
+                'preview'   => $photoPath . '_preview.' . $photo->extension,
                 'lat'       => $photo->lat,
                 'lon'       => $photo->lon,
-                'title'     => $photo->title,
+                'title'     => $title,
                 'placeId'   => $photo->place_id,
             ];
         }
 
         return $this->respond([
             'items' => $result,
+            'count' => count($result)
         ]);
     }
 

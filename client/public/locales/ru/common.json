@@ -34,7 +34,9 @@
                 "OCM": "Схема (Cycle Map)",
                 "GoogleMap": "Карта (Google)",
                 "GoogleSat": "Спутник (Google)",
-                "MapBoxSat": "Спутник (MapBox)"
+                "MapBoxSat": "Спутник (MapBox)",
+                "Photos": "Фотографии",
+                "Places": "Интересные места"
             },
             "searchControl": {
                 "placeholder": "Населенный пункт"
@@ -273,6 +275,7 @@
             "description": "Карта интересных мест и достопримечательностей",
             "breadCrumbCurrent": "Карта интересных мест",
             "pointsCount": "Точек на карте:",
+            "photosCount": "Фото на карте:",
             "buttonFilters": "Фильтры",
             "dialogFiltersTitle": "Фильтры",
             "dropdownCategoryLabel": "Фильтровать по категории",

@@ -17,7 +17,7 @@ const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
         className: styles.markerPhoto,
         iconAnchor: [16, 16],
         iconSize: [32, 32],
-        iconUrl: `${IMG_HOST}photo/${photo.placeId}/${photo.filename}_thumb.${photo.extension}`
+        iconUrl: `${IMG_HOST}${photo.preview}`
     })
 
     return (

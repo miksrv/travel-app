@@ -5,17 +5,26 @@ import Button from '@/ui/button'
 import Container from '@/ui/container'
 import RadioButton from '@/ui/radio-button'
 
-import { MapLayers, MapLayersType } from './InteractiveMap'
+import {
+    MapLayers,
+    MapLayersType,
+    MapObjects,
+    MapObjectsType
+} from './InteractiveMap'
 import styles from './styles.module.sass'
 
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
+    currentType?: MapObjectsType
     onSwitchMapLayer?: (layer: MapLayersType) => void
+    onSwitchMapType?: (type: MapObjectsType) => void
 }
 
 const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     currentLayer,
-    onSwitchMapLayer
+    currentType,
+    onSwitchMapLayer,
+    onSwitchMapType
 }) => {
     const layersContainerRef = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState<boolean>(false)
@@ -42,6 +51,13 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     ) => {
         setOpen(false)
         onSwitchMapLayer?.(event.target.id as MapLayersType)
+    }
+
+    const handleSwitchMapType = (
+        event: React.ChangeEvent<HTMLInputElement>
+    ) => {
+        setOpen(false)
+        onSwitchMapType?.(event.target.id as MapObjectsType)
     }
 
     useEffect(() => {
@@ -71,6 +87,20 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                                     name={'layerType'}
                                     checked={currentLayer === layer}
                                     onChange={handleSwitchMapLayer}
+                                    onClick={() => setOpen(false)}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                    <ul className={styles.mapPointsTypeList}>
+                        {Object.values(MapObjects).map((type) => (
+                            <li key={type}>
+                                <RadioButton
+                                    id={type}
+                                    label={t(type)}
+                                    name={'layerType'}
+                                    checked={currentType === type}
+                                    onChange={handleSwitchMapType}
                                     onClick={() => setOpen(false)}
                                 />
                             </li>

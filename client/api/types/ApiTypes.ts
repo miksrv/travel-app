@@ -332,6 +332,7 @@ export interface ResponsePoiPlacesList {
 
 export interface ResponsePoiPhotosList {
     items: poiPhoto[]
+    count: number
 }
 
 /* Controller: User */

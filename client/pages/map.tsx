@@ -19,9 +19,12 @@ import { API, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
+import { Photo } from '@/api/types/Poi'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
+import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
+import PhotoLightbox from '@/components/photo-lightbox'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -50,6 +53,10 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const [initMapZoom, setInitMapZoom] = useState<number>()
     // const [initMapLayer, setInitMapLayer] = useState<MapLayersType>()
 
+    const [showLightbox, setShowLightbox] = useState<boolean>(false)
+    const [currentPhoto, setCurrentPhoto] = useState<Photo>()
+
+    const [mapType, setMapType] = useState<MapObjectsType>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
     const [openedOptions, setOpenedOptions] =
@@ -58,10 +65,18 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
-    const { data: poiListData, isFetching } = API.usePoiGetListQuery(
-        { bounds: mapBounds, category: category ?? undefined },
-        { skip: !mapBounds }
-    )
+
+    const { data: poiListData, isFetching: placesLoading } =
+        API.usePoiGetListQuery(
+            { bounds: mapBounds, category: category ?? undefined },
+            { skip: !mapBounds || mapType !== 'Places' }
+        )
+
+    const { data: photoListData, isFetching: photosLoading } =
+        API.usePoiGetPhotoListQuery(
+            { bounds: mapBounds, category: category ?? undefined },
+            { skip: !mapBounds || mapType !== 'Photos' }
+        )
 
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined
@@ -86,6 +101,15 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
             })),
         [categoryData?.items]
     )
+
+    const handleCloseLightbox = () => {
+        setShowLightbox(false)
+    }
+
+    const handlePhotoClick = (photo: Photo) => {
+        setCurrentPhoto(photo)
+        setShowLightbox(true)
+    }
 
     const handleOpenOptionsCategory = () => {
         setOpenedOptions('category')
@@ -172,8 +196,16 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
                 actions={
                     <>
                         <div>
-                            {t('pointsCount')}{' '}
-                            <strong>{poiListData?.count ?? 0}</strong>
+                            {t(
+                                mapType === 'Places'
+                                    ? 'pointsCount'
+                                    : 'photosCount'
+                            )}{' '}
+                            <strong>
+                                {(mapType === 'Places'
+                                    ? poiListData?.count
+                                    : photoListData?.count) ?? 0}
+                            </strong>
                         </div>
                         <Button
                             size={'m'}
@@ -189,6 +221,13 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
                 }
             />
 
+            <PhotoLightbox
+                photos={currentPhoto ? [currentPhoto] : []}
+                photoIndex={0}
+                showLightbox={showLightbox}
+                onCloseLightBox={handleCloseLightbox}
+            />
+
             <Container className={'mainContainer'}>
                 <InteractiveMap
                     center={initMapCoords}
@@ -199,8 +238,11 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
                     enableFullScreen={true}
                     enableCoordsControl={true}
                     enableLayersSwitcher={true}
-                    loading={isFetching}
-                    places={poiListData?.items}
+                    loading={placesLoading || photosLoading}
+                    places={mapType === 'Places' ? poiListData?.items : []}
+                    photos={mapType === 'Photos' ? photoListData?.items : []}
+                    onPhotoClick={handlePhotoClick}
+                    onChangeMapType={setMapType}
                     onChangeBounds={debounceSetMapBounds}
                     userLatLon={location}
                 />
