@@ -118,7 +118,7 @@ const AppBar: React.FC<HeaderProps> = ({
                         </Link>
                     )}
 
-                    {appAuth.isAuth && appAuth?.user && (
+                    {appAuth.isAuth && appAuth.user?.id && (
                         <>
                             <Notifications />
                             <Popout
