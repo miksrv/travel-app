@@ -2,11 +2,10 @@ import { PlacePageProps } from '@/pages/places/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Article, BreadcrumbList } from 'schema-dts'
 
 import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -14,6 +13,7 @@ import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
 import PlaceInformation from '@/components/page-place/information'
 import PlacePhotos from '@/components/page-place/photos'
+import SocialRating from '@/components/page-place/social-rating'
 import PlacesList from '@/components/places-list'
 
 import { formatDateISO, formatDateUTC } from '@/functions/helpers'
@@ -25,20 +25,12 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
         keyPrefix: 'components.pagePlace.place'
     })
 
-    const { data: ratingData, isLoading: ratingLoading } =
-        API.useRatingGetListQuery(place?.id!, {
-            skip: !place?.id
-        })
-
-    const nearPlacesDistance = useMemo(
-        () =>
-            Math.max(
-                ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
-            ),
-        [nearPlaces]
-    )
+    const { data: ratingData } = API.useRatingGetListQuery(place?.id!, {
+        skip: !place?.id
+    })
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+    const pagePlaceUrl = `${canonicalUrl}places/${place?.id}`
 
     const breadCrumbSchema: BreadcrumbList = {
         // @ts-ignore
@@ -137,7 +129,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
             <NextSeo
                 title={place?.title}
                 description={place?.content?.substring(0, 160)}
-                canonical={`${canonicalUrl}places/${place?.id}`}
+                canonical={pagePlaceUrl}
                 openGraph={{
                     article: {
                         authors: [`${SITE_LINK}users/${place?.author?.id}`],
@@ -146,7 +138,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                         section: place?.category?.name,
                         tags: place?.tags
                     },
-                    description: place?.content?.substring(0, 160),
+                    description: place?.content?.substring(0, 250),
                     images: photoList?.slice(0, 3).map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
@@ -157,7 +149,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                     siteName: t('siteName'),
                     title: place?.title,
                     type: 'http://ogp.me/ns/article#',
-                    url: `${canonicalUrl}places/${place?.id}`
+                    url: pagePlaceUrl
                 }}
             />
 
@@ -173,11 +165,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                 ]}
             />
 
-            <PlaceInformation
-                place={place}
-                ratingValue={ratingData?.vote}
-                loading={ratingLoading}
-            />
+            <PlaceInformation place={place} />
 
             <PlacePhotos
                 photos={photoList}
@@ -190,14 +178,12 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
                 tags={place?.tags}
             />
 
-            <Container>
-                <h2>{t('nearPlacesTitle')}</h2>
-                <div className={'headline'}>
-                    {t('nearPlacesDescription', {
-                        distance: nearPlacesDistance
-                    })}
-                </div>
-            </Container>
+            <SocialRating
+                placeId={place?.id}
+                placeUrl={pagePlaceUrl}
+                ratingValue={ratingData?.vote}
+            />
+
             <PlacesList places={nearPlaces} />
 
             <Button
