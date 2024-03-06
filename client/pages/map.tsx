@@ -6,7 +6,6 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
-import { useSearchParams } from 'next/navigation'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -43,7 +42,6 @@ interface MapPageProps {
 const MapPage: NextPage<MapPageProps> = ({ category }) => {
     const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.map' })
 
-    const searchParams = useSearchParams()
     const dispatch = useAppDispatch()
     const router = useRouter()
 
@@ -154,7 +152,7 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
             const lat = round(mapCenter.lat, 4)
             const lon = round(mapCenter.lng, 4)
 
-            router.replace(`/map?c=${lat},${lon}&z=${zoom}`)
+            router.replace(`/map#${lat},${lon},${zoom}`)
 
             setMapBounds(bounds.toBBoxString())
         }, 500),
@@ -162,22 +160,21 @@ const MapPage: NextPage<MapPageProps> = ({ category }) => {
     )
 
     useEffect(() => {
-        const coords = searchParams.get('c')
-        const zoom = searchParams.get('z')
-        // const layer = searchParams.get('l')
+        const hash = window?.location?.hash ?? null
 
-        if (coords) {
-            const splitCords = coords.split(',')
+        if (hash) {
+            const splitCords = hash.replace('#', '').split(',')
             const lat = parseFloat(splitCords[0])
             const lon = parseFloat(splitCords[1])
+            const zoom = parseFloat(splitCords[2])
 
             if (lat && lon) {
                 setInitMapCoords([lat, lon])
             }
-        }
 
-        if (zoom && Number(zoom) >= 6 && Number(zoom) <= 18) {
-            setInitMapZoom(Number(zoom))
+            if (zoom && Number(zoom) >= 6 && Number(zoom) <= 18) {
+                setInitMapZoom(Number(zoom))
+            }
         }
     }, [])
 
