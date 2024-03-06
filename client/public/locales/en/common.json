@@ -67,8 +67,6 @@
             "place": {
                 "siteName": "Geometki",
                 "breadCrumbPlacesLink": "Interesting Places",
-                "nearPlacesTitle": "Nearby Places",
-                "nearPlacesDescription": "Found several nearby places of interest within {{distance}} km",
                 "allNearPlacesButton": "All places nearby"
             },
             "placeHeader": {
@@ -77,7 +75,6 @@
                 "ratingCount_other": "{{count}} votes"
             },
             "placeInformation": {
-                "userRating": "Your rating:",
                 "author": "Author:",
                 "category": "Category:",
                 "allCategoryPlaces": "Все интересные места категории",
@@ -93,6 +90,9 @@
             "placePhotos": {
                 "title": "Photos",
                 "buttonUpload": "Upload"
+            },
+            "socialRating": {
+                "userRating": "Rate this place:"
             },
             "placeDescription": {
                 "title": "Description",

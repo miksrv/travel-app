@@ -67,8 +67,6 @@
             "place": {
                 "siteName": "Геометки",
                 "breadCrumbPlacesLink": "Интересные места",
-                "nearPlacesTitle": "Ближайшие места рядом",
-                "nearPlacesDescription": "Найдены несколько ближайших интересных мест в радиусе {{distance}} км",
                 "allNearPlacesButton": "Все места рядом"
             },
             "placeHeader": {
@@ -78,7 +76,6 @@
                 "ratingCount_many": "{{count}} голосов"
             },
             "placeInformation": {
-                "userRating": "Ваша оценка:",
                 "author": "Автор:",
                 "category": "Категория:",
                 "allCategoryPlaces": "Все интересные места категории",
@@ -94,6 +91,9 @@
             "placePhotos": {
                 "title": "Фотографии",
                 "buttonUpload": "Загрузить"
+            },
+            "socialRating": {
+                "userRating": "Оцените место:"
             },
             "placeDescription": {
                 "title": "Описание",

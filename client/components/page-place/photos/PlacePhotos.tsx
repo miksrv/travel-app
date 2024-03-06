@@ -12,8 +12,6 @@ import { Photo } from '@/api/types/Photo'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 
-import styles from './styles.module.sass'
-
 interface PlacePhotosProps {
     placeId?: string
     photos?: Photo[]
@@ -174,7 +172,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     return (
         <Container
-            className={styles.component}
             title={t('title')}
             action={
                 <Button

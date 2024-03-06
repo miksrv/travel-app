@@ -6,9 +6,7 @@ import React, { useMemo } from 'react'
 
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
-import Rating from '@/ui/rating'
 
-import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
@@ -34,24 +32,16 @@ type PlaceAddress = {
 
 interface PlaceInformationProps {
     place?: Place
-    ratingValue?: number | null
-    loading?: boolean
     // onChangeWasHere?: (wasHere: boolean) => void
 }
 
-const PlaceInformation: React.FC<PlaceInformationProps> = ({
-    place,
-    ratingValue
-}) => {
+const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeInformation'
     })
 
     // const { data: visitedUsersData, isLoading: visitedUsersLoading } =
     //     API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
-
-    const [changeRating, { isLoading: ratingLoading }] =
-        API.useRatingPutScoreMutation()
 
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiTypes.LocationTypes[] = [
@@ -83,15 +73,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
     //     [visitedUsersData, authSlice]
     // )
 
-    const handleRatingChange = (value?: number) => {
-        if (value && place?.id) {
-            changeRating({
-                place: place.id,
-                score: value
-            })
-        }
-    }
-
     // React.useEffect(() => {
     //     onChangeWasHere?.(iWasHere)
     // }, [visitedUsersData, authSlice])
@@ -99,28 +80,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
     return (
         <Container className={styles.component}>
             <ul className={styles.information}>
-                <li>
-                    <Icon name={'Star'} />
-                    <div className={styles.key}>{t('userRating')}</div>
-                    <div className={styles.value}>
-                        <Rating
-                            value={ratingValue ?? undefined}
-                            disabled={ratingLoading}
-                            onChange={handleRatingChange}
-                        />
-                    </div>
-                </li>
-                <li>
-                    <Icon name={'User'} />
-                    <div className={styles.key}>{t('author')}</div>
-                    <div className={styles.value}>
-                        <UserAvatar
-                            user={place?.author}
-                            showName={true}
-                            hideOnlineIcon={true}
-                        />
-                    </div>
-                </li>
                 <li>
                     <Icon name={'Terrain'} />
                     <div className={styles.key}>{t('category')}</div>
@@ -141,6 +100,17 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({
                         >
                             {place?.category?.title}
                         </Link>
+                    </div>
+                </li>
+                <li>
+                    <Icon name={'User'} />
+                    <div className={styles.key}>{t('author')}</div>
+                    <div className={styles.value}>
+                        <UserAvatar
+                            user={place?.author}
+                            showName={true}
+                            hideOnlineIcon={true}
+                        />
                     </div>
                 </li>
                 <li>
