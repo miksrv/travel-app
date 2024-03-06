@@ -65,7 +65,7 @@ type MapProps = {
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
 
-const DEFAULT_MAP_ZOOM = 15
+const DEFAULT_MAP_ZOOM = 8
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 const DEFAULT_MAP_LAYER: MapLayersType = MapLayers.OSM
 const DEFAULT_MAP_TYPE: MapObjectsType = MapObjects.Places
@@ -216,8 +216,8 @@ const InteractiveMap: React.FC<MapProps> = ({
         <div className={styles.mapContainer}>
             <ReactLeaflet.MapContainer
                 {...props}
-                center={props.center || DEFAULT_MAP_CENTER}
-                zoom={props.zoom || DEFAULT_MAP_ZOOM}
+                center={props.center ?? DEFAULT_MAP_CENTER}
+                zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
                 minZoom={6}
                 style={{ height: '100%', width: '100%' }}
                 attributionControl={false}
