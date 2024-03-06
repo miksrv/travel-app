@@ -98,8 +98,8 @@ class Geocoder {
         $locationEn = $geocoderEn->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
         $locationRu = $geocoderRu->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
 
-        $countryTitleEn = $locationEn->getCountry()->getName();
-        $countryTitleRu = $locationRu->getCountry()->getName();
+        $countryTitleEn = $locationEn->getCountry()?->getName();
+        $countryTitleRu = $locationRu->getCountry()?->getName();
 
         $this->_getCountryId($countryTitleEn, $countryTitleRu);
 

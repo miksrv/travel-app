@@ -218,6 +218,8 @@ class Photos extends ResourceController {
 
             $photoId = $photosModel->getInsertID();
 
+            sleep(1);
+
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
         } else {
