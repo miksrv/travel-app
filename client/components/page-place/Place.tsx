@@ -2,11 +2,10 @@ import { PlacePageProps } from '@/pages/places/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Article, BreadcrumbList } from 'schema-dts'
 
 import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -29,14 +28,6 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
     const { data: ratingData } = API.useRatingGetListQuery(place?.id!, {
         skip: !place?.id
     })
-
-    const nearPlacesDistance = useMemo(
-        () =>
-            Math.max(
-                ...(nearPlaces?.map(({ distance }) => distance || 0) || [])
-            ),
-        [nearPlaces]
-    )
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pagePlaceUrl = `${canonicalUrl}places/${place?.id}`
