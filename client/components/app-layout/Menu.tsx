@@ -38,7 +38,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('map')
         },
         {
-            icon: 'Terrain',
+            icon: 'Place',
             link: '/places',
             text: t('places')
         },
@@ -47,6 +47,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             icon: 'PlusCircle',
             link: '/places/create',
             text: t('create')
+        },
+        {
+            icon: 'Category',
+            link: '/categories',
+            text: t('categories')
         },
         {
             auth: true,

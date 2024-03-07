@@ -241,7 +241,11 @@ export interface ResponseSitemapGet {
 }
 
 /* Controller: Categories */
-export interface ResponseCategoriesGetList extends Place {
+export interface RequestCategoriesGetList {
+    places?: boolean
+}
+
+export interface ResponseCategoriesGetList {
     items?: Category[]
 }
 

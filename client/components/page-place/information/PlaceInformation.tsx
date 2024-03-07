@@ -81,7 +81,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
         <Container className={styles.component}>
             <ul className={styles.information}>
                 <li>
-                    <Icon name={'Terrain'} />
+                    <Icon name={'Category'} />
                     <div className={styles.key}>{t('category')}</div>
                     <div className={styles.value}>
                         <Image

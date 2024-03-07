@@ -2,6 +2,7 @@
 
 use App\Libraries\LocaleLibrary;
 use App\Models\CategoryModel;
+use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -17,18 +18,33 @@ class Categories extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
+        $places = $this->request->getGet('places', FILTER_VALIDATE_BOOLEAN) ?? false;
         $locale = $this->request->getLocale();
         $result = [];
 
+        $placesModel     = new PlacesModel();
         $categoriesModel = new CategoryModel();
-        $categoriesData  = $categoriesModel->orderBy("title_$locale", 'ASC')->findAll();
+        $categoriesData  = $categoriesModel
+            ->select("name, title_$locale as title" . ($places ? ", content_$locale as content" : ''))
+            ->orderBy("title_$locale", 'ASC')
+            ->findAll();
 
         if ($categoriesData) {
             foreach ($categoriesData as $item) {
-                $result[] = [
+                $category = (object) [
                     'name' => $item->name,
-                    'title' => $item->{"title_$locale"}
+                    'title' => $item->title
                 ];
+
+                if ($places) {
+                    $category->content = $item->content;
+                    $category->count   = $placesModel
+                        ->select('id')
+                        ->where('category', $item->name)
+                        ->countAllResults();
+                }
+
+                $result[] = $category;
             }
         }
 

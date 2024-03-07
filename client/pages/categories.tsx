@@ -1,0 +1,72 @@
+import { GetServerSidePropsResult, NextPage } from 'next'
+import { useTranslation } from 'next-i18next'
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
+import { NextSeo } from 'next-seo'
+import React from 'react'
+
+import { API, SITE_LINK } from '@/api/api'
+import { setLocale } from '@/api/applicationSlice'
+import { wrapper } from '@/api/store'
+import { ApiTypes } from '@/api/types'
+import { Category } from '@/api/types/Place'
+
+import AppLayout from '@/components/app-layout'
+import CategoriesList from '@/components/categories-list'
+import Header from '@/components/header'
+
+interface CategoriesPageProps {
+    categories: Category[]
+}
+
+const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
+    const { t, i18n } = useTranslation('common', {
+        keyPrefix: 'pages.categories'
+    })
+
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
+    return (
+        <AppLayout>
+            <NextSeo
+                title={t('title')}
+                canonical={`${canonicalUrl}categories`}
+                description={categories.map(({ title }) => title)?.join(',')}
+            />
+
+            <Header
+                title={t('title')}
+                currentPage={t('breadCrumbCurrent')}
+            />
+
+            <CategoriesList categories={categories} />
+        </AppLayout>
+    )
+}
+
+export const getServerSideProps = wrapper.getServerSideProps(
+    (store) =>
+        async (
+            context
+        ): Promise<GetServerSidePropsResult<CategoriesPageProps>> => {
+            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+
+            const translations = await serverSideTranslations(locale)
+
+            store.dispatch(setLocale(locale))
+
+            const { data: categoriesList } = await store.dispatch(
+                API.endpoints?.categoriesGetList.initiate({ places: true })
+            )
+
+            await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
+
+            return {
+                props: {
+                    ...translations,
+                    categories: categoriesList?.items ?? []
+                }
+            }
+        }
+)
+
+export default CategoriesPage
