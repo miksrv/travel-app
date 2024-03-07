@@ -234,6 +234,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     enableLayersSwitcher={true}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
+                    zoom={placeId ? 15 : undefined}
                     center={
                         placeId && formData
                             ? [formData?.lat!, formData?.lon!]

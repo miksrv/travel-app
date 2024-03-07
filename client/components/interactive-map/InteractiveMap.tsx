@@ -195,8 +195,8 @@ const InteractiveMap: React.FC<MapProps> = ({
     useEffect(() => {
         if (props.center || props.zoom) {
             mapRef.current?.setView(
-                props.center || DEFAULT_MAP_CENTER,
-                props.zoom || mapPosition?.zoom || DEFAULT_MAP_ZOOM
+                props.center || DEFAULT_MAP_CENTER
+                // props.zoom || mapPosition?.zoom || DEFAULT_MAP_ZOOM
             )
         }
     }, [props.center, props.zoom])
