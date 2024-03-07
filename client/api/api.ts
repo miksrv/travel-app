@@ -141,9 +141,9 @@ export const API = createApi({
         /* Controller: Categories */
         categoriesGetList: builder.query<
             ApiTypes.ResponseCategoriesGetList,
-            void
+            Maybe<ApiTypes.RequestCategoriesGetList>
         >({
-            query: () => 'categories'
+            query: (params) => `categories${encodeQueryData(params)}`
         }),
 
         /* Controller: Levels */

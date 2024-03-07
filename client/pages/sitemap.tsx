@@ -20,7 +20,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints?.sitemapGetList.initiate()
             )
 
-            const staticPages = ['map', 'places', 'users', 'users/levels']
+            const staticPages = [
+                'map',
+                'places',
+                'users',
+                'users/levels',
+                'categories'
+            ]
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 

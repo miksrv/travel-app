@@ -54,6 +54,8 @@ export enum Categories {
 export type Category = {
     name: Categories
     title: string
+    content?: string
+    count?: number
 }
 
 export type Location = {

@@ -22,6 +22,7 @@
                 "map": "Карта интересных мест",
                 "places": "Интересные места",
                 "create": "Добавить место",
+                "categories": "Категории геометок",
                 "profile": "Моя страница",
                 "users": "Путешественники",
                 "telegram": "Дневник проекта"
@@ -199,6 +200,10 @@
                 "noData": "Пока ничего нет"
             }
         },
+        "categoriesList": {
+            "placesInCategory": "Interesting places in the category:",
+            "allCategoryPlaces": "All interesting places in the category"
+        },
         "registrationForm": {
             "errorsMessageTitle": "Исправьте ошибки",
             "errorName": "Имя обязательно для заполнения",
@@ -253,6 +258,10 @@
             "buttonAllPlaces": "Все интересные места",
             "titleActiveUsers": "Активные пользователи",
             "titleLastPhotos": "Последние загруженные фотографии"
+        },
+        "categories": {
+            "title": "Категории геометок",
+            "breadCrumbCurrent": "Категории интересных мест"
         },
         "places": {
             "createPlacePage": {

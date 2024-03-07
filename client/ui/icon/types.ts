@@ -2,7 +2,6 @@ export type IconTypes =
     | 'Address'
     | 'Map'
     | 'Menu'
-    | 'Terrain'
     | 'Eye'
     | 'Camera'
     | 'Photo'
@@ -41,3 +40,5 @@ export type IconTypes =
     | 'Rotate'
     | 'External'
     | 'Telegram'
+    | 'Category'
+    | 'Place'

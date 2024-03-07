@@ -22,6 +22,7 @@
                 "map": "Map of places",
                 "places": "Interesting places",
                 "create": "Add a place",
+                "categories": "Geotag categories",
                 "profile": "Personal page",
                 "users": "Travelers",
                 "telegram": "Project diary"
@@ -198,6 +199,10 @@
                 "noData": "Nothing yet"
             }
         },
+        "categoriesList": {
+            "placesInCategory": "Интересных мест в категории:",
+            "allCategoryPlaces": "Все интересные места категории"
+        },
         "registrationForm": {
             "errorsMessageTitle": "Fix errors",
             "errorName": "Name is required",
@@ -252,6 +257,10 @@
             "buttonAllPlaces": "All places of interest",
             "titleActiveUsers": "Active Users",
             "titleLastPhotos": "Last uploaded photos"
+        },
+        "categories": {
+            "title": "Geotag Categories",
+            "breadCrumbCurrent": "Points of Interest Categories"
         },
         "places": {
             "createPlacePage": {
