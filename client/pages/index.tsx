@@ -60,7 +60,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 description={`${t('description')} - ${placesList
                     ?.map(({ title }) => title)
                     .join(', ')
-                    .substring(0, 160)}`}
+                    .substring(0, 220)}`}
                 canonical={canonicalUrl}
             />
 
@@ -106,7 +106,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
-                    limit: 3,
+                    limit: 6,
                     order: ApiTypes.SortOrders.DESC,
                     sort: ApiTypes.SortFields.Updated
                 })

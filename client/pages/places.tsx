@@ -303,7 +303,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 description={`${title} - ${placesList
                     ?.map(({ title }) => title)
                     .join(', ')
-                    .substring(0, 160)}`}
+                    .substring(0, 220)}`}
                 canonical={`${canonicalUrl}places${encodeQueryData(
                     initialFilter
                 )}`}

@@ -52,7 +52,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
                 description={`${title} - ${usersList
                     ?.map(({ name }) => name)
                     .join(', ')
-                    .substring(0, 160)}`}
+                    .substring(0, 220)}`}
                 canonical={`${canonicalUrl}users${
                     currentPage && currentPage > 1 ? '?page=' + currentPage : ''
                 }`}

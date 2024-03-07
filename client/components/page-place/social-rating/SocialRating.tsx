@@ -1,6 +1,8 @@
 import { useTranslation } from 'next-i18next'
 import React from 'react'
 import {
+    OKIcon,
+    OKShareButton,
     RedditIcon,
     RedditShareButton,
     TelegramIcon,
@@ -74,6 +76,10 @@ const SocialRating: React.FC<SocialRatingProps> = ({
                 <VKShareButton url={placeUrl!}>
                     <VKIcon size={22} />
                 </VKShareButton>
+
+                <OKShareButton url={placeUrl!}>
+                    <OKIcon size={22} />
+                </OKShareButton>
 
                 <RedditShareButton url={placeUrl!}>
                     <RedditIcon size={22} />
