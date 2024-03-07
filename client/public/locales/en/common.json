@@ -200,8 +200,8 @@
             }
         },
         "categoriesList": {
-            "placesInCategory": "Интересных мест в категории:",
-            "allCategoryPlaces": "Все интересные места категории"
+            "placesInCategory": "Interesting places in the category:",
+            "allCategoryPlaces": "All interesting places in the category"
         },
         "registrationForm": {
             "errorsMessageTitle": "Fix errors",
