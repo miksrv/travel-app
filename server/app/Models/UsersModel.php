@@ -64,35 +64,13 @@ class UsersModel extends MyBaseModel {
     }
 
     /**
-     * @param array $data
-     * @return array
-     */
-    private function getUpdatedDataWithHashedPassword(array $data): array {
-        if (isset($data['data']['password'])) {
-            $plaintextPassword = $data['data']['password'];
-            $data['data']['password'] = $this->hashPassword($plaintextPassword);
-        }
-
-        return $data;
-    }
-
-    /**
-     * @param string $plaintextPassword
-     * @return string
-     */
-    private function hashPassword(string $plaintextPassword): string {
-        return password_hash($plaintextPassword, PASSWORD_BCRYPT);
-    }
-
-    /**
      * @param string $emailAddress
      * @return User|array|null
      */
-    public function findUserByEmailAddress(string $emailAddress): User | array | null
-    {
+    public function findUserByEmailAddress(string $emailAddress): User | array | null {
         return $this
             ->select('id, name, avatar, email, password')
-            ->where(['email' => $emailAddress])
+            ->where('email', $emailAddress)
             ->first();
     }
 
