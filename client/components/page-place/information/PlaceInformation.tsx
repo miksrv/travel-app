@@ -203,7 +203,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         enableFullScreen={false}
                         scrollWheelZoom={false}
                         dragging={false}
-                        fullMapLink={`/map?c=${place.lat},${place.lon}&z=14`}
+                        fullMapLink={`/map#${place.lat},${place.lon},14`}
                         places={[
                             {
                                 category: place.category?.name!,
