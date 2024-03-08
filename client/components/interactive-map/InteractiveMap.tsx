@@ -65,7 +65,7 @@ type MapProps = {
     onPhotoClick?: (photo: Photo) => void
 } & MapOptions
 
-const DEFAULT_MAP_ZOOM = 8
+const DEFAULT_MAP_ZOOM = 12
 const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 const DEFAULT_MAP_LAYER: MapLayersType = MapLayers.OSM
 const DEFAULT_MAP_TYPE: MapObjectsType = MapObjects.Places
@@ -190,7 +190,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 
             setReadyStorage(true)
         }
-    }, [readyStorage, coordinates])
+    }, [props.center, readyStorage, coordinates])
 
     useEffect(() => {
         if (props.center || props.zoom) {
