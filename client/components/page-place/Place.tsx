@@ -56,14 +56,6 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
         '@context': 'https://schema.org',
         '@type': 'Article',
         accessMode: ['textual', 'visual'],
-        // Google support only this types:
-        // https://developers.google.com/search/docs/appearance/structured-data/review-snippet
-        // aggregateRating: {
-        //     '@type': 'AggregateRating',
-        //     bestRating: 5,
-        //     ratingCount: voteCount,
-        //     ratingValue: place?.rating
-        // },
         articleBody: place?.content,
         author: {
             '@type': 'Person',
