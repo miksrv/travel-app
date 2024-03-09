@@ -163,6 +163,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         className={styles.searchInput}
                         placeholder={placeholder ?? t('placeholder')}
                         onMouseMove={(e) => e.stopPropagation()}
+                        onWheelCapture={(e) => e.stopPropagation()}
                         onChange={handleChangeInput}
                     />
                     <span className={styles.arrow}>
@@ -193,8 +194,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         )}
                     </span>
                 </div>
-                {isOpen && (
-                    <ul className={styles.optionsList}>
+                {isOpen && !loading && (
+                    <ul
+                        className={styles.optionsList}
+                        onWheelCapture={(e) => e.stopPropagation()}
+                    >
                         {!options?.length && (
                             <li className={styles.emptyItem}>
                                 {t('notFound')}

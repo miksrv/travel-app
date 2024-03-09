@@ -172,8 +172,11 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                         )}
                     </span>
                 </div>
-                {isOpen && (
-                    <ul className={styles.optionsList}>
+                {isOpen && !loading && (
+                    <ul
+                        className={styles.optionsList}
+                        onWheelCapture={(e) => e.stopPropagation()}
+                    >
                         {!options?.length && (
                             <li className={styles.emptyItem}>
                                 {t('notFound')}
