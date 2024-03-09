@@ -5,14 +5,15 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('introduce', 'Introduce::hello');
-$routes->options('introduce', 'Introduce');
+//$routes->get('introduce', 'Introduce::hello');
+//$routes->options('introduce', 'Introduce');
 
 //$routes->get('migrate/places', 'Migrate::places');
-$routes->cli('migrate/fix', 'Migrate::fixedActivity');
-$routes->cli('migrate/places', 'Migrate::places');
-$routes->cli('migrate/comments', 'Migrate::comments');
-$routes->cli('migrate/users', 'Migrate::users');
+//$routes->cli('migrate/fix', 'Migrate::fixedActivity');
+//$routes->cli('migrate/places', 'Migrate::places'); //  php index.php migrate places
+//$routes->cli('migrate/comments', 'Migrate::comments');
+//$routes->cli('migrate/users', 'Migrate::users');
+//$routes->cli('migrate/covers', 'Migrate::fixedCoverSizes'); //  php index.php migrate covers
 
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');

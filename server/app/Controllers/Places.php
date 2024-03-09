@@ -635,10 +635,11 @@ class Places extends ResourceController {
         $image = Services::image('gd'); // imagick
         $image->withFile($file->getRealPath())
             ->crop($input->width, $input->height, $input->x, $input->y)
+            ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT)
             ->save($photoDir . 'cover.jpg');
 
         $image->withFile($file->getRealPath())
-            ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
+            ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT)
             ->save($photoDir . '/cover_preview.jpg');
 
         $placesModel->update($id, ['updated_at' => new Time('now')]);
