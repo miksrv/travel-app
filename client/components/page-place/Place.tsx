@@ -98,7 +98,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
             '@type': 'InteractionCounter',
             userInteractionCount: place?.views
         },
-        wordCount: place?.content.trim().split(/\s+/).length
+        wordCount: place?.content?.trim().split(/\s+/).length
     }
 
     return (

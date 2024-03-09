@@ -184,17 +184,17 @@ class Photos extends ResourceController {
 
             $image = Services::image('gd'); // imagick
             $image->withFile($file->getRealPath())
-                ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT, 'center')
+                ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT)
                 ->save($photoDir . $name . '_preview.' . $ext);
 
             // If this first uploaded photo - we automated make place cover image
             if ($placesData->photos === 0) {
                 $image->withFile($file->getRealPath())
-                    ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT, 'center')
+                    ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT)
                     ->save($photoDir . '/cover.jpg');
 
                 $image->withFile($file->getRealPath())
-                    ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT, 'center')
+                    ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT)
                     ->save($photoDir . '/cover_preview.jpg');
             }
 

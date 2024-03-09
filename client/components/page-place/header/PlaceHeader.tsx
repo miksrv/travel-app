@@ -82,7 +82,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         alt={place?.title || ''}
                         height={300}
                         width={870}
-                        priority={true}
                         src={`${IMG_HOST}${place.cover.full}${
                             coverHash ? `?d=${coverHash}` : ''
                         }`}
