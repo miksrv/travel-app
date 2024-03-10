@@ -16,6 +16,7 @@ export type Place = {
     difference?: number
     distance?: number
     author?: User
+    editors?: User[]
     category?: Category
     address?: Location
     tags?: string[]

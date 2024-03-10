@@ -7,6 +7,7 @@ use App\Libraries\PlaceTags;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
 use App\Libraries\ActivityLibrary;
+use App\Models\ActivityModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
@@ -334,6 +335,7 @@ class Places extends ResourceController {
                     ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
                     : null
             ],
+            'editors'   => $this->_editors($placeData->id, $placeData->user_id),
             'category'  => [
                 'name'  => $placeData->category,
                 'title' => $placeData->{"category_$locale"},
@@ -716,5 +718,29 @@ class Places extends ResourceController {
         }
 
         return $placesModel->limit($limit <= 0 || $limit > 21 ? 21 : $limit, abs($offset));
+    }
+
+    /**
+     * @param string $placeId
+     * @param string $excludeUserId
+     * @return array
+     */
+    protected function _editors(string $placeId, string $excludeUserId): array {
+        $model = new ActivityModel();
+        $data  = $model->gePlaceEditors($placeId, $excludeUserId);
+
+        if (empty($data)) {
+            return [];
+        }
+
+        foreach ($data as $user) {
+            $avatar = $user->avatar ? explode('.', $user->avatar) : null;
+            $user->avatar = $avatar
+                ? PATH_AVATARS . $user->id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                : null;
+        }
+
+
+        return $data;
     }
 }

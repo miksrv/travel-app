@@ -77,10 +77,10 @@
             },
             "placeInformation": {
                 "author": "Author:",
+                "editors": "Editors:",
                 "category": "Category:",
                 "allCategoryPlaces": "Все интересные места категории",
                 "coordinates": "Coordinates:",
-                "createdTime": "Added:",
                 "editTime": "Edited:",
                 "address": "Address:",
                 "addressLinkTitle": "Points of Interest::",
