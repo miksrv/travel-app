@@ -44,4 +44,23 @@ class PlacesTagsModel extends MyBaseModel {
 
         return $data;
     }
+
+    /**
+     * @param string $placeId
+     * @return array
+     */
+    public function getPlaceTags(string $placeId): array {
+        return $this
+            ->select('tags.id as id, count')
+            ->join('tags', 'places_tags.tag_id = tags.id', 'left')
+            ->where('place_id', $placeId)
+            ->findAll();
+    }
+
+    /**
+     * @param string $placeId
+     */
+    public function deletePlaceTags(string $placeId): void {
+        $this->where('place_id', $placeId)->delete();
+    }
 }

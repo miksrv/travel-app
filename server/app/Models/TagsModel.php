@@ -11,7 +11,8 @@ class TagsModel extends MyBaseModel {
 
     protected $allowedFields = [
         'title_en',
-        'title_ru'
+        'title_ru',
+        'count'
     ];
 
     protected $useTimestamps = true;
@@ -43,5 +44,17 @@ class TagsModel extends MyBaseModel {
         $data['data']['id'] = uniqid();
 
         return $data;
+    }
+
+    /**
+     * @param string $title
+     * @return array|object|null
+     */
+    public function getTagsByTitle(string $title): object|array|null {
+        return $this
+            ->select('id, count')
+            ->where('title_ru', $title)
+            ->orWhere('title_en', $title)
+            ->first();
     }
 }
