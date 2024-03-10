@@ -30,7 +30,8 @@ class PlaceTags {
             return $returnTags;
         }
 
-        $this->placeTagsModel->where('place_id', $placeId)->delete();
+        // First, delete all existing tags and decrease the counter of these tags
+        $this->_deletePlaceTags($placeId);
 
         // If we just remove all tags
         if (empty($tags)) {
@@ -38,13 +39,9 @@ class PlaceTags {
         }
 
         foreach ($tags as $tag) {
-            $tagData = $this->tagsModel
-                ->where('title_ru', $tag)
-                ->orWhere('title_en', $tag)
-                ->first();
-
-            if (!$tagData) {
-                $this->tagsModel->insert(['title_' . $locale => $tag]);
+            if (!$tagData = $this->tagsModel->getTagsByTitle($tag)) {
+                // Add a new tag
+                $this->tagsModel->insert(['title_' . $locale => $tag, 'count' => 1]);
                 $this->placeTagsModel->insert([
                     'tag_id'   => $this->tagsModel->getInsertID(),
                     'place_id' => $placeId
@@ -59,6 +56,7 @@ class PlaceTags {
                     continue;
                 }
 
+                $this->tagsModel->update($tagData->id, ['count' => $tagData->count + 1]);
                 $this->placeTagsModel->insert([
                     'tag_id'   => $tagData->id,
                     'place_id' => $placeId
@@ -70,5 +68,21 @@ class PlaceTags {
         }
 
         return $returnTags;
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    protected function _deletePlaceTags(string $placeId): void {
+        if ($oldTagsData = $this->placeTagsModel->getPlaceTags($placeId)) {
+            $this->placeTagsModel->deletePlaceTags($placeId);
+
+            foreach ($oldTagsData as $tag) {
+                $this->tagsModel->update(
+                    $tag->id,
+                    ['count' => $tag->count !== 0 ? $tag->count - 1 : 0]
+                );
+            }
+        }
     }
 }

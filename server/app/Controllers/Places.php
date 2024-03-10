@@ -583,10 +583,13 @@ class Places extends ResourceController {
 
         $this->model->update($id, $place);
 
-        return $this->respond((object) [
-            'content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id),
-            'tags'    => $updatedTags
-        ]);
+        $return = ['content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id)];
+
+        if (isset($input->tags)) {
+            $return['tags'] = $updatedTags;
+        }
+
+        return $this->respond($return);
     }
 
     /**

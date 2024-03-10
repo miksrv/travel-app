@@ -12,6 +12,8 @@ import { ApiTypes } from '@/api/types'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
 
+import { equalsArrays } from '@/functions/helpers'
+
 interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
 const Edit: React.FC<EditProps> = ({ place }) => {
@@ -53,6 +55,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
     const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
         const title = formData?.title?.trim()
         const content = formData?.content?.trim()
+
         updatePlace({
             ...formData,
             category:
@@ -61,6 +64,9 @@ const Edit: React.FC<EditProps> = ({ place }) => {
                     : undefined,
             content: content !== place?.content ? content : undefined,
             id: place?.id!,
+            tags: !equalsArrays(place?.tags, formData?.tags)
+                ? formData?.tags
+                : undefined,
             title: title !== place?.title ? title : undefined
         })
     }

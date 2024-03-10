@@ -13,6 +13,8 @@ import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
+import { equalsArrays } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
@@ -69,7 +71,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
         await updatePlace({
             content: editorContent,
             id: placeId!,
-            tags: editorTags
+            tags: !equalsArrays(editorTags, localTags) ? editorTags : undefined
         })
     }
 
@@ -77,8 +79,11 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
         if (isSuccess && editorMode) {
             setEditorMode(false)
             setLocalContent(saveData?.content)
-            setLocalTags(saveData?.tags)
             setEditorContent(undefined)
+
+            if (saveData?.tags) {
+                setLocalTags(saveData?.tags)
+            }
         }
     }, [saveData])
 
