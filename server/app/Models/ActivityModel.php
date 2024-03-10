@@ -9,7 +9,7 @@ class ActivityModel extends MyBaseModel {
     protected $returnType       = \App\Entities\Activity::class;
     protected $useSoftDeletes   = true;
 
-    protected array $hiddenFields = ['id'];
+    // protected array $hiddenFields = ['id'];
 
     protected $allowedFields = [
         'type',
@@ -38,7 +38,7 @@ class ActivityModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    // protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
@@ -50,5 +50,20 @@ class ActivityModel extends MyBaseModel {
         $data['data']['id'] = uniqid();
 
         return $data;
+    }
+
+    /**
+     * @param string $placeId
+     * @param string $excludeUserId
+     * @return array
+     */
+    public function gePlaceEditors(string $placeId, string $excludeUserId): array {
+        return $this
+            ->select('users.id as id, users.name, users.avatar')
+            ->join('users', 'activity.user_id = users.id', 'left')
+            ->where(['place_id' => $placeId, 'user_id !=' => $excludeUserId])
+            ->whereIn('type', ['edit', 'cover', 'photo'])
+            ->groupBy('user_id')
+            ->findAll();
     }
 }

@@ -14,7 +14,7 @@ import styles from './styles.module.sass'
 
 type SizeType = 'small' | 'tiny' | 'medium'
 
-interface AvatarProps {
+export interface UserAvatarProps {
     className?: string
     user?: User
     size?: SizeType
@@ -28,7 +28,7 @@ interface AvatarProps {
 const getDimension = (size?: SizeType) =>
     size === 'medium' ? 36 : size === 'tiny' ? 32 : 20
 
-const UserAvatar: React.FC<AvatarProps> = (props) => {
+const UserAvatar: React.FC<UserAvatarProps> = (props) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.userAvatar'
     })
@@ -91,7 +91,11 @@ const UserAvatar: React.FC<AvatarProps> = (props) => {
     )
 }
 
-const AvatarImage: React.FC<AvatarProps> = ({ user, size, hideOnlineIcon }) => (
+const AvatarImage: React.FC<UserAvatarProps> = ({
+    user,
+    size,
+    hideOnlineIcon
+}) => (
     <>
         <Image
             alt={''}

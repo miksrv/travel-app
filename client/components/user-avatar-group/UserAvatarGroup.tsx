@@ -4,12 +4,13 @@ import React from 'react'
 import { User } from '@/api/types/User'
 
 import UserAvatar from '@/components/user-avatar'
+import { UserAvatarProps } from '@/components/user-avatar/UserAvatar'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface UserAvatarGroupProps {
+interface UserAvatarGroupProps extends Pick<UserAvatarProps, 'size'> {
     users?: User[]
     totalCount?: number
     className?: string
@@ -18,14 +19,16 @@ interface UserAvatarGroupProps {
 const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
     users,
     totalCount,
-    className
+    className,
+    ...props
 }) => (
     <div className={cn(styles.avatarsGroup, className)}>
         {users?.map((user) => (
             <UserAvatar
-                key={`avatar${user.id}`}
-                size={'tiny'}
                 user={user}
+                key={`avatar${user.id}`}
+                size={props.size ?? 'tiny'}
+                hideOnlineIcon={true}
             />
         ))}
 

@@ -11,6 +11,7 @@ import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
 import UserAvatar from '@/components/user-avatar'
+import UserAvatarGroup from '@/components/user-avatar-group'
 
 import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
@@ -113,6 +114,32 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         />
                     </div>
                 </li>
+                {!!place?.editors?.length && (
+                    <li>
+                        <Icon name={'Users'} />
+                        <div className={styles.key}>{t('editors')}</div>
+                        <div className={styles.value}>
+                            {place?.editors?.length === 1 ? (
+                                <UserAvatar
+                                    user={place?.editors?.[0]}
+                                    showName={true}
+                                />
+                            ) : (
+                                <UserAvatarGroup
+                                    size={'small'}
+                                    users={place?.editors}
+                                />
+                            )}
+                        </div>
+                    </li>
+                )}
+                <li>
+                    <Icon name={'Time'} />
+                    <div className={styles.key}>{t('editTime')}</div>
+                    <div className={styles.value}>
+                        {formatDate(place?.updated?.date, t('dateFormat'))}
+                    </div>
+                </li>
                 <li>
                     <Icon name={'Point'} />
                     <div className={styles.key}>{t('coordinates')}</div>
@@ -152,20 +179,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                                 alt={''}
                             />
                         </Link>
-                    </div>
-                </li>
-                <li>
-                    <Icon name={'Time'} />
-                    <div className={styles.key}>{t('createdTime')}</div>
-                    <div className={styles.value}>
-                        {formatDate(place?.created?.date, t('dateFormat'))}
-                    </div>
-                </li>
-                <li>
-                    <Icon name={'Time'} />
-                    <div className={styles.key}>{t('editTime')}</div>
-                    <div className={styles.value}>
-                        {formatDate(place?.updated?.date, t('dateFormat'))}
                     </div>
                 </li>
                 <li>
