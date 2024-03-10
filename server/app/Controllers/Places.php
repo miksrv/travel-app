@@ -28,20 +28,20 @@ class Places extends ResourceController {
 
     protected SessionLibrary $session;
 
+    protected $model;
+
     public function __construct() {
         new LocaleLibrary();
 
+        $this->model   = new PlacesModel();
         $this->session = new SessionLibrary();
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function random(): ResponseInterface{
-        $placesModel = new PlacesModel();
-        $placesData  = $placesModel
-            ->select('id')
-            ->orderBy('id', 'RANDOM')
-            ->first();
-
-        return $this->respond(['id' => $placesData->id]);
+        return $this->respond(['id' => $this->model->getRandomPlaceId()->id]);
     }
 
     /**
@@ -145,8 +145,7 @@ class Places extends ResourceController {
             $this->coordinatesAvailable = true;
         }
 
-        $placesModel = new PlacesModel();
-        $placesModel
+        $this->model
             ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
                 places.photos, places.country_id, places.region_id, places.district_id, places.locality_id, 
                 places.updated_at, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
@@ -171,7 +170,7 @@ class Places extends ResourceController {
         // Find all places
         // If a search was enabled, the second argument to the _makeListFilters function will contain the
         // IDs of the places found using the search criteria
-        $placesList = $this->_makeListFilters($placesModel, $searchPlacesIds)->get()->getResult();
+        $placesList = $this->_makeListFilters($this->model, $searchPlacesIds)->get()->getResult();
         $placesIds  = [];
         $response   = [];
         foreach ($placesList as $place) {
@@ -255,7 +254,7 @@ class Places extends ResourceController {
 
         return $this->respond([
             'items'  => $response,
-            'count'  => $this->_makeListFilters($placesModel, $searchPlacesIds)->countAllResults(),
+            'count'  => $this->_makeListFilters($this->model, $searchPlacesIds)->countAllResults(),
         ]);
     }
 
@@ -280,8 +279,8 @@ class Places extends ResourceController {
             : '';
 
         $placesTagsModel = new PlacesTagsModel();
-        $placesModel = new PlacesModel();
-        $placeData   = $placesModel
+
+        $placeData = $this->model
             ->select(
                 'places.*,
                     users.id as user_id, users.name as user_name, users.avatar as user_avatar,
@@ -401,18 +400,13 @@ class Places extends ResourceController {
         }
 
         // Update view counts
-        $placesModel->update($placeData->id, [
+        $this->model->update($placeData->id, [
             'views'      => $placeData->views + 1,
             'updated_at' => $placeData->updated_at
         ]);
 
         // Get random place ID
-        $placesData = $placesModel
-            ->select('id')
-            ->orderBy('id', 'RANDOM')
-            ->first();
-
-        $response['randomId'] = $placesData->id;
+        $response['randomId'] = $this->model->getRandomPlaceId()->id;
 
         return $this->respond((object) $response);
     }
@@ -440,9 +434,7 @@ class Places extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
-        $placeTags    = new PlaceTags();
-        $placesModel  = new PlacesModel();
-
+        $placeTags = new PlaceTags();
         $geocoder = new Geocoder();
         $place    = new \App\Entities\Place();
 
@@ -462,9 +454,9 @@ class Places extends ResourceController {
         $place->district_id = $geocoder->districtId;
         $place->locality_id = $geocoder->localityId;
 
-        $placesModel->insert($place);
+        $this->model->insert($place);
 
-        $newPlaceId = $placesModel->getInsertID();
+        $newPlaceId = $this->model->getInsertID();
 
         if (!empty($input->tags)) {
             $placeTags->saveTags($input->tags, $newPlaceId);
@@ -513,10 +505,9 @@ class Places extends ResourceController {
         }
 
         $placeTags    = new PlaceTags();
-        $placesModel  = new PlacesModel();
         $placeContent = new PlacesContent();
         $activity     = new ActivityLibrary();
-        $placeData    = $placesModel->find($id);
+        $placeData    = $this->model->find($id);
 
         $placeContent->translate([$id]);
 
@@ -590,7 +581,7 @@ class Places extends ResourceController {
             $place->category = $input->category;
         }
 
-        $placesModel->update($id, $place);
+        $this->model->update($id, $place);
 
         return $this->respond((object) [
             'content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id),
@@ -616,9 +607,8 @@ class Places extends ResourceController {
             return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
         }
 
-        $placesModel = new PlacesModel();
         $photosModel = new PhotosModel();
-        $placeData   = $placesModel->select('id, user_id')->find($id);
+        $placeData   = $this->model->select('id, user_id')->find($id);
         $photoData   = $photosModel->select('id, filename, extension')->find($input->photoId);
 
         if (!$placeData || !$photoData) {
@@ -644,7 +634,7 @@ class Places extends ResourceController {
             ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT)
             ->save($photoDir . '/cover_preview.jpg');
 
-        $placesModel->update($id, ['updated_at' => new Time('now')]);
+        $this->model->update($id, ['updated_at' => new Time('now')]);
 
         $userActivity = new ActivityLibrary();
         $userActivity->owner($placeData->user_id)->cover($id);
