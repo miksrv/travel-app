@@ -69,4 +69,14 @@ class PlacesModel extends MyBaseModel {
 
         return $data;
     }
+
+    /**
+     * @return object|array|null
+     */
+    public function getRandomPlaceId(): object|array|null {
+        return $this
+            ->select('id')
+            ->orderBy('id', 'RANDOM')
+            ->first();
+    }
 }
