@@ -85,7 +85,8 @@ export const formatDate = (
     format: string = 'D MMMM YYYY, HH:mm'
 ): string => (date ? dayjs.utc(date).local().format(format) : '')
 
-export const dateToUnixTime = (date?: string | Date) => dayjs(date).unix()
+export const dateToUnixTime = (date?: string | Date): number =>
+    dayjs(date).unix()
 
 export const formatDateISO = (date?: string | Date): string =>
     dayjs(date).toISOString()

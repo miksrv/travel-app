@@ -6,34 +6,63 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Tags extends ResourceController {
+
+    protected $model;
+
     public function __construct() {
         new LocaleLibrary();
+
+        $this->model = new TagsModel();
+    }
+
+    public function list(): ResponseInterface {
+        $locale = $this->request->getLocale();
+        $result = $this->model
+            ->select('title_ru, title_en, count, updated_at')
+            ->orderBy('count, updated_at', 'DESC')
+            ->findAll();
+
+        if ($result) {
+            foreach ($result as $tag) {
+                $tag->updated = $tag->updated_at;
+                $tag->title   = $locale === 'en' && !empty($tag->title_en)
+                    ? $tag->title_en
+                    : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en);
+
+                unset($tag->title_ru, $tag->title_en, $tag->updated_at);
+            }
+        }
+
+        return $this->respond(['items' => $result]);
     }
 
     /**
-     * Find all tags by search text
+     * Find max 10 tags by search text
      * @return ResponseInterface
      */
     public function search(): ResponseInterface {
-        $search = trim($this->request->getGet('search', FILTER_SANITIZE_STRING));
+        $search = trim($this->request->getGet('text', FILTER_SANITIZE_STRING));
         $locale = $this->request->getLocale();
 
         if (strlen($search) === 0 || strlen($search) >= 30) {
             return $this->respond(['items' => []]);
         }
 
-        $response  = [];
-        $tagsModel = new TagsModel();
-        $tagsData  = $tagsModel
+        $result = $this->model
+            ->select('title_ru, title_en')
             ->orLike(['title_ru' => $search, 'title_en' => $search])
             ->findAll(10);
 
-        if ($tagsData) {
-            foreach ($tagsData as $item) {
-                $response[] = $locale === 'en' && !empty($item->title_en)
-                    ? $item->title_en
-                    : (!empty($item->title_ru) ? $item->title_ru : $item->title_en);
-            }
+        if (empty($result)) {
+            return $this->respond(['items' => []]);
+        }
+
+        $response = [];
+
+        foreach ($result as $tag) {
+            $response[] = $locale === 'en' && !empty($item->title_en)
+                ? $tag->title_en
+                : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en);
         }
 
         return $this->respond(['items' => $response]);

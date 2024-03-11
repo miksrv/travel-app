@@ -23,6 +23,7 @@
                 "places": "Interesting places",
                 "create": "Add a place",
                 "categories": "Geotag categories",
+                "tags": "Geotag hashtags",
                 "profile": "Personal page",
                 "users": "Travelers",
                 "telegram": "Project diary"
@@ -260,6 +261,13 @@
         "categories": {
             "title": "Geotag Categories",
             "breadCrumbCurrent": "Points of Interest Categories"
+        },
+        "tags": {
+            "title": "Geotag hashtags",
+            "breadCrumbCurrent": "Hashtags of interesting places",
+            "lastUsed": "Last Used",
+            "mostPopular": "Most Popular",
+            "otherHashtags": "Most popular"
         },
         "places": {
             "createPlacePage": {

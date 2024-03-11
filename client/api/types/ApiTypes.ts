@@ -3,6 +3,7 @@ import { Notification } from './Notification'
 import { Photo } from './Photo'
 import { Category, GeoSearchLocation, LocationObject, Place } from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
+import { Tag } from './Tag'
 import { LevelData, User } from './User'
 
 /** General Types **/
@@ -230,6 +231,10 @@ export interface ResponseNotificationsGet {
 }
 
 /* Controller: Tags */
+export interface ResponseTagsGetList {
+    items?: Tag[]
+}
+
 export interface ResponseTagsGetSearch {
     items?: string[]
 }

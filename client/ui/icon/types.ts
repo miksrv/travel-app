@@ -42,3 +42,4 @@ export type IconTypes =
     | 'Telegram'
     | 'Category'
     | 'Place'
+    | 'Tag'

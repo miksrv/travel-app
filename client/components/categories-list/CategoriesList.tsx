@@ -59,4 +59,5 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
         </Container>
     )
 }
+
 export default CategoriesList
