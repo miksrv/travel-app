@@ -10,8 +10,13 @@ use CodeIgniter\RESTful\ResourceController;
  * Categories API controller (not use now)
  */
 class Categories extends ResourceController {
+
+    protected $model;
+
     public function __construct() {
         new LocaleLibrary();
+
+        $this->model = new CategoryModel();
     }
 
     /**
@@ -20,34 +25,23 @@ class Categories extends ResourceController {
     public function list(): ResponseInterface {
         $places = $this->request->getGet('places', FILTER_VALIDATE_BOOLEAN) ?? false;
         $locale = $this->request->getLocale();
-        $result = [];
-
-        $placesModel     = new PlacesModel();
-        $categoriesModel = new CategoryModel();
-        $categoriesData  = $categoriesModel
+        $data   = $this->model
             ->select("name, title_$locale as title" . ($places ? ", content_$locale as content" : ''))
             ->orderBy("title_$locale", 'ASC')
             ->findAll();
 
-        if ($categoriesData) {
-            foreach ($categoriesData as $item) {
-                $category = (object) [
-                    'name' => $item->name,
-                    'title' => $item->title
-                ];
+        if (empty($data)) {
+            $this->respond(['items'  => []]);
+        }
 
-                if ($places) {
-                    $category->content = $item->content;
-                    $category->count   = $placesModel
-                        ->select('id')
-                        ->where('category', $item->name)
-                        ->countAllResults();
-                }
+        if ($places) {
+            $placesModel = new PlacesModel();
 
-                $result[] = $category;
+            foreach ($data as $item) {
+                $item->count = $placesModel->getCountPlacesByCategory($item->name);
             }
         }
 
-        return $this->respond(['items'  => $result]);
+        return $this->respond(['items' => $data]);
     }
 }

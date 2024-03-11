@@ -79,4 +79,15 @@ class PlacesModel extends MyBaseModel {
             ->orderBy('id', 'RANDOM')
             ->first();
     }
+
+    /**
+     * @param string $category
+     * @return int|string
+     */
+    public function getCountPlacesByCategory(string $category): int|string {
+        return $this
+            ->select('id')
+            ->where('category', $category)
+            ->countAllResults();
+    }
 }
