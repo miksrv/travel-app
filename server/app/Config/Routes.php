@@ -108,8 +108,9 @@ $routes->get('levels', 'Levels::list');
 $routes->options('levels', 'Levels');
 
 /* Tags */
-$routes->get('tags', 'Tags::search');
-$routes->options('tags', 'Tags');
+$routes->get('tags', 'Tags::list');
+$routes->get('tags/search', 'Tags::search');
+$routes->options('tags/(:alphanum)', 'Tags');
 
 /* Bookmarks */
 $routes->get('bookmarks', 'Bookmarks::check');

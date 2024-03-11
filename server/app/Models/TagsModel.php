@@ -9,6 +9,11 @@ class TagsModel extends MyBaseModel {
     protected $returnType       = \App\Entities\Tag::class;
     protected $useSoftDeletes   = false;
 
+    protected array $hiddenFields = [
+        'created_at',
+        'deleted_at'
+    ];
+
     protected $allowedFields = [
         'title_en',
         'title_ru',
@@ -32,7 +37,7 @@ class TagsModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

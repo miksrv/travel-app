@@ -377,11 +377,14 @@ export const API = createApi({
         }),
 
         /* Controller: Tags */
+        tagsGetList: builder.query<ApiTypes.ResponseTagsGetList, void>({
+            query: () => 'tags'
+        }),
         tagsGetSearch: builder.mutation<
             ApiTypes.ResponseTagsGetSearch,
             Maybe<string>
         >({
-            query: (searchString) => `tags?search=${searchString}`
+            query: (searchString) => `tags/search?text=${searchString}`
         }),
 
         /* Controller: User */

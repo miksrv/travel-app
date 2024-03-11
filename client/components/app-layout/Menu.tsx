@@ -54,6 +54,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('categories')
         },
         {
+            icon: 'Tag',
+            link: '/tags',
+            text: t('tags')
+        },
+        {
             auth: true,
             icon: 'User',
             link: `/users/${userId}`,
