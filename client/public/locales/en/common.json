@@ -52,7 +52,6 @@
             "inputEmail": "Email address",
             "inputPassword": "Password",
             "linkRegistrationCaption": "Sign up",
-            "linkRegistrationTitle": "User Registration",
             "linkRecoveryCaption": "Forgot your password?",
             "linkRecoveryTitle": "Recovery",
             "buttonLogin": "Login",

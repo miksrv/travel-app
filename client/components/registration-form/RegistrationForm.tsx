@@ -1,12 +1,17 @@
 'use client'
 
 import { useTranslation } from 'next-i18next'
-import React, { useCallback, useEffect, useState } from 'react'
+import { useRouter } from 'next/dist/client/router'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
 import Button from '@/ui/button'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 
+import { API, isApiValidationErrors } from '@/api/api'
+import { closeAuthDialog } from '@/api/applicationSlice'
+import { login } from '@/api/authSlice'
+import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { validateEmail } from '@/functions/validators'
@@ -18,24 +23,32 @@ type FormDataType = ApiTypes.RequestAuthRegistration & {
 }
 
 interface RegistrationFormProps {
-    loading?: boolean
-    errors?: ApiTypes.RequestAuthRegistration
-    onSubmit?: (formData?: ApiTypes.RequestAuthRegistration) => void
-    onCancel?: () => void
+    onClickLogin?: () => void
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({
-    loading,
-    errors,
-    onSubmit,
-    onCancel
+    onClickLogin
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.registrationForm'
     })
 
+    const router = useRouter()
+    const dispatch = useAppDispatch()
+
     const [formData, setFormData] = useState<FormDataType>()
     const [formErrors, setFormErrors] = useState<FormDataType>()
+
+    const [registration, { data, error, isLoading }] =
+        API.useAuthPostRegistrationMutation()
+
+    const validationErrors = useMemo(
+        () =>
+            isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
+                ? error?.messages
+                : undefined,
+        [error]
+    )
 
     const validateForm = useCallback(() => {
         const errors: FormDataType = {}
@@ -75,8 +88,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
 
     const handleSubmit = () => {
-        if (validateForm()) {
-            onSubmit?.(formData)
+        if (validateForm() && formData) {
+            registration(formData)
         }
     }
 
@@ -87,8 +100,16 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     }
 
     useEffect(() => {
-        setFormErrors(errors)
-    }, [errors])
+        setFormErrors(validationErrors)
+    }, [error])
+
+    useEffect(() => {
+        if (data?.auth) {
+            dispatch(login(data))
+            router.push(`/users/${data?.user?.id}`)
+            dispatch(closeAuthDialog())
+        }
+    }, [data])
 
     return (
         <div className={styles.registrationForm}>
@@ -104,7 +125,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 <Input
                     label={t('inputNameLabel')}
                     name={'name'}
-                    disabled={loading}
+                    disabled={isLoading}
                     value={formData?.name}
                     error={formErrors?.name}
                     onKeyDown={handleKeyPress}
@@ -116,7 +137,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                 <Input
                     label={t('inputEmailLabel')}
                     name={'email'}
-                    disabled={loading}
+                    disabled={isLoading}
                     value={formData?.email}
                     error={formErrors?.email}
                     onKeyDown={handleKeyPress}
@@ -129,7 +150,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     label={t('inputPasswordLabel')}
                     name={'password'}
                     type={'password'}
-                    disabled={loading}
+                    disabled={isLoading}
                     value={formData?.password}
                     error={formErrors?.password}
                     onKeyDown={handleKeyPress}
@@ -142,7 +163,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
                     label={t('inputPasswordRepeatLabel')}
                     name={'repeat_password'}
                     type={'password'}
-                    disabled={loading}
+                    disabled={isLoading}
                     value={formData?.repeat_password}
                     error={formErrors?.repeat_password}
                     onKeyDown={handleKeyPress}
@@ -153,7 +174,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             <div className={styles.actions}>
                 <Button
                     mode={'primary'}
-                    disabled={loading}
+                    disabled={isLoading}
                     onClick={handleSubmit}
                 >
                     {t('buttonRegistration')}
@@ -161,8 +182,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
                 <Button
                     mode={'secondary'}
-                    disabled={loading}
-                    onClick={onCancel}
+                    disabled={isLoading}
+                    onClick={onClickLogin}
                 >
                     {t('buttonCancel')}
                 </Button>

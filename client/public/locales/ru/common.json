@@ -52,7 +52,6 @@
             "inputEmail": "Email адрес",
             "inputPassword": "Пароль",
             "linkRegistrationCaption": "Регистрация",
-            "linkRegistrationTitle": "Регистрация пользователя",
             "linkRecoveryCaption": "Забыли пароль?",
             "linkRecoveryTitle": "Восстановление пароля",
             "buttonLogin": "Войти",

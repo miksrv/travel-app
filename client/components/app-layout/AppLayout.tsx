@@ -9,12 +9,15 @@ import AppBar from '@/components/app-bar'
 import Footer from '@/components/footer'
 import LanguageSwitcher from '@/components/language-switcher'
 import LoginForm from '@/components/login-form'
+import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
 import Menu from './Menu'
 import styles from './styles.module.sass'
+
+type AuthFormType = 'login' | 'registration'
 
 interface AppLayoutProps {
     randomPlaceId?: string
@@ -34,6 +37,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     const application = useAppSelector((store) => store.application)
 
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
+    const [authForm, setAuthForm] = useState<AuthFormType>('login')
 
     const handleCloseOverlay = () => {
         setSidebarOpen(false)
@@ -44,6 +48,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }
 
     const handleCloseAuthDialog = () => {
+        setAuthForm('login')
         dispatch(closeAuthDialog())
     }
 
@@ -84,7 +89,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 open={application.showAuthDialog}
                 onCloseDialog={handleCloseAuthDialog}
             >
-                <LoginForm />
+                {authForm === 'login' && (
+                    <LoginForm
+                        onClickRegistration={() => setAuthForm('registration')}
+                    />
+                )}
+                {authForm === 'registration' && (
+                    <RegistrationForm
+                        onClickLogin={() => setAuthForm('login')}
+                    />
+                )}
             </Dialog>
 
             <AppBar

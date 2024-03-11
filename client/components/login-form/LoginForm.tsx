@@ -2,7 +2,6 @@
 
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 
@@ -26,10 +25,14 @@ import yandexLogo from '@/public/images/yandex-logo.png'
 import styles from './styles.module.sass'
 
 interface LoginFormProps {
+    onClickRegistration?: () => void
     onSuccessLogin?: () => void
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
+const LoginForm: React.FC<LoginFormProps> = ({
+    onClickRegistration,
+    onSuccessLogin
+}) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.loginForm'
     })
@@ -144,7 +147,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
     useEffect(() => {
         return () => {
-            dispatch(closeAuthDialog())
             setLocaleError('')
         }
     }, [])
@@ -226,19 +228,13 @@ const LoginForm: React.FC<LoginFormProps> = ({ onSuccessLogin }) => {
 
             <div className={styles.actions}>
                 <div>
-                    <Link
-                        href={'/registration'}
-                        title={t('linkRegistrationTitle')}
+                    <Button
+                        mode={'link'}
+                        disabled={loadingForm}
+                        onClick={onClickRegistration}
                     >
                         {t('linkRegistrationCaption')}
-                    </Link>
-                    <span className={styles.divider}>{'/'}</span>
-                    <Link
-                        href={'/recovery'}
-                        title={t('linkRecoveryTitle')}
-                    >
-                        {t('linkRecoveryCaption')}
-                    </Link>
+                    </Button>
                 </div>
                 <Button
                     mode={'primary'}
