@@ -47,7 +47,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     }
 
     useEffect(() => {
-        if (authSlice?.isAuth === false) {
+        if (!authSlice?.isAuth) {
             router.push('/places')
         }
     })
