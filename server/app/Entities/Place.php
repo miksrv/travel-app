@@ -17,6 +17,8 @@ class Place extends Entity {
         'region_id'   => 'integer',
         'district_id' => 'integer',
         'locality_id' => 'integer',
-        'user_id'     => 'string'
+        'user_id'     => 'string',
+
+        'updated' => 'datetime',
     ];
 }

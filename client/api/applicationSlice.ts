@@ -2,6 +2,10 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 import { ApiTypes } from '@/api/types'
 
+import { LOCAL_STORGE } from '@/functions/constants'
+
+import i18Config from '../next-i18next.config'
+
 type ApplicationStateProps = {
     showOverlay?: boolean
     showAuthDialog?: boolean
@@ -9,9 +13,15 @@ type ApplicationStateProps = {
     locale?: ApiTypes.LocaleType
 }
 
+export const getStorageLocale = (): string | undefined =>
+    typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORGE.LOCALE)
+        ? localStorage.getItem(LOCAL_STORGE.LOCALE) ??
+          i18Config.i18n.defaultLocale
+        : i18Config.i18n.defaultLocale
+
 const applicationSlice = createSlice({
     initialState: {
-        locale: 'en',
+        locale: getStorageLocale(),
         showAuthDialog: false,
         showOverlay: false
     } as ApplicationStateProps,

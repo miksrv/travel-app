@@ -1,5 +1,3 @@
-// @ts-check
-
 /**
  * @type {import('next-i18next').UserConfig}
  */
@@ -9,24 +7,18 @@ module.exports = {
     debug: false,
     i18n: {
         defaultLocale: 'ru',
-        defaultNS: 'common',
+        // defaultNS: 'common',
         localeDetection: true,
-        localeExtension: 'json',
-        /** To avoid issues when deploying to some paas (vercel...) */
-        // localePath:
-        //     typeof window === 'undefined'
-        //         ? require('path').resolve('./public/locales')
-        //         : '/locales',
-        localePath: './public/locales',
-        localeStructure: '{{lng}}/{{ns}}',
+        // localeExtension: 'json',
+        // localePath: './public/locales',
+        // localeStructure: '{{lng}}/{{ns}}',
         locales: ['ru', 'en']
     },
     /** To avoid issues when deploying to some paas (vercel...) */
-    localePath:
-        typeof window === 'undefined'
-            ? require('path').resolve('./public/locales')
-            : '/locales',
-
+    // localePath:
+    //     typeof window === 'undefined'
+    //         ? require('path').resolve('./public/locales')
+    //         : '/locales',
     reloadOnPrerender: process.env.NODE_ENV === 'development'
     /**
      * @link https://github.com/i18next/next-i18next#6-advanced-configuration
