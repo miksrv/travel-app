@@ -14,5 +14,7 @@ class User extends Entity {
         'experience'  => 'integer',
         'reputation'  => 'integer',
         'activity_at' => 'datetime',
+
+        'updated' => 'datetime',
     ];
 }

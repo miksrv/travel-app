@@ -6,12 +6,18 @@ import { setLocale } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
+import { LOCAL_STORGE } from '@/functions/constants'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
+
 import styles from './styles.module.sass'
 
 const LanguageSwitcher: React.FC = () => {
     const { i18n } = useTranslation()
     const router = useRouter()
     const dispatch = useAppDispatch()
+
+    const [, setStorageLocale] = useLocalStorage<string>(LOCAL_STORGE.LOCALE)
+
     const { language: currentLanguage } = i18n
     const { pathname, asPath, query } = router
 
@@ -20,7 +26,10 @@ const LanguageSwitcher: React.FC = () => {
             return
         }
 
+        setStorageLocale(locale)
+
         dispatch(setLocale(locale))
+
         await i18n.changeLanguage(locale)
         await router.push({ pathname, query }, asPath, { locale })
     }

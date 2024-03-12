@@ -5,20 +5,40 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import { appWithTranslation, useTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
+import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect } from 'react'
 import 'react-image-lightbox/style.css'
 import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
+import { LOCAL_STORGE } from '@/functions/constants'
+
+import i18Config from '../next-i18next.config'
+
 const App = ({ Component, pageProps }: AppProps) => {
+    const router = useRouter()
     const { i18n } = useTranslation()
     const { store } = wrapper.useWrappedStore(pageProps)
 
+    useEffect(() => {
+        const storage = localStorage?.getItem(LOCAL_STORGE.LOCALE)
+        const locale = storage
+            ? JSON.parse(storage)
+            : i18Config.i18n.defaultLocale
+
+        if (
+            i18n?.language !== locale &&
+            i18Config.i18n.locales.includes(locale)
+        ) {
+            router.replace(router.asPath, router.asPath, { locale })
+        }
+    }, [])
+
     dayjs.extend(utc)
     dayjs.extend(relativeTime)
-    dayjs.locale(i18n?.language ?? 'ru')
+    dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
 
     return (
         <>
