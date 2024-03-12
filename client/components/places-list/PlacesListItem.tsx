@@ -62,8 +62,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             className={styles.photo}
                             priority={true}
                             alt={place?.title || ''}
+                            quality={70}
                             height={180}
                             width={280}
+                            objectFit={'cover'}
                             src={`${IMG_HOST}${
                                 place.cover.preview
                             }?d=${dateToUnixTime(place.updated?.date)}`}
