@@ -30,7 +30,8 @@ const App = ({ Component, pageProps }: AppProps) => {
 
         if (
             i18n?.language !== locale &&
-            i18Config.i18n.locales.includes(locale)
+            i18Config.i18n.locales.includes(locale) &&
+            router.pathname !== '/404'
         ) {
             router.replace(router.asPath, router.asPath, { locale })
         }
