@@ -476,8 +476,3 @@ export const API = createApi({
         'Notifications'
     ]
 })
-
-// Export hooks for usage in functional components
-export const {
-    util: { getRunningQueriesThunk }
-} = API

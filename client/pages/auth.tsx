@@ -17,9 +17,9 @@ import { ApiTypes } from '@/api/types'
 import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
-interface LoginPageProps {}
+interface AuthPageProps {}
 
-const LoginYandexPage: NextPage<LoginPageProps> = () => {
+const AuthPage: NextPage<AuthPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
@@ -80,7 +80,7 @@ const LoginYandexPage: NextPage<LoginPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<LoginPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<AuthPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
@@ -95,4 +95,4 @@ export const getServerSideProps = wrapper.getServerSideProps(
         }
 )
 
-export default LoginYandexPage
+export default AuthPage

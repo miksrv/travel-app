@@ -168,7 +168,6 @@ class Auth extends ResourceController {
         return $this->responseAuth();
     }
 
-
     /**
      * @link https://oauth.yandex.ru/
      * @return ResponseInterface

@@ -21,6 +21,12 @@ class AddTags extends Migration {
                 'constraint' => 40,
                 'null'       => true,
             ],
+            'count' => [
+                'type'       => 'SMALLINT',
+                'constraint' => 5,
+                'null'       => false,
+                'default'    => 0
+            ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
             'deleted_at' => [
