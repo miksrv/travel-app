@@ -87,6 +87,7 @@
                 "addressLinkTitle": "Интересные места:",
                 "linkYandexMapTitle": "на Яндекс картах",
                 "linkGoogleMapTitle": "на Google картах",
+                "linkWikimapiaTitle": "на карте Wikimapia",
                 "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "placePhotos": {
