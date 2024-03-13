@@ -83,9 +83,6 @@ a
     &:hover
       opacity: .8
 
-.bodyScrollLock
-  overflow: hidden
-
 /* NotFound 404 */
 .page404
   text-align: center
@@ -124,14 +121,6 @@ a
   .experience
     font-size: $fontSizeCaption
     margin-bottom: 5px
-
-/* Login Page */
-.loginPage
-  margin: 8% auto 0 !important
-  max-width: 450px
-
-  @media only screen and (max-width: $mobileMaxWidth)
-    width: 96% !important
 
 /* Index (map) page */
 .mainLayout
@@ -190,11 +179,6 @@ a
     & > div:first-of-type
       display: none
 
-.photos
-  position: absolute
-  bottom: 0
-  width: 100%
-
 /* Leaflet */
 .leaflet-marker-pane
   .poiPhoto
@@ -242,13 +226,6 @@ a
     span
       color: #bdbdbd !important
 
-// Unused package react-photo-gallery
-//.react-photo-gallery--gallery
-//  img
-//    object-fit: cover
-//    max-height: 400px
-//    border-radius: 4px
-
 .leaflet-top, .leaflet-bottom, .leaflet-control
   z-index: 400 !important
 
@@ -260,17 +237,4 @@ a
 .ril-caption-content, ril-toolbar__item
   & *
     color: #FFFFFF !important
-
-/* Main Page */
-.mapPageFilters
-  display: flex
-  justify-content: space-between
-  align-items: center
-
-  & > div:first-of-type
-    width: 70%
-
-  & > div:last-of-type
-    width: 30%
-    text-align: right
 

@@ -1,8 +1,10 @@
+# docker-compose up
+
 version: '3.3'
-name: travel
+name: database
 services:
-  db:
-    container_name: travel-database
+  geometki:
+    container_name: geometki
     image: mariadb:10.5.8
     restart: always
     environment:
@@ -22,6 +24,8 @@ services:
       # Where our data will be persisted
     volumes:
       - database:/var/lib/mysql
+
 # Names our volume
 volumes:
   database:
+    name: geometki

@@ -14,16 +14,15 @@
 # ENVIRONMENT
 #--------------------------------------------------------------------
 
-# CI_ENVIRONMENT = production
+CI_ENVIRONMENT = production
 
 #--------------------------------------------------------------------
 # APP
 #--------------------------------------------------------------------
 
-auth.token.secret = ''
-auth.token.live = 3600
+app.geocoder.yandexKey = ''
+app.baseURL = ''
 
-# app.baseURL = ''
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false
 
@@ -31,10 +30,16 @@ auth.token.live = 3600
 # AUTHORIZATION
 #--------------------------------------------------------------------
 
-# See this page: https://console.developers.google.com/
+auth.token.secret = '' # key is the secret key used by the application to sign JWTS.
+auth.token.live   = 3600 # indicates the validity period of a signed JWT (in milliseconds)
+
 auth.google.clientID = ''
 auth.google.secret   = ''
 auth.google.redirect = ''
+
+auth.yandex.clientID = ''
+auth.yandex.secret   = ''
+auth.yandex.redirect = ''
 
 #--------------------------------------------------------------------
 # DATABASE
