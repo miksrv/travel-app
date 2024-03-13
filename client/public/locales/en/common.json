@@ -86,6 +86,7 @@
                 "addressLinkTitle": "Points of Interest::",
                 "linkYandexMapTitle": "on Yandex maps",
                 "linkGoogleMapTitle": "on Google Maps",
+                "linkWikimapiaTitle": "on the Wikimapia map",
                 "dateFormat": "MMMM D, YYYY, h:mm A"
             },
             "placePhotos": {

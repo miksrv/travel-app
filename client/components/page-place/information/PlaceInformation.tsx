@@ -17,6 +17,7 @@ import { categoryImage } from '@/functions/categories'
 import { convertDMS, formatDate } from '@/functions/helpers'
 
 import googleLogo from '@/public/images/google-logo.png'
+import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 
 import styles from './styles.module.sass'
@@ -37,7 +38,7 @@ interface PlaceInformationProps {
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
-    const { t } = useTranslation('common', {
+    const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeInformation'
     })
 
@@ -145,6 +146,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     <div className={styles.key}>{t('coordinates')}</div>
                     <div className={styles.value}>
                         <Link
+                            className={styles.coordinatesLink}
                             color={'inherit'}
                             target={'_blank'}
                             href={`geo:${place?.lat},${place?.lon}`}
@@ -170,12 +172,26 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                             target={'_blank'}
                             color={'inherit'}
                             title={`${place?.title} ${t('linkGoogleMapTitle')}`}
-                            href={`https://maps.google.com/maps?ll=${place?.lat},${place?.lon}&q=${place?.lat},${place?.lon}&spn=0.1,0.1&amp;t=h&amp;hl=ru`}
+                            href={`https://maps.google.com/maps?ll=${place?.lat},${place?.lon}&q=${place?.lat},${place?.lon}&spn=0.1,0.1&amp;t=h&amp;hl=${i18n.language}`}
                         >
                             <Image
                                 src={googleLogo.src}
                                 width={16}
                                 height={16}
+                                alt={''}
+                            />
+                        </Link>
+                        <Link
+                            className={styles.mapLink}
+                            target={'_blank'}
+                            color={'inherit'}
+                            title={`${place?.title} ${t('linkWikimapiaTitle')}`}
+                            href={`https://wikimapia.org/#lang=${i18n.language}&lat=${place?.lat}&lon=${place?.lon}&z=13&m=w`}
+                        >
+                            <Image
+                                src={wikimapiaLogo.src}
+                                width={13}
+                                height={13}
                                 alt={''}
                             />
                         </Link>
