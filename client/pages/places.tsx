@@ -12,7 +12,7 @@ import Container from '@/ui/container'
 import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
@@ -25,7 +25,7 @@ import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 
 import { encodeQueryData } from '@/functions/helpers'
-import { ListItemSchema, PlaceSchema } from '@/functions/schema'
+import { PlaceSchema } from '@/functions/schema'
 
 const DEFAULT_SORT = ApiTypes.SortFields.Updated
 const DEFAULT_ORDER = ApiTypes.SortOrders.DESC
@@ -288,11 +288,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
                         __html: JSON.stringify(
-                            ListItemSchema(
-                                placesList.map((place) =>
-                                    PlaceSchema(place, canonicalUrl)
-                                )
-                            )
+                            placesList.map((place) => PlaceSchema(place))
                         )
                     }}
                 />
@@ -307,6 +303,18 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 canonical={`${canonicalUrl}places${encodeQueryData(
                     initialFilter
                 )}`}
+                openGraph={{
+                    images: placesList
+                        ?.filter(({ cover }) => cover?.full)
+                        ?.map(({ cover, title }) => ({
+                            alt: `${title}`,
+                            height: 180,
+                            url: `${IMG_HOST}${cover?.preview}`,
+                            width: 280
+                        })),
+                    locale: i18n.language,
+                    type: 'http://ogp.me/ns/article#'
+                }}
             />
 
             <Header

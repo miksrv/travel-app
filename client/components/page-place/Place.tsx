@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
 import React from 'react'
-import { Article, BreadcrumbList } from 'schema-dts'
+import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
 import Button from '@/ui/button'
 
@@ -16,11 +16,16 @@ import PlacePhotos from '@/components/page-place/photos'
 import SocialRating from '@/components/page-place/social-rating'
 import PlacesList from '@/components/places-list'
 
-import { formatDateISO, formatDateUTC } from '@/functions/helpers'
+import { formatDateUTC } from '@/functions/helpers'
 
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
-const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
+const Place: React.FC<PlaceProps> = ({
+    place,
+    photoList,
+    ratingCount,
+    nearPlaces
+}) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.place'
     })
@@ -51,54 +56,57 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, nearPlaces }) => {
         ]
     }
 
-    const placeSchema: Article = {
+    const placeSchema: LocalBusiness = {
         // @ts-ignore
         '@context': 'https://schema.org',
-        '@type': 'Article',
-        accessMode: ['textual', 'visual'],
-        articleBody: place?.content,
-        author: {
-            '@type': 'Person',
-            image: place?.author?.avatar
-                ? `${IMG_HOST}${place?.author?.avatar}`
-                : undefined,
-            name: place?.author?.name,
-            url: `${canonicalUrl}users/${place?.author?.id}`
+        '@type': 'LocalBusiness',
+        address: {
+            '@type': 'PostalAddress',
+            addressCountry: place?.address?.country?.title,
+            addressLocality: place?.address?.locality?.title,
+            addressRegion: place?.address?.region?.title,
+            streetAddress: place?.address?.street
         },
-        contentLocation: {
-            '@type': 'Place',
-            address: {
-                '@type': 'PostalAddress',
-                addressCountry: place?.address?.country?.title,
-                addressLocality: place?.address?.locality?.title,
-                addressRegion: place?.address?.region?.title,
-                streetAddress: place?.address?.street
-            },
-            geo: {
-                '@type': 'GeoCoordinates',
-                latitude: place?.lat,
-                longitude: place?.lon
-            }
+        aggregateRating: {
+            '@type': 'AggregateRating',
+            bestRating: '5',
+            ratingCount: ratingCount ?? 0,
+            ratingValue: place?.rating,
+            worstRating: '1'
         },
-        dateModified: formatDateISO(place?.updated?.date),
-        datePublished: formatDateISO(place?.created?.date),
-        headline: place?.title,
+        // author: {
+        //     '@type': 'Person',
+        //     image: place?.author?.avatar
+        //         ? `${IMG_HOST}${place?.author?.avatar}`
+        //         : undefined,
+        //     name: place?.author?.name,
+        //     url: `${canonicalUrl}users/${place?.author?.id}`
+        // },
+        // dateModified: formatDateISO(place?.updated?.date),
+        // datePublished: formatDateISO(place?.created?.date),
+        description: place?.content,
+        geo: {
+            '@type': 'GeoCoordinates',
+            latitude: place?.lat,
+            longitude: place?.lon
+        },
         image: photoList?.length
-            ? photoList?.map((photo) => ({
-                  '@type': 'ImageObject',
-                  author: photo.author?.name,
-                  caption: photo.title,
-                  contentUrl: `${IMG_HOST}${photo?.full}`,
-                  height: `${photo.height}px`,
-                  url: `${IMG_HOST}${photo?.full}`,
-                  width: `${photo.width}px`
-              }))
+            ? // ? photoList?.map((photo) => ({
+              //       '@type': 'ImageObject',
+              //       author: photo.author?.name,
+              //       caption: photo.title,
+              //       contentUrl: `${IMG_HOST}${photo?.full}`,
+              //       height: `${photo.height}px`,
+              //       url: `${IMG_HOST}${photo?.full}`,
+              //       width: `${photo.width}px`
+              //   }))
+              photoList?.map(({ full }) => `${IMG_HOST}${full}`)
             : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
             userInteractionCount: place?.views
         },
-        wordCount: place?.content?.trim().split(/\s+/).length
+        name: place?.title
     }
 
     return (

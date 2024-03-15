@@ -1,56 +1,44 @@
-import { Article, ListItem, Person } from 'schema-dts'
+import { LocalBusiness, Person } from 'schema-dts'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 import { User } from '@/api/types/User'
 
-import { formatDateISO } from '@/functions/helpers'
+// import { formatDateISO } from '@/functions/helpers'
 
-export const ListItemSchema = (data: any[]): ListItem => ({
+export const PlaceSchema = (place: Place): LocalBusiness => ({
     // @ts-ignore
     '@context': 'https://schema.org',
-    '@type': 'ListItem',
-    itemListElement: data
-})
-
-export const PlaceSchema = (place: Place, canonicalUrl: string): Article => ({
-    // @ts-ignore
-    '@context': 'https://schema.org',
-    '@type': 'Article',
-    articleBody: place?.content,
-    author: {
-        '@type': 'Person',
-        image: place?.author?.avatar
-            ? `${IMG_HOST}${place?.author?.avatar}`
-            : undefined,
-        name: place?.author?.name,
-        url: `${canonicalUrl}users/${place?.author?.id}`
+    '@type': 'LocalBusiness',
+    address: {
+        '@type': 'PostalAddress',
+        addressCountry: place?.address?.country?.title,
+        addressLocality: place?.address?.locality?.title,
+        addressRegion: place?.address?.region?.title,
+        streetAddress: place?.address?.street
     },
-    contentLocation: {
-        '@type': 'Place',
-        address: {
-            '@type': 'PostalAddress',
-            addressCountry: place?.address?.country?.title,
-            addressLocality: place?.address?.locality?.title,
-            addressRegion: place?.address?.region?.title,
-            streetAddress: place?.address?.street
-        },
-        geo: {
-            '@type': 'GeoCoordinates',
-            latitude: place?.lat,
-            longitude: place?.lon
-        }
+    // author: {
+    //     '@type': 'Person',
+    //     image: place?.author?.avatar
+    //         ? `${IMG_HOST}${place?.author?.avatar}`
+    //         : undefined,
+    //     name: place?.author?.name,
+    //     url: `${canonicalUrl}users/${place?.author?.id}`
+    // },
+    // dateModified: formatDateISO(place?.updated?.date),
+    // datePublished: formatDateISO(place?.created?.date),
+    description: place?.content,
+    geo: {
+        '@type': 'GeoCoordinates',
+        latitude: place?.lat,
+        longitude: place?.lon
     },
-    dateModified: formatDateISO(place?.updated?.date),
-    datePublished: formatDateISO(place?.created?.date),
-    headline: place?.title,
-    image: place?.cover?.preview
-        ? `${IMG_HOST}${place?.cover?.preview}`
-        : undefined,
+    image: place?.cover?.full ? `${IMG_HOST}${place?.cover?.full}` : undefined,
     interactionStatistic: {
         '@type': 'InteractionCounter',
         userInteractionCount: place?.views
-    }
+    },
+    name: place?.title
 })
 
 export const UserSchema = (user: User): Person => ({
