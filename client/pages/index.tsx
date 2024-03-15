@@ -20,7 +20,7 @@ import UserGallery from '@/components/page-user/gallery'
 import PlacesList from '@/components/places-list'
 import UsersList from '@/components/users-list'
 
-import { ListItemSchema, PlaceSchema, UserSchema } from '@/functions/schema'
+import { PlaceSchema, UserSchema } from '@/functions/schema'
 
 interface IndexPageProps {
     placesList: Place.Place[]
@@ -43,14 +43,10 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(
-                            ListItemSchema([
-                                ...placesList.map((place) =>
-                                    PlaceSchema(place, canonicalUrl)
-                                ),
-                                ...usersList.map((user) => UserSchema(user))
-                            ])
-                        )
+                        __html: JSON.stringify([
+                            ...placesList.map((place) => PlaceSchema(place)),
+                            ...usersList.map((user) => UserSchema(user))
+                        ])
                     }}
                 />
             </Head>

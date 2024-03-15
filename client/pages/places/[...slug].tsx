@@ -19,6 +19,7 @@ type PageType = (typeof PAGES)[number]
 export interface PlacePageProps {
     randomId?: string
     page: PageType | null
+    ratingCount: number
     place?: PlaceType.Place
     photoList?: Photo.Photo[]
     nearPlaces?: PlaceType.Place[]
@@ -82,6 +83,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
+            const { data: ratingData } = await store.dispatch(
+                API.endpoints?.ratingGetList.initiate(id)
+            )
+
             const { data: photosData } = await store.dispatch(
                 API.endpoints.photosGetList.initiate({ place: id })
             )
@@ -106,7 +111,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,
-                    randomId: placeData?.randomId
+                    randomId: placeData?.randomId,
+                    ratingCount: ratingData?.count ?? 0
                 }
             }
         }
