@@ -78,9 +78,7 @@ class Users extends ResourceController {
     public function show($id = null): ResponseInterface {
         $userLevels = new LevelsLibrary();
         $usersModel = new UsersModel();
-        $usersData  = $usersModel
-            ->select('id, name, avatar, created_at, updated_at, activity_at, level, website, experience, reputation')
-            ->find($id);
+        $usersData  = $usersModel->getUserById($id);
 
         if (!$usersData) {
             return $this->failNotFound();

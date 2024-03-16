@@ -89,4 +89,14 @@ class UsersModel extends MyBaseModel {
 
         $this->update($userId, $user);
     }
+
+    /**
+     * @param string $userId
+     * @return array|object|null
+     */
+    public function getUserById(string $userId): array|object|null {
+        return $this
+            ->select('id, name, avatar, created_at, updated_at, activity_at, level, website, experience, reputation')
+            ->find($userId);
+    }
 }
