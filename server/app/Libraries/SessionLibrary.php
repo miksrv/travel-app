@@ -64,6 +64,8 @@ class SessionLibrary {
      * @throws ReflectionException
      */
     public function authorization(User $user): static {
+        unset($user->auth_type);
+
         $this->user   = $user;
         $this->isAuth = true;
         $this->update();
