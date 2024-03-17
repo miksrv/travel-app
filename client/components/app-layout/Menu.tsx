@@ -13,7 +13,7 @@ import styles from './styles.module.sass'
 export type MenuItemType = {
     icon?: IconTypes
     auth?: boolean
-    link: string
+    link?: string
     text: string
 }
 
@@ -61,7 +61,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         {
             auth: true,
             icon: 'User',
-            link: `/users/${userId}`,
+            link: userId ? `/users/${userId}` : undefined,
             text: t('profile')
         },
         {
@@ -87,18 +87,20 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
 
     return (
         <menu className={styles.menu}>
-            {menuItems.map((item, i) => (
-                <li key={`menu${type}${i}`}>
-                    <Link
-                        href={item.link}
-                        title={item.text}
-                        onClick={(event) => handleClick(event, item)}
-                    >
-                        {item.icon && <Icon name={item.icon} />}
-                        {item.text}
-                    </Link>
-                </li>
-            ))}
+            {menuItems
+                .filter(({ link }) => !!link)
+                ?.map((item, i) => (
+                    <li key={`menu${type}${i}`}>
+                        <Link
+                            href={item.link!}
+                            title={item.text}
+                            onClick={(event) => handleClick(event, item)}
+                        >
+                            {item.icon && <Icon name={item.icon} />}
+                            {item.text}
+                        </Link>
+                    </li>
+                ))}
         </menu>
     )
 }
