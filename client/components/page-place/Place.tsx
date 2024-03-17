@@ -67,13 +67,15 @@ const Place: React.FC<PlaceProps> = ({
             addressRegion: place?.address?.region?.title,
             streetAddress: place?.address?.street
         },
-        aggregateRating: {
-            '@type': 'AggregateRating',
-            bestRating: '5',
-            ratingCount: ratingCount ?? 0,
-            ratingValue: place?.rating,
-            worstRating: '1'
-        },
+        aggregateRating: ratingCount
+            ? {
+                  '@type': 'AggregateRating',
+                  bestRating: '5',
+                  ratingCount: ratingCount ?? 0,
+                  ratingValue: place?.rating,
+                  worstRating: '1'
+              }
+            : undefined,
         // author: {
         //     '@type': 'Person',
         //     image: place?.author?.avatar
