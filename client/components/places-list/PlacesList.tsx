@@ -5,8 +5,7 @@ import Container from '@/ui/container'
 
 import { Place } from '@/api/types/Place'
 
-import PlacesListItem from '@/components/places-list/PlacesListItem'
-
+import PlacesListItem from './PlacesListItem'
 import styles from './styles.module.sass'
 
 interface PlacesListProps {

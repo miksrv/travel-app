@@ -1,3 +1,5 @@
+@import ../../styles/variables
+
 .theme-light
     --brand-primary: rgb(47, 112, 193)
     --brand-secondary: rgb(116, 97, 195)
@@ -31,7 +33,7 @@
     --admonition-note-rgb-value: 46, 109, 188
     --admonition-warning-rgb-value: 255, 196, 9
     --admonition-danger-rgb-value: 220, 38, 38
-//
+
 //.theme-dark
 //    --brand-primary: rgb(138, 180, 248)
 //    --brand-secondary: rgb(193, 168, 226)
@@ -68,55 +70,66 @@
 //
 
 .carousel
-    --slide-spacing: 1rem
-    --slide-size: 20%
-    --slide-height: 5rem
-    padding: 0 1rem
     position: relative
+    max-width: 870px
+    margin-top: 10px
+    --slide-size: 100%
 
-.viewport
-    overflow: hidden
-    padding: 5px
+    .viewport
+        overflow: hidden
 
-.container
-    backface-visibility: hidden
-    display: flex
-    touch-action: pan-y
-    margin-left: calc(var(--slide-spacing) * -1)
+        .container
+            backface-visibility: hidden
+            display: flex
+            touch-action: pan-y
+            margin-left: calc(var(--slide-spacing) * -1)
 
-.buttonsContainer
-    display: flex
-    align-items: center
-    position: absolute
-    top: 50%
-    transform: translateY(-50%)
-    width: 100%
+            & > div, & > article
+                flex: 0 0 var(--slide-size)
+                min-width: 0
+                max-width: 280px
+                padding-left: var(--slide-spacing)
 
-.arrowButton
-    z-index: 1
-    background: none
-    border: none
-    display: flex
-    align-items: center
-    justify-content: center
-    cursor: pointer
-    width: 2rem
-    height: 4rem
-    position: absolute
-    color: #a6a6a6
-    transition: color .15s ease-out, opacity .15s ease-out
+    .buttonsContainer
+        display: flex
+        align-items: center
+        position: absolute
+        top: 50%
+        transform: translateY(-50%)
+        width: 100%
 
-    &:hover
-        color: #737373
+        .arrowButton
+            z-index: 1
+            background: none
+            border: none
+            display: flex
+            align-items: center
+            justify-content: center
+            cursor: pointer
+            width: 48px
+            min-height: 346px
+            height: 100%
+            position: absolute
+            color: #a6a6a6
+            transition: background-color .15s ease-out
 
-.arrowButtonLeft
-    @extend .arrowButton
-    left: 0em
-    right: auto
-    margin-left: -3em
+            @media only screen and (max-width: $mobileMaxWidth)
+                min-height: 402px
 
-.arrowButtonRight
-    @extend .arrowButton
-    left: auto
-    right: 0em
-    margin-right: -0.5em
+            svg
+                transition: fill .15s ease-out
+                fill: #a6a6a6
+
+            &:hover
+                background: rgba(224, 224, 224, 0.34)
+
+                svg
+                    fill: #737373
+
+        .arrowButtonLeft
+            left: 0
+            right: auto
+
+        .arrowButtonRight
+            left: auto
+            right: 0
