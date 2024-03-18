@@ -26,8 +26,7 @@ const nextConfig = {
     output: 'standalone',
 
     transpilePackages: [
-        '@mdxeditor/editor',
-        'react-diff-view',
+        '@uiw/react-md-editor',
         'leaflet',
         'leaflet-defaulticon-compatibility',
         'leaflet-geosearch'

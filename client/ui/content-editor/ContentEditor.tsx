@@ -1,27 +1,36 @@
 'use client'
 
-import { type MDXEditorMethods, type MDXEditorProps } from '@mdxeditor/editor'
+import '@uiw/react-markdown-preview/markdown.css'
+import { MDEditorProps } from '@uiw/react-md-editor'
+import '@uiw/react-md-editor/markdown-editor.css'
 import dynamic from 'next/dynamic'
-import { forwardRef } from 'react'
+import React from 'react'
+import Markdown from 'react-markdown'
 
-// This is the only place InitializedMDXEditor is imported directly.
-const MDXEditor = dynamic(() => import('./InitializedMDXEditor'), {
-    // Make sure we turn SSR off
+import styles from './styles.module.sass'
+
+const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
     ssr: false
 })
 
-// This is what is imported by other components. Pre-initialized with plugins, and ready
-// to accept other props, including a ref.
-export const ContentEditor = forwardRef<MDXEditorMethods, MDXEditorProps>(
-    (props, ref) => (
-        <MDXEditor
-            {...props}
-            editorRef={ref}
-        />
-    )
-)
+interface ContentEditorProps extends MDEditorProps {}
 
-// TS complains without the following line
-ContentEditor.displayName = 'ContentEditor'
+const ContentEditor: React.FC<ContentEditorProps> = (props) => (
+    <div
+        className={styles.contentEditor}
+        data-color-mode={'light'}
+    >
+        <MDEditor
+            {...props}
+            visibleDragbar={false}
+            minHeight={400}
+            height={'100%'}
+            preview={'edit'}
+            components={{
+                preview: (content) => <Markdown>{content}</Markdown>
+            }}
+        />
+    </div>
+)
 
 export default ContentEditor

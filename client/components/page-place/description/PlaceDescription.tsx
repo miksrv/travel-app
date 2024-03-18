@@ -46,7 +46,6 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const [editorTags, setEditorTags] = useState<string[]>()
 
     const [localTags, setLocalTags] = useState<string[]>()
-    const [localContent, setLocalContent] = useState<string>()
 
     const handleSetEditorClick = () => {
         if (isAuth) {
@@ -78,8 +77,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     useEffect(() => {
         if (isSuccess && editorMode) {
             setEditorMode(false)
-            setLocalContent(saveData?.content)
-            setEditorContent(undefined)
+            setEditorContent(saveData?.content)
 
             if (saveData?.tags) {
                 setLocalTags(saveData?.tags)
@@ -88,7 +86,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }, [saveData])
 
     useEffect(() => {
-        setLocalContent(content)
+        setEditorContent(content)
         setLocalTags(tags)
     }, [content, tags])
 
@@ -132,12 +130,12 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
             {isAuth && editorMode ? (
                 <ContentEditor
-                    markdown={localContent ?? content ?? ''}
+                    value={editorContent}
                     onChange={setEditorContent}
                 />
-            ) : content || localContent ? (
+            ) : editorContent ? (
                 <div className={styles.content}>
-                    <Markdown>{localContent ?? content}</Markdown>
+                    <Markdown>{editorContent}</Markdown>
                 </div>
             ) : (
                 <div className={styles.emptyContent}>{t('emptyContent')}</div>
