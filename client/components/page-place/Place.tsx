@@ -6,6 +6,7 @@ import React from 'react'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
 import Button from '@/ui/button'
+import Carousel from '@/ui/carousel/Carousel'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -14,7 +15,7 @@ import PlaceHeader from '@/components/page-place/header'
 import PlaceInformation from '@/components/page-place/information'
 import PlacePhotos from '@/components/page-place/photos'
 import SocialRating from '@/components/page-place/social-rating'
-import PlacesList from '@/components/places-list'
+import PlacesListItem from '@/components/places-list/PlacesListItem'
 
 import { formatDateUTC } from '@/functions/helpers'
 
@@ -186,18 +187,29 @@ const Place: React.FC<PlaceProps> = ({
                 ratingValue={ratingData?.vote}
             />
 
-            <PlacesList places={nearPlaces} />
+            {!!nearPlaces?.length && (
+                <>
+                    <Carousel options={{ dragFree: true, loop: true }}>
+                        {nearPlaces?.map((place) => (
+                            <PlacesListItem
+                                key={place.id}
+                                place={place}
+                            />
+                        ))}
+                    </Carousel>
 
-            <Button
-                size={'m'}
-                mode={'secondary'}
-                stretched={true}
-                noIndex={true}
-                link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
-                style={{ marginTop: '15px' }}
-            >
-                {t('allNearPlacesButton')}
-            </Button>
+                    <Button
+                        size={'m'}
+                        mode={'secondary'}
+                        stretched={true}
+                        noIndex={true}
+                        link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
+                        style={{ marginTop: '5px' }}
+                    >
+                        {t('allNearPlacesButton')}
+                    </Button>
+                </>
+            )}
         </>
     )
 }

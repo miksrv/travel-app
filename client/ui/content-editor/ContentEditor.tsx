@@ -7,8 +7,6 @@ import dynamic from 'next/dynamic'
 import React from 'react'
 import Markdown from 'react-markdown'
 
-import styles from './styles.module.sass'
-
 const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
     ssr: false
 })
@@ -16,10 +14,7 @@ const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
 interface ContentEditorProps extends MDEditorProps {}
 
 const ContentEditor: React.FC<ContentEditorProps> = (props) => (
-    <div
-        className={styles.contentEditor}
-        data-color-mode={'light'}
-    >
+    <div data-color-mode={'light'}>
         <MDEditor
             {...props}
             visibleDragbar={false}
