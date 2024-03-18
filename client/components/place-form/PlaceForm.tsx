@@ -248,7 +248,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <label>{t('inputDescriptionLabel')}</label>
                 <ContentEditor
-                    markdown={values?.content ?? formData?.content ?? ''}
+                    value={formData?.content ?? ''}
                     onChange={handleContentChange}
                 />
             </div>
