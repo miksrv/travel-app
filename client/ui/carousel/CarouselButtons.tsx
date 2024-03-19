@@ -69,8 +69,10 @@ export const PrevButton: React.FC<PropType> = ({ children, ...restProps }) => (
         type='button'
         {...restProps}
     >
-        <Icon name={'Left'} />
-        {children}
+        <span>
+            <Icon name={'Left'} />
+            {children}
+        </span>
     </button>
 )
 
@@ -80,7 +82,9 @@ export const NextButton: React.FC<PropType> = ({ children, ...restProps }) => (
         type='button'
         {...restProps}
     >
-        <Icon name={'Right'} />
-        {children}
+        <span>
+            <Icon name={'Right'} />
+            {children}
+        </span>
     </button>
 )
