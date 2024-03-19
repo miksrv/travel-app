@@ -91,12 +91,14 @@
                 padding-left: var(--slide-spacing)
 
     .buttonsContainer
+        opacity: 0
         display: flex
         align-items: center
         position: absolute
         top: 50%
         transform: translateY(-50%)
         width: 100%
+        transition: opacity .15s
 
         .arrowButton
             z-index: 1
@@ -111,25 +113,38 @@
             height: 100%
             position: absolute
             color: #a6a6a6
-            transition: background-color .15s ease-out
 
             @media only screen and (max-width: $mobileMaxWidth)
                 min-height: 402px
 
-            svg
-                transition: fill .15s ease-out
-                fill: #a6a6a6
-
-            &:hover
-                background: rgba(224, 224, 224, 0.34)
+            span
+                background-color: #ffffff
+                display: flex
+                align-items: center
+                justify-content: center
+                width: 36px
+                height: 36px
+                opacity: .7
+                border-radius: 50%
+                transition: opacity .15s ease-out
 
                 svg
+                    width: 32px
+                    height: 32px
                     fill: #737373
 
+            &:hover
+                span
+                    opacity: 1
+
         .arrowButtonLeft
-            left: 0
+            left: 10px
             right: auto
 
         .arrowButtonRight
             left: auto
-            right: 0
+            right: 10px
+
+    &:hover
+        .buttonsContainer
+            opacity: 1
