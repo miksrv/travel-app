@@ -8,7 +8,7 @@ use App\Models\MigratePlacesHistoryModel;
 use App\Models\MigratePlacesModel;
 use App\Models\MigrateUsersModel;
 use App\Models\PhotosModel;
-use App\Models\PlacesCommentsModel;
+use App\Models\CommentsModel;
 use App\Models\PlacesTagsModel;
 use App\Models\TagsModel;
 use App\Models\PlacesModel;
@@ -221,65 +221,106 @@ class Migrate extends ResourceController {
      */
     #[NoReturn] public function comments(): void {
         $counter = 0;
-        $placesContentModel = new PlacesContentModel();
         $migratePlaces   = new MigratePlacesModel();
         $migrateComments = new MigratePlacesComments();
-        $commentsModel   = new PlacesCommentsModel();
+        $commentsModel   = new CommentsModel();
         $activityModel   = new ActivityModel();
+        $placesModel     = new PlacesModel();
 
-        $allCommentsData = $migrateComments
-            ->where('item_type', 'places')
-            ->orderBy('item_answer', 'DESC')
+        $placesCounter = [];
+
+        $rootCommentsData = $migrateComments
+            ->where(['item_type' => 'places', 'item_answer' => 0])
             ->findAll();
 
-        foreach ($allCommentsData as $comment) {
-            if ($commentsModel
-                ->where('content', strip_tags(html_entity_decode($comment->item_comment)))
-                ->first()
-            ) {
+        foreach ($rootCommentsData as $comment) {
+            $migratePlace = $migratePlaces->select('migrate_id')->where('item_id', $comment->item_material)->first();
+
+            if (!$migratePlace || $comment->migrate_id) {
                 continue;
-            }
-
-            $migratePlace = $migratePlaces->select('item_title')->where('item_id', $comment->item_material)->first();
-
-            if (!$migratePlace) {
-                continue;
-            }
-
-            $placeData = $placesContentModel->where('title', strip_tags(html_entity_decode($migratePlace->item_title)))->first();
-
-            if (empty($placeData)) {
-                continue;
-            }
-
-            if ($comment->item_answer !== 0) {
-                $answerMigrate = $migrateComments->select('item_comment')->find($comment->item_answer);
-                $findAnswer    = $commentsModel->where('content', strip_tags(html_entity_decode($answerMigrate->item_comment)));
-
-                $answerId = $findAnswer->id;
-            } else {
-                $answerId = null;
             }
 
             $userId = $this->_migrate_user($comment->item_author);
 
             $commentEntity = new \App\Entities\Comment();
-            $commentEntity->place_id   = $placeData->place_id;
+            $commentEntity->place_id   = $migratePlace->migrate_id;
             $commentEntity->user_id    = $userId;
-            $commentEntity->answer_id  = $answerId;
             $commentEntity->content    = strip_tags(html_entity_decode($comment->item_comment));
             $commentEntity->created_at = $comment->item_datestamp;
+            $commentEntity->updated_at = $comment->item_datestamp;
             $commentsModel->insert($commentEntity);
+
+            $commentId = $commentsModel->getInsertID();
 
             $activity = new \App\Entities\Activity();
             $activity->type       = 'comment';
             $activity->user_id    = $userId;
-            $activity->place_id   = $placeData->place_id;
-            $activity->photo_id   = null;
+            $activity->place_id   = $migratePlace->migrate_id;
+            $activity->comment_id = $commentId;
             $activity->created_at = $comment->item_datestamp;
             $activityModel->insert($activity);
 
+            $migrateComments->update($comment->item_id, ['migrate_id' => $commentId]);
+
+            if (isset($placesCounter[$migratePlace->migrate_id])) {
+                $placesCounter[$migratePlace->migrate_id] += 1;
+            } else {
+                $placesCounter[$migratePlace->migrate_id] = 1;
+            }
+
             $counter++;
+        }
+
+        $answerCommentsData = $migrateComments
+            ->where(['item_type' => 'places', 'item_answer !=' => 0])
+            ->findAll();
+
+        foreach ($answerCommentsData as $comment) {
+            $migratePlace   = $migratePlaces->select('migrate_id')->where('item_id', $comment->item_material)->first();
+            $migrateComment = $migrateComments->select('migrate_id')->where('item_id', $comment->item_answer)->first();
+
+            if (!$migratePlace || !$migrateComment || $comment->migrate_id) {
+                continue;
+            }
+
+            $userId = $this->_migrate_user($comment->item_author);
+
+            $commentEntity = new \App\Entities\Comment();
+            $commentEntity->place_id   = $migratePlace->migrate_id;
+            $commentEntity->user_id    = $userId;
+            $commentEntity->content    = strip_tags(html_entity_decode($comment->item_comment));
+            $commentEntity->answer_id  = $migrateComment->migrate_id;
+            $commentEntity->created_at = $comment->item_datestamp;
+            $commentEntity->updated_at = $comment->item_datestamp;
+            $commentsModel->insert($commentEntity);
+
+            $commentId = $commentsModel->getInsertID();
+
+            $activity = new \App\Entities\Activity();
+            $activity->type       = 'comment';
+            $activity->user_id    = $userId;
+            $activity->place_id   = $migratePlace->migrate_id;
+            $activity->comment_id = $commentId;
+            $activity->created_at = $comment->item_datestamp;
+            $activityModel->insert($activity);
+
+            $migrateComments->update($comment->item_id, ['migrate_id' => $commentId]);
+
+            if (isset($placesCounter[$migratePlace->migrate_id])) {
+                $placesCounter[$migratePlace->migrate_id] += 1;
+            } else {
+                $placesCounter[$migratePlace->migrate_id] = 1;
+            }
+
+            $counter++;
+        }
+
+        if (!empty($placesCounter)) {
+            foreach ($placesCounter as $key => $item) {
+                $data = $placesModel->select('updated_at')->find($key);
+
+                $placesModel->update($key, ['comments' => $item, 'updated_at' => $data->updated_at]);
+            }
         }
 
         echo 'Migration Finished: ' . $counter;

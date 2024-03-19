@@ -40,6 +40,11 @@ class AddActivity extends Migration {
                 'constraint' => 15,
                 'null'       => true,
             ],
+            'comment_id' => [
+                'type'       => 'VARCHAR',
+                'constraint' => 15,
+                'null'       => true,
+            ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
             'deleted_at' => [
@@ -54,6 +59,7 @@ class AddActivity extends Migration {
         $this->forge->addForeignKey('photo_id', 'photos', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('rating_id', 'rating', 'id', 'CASCADE', 'CASCADE');
+        $this->forge->addForeignKey('comment_id', 'comments', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('activity');
     }
 

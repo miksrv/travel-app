@@ -9,6 +9,7 @@ class Activity extends Entity {
         'user_id'    => 'string',
         'photo_id'   => 'string',
         'place_id'   => 'string',
-        'rating_id'  => 'string'
+        'rating_id'  => 'string',
+        'comment_id' => 'string'
     ];
 }

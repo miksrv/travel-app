@@ -11,6 +11,10 @@ class MigratePlacesComments extends Model {
     protected $returnType     = 'object';
     protected $useSoftDeletes = false;
 
+    protected $allowedFields = [
+        'migrate_id'
+    ];
+
     // Validation
     protected $validationRules = [];
     protected $validationMessages   = [];

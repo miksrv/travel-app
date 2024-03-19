@@ -41,10 +41,10 @@ class AddPlacesComments extends Migration {
         $this->forge->addPrimaryKey('id');
         $this->forge->addForeignKey('place_id', 'places', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
-        $this->forge->createTable('places_comments');
+        $this->forge->createTable('comments');
     }
 
     public function down() {
-        $this->forge->dropTable('places_comments');
+        $this->forge->dropTable('comments');
     }
 }

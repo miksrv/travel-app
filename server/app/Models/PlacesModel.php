@@ -18,6 +18,7 @@ class PlacesModel extends MyBaseModel {
         'rating',
         'views',
         'photos',
+        'comments',
         'address_en',
         'address_ru',
         'country_id',

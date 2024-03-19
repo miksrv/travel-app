@@ -1,7 +1,7 @@
 <?php namespace App\Models;
 
-class PlacesCommentsModel extends MyBaseModel {
-    protected $table            = 'places_comments';
+class CommentsModel extends MyBaseModel {
+    protected $table            = 'comments';
     protected $primaryKey       = 'id';
 
     protected $useAutoIncrement = false;
@@ -13,7 +13,9 @@ class PlacesCommentsModel extends MyBaseModel {
         'place_id',
         'user_id',
         'answer_id',
-        'content'
+        'content',
+        'created_at',
+        'updated_at'
     ];
 
     protected $useTimestamps = true;

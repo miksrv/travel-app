@@ -17,6 +17,7 @@ class ActivityModel extends MyBaseModel {
         'user_id',
         'photo_id',
         'place_id',
+        'comment_id',
         'rating_id',
         'created_at'
     ];
