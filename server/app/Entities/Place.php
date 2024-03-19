@@ -11,6 +11,7 @@ class Place extends Entity {
         'rating'      => 'float',
         'views'       => 'integer',
         'photos'      => 'integer',
+        'comments'    => 'integer',
         'address_en'  => 'string',
         'address_ru'  => 'string',
         'country_id'  => 'integer',
