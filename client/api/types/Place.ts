@@ -8,9 +8,10 @@ export type Place = {
     updated?: ApiTypes.DateTimeType
     lat: number
     lon: number
-    rating: number
-    views: number
-    photos: number
+    rating?: number
+    views?: number
+    photos?: number
+    comments?: number
     title: string
     content: string
     difference?: number

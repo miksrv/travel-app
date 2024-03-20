@@ -78,14 +78,23 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         icon={'Photo'}
                         content={place?.photos || 0}
                     />
+
+                    {!!place?.comments && (
+                        <Badge
+                            icon={'Comment'}
+                            content={numberFormatter(place.comments)}
+                        />
+                    )}
+
                     <Badge
                         icon={'Eye'}
                         content={numberFormatter(place?.views || 0)}
                     />
+
                     {!!place?.distance && (
                         <Badge
                             icon={'Ruler'}
-                            content={numberFormatter(place?.distance || 0)}
+                            content={numberFormatter(place.distance)}
                         />
                     )}
                 </div>

@@ -146,6 +146,14 @@ export const API = createApi({
             query: (params) => `categories${encodeQueryData(params)}`
         }),
 
+        /* Controller: Comments */
+        commentsGetList: builder.query<
+            ApiTypes.ResponseCommentsGetList,
+            Maybe<ApiTypes.RequestCommentsGetList>
+        >({
+            query: (params) => `comments${encodeQueryData(params)}`
+        }),
+
         /* Controller: Levels */
         levelsGetList: builder.query<ApiTypes.ResponseLevelsGetList, void>({
             query: () => 'levels'

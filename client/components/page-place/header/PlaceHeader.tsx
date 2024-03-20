@@ -15,7 +15,11 @@ import { Place } from '@/api/types/Place'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
-import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
+import {
+    addDecimalPoint,
+    dateToUnixTime,
+    numberFormatter
+} from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -94,6 +98,14 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     icon={'Photo'}
                     content={place?.photos || 0}
                 />
+
+                {!!place?.comments && (
+                    <Badge
+                        icon={'Comment'}
+                        content={numberFormatter(place.comments)}
+                    />
+                )}
+
                 <Badge
                     icon={'Eye'}
                     content={place?.views || 0}
