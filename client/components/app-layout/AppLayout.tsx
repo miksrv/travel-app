@@ -1,3 +1,4 @@
+import NextNProgress from 'nextjs-progressbar'
 import React, { useEffect, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
@@ -72,6 +73,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 fullSize && styles.fullSize
             )}
         >
+            <NextNProgress
+                color={'#2688eb'}
+                options={{ showSpinner: false }}
+            />
+
             <div
                 role={'button'}
                 tabIndex={0}
