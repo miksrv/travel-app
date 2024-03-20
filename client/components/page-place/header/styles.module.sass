@@ -1,5 +1,14 @@
 @import ../../../styles/variables
 
+.headerPanel
+  position: absolute
+  top: 0
+  left: 0
+  display: flex
+  width: 100%
+  padding: 15px
+  justify-content: space-between
+
 .component
   margin-top: 15px
   border-radius: $borderRadius
@@ -7,45 +16,80 @@
   box-shadow: $boxShadow3
 
   .image
-    border-top-left-radius: $borderRadius
-    border-top-right-radius: $borderRadius
+    border-radius: $borderRadius
     width: 100%
     height: 300px
     background-image: url('/images/no-image.svg')
     background-position: center
     background-size: cover
+    overflow: hidden
 
-    & > img
-      border-top-left-radius: $borderRadius
-      border-top-right-radius: $borderRadius
-      object-fit: cover
-      margin-bottom: -5px
+    @media only screen and (max-width: $mobileMaxWidth)
+      height: 240px
+
+    & > div
       width: 100%
+      height: 100%
+      background-position: center
+      background-repeat: no-repeat
+      background-size: cover
+      filter: blur(2px) brightness(80%)
+      -webkit-filter: blur(2px) brightness(80%)
+
+    .desktop
+      display: block
+
+    .mobile
+      display: none
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      .desktop
+        display: none
+
+      .mobile
+        display: block
 
   .topPanel
-    position: absolute
-    top: 10px
-    right: 10px
+    @extend .headerPanel
+    color: #FFFFFF
+
+    h1
+      text-overflow: ellipsis
+      overflow: hidden
+      font-size: 2em
+      margin-top: -5px
+      line-height: normal
+      padding-right: 10px
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        font-size: 1.3em
+        margin-top: 5px
+
+    .breadcrumbs
+      li, a
+        color: #e5e5e5
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        display: none
 
   .bottomPanel
-    position: absolute
-    bottom: 70px
-    left: 10px
-    display: flex
+    @extend .headerPanel
+    top: auto
+    bottom: 0
 
-  .header
-    padding: 8px 15px
-    background-color: #FFFFFF
-    border-bottom-left-radius: $borderRadius
-    border-bottom-right-radius: $borderRadius
-    display: flex
-    text-align: center
-    justify-content: space-between
-    box-shadow: $boxShadow3
+    & > div
+      display: flex
+      align-items: end
 
-    .actions
-      button
-        margin-top: 4px
+      & > button
+        margin-left: 10px
+
+        @media only screen and (max-width: $mobileMaxWidth)
+          svg
+            margin: 0
+
+          div
+            display: none
 
   .rating
     .value
@@ -59,3 +103,4 @@
       color: #FFF
       text-align: center
       font-size: $fontSizeCaption
+      white-space: nowrap

@@ -2,6 +2,8 @@ import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React from 'react'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 export type BreadcrumbLink = {
@@ -12,12 +14,14 @@ export type BreadcrumbLink = {
 export interface BreadcrumbsProps {
     hideHomePage?: boolean
     currentPage?: string
+    className?: string
     links?: BreadcrumbLink[]
 }
 
 const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     hideHomePage,
     links,
+    className,
     currentPage
 }) => {
     const { t } = useTranslation('common', {
@@ -27,7 +31,7 @@ const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
     return (
         <ul
             aria-label={'breadcrumb'}
-            className={styles.breadcrumbs}
+            className={cn(className, styles.breadcrumbs)}
         >
             {!hideHomePage && (
                 <li>

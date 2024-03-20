@@ -1,9 +1,8 @@
 import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
 import Badge from '@/ui/badge'
-import { BreadcrumbLink } from '@/ui/breadcrumbs'
+import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import RatingColored from '@/ui/rating-colored'
 
@@ -12,7 +11,6 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
-import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
 import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
@@ -60,78 +58,93 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     return (
         <section className={styles.component}>
-            <div className={styles.topPanel}>
-                {(place?.rating || (!!ratingCount && ratingValue)) && (
-                    <RatingColored
-                        className={styles.rating}
-                        value={ratingValue}
-                    >
-                        <div className={styles.value}>
-                            {addDecimalPoint(ratingValue ?? place?.rating)}
-                        </div>
-                        <div className={styles.count}>
-                            {t('ratingCount', { count: ratingCount ?? 0 })}
-                        </div>
-                    </RatingColored>
+            <div className={styles.image}>
+                {place?.cover && (
+                    <>
+                        <div
+                            className={styles.desktop}
+                            style={{
+                                backgroundImage: `url(${IMG_HOST}${
+                                    place.cover.full
+                                }${coverHash ? `?d=${coverHash}` : ''})`
+                            }}
+                        />
+
+                        <div
+                            className={styles.mobile}
+                            style={{
+                                backgroundImage: `url(${IMG_HOST}${
+                                    place.cover.preview
+                                }${coverHash ? `?d=${coverHash}` : ''})`
+                            }}
+                        />
+                    </>
                 )}
             </div>
 
-            <div className={styles.image}>
-                {place?.cover && (
-                    <Image
-                        alt={place?.title || ''}
-                        height={300}
-                        width={870}
-                        src={`${IMG_HOST}${place.cover.full}${
-                            coverHash ? `?d=${coverHash}` : ''
-                        }`}
+            <div className={styles.topPanel}>
+                <div>
+                    <h1>{place?.title}</h1>
+                    <Breadcrumbs
+                        className={styles.breadcrumbs}
+                        links={breadcrumbs}
+                        currentPage={place?.title}
                     />
-                )}
+                </div>
+                <div>
+                    {(place?.rating || (!!ratingCount && ratingValue)) && (
+                        <RatingColored
+                            className={styles.rating}
+                            value={ratingValue}
+                        >
+                            <div className={styles.value}>
+                                {addDecimalPoint(ratingValue ?? place?.rating)}
+                            </div>
+                            <div className={styles.count}>
+                                {t('ratingCount', { count: ratingCount ?? 0 })}
+                            </div>
+                        </RatingColored>
+                    )}
+                </div>
             </div>
 
             <div className={styles.bottomPanel}>
-                <Badge
-                    icon={'Photo'}
-                    content={place?.photos || 0}
-                />
-                <Badge
-                    icon={'Eye'}
-                    content={place?.views || 0}
-                />
-                {/*<Badge*/}
-                {/*    icon={'Ruler'}*/}
-                {/*    content={`${place?.distance || '?'} км`}*/}
-                {/*/>*/}
+                <div>
+                    <Badge
+                        icon={'Photo'}
+                        content={place?.photos || 0}
+                    />
+                    <Badge
+                        icon={'Eye'}
+                        content={place?.views || 0}
+                    />
+                    {/*<Badge*/}
+                    {/*    icon={'Ruler'}*/}
+                    {/*    content={`${place?.distance || '?'} км`}*/}
+                    {/*/>*/}
+                </div>
+
+                <div>
+                    <PlaceCoverEditor
+                        placeId={place?.id}
+                        onSaveCover={handleSaveCover}
+                    />
+
+                    <Button
+                        size={'m'}
+                        icon={'EditLocation'}
+                        mode={'secondary'}
+                        link={
+                            authSlice.isAuth
+                                ? `/places/${place?.id}/edit`
+                                : undefined
+                        }
+                        onClick={handleEditPlaceClick}
+                    >
+                        {t('buttonEdit')}
+                    </Button>
+                </div>
             </div>
-
-            <Header
-                title={place?.title}
-                currentPage={place?.title}
-                attachedBottom={true}
-                links={breadcrumbs}
-                actions={
-                    <>
-                        <PlaceCoverEditor
-                            placeId={place?.id}
-                            onSaveCover={handleSaveCover}
-                        />
-
-                        <Button
-                            size={'m'}
-                            icon={'EditLocation'}
-                            mode={'secondary'}
-                            link={
-                                authSlice.isAuth
-                                    ? `/places/${place?.id}/edit`
-                                    : undefined
-                            }
-                            onClick={handleEditPlaceClick}
-                        >
-                            {t('buttonEdit')}
-                        </Button>
-                    </>
-                }
-            />
         </section>
     )
 }
