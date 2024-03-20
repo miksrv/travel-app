@@ -202,7 +202,8 @@
         },
         "categoriesList": {
             "placesInCategory": "Interesting places in the category:",
-            "allCategoryPlaces": "All interesting places in the category"
+            "allCategoryPlaces": "All interesting places in the category",
+            "goToCategory": "Go to category"
         },
         "registrationForm": {
             "errorsMessageTitle": "Fix errors",
