@@ -133,13 +133,15 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
             <section className={styles.mainContainer}>
                 <aside className={styles.menubar}>
-                    <Menu
-                        type={'desktop'}
-                        userId={authSlice?.user?.id}
-                        isAuth={authSlice?.isAuth}
-                    />
-                    <LanguageSwitcher />
-                    <Footer />
+                    <div className={styles.rails}>
+                        <Menu
+                            type={'desktop'}
+                            userId={authSlice?.user?.id}
+                            isAuth={authSlice?.isAuth}
+                        />
+                        <LanguageSwitcher />
+                        <Footer />
+                    </div>
                 </aside>
                 <main className={styles.main}>{children}</main>
             </section>
