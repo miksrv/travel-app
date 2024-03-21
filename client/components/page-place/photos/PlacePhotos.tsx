@@ -28,7 +28,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const [photoLoading, setPhotoLoading] = useState<string>()
-    const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos || [])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
 
