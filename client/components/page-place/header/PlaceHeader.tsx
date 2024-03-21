@@ -11,6 +11,7 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
+import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
 import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
@@ -83,68 +84,64 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
 
             <div className={styles.topPanel}>
-                <div>
-                    <h1>{place?.title}</h1>
-                    <Breadcrumbs
-                        className={styles.breadcrumbs}
-                        links={breadcrumbs}
-                        currentPage={place?.title}
-                    />
-                </div>
-                <div>
-                    {(place?.rating || (!!ratingCount && ratingValue)) && (
-                        <RatingColored
-                            className={styles.rating}
-                            value={ratingValue}
-                        >
-                            <div className={styles.value}>
-                                {addDecimalPoint(ratingValue ?? place?.rating)}
-                            </div>
-                            <div className={styles.count}>
-                                {t('ratingCount', { count: ratingCount ?? 0 })}
-                            </div>
-                        </RatingColored>
-                    )}
-                </div>
+                {(place?.rating || (!!ratingCount && ratingValue)) && (
+                    <RatingColored
+                        className={styles.rating}
+                        value={ratingValue}
+                    >
+                        <div className={styles.value}>
+                            {addDecimalPoint(ratingValue ?? place?.rating)}
+                        </div>
+                        <div className={styles.count}>
+                            {t('ratingCount', { count: ratingCount ?? 0 })}
+                        </div>
+                    </RatingColored>
+                )}
             </div>
 
             <div className={styles.bottomPanel}>
-                <div>
-                    <Badge
-                        icon={'Photo'}
-                        content={place?.photos || 0}
-                    />
-                    <Badge
-                        icon={'Eye'}
-                        content={place?.views || 0}
-                    />
-                    {/*<Badge*/}
-                    {/*    icon={'Ruler'}*/}
-                    {/*    content={`${place?.distance || '?'} км`}*/}
-                    {/*/>*/}
-                </div>
-
-                <div>
-                    <PlaceCoverEditor
-                        placeId={place?.id}
-                        onSaveCover={handleSaveCover}
-                    />
-
-                    <Button
-                        size={'m'}
-                        icon={'EditLocation'}
-                        mode={'secondary'}
-                        link={
-                            authSlice.isAuth
-                                ? `/places/${place?.id}/edit`
-                                : undefined
-                        }
-                        onClick={handleEditPlaceClick}
-                    >
-                        {t('buttonEdit')}
-                    </Button>
-                </div>
+                <Badge
+                    icon={'Photo'}
+                    content={place?.photos || 0}
+                />
+                <Badge
+                    icon={'Eye'}
+                    content={place?.views || 0}
+                />
+                {/*<Badge*/}
+                {/*    icon={'Ruler'}*/}
+                {/*    content={`${place?.distance || '?'} км`}*/}
+                {/*/>*/}
             </div>
+
+            <Header
+                title={place?.title}
+                currentPage={place?.title}
+                attachedBottom={true}
+                links={breadcrumbs}
+                actions={
+                    <>
+                        <PlaceCoverEditor
+                            placeId={place?.id}
+                            onSaveCover={handleSaveCover}
+                        />
+
+                        <Button
+                            size={'m'}
+                            icon={'EditLocation'}
+                            mode={'secondary'}
+                            link={
+                                authSlice.isAuth
+                                    ? `/places/${place?.id}/edit`
+                                    : undefined
+                            }
+                            onClick={handleEditPlaceClick}
+                        >
+                            {t('buttonEdit')}
+                        </Button>
+                    </>
+                }
+            />
         </section>
     )
 }
