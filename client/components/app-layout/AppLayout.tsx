@@ -1,7 +1,8 @@
 import NextNProgress from 'nextjs-progressbar'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
+import Icon from '@/ui/icon'
 
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
@@ -37,6 +38,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
 
+    const [leftDistance, setLeftDistance] = useState<number>()
+    const [scrollTopVisible, setScrollTopVisible] = useState<boolean>(false)
+    const menuBarRef = useRef<HTMLDivElement>(null)
+
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
     const [authForm, setAuthForm] = useState<AuthFormType>('login')
 
@@ -52,6 +57,34 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         setAuthForm('login')
         dispatch(closeAuthDialog())
     }
+
+    const handleScrollToTop = () => {
+        window?.scrollTo(0, 0)
+    }
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollTopVisible(window?.scrollY > 20)
+        }
+
+        const handleResize = () => {
+            if (menuBarRef.current) {
+                const rect = menuBarRef.current.getBoundingClientRect()
+
+                setLeftDistance(rect.left + rect?.width - 5)
+            }
+        }
+
+        handleResize()
+
+        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
 
     useEffect(() => {
         if (application?.showOverlay || sidebarOpen) {
@@ -77,6 +110,21 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 color={'#2688eb'}
                 options={{ showSpinner: false }}
             />
+
+            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
+            <div
+                className={styles.scrollArea}
+                style={{
+                    display: scrollTopVisible ? 'block' : 'none',
+                    width: leftDistance
+                }}
+                onClick={handleScrollToTop}
+            >
+                <div className={styles.buttonToTop}>
+                    <Icon name={'Up'} />
+                    {'Наверх'}
+                </div>
+            </div>
 
             <div
                 role={'button'}
@@ -132,7 +180,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             </aside>
 
             <section className={styles.mainContainer}>
-                <aside className={styles.menubar}>
+                <aside
+                    className={styles.menubar}
+                    ref={menuBarRef}
+                >
                     <div className={styles.rails}>
                         <Menu
                             type={'desktop'}
