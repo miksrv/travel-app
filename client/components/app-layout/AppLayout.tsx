@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import NextNProgress from 'nextjs-progressbar'
 import React, { useEffect, useRef, useState } from 'react'
 
@@ -34,6 +35,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     fullSize,
     children
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.appLayout'
+    })
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
@@ -64,7 +68,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrollTopVisible(window?.scrollY > 20)
+            setScrollTopVisible(window?.scrollY > 500)
         }
 
         const handleResize = () => {
@@ -111,18 +115,20 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 options={{ showSpinner: false }}
             />
 
-            {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
             <div
+                tabIndex={0}
+                role={'button'}
                 className={styles.scrollArea}
                 style={{
                     display: scrollTopVisible ? 'block' : 'none',
                     width: leftDistance
                 }}
+                onKeyDown={() => undefined}
                 onClick={handleScrollToTop}
             >
                 <div className={styles.buttonToTop}>
                     <Icon name={'Up'} />
-                    {'Наверх'}
+                    {t('scrollToTop')}
                 </div>
             </div>
 

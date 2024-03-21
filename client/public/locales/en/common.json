@@ -18,6 +18,7 @@
             }
         },
         "appLayout": {
+            "scrollToTop": "Go up",
             "menu": {
                 "map": "Map of places",
                 "places": "Interesting places",
