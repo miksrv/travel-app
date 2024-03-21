@@ -53,6 +53,42 @@ $sideBarWidth: 300px
     margin: 0 auto
     position: relative
 
+    .scrollArea
+        display: none
+        position: absolute
+        top: 0
+        left: 0
+        height: 100%
+        cursor: pointer
+
+        .buttonToTop
+            height: 100%
+            width: 100%
+            max-width: 120px
+            position: fixed
+            z-index: 1
+            display: flex
+            align-items: end
+            transition: background-color 0.5s ease
+            padding-bottom: 20px
+            color: $colorTextSecond
+            justify-content: center
+            font-size: $fontSizeHeadline
+
+            svg
+                width: 24px
+                height: 24px
+                margin-bottom: -2px
+                margin-left: -10px
+                fill: $colorTextSecond
+
+        &:hover
+            .buttonToTop
+                background-color: #f4f7f8
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            display: none !important
+
     .mainContainer
         display: flex
         max-width: $maxWidth
