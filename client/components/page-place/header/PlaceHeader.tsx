@@ -2,7 +2,7 @@ import { useTranslation } from 'next-i18next'
 import React, { useEffect, useState } from 'react'
 
 import Badge from '@/ui/badge'
-import Breadcrumbs, { BreadcrumbLink } from '@/ui/breadcrumbs'
+import { BreadcrumbLink } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import RatingColored from '@/ui/rating-colored'
 
