@@ -411,12 +411,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 (context.query.order as ApiTypes.SortOrdersType) ||
                 DEFAULT_ORDER
 
-            if (
-                !lat &&
-                !lon &&
-                cookies?.[LOCAL_STORGE.LOCATION] &&
-                sort === ApiTypes.SortFields.Distance
-            ) {
+            if (!lat && !lon && cookies?.[LOCAL_STORGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {

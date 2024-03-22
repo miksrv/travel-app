@@ -75,7 +75,8 @@
                 "buttonEdit": "Редактировать",
                 "ratingCount_one": "{{count}} голос",
                 "ratingCount_few": "{{count}} голоса",
-                "ratingCount_many": "{{count}} голосов"
+                "ratingCount_many": "{{count}} голосов",
+                "km": "км"
             },
             "placeInformation": {
                 "author": "Автор:",

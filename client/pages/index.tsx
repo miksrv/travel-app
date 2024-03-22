@@ -20,6 +20,7 @@ import UserGallery from '@/components/page-user/gallery'
 import PlacesList from '@/components/places-list'
 import UsersList from '@/components/users-list'
 
+import { LOCAL_STORGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 
 interface IndexPageProps {
@@ -94,15 +95,29 @@ const IndexPage: NextPage<IndexPageProps> = ({
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<IndexPageProps>> => {
+            const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
+
+            let lat, lon
+
+            if (cookies?.[LOCAL_STORGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+
+                if (userLocation?.[0] && userLocation?.[1]) {
+                    lat = parseFloat(userLocation[0])
+                    lon = parseFloat(userLocation[1])
+                }
+            }
 
             store.dispatch(setLocale(locale))
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints?.placesGetList.initiate({
+                    lat,
                     limit: 6,
+                    lon,
                     order: ApiTypes.SortOrders.DESC,
                     sort: ApiTypes.SortFields.Updated
                 })

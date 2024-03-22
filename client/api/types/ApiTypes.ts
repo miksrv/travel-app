@@ -101,6 +101,12 @@ export interface RequestAuthRegistration {
 }
 
 /* Controller: Places */
+export interface RequestPlacesGetItem {
+    id: string
+    lat?: number | null
+    lon?: number | null
+}
+
 export interface ResponsePlacesGetItem extends Place {
     randomId?: string
 }
