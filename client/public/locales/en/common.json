@@ -74,7 +74,8 @@
             "placeHeader": {
                 "buttonEdit": "Edit",
                 "ratingCount_one": "{{count}} vote",
-                "ratingCount_other": "{{count}} votes"
+                "ratingCount_other": "{{count}} votes",
+                "km": "km"
             },
             "placeInformation": {
                 "author": "Author:",

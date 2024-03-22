@@ -11,6 +11,8 @@ import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
 
+import { LOCAL_STORGE } from '@/functions/constants'
+
 const NEAR_PLACES_COUNT = 10
 const PAGES = ['edit', undefined] as const
 
@@ -65,6 +67,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<PlacePageProps>> => {
             const id = context.params?.slug?.[0]
             const page = context.params?.slug?.[1] as PageType
+            const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)
@@ -73,10 +76,25 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
+            let lat, lon
+
+            if (cookies?.[LOCAL_STORGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+
+                if (userLocation?.[0] && userLocation?.[1]) {
+                    lat = parseFloat(userLocation[0])
+                    lon = parseFloat(userLocation[1])
+                }
+            }
+
             store.dispatch(setLocale(locale))
 
             const { data: placeData, isError } = await store.dispatch(
-                API.endpoints.placesGetItem.initiate(id)
+                API.endpoints.placesGetItem.initiate({
+                    id,
+                    lat: lat ?? null,
+                    lon: lon ?? null
+                })
             )
 
             if (isError) {
