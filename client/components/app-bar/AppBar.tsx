@@ -41,7 +41,7 @@ const AppBar: React.FC<HeaderProps> = ({
     const geolocation = useGeolocation()
 
     const appAuth = useAppSelector((state) => state.auth)
-    const useLocation = useAppSelector(
+    const userLocation = useAppSelector(
         (state) => state.application.userLocation
     )
 
@@ -68,8 +68,8 @@ const AppBar: React.FC<HeaderProps> = ({
         if (
             updateLat &&
             updateLng &&
-            updateLat !== useLocation?.lat &&
-            updateLng !== useLocation?.lon
+            updateLat !== userLocation?.lat &&
+            updateLng !== userLocation?.lon
         ) {
             const data: ApiTypes.LatLonCoordinate = {
                 lat: updateLat,

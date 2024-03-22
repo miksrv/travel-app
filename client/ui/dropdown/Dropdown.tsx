@@ -13,6 +13,7 @@ export type DropdownOption = {
     key: string | number
     value: React.ReactNode | string | number
     image?: StaticImageData
+    disabled?: boolean
 }
 
 interface DropdownProps<T> {
