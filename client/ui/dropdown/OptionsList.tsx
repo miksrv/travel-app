@@ -1,15 +1,10 @@
-import Image, { StaticImageData } from 'next/image'
+import Image from 'next/image'
 import React from 'react'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
+import { DropdownOption } from './Dropdown'
 import styles from './styles.module.sass'
-
-type DropdownOption = {
-    key: string | number
-    value: React.ReactNode | string | number
-    image?: StaticImageData
-}
 
 interface DropdownProps {
     options?: DropdownOption[]
@@ -27,10 +22,15 @@ const OptionsList: React.FC<DropdownProps> = ({
             <li
                 key={option.key}
                 className={cn(
-                    option.key === selectedOption?.key && styles.active
+                    option.key === selectedOption?.key && styles.active,
+                    option.disabled && styles.disabled
                 )}
             >
-                <button onClick={() => onSelect?.(option)}>
+                <button
+                    onClick={() =>
+                        !option.disabled ? onSelect?.(option) : undefined
+                    }
+                >
                     {option.image && (
                         <Image
                             className={styles.categoryIcon}
