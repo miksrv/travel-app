@@ -109,7 +109,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     content={place?.photos || 0}
                 />
 
-
                 {!!place?.comments && (
                     <Badge
                         icon={'Comment'}
