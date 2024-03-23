@@ -1,5 +1,5 @@
 // import { useTranslation } from 'next-i18next'
-import React from 'react'
+import React, { useState } from 'react'
 
 import Container from '@/ui/container'
 
@@ -18,6 +18,8 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
     //     keyPrefix: 'components.placesList'
     // })
 
+    const [answerFormId, setAnswerFormId] = useState<string | undefined>()
+
     const renderComments = (comments: Comments[], answerId?: string) =>
         comments
             ?.filter((item) =>
@@ -28,6 +30,8 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
                     <CommentListItem
                         isAnswer={!!answerId}
                         comment={item}
+                        onAnswerClick={setAnswerFormId}
+                        formAnswerId={answerFormId}
                     />
 
                     {renderComments(comments, item.id)}

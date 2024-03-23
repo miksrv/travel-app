@@ -3,8 +3,8 @@
 .commentList
   .commentItem
     display: flex
-    margin-bottom: 10px
-    padding-bottom: 10px
+    margin-bottom: 5px
+    padding-bottom: 5px
     //border-bottom: 0.5px solid $borderBottomColor
 
     &.answer
@@ -18,14 +18,39 @@
       padding-bottom: 0
       border-bottom: none
 
-    .rating
+    .block
+      margin-top: 5px
+      display: flex
+      align-items: flex-start
+      width: 100%
 
-    .content
+      &:hover
+        .answerButton
+          opacity: 1 !important
 
-      .text
-        margin-top: 5px
+      .content
+        margin-left: 10px
+        width: 100%
 
         p
           margin-bottom: 0
 
+        .user
 
+        .info
+          font-size: $fontSizeHeadline
+          color: $colorTextSecond
+          display: flex
+
+          .answerButton
+            opacity: 0
+            margin-left: 10px
+            padding: 0
+            height: auto
+            line-height: normal
+            min-height: 0
+            background: none
+            transition: opacity .3s
+
+    .commentForm
+      margin-top: 10px
