@@ -100,7 +100,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const translations = await serverSideTranslations(locale)
 
-            let lat, lon
+            let lat = null
+            let lon = null
 
             if (cookies?.[LOCAL_STORGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
