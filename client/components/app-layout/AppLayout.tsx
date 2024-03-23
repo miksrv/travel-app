@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
+import NextNProgress from 'nextjs-progressbar'
+import React, { useEffect, useRef, useState } from 'react'
 
 import Dialog from '@/ui/dialog'
+import Icon from '@/ui/icon'
 
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
@@ -32,9 +35,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     fullSize,
     children
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.appLayout'
+    })
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
+
+    const [leftDistance, setLeftDistance] = useState<number>()
+    const [scrollTopVisible, setScrollTopVisible] = useState<boolean>(false)
+    const menuBarRef = useRef<HTMLDivElement>(null)
 
     const [sidebarOpen, setSidebarOpen] = useState<boolean>(false)
     const [authForm, setAuthForm] = useState<AuthFormType>('login')
@@ -51,6 +61,34 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         setAuthForm('login')
         dispatch(closeAuthDialog())
     }
+
+    const handleScrollToTop = () => {
+        window?.scrollTo(0, 0)
+    }
+
+    useEffect(() => {
+        const handleScroll = () => {
+            setScrollTopVisible(window?.scrollY > 500)
+        }
+
+        const handleResize = () => {
+            if (menuBarRef.current) {
+                const rect = menuBarRef.current.getBoundingClientRect()
+
+                setLeftDistance(rect.left + rect?.width - 5)
+            }
+        }
+
+        handleResize()
+
+        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('resize', handleResize)
+
+        return () => {
+            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleResize)
+        }
+    }, [])
 
     useEffect(() => {
         if (application?.showOverlay || sidebarOpen) {
@@ -72,6 +110,28 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 fullSize && styles.fullSize
             )}
         >
+            <NextNProgress
+                color={'#2688eb'}
+                options={{ showSpinner: false }}
+            />
+
+            <div
+                tabIndex={0}
+                role={'button'}
+                className={styles.scrollArea}
+                style={{
+                    display: scrollTopVisible ? 'block' : 'none',
+                    width: leftDistance
+                }}
+                onKeyDown={() => undefined}
+                onClick={handleScrollToTop}
+            >
+                <div className={styles.buttonToTop}>
+                    <Icon name={'Up'} />
+                    {t('scrollToTop')}
+                </div>
+            </div>
+
             <div
                 role={'button'}
                 tabIndex={0}
@@ -126,14 +186,19 @@ const AppLayout: React.FC<AppLayoutProps> = ({
             </aside>
 
             <section className={styles.mainContainer}>
-                <aside className={styles.menubar}>
-                    <Menu
-                        type={'desktop'}
-                        userId={authSlice?.user?.id}
-                        isAuth={authSlice?.isAuth}
-                    />
-                    <LanguageSwitcher />
-                    <Footer />
+                <aside
+                    className={styles.menubar}
+                    ref={menuBarRef}
+                >
+                    <div className={styles.rails}>
+                        <Menu
+                            type={'desktop'}
+                            userId={authSlice?.user?.id}
+                            isAuth={authSlice?.isAuth}
+                        />
+                        <LanguageSwitcher />
+                        <Footer />
+                    </div>
                 </aside>
                 <main className={styles.main}>{children}</main>
             </section>

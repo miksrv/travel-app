@@ -1,7 +1,12 @@
 import dayjs from 'dayjs'
 
 export const encodeQueryData = (data: any): string => {
+    if (typeof data === 'undefined' || !data) {
+        return ''
+    }
+
     const ret = []
+
     for (let d in data) {
         if (d && data[d]) {
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))

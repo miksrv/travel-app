@@ -278,9 +278,18 @@ export const API = createApi({
         }),
 
         /* Controller: Places */
-        placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, string>({
-            providesTags: (result, error, arg) => [{ id: arg, type: 'Places' }],
-            query: (item) => `places/${item}`
+        placesGetItem: builder.query<
+            ApiTypes.ResponsePlacesGetItem,
+            ApiTypes.RequestPlacesGetItem
+        >({
+            providesTags: (result, error, arg) => [
+                { id: arg.id, type: 'Places' }
+            ],
+            query: (params) =>
+                `places/${params.id}${encodeQueryData({
+                    ...params,
+                    id: undefined
+                })}`
         }),
         placesGetList: builder.query<
             ApiTypes.ResponsePlacesGetList,

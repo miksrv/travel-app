@@ -42,10 +42,11 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
         API.useTagsGetSearchMutation()
 
     const [editorMode, setEditorMode] = useState<boolean>(false)
-    const [editorContent, setEditorContent] = useState<string>()
     const [editorTags, setEditorTags] = useState<string[]>()
-
     const [localTags, setLocalTags] = useState<string[]>()
+    const [localContent, setLocalContent] = useState<string | undefined>(
+        content
+    )
 
     const handleSetEditorClick = () => {
         if (isAuth) {
@@ -68,7 +69,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
     const handleSaveEditorClick = async () => {
         await updatePlace({
-            content: editorContent,
+            content: localContent,
             id: placeId!,
             tags: !equalsArrays(editorTags, localTags) ? editorTags : undefined
         })
@@ -77,7 +78,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     useEffect(() => {
         if (isSuccess && editorMode) {
             setEditorMode(false)
-            setEditorContent(saveData?.content)
+            setLocalContent(saveData?.content)
 
             if (saveData?.tags) {
                 setLocalTags(saveData?.tags)
@@ -86,7 +87,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }, [saveData])
 
     useEffect(() => {
-        setEditorContent(content)
+        setLocalContent(content)
         setLocalTags(tags)
     }, [content, tags])
 
@@ -130,12 +131,12 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
 
             {isAuth && editorMode ? (
                 <ContentEditor
-                    value={editorContent}
-                    onChange={setEditorContent}
+                    value={localContent}
+                    onChange={setLocalContent}
                 />
-            ) : editorContent ? (
+            ) : localContent ? (
                 <div className={styles.content}>
-                    <Markdown>{editorContent}</Markdown>
+                    <Markdown>{localContent}</Markdown>
                 </div>
             ) : (
                 <div className={styles.emptyContent}>{t('emptyContent')}</div>

@@ -1,4 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
+import { setCookie } from 'cookies-next'
 
 import { ApiTypes } from '@/api/types'
 
@@ -42,6 +43,8 @@ const applicationSlice = createSlice({
             state,
             { payload }: PayloadAction<ApiTypes.LatLonCoordinate>
         ) => {
+            setCookie(LOCAL_STORGE.LOCATION, `${payload.lat};${payload.lon}`)
+
             state.userLocation = payload
         },
         toggleOverlay: (state, { payload }: PayloadAction<boolean>) => {

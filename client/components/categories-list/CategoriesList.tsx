@@ -52,6 +52,14 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                                 {t('placesInCategory')}{' '}
                                 <strong>{category?.count ?? 0}</strong>
                             </noindex>
+                            <Link
+                                href={`/places?category=${category.name}`}
+                                title={`${category.title} - ${t(
+                                    'allCategoryPlaces'
+                                )}`}
+                            >
+                                {t('goToCategory')}
+                            </Link>
                         </p>
                     </div>
                 </div>

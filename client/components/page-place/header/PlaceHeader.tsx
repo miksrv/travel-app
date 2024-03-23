@@ -1,5 +1,4 @@
 import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useEffect, useState } from 'react'
 
 import Badge from '@/ui/badge'
@@ -64,6 +63,30 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     return (
         <section className={styles.component}>
+            <div className={styles.image}>
+                {place?.cover && (
+                    <>
+                        <div
+                            className={styles.desktop}
+                            style={{
+                                backgroundImage: `url(${IMG_HOST}${
+                                    place.cover.full
+                                }${coverHash ? `?d=${coverHash}` : ''})`
+                            }}
+                        />
+
+                        <div
+                            className={styles.mobile}
+                            style={{
+                                backgroundImage: `url(${IMG_HOST}${
+                                    place.cover.preview
+                                }${coverHash ? `?d=${coverHash}` : ''})`
+                            }}
+                        />
+                    </>
+                )}
+            </div>
+
             <div className={styles.topPanel}>
                 {(place?.rating || (!!ratingCount && ratingValue)) && (
                     <RatingColored
@@ -80,24 +103,12 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                 )}
             </div>
 
-            <div className={styles.image}>
-                {place?.cover && (
-                    <Image
-                        alt={place?.title || ''}
-                        height={300}
-                        width={870}
-                        src={`${IMG_HOST}${place.cover.full}${
-                            coverHash ? `?d=${coverHash}` : ''
-                        }`}
-                    />
-                )}
-            </div>
-
             <div className={styles.bottomPanel}>
                 <Badge
                     icon={'Photo'}
                     content={place?.photos || 0}
                 />
+
 
                 {!!place?.comments && (
                     <Badge
@@ -110,10 +121,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     icon={'Eye'}
                     content={place?.views || 0}
                 />
-                {/*<Badge*/}
-                {/*    icon={'Ruler'}*/}
-                {/*    content={`${place?.distance || '?'} км`}*/}
-                {/*/>*/}
+
+                {place?.distance && (
+                    <Badge
+                        icon={'Ruler'}
+                        content={`${place?.distance} ${t('km')}`}
+                    />
+                )}
             </div>
 
             <Header

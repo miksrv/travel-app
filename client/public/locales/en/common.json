@@ -18,6 +18,7 @@
             }
         },
         "appLayout": {
+            "scrollToTop": "Go up",
             "menu": {
                 "map": "Map of places",
                 "places": "Interesting places",
@@ -73,7 +74,8 @@
             "placeHeader": {
                 "buttonEdit": "Edit",
                 "ratingCount_one": "{{count}} vote",
-                "ratingCount_other": "{{count}} votes"
+                "ratingCount_other": "{{count}} votes",
+                "km": "km"
             },
             "placeInformation": {
                 "author": "Author:",
@@ -202,7 +204,8 @@
         },
         "categoriesList": {
             "placesInCategory": "Interesting places in the category:",
-            "allCategoryPlaces": "All interesting places in the category"
+            "allCategoryPlaces": "All interesting places in the category",
+            "goToCategory": "Go to category"
         },
         "registrationForm": {
             "errorsMessageTitle": "Fix errors",
@@ -268,7 +271,7 @@
             "breadCrumbCurrent": "Hashtags of interesting places",
             "lastUsed": "Last Used",
             "mostPopular": "Most Popular",
-            "otherHashtags": "Most popular"
+            "otherHashtags": "Other hashtags"
         },
         "places": {
             "createPlacePage": {
@@ -288,7 +291,7 @@
         },
         "map": {
             "title": "Map of interesting places",
-            "description": "Map of interesting places and attractions",
+            "description": "Explore unique places and attractions with our attractions map. Find popular holiday destinations, travel and excursions anywhere in the world. Plan your adventures easily and conveniently with our detailed map.",
             "breadCrumbCurrent": "Map of interesting places",
             "pointsCount": "Points on map:",
             "photosCount": "Photos on map:",

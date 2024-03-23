@@ -1,17 +1,15 @@
 @import ../../styles/variables
 
 .appBar
-  position: relative
   z-index: 450
   color: $colorTextMain
   background-color: $boxBackground
   padding: 0 14px
   box-shadow: $boxShadow1
   height: 50px
-
-  @media only screen and (max-width: $mobileMaxWidth)
-    position: fixed
-    width: 100%
+  position: fixed
+  width: 100%
+  top: 0
 
   .wrapper
     display: flex
@@ -155,3 +153,17 @@
 
       &:hover, &.active
         background-color: $inputBackgroundColor
+
+  .search
+    flex: .7
+
+    & > div > div
+      border: none !important
+
+    ul
+      top: 34px !important
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 -2px 2px rgba(0, 0, 0, 0) !important
+      border: none !important
+
+    @media only screen and (max-width: $mobileMaxWidth)
+      flex: 1

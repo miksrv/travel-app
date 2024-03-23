@@ -24,6 +24,7 @@ import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 
+import { LOCAL_STORGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
 
@@ -300,9 +301,11 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     ?.map(({ title }) => title)
                     .join(', ')
                     .substring(0, 220)}`}
-                canonical={`${canonicalUrl}places${encodeQueryData(
-                    initialFilter
-                )}`}
+                canonical={`${canonicalUrl}places${encodeQueryData({
+                    ...initialFilter,
+                    lat: undefined,
+                    lon: undefined
+                })}`}
                 openGraph={{
                     images: placesList
                         ?.filter(({ cover }) => cover?.full)
@@ -383,6 +386,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
+            const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const country =
@@ -395,14 +399,28 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
-            const lat = parseFloat(context.query.lat as string) || null
-            const lon = parseFloat(context.query.lon as string) || null
+
+            let lat = parseFloat(context.query.lat as string) || null
+            let lon = parseFloat(context.query.lon as string) || null
+            let isUserLocation = false
+
             const tag = (context.query.tag as string) || null
             const sort =
                 (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
             const order =
                 (context.query.order as ApiTypes.SortOrdersType) ||
                 DEFAULT_ORDER
+
+            if (!lat && !lon && cookies?.[LOCAL_STORGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+
+                if (userLocation?.[0] && userLocation?.[1]) {
+                    isUserLocation = true
+
+                    lat = parseFloat(userLocation[0])
+                    lon = parseFloat(userLocation[1])
+                }
+            }
 
             const translations = await serverSideTranslations(locale)
 
@@ -463,11 +481,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     country,
                     currentPage,
                     district,
-                    lat,
+                    lat: !isUserLocation ? lat : null,
                     locality,
                     locationData: locationData?.data || null,
                     locationType,
-                    lon,
+                    lon: !isUserLocation ? lon : null,
                     order,
                     placesCount: placesList?.count || 0,
                     placesList: placesList?.items || [],

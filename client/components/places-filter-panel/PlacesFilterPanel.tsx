@@ -6,6 +6,7 @@ import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
 import { API } from '@/api/api'
+import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
@@ -44,6 +45,10 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         keyPrefix: 'components.placeFilterPanel'
     })
 
+    const userLocation = useAppSelector(
+        (state) => state.application.userLocation
+    )
+
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const [searchAddress, { data: addressData, isLoading: addressLoading }] =
@@ -57,6 +62,9 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
             Object.values(ApiTypes.SortFields)
                 ?.filter((sort) => sort !== ApiTypes.SortFields.Category)
                 .map((sort) => ({
+                    disabled:
+                        sort === ApiTypes.SortFields.Distance &&
+                        (!userLocation?.lat || !userLocation?.lon),
                     key: sort,
                     value: t(`sort.${sort}`)
                 })),

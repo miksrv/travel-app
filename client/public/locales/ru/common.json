@@ -10,7 +10,7 @@
             "userLoginTitle": "Авторизация на сайте",
             "randomPlaceLinkTitle": "Перейти на случайное место",
             "search": {
-                "placeholder": "Поиск мест..."
+                "placeholder": "Поиск мест"
             },
             "notifications": {
                 "noData": "Нет уведомлений",
@@ -18,6 +18,7 @@
             }
         },
         "appLayout": {
+            "scrollToTop": "Наверх",
             "menu": {
                 "map": "Карта интересных мест",
                 "places": "Интересные места",
@@ -74,7 +75,8 @@
                 "buttonEdit": "Редактировать",
                 "ratingCount_one": "{{count}} голос",
                 "ratingCount_few": "{{count}} голоса",
-                "ratingCount_many": "{{count}} голосов"
+                "ratingCount_many": "{{count}} голосов",
+                "km": "км"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -203,7 +205,8 @@
         },
         "categoriesList": {
             "placesInCategory": "Интересных мест в категории:",
-            "allCategoryPlaces": "Все интересные места категории"
+            "allCategoryPlaces": "Все интересные места категории",
+            "goToCategory": "Перейти в категорию"
         },
         "registrationForm": {
             "errorsMessageTitle": "Исправьте ошибки",
@@ -269,7 +272,7 @@
             "breadCrumbCurrent": "Хештеги интересных мест",
             "lastUsed": "Последние используемые",
             "mostPopular": "Самые популярные",
-            "otherHashtags": "Самые популярные"
+            "otherHashtags": "Прочие хештеги"
         },
         "places": {
             "createPlacePage": {
@@ -289,7 +292,7 @@
         },
         "map": {
             "title": "Карта интересных мест",
-            "description": "Карта интересных мест и достопримечательностей",
+            "description": "Исследуйте уникальные места и достопримечательности с помощью нашей карты интересных мест. Находите популярные места для отдыха, путешествий и экскурсий в любой точке мира. Планируйте свои приключения легко и удобно с нашей подробной картой.",
             "breadCrumbCurrent": "Карта интересных мест",
             "pointsCount": "Точек на карте:",
             "photosCount": "Фото на карте:",

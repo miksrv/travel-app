@@ -60,7 +60,6 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {place?.cover && (
                         <Image
                             className={styles.photo}
-                            priority={true}
                             alt={place?.title || ''}
                             quality={70}
                             height={180}

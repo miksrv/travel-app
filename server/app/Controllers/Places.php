@@ -266,6 +266,8 @@ class Places extends ResourceController {
      */
     public function show($id = null): ResponseInterface {
         $locale = $this->request->getLocale();
+        $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
+        $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
 
         // Load translate library
         $placeContent = new PlacesContent();
@@ -275,9 +277,13 @@ class Places extends ResourceController {
             return $this->failNotFound();
         }
 
-        $distanceSelect = ($this->session->lon && $this->session->lat)
-            ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
-            : '';
+        if ($lat && $lon) {
+            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(($lat - abs(lat)) * pi()/180 / 2), 2) +  COS($lat * pi()/180 ) * COS(abs(lat) * pi()/180) *  POWER(SIN(($lon - lon) * pi()/180 / 2), 2) )) AS distance";
+        } else {
+            $distanceSelect = $this->session->lon && $this->session->lat
+                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
+                : '';
+        }
 
         $placesTagsModel = new PlacesTagsModel();
 
@@ -361,7 +367,7 @@ class Places extends ResourceController {
 
         $response['address']['street'] = $placeData->{"address_$locale"};
 
-        if ($this->session->lon && $this->session->lat) {
+        if ($distanceSelect && $placeData->distance) {
             $response['distance'] = round((float) $placeData->distance, 1);
         }
 
