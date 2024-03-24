@@ -43,7 +43,6 @@ class Bookmarks extends ResourceController {
     /**
      * Adds an interesting place to the user's bookmarks
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function set(): ResponseInterface {
         $input   = $this->request->getJSON();

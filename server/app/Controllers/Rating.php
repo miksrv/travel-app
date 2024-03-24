@@ -58,7 +58,6 @@ class Rating extends ResourceController {
     /**
      * Adding a new rating
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function set(): ResponseInterface {
         try {
