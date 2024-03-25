@@ -110,7 +110,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     author: id,
                     limit: PLACES_PER_PAGE,
                     offset: (currentPage - 1) * PLACES_PER_PAGE,
-                    order: ApiTypes.SortOrders.ASC,
+                    order: ApiTypes.SortOrders.DESC,
                     sort: ApiTypes.SortFields.Updated
                 })
             )
