@@ -1,7 +1,13 @@
 import { Item } from './Activity'
 import { Notification } from './Notification'
 import { Photo } from './Photo'
-import { Category, GeoSearchLocation, LocationObject, Place } from './Place'
+import {
+    Categories,
+    Category,
+    GeoSearchLocation,
+    LocationObject,
+    Place
+} from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Poi'
 import { Tag } from './Tag'
 import { LevelData, User } from './User'
@@ -331,7 +337,7 @@ export interface RequestActivityGetList {
 /* Controller: POI */
 export interface RequestPoiList {
     bounds?: string
-    category?: string
+    categories?: Categories[]
 }
 
 export interface ResponsePoiItem

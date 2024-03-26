@@ -68,47 +68,49 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
         }
     }, [])
 
-    return (
-        <div ref={layersContainerRef}>
-            {!open ? (
-                <Button
-                    mode={'secondary'}
-                    icon={'Layers'}
-                    onClick={handleToggleOpen}
-                />
-            ) : (
-                <Container className={styles.mapLayersContainer}>
-                    <ul className={styles.mapLayersList}>
-                        {Object.values(MapLayers).map((layer) => (
-                            <li key={layer}>
-                                <RadioButton
-                                    id={layer}
-                                    label={t(layer)}
-                                    name={'layerType'}
-                                    checked={currentLayer === layer}
-                                    onChange={handleSwitchMapLayer}
-                                    onClick={() => setOpen(false)}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                    <ul className={styles.mapPointsTypeList}>
-                        {Object.values(MapObjects).map((type) => (
-                            <li key={type}>
-                                <RadioButton
-                                    id={type}
-                                    label={t(type)}
-                                    name={'layerType'}
-                                    checked={currentType === type}
-                                    onChange={handleSwitchMapType}
-                                    onClick={() => setOpen(false)}
-                                />
-                            </li>
-                        ))}
-                    </ul>
-                </Container>
-            )}
-        </div>
+    return !open ? (
+        <Button
+            mode={'secondary'}
+            icon={'Layers'}
+            onClick={handleToggleOpen}
+        />
+    ) : (
+        <Container
+            className={styles.mapLayersContainer}
+            onMouseMove={(e) => e.stopPropagation()}
+            onWheelCapture={(e) => e.stopPropagation()}
+        >
+            <div ref={layersContainerRef}>
+                <ul className={styles.mapLayersList}>
+                    {Object.values(MapLayers).map((layer) => (
+                        <li key={layer}>
+                            <RadioButton
+                                id={layer}
+                                label={t(layer)}
+                                name={'layerType'}
+                                checked={currentLayer === layer}
+                                onChange={handleSwitchMapLayer}
+                                onClick={() => setOpen(false)}
+                            />
+                        </li>
+                    ))}
+                </ul>
+                <ul className={styles.mapPointsTypeList}>
+                    {Object.values(MapObjects).map((type) => (
+                        <li key={type}>
+                            <RadioButton
+                                id={type}
+                                label={t(type)}
+                                name={'layerType'}
+                                checked={currentType === type}
+                                onChange={handleSwitchMapType}
+                                onClick={() => setOpen(false)}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            </div>
+        </Container>
     )
 }
 

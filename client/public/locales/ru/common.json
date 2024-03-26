@@ -31,6 +31,9 @@
             }
         },
         "interactiveMap": {
+            "categoriesSwitcher": {
+                "allCategories": "Все категории геометок"
+            },
             "layerSwitcher": {
                 "MapBox": "Схема (MabBox)",
                 "OSM": "Схема (Street Map)",

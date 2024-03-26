@@ -31,6 +31,9 @@
             }
         },
         "interactiveMap": {
+            "categoriesSwitcher": {
+                "allCategories": "All categories of geotags"
+            },
             "layerSwitcher": {
                 "MapBox": "Scheme (MabBox)",
                 "OSM": "Scheme (Street Map)",

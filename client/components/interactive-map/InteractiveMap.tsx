@@ -11,8 +11,10 @@ import Button from '@/ui/button'
 import Spinner from '@/ui/spinner'
 
 import { ApiTypes } from '@/api/types'
+import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
+import CategoryControl from '@/components/interactive-map/CategoryControl'
 import CoordinatesControl from '@/components/interactive-map/CoordinatesControl'
 import LayerSwitcherControl from '@/components/interactive-map/LayerSwitcherControl'
 import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
@@ -50,16 +52,19 @@ export type MapPositionType = {
 type MapProps = {
     places?: Place[]
     photos?: Photo[]
+    categories?: Categories[]
     layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
     enableSearch?: boolean
     enableFullScreen?: boolean
     enableCoordsControl?: boolean
+    enableCategoryControl?: boolean
     enableLayersSwitcher?: boolean
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
+    onChangeCategories?: (categories?: Categories[]) => void
     onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photo: Photo) => void
@@ -73,16 +78,19 @@ const DEFAULT_MAP_TYPE: MapObjectsType = MapObjects.Places
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
+    categories,
     // layer,
     loading,
     storeMapPosition,
     enableSearch,
     enableFullScreen,
     enableCoordsControl,
+    enableCategoryControl,
     enableLayersSwitcher,
     storeMapKey,
     fullMapLink,
     userLatLon,
+    onChangeCategories,
     onChangeMapType,
     onChangeBounds,
     onPhotoClick,
@@ -315,6 +323,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                             currentType={mapType}
                             onSwitchMapLayer={setMapLayer}
                             onSwitchMapType={handleSwitchMapType}
+                        />
+                    )}
+
+                    {enableCategoryControl && (
+                        <CategoryControl
+                            categories={categories}
+                            onChangeCategories={onChangeCategories}
                         />
                     )}
                 </div>
