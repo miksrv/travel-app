@@ -81,6 +81,19 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                     />
                 </div>
             )}
+
+            {!appAuth.isAuth && !!comments?.length && (
+                <div className={styles.loginContainer}>
+                    <div>{t('loginForComment')}</div>
+                    <Button
+                        mode={'secondary'}
+                        className={styles.loginButton}
+                        onClick={handleLoginClick}
+                    >
+                        {t('userLogin')}
+                    </Button>
+                </div>
+            )}
         </section>
     )
 }
