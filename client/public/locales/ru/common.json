@@ -219,7 +219,8 @@
             "answerAdd": "ответить",
             "userLogin": "Войти",
             "noComments": "Пока нет комментариев, станьте первым",
-            "writeComment": "Напишите комментарий..."
+            "writeComment": "Напишите комментарий...",
+            "loginForComment": "Войдите, чтобы написать комментарий"
         },
         "registrationForm": {
             "errorsMessageTitle": "Исправьте ошибки",
