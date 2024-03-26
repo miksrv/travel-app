@@ -8,15 +8,10 @@ import styles from './styles.module.sass'
 
 interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
-    error?: string
 }
 
-const RadioButton: React.FC<RadioButtonProps> = ({
-    label,
-    error,
-    ...props
-}) => (
-    <div className={cn(styles.radioButton, error && styles.error)}>
+const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
+    <div className={styles.radioButton}>
         <div className={cn(styles.formField, props.checked && styles.checked)}>
             {props.checked ? (
                 <Icon name={'RadioButtonChecked'} />
@@ -26,17 +21,9 @@ const RadioButton: React.FC<RadioButtonProps> = ({
             <input
                 {...props}
                 type={'radio'}
-                className={styles.radio}
             />
         </div>
-        {label && (
-            <label
-                className={styles.label}
-                htmlFor={props.id}
-            >
-                {label}
-            </label>
-        )}
+        {label && <label htmlFor={props.id}>{label}</label>}
     </div>
 )
 
