@@ -1,14 +1,18 @@
 <?php namespace App\Controllers;
 
+use App\Entities\Comment;
 use App\Libraries\SessionLibrary;
 use App\Models\CommentsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
+use ReflectionException;
 
 class Comments extends ResourceController {
 
     protected $model;
+
+    private SessionLibrary $session;
 
     public function __construct() {
         $this->model   = new CommentsModel();
@@ -53,5 +57,36 @@ class Comments extends ResourceController {
         }
 
         return $this->respond(['items' => $data, 'count' => count($data)]);
+    }
+
+    /**
+     * @return ResponseInterface
+     * @throws ReflectionException
+     */
+    public function create(): ResponseInterface {
+        if (!$this->session->isAuth) {
+            return $this->failUnauthorized();
+        }
+
+        $input = $this->request->getJSON();
+        $rules = [
+            'placeId'  => 'required|min_length[13]|max_length[13]',
+            'answerId' => 'if_exist|required|min_length[13]|max_length[13]',
+            'comment'  => 'required|string'
+        ];
+
+        if (!$this->validateData((array) $input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $comment = new Comment();
+        $comment->place_id  = $input->placeId;
+        $comment->user_id   = $this->session->user->id;
+        $comment->answer_id = $input?->answerId ?? null;
+        $comment->content   = strip_tags(html_entity_decode($input->comment));
+
+        $this->model->insert($comment);
+
+        return $this->respondCreated();
     }
 }

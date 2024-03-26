@@ -9,13 +9,13 @@ import { Comments } from '@/api/types/Comments'
 
 import UserAvatar from '@/components/user-avatar'
 
-import { timeAgo } from '@/functions/helpers'
-import { concatClassNames as cn } from '@/functions/helpers'
+import { concatClassNames as cn, timeAgo } from '@/functions/helpers'
 
 import CommentForm from './CommentForm'
 import styles from './styles.module.sass'
 
 interface CommentListItemProps {
+    placeId: string
     comment: Comments
     isAuth?: boolean
     isAnswer?: boolean
@@ -24,6 +24,7 @@ interface CommentListItemProps {
 }
 
 const CommentListItem: React.FC<CommentListItemProps> = ({
+    placeId,
     comment,
     isAuth,
     isAnswer,
@@ -57,17 +58,30 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                         {isAuth && (
                             <Button
                                 className={styles.answerButton}
-                                onClick={() => onAnswerClick?.(comment.id)}
+                                onClick={() =>
+                                    onAnswerClick?.(
+                                        formAnswerId !== comment.id
+                                            ? comment.id
+                                            : undefined
+                                    )
+                                }
                                 size={'s'}
                                 mode={'link'}
                             >
-                                {'ответить'}
+                                {formAnswerId === comment.id
+                                    ? 'отмена'
+                                    : 'ответить'}
                             </Button>
                         )}
                     </div>
 
                     {formAnswerId === comment.id && (
-                        <CommentForm isAuth={isAuth} />
+                        <CommentForm
+                            placeId={placeId}
+                            answerId={comment.id}
+                            isAuth={isAuth}
+                            onCommentAdded={() => onAnswerClick?.(undefined)}
+                        />
                     )}
                 </div>
             </div>

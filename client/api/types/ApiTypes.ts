@@ -273,6 +273,12 @@ export interface RequestCommentsGetList {
     place?: string
 }
 
+export interface RequestCommentsPost {
+    placeId?: string
+    answerId?: string
+    comment?: string
+}
+
 export interface ResponseCommentsGetList {
     items?: Comments[]
     count: number

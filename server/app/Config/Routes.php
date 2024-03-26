@@ -51,6 +51,7 @@ $routes->options('notifications', 'Notifications');
 $routes->options('notifications/(:alphanum)', 'Notifications');
 
 $routes->get('comments', 'Comments::list');
+$routes->post('comments', 'Comments::create');
 $routes->options('comments', 'Comments');
 
 //$routes->get('countries', 'Countries::list');

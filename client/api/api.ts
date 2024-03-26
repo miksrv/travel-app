@@ -151,7 +151,17 @@ export const API = createApi({
             ApiTypes.ResponseCommentsGetList,
             Maybe<ApiTypes.RequestCommentsGetList>
         >({
+            providesTags: ['Comments'],
             query: (params) => `comments${encodeQueryData(params)}`
+        }),
+        commentsPost: builder.mutation<void, ApiTypes.RequestCommentsPost>({
+            invalidatesTags: () => ['Comments', 'Notifications'],
+            query: (data) => ({
+                body: data,
+                method: 'POST',
+                url: 'comments'
+            }),
+            transformErrorResponse: (response) => response.data
         }),
 
         /* Controller: Levels */
@@ -490,6 +500,7 @@ export const API = createApi({
         'Visited',
         'Users',
         'Profile',
+        'Comments',
         'Notifications'
     ]
 })

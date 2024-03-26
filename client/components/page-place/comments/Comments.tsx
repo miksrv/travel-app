@@ -28,6 +28,7 @@ const Comments: React.FC<CommentsProps> = ({ placeId }) => {
             title={'Комментарии'}
         >
             <CommentList
+                placeId={placeId}
                 comments={data?.items}
                 loading={isLoading}
             />

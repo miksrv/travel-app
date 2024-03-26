@@ -443,8 +443,8 @@ class Places extends ResourceController {
         }
 
         $placeTags = new PlaceTags();
-        $geocoder = new Geocoder();
-        $place    = new \App\Entities\Place();
+        $geocoder  = new Geocoder();
+        $place     = new \App\Entities\Place();
 
         $geocoder->coordinates($input->lat, $input->lon);
 
