@@ -98,17 +98,15 @@ class Photos extends ResourceController {
 
             $avatar   = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
             $result[] = (object) [
-                'id'        => $photo->id,
-                'full'      => $photoPath . '.' . $photo->extension,
-                'preview'   => $photoPath . '_preview.' . $photo->extension,
-                // 'filename'  => $photo->filename,
-                // 'extension' => $photo->extension,
-                'width'     => $photo->width,
-                'height'    => $photo->height,
-                'title'     => $title,
-                'placeId'   => $photo->place_id,
-                'created'   => $photo->created_at,
-                'author'    => $photo->user_id ? [
+                'id'      => $photo->id,
+                'full'    => $photoPath . '.' . $photo->extension,
+                'preview' => $photoPath . '_preview.' . $photo->extension,
+                'width'   => $photo->width,
+                'height'  => $photo->height,
+                'title'   => $title,
+                'placeId' => $photo->place_id,
+                'created' => $photo->created_at,
+                'author'  => $photo->user_id ? [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
                     'avatar' => $avatar

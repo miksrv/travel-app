@@ -1,8 +1,10 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Comment;
+use App\Libraries\ActivityLibrary;
 use App\Libraries\SessionLibrary;
 use App\Models\CommentsModel;
+use App\Models\PlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
@@ -79,13 +81,30 @@ class Comments extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
+        $placesModel = new PlacesModel();
+        $placesData  = $placesModel->select('id, user_id, comments, updated_at')->find($input->placeId);
+
+        if (!$placesData) {
+            return $this->failValidationErrors('Place with this ID does not exist');
+        }
+
         $comment = new Comment();
-        $comment->place_id  = $input->placeId;
+        $comment->place_id  = $placesData->id;
         $comment->user_id   = $this->session->user->id;
         $comment->answer_id = $input?->answerId ?? null;
         $comment->content   = strip_tags(html_entity_decode($input->comment));
 
-        $this->model->insert($comment);
+        $newCommentId = $this->model->insert($comment);
+
+        $activity = new ActivityLibrary();
+        $activity->owner($placesData->user_id);
+        $activity->comment($comment->place_id, $newCommentId);
+
+        // Update the comments count
+        $placesModel->update($placesData->id, [
+            'comments'   => $placesData->comments + 1,
+            'updated_at' => $placesData->updated_at
+        ]);
 
         return $this->respondCreated();
     }

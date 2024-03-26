@@ -14,7 +14,7 @@ class AddUsersNotifications extends Migration {
                 'unique'     => true
             ],
             'type' => [
-                'type' => 'ENUM("photo", "place", "rating", "edit", "cover", "experience", "level", "achievements")',
+                'type' => 'ENUM("photo", "place", "rating", "comment", "edit", "cover", "experience", "level", "achievements")',
                 'null' => false,
             ],
             'read' => [

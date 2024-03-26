@@ -27,27 +27,23 @@ const CommentForm: React.FC<CommentFormProps> = ({
 }) => {
     const [comment, setComment] = useState<string | undefined>()
 
-    const [submit, { isSuccess, isLoading }] = API.useCommentsPostMutation()
+    const [submit, { isLoading }] = API.useCommentsPostMutation()
 
     const handleKeyPress = (
         event: React.KeyboardEvent<HTMLTextAreaElement>
     ) => {
-        if (event.key === 'Enter' && comment && comment?.length > 0) {
+        if (event.key === 'Enter' && comment && comment?.length > 1) {
             event.preventDefault()
             submit({
                 answerId,
                 comment,
                 placeId
             })
-        }
-    }
 
-    useEffect(() => {
-        if (isSuccess && comment && comment?.length > 0) {
             setComment('')
             onCommentAdded?.()
         }
-    }, [isSuccess, comment])
+    }
 
     return isAuth ? (
         <div className={styles.commentForm}>

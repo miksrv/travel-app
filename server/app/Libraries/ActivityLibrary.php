@@ -10,7 +10,7 @@ const ACTIVITY_FLOOD_MIN = 35;
 class ActivityLibrary {
     private string $owner;
 
-    protected array $types = ['photo', 'place', 'rating', 'edit', 'cover'];
+    protected array $types = ['photo', 'place', 'rating', 'edit', 'cover', 'comment'];
 
     public function owner(string $userId): static {
         $this->owner = $userId;
@@ -59,10 +59,20 @@ class ActivityLibrary {
     }
 
     /**
-     * @param string $type One of: 'photo', 'place', 'rating', 'edit', 'cover'
+     * @param $placeId
+     * @param $commentId
+     * @throws ReflectionException
+     */
+    public function comment($placeId, $commentId): void {
+        $this->_add('comment', null, $placeId, null, $commentId);
+    }
+
+    /**
+     * @param string $type One of: 'photo', 'place', 'rating', 'edit', 'cover', 'comment'
      * @param string|null $photoId
      * @param string|null $placeId
      * @param string|null $ratingId
+     * @param string|null $commentId
      * @throws ReflectionException
      * @throws Exception
      */
@@ -71,6 +81,7 @@ class ActivityLibrary {
         string|null $photoId  = null,
         string|null $placeId  = null,
         string|null $ratingId = null,
+        string|null $commentId = null,
     ): void
     {
         if (!in_array($type, $this->types)) {
@@ -84,25 +95,29 @@ class ActivityLibrary {
          * If no more than that many minutes have passed since the user’s previous activity with exactly
          * the same parameters (for example, editing a specific place),
          * then new activity and experience will not be added
+         *
+         * !!! ONLY FOR 'photo' $type !!!
          */
-        $lastData = $model
-            ->where([
-                'type'       => $type,
-                'session_id' => !$session->isAuth ? $session->id : null,
-                'user_id'    => $session->user?->id ?? null,
-                'place_id'   => $placeId,
-                'photo_id'   => $photoId,
-                'rating_id'  => $ratingId
-            ])
-            ->orderBy('created_at', 'DESC')
-            ->first();
+        if ($type === 'photo') {
+            $lastData = $model
+                ->where([
+                    'type'       => $type,
+                    'session_id' => !$session->isAuth ? $session->id : null,
+                    'user_id'    => $session->user?->id ?? null,
+                    'place_id'   => $placeId,
+                    'photo_id'   => $photoId,
+                    'rating_id'  => $ratingId
+                ])
+                ->orderBy('created_at', 'DESC')
+                ->first();
 
-        if ($lastData) {
-            $time = new Time('now');
-            $diff = $time->difference($lastData->created_at);
+            if ($lastData) {
+                $time = new Time('now');
+                $diff = $time->difference($lastData->created_at);
 
-            if (abs($diff->getMinutes()) <= ACTIVITY_FLOOD_MIN) {
-                return ;
+                if (abs($diff->getMinutes()) <= ACTIVITY_FLOOD_MIN) {
+                    return ;
+                }
             }
         }
 
@@ -114,6 +129,7 @@ class ActivityLibrary {
         $activity->photo_id   = $photoId;
         $activity->place_id   = $placeId;
         $activity->rating_id  = $ratingId;
+        $activity->comment_id = $commentId;
 
         $model->insert($activity);
         $session->update();
