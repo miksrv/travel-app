@@ -108,6 +108,9 @@
                 "buttonEdit": "Edit",
                 "emptyContent": "No description",
                 "tagSelectLabel": "Select or add point of interest labels"
+            },
+            "placeComments": {
+                "title": "Comments"
             }
         },
         "pageUser": {
@@ -119,11 +122,11 @@
                 "timeActivity": "Been here:",
                 "website": "Personal page:",
                 "notDefined": "Not specified",
-                "statisticActivity": "Activity statistics",
                 "placesAdded": "Places:",
                 "photosUploaded": "Photos:",
                 "ratingsAdded": "Ratings:",
                 "editions": "Edits:",
+                "comments": "Comments:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
                 "buttonEdit": "Edit",
@@ -209,6 +212,13 @@
             "placesInCategory": "Interesting places in the category:",
             "allCategoryPlaces": "All interesting places in the category",
             "goToCategory": "Go to category"
+        },
+        "commentList": {
+            "answerCancel": "cancel",
+            "answerAdd": "answer",
+            "userLogin": "Login",
+            "noComments": "No comments yet, be the first",
+            "writeComment": "Write a comment..."
         },
         "registrationForm": {
             "errorsMessageTitle": "Fix errors",

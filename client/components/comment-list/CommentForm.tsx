@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
+import React, { useState } from 'react'
 
 import Button from '@/ui/button'
 import Textarea from '@/ui/textarea'
@@ -25,6 +26,10 @@ const CommentForm: React.FC<CommentFormProps> = ({
     user,
     onCommentAdded
 }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.commentList'
+    })
+
     const [comment, setComment] = useState<string | undefined>()
 
     const [submit, { isLoading }] = API.useCommentsPostMutation()
@@ -61,7 +66,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
                 disabled={isLoading}
                 onChange={setComment}
                 onKeyDown={handleKeyPress}
-                placeholder={'Напишите комментарий...'}
+                placeholder={t('writeComment')}
             />
 
             <Button

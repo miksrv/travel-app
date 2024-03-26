@@ -32,7 +32,7 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
     onAnswerClick
 }) => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'components.placesList.placesListItem'
+        keyPrefix: 'components.commentList'
     })
 
     return (
@@ -69,8 +69,8 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                                 mode={'link'}
                             >
                                 {formAnswerId === comment.id
-                                    ? 'отмена'
-                                    : 'ответить'}
+                                    ? t('answerCancel')
+                                    : t('answerAdd')}
                             </Button>
                         )}
                     </div>

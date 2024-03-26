@@ -28,4 +28,5 @@ export type Statistic = {
     rating: number
     edit: number
     cover: number
+    comment: number
 }

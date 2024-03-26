@@ -14,8 +14,8 @@ interface CommentsProps {
 }
 
 const Comments: React.FC<CommentsProps> = ({ placeId }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.comments'
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.pagePlace.placeComments'
     })
 
     const { data, isLoading } = API.useCommentsGetListQuery({
@@ -25,7 +25,7 @@ const Comments: React.FC<CommentsProps> = ({ placeId }) => {
     return (
         <Container
             className={styles.component}
-            title={'Комментарии'}
+            title={t('title')}
         >
             <CommentList
                 placeId={placeId}

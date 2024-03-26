@@ -1,6 +1,10 @@
+import { useTranslation } from 'next-i18next'
 import React, { useState } from 'react'
 
-import { useAppSelector } from '@/api/store'
+import Button from '@/ui/button'
+
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Comments } from '@/api/types/Comments'
 
 import CommentForm from '@/components/comment-list/CommentForm'
@@ -15,9 +19,19 @@ interface CommentListProps {
 }
 
 const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.commentList'
+    })
+
+    const dispatch = useAppDispatch()
     const appAuth = useAppSelector((state) => state.auth)
 
     const [answerFormId, setAnswerFormId] = useState<string | undefined>()
+
+    const handleLoginClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        dispatch(openAuthDialog())
+    }
 
     const renderComments = (comments: Comments[], answerId?: string) =>
         comments
@@ -45,7 +59,16 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                 renderComments(comments)
             ) : (
                 <div className={styles.emptyList}>
-                    {'Пока нет комментариев, станьте первым!'}
+                    <div>{t('noComments')}</div>
+                    {!appAuth.isAuth && (
+                        <Button
+                            mode={'secondary'}
+                            className={styles.loginButton}
+                            onClick={handleLoginClick}
+                        >
+                            {t('userLogin')}
+                        </Button>
+                    )}
                 </div>
             )}
 
