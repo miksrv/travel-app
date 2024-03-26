@@ -1,5 +1,7 @@
 import React, { useRef } from 'react'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 interface TextareaProps
@@ -27,7 +29,7 @@ const Textarea: React.FC<TextareaProps> = ({
     }
 
     return (
-        <div className={styles.textarea}>
+        <div className={cn(props.className, styles.textarea)}>
             {label && <label className={styles.label}>{label}</label>}
             <span className={styles.formField}>
                 <textarea

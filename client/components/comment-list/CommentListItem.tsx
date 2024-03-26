@@ -17,6 +17,7 @@ import styles from './styles.module.sass'
 
 interface CommentListItemProps {
     comment: Comments
+    isAuth?: boolean
     isAnswer?: boolean
     formAnswerId?: string
     onAnswerClick?: (id?: string) => void
@@ -24,6 +25,7 @@ interface CommentListItemProps {
 
 const CommentListItem: React.FC<CommentListItemProps> = ({
     comment,
+    isAuth,
     isAnswer,
     formAnswerId,
     onAnswerClick
@@ -51,17 +53,22 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                     <Markdown>{comment.content}</Markdown>
                     <div className={styles.info}>
                         {timeAgo(comment?.created?.date)}
-                        <Button
-                            className={styles.answerButton}
-                            onClick={() => onAnswerClick?.(comment.id)}
-                            size={'s'}
-                            mode={'link'}
-                        >
-                            {'ответить'}
-                        </Button>
+
+                        {isAuth && (
+                            <Button
+                                className={styles.answerButton}
+                                onClick={() => onAnswerClick?.(comment.id)}
+                                size={'s'}
+                                mode={'link'}
+                            >
+                                {'ответить'}
+                            </Button>
+                        )}
                     </div>
 
-                    {formAnswerId === comment.id && <CommentForm />}
+                    {formAnswerId === comment.id && (
+                        <CommentForm isAuth={isAuth} />
+                    )}
                 </div>
             </div>
         </div>

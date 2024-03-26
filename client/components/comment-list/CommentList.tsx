@@ -3,7 +3,10 @@ import React, { useState } from 'react'
 
 import Container from '@/ui/container'
 
+import { useAppSelector } from '@/api/store'
 import { Comments } from '@/api/types/Comments'
+
+import CommentForm from '@/components/comment-list/CommentForm'
 
 import CommentListItem from './CommentListItem'
 import styles from './styles.module.sass'
@@ -18,6 +21,8 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
     //     keyPrefix: 'components.placesList'
     // })
 
+    const appAuth = useAppSelector((state) => state.auth)
+
     const [answerFormId, setAnswerFormId] = useState<string | undefined>()
 
     const renderComments = (comments: Comments[], answerId?: string) =>
@@ -28,10 +33,11 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
             ?.map((item) => (
                 <React.Fragment key={item.id}>
                     <CommentListItem
+                        isAuth={appAuth.isAuth}
                         isAnswer={!!answerId}
                         comment={item}
-                        onAnswerClick={setAnswerFormId}
                         formAnswerId={answerFormId}
+                        onAnswerClick={setAnswerFormId}
                     />
 
                     {renderComments(comments, item.id)}
@@ -41,6 +47,15 @@ const CommentList: React.FC<CommentListProps> = ({ comments }) => {
     return comments?.length ? (
         <section className={styles.commentList}>
             {renderComments(comments)}
+
+            {appAuth.isAuth && (
+                <div className={styles.formSection}>
+                    <CommentForm
+                        isAuth={appAuth.isAuth}
+                        user={appAuth?.user}
+                    />
+                </div>
+            )}
         </section>
     ) : (
         <Container className={styles.emptyList}>Пусто</Container>
