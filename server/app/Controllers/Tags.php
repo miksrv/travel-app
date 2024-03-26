@@ -15,6 +15,9 @@ class Tags extends ResourceController {
         $this->model = new TagsModel();
     }
 
+    /**
+     * @return ResponseInterface
+     */
     public function list(): ResponseInterface {
         $locale = $this->request->getLocale();
         $result = $this->model

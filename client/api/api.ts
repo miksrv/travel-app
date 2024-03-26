@@ -361,7 +361,7 @@ export const API = createApi({
         }),
         poiGetPhotoList: builder.query<
             ApiTypes.ResponsePoiPhotosList,
-            Maybe<ApiTypes.RequestPoiList>
+            Maybe<Omit<ApiTypes.RequestPoiList, 'categories'>>
         >({
             query: (params) => `poi/photos${encodeQueryData(params)}`
         }),

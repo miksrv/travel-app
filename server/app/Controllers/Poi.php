@@ -16,9 +16,9 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
-        $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
-        $bounds   = $this->_getBounds();
+        $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
+        $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $bounds = $this->_getBounds();
 
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
@@ -30,8 +30,8 @@ class Poi extends ResourceController {
                 'lat <=' =>  $bounds[3],
             ]);
 
-        if ($category) {
-            $placesData->where('category', $category);
+        if (isset($categories)) {
+            $placesData->whereIn('category', explode(',', $categories));
         }
 
         if ($author) {
