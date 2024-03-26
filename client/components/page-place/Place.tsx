@@ -10,6 +10,7 @@ import Carousel from '@/ui/carousel/Carousel'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
+import Comments from '@/components/page-place/comments'
 import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
 import PlaceInformation from '@/components/page-place/information'
@@ -186,6 +187,8 @@ const Place: React.FC<PlaceProps> = ({
                 placeUrl={pagePlaceUrl}
                 ratingValue={ratingData?.vote}
             />
+
+            <Comments placeId={place?.id!} />
 
             {!!nearPlaces?.length && (
                 <>

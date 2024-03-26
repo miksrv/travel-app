@@ -146,6 +146,24 @@ export const API = createApi({
             query: (params) => `categories${encodeQueryData(params)}`
         }),
 
+        /* Controller: Comments */
+        commentsGetList: builder.query<
+            ApiTypes.ResponseCommentsGetList,
+            Maybe<ApiTypes.RequestCommentsGetList>
+        >({
+            providesTags: ['Comments'],
+            query: (params) => `comments${encodeQueryData(params)}`
+        }),
+        commentsPost: builder.mutation<void, ApiTypes.RequestCommentsPost>({
+            invalidatesTags: () => ['Comments', 'Notifications'],
+            query: (data) => ({
+                body: data,
+                method: 'POST',
+                url: 'comments'
+            }),
+            transformErrorResponse: (response) => response.data
+        }),
+
         /* Controller: Levels */
         levelsGetList: builder.query<ApiTypes.ResponseLevelsGetList, void>({
             query: () => 'levels'
@@ -482,6 +500,7 @@ export const API = createApi({
         'Visited',
         'Users',
         'Profile',
+        'Comments',
         'Notifications'
     ]
 })

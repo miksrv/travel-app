@@ -1,0 +1,82 @@
+@import ../../styles/variables
+
+.commentList
+  .emptyList
+    text-align: center
+    padding: 40px
+    width: 100%
+    color: $colorTextSecond
+
+    .loginButton
+      margin: 15px auto 0 !important
+
+  .commentItem
+    display: flex
+    margin-bottom: 5px
+    padding-bottom: 5px
+    //border-bottom: 0.5px solid $borderBottomColor
+
+    &.answer
+      margin-left: 40px
+      //margin-left: 20px
+      //padding-left: 25px
+      //border-left: 1.5px solid $borderBottomColor
+
+    &:last-of-type
+      margin-bottom: 0
+      padding-bottom: 0
+      border-bottom: none
+
+    .block
+      margin-top: 5px
+      display: flex
+      align-items: flex-start
+      width: 100%
+
+      &:hover
+        .answerButton
+          opacity: 1 !important
+
+      .content
+        margin-left: 10px
+        width: 100%
+
+        p
+          margin-bottom: 0
+
+        .user
+
+        .info
+          font-size: $fontSizeHeadline
+          color: $colorTextSecond
+          display: flex
+
+          .answerButton
+            opacity: 0
+            margin-left: 10px
+            padding: 0
+            height: auto
+            line-height: normal
+            min-height: 0
+            background: none
+            transition: opacity .3s
+
+  .commentForm
+    margin-top: 5px
+    display: flex
+    align-items: flex-start
+
+    .userAvatar
+      margin-right: 10px
+
+    .submitButton
+      margin-left: 5px
+      min-height: 36px
+
+    .textarea
+      flex: 1
+
+  .formSection
+    margin-top: 10px
+    padding-top: 5px
+    border-top: 0.5px solid $borderBottomColor

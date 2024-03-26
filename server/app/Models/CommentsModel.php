@@ -9,6 +9,11 @@ class CommentsModel extends MyBaseModel {
     protected $returnType       = \App\Entities\Comment::class;
     protected $useSoftDeletes   = true;
 
+    protected array $hiddenFields = [
+        'updated_at',
+        'deleted_at'
+    ];
+
     protected $allowedFields = [
         'place_id',
         'user_id',
@@ -35,7 +40,7 @@ class CommentsModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = [];
+    protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 

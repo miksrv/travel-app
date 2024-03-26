@@ -66,7 +66,7 @@ type PropType = PropsWithChildren<
 export const PrevButton: React.FC<PropType> = ({ children, ...restProps }) => (
     <button
         className={cn(styles.arrowButton, styles.arrowButtonLeft)}
-        type='button'
+        type={'button'}
         {...restProps}
     >
         <span>
@@ -79,7 +79,7 @@ export const PrevButton: React.FC<PropType> = ({ children, ...restProps }) => (
 export const NextButton: React.FC<PropType> = ({ children, ...restProps }) => (
     <button
         className={cn(styles.arrowButton, styles.arrowButtonRight)}
-        type='button'
+        type={'button'}
         {...restProps}
     >
         <span>

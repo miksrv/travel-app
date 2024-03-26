@@ -1,3 +1,5 @@
+import { Comments } from '@/api/types/Comments'
+
 import { Item } from './Activity'
 import { Notification } from './Notification'
 import { Photo } from './Photo'
@@ -264,6 +266,22 @@ export interface RequestCategoriesGetList {
 
 export interface ResponseCategoriesGetList {
     items?: Category[]
+}
+
+/* Controller: Comments */
+export interface RequestCommentsGetList {
+    place?: string
+}
+
+export interface RequestCommentsPost {
+    placeId?: string
+    answerId?: string
+    comment?: string
+}
+
+export interface ResponseCommentsGetList {
+    items?: Comments[]
+    count: number
 }
 
 /* Controller: Levels */

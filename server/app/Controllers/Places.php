@@ -146,7 +146,7 @@ class Places extends ResourceController {
         }
 
         $this->model
-            ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views,
+            ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views, places.comments,
                 places.photos, places.country_id, places.region_id, places.district_id, places.locality_id, 
                 places.updated_at, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                 location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
@@ -193,6 +193,7 @@ class Places extends ResourceController {
                 'rating'    => (float) $place->rating,
                 'views'     => (int) $place->views,
                 'photos'    => (int) $place->photos,
+                'comments'  => (int) $place->comments,
                 'title'     => $placeContent->title($place->id),
                 'content'   => $placeContent->content($place->id),
                 'updated'   => new \DateTime($place->updated_at),
@@ -331,6 +332,7 @@ class Places extends ResourceController {
             'rating'    => (float) $placeData->rating,
             'views'     => (int) $placeData->views,
             'photos'    => (int) $placeData->photos,
+            'comments'  => (int) $placeData->comments,
             'title'     => $placeContent->title($id),
             'content'   => $placeContent->content($id),
             'author'    => [
@@ -441,8 +443,8 @@ class Places extends ResourceController {
         }
 
         $placeTags = new PlaceTags();
-        $geocoder = new Geocoder();
-        $place    = new \App\Entities\Place();
+        $geocoder  = new Geocoder();
+        $place     = new \App\Entities\Place();
 
         $geocoder->coordinates($input->lat, $input->lon);
 

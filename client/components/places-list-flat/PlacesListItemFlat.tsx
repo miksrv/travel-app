@@ -86,6 +86,13 @@ const PlacesListItemFlat: React.FC<PlacesListItemProps> = ({ place }) => {
                             {place?.photos || 0}
                         </div>
 
+                        {!!place?.comments && (
+                            <div className={styles.icon}>
+                                <Icon name={'Comment'} />
+                                {place.comments}
+                            </div>
+                        )}
+
                         {!!place.rating && (
                             <div className={styles.icon}>
                                 <Icon name={'Star'} />

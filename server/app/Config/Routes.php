@@ -11,7 +11,7 @@ use CodeIgniter\Router\RouteCollection;
 //$routes->get('migrate/places', 'Migrate::places');
 //$routes->cli('migrate/fix', 'Migrate::fixedActivity');
 //$routes->cli('migrate/places', 'Migrate::places'); //  php index.php migrate places
-$routes->cli('migrate/comments', 'Migrate::comments');
+//$routes->cli('migrate/comments', 'Migrate::comments');
 //$routes->cli('migrate/users', 'Migrate::users');
 //$routes->cli('migrate/covers', 'Migrate::fixedCoverSizes'); //  php index.php migrate covers
 
@@ -49,6 +49,10 @@ $routes->get('notifications/list', 'Notifications::list');
 $routes->delete('notifications', 'Notifications::clear');
 $routes->options('notifications', 'Notifications');
 $routes->options('notifications/(:alphanum)', 'Notifications');
+
+$routes->get('comments', 'Comments::list');
+$routes->post('comments', 'Comments::create');
+$routes->options('comments', 'Comments');
 
 //$routes->get('countries', 'Countries::list');
 //$routes->options('countries', 'Countries');

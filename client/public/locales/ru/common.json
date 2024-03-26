@@ -109,6 +109,9 @@
                 "buttonEdit": "Редактировать",
                 "emptyContent": "Нет описания",
                 "tagSelectLabel": "Выберите или добавьте метки интересного места"
+            },
+            "placeComments": {
+                "title": "Комментарии"
             }
         },
         "pageUser": {
@@ -120,11 +123,11 @@
                 "timeActivity": "Был(а) тут:",
                 "website": "Личная страница:",
                 "notDefined": "Не указана",
-                "statisticActivity": "Статистика активности",
                 "placesAdded": "Геометок:",
                 "photosUploaded": "Фотографий:",
                 "ratingsAdded": "Оценок:",
                 "editions": "Редактирований:",
+                "comments": "Комментариев:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
                 "buttonEdit": "Редактировать",
@@ -211,6 +214,13 @@
             "allCategoryPlaces": "Все интересные места категории",
             "goToCategory": "Перейти в категорию"
         },
+        "commentList": {
+            "answerCancel": "отмена",
+            "answerAdd": "ответить",
+            "userLogin": "Войти",
+            "noComments": "Пока нет комментариев, станьте первым",
+            "writeComment": "Напишите комментарий..."
+        },
         "registrationForm": {
             "errorsMessageTitle": "Исправьте ошибки",
             "errorName": "Имя обязательно для заполнения",
@@ -242,6 +252,7 @@
             "cover": "Загружена новая обложка",
             "edit": "Место отредактировано",
             "rating": "Поставлена новая оценка",
+            "comment": "Добавлен новый комментарий",
             "place": "Добавлено новое место",
             "photo": "Загружено новое фото",
             "experience": "опыта",
