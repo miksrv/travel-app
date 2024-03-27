@@ -16,6 +16,7 @@ use CodeIgniter\Router\RouteCollection;
 //$routes->cli('migrate/covers', 'Migrate::fixedCoverSizes'); //  php index.php migrate covers
 
 $routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); //  php index.php system recalculate_tags_count
+$routes->cli('system/generate_users_online', 'System::generateUsersOnline'); //  php index.php system generate_users_online
 
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');
