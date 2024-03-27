@@ -18,6 +18,7 @@ import UserAvatarEditor from '@/components/user-avatar-editor'
 import {
     formatDate,
     makeActiveLink,
+    minutesAgo,
     removeProtocolFromUrl,
     timeAgo
 } from '@/functions/helpers'
@@ -120,8 +121,15 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         <Icon name={'Time'} />
                         <div className={styles.key}>{t('timeActivity')}</div>
                         <div className={styles.value}>
-                            {timeAgo(
-                                user?.activity?.date ?? user?.updated?.date
+                            {minutesAgo(user?.activity?.date) <= 15 ? (
+                                <span className={styles.online}>
+                                    <div className={styles.signOnline}></div>
+                                    {t('userOnline')}
+                                </span>
+                            ) : (
+                                timeAgo(
+                                    user?.activity?.date ?? user?.updated?.date
+                                )
                             )}
                         </div>
                     </li>
