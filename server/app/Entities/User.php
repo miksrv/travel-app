@@ -17,6 +17,7 @@ class User extends Entity {
         'avatar'      => 'string',
         'activity_at' => 'datetime',
 
-        'updated' => 'datetime',
+        'activity' => 'datetime',
+        'updated'  => 'datetime',
     ];
 }

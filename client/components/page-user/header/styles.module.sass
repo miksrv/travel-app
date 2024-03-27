@@ -73,6 +73,20 @@
             @media only screen and (max-width: $mobileMaxWidth)
               max-width: 185px
 
+      .online
+        color: $greenColor
+        font-weight: 700
+        display: flex
+        align-items: center
+
+        &:before
+          content: ' '
+          width: 10px
+          height: 10px
+          margin-right: 5px
+          border-radius: 50%
+          background-color: $greenColor
+
   .header
     padding: 8px 15px
     border-bottom-left-radius: $borderRadius

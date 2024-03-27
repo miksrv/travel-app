@@ -263,6 +263,7 @@ class Places extends ResourceController {
      * @param $id
      * @return ResponseInterface
      * @throws ReflectionException
+     * @throws \Exception
      */
     public function show($id = null): ResponseInterface {
         $locale = $this->request->getLocale();
@@ -290,7 +291,7 @@ class Places extends ResourceController {
         $placeData = $this->model
             ->select(
                 'places.*,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar,
+                    users.id as user_id, users.name as user_name, users.avatar as user_avatar, users.activity_at,
                     location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                     location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                     location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
@@ -336,9 +337,10 @@ class Places extends ResourceController {
             'title'     => $placeContent->title($id),
             'content'   => $placeContent->content($id),
             'author'    => [
-                'id'     => $placeData->user_id,
-                'name'   => $placeData->user_name,
-                'avatar' => $avatar
+                'id'       => $placeData->user_id,
+                'name'     => $placeData->user_name,
+                'activity' => $placeData->activity_at ? new \DateTime($placeData->activity_at) : null,
+                'avatar'   => $avatar
                     ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
                     : null
             ],
