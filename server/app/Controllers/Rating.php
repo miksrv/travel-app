@@ -9,7 +9,6 @@ use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
-use ReflectionException;
 
 class Rating extends ResourceController {
 
@@ -26,33 +25,27 @@ class Rating extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        try {
-            $ratingModel = new RatingModel();
-            $ratingData  = $ratingModel->select('value, session_id, user_id')->where(['place_id' => $id])->findAll();
-            $response    = ['rating' => 0, 'count'  => 0];
+        $ratingModel = new RatingModel();
+        $ratingData  = $ratingModel->select('value, session_id, user_id')->where(['place_id' => $id])->findAll();
+        $response    = ['rating' => 0, 'count'  => 0];
 
-            if (!$ratingData) {
-                return $this->respond($response);
-            }
-
-            $response['count'] = count($ratingData);
-
-            foreach ($ratingData as $item) {
-                if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
-                    $response['vote'] = $item->value;
-                }
-
-                $response['rating'] += $item->value;
-            }
-
-            $response['rating'] = round($response['rating'] / $response['count'], 1);
-
+        if (!$ratingData) {
             return $this->respond($response);
-        } catch (Exception $e) {
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failServerError();
         }
+
+        $response['count'] = count($ratingData);
+
+        foreach ($ratingData as $item) {
+            if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
+                $response['vote'] = $item->value;
+            }
+
+            $response['rating'] += $item->value;
+        }
+
+        $response['rating'] = round($response['rating'] / $response['count'], 1);
+
+        return $this->respond($response);
     }
 
     /**
