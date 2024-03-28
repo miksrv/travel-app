@@ -55,7 +55,7 @@ class Poi extends ResourceController {
 
         $photosModel = new PhotosModel();
         $photosData  = $photosModel
-            ->select('place_id, lat, lon, filename, extension, title_en, title_ru')
+            ->select('place_id as placeId, lat, lon, filename, extension, title_en, title_ru')
             ->where([
                 'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
@@ -65,27 +65,21 @@ class Poi extends ResourceController {
             ->groupBy('photos.lon, photos.lat')
             ->findAll();
 
-        $result = [];
-
         foreach ($photosData as $photo) {
-            $title = $locale === 'ru' ?
+            $photoPath = PATH_PHOTOS . $photo->placeId . '/' . $photo->filename;
+
+            $photo->full    = $photoPath . '.' . $photo->extension;
+            $photo->preview = $photoPath . '_preview.' . $photo->extension;
+            $photo->title   = $locale === 'ru' ?
                 ($photo->title_ru ?: $photo->title_en) :
                 ($photo->title_en ?: $photo->title_ru);
 
-            $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
-            $result[]  = (object) [
-                'full'      => $photoPath . '.' . $photo->extension,
-                'preview'   => $photoPath . '_preview.' . $photo->extension,
-                'lat'       => $photo->lat,
-                'lon'       => $photo->lon,
-                'title'     => $title,
-                'placeId'   => $photo->place_id,
-            ];
+            unset($photo->title_ru, $photo->title_en, $photo->extension, $photo->filename);
         }
 
         return $this->respond([
-            'items' => $result,
-            'count' => count($result)
+            'items' => $photosData,
+            'count' => count($photosData)
         ]);
     }
 
@@ -94,7 +88,6 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
-        // Load translate library
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
 
@@ -107,31 +100,23 @@ class Poi extends ResourceController {
             ->select('id, rating, views, photos, photos')
             ->find($id);
 
-        $response = [
-            'id'     => $placeData->id,
-            'rating' => (int) $placeData->rating,
-            'views'  => (int) $placeData->views,
-            'photos' => (int) $placeData->photos,
-            'title'  => $placeContent->title($id),
-        ];
+        $placeData->title = $placeContent->title($id);
 
-        // Place cover
         if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
-            $response['cover'] = [
+            $placeData->cover = [
                 'full'    => PATH_PHOTOS . $id . '/cover.jpg',
                 'preview' => PATH_PHOTOS . $id . '/cover_preview.jpg',
             ];
         }
 
-        return $this->respond($response);
+        return $this->respond($placeData);
     }
 
     /**
      * Getting the map boundaries from the GET parameter
      * @return ResponseInterface|array
      */
-    protected function _getBounds(): ResponseInterface | array
-    {
+    protected function _getBounds(): ResponseInterface | array {
         // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = explode(',', $bounds);
