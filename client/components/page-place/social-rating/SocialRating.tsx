@@ -37,6 +37,10 @@ const SocialRating: React.FC<SocialRatingProps> = ({
         keyPrefix: 'components.pagePlace.socialRating'
     })
 
+    const { data: ratingData } = API.useRatingGetListQuery(placeId!, {
+        refetchOnMountOrArgChange: true
+    })
+
     const [changeRating, { isLoading: ratingLoading }] =
         API.useRatingPutScoreMutation()
 
@@ -54,7 +58,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({
             <div className={styles.rating}>
                 <div className={styles.ratingCaption}>{t('userRating')}</div>
                 <Rating
-                    value={ratingValue ?? undefined}
+                    value={ratingData?.vote ?? ratingValue ?? undefined}
                     disabled={ratingLoading}
                     onChange={handleRatingChange}
                 />
