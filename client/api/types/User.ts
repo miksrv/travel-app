@@ -4,14 +4,13 @@ export type User = {
     id: string
     name: string
     avatar?: string
-
-    /* Optional parameters */
     reputation?: number
     website?: string
     level?: LevelData
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
     activity?: ApiTypes.DateTimeType
+    authType?: ApiTypes.AuthServiceType
     statistic?: Statistic
 }
 

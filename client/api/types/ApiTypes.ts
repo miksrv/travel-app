@@ -37,7 +37,7 @@ export type PlaceLocationType = {
     type: LocationType
 }
 
-export type AuthServiceType = 'google' | 'yandex'
+export type AuthServiceType = 'google' | 'yandex' | 'native'
 
 export type LocaleType = 'en' | 'ru'
 
