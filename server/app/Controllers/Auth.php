@@ -15,10 +15,6 @@ use Config\Services;
 use Exception;
 use ReflectionException;
 
-define('AUTH_TYPE_NATIVE', 'native');
-define('AUTH_TYPE_GOOGLE', 'google');
-define('AUTH_TYPE_YANDEX', 'yandex');
-
 class Auth extends ResourceController {
     private SessionLibrary $session;
 
@@ -41,7 +37,7 @@ class Auth extends ResourceController {
         $validationRules = [
             'name'     => 'required|is_unique[users.name]',
             'email'    => 'required|min_length[6]|max_length[50]|valid_email|is_unique[users.email]',
-            'password' => 'required|min_length[8]|max_length[255]'
+            'password' => 'required|min_length[8]|max_length[50]'
         ];
 
         $input = $this->getRequestInput($this->request);
@@ -280,7 +276,7 @@ class Auth extends ResourceController {
 
         $rules = [
             'email'    => 'required|min_length[6]|max_length[50]|valid_email',
-            'password' => 'required|min_length[8]|max_length[255]|validateUser[email, password]'
+            'password' => 'required|min_length[8]|max_length[50]|validateUser[email, password]'
         ];
 
         $errors = [

@@ -142,14 +142,32 @@ class Users extends ResourceController {
         $input = $this->request->getJSON();
         $rules = [
             'name'    => 'if_exist|min_length[6]|max_length[150]|is_unique[users.name]',
-            'website' => 'if_exist|min_length[6]|max_length[150]|string'
+            'website' => 'if_exist|max_length[150]|string',
+            'oldPassword' => 'if_exist|min_length[8]|max_length[50]',
+            'newPassword' => 'if_exist|min_length[8]|max_length[50]',
         ];
 
         if (!$this->validateData((array) $input, $rules)) {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
+        $userModel  = new UsersModel();
         $updateData = [];
+
+        if (isset($input->oldPassword) && isset($input->newPassword)) {
+            helper('auth');
+
+            $validatePassword = $userModel
+                ->select('password')
+                ->where(['email' => $session->user?->email, 'auth_type' => AUTH_TYPE_NATIVE])
+                ->first();
+
+            if (!password_verify($input->oldPassword, $validatePassword->password)) {
+                return $this->failValidationErrors('Введенный старый пароль не верный');
+            }
+
+            $updateData['password'] = hashUserPassword($input->newPassword);
+        }
 
         if (isset($input->name)) {
             $updateData['name'] = $input->name;
@@ -163,8 +181,6 @@ class Users extends ResourceController {
             return $this->failValidationErrors('No data for update');
         }
 
-
-        $userModel = new UsersModel();
         $userModel->update($id, $updateData);
 
         return $this->respondUpdated();

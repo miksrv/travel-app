@@ -178,8 +178,14 @@
             "inputNamePlaceholder": "Введиет свое имя пользователя",
             "inputWebsiteLabel": "Персональная страница",
             "inputWebsitePlaceholder": "Ссылка на вашу страницу в социальной сети",
+            "loginViaService": "Вы авторизовались через {{service}}, поэтому нет необходимости менять пароль на сайте",
             "buttonSave": "Сохранить",
-            "buttonCancel": "Отмена"
+            "buttonCancel": "Отмена",
+            "errorName": "Имя пользователя обязательно для заполнения",
+            "errorNewPassword": "Придумайте новый пароль",
+            "errorOldPassword": "Укажите свой текущий пароль",
+            "errorConfirmPassword": "Введенные пароли на совпадают",
+            "errorPasswordLength": "Пароль должен содержать минимум 8 символов"
         },
         "placeFilterPanel": {
             "sort": {
