@@ -130,3 +130,8 @@ const MODIFIER_RATING = 1;
 const MODIFIER_COVER = 2;
 const MODIFIER_EDIT = 5;
 const MODIFIER_COMMENT = 5;
+
+
+const AUTH_TYPE_NATIVE = 'native';
+const AUTH_TYPE_GOOGLE = 'google';
+const AUTH_TYPE_YANDEX = 'yandex';

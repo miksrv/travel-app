@@ -53,12 +53,19 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
         updateProfile({
             id: authSlice.user?.id,
             name:
-                formData?.name !== authSlice.user?.name
-                    ? formData?.name
+                formData?.name !== userData?.name ? formData?.name : undefined,
+            newPassword:
+                userData?.authType === 'native' &&
+                formData?.newPassword?.length! > 1
+                    ? formData?.newPassword
+                    : undefined,
+            oldPassword:
+                userData?.authType === 'native' &&
+                formData?.oldPassword?.length! > 1
+                    ? formData?.oldPassword
                     : undefined,
             website:
-                formData?.website &&
-                formData.website !== authSlice.user?.website
+                formData?.website !== userData?.website
                     ? formData?.website
                     : undefined
         })

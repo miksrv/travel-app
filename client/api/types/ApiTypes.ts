@@ -401,6 +401,8 @@ export interface RequestUsersPatch {
     id?: string
     name?: string
     website?: string
+    oldPassword?: string
+    newPassword?: string
 }
 
 export interface ResponseUserUploadAvatar {

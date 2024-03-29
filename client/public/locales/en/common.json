@@ -177,8 +177,14 @@
             "inputNamePlaceholder": "Inputs your username",
             "inputWebsiteLabel": "Personal Page",
             "inputWebsitePlaceholder": "Link to your social network page",
+            "loginViaService": "You are logged in via {{service}}, so there is no need to change your password on the site",
             "buttonSave": "Save",
-            "buttonCancel": "Cancel"
+            "buttonCancel": "Cancel",
+            "errorName": "Username is required",
+            "errorNewPassword": "Create a new password",
+            "errorOldPassword": "Please enter your current password",
+            "errorConfirmPassword": "The entered passwords do not match",
+            "errorPasswordLength": "Password must contain at least 8 characters"
         },
         "placeFilterPanel": {
             "sort": {
