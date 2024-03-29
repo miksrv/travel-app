@@ -76,23 +76,17 @@ class Users extends ResourceController {
      * @throws Exception
      */
     public function show($id = null): ResponseInterface {
-        $userLevels = new LevelsLibrary();
-        $usersModel = new UsersModel();
-        $usersData  = $usersModel->getUserById($id);
+        $userLevels  = new LevelsLibrary();
+        $usersModel  = new UsersModel();
+        $placesModel = new PlacesModel();
+        $usersData   = $usersModel->getUserById($id);
 
         if (!$usersData) {
             return $this->failNotFound();
         }
 
-        // GET ALL USER REPUTATION
-        $placesModel = new PlacesModel();
-        $placesData  = $placesModel->select('id')->where('user_id', $id)->findAll();
-        $ratingValue = $usersData->reputation;
-
-        $userLevels->calculate($usersData);
-
         // Calculate new user reputation value
-        if ($placesData) {
+        if ($placesData  = $placesModel->select('id')->where('user_id', $id)->findAll()) {
             $ratingModel = new RatingModel();
             $placesIds   = [];
 
@@ -113,26 +107,24 @@ class Users extends ResourceController {
 
             if ($ratingValue !== $usersData->reputation) {
                 $usersModel->update($usersData->id, ['reputation' => $ratingValue]);
+
+                $usersData->reputation = $ratingValue;
             }
         }
 
-        $avatar = $usersData->avatar ? explode('.', $usersData->avatar) : null;
-        $result = (object) [
-            'id'         => $usersData->id,
-            'name'       => $usersData->name,
-            'level'      => $userLevels->getLevelData($usersData),
-            'statistic'  => $userLevels->statistic,
-            'reputation' => $ratingValue,
-            'website'    => $usersData->website,
-            'created'    => $usersData->created_at,
-            'updated'    => $usersData->updated_at,
-            'activity'   => $usersData->activity_at ? new \DateTime($usersData->activity_at) : null,
-            'avatar'     => $usersData->avatar
-                ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
-                : null
-        ];
+        $userLevels->calculate($usersData);
 
-        return $this->respond($result);
+        $avatar = $usersData->avatar ? explode('.', $usersData->avatar) : null;
+
+        $usersData->level     = $userLevels->getLevelData($usersData);
+        $usersData->statistic = $userLevels->statistic;
+        $usersData->avatar    = $usersData->avatar
+                ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
+                : null;
+
+        unset($usersData->experience);
+
+        return $this->respond($usersData);
     }
 
     /**

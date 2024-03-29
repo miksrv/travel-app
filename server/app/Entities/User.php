@@ -10,13 +10,14 @@ class User extends Entity {
         'password'    => 'string',
         'auth_type'   => 'string',
         'locale'      => 'string',
-        'level'       => 'integer',
+        'level'       => 'integer|null',
         'experience'  => 'integer',
         'reputation'  => 'integer',
         'website'     => 'string',
         'avatar'      => 'string',
         'activity_at' => 'datetime',
 
+        'created'  => 'datetime',
         'activity' => 'datetime',
         'updated'  => 'datetime',
     ];

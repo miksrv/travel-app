@@ -68,7 +68,7 @@ class LevelsLibrary {
 
         // If we consider that the user’s actual experience or level does not correspond to that obtained
         // as a result of the calculation, then we will update the user data in the database
-        if ($experience !== $user->experience || $calcLevel->level !== $user->level) {
+        if ($experience !== $user->experience || $calcLevel->level !== (int) $user->level) {
             $userModel  = new UsersModel();
             $userModel->update($user->id, ['level' => $calcLevel->level, 'experience' => $experience]);
 

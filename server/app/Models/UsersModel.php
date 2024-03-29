@@ -96,7 +96,9 @@ class UsersModel extends MyBaseModel {
      */
     public function getUserById(string $userId): array|object|null {
         return $this
-            ->select('id, name, avatar, created_at, updated_at, activity_at, level, website, experience, reputation')
-            ->find($userId);
+            ->select('id, name, avatar, created_at as created, 
+                updated_at as updated, activity_at as activity, level, 
+                auth_type as authType, website, experience, reputation'
+            )->find($userId);
     }
 }
