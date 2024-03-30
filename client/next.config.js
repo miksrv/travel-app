@@ -25,12 +25,7 @@ const nextConfig = {
     },
     output: 'standalone',
 
-    transpilePackages: [
-        '@uiw/react-md-editor',
-        'leaflet',
-        'leaflet-defaulticon-compatibility',
-        'leaflet-geosearch'
-    ],
+    transpilePackages: ['@uiw/react-md-editor', 'leaflet', 'leaflet.heat'],
 
     webpack(config) {
         config.resolve.fallback = {

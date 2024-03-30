@@ -4,6 +4,7 @@ use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
+use App\Models\SessionsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -110,6 +111,28 @@ class Poi extends ResourceController {
         }
 
         return $this->respond($placeData);
+    }
+
+    /**
+     * @return ResponseInterface
+     */
+    public function users(): ResponseInterface {
+        $sessionsModel = new SessionsModel();
+        $sessionsData  = $sessionsModel
+            ->select('lat, lon')
+            ->where(['lat !=' => null, 'lon !=' => null])
+            ->findAll();
+
+        if (!$sessionsData) {
+            return $this->respond(['items' => []]);
+        }
+
+        $result = [];
+        foreach ($sessionsData as $item) {
+            $result[] = [$item->lat, $item->lon];
+        }
+
+        return $this->respond(['items' => $result]);
     }
 
     /**

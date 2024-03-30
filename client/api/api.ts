@@ -375,6 +375,9 @@ export const API = createApi({
         >({
             query: (params) => `poi/photos${encodeQueryData(params)}`
         }),
+        poiGetUsers: builder.query<ApiTypes.ResponsePoiUsersList, void>({
+            query: () => 'poi/users'
+        }),
 
         /* Controller: Rating */
         ratingGetList: builder.query<ApiTypes.ResponseRatingGetList, string>({

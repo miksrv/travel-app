@@ -32,9 +32,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
     })
 
     const placeClickHandler = () => {
-        if (place.id) {
-            getPlaceItem(place.id)
-        }
+        getPlaceItem(place.id!)
     }
 
     return (
@@ -45,56 +43,57 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 click: placeClickHandler
             }}
         >
-            {place.id && (
-                <Popup className={styles.popup}>
-                    <Link
-                        href={`/places/${place.id}`}
-                        title={poiData?.title}
-                        className={styles.link}
-                    >
-                        {(isLoading || !poiData) && <Skeleton />}
+            <Popup
+                className={styles.popup}
+                closeOnEscapeKey={true}
+            >
+                <Link
+                    href={`/places/${place.id}`}
+                    title={poiData?.title}
+                    className={styles.link}
+                >
+                    {(isLoading || !poiData) && <Skeleton />}
 
-                        {!isLoading && poiData && (
-                            <>
-                                <RatingColored
-                                    className={styles.rating}
-                                    value={poiData.rating}
-                                >
-                                    {addDecimalPoint(poiData.rating)}
-                                </RatingColored>
+                    {!isLoading && poiData && (
+                        <>
+                            <RatingColored
+                                className={styles.rating}
+                                value={poiData.rating}
+                            >
+                                {addDecimalPoint(poiData.rating)}
+                            </RatingColored>
 
-                                {poiData?.cover && (
-                                    <Image
-                                        className={styles.image}
-                                        src={`${IMG_HOST}${poiData.cover?.preview}`}
-                                        alt={poiData?.title || ''}
-                                        width={300}
-                                        height={200}
-                                    />
-                                )}
+                            {poiData?.cover && (
+                                <Image
+                                    className={styles.image}
+                                    src={`${IMG_HOST}${poiData.cover?.preview}`}
+                                    alt={poiData?.title || ''}
+                                    width={300}
+                                    height={200}
+                                />
+                            )}
 
-                                <div className={styles.bottomPanel}>
-                                    <Badge
-                                        icon={'Photo'}
-                                        content={poiData?.photos || 0}
-                                    />
-                                    <Badge
-                                        icon={'Eye'}
-                                        content={numberFormatter(
-                                            poiData?.views || 0
-                                        )}
-                                    />
-                                </div>
-                            </>
-                        )}
-                    </Link>
-                    {isLoading || !poiData ? (
-                        <Skeleton style={{ height: '18px', margin: '6px' }} />
-                    ) : (
-                        <h3 className={styles.title}>{poiData?.title}</h3>
+                            <div className={styles.bottomPanel}>
+                                <Badge
+                                    icon={'Photo'}
+                                    content={poiData?.photos || 0}
+                                />
+                                <Badge
+                                    icon={'Eye'}
+                                    content={numberFormatter(
+                                        poiData?.views || 0
+                                    )}
+                                />
+                            </div>
+                        </>
                     )}
-                </Popup>
-            )}
+                </Link>
+                {isLoading || !poiData ? (
+                    <Skeleton style={{ height: '18px', margin: '6px' }} />
+                ) : (
+                    <h3 className={styles.title}>{poiData?.title}</h3>
+                )}
+            </Popup>
         </Marker>
     )
 }

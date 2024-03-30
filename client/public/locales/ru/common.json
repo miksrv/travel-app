@@ -42,7 +42,8 @@
                 "GoogleSat": "Спутник (Google)",
                 "MapBoxSat": "Спутник (MapBox)",
                 "Photos": "Фотографии",
-                "Places": "Интересные места"
+                "Places": "Интересные места",
+                "Heatmap": "Пользователи онлайн"
             },
             "searchControl": {
                 "placeholder": "Населенный пункт"

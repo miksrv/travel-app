@@ -2,10 +2,10 @@
 
 import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
+import 'leaflet.heat'
 import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import React, { useEffect, useRef, useState } from 'react'
-import { useMapEvents } from 'react-leaflet'
 
 import Button from '@/ui/button'
 import Spinner from '@/ui/spinner'
@@ -21,11 +21,18 @@ import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
 import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
 import SearchControl from '@/components/interactive-map/SearchControl'
+import HeatmapLayer from '@/components/interactive-map/heatmap-layer/HeatmapLayer'
 
 import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
+
+export const MapAdditionalLayers = {
+    Heatmap: 'Heatmap'
+} as const
+export type MapAdditionalLayersType =
+    (typeof MapAdditionalLayers)[keyof typeof MapAdditionalLayers]
 
 export const MapObjects = {
     Photos: 'Photos',
@@ -102,6 +109,8 @@ const InteractiveMap: React.FC<MapProps> = ({
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
     const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
+    const [additionalLayers, setAdditionalLayers] =
+        useState<MapAdditionalLayersType[]>()
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
         storeMapKey || LOCAL_STORGE.MAP_CENTER
@@ -231,6 +240,10 @@ const InteractiveMap: React.FC<MapProps> = ({
                 attributionControl={false}
                 ref={mapRef}
             >
+                {additionalLayers?.includes(MapAdditionalLayers.Heatmap) && (
+                    <HeatmapLayer />
+                )}
+
                 {mapLayer === MapLayers.OCM && (
                     <ReactLeaflet.TileLayer
                         url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
@@ -267,6 +280,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />
                 )}
+
                 {places?.map((place) => (
                     <MarkerPoint
                         key={`poi${place.id}`}
@@ -321,8 +335,10 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <LayerSwitcherControl
                             currentLayer={mapLayer}
                             currentType={mapType}
+                            additionalLayers={additionalLayers}
                             onSwitchMapLayer={setMapLayer}
                             onSwitchMapType={handleSwitchMapType}
+                            onSwitchAdditionalLayers={setAdditionalLayers}
                         />
                     )}
 
@@ -363,7 +379,7 @@ type MapEventsProps = {
 }
 
 const MapEvents: React.FC<MapEventsProps> = ({ onChangeBounds }) => {
-    const mapEvents = useMapEvents({
+    const mapEvents = ReactLeaflet.useMapEvents({
         mousedown: () => {
             mapEvents.closePopup()
         },
