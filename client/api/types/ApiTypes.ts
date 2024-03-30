@@ -368,6 +368,9 @@ export interface ResponsePoiPlacesList {
     items: poiPlace[]
     count: number
 }
+export interface ResponsePoiUsersList {
+    items: string[][]
+}
 
 export interface ResponsePoiPhotosList {
     items: poiPhoto[]

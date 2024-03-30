@@ -42,7 +42,8 @@
                 "GoogleSat": "Satellite (Google)",
                 "MapBoxSat": "Satellite (MapBox)",
                 "Photos": "Photos",
-                "Places": "Places"
+                "Places": "Places",
+                "Heatmap": "Users online"
             },
             "searchControl": {
                 "placeholder": "Locality"

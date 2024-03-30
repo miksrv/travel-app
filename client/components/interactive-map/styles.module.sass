@@ -19,6 +19,8 @@
   & > div
     border-radius: $borderRadius
     height: 100%
+    outline: none
+    border: none
 
   .leftControls, .rightControls
     position: absolute
@@ -58,7 +60,7 @@
       @extend .rightControlContainer
       width: fit-content
 
-    .mapLayersList, .mapPointsTypeList, .mapCategoryList
+    .mapLayersList, .mapPointsTypeList, .mapCategoryList, .mapAdditionalList
       margin: -10px -10px 5px
 
       li
@@ -72,15 +74,18 @@
       margin: -10px -10px -10px
 
       .allCategories
+        border-radius: 0
         border-bottom: .5px solid $borderInputColor
         margin-bottom: 4px
         padding-bottom: 4px
 
-    .mapPointsTypeList
+    .mapPointsTypeList, .mapAdditionalList
       margin-top: 5px
-      margin-bottom: -10px
       padding-top: 5px
       border-top: 0.5px solid $borderBottomColor
+
+    .mapAdditionalList
+      margin-bottom: -10px
 
   .searchControl
     position: absolute

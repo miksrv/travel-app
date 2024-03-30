@@ -2,10 +2,13 @@ import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
 import Container from '@/ui/container'
 import RadioButton from '@/ui/radio-button'
 
 import {
+    MapAdditionalLayers,
+    MapAdditionalLayersType,
     MapLayers,
     MapLayersType,
     MapObjects,
@@ -16,15 +19,19 @@ import styles from './styles.module.sass'
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
     currentType?: MapObjectsType
+    additionalLayers?: MapAdditionalLayersType[]
     onSwitchMapLayer?: (layer: MapLayersType) => void
     onSwitchMapType?: (type: MapObjectsType) => void
+    onSwitchAdditionalLayers?: (layer?: MapAdditionalLayersType[]) => void
 }
 
 const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     currentLayer,
     currentType,
+    additionalLayers,
     onSwitchMapLayer,
-    onSwitchMapType
+    onSwitchMapType,
+    onSwitchAdditionalLayers
 }) => {
     const layersContainerRef = useRef<HTMLDivElement>(null)
     const [open, setOpen] = useState<boolean>(false)
@@ -49,14 +56,12 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     const handleSwitchMapLayer = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setOpen(false)
         onSwitchMapLayer?.(event.target.id as MapLayersType)
     }
 
     const handleSwitchMapType = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        setOpen(false)
         onSwitchMapType?.(event.target.id as MapObjectsType)
     }
 
@@ -87,10 +92,8 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                             <RadioButton
                                 id={layer}
                                 label={t(layer)}
-                                name={'layerType'}
                                 checked={currentLayer === layer}
                                 onChange={handleSwitchMapLayer}
-                                onClick={() => setOpen(false)}
                             />
                         </li>
                     ))}
@@ -101,10 +104,31 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                             <RadioButton
                                 id={type}
                                 label={t(type)}
-                                name={'layerType'}
                                 checked={currentType === type}
                                 onChange={handleSwitchMapType}
-                                onClick={() => setOpen(false)}
+                            />
+                        </li>
+                    ))}
+                </ul>
+                <ul className={styles.mapAdditionalList}>
+                    {Object.values(MapAdditionalLayers).map((type) => (
+                        <li key={type}>
+                            <Checkbox
+                                id={type}
+                                label={t(type)}
+                                checked={additionalLayers?.includes(type)}
+                                onChange={() =>
+                                    onSwitchAdditionalLayers?.(
+                                        additionalLayers?.includes(type)
+                                            ? additionalLayers?.filter(
+                                                  (layer) => layer !== type
+                                              )
+                                            : [
+                                                  ...(additionalLayers || []),
+                                                  type
+                                              ]
+                                    )
+                                }
                             />
                         </li>
                     ))}

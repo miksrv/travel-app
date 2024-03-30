@@ -20,6 +20,7 @@ $routes->cli('system/generate_users_online', 'System::generateUsersOnline'); // 
 
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');
+$routes->get('poi/users', 'Poi::users');
 $routes->get('poi/(:alphanum)', 'Poi::show/$1');
 $routes->options('poi', 'Poi');
 $routes->options('poi/(:alphanum)', 'Poi');
