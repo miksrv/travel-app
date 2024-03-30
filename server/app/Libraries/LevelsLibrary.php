@@ -68,11 +68,11 @@ class LevelsLibrary {
 
         // If we consider that the user’s actual experience or level does not correspond to that obtained
         // as a result of the calculation, then we will update the user data in the database
-        if ($experience !== $user->experience || $calcLevel->level !== (int) $user->level) {
+        if ($experience !== (int) $user->experience || $calcLevel->level !== (int) $user->level) {
             $userModel  = new UsersModel();
             $userModel->update($user->id, ['level' => $calcLevel->level, 'experience' => $experience]);
 
-             if ($calcLevel->level !== $user->level) {
+             if ($calcLevel->level !== (int) $user->level) {
                  $notify = new NotifyLibrary();
                  $notify->push('level', $user->id, null, $calcLevel);
              }
@@ -130,7 +130,7 @@ class LevelsLibrary {
         $calcLevel = $this->getUserLevel($userData->experience);
         $notify    = new NotifyLibrary();
 
-        if ($calcLevel->level !== $userData->level) {
+        if ($calcLevel->level !== (int) $userData->level) {
             $notify->push('level', $userId, $activity, $calcLevel);
             $userModel->update($userData->id, ['level' => $calcLevel->level, 'experience' => $userData->experience]);
         } else {
@@ -147,7 +147,7 @@ class LevelsLibrary {
      */
     public function getLevelData(User $user): ?object {
         $request    = Services::request();
-        $levelIndex = array_search($user->level, array_column($this->userLevels, 'level'));
+        $levelIndex = array_search((int) $user->level, array_column($this->userLevels, 'level'));
 
         if ($levelIndex === false) {
             return null;
