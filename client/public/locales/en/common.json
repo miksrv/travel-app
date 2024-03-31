@@ -1,4 +1,5 @@
 {
+    "siteName": "Geometki",
     "components": {
         "appBar": {
             "userProfileCaption": "My page",
@@ -314,7 +315,7 @@
         },
         "map": {
             "title": "Map of interesting places",
-            "description": "Explore unique places and attractions with our attractions map. Find popular holiday destinations, travel and excursions anywhere in the world. Plan your adventures easily and conveniently with our detailed map.",
+            "description": "Map of interesting places, attractions, abandoned places, monuments, temples, bunkers, training grounds, bomb shelters, mountain peaks, waterfalls, forests, reservoirs, lakes, rivers, bridges. Coordinates of interesting places, photographs, descriptions, comments from travelers.",
             "breadCrumbCurrent": "Map of interesting places",
             "pointsCount": "Points on map:",
             "photosCount": "Photos on map:",
