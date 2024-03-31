@@ -28,10 +28,12 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
+const LKEY = 'pages.map.'
+
 interface MapPageProps {}
 
 const MapPage: NextPage<MapPageProps> = () => {
-    const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.map' })
+    const { t, i18n } = useTranslation('common')
 
     const router = useRouter()
 
@@ -122,14 +124,29 @@ const MapPage: NextPage<MapPageProps> = () => {
     return (
         <AppLayout className={'mainLayout'}>
             <NextSeo
-                title={t('title')}
-                description={t('description')}
+                title={t(`${LKEY}title`)}
+                description={t(`${LKEY}description`)}
                 canonical={`${canonicalUrl}map`}
+                openGraph={{
+                    description: t(`${LKEY}description`),
+                    images: [
+                        {
+                            height: 1305,
+                            url: '/images/pages/map.jpg',
+                            width: 1730
+                        }
+                    ],
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
+                    siteName: t('siteName'),
+                    title: t(`${LKEY}title`),
+                    type: 'website',
+                    url: `${canonicalUrl}map`
+                }}
             />
 
             <Header
-                title={t('title')}
-                currentPage={t('breadCrumbCurrent')}
+                title={t(`${LKEY}title`)}
+                currentPage={t(`${LKEY}breadCrumbCurrent`)}
                 className={'mainHeader'}
                 actions={
                     <>
