@@ -22,6 +22,7 @@ import MarkerPoint from '@/components/interactive-map/MarkerPoint'
 import MarkerUser from '@/components/interactive-map/MarkerUser'
 import SearchControl from '@/components/interactive-map/SearchControl'
 import HeatmapLayer from '@/components/interactive-map/heatmap-layer/HeatmapLayer'
+import MarkersCanvasLayer from '@/components/interactive-map/markers-canvas-layer/MarkersCanvasLayer'
 
 import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -280,6 +281,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                         accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />
                 )}
+
+                <MarkersCanvasLayer markers={places} />
 
                 {places?.map((place) => (
                     <MarkerPoint
