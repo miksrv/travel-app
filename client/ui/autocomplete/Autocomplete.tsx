@@ -34,8 +34,10 @@ interface DropdownProps<T> {
     leftIcon?: IconTypes
     onSelect?: (option: T) => void
     onSearch?: (value: string) => void
+    onClear?: () => void
 }
 
+// TODO: If Enter key press and focus on the input field and options list not empty - select first option
 const Autocomplete: React.FC<DropdownProps<any>> = ({
     className,
     options,
@@ -50,7 +52,8 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     label,
     leftIcon,
     onSelect,
-    onSearch
+    onSearch,
+    onClear
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'ui.autocomplete'
@@ -118,6 +121,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         event.stopPropagation()
         setSearch(undefined)
         handleSelect(undefined)
+        onClear?.()
     }
 
     useEffect(() => {

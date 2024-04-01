@@ -19,13 +19,18 @@ import {
 import styles from '../styles.module.sass'
 
 interface SearchControlProps {
+    onClear?: () => void
     onSelectResult?: (
         coordinates: ApiTypes.LatLonCoordinate,
-        zoom?: number
+        zoom?: number,
+        showPosition?: boolean
     ) => void
 }
 
-const SearchControl: React.FC<SearchControlProps> = ({ onSelectResult }) => {
+const SearchControl: React.FC<SearchControlProps> = ({
+    onClear,
+    onSelectResult
+}) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.searchControl'
     })
@@ -191,9 +196,14 @@ const SearchControl: React.FC<SearchControlProps> = ({ onSelectResult }) => {
             loading={isLoading}
             options={foundCoords ?? locationOptions}
             onSearch={handleSearchLocation}
+            onClear={onClear}
             onSelect={(option) =>
                 option?.value &&
-                onSelectResult?.(option.value, foundCoords ? 17 : 12)
+                onSelectResult?.(
+                    option.value,
+                    foundCoords ? 17 : 12,
+                    !!foundCoords
+                )
             }
         />
     )

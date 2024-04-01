@@ -14,6 +14,8 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
+import PlaceMark from '@/components/interactive-map/place-mark/PlaceMark'
+
 import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
@@ -105,6 +107,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     const mapRef = useRef<Map | any>()
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
+    const [placeMark, setPlaceMark] = useState<ApiTypes.LatLonCoordinate>()
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
     const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
@@ -149,12 +152,17 @@ const InteractiveMap: React.FC<MapProps> = ({
 
     const handleSelectSearch = (
         coordinates: ApiTypes.LatLonCoordinate,
-        zoom?: number
+        zoom?: number,
+        showPosition?: boolean
     ) => {
         mapRef.current?.setView(
             [coordinates.lat, coordinates.lon],
             zoom ?? DEFAULT_MAP_ZOOM
         )
+
+        if (showPosition) {
+            setPlaceMark(coordinates)
+        }
     }
 
     const handleToggleFullscreen = async () => {
@@ -283,6 +291,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                     />
                 )}
 
+                {placeMark && (
+                    <PlaceMark
+                        {...placeMark}
+                        onClick={() => setPlaceMark(undefined)}
+                    />
+                )}
+
                 {places?.map((place) => (
                     <MarkerPoint
                         key={`poi${place.id}`}
@@ -298,7 +313,10 @@ const InteractiveMap: React.FC<MapProps> = ({
                 ))}
 
                 {enableSearch && (
-                    <SearchControl onSelectResult={handleSelectSearch} />
+                    <SearchControl
+                        onSelectResult={handleSelectSearch}
+                        onClear={() => setPlaceMark(undefined)}
+                    />
                 )}
 
                 <div className={styles.leftControls}>
