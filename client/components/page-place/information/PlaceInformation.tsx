@@ -150,7 +150,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                             target={'_blank'}
                             href={`geo:${place?.lat},${place?.lon}`}
                         >
-                            {`${convertDMS(place?.lat || 0, place?.lon || 0)}`}
+                            {convertDMS(place?.lat || 0, place?.lon || 0)}
                         </Link>
                         <Link
                             className={styles.mapLink}

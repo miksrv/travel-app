@@ -16,7 +16,7 @@ import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-type MarkerPointProps = {
+interface MarkerPointProps {
     place: Poi.Place
 }
 
