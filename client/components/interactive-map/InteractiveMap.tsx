@@ -17,6 +17,7 @@ import { Photo, Place } from '@/api/types/Poi'
 import PlaceMark from '@/components/interactive-map/place-mark/PlaceMark'
 
 import { LOCAL_STORGE } from '@/functions/constants'
+import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import CategoryControl from './CategoryControl'
@@ -113,6 +114,8 @@ const InteractiveMap: React.FC<MapProps> = ({
     const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
     const [additionalLayers, setAdditionalLayers] =
         useState<MapAdditionalLayersType[]>()
+    const [cursorPosition, setCursorPosition] =
+        useState<ApiTypes.LatLonCoordinate>()
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
         storeMapKey || LOCAL_STORGE.MAP_CENTER
@@ -191,13 +194,6 @@ const InteractiveMap: React.FC<MapProps> = ({
         }
     }
 
-    const handleSetCoordinates = (lat: number, lon: number) => {
-        mapRef?.current?.setView(
-            [lat, lon],
-            coordinates?.zoom || DEFAULT_MAP_ZOOM
-        )
-    }
-
     useEffect(() => {
         if (typeof coordinates !== 'undefined') {
             if (
@@ -246,7 +242,15 @@ const InteractiveMap: React.FC<MapProps> = ({
                 center={props.center ?? DEFAULT_MAP_CENTER}
                 zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
                 minZoom={6}
-                style={{ height: '100%', width: '100%' }}
+                style={{
+                    cursor: enableCoordsControl
+                        ? 'crosshair'
+                        : props.dragging
+                        ? 'pointer'
+                        : 'default',
+                    height: '100%',
+                    width: '100%'
+                }}
                 attributionControl={false}
                 ref={mapRef}
             >
@@ -372,10 +376,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 <div className={styles.bottomControls}>
                     {enableCoordsControl && (
-                        <CoordinatesControl
-                            coordinates={mapRef?.current?.getCenter()}
-                            onSetCoordinates={handleSetCoordinates}
-                        />
+                        <CoordinatesControl coordinates={cursorPosition} />
                     )}
                 </div>
 
@@ -387,21 +388,36 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <Spinner />
                 </div>
                 {onChangeBounds && (
-                    <MapEvents onChangeBounds={handleChangeBounds} />
+                    <MapEvents
+                        onChangeBounds={handleChangeBounds}
+                        onMouseMove={
+                            enableCoordsControl ? setCursorPosition : undefined
+                        }
+                    />
                 )}
             </ReactLeaflet.MapContainer>
         </div>
     )
 }
 
-type MapEventsProps = {
+interface MapEventsProps {
+    onMouseMove?: (coordinates: ApiTypes.LatLonCoordinate) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
 }
 
-const MapEvents: React.FC<MapEventsProps> = ({ onChangeBounds }) => {
+const MapEvents: React.FC<MapEventsProps> = ({
+    onMouseMove,
+    onChangeBounds
+}) => {
     const mapEvents = ReactLeaflet.useMapEvents({
         mousedown: () => {
             mapEvents.closePopup()
+        },
+        mousemove: (event) => {
+            onMouseMove?.({
+                lat: round(event.latlng.lat, 5) || 0,
+                lon: round(event.latlng.lng, 5) || 0
+            })
         },
         moveend: () => {
             onChangeBounds?.(mapEvents.getBounds(), mapEvents.getZoom())
