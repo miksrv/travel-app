@@ -47,7 +47,7 @@
                 "Heatmap": "Пользователи онлайн"
             },
             "searchControl": {
-                "placeholder": "Населенный пункт"
+                "placeholder": "Населенный пункт, координаты"
             }
         },
         "loginForm": {

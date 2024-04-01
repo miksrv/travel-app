@@ -47,7 +47,7 @@
                 "Heatmap": "Users online"
             },
             "searchControl": {
-                "placeholder": "Locality"
+                "placeholder": "Locality, coordinates"
             }
         },
         "loginForm": {
