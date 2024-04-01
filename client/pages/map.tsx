@@ -151,7 +151,11 @@ const MapPage: NextPage<MapPageProps> = () => {
                 actions={
                     <>
                         {t(
-                            mapType === 'Places' ? 'pointsCount' : 'photosCount'
+                            `${LKEY}${
+                                mapType === 'Places'
+                                    ? 'pointsCount'
+                                    : 'photosCount'
+                            }`
                         )}
                         <strong style={{ marginLeft: '5px' }}>
                             {(mapType === 'Places'
