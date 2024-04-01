@@ -157,7 +157,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         } else {
             await handleChangeFilter(
                 location?.type ?? 'locality',
-                location?.key
+                location?.value
             )
         }
     }
@@ -368,9 +368,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     location={
                         locationData && locationType
                             ? {
-                                  key: locationData.id,
+                                  title: locationData.title,
                                   type: locationType,
-                                  value: locationData.title
+                                  value: locationData.id
                               }
                             : undefined
                     }

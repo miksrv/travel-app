@@ -32,8 +32,8 @@ export type SitemapItem = {
 }
 
 export type PlaceLocationType = {
-    value: string
-    key: number
+    title: string
+    value: number
     type: LocationType
 }
 

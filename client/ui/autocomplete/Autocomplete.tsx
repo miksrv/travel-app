@@ -11,9 +11,9 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-type DropdownOption = {
-    key: string | number
-    value: string
+export type DropdownOption = {
+    title: string
+    value: any
     type?: string
     image?: StaticImageData
     description?: string
@@ -26,9 +26,11 @@ interface DropdownProps<T> {
     disabled?: boolean
     clearable?: boolean
     hideArrow?: boolean
+    debouncing?: boolean
     placeholder?: string
     label?: string
     value?: T
+    minLength?: number
     leftIcon?: IconTypes
     onSelect?: (option: T) => void
     onSearch?: (value: string) => void
@@ -41,7 +43,9 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     loading,
     clearable,
     hideArrow,
+    debouncing = true,
     value,
+    minLength = 3,
     placeholder,
     label,
     leftIcon,
@@ -54,7 +58,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
 
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
-    const [localLoading, setLocaLoading] = useState<boolean>(false)
+    const [localLoading, setLocalLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<
         DropdownOption | undefined
@@ -67,7 +71,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     const handleDebouncedSearch = useCallback(
         debounce((value) => {
             onSearch?.(value)
-            setLocaLoading(false)
+            setLocalLoading(false)
         }, 1000),
         []
     )
@@ -75,20 +79,26 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value
 
-        if (value.length > 0) {
-            setLocaLoading(true)
+        if (value.length >= minLength) {
+            setLocalLoading(true)
         } else {
-            setLocaLoading(false)
+            setLocalLoading(false)
         }
 
         setSearch(value)
-        handleDebouncedSearch(value)
+
+        if (debouncing) {
+            handleDebouncedSearch(value)
+        } else {
+            onSearch?.(value)
+            setLocalLoading(false)
+        }
     }
 
     const handleSelect = (option: DropdownOption | undefined) => {
-        if (selectedOption?.key !== option?.key) {
+        if (selectedOption?.title !== option?.title) {
             setSelectedOption(option)
-            setSearch(option?.value)
+            setSearch(option?.title)
             onSelect?.(option)
         }
 
@@ -124,9 +134,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         }
 
         if (value) {
-            setSearch(value.value)
+            setSearch(value.title)
             setSelectedOption(
-                options?.find(({ key }) => value === key) ?? value ?? undefined
+                options?.find(({ title }) => value === title) ??
+                    value ??
+                    undefined
             )
         }
     }, [value])
@@ -159,7 +171,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                     <input
                         type={'text'}
                         value={search || ''}
-                        defaultValue={selectedOption?.value ?? value?.name}
+                        defaultValue={selectedOption?.title ?? value?.name}
                         className={styles.searchInput}
                         placeholder={placeholder ?? t('placeholder')}
                         onMouseMove={(e) => e.stopPropagation()}
@@ -169,7 +181,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                     <span className={styles.arrow}>
                         {loading || localLoading ? (
                             <Spinner className={styles.loader} />
-                        ) : clearable && selectedOption?.key ? (
+                        ) : clearable && selectedOption?.title ? (
                             <button
                                 className={styles.clear}
                                 type={'button'}
@@ -204,11 +216,11 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                 {t('notFound')}
                             </li>
                         )}
-                        {options?.map((option) => (
+                        {options?.map((option, i) => (
                             <li
-                                key={option.key}
+                                key={`option${i}`}
                                 className={cn(
-                                    option.key === selectedOption?.key &&
+                                    option.title === selectedOption?.title &&
                                         option?.type === selectedOption?.type &&
                                         styles.active
                                 )}
@@ -227,7 +239,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                                 height={26}
                                             />
                                         )}
-                                        <span>{option.value}</span>
+                                        <span>{option.title}</span>
                                     </div>
                                     {option?.description && (
                                         <div className={styles.description}>

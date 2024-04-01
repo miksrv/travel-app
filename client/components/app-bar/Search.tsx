@@ -52,8 +52,8 @@ const Search: React.FC<SearchProps> = () => {
                 return {
                     description: address.join(', '),
                     image: categoryImage(item.category?.name),
-                    key: item.id,
-                    value: item.title
+                    title: item.title,
+                    value: item.id
                 }
             }),
         [data?.items]
@@ -64,7 +64,7 @@ const Search: React.FC<SearchProps> = () => {
     }
 
     const handleSelectLocation = async (value: DropdownOption) => {
-        await router.push(`/places/${value.key}`)
+        await router.push(`/places/${value.value}`)
     }
 
     return (

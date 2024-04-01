@@ -14,18 +14,17 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
-import CategoryControl from '@/components/interactive-map/CategoryControl'
-import CoordinatesControl from '@/components/interactive-map/CoordinatesControl'
-import LayerSwitcherControl from '@/components/interactive-map/LayerSwitcherControl'
-import MarkerPhoto from '@/components/interactive-map/MarkerPhoto'
-import MarkerPoint from '@/components/interactive-map/MarkerPoint'
-import MarkerUser from '@/components/interactive-map/MarkerUser'
-import SearchControl from '@/components/interactive-map/SearchControl'
-import HeatmapLayer from '@/components/interactive-map/heatmap-layer/HeatmapLayer'
-
 import { LOCAL_STORGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
+import CategoryControl from './CategoryControl'
+import CoordinatesControl from './CoordinatesControl'
+import LayerSwitcherControl from './LayerSwitcherControl'
+import MarkerPhoto from './MarkerPhoto'
+import MarkerPoint from './MarkerPoint'
+import MarkerUser from './MarkerUser'
+import HeatmapLayer from './heatmap-layer/HeatmapLayer'
+import SearchControl from './search-control/SearchControl'
 import styles from './styles.module.sass'
 
 export const MapAdditionalLayers = {
@@ -53,7 +52,7 @@ export type MapLayersType = (typeof MapLayers)[keyof typeof MapLayers]
 export type MapPositionType = {
     lat: number
     lon: number
-    zoom: number
+    zoom?: number
 }
 
 type MapProps = {
@@ -148,10 +147,13 @@ const InteractiveMap: React.FC<MapProps> = ({
         onChangeMapType?.(type)
     }
 
-    const handleSelectSearch = (coordinates: ApiTypes.LatLonCoordinate) => {
+    const handleSelectSearch = (
+        coordinates: ApiTypes.LatLonCoordinate,
+        zoom?: number
+    ) => {
         mapRef.current?.setView(
             [coordinates.lat, coordinates.lon],
-            DEFAULT_MAP_ZOOM
+            zoom ?? DEFAULT_MAP_ZOOM
         )
     }
 

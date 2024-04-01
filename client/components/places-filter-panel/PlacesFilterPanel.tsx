@@ -26,7 +26,7 @@ interface PlacesFilterPanelProps {
         value: string | number | undefined
     ) => void
     onOpenOptions?: (title?: string) => void
-    onChangeLocation?: (value?: ApiTypes.PlaceLocationType) => void
+    onChangeLocation?: (option?: ApiTypes.PlaceLocationType) => void
 }
 
 type OpenedOptionsType = 'sort' | 'order' | 'category' | undefined
@@ -129,24 +129,24 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     const locationOptions = useMemo(
         () => [
             ...(addressData?.countries?.map((item) => ({
-                key: item.id,
+                title: item.title,
                 type: ApiTypes.LocationType.Country,
-                value: item.title
+                value: item.id
             })) || []),
             ...(addressData?.regions?.map((item) => ({
-                key: item.id,
+                title: item.title,
                 type: ApiTypes.LocationType.Region,
-                value: item.title
+                value: item.id
             })) || []),
             ...(addressData?.districts?.map((item) => ({
-                key: item.id,
+                title: item.title,
                 type: ApiTypes.LocationType.District,
-                value: item.title
+                value: item.id
             })) || []),
             ...(addressData?.cities?.map((item) => ({
-                key: item.id,
+                title: item.title,
                 type: ApiTypes.LocationType.Locality,
-                value: item.title
+                value: item.id
             })) || [])
         ],
         [addressData]

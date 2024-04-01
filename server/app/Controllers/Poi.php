@@ -27,8 +27,8 @@ class Poi extends ResourceController {
             ->where([
                 'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
-                'lon <=' =>  $bounds[2],
-                'lat <=' =>  $bounds[3],
+                'lon <=' => $bounds[2],
+                'lat <=' => $bounds[3],
             ]);
 
         if (isset($categories)) {
