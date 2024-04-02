@@ -3,27 +3,34 @@
 import { useLeafletContext } from '@react-leaflet/core'
 import { Point } from 'leaflet'
 import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 
+import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import { convertDMS, round } from '@/functions/helpers'
+import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
+import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
 
-import googleLogo from '@/public/images/google-logo.png'
-import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
-import yandexLogo from '@/public/images/yandex-logo.png'
+import { LOCAL_STORGE } from '@/functions/constants'
+import { convertDMS } from '@/functions/coordinates'
+import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
 const ContextMenu: React.FC = () => {
-    const { t, i18n } = useTranslation('common', {
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
+    const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.contextMenu'
     })
+
+    const [, setCoordinates] = useLocalStorage<MapPositionType>(
+        LOCAL_STORGE.MAP_CENTER
+    )
 
     const getContext = useLeafletContext()
     const mapContext = useRef<ReturnType<typeof useLeafletContext>>(getContext)
@@ -145,69 +152,46 @@ const ContextMenu: React.FC = () => {
                             {convertDMS(pointCords?.lat!, pointCords?.lon!)}
                         </Button>
                     </li>
-                    <li>
-                        <Link
-                            href={`https://yandex.ru/maps/?pt=${
-                                pointCords?.lon
-                            },${
-                                pointCords?.lat
-                            }&spn=0.1,0.1&l=sat,skl&z=${mapContext.current.map?.getZoom()}`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={yandexLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                                style={{ marginRight: '1px' }}
-                            />{' '}
-                            {t('openYandex')}
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={`https://maps.google.com/maps?ll=${
-                                pointCords?.lat
-                            },${pointCords?.lon}&q=${pointCords?.lat},${
-                                pointCords?.lon
-                            }&z=${mapContext.current.map?.getZoom()}&spn=0.1,0.1&t=h&hl=${
-                                i18n.language
-                            }`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={googleLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                            />
-                            {t('openGoogle')}
-                        </Link>
-                    </li>
-                    <li>
-                        <Link
-                            href={`https://wikimapia.org/#lang=${
-                                i18n.language
-                            }&lat=${pointCords?.lat}&lon=${
-                                pointCords?.lon
-                            }&z=${mapContext.current.map?.getZoom()}&m=w`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={wikimapiaLogo.src}
-                                width={13}
-                                height={13}
-                                style={{
-                                    marginLeft: '2px',
-                                    marginRight: '6px'
+                    {isAuth && (
+                        <li className={styles.divider}>
+                            <Link
+                                href={'/places/create'}
+                                title={t('addNewPlace')}
+                                onClick={() => {
+                                    setCoordinates({
+                                        lat: pointCords?.lat!,
+                                        lon: pointCords?.lon!,
+                                        zoom: 18
+                                    })
                                 }}
-                                alt={''}
-                            />
-                            {t('openWikimapia')}
-                        </Link>
+                            >
+                                {t('addNewPlace')}
+                            </Link>
+                        </li>
+                    )}
+                    <li>
+                        <Yandex
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
+                    </li>
+                    <li>
+                        <Google
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
+                    </li>
+                    <li>
+                        <Wikimapia
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
                     </li>
                 </ul>
             </Container>

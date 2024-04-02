@@ -10,15 +10,13 @@ import Icon from '@/ui/icon'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 
+import MapLinks from '@/components/map-links'
 import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
 
 import { categoryImage } from '@/functions/categories'
-import { convertDMS, formatDate } from '@/functions/helpers'
-
-import googleLogo from '@/public/images/google-logo.png'
-import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
-import yandexLogo from '@/public/images/yandex-logo.png'
+import { convertDMS } from '@/functions/coordinates'
+import { formatDate } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -38,7 +36,7 @@ interface PlaceInformationProps {
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
-    const { t, i18n } = useTranslation('common', {
+    const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeInformation'
     })
 
@@ -152,48 +150,11 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         >
                             {convertDMS(place?.lat || 0, place?.lon || 0)}
                         </Link>
-                        <Link
-                            className={styles.mapLink}
-                            color={'inherit'}
-                            target={'_blank'}
-                            title={`${place?.title} ${t('linkYandexMapTitle')}`}
-                            href={`https://yandex.ru/maps/?pt=${place?.lon},${place?.lat}&spn=0.1,0.1&l=sat,skl&z=14`}
-                        >
-                            <Image
-                                src={yandexLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                            />
-                        </Link>
-                        <Link
-                            className={styles.mapLink}
-                            target={'_blank'}
-                            color={'inherit'}
-                            title={`${place?.title} ${t('linkGoogleMapTitle')}`}
-                            href={`https://maps.google.com/maps?ll=${place?.lat},${place?.lon}&q=${place?.lat},${place?.lon}&spn=0.1,0.1&amp;t=h&amp;hl=${i18n.language}`}
-                        >
-                            <Image
-                                src={googleLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                            />
-                        </Link>
-                        <Link
-                            className={styles.mapLink}
-                            target={'_blank'}
-                            color={'inherit'}
-                            title={`${place?.title} ${t('linkWikimapiaTitle')}`}
-                            href={`https://wikimapia.org/#lang=${i18n.language}&lat=${place?.lat}&lon=${place?.lon}&z=13&m=w`}
-                        >
-                            <Image
-                                src={wikimapiaLogo.src}
-                                width={13}
-                                height={13}
-                                alt={''}
-                            />
-                        </Link>
+                        <MapLinks
+                            title={place?.title}
+                            lat={place?.lat!}
+                            lon={place?.lon!}
+                        />
                     </div>
                 </li>
                 <li>

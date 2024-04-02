@@ -4,7 +4,7 @@ import { Marker } from 'react-leaflet'
 
 import { ApiTypes } from '@/api/types'
 
-import { convertDMS } from '@/functions/helpers'
+import { convertDMS } from '@/functions/coordinates'
 
 interface PlaceMarkProps extends ApiTypes.LatLonCoordinate {
     onClick?: () => void

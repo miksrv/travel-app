@@ -5,6 +5,7 @@ import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import 'leaflet.heat'
 import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
+import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -107,6 +108,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     onPhotoClick,
     ...props
 }) => {
+    const router = useRouter()
     const mapRef = useRef<Map | any>()
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
@@ -155,7 +157,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         onChangeMapType?.(type)
     }
 
-    const handleSelectSearch = (
+    const handleSelectSearch = async (
         coordinates: ApiTypes.LatLonCoordinate,
         zoom?: number,
         showPosition?: boolean
@@ -166,8 +168,25 @@ const InteractiveMap: React.FC<MapProps> = ({
         )
 
         if (showPosition) {
-            setPlaceMark(coordinates)
+            await handleSetPlaceMarker(coordinates)
         }
+    }
+
+    const handleSetPlaceMarker = async (
+        coords: ApiTypes.LatLonCoordinate | undefined
+    ) => {
+        setPlaceMark(coords)
+
+        const url = new URL(window?.location?.href)
+        const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
+        const param = coords ? `?m=${coords.lat},${coords.lon}` : ''
+        const hash = match
+            ? url.hash.replace(match[0], param)
+            : url.hash + param
+
+        url.hash = hash
+
+        await router.replace(url.toString())
     }
 
     const handleToggleFullscreen = async () => {
@@ -197,6 +216,19 @@ const InteractiveMap: React.FC<MapProps> = ({
     }
 
     useEffect(() => {
+        const url = new URL(window?.location?.href)
+        const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
+
+        if (match && !placeMark) {
+            const [, lat, lon] = match
+            setPlaceMark({
+                lat: Number(lat),
+                lon: Number(lon)
+            })
+        } else if (!match && placeMark) {
+            setPlaceMark(undefined)
+        }
+
         if (typeof coordinates !== 'undefined') {
             if (
                 !readyStorage &&
@@ -215,7 +247,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 
             setReadyStorage(true)
         }
-    }, [props.center, readyStorage, coordinates])
+    }, [props.center, readyStorage, coordinates, placeMark])
 
     useEffect(() => {
         if (props.center || props.zoom) {
@@ -229,13 +261,6 @@ const InteractiveMap: React.FC<MapProps> = ({
     useEffect(() => {
         onChangeMapType?.(mapType)
     }, [])
-
-    // TODO Change layer
-    // useEffect(() => {
-    //     if (layer && Object.values(MapLayers).includes(layer)) {
-    //
-    //     }
-    // }, [])
 
     return (
         <div className={styles.mapContainer}>
@@ -300,7 +325,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {placeMark && (
                     <PlaceMark
                         {...placeMark}
-                        onClick={() => setPlaceMark(undefined)}
+                        onClick={() => handleSetPlaceMarker(undefined)}
                     />
                 )}
 
@@ -321,7 +346,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {enableSearch && (
                     <SearchControl
                         onSelectResult={handleSelectSearch}
-                        onClear={() => setPlaceMark(undefined)}
+                        onClear={() => handleSetPlaceMarker(undefined)}
                     />
                 )}
 
@@ -380,7 +405,9 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 <div className={styles.bottomControls}>
                     {enableCoordsControl && (
-                        <CoordinatesControl coordinates={cursorPosition} />
+                        <CoordinatesControl
+                            coordinates={cursorPosition ?? mapPosition}
+                        />
                     )}
                 </div>
 

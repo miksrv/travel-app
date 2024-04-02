@@ -38,7 +38,7 @@ const Dialog: React.FC<DialogProps> = ({
 
     const handleResize = () => {
         // const viewportWidth = window.innerWidth
-        const viewportHeight = window.innerHeight
+        const viewportHeight = window?.innerHeight
 
         // const dialogWidth = dialogRef?.current?.offsetWidth || 0
         const dialogHeight = dialogRef?.current?.offsetHeight || 0
