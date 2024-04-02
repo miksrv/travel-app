@@ -1,4 +1,4 @@
-import L from 'leaflet'
+import { ApiTypes } from '@/api/types'
 
 const reInteger = '\\d+'
 const reFractional = '\\d+(?:\\.\\d+)?'
@@ -144,7 +144,7 @@ export const CoordinatesD = {
                     }°`
                 }
             },
-            getLatLng: function () {
+            getLatLng: function (): ApiTypes.LatLonCoordinate {
                 let lat = this.latDeg
                 if (this.latIsSouth) {
                     lat = -lat
@@ -153,7 +153,7 @@ export const CoordinatesD = {
                 if (this.lonIsWest) {
                     lon = -lon
                 }
-                return L.latLng(lat, lon)
+                return { lat: lat, lon: lon }
             },
             isValid: function () {
                 return (
@@ -234,7 +234,7 @@ export const CoordinatesDM = {
                     }°${this.lonMin}′`
                 }
             },
-            getLatLng: function () {
+            getLatLng: function (): ApiTypes.LatLonCoordinate {
                 let lat = this.latDeg + this.latMin / 60
                 if (this.latIsSouth) {
                     lat = -lat
@@ -243,7 +243,7 @@ export const CoordinatesDM = {
                 if (this.lonIsWest) {
                     lon = -lon
                 }
-                return L.latLng(lat, lon)
+                return { lat: lat, lon: lon }
             },
             isValid: function () {
                 return (
@@ -352,7 +352,7 @@ export const CoordinatesDMS = {
                     }°${this.lonMin}′${this.lonSec}″`
                 }
             },
-            getLatLng: function () {
+            getLatLng: function (): ApiTypes.LatLonCoordinate {
                 let lat = this.latDeg + this.latMin / 60 + this.latSec / 3600
                 if (this.latIsSouth) {
                     lat = -lat
@@ -361,7 +361,7 @@ export const CoordinatesDMS = {
                 if (this.lonIsWest) {
                     lon = -lon
                 }
-                return L.latLng(lat, lon)
+                return { lat: lat, lon: lon }
             },
             isValid: function () {
                 return (
@@ -486,8 +486,8 @@ export const CoordinatesDSigned = {
                     longitude: `${this.lonDegSigned}°`
                 }
             },
-            getLatLng: function () {
-                return L.latLng(this.latDegSigned, this.lonDegSigned)
+            getLatLng: function (): ApiTypes.LatLonCoordinate {
+                return { lat: this.latDegSigned, lon: this.lonDegSigned }
             },
             isValid: function () {
                 return (

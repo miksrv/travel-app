@@ -100,7 +100,7 @@ const SearchControl: React.FC<SearchControlProps> = ({
                                 title: `${coordStrings.latitude} ${coordStrings.longitude}`,
                                 value: {
                                     lat: latLng.lat,
-                                    lon: latLng.lng
+                                    lon: latLng.lon
                                 }
                             }
                         })

@@ -74,13 +74,36 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(true)
     }
 
+    const updateUrlCoordinates = async (
+        lat?: number,
+        lon?: number,
+        zoom?: number
+    ) => {
+        const url = new URL(window?.location?.href)
+        const hash = url.hash
+
+        if (!lat || !lon) {
+            return
+        }
+
+        const match = hash.match(/#([\d.]+),([\d.]+),(\d+)/)
+
+        if (match) {
+            url.hash = hash.replace(/#[^?]*/, `#${lat},${lon},${zoom}`)
+        } else {
+            url.hash = `#${lat},${lon},${zoom}`
+        }
+
+        await router.replace(url.toString())
+    }
+
     const debounceSetMapBounds = useCallback(
-        debounce((bounds: LatLngBounds, zoom: number) => {
+        debounce(async (bounds: LatLngBounds, zoom: number) => {
             const mapCenter = bounds.getCenter()
             const lat = round(mapCenter.lat, 4)
             const lon = round(mapCenter.lng, 4)
 
-            router.replace(`/map#${lat},${lon},${zoom}`)
+            await updateUrlCoordinates(lat, lon, zoom)
 
             setMapBounds(bounds.toBBoxString())
         }, 500),

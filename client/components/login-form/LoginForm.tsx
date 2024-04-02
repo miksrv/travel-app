@@ -134,7 +134,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     }, [authData])
 
     useEffect(() => {
-        if (serviceData?.redirect) {
+        if (serviceData?.redirect && typeof window !== 'undefined') {
             window.location.href = serviceData.redirect
         }
     }, [serviceData?.redirect])
