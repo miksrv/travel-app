@@ -3,24 +3,34 @@
 import { useLeafletContext } from '@react-leaflet/core'
 import { Point } from 'leaflet'
 import { useTranslation } from 'next-i18next'
+import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 
+import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
+import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
 
+import { LOCAL_STORGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
 
 const ContextMenu: React.FC = () => {
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.contextMenu'
     })
+
+    const [, setCoordinates] = useLocalStorage<MapPositionType>(
+        LOCAL_STORGE.MAP_CENTER
+    )
 
     const getContext = useLeafletContext()
     const mapContext = useRef<ReturnType<typeof useLeafletContext>>(getContext)
@@ -142,6 +152,23 @@ const ContextMenu: React.FC = () => {
                             {convertDMS(pointCords?.lat!, pointCords?.lon!)}
                         </Button>
                     </li>
+                    {isAuth && (
+                        <li className={styles.divider}>
+                            <Link
+                                href={'/places/create'}
+                                title={t('addNewPlace')}
+                                onClick={() => {
+                                    setCoordinates({
+                                        lat: pointCords?.lat!,
+                                        lon: pointCords?.lon!,
+                                        zoom: 18
+                                    })
+                                }}
+                            >
+                                {t('addNewPlace')}
+                            </Link>
+                        </li>
+                    )}
                     <li>
                         <Yandex
                             showTitle={true}

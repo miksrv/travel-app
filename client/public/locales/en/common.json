@@ -36,7 +36,8 @@
                 "allCategories": "All categories of geotags"
             },
             "contextMenu": {
-                "copyToClipboard": "Copy to clipboard"
+                "copyToClipboard": "Copy to clipboard",
+                "addNewPlace": "Add a geotag"
             },
             "layerSwitcher": {
                 "MapBox": "Scheme (MabBox)",

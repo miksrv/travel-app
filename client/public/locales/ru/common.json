@@ -36,7 +36,8 @@
                 "allCategories": "Все категории геометок"
             },
             "contextMenu": {
-                "copyToClipboard": "Копировать в буфер обмена"
+                "copyToClipboard": "Копировать в буфер обмена",
+                "addNewPlace": "Добавить геометку"
             },
             "layerSwitcher": {
                 "MapBox": "Схема (MabBox)",
