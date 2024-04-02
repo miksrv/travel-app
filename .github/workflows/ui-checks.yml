@@ -72,9 +72,9 @@ jobs:
           NEXT_PUBLIC_SITE_LINK = '${{ secrets.NEXT_PUBLIC_SITE_LINK }}'" > .env
         working-directory: client
 
-#      - name: UI Unit Tests
-#        run: yarn test
-#        working-directory: client
+      - name: UI Unit Tests
+        run: yarn test
+        working-directory: client
 
       - if: ${{ steps.cache-build.outputs.cache-hit != 'true' }}
         name: Build UI
