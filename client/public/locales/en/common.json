@@ -35,6 +35,12 @@
             "categoriesSwitcher": {
                 "allCategories": "All categories of geotags"
             },
+            "contextMenu": {
+                "copyToClipboard": "Copy to clipboard",
+                "openYandex": "Open in Yandex",
+                "openGoogle": "Open in Google",
+                "openWikimapia": "Open in Wikimapia"
+            },
             "layerSwitcher": {
                 "MapBox": "Scheme (MabBox)",
                 "OSM": "Scheme (Street Map)",
