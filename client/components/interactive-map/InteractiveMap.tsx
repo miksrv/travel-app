@@ -405,7 +405,9 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 <div className={styles.bottomControls}>
                     {enableCoordsControl && (
-                        <CoordinatesControl coordinates={cursorPosition} />
+                        <CoordinatesControl
+                            coordinates={cursorPosition ?? mapPosition}
+                        />
                     )}
                 </div>
 

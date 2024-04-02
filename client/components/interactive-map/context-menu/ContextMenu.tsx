@@ -3,8 +3,6 @@
 import { useLeafletContext } from '@react-leaflet/core'
 import { Point } from 'leaflet'
 import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
-import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
 
 import Button from '@/ui/button'
@@ -12,17 +10,15 @@ import Container from '@/ui/container'
 
 import { ApiTypes } from '@/api/types'
 
+import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
+
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
-
-import googleLogo from '@/public/images/google-logo.png'
-import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
-import yandexLogo from '@/public/images/yandex-logo.png'
 
 import styles from './styles.module.sass'
 
 const ContextMenu: React.FC = () => {
-    const { t, i18n } = useTranslation('common', {
+    const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.contextMenu'
     })
 
@@ -147,68 +143,28 @@ const ContextMenu: React.FC = () => {
                         </Button>
                     </li>
                     <li>
-                        <Link
-                            href={`https://yandex.ru/maps/?pt=${
-                                pointCords?.lon
-                            },${
-                                pointCords?.lat
-                            }&spn=0.1,0.1&l=sat,skl&z=${mapContext.current.map?.getZoom()}`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={yandexLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                                style={{ marginRight: '1px' }}
-                            />{' '}
-                            {t('openYandex')}
-                        </Link>
+                        <Yandex
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
                     </li>
                     <li>
-                        <Link
-                            href={`https://maps.google.com/maps?ll=${
-                                pointCords?.lat
-                            },${pointCords?.lon}&q=${pointCords?.lat},${
-                                pointCords?.lon
-                            }&z=${mapContext.current.map?.getZoom()}&spn=0.1,0.1&t=h&hl=${
-                                i18n.language
-                            }`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={googleLogo.src}
-                                width={16}
-                                height={16}
-                                alt={''}
-                            />
-                            {t('openGoogle')}
-                        </Link>
+                        <Google
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
                     </li>
                     <li>
-                        <Link
-                            href={`https://wikimapia.org/#lang=${
-                                i18n.language
-                            }&lat=${pointCords?.lat}&lon=${
-                                pointCords?.lon
-                            }&z=${mapContext.current.map?.getZoom()}&m=w`}
-                            title={''}
-                            target={'_blank'}
-                        >
-                            <Image
-                                src={wikimapiaLogo.src}
-                                width={13}
-                                height={13}
-                                style={{
-                                    marginLeft: '2px',
-                                    marginRight: '6px'
-                                }}
-                                alt={''}
-                            />
-                            {t('openWikimapia')}
-                        </Link>
+                        <Wikimapia
+                            showTitle={true}
+                            lat={pointCords?.lat!}
+                            lon={pointCords?.lon!}
+                            zoom={mapContext.current.map?.getZoom()}
+                        />
                     </li>
                 </ul>
             </Container>

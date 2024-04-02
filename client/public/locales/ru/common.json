@@ -36,10 +36,7 @@
                 "allCategories": "Все категории геометок"
             },
             "contextMenu": {
-                "copyToClipboard": "Копировать в буфер обмена",
-                "openYandex": "Открыть в Yandex",
-                "openGoogle": "Открыть в Google",
-                "openWikimapia": "Открыть в Wikimapia"
+                "copyToClipboard": "Копировать в буфер обмена"
             },
             "layerSwitcher": {
                 "MapBox": "Схема (MabBox)",
@@ -71,6 +68,11 @@
             "loginGoogle": "Войти через Google",
             "loginYandex": "Войти через Яндекс"
         },
+        "mapLinks": {
+            "yandexMap": "на Яндекс картах",
+            "googleMap": "на Google картах",
+            "wikimapiaMap": "на карте Wikimapia"
+        },
         "pagePlace": {
             "edit": {
                 "pageTitle": "Редактирование",
@@ -98,9 +100,6 @@
                 "editTime": "Отредактировано:",
                 "address": "Адрес:",
                 "addressLinkTitle": "Интересные места:",
-                "linkYandexMapTitle": "на Яндекс картах",
-                "linkGoogleMapTitle": "на Google картах",
-                "linkWikimapiaTitle": "на карте Wikimapia",
                 "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "placePhotos": {

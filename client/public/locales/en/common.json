@@ -36,10 +36,7 @@
                 "allCategories": "All categories of geotags"
             },
             "contextMenu": {
-                "copyToClipboard": "Copy to clipboard",
-                "openYandex": "Open in Yandex",
-                "openGoogle": "Open in Google",
-                "openWikimapia": "Open in Wikimapia"
+                "copyToClipboard": "Copy to clipboard"
             },
             "layerSwitcher": {
                 "MapBox": "Scheme (MabBox)",
@@ -71,6 +68,11 @@
             "loginGoogle": "Login with Google",
             "loginYandex": "Login with Yandex"
         },
+        "mapLinks": {
+            "yandexMap": "on Yandex maps",
+            "googleMap": "on Google Maps",
+            "wikimapiaMap": "on the Wikimapia map"
+        },
         "pagePlace": {
             "edit": {
                 "pageTitle": "Editing",
@@ -97,9 +99,6 @@
                 "editTime": "Edited:",
                 "address": "Address:",
                 "addressLinkTitle": "Points of Interest::",
-                "linkYandexMapTitle": "on Yandex maps",
-                "linkGoogleMapTitle": "on Google Maps",
-                "linkWikimapiaTitle": "on the Wikimapia map",
                 "dateFormat": "MMMM D, YYYY, h:mm A"
             },
             "placePhotos": {
