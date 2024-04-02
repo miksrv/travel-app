@@ -98,6 +98,12 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         }
     }
 
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter' && options?.length && options?.length >= 1) {
+            handleSelect(options?.[0])
+        }
+    }
+
     const handleSelect = (option: DropdownOption | undefined) => {
         if (selectedOption?.title !== option?.title) {
             setSelectedOption(option)
@@ -180,6 +186,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         placeholder={placeholder ?? t('placeholder')}
                         onMouseMove={(e) => e.stopPropagation()}
                         onWheelCapture={(e) => e.stopPropagation()}
+                        onKeyDown={handleKeyPress}
                         onChange={handleChangeInput}
                     />
                     <span className={styles.arrow}>
