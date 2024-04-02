@@ -12,7 +12,8 @@ import Container from '@/ui/container'
 
 import { ApiTypes } from '@/api/types'
 
-import { convertDMS, round } from '@/functions/helpers'
+import { convertDMS } from '@/functions/coordinates'
+import { round } from '@/functions/helpers'
 
 import googleLogo from '@/public/images/google-logo.png'
 import wikimapiaLogo from '@/public/images/wikimapia-logo.png'

@@ -2,8 +2,86 @@ import L from 'leaflet'
 
 const reInteger = '\\d+'
 const reFractional = '\\d+(?:\\.\\d+)?'
-export const reSignedFractional = '-?\\d+(?:\\.\\d+)?'
-export const reHemisphere = '[NWSE]'
+const reSignedFractional = '-?\\d+(?:\\.\\d+)?'
+const reHemisphere = '[NWSE]'
+
+export const toDegreesMinutesAndSeconds = (coordinate: number): string => {
+    const absolute = Math.abs(coordinate)
+    const degrees = Math.floor(absolute)
+    const minutesNotTruncated = (absolute - degrees) * 60
+    const minutes = Math.floor(minutesNotTruncated)
+    const seconds = Math.floor((minutesNotTruncated - minutes) * 60)
+
+    return `${degrees}°${minutes}’${seconds}"`
+}
+
+export const convertDMS = (lat: number, lon: number): string => {
+    const latitude = toDegreesMinutesAndSeconds(lat)
+    const latitudeCardinal = lat >= 0 ? 'N' : 'S'
+
+    const longitude = toDegreesMinutesAndSeconds(lon)
+    const longitudeCardinal = lon >= 0 ? 'E' : 'W'
+
+    return `${latitude}${latitudeCardinal} ${longitude}${longitudeCardinal}`
+}
+
+const regexps = {
+    easternHemishphere: /[EeЕе]|[ВвB] *[Дд]?/gu, // second Ее is cyrillic
+    northernHemishphere: /[Nn]|[СсCc] *[Шш]?/gu,
+    southernHemishphere: /[Ss]|[Юю] *[Шш]?/gu,
+    // This regexp wag generated using script at https://gist.github.com/wladich/3d15edc8fcd8b735ac883ef60fe10bfe
+    // It matches all unicode characters except Lu (Uppercase Letter), Ll (Lowercase Letter)
+    // and [0123456789,.-]. It ignores unassigned code points (Cn) and characters that are removed after NFKC
+    // normalization.
+    // Manually added: "oO" (lat), "оО" (rus)
+    symbols:
+        // eslint-disable-next-line no-control-regex,no-misleading-character-class,max-len
+        /[OoОо\u0000-\u002b\u002f\u003a-\u0040\u005b-\u0060\u007b-\u00bf\u00d7\u00f7\u01bb\u01c0-\u01cc\u0294\u02b9-\u036f\u0375\u03f6\u0482-\u0489\u0559-\u055f\u0589-\u109f\u10fb\u10fc\u1100-\u139f\u1400-\u1c7f\u1cc0-\u1cff\u1d2f-\u1d6a\u1dc0-\u1dff\u1f88-\u1f8f\u1f98-\u1f9f\u1fa8-\u1faf\u1fbc-\u1fc1\u1fcc-\u1fcf\u1ffc-\u2131\u213a-\u214d\u214f-\u2182\u2185-\u2bff\u2ce5-\u2cea\u2cef-\u2cf1\u2cf9-\u2cff\u2d30-\ua63f\ua66e-\ua67f\ua69e-\ua721\ua788-\ua78a\ua78f\ua7f7-\ua7f9\ua7fb-\uab2f\uab5b-\uab5f\uabc0-\uffff]/gu,
+    westernHemishphere: /[Ww]|[Зз] *[Дд]?/gu
+}
+
+export const normalizeInput = (inp: string): string => {
+    let s = inp.normalize('NFKC') // convert subscripts and superscripts to normal chars
+    s = ' ' + s + ' '
+    // replace everything that is not letter, number, minus, dot or comma to space
+    s = s.replace(regexps.symbols, ' ')
+    // remove all dots and commas if they are not between digits
+    s = s.replace(/[,.](?=\D)/gu, ' ')
+    s = s.replace(/(\D)[,.]/gu, '$1 ') // lookbehind is not supported in all browsers
+    // if dot is likely to be used as decimal separator, remove all commas
+    if (s.includes('.')) {
+        s = s.replace(/,/gu, ' ')
+    } else {
+        // otherwise comma is decimal separator
+        s = s.replace(/,/gu, '.')
+    }
+    s = s.replace(/-(?=\D)/gu, ' ') // remove all minuses that are not in the beginning of number
+    s = s.replace(/([^ ])-/gu, '$1 ') // lookbehind is not supported in all browsers
+
+    s = s.replace(regexps.northernHemishphere, ' N ')
+    s = s.replace(regexps.southernHemishphere, ' S ')
+    s = s.replace(regexps.westernHemishphere, ' W ')
+    s = s.replace(regexps.easternHemishphere, ' E ')
+
+    s = s.replace(/ +/gu, ' ') // compress whitespaces
+    s = s.trim()
+
+    return s
+}
+
+export const isCoordinates = (value: string): boolean => {
+    const coordFieldRe = new RegExp(
+        `^((${reHemisphere})|(${reSignedFractional}))$`,
+        'u'
+    )
+    const coordNumbersFieldRe = new RegExp(`^(${reSignedFractional})$`, 'u')
+    const fields = normalizeInput(value).split(' ')
+    return (
+        fields.length > 1 &&
+        fields.every((field) => field.match(coordFieldRe)) &&
+        fields.some((field) => field.match(coordNumbersFieldRe))
+    )
+}
 
 const getLatitudeLetter = (latIsSouth: boolean) => (latIsSouth ? 'S' : 'N')
 
@@ -227,6 +305,7 @@ export const CoordinatesDM = {
                 coords.push(coord)
             }
         }
+
         if (coords.length > 0) {
             return { coordinates: coords }
         }

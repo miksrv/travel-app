@@ -14,7 +14,8 @@ import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
 
 import { categoryImage } from '@/functions/categories'
-import { convertDMS, formatDate } from '@/functions/helpers'
+import { convertDMS } from '@/functions/coordinates'
+import { formatDate } from '@/functions/helpers'
 
 import googleLogo from '@/public/images/google-logo.png'
 import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
