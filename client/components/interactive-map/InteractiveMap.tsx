@@ -14,8 +14,6 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
-import PlaceMark from '@/components/interactive-map/place-mark/PlaceMark'
-
 import { LOCAL_STORGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -26,7 +24,9 @@ import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerPhoto from './MarkerPhoto'
 import MarkerPoint from './MarkerPoint'
 import MarkerUser from './MarkerUser'
+import ContextMenu from './context-menu/ContextMenu'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
+import PlaceMark from './place-mark/PlaceMark'
 import SearchControl from './search-control/SearchControl'
 import styles from './styles.module.sass'
 
@@ -70,6 +70,7 @@ type MapProps = {
     enableCoordsControl?: boolean
     enableCategoryControl?: boolean
     enableLayersSwitcher?: boolean
+    enableContextMenu?: boolean
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
@@ -96,6 +97,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     enableCoordsControl,
     enableCategoryControl,
     enableLayersSwitcher,
+    enableContextMenu,
     storeMapKey,
     fullMapLink,
     userLatLon,
@@ -322,6 +324,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                         onClear={() => setPlaceMark(undefined)}
                     />
                 )}
+
+                {enableContextMenu && <ContextMenu />}
 
                 <div className={styles.leftControls}>
                     {enableFullScreen && (

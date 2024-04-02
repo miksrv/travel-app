@@ -35,6 +35,12 @@
             "categoriesSwitcher": {
                 "allCategories": "Все категории геометок"
             },
+            "contextMenu": {
+                "copyToClipboard": "Копировать в буфер обмена",
+                "openYandex": "Открыть в Yandex",
+                "openGoogle": "Открыть в Google",
+                "openWikimapia": "Открыть в Wikimapia"
+            },
             "layerSwitcher": {
                 "MapBox": "Схема (MabBox)",
                 "OSM": "Схема (Street Map)",

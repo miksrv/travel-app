@@ -184,6 +184,7 @@ const MapPage: NextPage<MapPageProps> = () => {
                     enableFullScreen={true}
                     enableCoordsControl={true}
                     enableLayersSwitcher={true}
+                    enableContextMenu={true}
                     enableCategoryControl={mapType === 'Places'}
                     loading={placesLoading || photosLoading}
                     places={mapType === 'Places' ? poiListData?.items : []}
