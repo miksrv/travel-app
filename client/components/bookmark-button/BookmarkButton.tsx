@@ -23,11 +23,16 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
     const [setBookmark, { isLoading: bookmarkPutLoading }] =
         API.useBookmarksPutPlaceMutation()
 
-    const { data: bookmarkData, isLoading: bookmarksLoading } =
-        API.useBookmarksGetPlaceQuery(
-            { placeId: placeId! },
-            { skip: !placeId || !isAuth }
-        )
+    const {
+        data: bookmarkData,
+        isLoading: bookmarksLoading,
+        isFetching
+    } = API.useBookmarksGetPlaceQuery(
+        { placeId: placeId! },
+        { skip: !placeId || !isAuth }
+    )
+
+    const loading = bookmarkPutLoading || bookmarksLoading || isFetching
 
     const handleButtonClick = (event: React.MouseEvent) => {
         event.stopPropagation()
@@ -45,8 +50,8 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
             mode={'secondary'}
             icon={bookmarkData?.result ? 'HeartFull' : 'HeartEmpty'}
             className={styles.bookmarkButton}
-            disabled={!placeId || bookmarkPutLoading || bookmarksLoading}
-            loading={bookmarkPutLoading || bookmarksLoading}
+            disabled={!placeId || loading}
+            loading={loading}
             onClick={handleButtonClick}
         />
     )
