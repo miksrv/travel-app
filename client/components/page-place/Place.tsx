@@ -171,6 +171,12 @@ const Place: React.FC<PlaceProps> = ({
 
             <PlaceInformation place={place} />
 
+            <SocialRating
+                placeId={place?.id}
+                placeUrl={pagePlaceUrl}
+                ratingValue={ratingData?.vote}
+            />
+
             <PlacePhotos
                 photos={photoList}
                 placeId={place?.id}
@@ -180,12 +186,6 @@ const Place: React.FC<PlaceProps> = ({
                 placeId={place?.id}
                 content={place?.content}
                 tags={place?.tags}
-            />
-
-            <SocialRating
-                placeId={place?.id}
-                placeUrl={pagePlaceUrl}
-                ratingValue={ratingData?.vote}
             />
 
             <Comments placeId={place?.id!} />

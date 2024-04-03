@@ -5,9 +5,9 @@ import { LOCAL_STORGE } from '@/functions/constants'
 export const middleware = (request: NextRequest) => {
     const currentUser = request.cookies.get(LOCAL_STORGE.AUTH_TOKEN)?.value
 
-    if (!currentUser && request.nextUrl.pathname.startsWith('/places/create')) {
-        return Response.redirect(new URL('/places', request.url))
-    }
+    // if (!currentUser && request.nextUrl.pathname.startsWith('/places/create')) {
+    //     return Response.redirect(new URL('/places', request.url))
+    // }
 
     if (
         !currentUser &&
