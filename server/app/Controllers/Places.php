@@ -66,7 +66,7 @@ class Places extends ResourceController {
 
             if ($bookmarksData) {
                 foreach ($bookmarksData as $bookmark) {
-                    $bookmarksPlacesIds[] = $bookmark->place;
+                    $bookmarksPlacesIds[] = $bookmark->place_id;
                 }
             }
         }
@@ -146,9 +146,7 @@ class Places extends ResourceController {
         }
 
         $this->model
-            ->select('places.id, places.category, places.lat, places.lon, places.rating, places.views, places.comments,
-                places.photos, places.country_id, places.region_id, places.district_id, places.locality_id, 
-                places.updated_at, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
+            ->select('places.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
                 location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
                 location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                 location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
@@ -194,6 +192,7 @@ class Places extends ResourceController {
                 'views'     => (int) $place->views,
                 'photos'    => (int) $place->photos,
                 'comments'  => (int) $place->comments,
+                'bookmarks' => (int) $place->bookmarks,
                 'title'     => $placeContent->title($place->id),
                 'content'   => $placeContent->content($place->id),
                 'updated'   => new \DateTime($place->updated_at),
@@ -334,6 +333,7 @@ class Places extends ResourceController {
             'views'     => (int) $placeData->views,
             'photos'    => (int) $placeData->photos,
             'comments'  => (int) $placeData->comments,
+            'bookmarks' => (int) $placeData->bookmarks,
             'title'     => $placeContent->title($id),
             'content'   => $placeContent->content($id),
             'author'    => [

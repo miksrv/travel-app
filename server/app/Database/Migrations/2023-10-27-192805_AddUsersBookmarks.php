@@ -23,6 +23,8 @@ class AddUsersBookmarks extends Migration {
                 'constraint' => 15,
                 'null'       => true
             ],
+            'created_at DATETIME default current_timestamp',
+            'updated_at DATETIME default current_timestamp',
         ]);
 
         $this->forge->addPrimaryKey('id');

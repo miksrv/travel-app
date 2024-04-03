@@ -12,6 +12,7 @@ export type Place = {
     views?: number
     photos?: number
     comments?: number
+    bookmarks?: number
     title: string
     content: string
     difference?: number

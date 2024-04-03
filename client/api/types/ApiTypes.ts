@@ -320,10 +320,10 @@ export interface ResponseRatingSet {
 
 /* Controller: Bookmarks */
 export interface RequestBookmarkSet {
-    place: string
+    placeId: string
 }
 export interface RequestBookmarkGetCheck {
-    place: string
+    placeId: string
 }
 
 export interface ResponseBookmarkGetCheck {
@@ -361,7 +361,14 @@ export interface RequestPoiList {
 export interface ResponsePoiItem
     extends Pick<
         Place,
-        'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover'
+        | 'id'
+        | 'rating'
+        | 'title'
+        | 'views'
+        | 'photos'
+        | 'cover'
+        | 'comments'
+        | 'bookmarks'
     > {}
 
 export interface ResponsePoiPlacesList {

@@ -1,0 +1,48 @@
+@import ../../styles/variables
+
+.tabs
+  .tabsHeader
+    display: flex
+    align-items: stretch
+
+    .tabsHeaderItem
+      position: relative
+      flex-basis: auto
+      flex-grow: 1
+      flex-shrink: 0
+      min-width: 48px
+      padding: 12px 6px
+      max-width: 100%
+      width: 100%
+      overflow: hidden
+      text-overflow: ellipsis
+      transition: color .15s ease-out, background-color .15s ease-out
+      white-space: nowrap
+      cursor: pointer
+      border: none
+      background-color: transparent
+      border-radius: $borderRadius
+      color: $colorTextSecond
+
+      &:hover
+        background-color: rgba(242, 243, 252, 0.7)
+
+      &.active
+        color: $colorTextMain
+
+      .itemBottom
+        background: $colorLink
+        border-radius: 2px
+        bottom: 3px
+        left: 5px
+        right: 5px
+        height: 2px
+        opacity: 0
+        pointer-events: none
+        position: absolute
+        transition: opacity .15s ease-out
+
+        &.active
+          opacity: 1
+
+  .tabContent

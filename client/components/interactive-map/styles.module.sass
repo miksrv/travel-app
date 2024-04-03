@@ -145,9 +145,18 @@
 
     .bottomPanel
       position: absolute
-      bottom: 10px
-      left: 10px
+      bottom: 0
+      left: 0
+      opacity: 0
       display: flex
+      justify-content: space-between
+      align-items: flex-end
+      width: 100%
+      padding: 10px
+      transition: opacity .15s
+
+      & > div
+        display: flex
 
   .image
     object-fit: cover

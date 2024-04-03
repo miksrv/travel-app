@@ -14,13 +14,16 @@ class UsersBookmarksModel extends MyBaseModel {
         'place_id'
     ];
 
-    // Validation
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
     protected $beforeInsert   = ['beforeInsert'];
     protected $afterInsert    = [];

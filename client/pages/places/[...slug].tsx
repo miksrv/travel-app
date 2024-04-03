@@ -24,23 +24,14 @@ export interface PlacePageProps {
     ratingCount: number
     place?: PlaceType.Place
     photoList?: Photo.Photo[]
-    nearPlaces?: PlaceType.Place[]
+    nearPlaces?: PlaceType.Place[] | null
 }
 
 const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
-    const authSlice = useAppSelector((state) => state.auth)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    // const [setBookmark, { isLoading: bookmarkPutLoading }] =
-    //     API.useBookmarksPutPlaceMutation()
-    //
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
-    //
-    // const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
-    //     API.useBookmarksGetCheckPlaceQuery(
-    //         { place: placeData?.id! },
-    //         { skip: !placeData?.id || !authSlice.isAuth }
-    //     )
 
     // const { data: activityData } = API.useActivityGetListQuery(
     //     {
@@ -53,7 +44,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
 
     return (
         <AppLayout randomPlaceId={randomId}>
-            {page === 'edit' && authSlice?.isAuth ? (
+            {page === 'edit' && isAuth ? (
                 <Edit {...props} />
             ) : (
                 <Place {...props} />
@@ -125,7 +116,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
-                    nearPlaces: nearPlaces?.items,
+                    nearPlaces: nearPlaces?.items ?? null,
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,

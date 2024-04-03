@@ -98,7 +98,7 @@ class Poi extends ResourceController {
 
         $placesModel = new PlacesModel();
         $placeData   = $placesModel
-            ->select('id, rating, views, photos, photos')
+            ->select('id, rating, views, photos, photos, comments, bookmarks')
             ->find($id);
 
         $placeData->title = $placeContent->title($id);

@@ -116,19 +116,18 @@ export const API = createApi({
         }),
 
         /* Controller: Bookmarks */
-        bookmarksGetCheckPlace: builder.query<
+        bookmarksGetPlace: builder.query<
             ApiTypes.ResponseBookmarkGetCheck,
             ApiTypes.RequestBookmarkGetCheck
         >({
-            providesTags: (result, error, arg) => [
-                { id: arg.place, type: 'Bookmarks' }
+            providesTags: (res, err, arg) => [
+                { id: arg.placeId, type: 'Bookmarks' }
             ],
             query: (params) => `bookmarks${encodeQueryData(params)}`
         }),
         bookmarksPutPlace: builder.mutation<void, ApiTypes.RequestBookmarkSet>({
             invalidatesTags: (res, err, arg) => [
-                { id: arg.place, type: 'Bookmarks' },
-                { type: 'Notifications' }
+                { id: arg.placeId, type: 'Bookmarks' }
             ],
             query: (data) => ({
                 body: data,
@@ -201,7 +200,7 @@ export const API = createApi({
 
         /* Controller: Notifications */
         notificationsDelete: builder.mutation<void, void>({
-            invalidatesTags: [{ type: 'Notifications' }],
+            invalidatesTags: ['Notifications'],
             query: () => ({
                 method: 'DELETE',
                 url: 'notifications'
