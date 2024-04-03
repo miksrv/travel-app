@@ -5,11 +5,14 @@ import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
 import Badge from '@/ui/badge'
+import Icon from '@/ui/icon'
 import RatingColored from '@/ui/rating-colored'
 import Skeleton from '@/ui/skeleton'
 
 import { API, IMG_HOST } from '@/api/api'
 import { Poi } from '@/api/types'
+
+import BookmarkButton from '@/components/bookmark-button'
 
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
@@ -47,47 +50,73 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 className={styles.popup}
                 closeOnEscapeKey={true}
             >
-                <Link
-                    href={`/places/${place.id}`}
-                    title={poiData?.title}
-                    className={styles.link}
-                >
-                    {(isLoading || !poiData) && <Skeleton />}
+                <div className={styles.link}>
+                    <Link
+                        href={`/places/${place.id}`}
+                        title={poiData?.title}
+                    >
+                        {(isLoading || !poiData) && <Skeleton />}
 
-                    {!isLoading && poiData && (
-                        <>
-                            <RatingColored
-                                className={styles.rating}
-                                value={poiData.rating}
-                            >
-                                {addDecimalPoint(poiData.rating)}
-                            </RatingColored>
+                        {!isLoading && poiData && (
+                            <>
+                                <RatingColored
+                                    className={styles.rating}
+                                    value={poiData.rating}
+                                >
+                                    {addDecimalPoint(poiData.rating)}
+                                </RatingColored>
 
-                            {poiData?.cover && (
-                                <Image
-                                    className={styles.image}
-                                    src={`${IMG_HOST}${poiData.cover?.preview}`}
-                                    alt={poiData?.title || ''}
-                                    width={300}
-                                    height={200}
-                                />
+                                {poiData?.cover && (
+                                    <Image
+                                        className={styles.image}
+                                        src={`${IMG_HOST}${poiData.cover?.preview}`}
+                                        alt={poiData?.title || ''}
+                                        width={300}
+                                        height={200}
+                                    />
+                                )}
+                            </>
+                        )}
+                    </Link>
+
+                    <div
+                        className={styles.bottomPanel}
+                        style={{
+                            opacity: poiData ? 1 : 0
+                        }}
+                    >
+                        <div>
+                            <Badge
+                                icon={'Photo'}
+                                content={poiData?.photos || 0}
+                            />
+
+                            <Badge
+                                icon={'Eye'}
+                                content={numberFormatter(poiData?.views || 0)}
+                            />
+
+                            {!!poiData?.comments && (
+                                <div className={styles.icon}>
+                                    <Icon name={'Comment'} />
+                                    {poiData.comments}
+                                </div>
                             )}
 
-                            <div className={styles.bottomPanel}>
+                            {!!poiData?.bookmarks && (
                                 <Badge
-                                    icon={'Photo'}
-                                    content={poiData?.photos || 0}
+                                    icon={'HeartEmpty'}
+                                    content={poiData.bookmarks}
                                 />
-                                <Badge
-                                    icon={'Eye'}
-                                    content={numberFormatter(
-                                        poiData?.views || 0
-                                    )}
-                                />
-                            </div>
-                        </>
-                    )}
-                </Link>
+                            )}
+                        </div>
+
+                        <div>
+                            <BookmarkButton placeId={poiData?.id} />
+                        </div>
+                    </div>
+                </div>
+
                 {isLoading || !poiData ? (
                     <Skeleton style={{ height: '18px', margin: '6px' }} />
                 ) : (

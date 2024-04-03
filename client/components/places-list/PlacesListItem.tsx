@@ -85,6 +85,13 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         />
                     )}
 
+                    {!!place?.bookmarks && (
+                        <Badge
+                            icon={'HeartEmpty'}
+                            content={place.bookmarks}
+                        />
+                    )}
+
                     <Badge
                         icon={'Eye'}
                         content={numberFormatter(place?.views || 0)}

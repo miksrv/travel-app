@@ -15,11 +15,7 @@ import BookmarkButton from '@/components/bookmark-button'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
-import {
-    addDecimalPoint,
-    dateToUnixTime,
-    numberFormatter
-} from '@/functions/helpers'
+import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -114,7 +110,14 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                     {!!place?.comments && (
                         <Badge
                             icon={'Comment'}
-                            content={numberFormatter(place.comments)}
+                            content={place.comments}
+                        />
+                    )}
+
+                    {!!place?.bookmarks && (
+                        <Badge
+                            icon={'HeartEmpty'}
+                            content={place.bookmarks}
                         />
                     )}
 
@@ -132,7 +135,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                 </div>
 
                 <div>
-                    <BookmarkButton placeId={place?.id} />
+                    <BookmarkButton
+                        size={'m'}
+                        placeId={place?.id}
+                    />
                 </div>
             </div>
 

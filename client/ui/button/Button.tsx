@@ -9,7 +9,8 @@ import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
+export interface ButtonProps
+    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
     link?: string
     noIndex?: boolean
@@ -22,7 +23,7 @@ interface ContainerProps extends React.ButtonHTMLAttributes<unknown> {
     children?: React.ReactNode
 }
 
-const Button: React.FC<ContainerProps> = ({
+const Button: React.FC<ButtonProps> = ({
     className,
     link,
     noIndex,

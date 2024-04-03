@@ -361,7 +361,14 @@ export interface RequestPoiList {
 export interface ResponsePoiItem
     extends Pick<
         Place,
-        'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover'
+        | 'id'
+        | 'rating'
+        | 'title'
+        | 'views'
+        | 'photos'
+        | 'cover'
+        | 'comments'
+        | 'bookmarks'
     > {}
 
 export interface ResponsePoiPlacesList {

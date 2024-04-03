@@ -24,7 +24,7 @@ export interface PlacePageProps {
     ratingCount: number
     place?: PlaceType.Place
     photoList?: Photo.Photo[]
-    nearPlaces?: PlaceType.Place[]
+    nearPlaces?: PlaceType.Place[] | null
 }
 
 const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
@@ -116,7 +116,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
-                    nearPlaces: nearPlaces?.items,
+                    nearPlaces: nearPlaces?.items ?? null,
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,

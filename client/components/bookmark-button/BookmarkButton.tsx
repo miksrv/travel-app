@@ -1,6 +1,6 @@
 import React from 'react'
 
-import Button from '@/ui/button'
+import Button, { ButtonProps } from '@/ui/button'
 
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -8,11 +8,14 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import styles from './styles.module.sass'
 
-interface BookmarkButtonProps {
+interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId }) => {
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({
+    placeId,
+    ...props
+}) => {
     const dispatch = useAppDispatch()
 
     const isAuth = useAppSelector((state) => state.auth?.isAuth)
@@ -26,7 +29,9 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId }) => {
             { skip: !placeId || !isAuth }
         )
 
-    const handleButtonClick = () => {
+    const handleButtonClick = (event: React.MouseEvent) => {
+        event.stopPropagation()
+
         if (!isAuth) {
             dispatch(openAuthDialog())
         } else if (isAuth && placeId) {
@@ -36,7 +41,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId }) => {
 
     return (
         <Button
-            size={'m'}
+            {...props}
             mode={'secondary'}
             icon={bookmarkData?.result ? 'HeartFull' : 'HeartEmpty'}
             className={styles.bookmarkButton}
