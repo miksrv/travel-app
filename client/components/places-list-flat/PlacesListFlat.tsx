@@ -1,25 +1,22 @@
 import { useTranslation } from 'next-i18next'
 import React from 'react'
 
-import Container, { ContainerProps } from '@/ui/container'
-
 import { Place } from '@/api/types/Place'
 
 import PlacesListItemFlat from './PlacesListItemFlat'
 import styles from './styles.module.sass'
 
-interface PlacesListProps
-    extends Pick<ContainerProps, 'title' | 'action' | 'footer'> {
+interface PlacesListProps {
     places?: Place[]
 }
 
-const PlacesListFlat: React.FC<PlacesListProps> = ({ places, ...props }) => {
+const PlacesListFlat: React.FC<PlacesListProps> = ({ places }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placesList.placesListItem'
     })
 
     return (
-        <Container {...props}>
+        <>
             {places?.length ? (
                 places?.map((place) => (
                     <PlacesListItemFlat
@@ -30,7 +27,7 @@ const PlacesListFlat: React.FC<PlacesListProps> = ({ places, ...props }) => {
             ) : (
                 <div className={styles.emptyList}>{t('noData')}</div>
             )}
-        </Container>
+        </>
     )
 }
 export default PlacesListFlat

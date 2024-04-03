@@ -19,6 +19,7 @@ interface PaginationProps<T> {
     perPage?: number
     neighbours?: number
     disableScroll?: boolean
+    hideIfOnePage?: boolean
     hideArrows?: boolean
     onChangePage?: (page: number) => void
 }
@@ -29,6 +30,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
     linkPart,
     urlParam,
     disableScroll,
+    hideIfOnePage,
     hideArrows,
     perPage = 4,
     neighbours = 2,
@@ -88,7 +90,9 @@ const Pagination: React.FC<PaginationProps<any>> = ({
         return range(1, totalPages)
     }, [currentPage, pageNeighbours, totalPages])
 
-    return (
+    return hideIfOnePage && totalPages === 1 ? (
+        <></>
+    ) : (
         <nav
             aria-label={'Pages Pagination'}
             className={styles.pagination}

@@ -320,10 +320,10 @@ export interface ResponseRatingSet {
 
 /* Controller: Bookmarks */
 export interface RequestBookmarkSet {
-    place: string
+    placeId: string
 }
 export interface RequestBookmarkGetCheck {
-    place: string
+    placeId: string
 }
 
 export interface ResponseBookmarkGetCheck {

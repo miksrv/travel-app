@@ -47,3 +47,5 @@ export type IconTypes =
     | 'Place'
     | 'Tag'
     | 'Comment'
+    | 'HeartEmpty'
+    | 'HeartFull'

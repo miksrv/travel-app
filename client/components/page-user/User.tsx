@@ -2,13 +2,15 @@ import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BreadcrumbList, ProfilePage } from 'schema-dts'
 
 import Button from '@/ui/button'
 import Pagination from '@/ui/pagination'
+import Tabs from '@/ui/tabs'
 
-import { IMG_HOST, SITE_LINK } from '@/api/api'
+import { API, IMG_HOST, SITE_LINK } from '@/api/api'
+import { ApiTypes } from '@/api/types'
 
 import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
@@ -18,20 +20,51 @@ import { formatDateISO } from '@/functions/helpers'
 
 interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
 
-const User: React.FC<UserProps> = ({
-    id,
-    user,
-    currentPage,
-    photosList,
-    placesList,
-    placesCount,
-    photosCount
-}) => {
+enum TabsEnum {
+    PLACES = 'places',
+    BOOKMARKS = 'bookmarks'
+}
+
+const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.user'
     })
 
+    const [placesPage, setPlacesPage] = useState<number>(1)
+    const [activeTab, setActiveTab] = useState<TabsEnum>(TabsEnum.PLACES)
+
+    const { data: bookmarksData } = API.usePlacesGetListQuery(
+        {
+            bookmarkUser: id,
+            limit: PLACES_PER_PAGE,
+            offset: (placesPage - 1) * PLACES_PER_PAGE,
+            order: ApiTypes.SortOrders.DESC,
+            sort: ApiTypes.SortFields.Updated
+        },
+        {
+            refetchOnMountOrArgChange: true,
+            skip: activeTab === TabsEnum.PLACES
+        }
+    )
+
+    const { data: placesData } = API.usePlacesGetListQuery(
+        {
+            author: id,
+            limit: PLACES_PER_PAGE,
+            offset: (placesPage - 1) * PLACES_PER_PAGE,
+            order: ApiTypes.SortOrders.DESC,
+            sort: ApiTypes.SortFields.Updated
+        },
+        {
+            skip: activeTab === TabsEnum.BOOKMARKS
+        }
+    )
+
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+    const placesCount =
+        (activeTab === TabsEnum.PLACES
+            ? placesData?.count
+            : bookmarksData?.count) ?? 0
 
     const breadCrumbSchema: BreadcrumbList = {
         // @ts-ignore
@@ -65,6 +98,10 @@ const User: React.FC<UserProps> = ({
             name: user?.name
         }
     }
+
+    useEffect(() => {
+        setPlacesPage(1)
+    }, [activeTab])
 
     return (
         <>
@@ -125,23 +162,40 @@ const User: React.FC<UserProps> = ({
                 }
             />
 
-            <PlacesListFlat
-                title={t('places')}
-                places={placesList}
-                action={
-                    placesCount > PLACES_PER_PAGE && (
+            <Tabs<TabsEnum>
+                tabs={[
+                    { key: TabsEnum.PLACES, label: 'Геометки' },
+                    { key: TabsEnum.BOOKMARKS, label: 'Избранное' }
+                ]}
+                activeTab={activeTab}
+                onChangeTab={setActiveTab}
+                footer={
+                    <>
+                        {placesCount > PLACES_PER_PAGE && <br />}
                         <Pagination
-                            hideArrows={true}
-                            disableScroll={true}
                             neighbours={1}
-                            currentPage={currentPage}
-                            totalItemsCount={placesCount}
+                            hideIfOnePage={true}
+                            disableScroll={true}
+                            currentPage={placesPage}
+                            totalItemsCount={
+                                activeTab === TabsEnum.PLACES
+                                    ? placesData?.count
+                                    : bookmarksData?.count
+                            }
                             perPage={PLACES_PER_PAGE}
-                            linkPart={`users/${id}`}
+                            onChangePage={setPlacesPage}
                         />
-                    )
+                    </>
                 }
-            />
+            >
+                <PlacesListFlat
+                    places={
+                        activeTab === TabsEnum.PLACES
+                            ? placesData?.items
+                            : bookmarksData?.items
+                    }
+                />
+            </Tabs>
         </>
     )
 }

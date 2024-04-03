@@ -11,6 +11,7 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
 
+import BookmarkButton from '@/components/bookmark-button'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 
@@ -40,11 +41,11 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     })
 
     const dispatch = useAppDispatch()
-    const authSlice = useAppSelector((state) => state.auth)
+    const isAuth = useAppSelector((state) => state.auth?.isAuth)
     const [coverHash, setCoverHash] = useState<string | number>('')
 
     const handleEditPlaceClick = (event: React.MouseEvent) => {
-        if (!authSlice.isAuth) {
+        if (!isAuth) {
             event.stopPropagation()
             dispatch(openAuthDialog())
         }
@@ -104,29 +105,35 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
 
             <div className={styles.bottomPanel}>
-                <Badge
-                    icon={'Photo'}
-                    content={place?.photos || 0}
-                />
-
-                {!!place?.comments && (
+                <div>
                     <Badge
-                        icon={'Comment'}
-                        content={numberFormatter(place.comments)}
+                        icon={'Photo'}
+                        content={place?.photos || 0}
                     />
-                )}
 
-                <Badge
-                    icon={'Eye'}
-                    content={place?.views || 0}
-                />
+                    {!!place?.comments && (
+                        <Badge
+                            icon={'Comment'}
+                            content={numberFormatter(place.comments)}
+                        />
+                    )}
 
-                {place?.distance && (
                     <Badge
-                        icon={'Ruler'}
-                        content={`${place?.distance} ${t('km')}`}
+                        icon={'Eye'}
+                        content={place?.views || 0}
                     />
-                )}
+
+                    {place?.distance && (
+                        <Badge
+                            icon={'Ruler'}
+                            content={`${place?.distance} ${t('km')}`}
+                        />
+                    )}
+                </div>
+
+                <div>
+                    <BookmarkButton placeId={place?.id} />
+                </div>
             </div>
 
             <Header
@@ -146,9 +153,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                             icon={'EditLocation'}
                             mode={'secondary'}
                             link={
-                                authSlice.isAuth
-                                    ? `/places/${place?.id}/edit`
-                                    : undefined
+                                isAuth ? `/places/${place?.id}/edit` : undefined
                             }
                             onClick={handleEditPlaceClick}
                         >

@@ -7,7 +7,6 @@ import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Photo } from '@/api/types/Photo'
-import { Place } from '@/api/types/Place'
 import { User as UserType } from '@/api/types/User'
 
 import AppLayout from '@/components/app-layout'
@@ -25,9 +24,7 @@ export interface UserPageProps {
     page: PageType | null
     user?: UserType
     photosList?: Photo[]
-    placesList?: Place[]
     photosCount: number
-    placesCount: number
     currentPage: number
 }
 
@@ -105,16 +102,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 API.endpoints.usersGetItem.initiate(id)
             )
 
-            const { data: placesData } = await store.dispatch(
-                API.endpoints?.placesGetList.initiate({
-                    author: id,
-                    limit: PLACES_PER_PAGE,
-                    offset: (currentPage - 1) * PLACES_PER_PAGE,
-                    order: ApiTypes.SortOrders.DESC,
-                    sort: ApiTypes.SortFields.Updated
-                })
-            )
-
             const { data: photosData } = await store.dispatch(
                 API.endpoints.photosGetList.initiate({
                     author: id,
@@ -140,8 +127,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     page: page ?? null,
                     photosCount: photosData?.count || 0,
                     photosList: photosData?.items || [],
-                    placesCount: placesData?.count || 0,
-                    placesList: placesData?.items || [],
                     user: userData
                 }
             }

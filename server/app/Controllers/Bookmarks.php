@@ -21,7 +21,7 @@ class Bookmarks extends ResourceController {
      * @return ResponseInterface
      */
     public function check(): ResponseInterface {
-        $placeId = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
+        $placeId = $this->request->getGet('placeId', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->session->isAuth) {
             return $this->respond(['result' => false]);
@@ -37,7 +37,7 @@ class Bookmarks extends ResourceController {
             ->where(['user_id' => $this->session->user?->id, 'place_id' => $placeId])
             ->first();
 
-        return $this->respond(['result' => !$bookmarkData]);
+        return $this->respond(['result' => !!$bookmarkData]);
     }
 
     /**
@@ -45,31 +45,31 @@ class Bookmarks extends ResourceController {
      * @return ResponseInterface
      */
     public function set(): ResponseInterface {
-        $input   = $this->request->getJSON();
+        $input = $this->request->getJSON();
 
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
 
-        if (empty($input) || !$input->place) {
+        if (empty($input) || !$input->placeId) {
             return $this->failValidationErrors('Point of Interest ID missing');
         }
 
         try {
-            $bookmarkData   = ['user_id' => $this->session->user?->id, 'place_id' => $input->place];
+            $bookmarkData   = ['user_id' => $this->session->user?->id, 'place_id' => $input->placeId];
             $bookmarksModel = new UsersBookmarksModel();
             $placesModel    = new PlacesModel();
             $bookmarksData  = $bookmarksModel->where($bookmarkData)->first();
-            $placesData     = $placesModel->find($input->place);
+            $placesData     = $placesModel->find($input->placeId);
+
+            if (!$placesData) {
+                return $this->failNotFound();
+            }
 
             if ($bookmarksData) {
                 $bookmarksModel->delete($bookmarksData->id);
 
                 return $this->respondDeleted();
-            }
-
-            if (!$placesData) {
-                return $this->failNotFound();
             }
 
             $bookmarksModel->insert($bookmarkData);

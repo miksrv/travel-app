@@ -28,19 +28,10 @@ export interface PlacePageProps {
 }
 
 const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
-    const authSlice = useAppSelector((state) => state.auth)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    // const [setBookmark, { isLoading: bookmarkPutLoading }] =
-    //     API.useBookmarksPutPlaceMutation()
-    //
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
-    //
-    // const { data: bookmarksUserData, isLoading: bookmarksUserLoading } =
-    //     API.useBookmarksGetCheckPlaceQuery(
-    //         { place: placeData?.id! },
-    //         { skip: !placeData?.id || !authSlice.isAuth }
-    //     )
 
     // const { data: activityData } = API.useActivityGetListQuery(
     //     {
@@ -53,7 +44,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
 
     return (
         <AppLayout randomPlaceId={randomId}>
-            {page === 'edit' && authSlice?.isAuth ? (
+            {page === 'edit' && isAuth ? (
                 <Edit {...props} />
             ) : (
                 <Place {...props} />

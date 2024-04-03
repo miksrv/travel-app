@@ -66,7 +66,7 @@ class Places extends ResourceController {
 
             if ($bookmarksData) {
                 foreach ($bookmarksData as $bookmark) {
-                    $bookmarksPlacesIds[] = $bookmark->place;
+                    $bookmarksPlacesIds[] = $bookmark->place_id;
                 }
             }
         }
