@@ -80,8 +80,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
     const [filtersDialogOpen, setFiltersDialogOpen] = useState<boolean>(false)
 
-    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
-
     const initialFilter: PlacesFilterType = {
         category: category ?? undefined,
         country: country ?? undefined,
@@ -95,6 +93,15 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         sort: sort !== DEFAULT_SORT ? sort : undefined,
         tag: tag ?? undefined
     }
+
+    const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+    const canonicalPage = `${canonicalUrl}places${encodeQueryData({
+        ...initialFilter,
+        lat: undefined,
+        lon: undefined,
+        order: undefined,
+        sort: undefined
+    })}`
 
     const handleChangeFilter = async (
         key: keyof PlacesFilterType,
@@ -301,11 +308,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     ?.map(({ title }) => title)
                     .join(', ')
                     .substring(0, 220)}`}
-                canonical={`${canonicalUrl}places${encodeQueryData({
-                    ...initialFilter,
-                    lat: undefined,
-                    lon: undefined
-                })}`}
+                canonical={canonicalPage}
                 openGraph={{
                     images: placesList
                         ?.filter(({ cover }) => cover?.full)
