@@ -15,6 +15,8 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
+import HistoricalPhotos from '@/components/interactive-map/historical-photos/HistoricalPhotos'
+
 import { LOCAL_STORGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -32,7 +34,8 @@ import SearchControl from './search-control/SearchControl'
 import styles from './styles.module.sass'
 
 export const MapAdditionalLayers = {
-    Heatmap: 'Heatmap'
+    Heatmap: 'Heatmap',
+    HistoricalPhotos: 'HistoricalPhotos'
 } as const
 export type MapAdditionalLayersType =
     (typeof MapAdditionalLayers)[keyof typeof MapAdditionalLayers]
@@ -283,6 +286,15 @@ const InteractiveMap: React.FC<MapProps> = ({
             >
                 {additionalLayers?.includes(MapAdditionalLayers.Heatmap) && (
                     <HeatmapLayer />
+                )}
+
+                {additionalLayers?.includes(
+                    MapAdditionalLayers.HistoricalPhotos
+                ) && (
+                    <HistoricalPhotos
+                        position={mapPosition}
+                        onPhotoClick={onPhotoClick}
+                    />
                 )}
 
                 {mapLayer === MapLayers.OCM && (

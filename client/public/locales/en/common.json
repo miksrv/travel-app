@@ -48,7 +48,8 @@
                 "MapBoxSat": "Satellite (MapBox)",
                 "Photos": "Photos",
                 "Places": "Places",
-                "Heatmap": "Users online"
+                "Heatmap": "Users online",
+                "HistoricalPhotos": "Historical photos"
             },
             "searchControl": {
                 "placeholder": "Locality, coordinates"

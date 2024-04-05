@@ -48,7 +48,8 @@
                 "MapBoxSat": "Спутник (MapBox)",
                 "Photos": "Фотографии",
                 "Places": "Интересные места",
-                "Heatmap": "Пользователи онлайн"
+                "Heatmap": "Пользователи онлайн",
+                "HistoricalPhotos": "Исторические фото"
             },
             "searchControl": {
                 "placeholder": "Населенный пункт, координаты"

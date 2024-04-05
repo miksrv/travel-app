@@ -29,9 +29,14 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
         keyPrefix: 'components.photoLightbox'
     })
 
-    const imageUrl = (index: number) => `${IMG_HOST}${photos?.[index]?.full}`
+    const imageHost = (link?: string) =>
+        link?.includes('http://') || link?.includes('https://')
+            ? link
+            : `${IMG_HOST}${link}`
+
+    const imageUrl = (index: number) => imageHost(photos?.[index]?.full)
     const ImagePreviewUrl = (index: number) =>
-        `${IMG_HOST}${photos?.[index]?.preview}`
+        imageHost(photos?.[index]?.preview)
 
     return (
         <>
