@@ -1,4 +1,5 @@
 import { ApiTypes } from '@/api/types'
+import { LocaleType } from '@/api/types/ApiTypes'
 
 export type User = {
     id: string
@@ -6,6 +7,7 @@ export type User = {
     avatar?: string
     reputation?: number
     website?: string
+    locale?: LocaleType
     level?: LevelData
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
