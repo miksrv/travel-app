@@ -5,7 +5,6 @@ use CodeIgniter\Entity\Entity;
 class Place extends Entity {
     protected $casts = [
         'id'          => 'string',
-        'category'    => 'string',
         'lat'         => 'float',
         'lon'         => 'float',
         'rating'      => 'float',
@@ -21,6 +20,7 @@ class Place extends Entity {
         'locality_id' => 'integer',
         'user_id'     => 'string',
 
+        'created' => 'datetime',
         'updated' => 'datetime',
     ];
 }

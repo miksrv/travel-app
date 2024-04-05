@@ -73,7 +73,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         itemListElement: [
             {
                 '@type': 'ListItem',
-                item: `${canonicalUrl}places`,
+                item: `${canonicalUrl}users`,
                 name: t('breadCrumbUsersLink'),
                 position: 1
             },

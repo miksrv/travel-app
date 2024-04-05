@@ -133,15 +133,11 @@ class Places extends ResourceController {
             }
         }
 
-        if ($lat && $lon) {
-            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(($lat - abs(lat)) * pi()/180 / 2), 2) +  COS($lat * pi()/180 ) * COS(abs(lat) * pi()/180) *  POWER(SIN(($lon - lon) * pi()/180 / 2), 2) )) AS distance";
-        } else {
-            $distanceSelect = $this->session->lon && $this->session->lat
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
-                : '';
-        }
+        $coordinates = $lat && $lon
+            ? $this->model->makeDistanceSQL($lat, $lon)
+            : $this->model->makeDistanceSQL($this->session->lon, $this->session->lat);
 
-        if ($distanceSelect) {
+        if ($coordinates) {
             $this->coordinatesAvailable = true;
         }
 
@@ -151,8 +147,7 @@ class Places extends ResourceController {
                 location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
                 location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
                 location_localities.title_en as city_en, location_localities.title_ru as city_ru,
-                category.title_en as category_en, category.title_ru as category_ru' .
-                $distanceSelect)
+                category.title_en as category_en, category.title_ru as category_ru' . $coordinates)
             ->join('users', 'places.user_id = users.id', 'left')
             ->join('location_countries', 'location_countries.id = places.country_id', 'left')
             ->join('location_regions', 'location_regions.id = places.region_id', 'left')
@@ -209,7 +204,7 @@ class Places extends ResourceController {
                 ],
             ];
 
-            if ($distanceSelect && $place->distance) {
+            if ($coordinates && $place->distance) {
                 $return['distance'] = round((float) $place->distance, 1);
             }
 
@@ -277,137 +272,112 @@ class Places extends ResourceController {
             return $this->failNotFound();
         }
 
-        if ($lat && $lon) {
-            $distanceSelect = ", 6378 * 2 * ASIN(SQRT(POWER(SIN(($lat - abs(lat)) * pi()/180 / 2), 2) +  COS($lat * pi()/180 ) * COS(abs(lat) * pi()/180) *  POWER(SIN(($lon - lon) * pi()/180 / 2), 2) )) AS distance";
-        } else {
-            $distanceSelect = $this->session->lon && $this->session->lat
-                ? ", 6378 * 2 * ASIN(SQRT(POWER(SIN(({$this->session->lat} - abs(places.lat)) * pi()/180 / 2), 2) +  COS({$this->session->lat} * pi()/180 ) * COS(abs(places.lat) * pi()/180) *  POWER(SIN(({$this->session->lon} - places.lon) * pi()/180 / 2), 2) )) AS distance"
-                : '';
-        }
+        $coordinates = $lat && $lon
+            ? $this->model->makeDistanceSQL($lat, $lon)
+            : $this->model->makeDistanceSQL($this->session->lon, $this->session->lat);
 
-        $placesTagsModel = new PlacesTagsModel();
-
-        $placeData = $this->model
-            ->select(
-                'places.*,
-                    users.id as user_id, users.name as user_name, users.avatar as user_avatar, users.activity_at,
-                    location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
-                    location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
-                    location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
-                    location_localities.title_en as city_en, location_localities.title_ru as city_ru,
-                    category.title_ru as category_ru, category.title_en as category_en' .
-                $distanceSelect)
-            ->join('users', 'places.user_id = users.id', 'left')
-            ->join('category', 'places.category = category.name', 'left')
-            ->join('location_countries', 'location_countries.id = places.country_id', 'left')
-            ->join('location_regions', 'location_regions.id = places.region_id', 'left')
-            ->join('location_districts', 'location_districts.id = places.district_id', 'left')
-            ->join('location_localities', 'location_localities.id = places.locality_id', 'left')
-            ->find($id);
+        $placeData = $this->model->getPlaceDataByID($id, $coordinates);
 
         if (!$placeData) {
             return $this->failNotFound();
         }
 
         // Collect tags
-        $placeData->tags = $placesTagsModel
-            ->join('tags', 'tags.id = places_tags.tag_id')
-            ->where('place_id', $placeData->id)
-            ->findAll();
+        $placesTagsModel = new PlacesTagsModel();
+        $placeData->tags = $placesTagsModel->getAllTagsForPlaceById($id);
 
         // Has the user already voted for this material or not?
         $ratingModel = new RatingModel();
         $ratingData  = $ratingModel
             ->select('id')
-            ->where(['place_id' => $placeData->id, 'session_id' => $this->session->id])
+            ->where(['place_id' => $id, 'session_id' => $this->session->id])
             ->first();
 
-        $avatar   = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
-        $response = [
-            'id'        => $placeData->id,
-            'created'   => $placeData->created_at ?? null,
-            'updated'   => $placeData->updated_at ?? null,
-            'lat'       => (float) $placeData->lat,
-            'lon'       => (float) $placeData->lon,
-            'rating'    => (float) $placeData->rating,
-            'views'     => (int) $placeData->views,
-            'photos'    => (int) $placeData->photos,
-            'comments'  => (int) $placeData->comments,
-            'bookmarks' => (int) $placeData->bookmarks,
-            'title'     => $placeContent->title($id),
-            'content'   => $placeContent->content($id),
-            'author'    => [
-                'id'       => $placeData->user_id,
-                'name'     => $placeData->user_name,
-                'activity' => $placeData->activity_at ? new \DateTime($placeData->activity_at) : null,
-                'avatar'   => $avatar
-                    ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
-                    : null
-            ],
-            'editors'   => $this->_editors($placeData->id, $placeData->user_id),
-            'category'  => [
-                'name'  => $placeData->category,
-                'title' => $placeData->{"category_$locale"},
-            ],
-            'actions'   => [
-                'rating' => !$ratingData,
-            ],
-            'address'   => [],
+        $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
+        $placeData->editors = $this->_editors($id, $placeData->user_id);
+        $placeData->author  = [
+            'id'       => $placeData->user_id,
+            'name'     => $placeData->user_name,
+            'activity' => $placeData->activity_at ? new \DateTime($placeData->activity_at) : null,
+            'avatar'   => $avatar
+                ? PATH_AVATARS . $placeData->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                : null
         ];
 
-        if ($placeData->tags) {
-            $tagsTitles = [];
+        $placeData->category = [
+            'name'  => $placeData->category,
+            'title' => $placeData->{"category_$locale"},
+        ];
 
-            foreach ($placeData->tags as $tag) {
-                $tagsTitles[] = $locale === 'en' && !empty($tag->title_en)
-                    ? $tag->title_en
-                    : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en);
-            }
-
-            $response['tags'] = $tagsTitles;
+        if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
+            $placeData->cover = [
+                'full'    => PATH_PHOTOS . $id . '/cover.jpg',
+                'preview' => PATH_PHOTOS . $id . '/cover_preview.jpg',
+            ];
         }
 
-        $response['address']['street'] = $placeData->{"address_$locale"};
+        $placeData->address = (object) [];
 
-        if ($distanceSelect && $placeData->distance) {
-            $response['distance'] = round((float) $placeData->distance, 1);
+        if ($coordinates && $placeData->distance) {
+            $placeData->distance = round((float) $placeData->distance, 1);
         }
 
         if ($placeData->country_id) {
-            $response['address']['country'] = [
+            $placeData->address->country = [
                 'id'    => $placeData->country_id,
                 'title' => $placeData->{"country_$locale"}
             ];
         }
 
         if ($placeData->region_id) {
-            $response['address']['region'] = [
+            $placeData->address->region = [
                 'id'    => $placeData->region_id,
                 'title' => $placeData->{"region_$locale"}
             ];
         }
 
         if ($placeData->district_id) {
-            $response['address']['district'] = [
+            $placeData->address->district = [
                 'id'    => $placeData->district_id,
                 'title' => $placeData->{"district_$locale"}
             ];
         }
 
         if ($placeData->locality_id) {
-            $response['address']['locality'] = [
+            $placeData->address->locality = [
                 'id'    => $placeData->locality_id,
                 'title' => $placeData->{"city_$locale"}
             ];
         }
 
-        // Place cover
-        if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
-            $response['cover'] = [
-                'full'    => PATH_PHOTOS . $id . '/cover.jpg',
-                'preview' => PATH_PHOTOS . $id . '/cover_preview.jpg',
-            ];
+        if ($placeData->{"address_$locale"}) {
+            $placeData->address->street = $placeData->{"address_$locale"};
         }
+
+        if ($placeData->tags) {
+            $tags = [];
+
+            foreach ($placeData->tags as $tag) {
+                $tags[] = $locale === 'en' && !empty($tag->title_en)
+                    ? $tag->title_en
+                    : (!empty($tag->title_ru) ? $tag->title_ru : $tag->title_en);
+            }
+
+            $placeData->tags = $tags;
+        }
+
+        $placeData->title   = $placeContent->title($id);
+        $placeData->content = $placeContent->content($id);
+
+        unset($placeData->user_id, $placeData->user_name, $placeData->user_avatar, $placeData->activity_at,
+            $placeData->country_id, $placeData->region_id, $placeData->district_id, $placeData->locality_id,
+            $placeData->address_en, $placeData->address_ru,
+            $placeData->country_en, $placeData->country_ru,
+            $placeData->region_en, $placeData->region_ru,
+            $placeData->district_en, $placeData->district_ru,
+            $placeData->city_en, $placeData->city_ru,
+            $placeData->category_en, $placeData->category_ru,
+        );
 
         // Update view counts
         $this->model->update($placeData->id, [
@@ -415,10 +385,10 @@ class Places extends ResourceController {
             'updated_at' => $placeData->updated_at
         ]);
 
-        // Get random place ID
-        $response['randomId'] = $this->model->getRandomPlaceId()->id;
+        // TODO Get random place ID
+        $placeData->randomId = $this->model->getRandomPlaceId()->id;
 
-        return $this->respond((object) $response);
+        return $this->respond($placeData);
     }
 
     /**
@@ -662,7 +632,7 @@ class Places extends ResourceController {
      */
     protected function _makeListFilters(PlacesModel $placesModel, array $placeIds = []): PlacesModel {
         $orderDefault  = 'DESC';
-        $sortingFields = ['views', 'rating', 'title', 'category', 'distance', 'created_at', 'updated_at'];
+        $sortingFields = ['views', 'rating', 'comments', 'bookmarks', 'category', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
 
         $sort     = $this->request->getGet('sort', FILTER_SANITIZE_SPECIAL_CHARS);

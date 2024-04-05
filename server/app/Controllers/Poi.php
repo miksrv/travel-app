@@ -121,18 +121,17 @@ class Poi extends ResourceController {
         $sessionsData  = $sessionsModel
             ->select('lat, lon')
             ->where(['lat !=' => null, 'lon !=' => null])
-            ->findAll();
+            ->findAll(500);
 
         if (!$sessionsData) {
             return $this->respond(['items' => []]);
         }
 
-        $result = [];
-        foreach ($sessionsData as $item) {
-            $result[] = [$item->lat, $item->lon];
+        foreach ($sessionsData as $key => $item) {
+            $sessionsData[$key] = [$item->lat, $item->lon];
         }
 
-        return $this->respond(['items' => $result]);
+        return $this->respond(['items' => $sessionsData]);
     }
 
     /**
