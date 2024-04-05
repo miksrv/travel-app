@@ -48,11 +48,12 @@ export const SortOrders = {
 export type SortOrdersType = (typeof SortOrders)[keyof typeof SortOrders]
 
 export const SortFields = {
+    Bookmarks: 'bookmarks',
     Category: 'category',
+    Comments: 'comments',
     Created: 'created_at',
     Distance: 'distance',
     Rating: 'rating',
-    Title: 'title',
     Updated: 'updated_at',
     Views: 'views'
 } as const

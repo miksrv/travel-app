@@ -199,9 +199,10 @@
             "sort": {
                 "views": "Views",
                 "rating": "Rating",
+                "bookmarks": "Bookmarks count",
+                "comments": "Comments count",
                 "created_at": "Date added",
                 "updated_at": "Date of update",
-                "title": "Title",
                 "distance": "Distance"
             },
             "order": {
