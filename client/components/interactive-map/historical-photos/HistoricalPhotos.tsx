@@ -30,6 +30,9 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
         { skip: !position?.lat || !position?.lon }
     )
 
+    const photoUrl = (file: string, full?: boolean) =>
+        `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
+
     return photosData?.result?.photos?.length ? (
         photosData?.result?.photos?.map((photo) => (
             <Marker
@@ -40,7 +43,7 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
                         className: styles.historicalPhoto,
                         iconAnchor: [25, 16],
                         iconSize: [50, 32],
-                        iconUrl: `${IMG_HOST}/h/${photo.file}`
+                        iconUrl: photoUrl(photo.file)
                     })
                 }
                 title={photo.title}
@@ -48,11 +51,13 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
                 eventHandlers={{
                     click: () => {
                         onPhotoClick?.({
-                            full: `${IMG_HOST}/a/${photo.file}`,
+                            full: photoUrl(photo.file, true),
                             lat: photo.geo[0],
                             lon: photo.geo[1],
-                            preview: `${IMG_HOST}/h/${photo.file}`,
-                            title: photo.title
+                            preview: photoUrl(photo.file),
+                            title: `${photo.title}${
+                                photo.year ? ` (${photo.year})` : ''
+                            }`
                         })
                     }
                 }}
