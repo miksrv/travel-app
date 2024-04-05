@@ -133,15 +133,15 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
 
         sizes.ratioWidth = sizes.realWidth / sizes.width
         sizes.ratioHeight = sizes.realHeight / sizes.height
-        sizes.halfSize = Math.min(sizes.width, sizes.height) // / 2
-        sizes.halfRealSize = Math.min(sizes.realWidth, sizes.realHeight) // / 2
+        sizes.halfSize = Math.min(sizes.width, sizes.height)
+        sizes.halfRealSize = Math.min(sizes.realWidth, sizes.realHeight)
 
         setImageCropData({
             height: (sizes.halfSize / sizes.height) * 100, // 50% of height
             unit: '%',
             width: (sizes.halfSize / sizes.width) * 100, // 50% of width
-            x: 0, // 25
-            y: 0 // 25
+            x: 0,
+            y: 0
         })
 
         setImageSizes(sizes)
@@ -227,6 +227,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     // 50% in px of width
                                     imageSizes
                                         ? imageSizes.halfRealSize /
+                                          2 /
                                           imageSizes.ratioHeight
                                         : 500
                                 }
@@ -234,6 +235,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     // 50% in px of height
                                     imageSizes
                                         ? imageSizes.halfRealSize /
+                                          2 /
                                           imageSizes.ratioWidth
                                         : 500
                                 }
@@ -246,8 +248,6 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     alt={''}
                                     style={{
                                         height: '100%'
-                                        // objectFit: 'contain',
-                                        // width: '100%'
                                     }}
                                 />
                             </ReactCrop>

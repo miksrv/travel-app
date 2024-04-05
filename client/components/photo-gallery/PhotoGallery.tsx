@@ -85,7 +85,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             alt={`${photo.title}. ${t('linkPhotoTitle')} ${
                                 index + 1
                             }`}
-                            objectFit={'cover'}
                             quality={50}
                             width={206}
                             height={150}
