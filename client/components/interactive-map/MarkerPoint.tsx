@@ -15,6 +15,7 @@ import { Poi } from '@/api/types'
 import BookmarkButton from '@/components/bookmark-button'
 
 import { categoryImage } from '@/functions/categories'
+import { convertDMS } from '@/functions/coordinates'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
@@ -38,7 +39,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
         getPlaceItem(place.id!)
     }
 
-    return (
+    return place.type === 'point' ? (
         <Marker
             position={[place.lat, place.lon]}
             icon={placeMarkerIcon}
@@ -124,6 +125,22 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 )}
             </Popup>
         </Marker>
+    ) : (
+        <Marker
+            position={[place.lat, place.lon]}
+            icon={
+                new Leaflet.DivIcon({
+                    className: 'map-placemark',
+                    html:
+                        '<div class="map-placemark-title">' +
+                        place.count +
+                        '</div>'
+                })
+            }
+            // eventHandlers={{
+            //     click: onClick
+            // }}
+        />
     )
 }
 

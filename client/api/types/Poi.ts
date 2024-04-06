@@ -3,6 +3,8 @@ import { Categories, Place as PlaceType } from '@/api/types/Place'
 
 export type Place = Pick<PlaceType, 'lat' | 'lon'> & {
     id?: string
+    type?: 'cluster' | 'point'
+    count?: number
     category: Categories
 }
 

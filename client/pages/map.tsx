@@ -50,12 +50,17 @@ const MapPage: NextPage<MapPageProps> = () => {
     const [mapCategories, setMapCategories] = useState<Categories[]>()
     const [mapType, setMapType] = useState<MapObjectsType>()
     const [mapBounds, setMapBounds] = useState<string>()
+    const [mapZoom, setMapZoom] = useState<number>()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const { data: poiListData, isFetching: placesLoading } =
         API.usePoiGetListQuery(
-            { bounds: mapBounds, categories: mapCategories ?? [] },
+            {
+                bounds: mapBounds,
+                categories: mapCategories ?? [],
+                zoom: mapZoom
+            },
             { skip: !mapBounds || mapType !== 'Places' }
         )
 
@@ -106,6 +111,7 @@ const MapPage: NextPage<MapPageProps> = () => {
             await updateUrlCoordinates(lat, lon, zoom)
 
             setMapBounds(bounds.toBBoxString())
+            setMapZoom(zoom)
         }, 500),
         []
     )
