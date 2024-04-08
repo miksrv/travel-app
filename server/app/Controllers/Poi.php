@@ -46,77 +46,165 @@ class Poi extends ResourceController {
         $placesData  = $placesData->findAll();
         $totalPoints = count($placesData);
 
-        // Создаем матрицу расстояний
-        $distanceMatrix = [];
-        foreach ($placesData as $point1) {
-            foreach ($placesData as $point2) {
-                $distanceMatrix[$point1->id][$point2->id] = $this->calculateDistance(
-                    $point1->lat,
-                    $point1->lon,
-                    $point2->lat,
-                    $point2->lon
-                );
-            }
+        define('OFFSET', 268435456);
+        define('RADIUS', 85445659.4471); /* $offset / pi() */
+
+        function lonToX($lon) {
+            return round(OFFSET + RADIUS * $lon * pi() / 180);
         }
 
-        $dbscanLibrary = new DbscanLibrary($distanceMatrix, array_column($placesData, 'id'));
+        function latToY($lat) {
+            return round(OFFSET - RADIUS *
+                log((1 + sin($lat * pi() / 180)) /
+                    (1 - sin($lat * pi() / 180))) / 2);
+        }
 
-        // Устанавливаем параметры для DBSCAN
-        $epsilon  = $this->calculateEpsilon($zoom); // Примерное расстояние в км для формирования кластера
-        $clusters = $dbscanLibrary->dbscan($epsilon, 3);
+        function pixelDistance($lat1, $lon1, $lat2, $lon2, $zoom) {
+            $x1 = lonToX($lon1);
+            $y1 = latToY($lat1);
 
-        $clustersData = [];
-        foreach ($clusters as $clusterItem) {
-            $lat = 0;
-            $lon = 0;
-            $count = count($clusterItem);
+            $x2 = lonToX($lon2);
+            $y2 = latToY($lat2);
 
-            if ($count === 0) {
+            return sqrt(pow(($x1-$x2),2) + pow(($y1-$y2),2)) >> (21 - $zoom);
+        }
+
+        function cluster($markers, $distance, $zoom) {
+            $clustered = array();
+            /* Loop until all markers have been compared. */
+            while (count($markers)) {
+                $marker  = array_pop($markers);
+                $cluster = array();
+                /* Compare against all markers which are left. */
+                foreach ($markers as $key => $target) {
+                    $pixels = pixelDistance($marker->lat, $marker->lon,
+                        $target->lat, $target->lon,
+                        $zoom);
+                    /* If two markers are closer than given distance remove */
+                    /* target marker from array and add it to cluster.      */
+                    if ($distance > $pixels) {
+//                        printf("Distance between %s,%s and %s,%s is %d pixels.\n",
+//                            $marker['lat'], $marker['lon'],
+//                            $target['lat'], $target['lon'],
+//                            $pixels);
+//                        echo '<br />';
+                        unset($markers[$key]);
+                        $cluster[] = $target;
+                    }
+                }
+
+                /* If a marker has been added to cluster, add also the one  */
+                /* we were comparing to and remove the original from array. */
+                if (count($cluster) > 0) {
+                    $cluster[] = $marker;
+                    $clustered[] = $cluster;
+                } else {
+                    $clustered[] = $marker;
+                }
+            }
+            return $clustered;
+        }
+
+        $placesData = cluster($placesData, 20, $zoom);
+
+        foreach ($placesData as $key => $item) {
+            if (!is_array($item)) {
                 continue;
             }
 
-            foreach ($clusterItem as $clusterPoint) {
-                $findPoint = array_search($clusterPoint, array_column($placesData, 'id'));
-                $lat += $placesData[$findPoint]->lat;
-                $lon += $placesData[$findPoint]->lon;
+            $averageLat = 0;
+            $averageLon = 0;
+            $pointCount = count($item);
+
+            foreach ($item as $poi) {
+                $averageLat += $poi->lat;
+                $averageLon += $poi->lon;
             }
 
-            $lat = round($lat / $count, 6);
-            $lon = round($lon / $count, 6);
-
-            $clustersData[] = [
-                'lat' => $lat,
-                'lon' => $lon,
+            $placesData[$key] = [
+                'lat' => round($averageLat / $pointCount, 6),
+                'lon' => round($averageLon / $pointCount, 6),
                 'type'  => 'cluster',
-                'count' => $count
+                'count' => $pointCount
             ];
         }
 
-        // Проходим по всем точкам, которые не попали в кластеры
-        foreach ($placesData as $key => $point) {
-            $isClustered = false;
-
-            foreach ($clusters as $cluster) {
-                if (in_array($point->id, $cluster)) {
-                    $isClustered = true;
-                    break;
-                }
-            }
-
-            if ($isClustered) {
-                unset($placesData[$key]);
-            }
-
-            $point->type = 'point';
-        }
-
         return $this->respond([
-            'test'    => $distanceMatrix,
-            'epsilon' => $this->calculateEpsilon($zoom),
-            'check' => count($placesData),
             'count' => $totalPoints,
-            'items' => array_merge($clustersData, $placesData)
+            'items' => $placesData
         ]);
+
+//        // Создаем матрицу расстояний
+//        $distanceMatrix = [];
+//        foreach ($placesData as $point1) {
+//            foreach ($placesData as $point2) {
+//                $distanceMatrix[$point1->id][$point2->id] = $this->calculateDistance(
+//                    $point1->lat,
+//                    $point1->lon,
+//                    $point2->lat,
+//                    $point2->lon
+//                );
+//            }
+//        }
+//
+//        $dbscanLibrary = new DbscanLibrary($distanceMatrix, array_column($placesData, 'id'));
+//
+//        // Устанавливаем параметры для DBSCAN
+//        $epsilon  = $this->calculateEpsilon($zoom); // Примерное расстояние в км для формирования кластера
+//        $clusters = $dbscanLibrary->dbscan($epsilon, 3);
+//
+//        $clustersData = [];
+//        foreach ($clusters as $clusterItem) {
+//            $lat = 0;
+//            $lon = 0;
+//            $count = count($clusterItem);
+//
+//            if ($count === 0) {
+//                continue;
+//            }
+//
+//            foreach ($clusterItem    as $clusterPoint) {
+//                $findPoint = array_search($clusterPoint, array_column($placesData, 'id'));
+//                $lat += $placesData[$findPoint]->lat;
+//                $lon += $placesData[$findPoint]->lon;
+//            }
+//
+//            $lat = round($lat / $count, 6);
+//            $lon = round($lon / $count, 6);
+//
+//            $clustersData[] = [
+//                'lat' => $lat,
+//                'lon' => $lon,
+//                'type'  => 'cluster',
+//                'count' => $count
+//            ];
+//        }
+//
+//        // Проходим по всем точкам, которые не попали в кластеры
+//        foreach ($placesData as $key => $point) {
+//            $isClustered = false;
+//
+//            foreach ($clusters as $cluster) {
+//                if (in_array($point->id, $cluster)) {
+//                    $isClustered = true;
+//                    break;
+//                }
+//            }
+//
+//            if ($isClustered) {
+//                unset($placesData[$key]);
+//            }
+//
+//            $point->type = 'point';
+//        }
+//
+//        return $this->respond([
+//            'test'    => $distanceMatrix,
+//            'epsilon' => $this->calculateEpsilon($zoom),
+//            'check' => count($placesData),
+//            'count' => $totalPoints,
+//            'items' => array_merge($clustersData, $placesData)
+//        ]);
     }
 
     static function calculateDistance($lat1, $lon1, $lat2, $lon2): float|int {
