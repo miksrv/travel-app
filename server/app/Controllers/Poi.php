@@ -97,6 +97,7 @@ class Poi extends ResourceController {
         ]);
     }
 
+
     /**
      * @param $id
      * @return ResponseInterface
@@ -125,6 +126,7 @@ class Poi extends ResourceController {
 
         return $this->respond($placeData);
     }
+
 
     /**
      * @return ResponseInterface

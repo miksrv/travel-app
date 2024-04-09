@@ -29,6 +29,11 @@ class Cluster {
                 'type'  => 'cluster',
                 'count' => $pointCount
             ];
+
+            if (isset($item[0]->filename)) {
+                $photoPath = PATH_PHOTOS . $item[0]->placeId . '/' . $item[0]->filename;
+                $placeMarks[$key]->preview = $photoPath . '_preview.' . $item[0]->extension;
+            }
         }
 
         return $this->placeMarks = $placeMarks;

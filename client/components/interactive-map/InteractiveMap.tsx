@@ -16,6 +16,7 @@ import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
 import MarkerCluster from '@/components/interactive-map/MarkerCluster'
+import MarkerPhotoCluster from '@/components/interactive-map/MarkerPhotoCluster'
 import HistoricalPhotos from '@/components/interactive-map/historical-photos/HistoricalPhotos'
 
 import { LOCAL_STORGE } from '@/functions/constants'
@@ -351,11 +352,26 @@ const InteractiveMap: React.FC<MapProps> = ({
                         />
                     ))}
 
-                {(places?.length ? places : photos)
+                {places
                     ?.filter(({ type }) => type === 'cluster')
                     ?.map((place, i) => (
                         <MarkerCluster
                             key={`cluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
+                        />
+                    ))}
+
+                {photos
+                    ?.filter(({ type }) => type === 'cluster')
+                    ?.map((place, i) => (
+                        <MarkerPhotoCluster
+                            key={`photoCluster${i}`}
                             marker={place}
                             onClick={(coords) =>
                                 mapRef.current?.setView(
