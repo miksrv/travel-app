@@ -20,10 +20,10 @@ import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import CategoryControl from './CategoryControl'
-import CoordinatesControl from './CoordinatesControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerUser from './MarkerUser'
 import ContextMenu from './context-menu/ContextMenu'
+import CoordinatesControl from './coordinates-control/CoordinatesControl'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
 import HistoricalPhotos from './historical-photos/HistoricalPhotos'
 import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
@@ -116,6 +116,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     const mapRef = useRef<Map | any>()
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
+    const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
     const [placeMark, setPlaceMark] = useState<ApiTypes.LatLonCoordinate>()
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
@@ -449,6 +450,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {enableCoordsControl && (
                         <CoordinatesControl
                             coordinates={cursorPosition ?? mapPosition}
+                            onChangeOpen={setCoordinatesOpen}
                         />
                     )}
                 </div>
@@ -464,7 +466,9 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <MapEvents
                         onChangeBounds={handleChangeBounds}
                         onMouseMove={
-                            enableCoordsControl ? setCursorPosition : undefined
+                            enableCoordsControl && coordinatesOpen
+                                ? setCursorPosition
+                                : undefined
                         }
                     />
                 )}

@@ -22,7 +22,7 @@
     outline: none
     border: none
 
-  .leftControls, .rightControls
+  .leftControls, .rightControls, .bottomControls
     position: absolute
     z-index: 402
     top: 90px
@@ -39,8 +39,8 @@
         margin-bottom: 0
 
   .bottomControls
-    position: absolute
-    z-index: 402
+    height: auto
+    top: auto
     bottom: 10px
     left: 10px
 
@@ -86,26 +86,6 @@
 
     .mapAdditionalList
       margin-bottom: -10px
-
-  .mapCoordinatesControl
-    padding: 2px 6px
-    font-size: $fontSizeCaption
-    border: 0.5px solid $borderInputColor !important
-    box-shadow: none
-    display: flex
-    align-items: center
-
-    b
-      font-weight: 700
-      margin-right: 4px
-
-      &:last-of-type
-        margin-left: 4px
-
-    span
-      display: inline-block
-      width: 54px
-      overflow: hidden
 
 .markerUser
   border-radius: 50%
