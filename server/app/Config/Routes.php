@@ -5,16 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-//$routes->get('introduce', 'Introduce::hello');
-//$routes->options('introduce', 'Introduce');
-
-//$routes->get('migrate/places', 'Migrate::places');
-//$routes->cli('migrate/fix', 'Migrate::fixedActivity');
-//$routes->cli('migrate/places', 'Migrate::places'); //  php index.php migrate places
-//$routes->cli('migrate/comments', 'Migrate::comments');
-//$routes->cli('migrate/users', 'Migrate::users');
-//$routes->cli('migrate/covers', 'Migrate::fixedCoverSizes'); //  php index.php migrate covers
-
 $routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); //  php index.php system recalculate_tags_count
 $routes->cli('system/generate_users_online', 'System::generateUsersOnline'); //  php index.php system generate_users_online
 
