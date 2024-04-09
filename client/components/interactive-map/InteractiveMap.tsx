@@ -339,36 +339,31 @@ const InteractiveMap: React.FC<MapProps> = ({
                     />
                 )}
 
-                {places
-                    ?.filter(({ type }) => type !== 'cluster')
-                    ?.map((place) => (
+                {places?.map((place, i) =>
+                    place?.type === 'cluster' ? (
+                        <MarkerPointCluster
+                            key={`markerPointCluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
+                        />
+                    ) : (
                         <MarkerPoint
-                            key={`poi${place.id}`}
+                            key={`markerPoint${i}`}
                             place={place}
                         />
-                    ))}
+                    )
+                )}
 
-                {places
-                    ?.filter(({ type }) => type === 'cluster')
-                    ?.map((place, i) => (
-                        <MarkerPointCluster
-                            key={`cluster${i}`}
-                            marker={place}
-                            onClick={(coords) =>
-                                mapRef.current?.setView(
-                                    [coords.lat, coords.lon],
-                                    (mapPosition?.zoom ?? 16) + 2
-                                )
-                            }
-                        />
-                    ))}
-
-                {photos
-                    ?.filter(({ type }) => type === 'cluster')
-                    ?.map((place, i) => (
+                {photos?.map((photo, i) =>
+                    photo?.type === 'cluster' ? (
                         <MarkerPhotoCluster
-                            key={`photoCluster${i}`}
-                            marker={place}
+                            key={`markerPhotoCluster${i}`}
+                            marker={photo}
                             onClick={(coords) =>
                                 mapRef.current?.setView(
                                     [coords.lat, coords.lon],
@@ -376,17 +371,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                                 )
                             }
                         />
-                    ))}
-
-                {photos
-                    ?.filter(({ type }) => type !== 'cluster')
-                    ?.map((photo) => (
+                    ) : (
                         <MarkerPhoto
-                            key={`photo${photo.lat}_${photo.lon}`}
+                            key={`markerPhoto${i}`}
                             photo={photo}
                             onPhotoClick={onPhotoClick}
                         />
-                    ))}
+                    )
+                )}
 
                 {enableSearch && (
                     <SearchControl
