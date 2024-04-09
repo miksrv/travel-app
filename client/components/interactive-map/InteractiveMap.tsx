@@ -353,10 +353,16 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 {places
                     ?.filter(({ type }) => type === 'cluster')
-                    ?.map((place) => (
+                    ?.map((place, i) => (
                         <MarkerCluster
-                            key={`cluster${place.id}`}
-                            place={place}
+                            key={`cluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
                         />
                     ))}
 

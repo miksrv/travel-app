@@ -2,25 +2,26 @@ import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
 
-import { Poi } from '@/api/types'
+import { ApiTypes, Poi } from '@/api/types'
 
 interface MarkerPointProps {
-    place: Poi.Place
+    marker: Poi.Place
+    onClick?: (coords: ApiTypes.LatLonCoordinate) => void
 }
 
-const MarkerCluster: React.FC<MarkerPointProps> = ({ place }) => {
+const MarkerCluster: React.FC<MarkerPointProps> = ({ marker, onClick }) => {
     const clusterMarkerIcon = new Leaflet.DivIcon({
         className: 'map-cluster',
-        html: '<div class="map-placemark-cluster">' + place.count + '</div>'
+        html: '<div class="map-placemark-cluster">' + marker.count + '</div>'
     })
 
     return (
         <Marker
-            position={[place.lat, place.lon]}
+            position={[marker.lat, marker.lon]}
             icon={clusterMarkerIcon}
-            // eventHandlers={{
-            //     click: onClick
-            // }}
+            eventHandlers={{
+                click: () => onClick?.({ lat: marker.lat, lon: marker.lon })
+            }}
         />
     )
 }
