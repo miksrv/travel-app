@@ -1,3 +1,5 @@
+'use client'
+
 import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'

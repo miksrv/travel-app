@@ -1,3 +1,5 @@
+'use client'
+
 import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
@@ -17,7 +19,7 @@ const MarkerPhotoCluster: React.FC<MarkerPhotoClusterProps> = ({
     onClick
 }) => {
     const clusterMarkerIcon = new Leaflet.DivIcon({
-        className: styles.clusterPhoto,
+        className: styles.markerPhotoCluster,
         html:
             '<img src="' +
             IMG_HOST +

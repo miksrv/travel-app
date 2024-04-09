@@ -1,0 +1,58 @@
+@import ../../../styles/variables
+
+.markerPointPopup
+  padding: 10px
+
+  .link
+    display: block
+    width: 300px
+    height: 200px
+    background-image: url('/images/no-image.svg')
+    background-position: center
+    background-size: cover
+    position: relative
+
+    .rating
+      position: absolute
+      left: 8px
+      top: 8px
+
+    .bottomPanel
+      position: absolute
+      bottom: 0
+      left: 0
+      opacity: 0
+      display: flex
+      justify-content: space-between
+      align-items: flex-end
+      width: 100%
+      padding: 10px
+      transition: opacity .15s
+
+      & > div
+        display: flex
+        align-items: flex-end
+
+  .image
+    object-fit: cover
+    border-radius: $borderRadius $borderRadius 0 0
+    height: 100%
+
+  .title
+    font-size: $fontSize
+    font-weight: 400
+    margin: 8px 8px
+
+  & > div:first-of-type // borders
+    border-radius: 4px
+
+    & > div // content
+      margin: 0px
+      margin-right: -1px
+
+      & > p
+        margin: 0 !important
+
+  & > a:first-of-type // close button
+    top: 10px
+    right: 10px

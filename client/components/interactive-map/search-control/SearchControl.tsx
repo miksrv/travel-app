@@ -9,7 +9,7 @@ import { ApiTypes } from '@/api/types'
 
 import * as Coordinates from '@/functions/coordinates'
 
-import styles from '../styles.module.sass'
+import styles from './styles.module.sass'
 
 interface SearchControlProps {
     onClear?: () => void

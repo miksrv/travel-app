@@ -87,25 +87,6 @@
     .mapAdditionalList
       margin-bottom: -10px
 
-  .searchControl
-    position: absolute
-    z-index: 402
-    top: 10px
-    left: 56px
-    min-width: 300px
-
-    @media only screen and (max-width: $mobileMaxWidth)
-      min-width: 240px
-
-    & > div
-      & > div
-        background-color: #FFF !important
-
-    ul
-      top: 33px !important
-      border-width: .5px !important
-      box-shadow: none !important
-
   .mapCoordinatesControl
     padding: 2px 6px
     font-size: $fontSizeCaption
@@ -126,81 +107,11 @@
       width: 54px
       overflow: hidden
 
-.popup
-  padding: 10px
-
-  .link
-    display: block
-    width: 300px
-    height: 200px
-    background-image: url('/images/no-image.svg')
-    background-position: center
-    background-size: cover
-    position: relative
-
-    .rating
-      position: absolute
-      left: 8px
-      top: 8px
-
-    .bottomPanel
-      position: absolute
-      bottom: 0
-      left: 0
-      opacity: 0
-      display: flex
-      justify-content: space-between
-      align-items: flex-end
-      width: 100%
-      padding: 10px
-      transition: opacity .15s
-
-      & > div
-        display: flex
-        align-items: flex-end
-
-  .image
-    object-fit: cover
-    border-radius: $borderRadius $borderRadius 0 0
-    height: 100%
-
-  .title
-    font-size: $fontSize
-    font-weight: 400
-    margin: 8px 8px
-
-  & > div:first-of-type // borders
-    border-radius: 4px
-
-    & > div // content
-      margin: 0px
-      margin-right: -1px
-
-      & > p
-        margin: 0 !important
-
-  & > a:first-of-type // close button
-    top: 10px
-    right: 10px
-
 .markerUser
   border-radius: 50%
   padding: 3px !important
   background: #ffffff
   border: 1px solid rgba(0,0,0,.22)
-
-.markerPhoto
-  border-radius: $borderRadius
-  border: 1px solid #FFF
-  object-fit: cover
-  background-image: url('/images/no-image.svg')
-  background-position: center
-  background-size: cover
-  background-color: $inputBackgroundColor
-
-  &:hover
-    z-index: 600 !important
-    box-shadow: 0 0 1px 1px #ffb700
 
 .loader
   position: absolute
@@ -215,40 +126,4 @@
   svg
     width: 16px
     height: 16px
-
-.clusterPhoto
-  border-radius: $borderRadius
-  border: 1px solid #FFF
-  object-fit: cover
-  background-image: url('/images/no-image.svg')
-  background-position: center
-  background-size: cover
-  background-color: $inputBackgroundColor
-  width: 32px !important
-  height: 32px !important
-  margin-left: -16px !important
-  margin-top: -16px !important
-  position: relative
-
-  &:hover
-    z-index: 600 !important
-    box-shadow: 0 0 1px 1px #ffb700
-
-  & > img
-    border-radius: $borderRadius
-    width: 100% !important
-    height: 100% !important
-    object-fit: cover
-
-  & > div
-    position: absolute
-    bottom: 0
-    left: 0
-    font-size: 0.7em
-    color: #FFF
-    width: 100%
-    text-align: center
-    background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%)
-    border-bottom-right-radius: $borderRadius
-    border-bottom-left-radius: $borderRadius
 

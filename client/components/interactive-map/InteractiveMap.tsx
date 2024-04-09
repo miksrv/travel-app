@@ -15,10 +15,6 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
-import MarkerCluster from '@/components/interactive-map/MarkerCluster'
-import MarkerPhotoCluster from '@/components/interactive-map/MarkerPhotoCluster'
-import HistoricalPhotos from '@/components/interactive-map/historical-photos/HistoricalPhotos'
-
 import { LOCAL_STORGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -26,11 +22,14 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import CategoryControl from './CategoryControl'
 import CoordinatesControl from './CoordinatesControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
-import MarkerPhoto from './MarkerPhoto'
-import MarkerPoint from './MarkerPoint'
 import MarkerUser from './MarkerUser'
 import ContextMenu from './context-menu/ContextMenu'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
+import HistoricalPhotos from './historical-photos/HistoricalPhotos'
+import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
+import MarkerPhoto from './marker-photo/MarkerPhoto'
+import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
+import MarkerPoint from './marker-point/MarkerPoint'
 import PlaceMark from './place-mark/PlaceMark'
 import SearchControl from './search-control/SearchControl'
 import styles from './styles.module.sass'
@@ -185,11 +184,8 @@ const InteractiveMap: React.FC<MapProps> = ({
         const url = new URL(window?.location?.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
         const param = coords ? `?m=${coords.lat},${coords.lon}` : ''
-        const hash = match
-            ? url.hash.replace(match[0], param)
-            : url.hash + param
 
-        url.hash = hash
+        url.hash = match ? url.hash.replace(match[0], param) : url.hash + param
 
         await router.replace(url.toString())
     }
@@ -355,7 +351,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {places
                     ?.filter(({ type }) => type === 'cluster')
                     ?.map((place, i) => (
-                        <MarkerCluster
+                        <MarkerPointCluster
                             key={`cluster${i}`}
                             marker={place}
                             onClick={(coords) =>
