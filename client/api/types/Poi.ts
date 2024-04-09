@@ -12,6 +12,8 @@ export type Photo = Pick<
     PhotoType,
     'title' | 'preview' | 'full' | 'placeId' | 'author' | 'created'
 > & {
+    type?: 'cluster' | 'point'
+    count?: number
     lat: number
     lon: number
 }

@@ -5,7 +5,6 @@ import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 
 import Badge from '@/ui/badge'
-import Icon from '@/ui/icon'
 import RatingColored from '@/ui/rating-colored'
 import Skeleton from '@/ui/skeleton'
 
@@ -97,10 +96,10 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                             />
 
                             {!!poiData?.comments && (
-                                <div className={styles.icon}>
-                                    <Icon name={'Comment'} />
-                                    {poiData.comments}
-                                </div>
+                                <Badge
+                                    icon={'Comment'}
+                                    content={poiData.comments}
+                                />
                             )}
 
                             {!!poiData?.bookmarks && (

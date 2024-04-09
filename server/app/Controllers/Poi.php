@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Libraries\DbscanLibrary;
+use App\Libraries\Cluster;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Models\PhotosModel;
@@ -18,8 +18,6 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function list(): ResponseInterface {
-        // https://github.com/matthiasmullie/geo/tree/master
-
         $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
         $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -45,225 +43,20 @@ class Poi extends ResourceController {
 
         $placesData  = $placesData->findAll();
         $totalPoints = count($placesData);
-
-        define('OFFSET', 268435456);
-        define('RADIUS', 85445659.4471); /* $offset / pi() */
-
-        function lonToX($lon) {
-            return round(OFFSET + RADIUS * $lon * pi() / 180);
-        }
-
-        function latToY($lat) {
-            return round(OFFSET - RADIUS *
-                log((1 + sin($lat * pi() / 180)) /
-                    (1 - sin($lat * pi() / 180))) / 2);
-        }
-
-        function pixelDistance($lat1, $lon1, $lat2, $lon2, $zoom) {
-            $x1 = lonToX($lon1);
-            $y1 = latToY($lat1);
-
-            $x2 = lonToX($lon2);
-            $y2 = latToY($lat2);
-
-            return sqrt(pow(($x1-$x2),2) + pow(($y1-$y2),2)) >> (21 - $zoom);
-        }
-
-        function cluster($markers, $distance, $zoom) {
-            $clustered = array();
-            /* Loop until all markers have been compared. */
-            while (count($markers)) {
-                $marker  = array_pop($markers);
-                $cluster = array();
-                /* Compare against all markers which are left. */
-                foreach ($markers as $key => $target) {
-                    $pixels = pixelDistance($marker->lat, $marker->lon,
-                        $target->lat, $target->lon,
-                        $zoom);
-                    /* If two markers are closer than given distance remove */
-                    /* target marker from array and add it to cluster.      */
-                    if ($distance > $pixels) {
-//                        printf("Distance between %s,%s and %s,%s is %d pixels.\n",
-//                            $marker['lat'], $marker['lon'],
-//                            $target['lat'], $target['lon'],
-//                            $pixels);
-//                        echo '<br />';
-                        unset($markers[$key]);
-                        $cluster[] = $target;
-                    }
-                }
-
-                /* If a marker has been added to cluster, add also the one  */
-                /* we were comparing to and remove the original from array. */
-                if (count($cluster) > 0) {
-                    $cluster[] = $marker;
-                    $clustered[] = $cluster;
-                } else {
-                    $clustered[] = $marker;
-                }
-            }
-            return $clustered;
-        }
-
-        $placesData = cluster($placesData, 20, $zoom);
-
-        foreach ($placesData as $key => $item) {
-            if (!is_array($item)) {
-                continue;
-            }
-
-            $averageLat = 0;
-            $averageLon = 0;
-            $pointCount = count($item);
-
-            foreach ($item as $poi) {
-                $averageLat += $poi->lat;
-                $averageLon += $poi->lon;
-            }
-
-            $placesData[$key] = [
-                'lat' => round($averageLat / $pointCount, 6),
-                'lon' => round($averageLon / $pointCount, 6),
-                'type'  => 'cluster',
-                'count' => $pointCount
-            ];
-        }
+        $clusterData = new Cluster($placesData, $zoom);
 
         return $this->respond([
             'count' => $totalPoints,
-            'items' => $placesData
+            'items' => $clusterData->placeMarks
         ]);
-
-//        // Создаем матрицу расстояний
-//        $distanceMatrix = [];
-//        foreach ($placesData as $point1) {
-//            foreach ($placesData as $point2) {
-//                $distanceMatrix[$point1->id][$point2->id] = $this->calculateDistance(
-//                    $point1->lat,
-//                    $point1->lon,
-//                    $point2->lat,
-//                    $point2->lon
-//                );
-//            }
-//        }
-//
-//        $dbscanLibrary = new DbscanLibrary($distanceMatrix, array_column($placesData, 'id'));
-//
-//        // Устанавливаем параметры для DBSCAN
-//        $epsilon  = $this->calculateEpsilon($zoom); // Примерное расстояние в км для формирования кластера
-//        $clusters = $dbscanLibrary->dbscan($epsilon, 3);
-//
-//        $clustersData = [];
-//        foreach ($clusters as $clusterItem) {
-//            $lat = 0;
-//            $lon = 0;
-//            $count = count($clusterItem);
-//
-//            if ($count === 0) {
-//                continue;
-//            }
-//
-//            foreach ($clusterItem    as $clusterPoint) {
-//                $findPoint = array_search($clusterPoint, array_column($placesData, 'id'));
-//                $lat += $placesData[$findPoint]->lat;
-//                $lon += $placesData[$findPoint]->lon;
-//            }
-//
-//            $lat = round($lat / $count, 6);
-//            $lon = round($lon / $count, 6);
-//
-//            $clustersData[] = [
-//                'lat' => $lat,
-//                'lon' => $lon,
-//                'type'  => 'cluster',
-//                'count' => $count
-//            ];
-//        }
-//
-//        // Проходим по всем точкам, которые не попали в кластеры
-//        foreach ($placesData as $key => $point) {
-//            $isClustered = false;
-//
-//            foreach ($clusters as $cluster) {
-//                if (in_array($point->id, $cluster)) {
-//                    $isClustered = true;
-//                    break;
-//                }
-//            }
-//
-//            if ($isClustered) {
-//                unset($placesData[$key]);
-//            }
-//
-//            $point->type = 'point';
-//        }
-//
-//        return $this->respond([
-//            'test'    => $distanceMatrix,
-//            'epsilon' => $this->calculateEpsilon($zoom),
-//            'check' => count($placesData),
-//            'count' => $totalPoints,
-//            'items' => array_merge($clustersData, $placesData)
-//        ]);
     }
 
-    static function calculateDistance($lat1, $lon1, $lat2, $lon2): float|int {
-        $r = 6371; // Радиус Земли в километрах
-
-        // Преобразование градусов в радианы
-        $lat1 = deg2rad($lat1);
-        $lon1 = deg2rad($lon1);
-        $lat2 = deg2rad($lat2);
-        $lon2 = deg2rad($lon2);
-
-        // Разница широт и долгот
-        $dlat = $lat2 - $lat1;
-        $dlon = $lon2 - $lon1;
-
-        // Формула гаверсинусов для вычисления расстояния между точками
-        $a = sin($dlat / 2) * sin($dlat / 2) +
-            cos($lat1) * cos($lat2) *
-            sin($dlon / 2) * sin($dlon / 2);
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-
-        return round($r * $c, 3);
-    }
-
-    static function calculateEpsilon($zoom) {
-        // Минимальное и максимальное значение зума, при котором epsilon будет минимальным и максимальным соответственно
-        switch ($zoom) {
-            case 6: return 2;
-            case 7: return 1.7;
-            case 8: return 1.5;
-            case 9: return 1.3;
-            case 10: return 1.1;
-            case 11: return 0.9;
-            case 12: return 0.8;
-            case 13: return 0.7;
-            case 14: return 0.5;
-            case 15: return 0.3;
-            case 16: return 0.1;
-            case 17: return 0.02;
-            case 18: return 0.001;
-        }
-
-        $minZoom = 6;
-        $maxZoom = 18;
-
-        // Минимальное и максимальное значение epsilon, которые соответствуют минимальному и максимальному зуму
-        $minEpsilon = 10;
-        $maxEpsilon = 0.001;
-
-        // Интерполяция значения epsilon в зависимости от зума
-        $epsilon = $minEpsilon + (($zoom - $minZoom) / ($maxZoom - $minZoom)) * ($maxEpsilon - $minEpsilon);
-
-        return $epsilon;
-    }
 
     /**
      * @return ResponseInterface
      */
     public function photos(): ResponseInterface {
+        $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $locale = $this->request->getLocale();
         $bounds = $this->_getBounds();
 
@@ -279,7 +72,14 @@ class Poi extends ResourceController {
             ->groupBy('photos.lon, photos.lat')
             ->findAll();
 
-        foreach ($photosData as $photo) {
+        $photosCount = count($photosData);
+        $clusterData = new Cluster($photosData, $zoom);
+
+        foreach ($clusterData->placeMarks as $photo) {
+            if (isset($photo->type) && $photo->type === 'cluster') {
+                continue;
+            }
+
             $photoPath = PATH_PHOTOS . $photo->placeId . '/' . $photo->filename;
 
             $photo->full    = $photoPath . '.' . $photo->extension;
@@ -292,8 +92,8 @@ class Poi extends ResourceController {
         }
 
         return $this->respond([
-            'items' => $photosData,
-            'count' => count($photosData)
+            'items' => $clusterData->placeMarks,
+            'count' => $photosCount
         ]);
     }
 

@@ -5,7 +5,7 @@ import { Marker } from 'react-leaflet'
 import { ApiTypes, Poi } from '@/api/types'
 
 interface MarkerPointProps {
-    marker: Poi.Place
+    marker: Poi.Place | Poi.Photo
     onClick?: (coords: ApiTypes.LatLonCoordinate) => void
 }
 

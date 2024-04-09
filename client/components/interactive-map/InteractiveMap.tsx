@@ -351,7 +351,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         />
                     ))}
 
-                {places
+                {(places?.length ? places : photos)
                     ?.filter(({ type }) => type === 'cluster')
                     ?.map((place, i) => (
                         <MarkerCluster
@@ -366,13 +366,15 @@ const InteractiveMap: React.FC<MapProps> = ({
                         />
                     ))}
 
-                {photos?.map((photo) => (
-                    <MarkerPhoto
-                        key={`photo${photo.lat}_${photo.lon}`}
-                        photo={photo}
-                        onPhotoClick={onPhotoClick}
-                    />
-                ))}
+                {photos
+                    ?.filter(({ type }) => type !== 'cluster')
+                    ?.map((photo) => (
+                        <MarkerPhoto
+                            key={`photo${photo.lat}_${photo.lon}`}
+                            photo={photo}
+                            onPhotoClick={onPhotoClick}
+                        />
+                    ))}
 
                 {enableSearch && (
                     <SearchControl

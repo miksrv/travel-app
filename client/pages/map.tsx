@@ -66,7 +66,7 @@ const MapPage: NextPage<MapPageProps> = () => {
 
     const { data: photoListData, isFetching: photosLoading } =
         API.usePoiGetPhotoListQuery(
-            { bounds: mapBounds },
+            { bounds: mapBounds, zoom: mapZoom },
             { skip: !mapBounds || mapType !== 'Photos' }
         )
 
