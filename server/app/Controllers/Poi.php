@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\Cluster;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Models\PhotosModel;
@@ -18,6 +19,7 @@ class Poi extends ResourceController {
      */
     public function list(): ResponseInterface {
         $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
+        $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = $this->_getBounds();
 
@@ -39,18 +41,22 @@ class Poi extends ResourceController {
             $placesData->where('user_id', $author);
         }
 
-        $result = $placesData->findAll();
+        $placesData  = $placesData->findAll();
+        $totalPoints = count($placesData);
+        $clusterData = new Cluster($placesData, $zoom);
 
         return $this->respond([
-            'items' => $result,
-            'count' => count($result)
+            'count' => $totalPoints,
+            'items' => $clusterData->placeMarks
         ]);
     }
+
 
     /**
      * @return ResponseInterface
      */
     public function photos(): ResponseInterface {
+        $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $locale = $this->request->getLocale();
         $bounds = $this->_getBounds();
 
@@ -66,7 +72,14 @@ class Poi extends ResourceController {
             ->groupBy('photos.lon, photos.lat')
             ->findAll();
 
-        foreach ($photosData as $photo) {
+        $photosCount = count($photosData);
+        $clusterData = new Cluster($photosData, $zoom);
+
+        foreach ($clusterData->placeMarks as $photo) {
+            if (isset($photo->type) && $photo->type === 'cluster') {
+                continue;
+            }
+
             $photoPath = PATH_PHOTOS . $photo->placeId . '/' . $photo->filename;
 
             $photo->full    = $photoPath . '.' . $photo->extension;
@@ -79,10 +92,11 @@ class Poi extends ResourceController {
         }
 
         return $this->respond([
-            'items' => $photosData,
-            'count' => count($photosData)
+            'items' => $clusterData->placeMarks,
+            'count' => $photosCount
         ]);
     }
+
 
     /**
      * @param $id
@@ -112,6 +126,7 @@ class Poi extends ResourceController {
 
         return $this->respond($placeData);
     }
+
 
     /**
      * @return ResponseInterface

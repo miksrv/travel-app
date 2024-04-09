@@ -356,6 +356,7 @@ export interface RequestActivityGetList {
 /* Controller: POI */
 export interface RequestPoiList {
     bounds?: string
+    zoom?: number
     categories?: Categories[]
 }
 

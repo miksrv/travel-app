@@ -15,6 +15,8 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
+import MarkerCluster from '@/components/interactive-map/MarkerCluster'
+import MarkerPhotoCluster from '@/components/interactive-map/MarkerPhotoCluster'
 import HistoricalPhotos from '@/components/interactive-map/historical-photos/HistoricalPhotos'
 
 import { LOCAL_STORGE } from '@/functions/constants'
@@ -341,19 +343,54 @@ const InteractiveMap: React.FC<MapProps> = ({
                     />
                 )}
 
-                {places?.map((place) => (
-                    <MarkerPoint
-                        key={`poi${place.id}`}
-                        place={place}
-                    />
-                ))}
-                {photos?.map((photo) => (
-                    <MarkerPhoto
-                        key={`photo${photo.lat}_${photo.lon}`}
-                        photo={photo}
-                        onPhotoClick={onPhotoClick}
-                    />
-                ))}
+                {places
+                    ?.filter(({ type }) => type !== 'cluster')
+                    ?.map((place) => (
+                        <MarkerPoint
+                            key={`poi${place.id}`}
+                            place={place}
+                        />
+                    ))}
+
+                {places
+                    ?.filter(({ type }) => type === 'cluster')
+                    ?.map((place, i) => (
+                        <MarkerCluster
+                            key={`cluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
+                        />
+                    ))}
+
+                {photos
+                    ?.filter(({ type }) => type === 'cluster')
+                    ?.map((place, i) => (
+                        <MarkerPhotoCluster
+                            key={`photoCluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
+                        />
+                    ))}
+
+                {photos
+                    ?.filter(({ type }) => type !== 'cluster')
+                    ?.map((photo) => (
+                        <MarkerPhoto
+                            key={`photo${photo.lat}_${photo.lon}`}
+                            photo={photo}
+                            onPhotoClick={onPhotoClick}
+                        />
+                    ))}
 
                 {enableSearch && (
                     <SearchControl
