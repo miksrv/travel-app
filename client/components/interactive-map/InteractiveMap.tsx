@@ -297,16 +297,21 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 {mapLayer === MapLayers.OCM && (
                     <ReactLeaflet.TileLayer
+                        attribution='Open Cycle Map'
                         url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
                     />
                 )}
                 {mapLayer === MapLayers.MapBox && (
                     <ReactLeaflet.TileLayer
+                        attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
                     />
                 )}
                 {mapLayer === MapLayers.OSM && (
-                    <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+                    <ReactLeaflet.TileLayer
+                        attribution={'Open Street Map'}
+                        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    />
                 )}
                 {mapLayer === MapLayers.GoogleMap && (
                     <ReactLeaflet.TileLayer
