@@ -108,8 +108,9 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         if (selectedOption?.title !== option?.title) {
             setSelectedOption(option)
             setSearch(option?.title)
-            onSelect?.(option)
         }
+
+        onSelect?.(option)
 
         setIsOpen(false)
     }

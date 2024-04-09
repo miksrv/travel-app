@@ -15,22 +15,21 @@ import { ApiTypes } from '@/api/types'
 import { Categories } from '@/api/types/Place'
 import { Photo, Place } from '@/api/types/Poi'
 
-import MarkerCluster from '@/components/interactive-map/MarkerCluster'
-import MarkerPhotoCluster from '@/components/interactive-map/MarkerPhotoCluster'
-import HistoricalPhotos from '@/components/interactive-map/historical-photos/HistoricalPhotos'
-
 import { LOCAL_STORGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import CategoryControl from './CategoryControl'
-import CoordinatesControl from './CoordinatesControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
-import MarkerPhoto from './MarkerPhoto'
-import MarkerPoint from './MarkerPoint'
 import MarkerUser from './MarkerUser'
 import ContextMenu from './context-menu/ContextMenu'
+import CoordinatesControl from './coordinates-control/CoordinatesControl'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
+import HistoricalPhotos from './historical-photos/HistoricalPhotos'
+import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
+import MarkerPhoto from './marker-photo/MarkerPhoto'
+import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
+import MarkerPoint from './marker-point/MarkerPoint'
 import PlaceMark from './place-mark/PlaceMark'
 import SearchControl from './search-control/SearchControl'
 import styles from './styles.module.sass'
@@ -117,6 +116,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     const mapRef = useRef<Map | any>()
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
+    const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
     const [placeMark, setPlaceMark] = useState<ApiTypes.LatLonCoordinate>()
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
@@ -185,11 +185,8 @@ const InteractiveMap: React.FC<MapProps> = ({
         const url = new URL(window?.location?.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
         const param = coords ? `?m=${coords.lat},${coords.lon}` : ''
-        const hash = match
-            ? url.hash.replace(match[0], param)
-            : url.hash + param
 
-        url.hash = hash
+        url.hash = match ? url.hash.replace(match[0], param) : url.hash + param
 
         await router.replace(url.toString())
     }
@@ -301,16 +298,21 @@ const InteractiveMap: React.FC<MapProps> = ({
 
                 {mapLayer === MapLayers.OCM && (
                     <ReactLeaflet.TileLayer
+                        attribution='Open Cycle Map'
                         url={`https://tile.thunderforest.com/cycle/{z}/{x}/{y}.png?apikey=${process.env.NEXT_PUBLIC_CYCLEMAP_TOKEN}`}
                     />
                 )}
                 {mapLayer === MapLayers.MapBox && (
                     <ReactLeaflet.TileLayer
+                        attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url={`https://api.mapbox.com/styles/v1/miksoft/cli4uhd5b00bp01r6eocm21rq/tiles/256/{z}/{x}/{y}@2x?access_token=${process.env.NEXT_PUBLIC_MAPBOX_TOKEN}`}
                     />
                 )}
                 {mapLayer === MapLayers.OSM && (
-                    <ReactLeaflet.TileLayer url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png' />
+                    <ReactLeaflet.TileLayer
+                        attribution={'Open Street Map'}
+                        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    />
                 )}
                 {mapLayer === MapLayers.GoogleMap && (
                     <ReactLeaflet.TileLayer
@@ -343,36 +345,31 @@ const InteractiveMap: React.FC<MapProps> = ({
                     />
                 )}
 
-                {places
-                    ?.filter(({ type }) => type !== 'cluster')
-                    ?.map((place) => (
+                {places?.map((place, i) =>
+                    place?.type === 'cluster' ? (
+                        <MarkerPointCluster
+                            key={`markerPointCluster${i}`}
+                            marker={place}
+                            onClick={(coords) =>
+                                mapRef.current?.setView(
+                                    [coords.lat, coords.lon],
+                                    (mapPosition?.zoom ?? 16) + 2
+                                )
+                            }
+                        />
+                    ) : (
                         <MarkerPoint
-                            key={`poi${place.id}`}
+                            key={`markerPoint${i}`}
                             place={place}
                         />
-                    ))}
+                    )
+                )}
 
-                {places
-                    ?.filter(({ type }) => type === 'cluster')
-                    ?.map((place, i) => (
-                        <MarkerCluster
-                            key={`cluster${i}`}
-                            marker={place}
-                            onClick={(coords) =>
-                                mapRef.current?.setView(
-                                    [coords.lat, coords.lon],
-                                    (mapPosition?.zoom ?? 16) + 2
-                                )
-                            }
-                        />
-                    ))}
-
-                {photos
-                    ?.filter(({ type }) => type === 'cluster')
-                    ?.map((place, i) => (
+                {photos?.map((photo, i) =>
+                    photo?.type === 'cluster' ? (
                         <MarkerPhotoCluster
-                            key={`photoCluster${i}`}
-                            marker={place}
+                            key={`markerPhotoCluster${i}`}
+                            marker={photo}
                             onClick={(coords) =>
                                 mapRef.current?.setView(
                                     [coords.lat, coords.lon],
@@ -380,17 +377,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                                 )
                             }
                         />
-                    ))}
-
-                {photos
-                    ?.filter(({ type }) => type !== 'cluster')
-                    ?.map((photo) => (
+                    ) : (
                         <MarkerPhoto
-                            key={`photo${photo.lat}_${photo.lon}`}
+                            key={`markerPhoto${i}`}
                             photo={photo}
                             onPhotoClick={onPhotoClick}
                         />
-                    ))}
+                    )
+                )}
 
                 {enableSearch && (
                     <SearchControl
@@ -456,6 +450,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {enableCoordsControl && (
                         <CoordinatesControl
                             coordinates={cursorPosition ?? mapPosition}
+                            onChangeOpen={setCoordinatesOpen}
                         />
                     )}
                 </div>
@@ -471,7 +466,9 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <MapEvents
                         onChangeBounds={handleChangeBounds}
                         onMouseMove={
-                            enableCoordsControl ? setCursorPosition : undefined
+                            enableCoordsControl && coordinatesOpen
+                                ? setCursorPosition
+                                : undefined
                         }
                     />
                 )}
