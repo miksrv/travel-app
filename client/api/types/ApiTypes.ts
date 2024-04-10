@@ -10,7 +10,7 @@ import {
     LocationObject,
     Place
 } from './Place'
-import { Photo as poiPhoto, Place as poiPlace } from './Poi'
+import { Photo as poiPhoto, Place as poiPlace } from './Placemark'
 import { Tag } from './Tag'
 import { LevelData, User } from './User'
 

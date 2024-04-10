@@ -11,7 +11,7 @@ import RatingColored from '@/ui/rating-colored'
 import Skeleton from '@/ui/skeleton'
 
 import { API, IMG_HOST } from '@/api/api'
-import { Poi } from '@/api/types'
+import { Placemark } from '@/api/types'
 
 import BookmarkButton from '@/components/bookmark-button'
 
@@ -21,7 +21,7 @@ import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 import styles from './styles.module.sass'
 
 interface MarkerPointProps {
-    place: Poi.Place
+    place: Placemark.Place
 }
 
 const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {

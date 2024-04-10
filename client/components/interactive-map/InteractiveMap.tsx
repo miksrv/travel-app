@@ -11,9 +11,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from '@/ui/button'
 import Spinner from '@/ui/spinner'
 
-import { ApiTypes } from '@/api/types'
-import { Categories } from '@/api/types/Place'
-import { Photo, Place } from '@/api/types/Poi'
+import { ApiTypes, Place, Placemark } from '@/api/types'
 
 import { LOCAL_STORGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
@@ -64,9 +62,9 @@ export type MapPositionType = {
 }
 
 type MapProps = {
-    places?: Place[]
-    photos?: Photo[]
-    categories?: Categories[]
+    places?: Placemark.Place[]
+    photos?: Placemark.Photo[]
+    categories?: Place.Categories[]
     layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
@@ -79,10 +77,10 @@ type MapProps = {
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
-    onChangeCategories?: (categories?: Categories[]) => void
+    onChangeCategories?: (categories?: Place.Categories[]) => void
     onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
-    onPhotoClick?: (photo: Photo) => void
+    onPhotoClick?: (photo: Placemark.Photo) => void
 } & MapOptions
 
 const DEFAULT_MAP_ZOOM = 12

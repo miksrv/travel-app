@@ -13,9 +13,7 @@ import Container from '@/ui/container'
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Categories } from '@/api/types/Place'
-import { Photo } from '@/api/types/Poi'
+import { ApiTypes, Place, Placemark } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -44,10 +42,10 @@ const MapPage: NextPage<MapPageProps> = () => {
     // const [initMapLayer, setInitMapLayer] = useState<MapLayersType>()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<Photo>()
-    const [categories, setCategories] = useState<Categories[]>()
+    const [currentPhoto, setCurrentPhoto] = useState<Placemark.Photo>()
+    const [categories, setCategories] = useState<Place.Categories[]>()
 
-    const [mapCategories, setMapCategories] = useState<Categories[]>()
+    const [mapCategories, setMapCategories] = useState<Place.Categories[]>()
     const [mapType, setMapType] = useState<MapObjectsType>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [mapZoom, setMapZoom] = useState<number>()
@@ -74,7 +72,7 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(false)
     }
 
-    const handlePhotoClick = (photo: Photo) => {
+    const handlePhotoClick = (photo: Placemark.Photo) => {
         setCurrentPhoto(photo)
         setShowLightbox(true)
     }
@@ -117,13 +115,13 @@ const MapPage: NextPage<MapPageProps> = () => {
     )
 
     const debounceSetMapCategories = useCallback(
-        debounce((categories?: Categories[]) => {
+        debounce((categories?: Place.Categories[]) => {
             setMapCategories(categories)
         }, 1000),
         []
     )
 
-    const handleChangeCategories = (categories?: Categories[]) => {
+    const handleChangeCategories = (categories?: Place.Categories[]) => {
         setCategories(categories)
         debounceSetMapCategories(categories)
     }
@@ -131,8 +129,8 @@ const MapPage: NextPage<MapPageProps> = () => {
     useEffect(() => {
         const hash = window?.location?.hash ?? null
 
-        setCategories(Object.values(Categories))
-        setMapCategories(Object.values(Categories))
+        setCategories(Object.values(Place.Categories))
+        setMapCategories(Object.values(Place.Categories))
 
         if (hash) {
             const splitCords = hash.replace('#', '').split(',')
