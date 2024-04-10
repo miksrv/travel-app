@@ -318,7 +318,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                             url: `${IMG_HOST}${cover?.preview}`,
                             width: 280
                         })),
-                    locale: i18n.language,
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     type: 'http://ogp.me/ns/article#'
                 }}
             />

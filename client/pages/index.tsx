@@ -29,12 +29,14 @@ interface IndexPageProps {
     photosList: Photo[]
 }
 
+const TKEY = 'pages.index.'
+
 const IndexPage: NextPage<IndexPageProps> = ({
     placesList,
     usersList,
     photosList
 }) => {
-    const { t, i18n } = useTranslation('common', { keyPrefix: 'pages.index' })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
 
@@ -53,18 +55,30 @@ const IndexPage: NextPage<IndexPageProps> = ({
             </Head>
 
             <NextSeo
-                title={t('title')}
-                description={`${t('description')} - ${placesList
-                    ?.map(({ title }) => title)
-                    .join(', ')
-                    .substring(0, 220)}`}
+                title={t(`${TKEY}title`)}
+                description={t(`${TKEY}description`)}
                 canonical={canonicalUrl}
+                openGraph={{
+                    description: t(`${TKEY}description`),
+                    images: [
+                        {
+                            height: 1538,
+                            url: '/images/pages/main.jpg',
+                            width: 1768
+                        }
+                    ],
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
+                    siteName: t('siteName'),
+                    title: t(`${TKEY}title`),
+                    type: 'website',
+                    url: canonicalUrl
+                }}
             />
 
             <Header
                 hideHomePage={true}
-                title={t('title')}
-                currentPage={t('title')}
+                title={t(`${TKEY}title`)}
+                currentPage={t(`${TKEY}title`)}
             />
 
             <PlacesList places={placesList} />
@@ -76,16 +90,16 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 link={'/places'}
                 style={{ margin: '15px 0' }}
             >
-                {t('buttonAllPlaces')}
+                {t(`${TKEY}buttonAllPlaces`)}
             </Button>
 
             <UsersList
-                title={t('titleActiveUsers')}
+                title={t(`${TKEY}titleActiveUsers`)}
                 users={usersList}
             />
 
             <UserGallery
-                title={t('titleLastPhotos')}
+                title={t(`${TKEY}titleLastPhotos`)}
                 photos={photosList}
             />
         </AppLayout>

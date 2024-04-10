@@ -22,15 +22,15 @@ import { formatDateUTC } from '@/functions/helpers'
 
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
+const TKEY = 'components.pagePlace.place.'
+
 const Place: React.FC<PlaceProps> = ({
     place,
     photoList,
     ratingCount,
     nearPlaces
 }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.place'
-    })
+    const { t, i18n } = useTranslation()
 
     const { data: ratingData } = API.useRatingGetListQuery(place?.id!, {
         skip: !place?.id
@@ -47,7 +47,7 @@ const Place: React.FC<PlaceProps> = ({
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}places`,
-                name: t('breadCrumbPlacesLink'),
+                name: t(`${TKEY}breadCrumbPlacesLink`),
                 position: 1
             },
             {
@@ -95,16 +95,7 @@ const Place: React.FC<PlaceProps> = ({
             longitude: place?.lon
         },
         image: photoList?.length
-            ? // ? photoList?.map((photo) => ({
-              //       '@type': 'ImageObject',
-              //       author: photo.author?.name,
-              //       caption: photo.title,
-              //       contentUrl: `${IMG_HOST}${photo?.full}`,
-              //       height: `${photo.height}px`,
-              //       url: `${IMG_HOST}${photo?.full}`,
-              //       width: `${photo.width}px`
-              //   }))
-              photoList?.map(({ full }) => `${IMG_HOST}${full}`)
+            ? photoList?.map(({ full }) => `${IMG_HOST}${full}`)
             : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
@@ -149,7 +140,7 @@ const Place: React.FC<PlaceProps> = ({
                         url: `${IMG_HOST}${photo.full}`,
                         width: photo.width
                     })),
-                    locale: i18n.language,
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('siteName'),
                     title: place?.title,
                     type: 'http://ogp.me/ns/article#',
@@ -164,7 +155,7 @@ const Place: React.FC<PlaceProps> = ({
                 breadcrumbs={[
                     {
                         link: '/places/',
-                        text: t('breadCrumbPlacesLink')
+                        text: t(`${TKEY}breadCrumbPlacesLink`)
                     }
                 ]}
             />
@@ -209,7 +200,7 @@ const Place: React.FC<PlaceProps> = ({
                         link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                         style={{ marginTop: '5px' }}
                     >
-                        {t('allNearPlacesButton')}
+                        {t(`${TKEY}allNearPlacesButton`)}
                     </Button>
                 </>
             )}

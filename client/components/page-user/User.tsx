@@ -131,7 +131,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         url: `${IMG_HOST}${photo.full}`,
                         width: photo.width
                     })),
-                    locale: i18n.language,
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     profile: {
                         username: user?.name
                     },

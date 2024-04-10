@@ -16,10 +16,10 @@ import { equalsArrays } from '@/functions/helpers'
 
 interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
+const TKEY = 'components.pagePlace.edit.'
+
 const Edit: React.FC<EditProps> = ({ place }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.edit'
-    })
+    const { t, i18n } = useTranslation()
 
     const router = useRouter()
 
@@ -82,19 +82,19 @@ const Edit: React.FC<EditProps> = ({ place }) => {
             <NextSeo
                 nofollow={true}
                 noindex={true}
-                title={`${place?.title} - ${t('pageTitle')}`}
+                title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
                 description={''}
                 canonical={`${canonicalUrl}places/${place?.id}/edit`}
             />
 
             <Header
-                title={`${place?.title} - ${t('pageTitle')}`}
-                currentPage={t('breadCrumbCurrent')}
+                title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
+                currentPage={t(`${TKEY}breadCrumbCurrent`)}
                 backLink={`/places/${place?.id}`}
                 links={[
                     {
                         link: '/places/',
-                        text: t('breadCrumbPlacesLink')
+                        text: t(`${TKEY}breadCrumbPlacesLink`)
                     },
                     {
                         link: `/places/${place?.id}`,

@@ -2,7 +2,7 @@ import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React from 'react'
+import React, { useMemo } from 'react'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -18,24 +18,44 @@ interface CategoriesPageProps {
     categories: Category[]
 }
 
+const TKEY = 'pages.categories.'
+
 const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.categories'
-    })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
+    const description = useMemo(
+        () => categories.map(({ title }) => title)?.join(', '),
+        [categories]
+    )
 
     return (
         <AppLayout>
             <NextSeo
-                title={t('title')}
+                title={t(`${TKEY}title`)}
                 canonical={`${canonicalUrl}categories`}
-                description={categories.map(({ title }) => title)?.join(',')}
+                description={`${t(`${TKEY}title`)}: ${description}`}
+                openGraph={{
+                    description: `${t(`${TKEY}title`)}: ${description}`,
+                    images: [
+                        {
+                            height: 1402,
+                            url: '/images/pages/categories.jpg',
+                            width: 1760
+                        }
+                    ],
+                    locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
+                    siteName: t('siteName'),
+                    title: t(`${TKEY}title`),
+                    type: 'website',
+                    url: `${canonicalUrl}categories`
+                }}
             />
 
             <Header
-                title={t('title')}
-                currentPage={t('breadCrumbCurrent')}
+                title={t(`${TKEY}title`)}
+                currentPage={t(`${TKEY}breadCrumbCurrent`)}
             />
 
             <CategoriesList categories={categories} />
