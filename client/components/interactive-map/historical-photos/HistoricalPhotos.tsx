@@ -5,7 +5,7 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 
 import { APIPastvu } from '@/api/apiPastvu'
-import { Poi } from '@/api/types'
+import { Placemark } from '@/api/types'
 
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 
@@ -13,7 +13,7 @@ import styles from './styles.module.sass'
 
 type HistoricalPhotosProps = {
     position?: MapPositionType
-    onPhotoClick?: (photo: Poi.Photo) => void
+    onPhotoClick?: (photo: Placemark.Photo) => void
 }
 
 const IMG_HOST = 'https://pastvu.com/_p'

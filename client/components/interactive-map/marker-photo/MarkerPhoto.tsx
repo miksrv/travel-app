@@ -5,13 +5,13 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 
 import { IMG_HOST } from '@/api/api'
-import { Poi } from '@/api/types'
+import { Placemark } from '@/api/types'
 
 import styles from './styles.module.sass'
 
 type MarkerPhotoProps = {
-    photo: Poi.Photo
-    onPhotoClick?: (photo: Poi.Photo) => void
+    photo: Placemark.Photo
+    onPhotoClick?: (photo: Placemark.Photo) => void
 }
 
 const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
