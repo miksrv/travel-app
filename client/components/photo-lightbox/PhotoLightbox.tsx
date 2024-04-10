@@ -4,14 +4,14 @@ import React from 'react'
 import Lightbox from 'react-image-lightbox'
 
 import { IMG_HOST } from '@/api/api'
-import { Photo, Poi } from '@/api/types'
+import { Photo, Placemark } from '@/api/types'
 
 import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
 
 interface PhotoLightboxProps {
-    photos?: Photo.Photo[] | Poi.Photo[]
+    photos?: Photo.Photo[] | Placemark.Photo[]
     photoIndex?: number
     showLightbox?: boolean
     onCloseLightBox?: () => void

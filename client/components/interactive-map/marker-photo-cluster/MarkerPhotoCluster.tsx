@@ -5,12 +5,12 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 
 import { IMG_HOST } from '@/api/api'
-import { ApiTypes, Poi } from '@/api/types'
+import { ApiTypes, Placemark } from '@/api/types'
 
 import styles from './styles.module.sass'
 
 interface MarkerPhotoClusterProps {
-    marker: Poi.Photo
+    marker: Placemark.Photo
     onClick?: (coords: ApiTypes.LatLonCoordinate) => void
 }
 
