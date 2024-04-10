@@ -152,6 +152,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                     <Button
                         mode={'secondary'}
                         stretched={true}
+                        loading={loadingClear}
                         disabled={
                             loadingClear ||
                             notifyFetching ||
