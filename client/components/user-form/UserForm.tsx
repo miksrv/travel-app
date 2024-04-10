@@ -214,6 +214,13 @@ const UserForm: React.FC<UserFormProps> = ({
                 </div>
             )}
 
+            <h3 className={styles.headerSection}>{'Настройка уведомлений'}</h3>
+            <div>{'Загрузка фотографии'}</div>
+            <div>{'Выставление рейтинга'}</div>
+            <div>{'Добавление комментария'}</div>
+            <div>{'Редактирование геометки'}</div>
+            <div>{'Изменение обложки'}</div>
+
             <div className={styles.actions}>
                 <Button
                     size={'m'}
