@@ -2,11 +2,16 @@
 
 const OFFSET = 268435456;
 const RADIUS =  85445659.4471;
+const MAX_ZOOM = 18;
 
 class Cluster {
     public array $placeMarks;
 
     public function __construct(array $placeMarks, int $zoom) {
+        if ($zoom === MAX_ZOOM) {
+            return $this->placeMarks = $placeMarks;
+        }
+
         $placeMarks = $this->cluster($placeMarks, 20, $zoom);
 
         foreach ($placeMarks as $key => $item) {
