@@ -26,12 +26,12 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-const LKEY = 'pages.map.'
+const TKEY = 'pages.map.'
 
 interface MapPageProps {}
 
 const MapPage: NextPage<MapPageProps> = () => {
-    const { t, i18n } = useTranslation('common')
+    const { t, i18n } = useTranslation()
 
     const router = useRouter()
 
@@ -151,11 +151,11 @@ const MapPage: NextPage<MapPageProps> = () => {
     return (
         <AppLayout className={'mainLayout'}>
             <NextSeo
-                title={t(`${LKEY}title`)}
-                description={t(`${LKEY}description`)}
+                title={t(`${TKEY}title`)}
+                description={t(`${TKEY}description`)}
                 canonical={`${canonicalUrl}map`}
                 openGraph={{
-                    description: t(`${LKEY}description`),
+                    description: t(`${TKEY}description`),
                     images: [
                         {
                             height: 1305,
@@ -165,20 +165,20 @@ const MapPage: NextPage<MapPageProps> = () => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('siteName'),
-                    title: t(`${LKEY}title`),
+                    title: t(`${TKEY}title`),
                     type: 'website',
                     url: `${canonicalUrl}map`
                 }}
             />
 
             <Header
-                title={t(`${LKEY}title`)}
-                currentPage={t(`${LKEY}breadCrumbCurrent`)}
+                title={t(`${TKEY}title`)}
+                currentPage={t(`${TKEY}breadCrumbCurrent`)}
                 className={'mainHeader'}
                 actions={
                     <>
                         {t(
-                            `${LKEY}${
+                            `${TKEY}${
                                 mapType === 'Places'
                                     ? 'pointsCount'
                                     : 'photosCount'

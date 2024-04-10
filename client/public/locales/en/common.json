@@ -77,7 +77,6 @@
         },
         "pagePlace": {
             "edit": {
-                "pageTitle": "Editing",
                 "breadCrumbCurrent": "Editing",
                 "breadCrumbPlacesLink": "Interesting Places"
             },
@@ -288,8 +287,8 @@
     },
     "pages": {
         "index": {
-            "title": "Interesting places and attractions",
-            "description": "Interesting places and attractions",
+            "title": "News feed of interesting places",
+            "description": "Interesting places and attractions - news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
             "buttonAllPlaces": "All places of interest",
             "titleActiveUsers": "Active Users",
             "titleLastPhotos": "Last uploaded photos"

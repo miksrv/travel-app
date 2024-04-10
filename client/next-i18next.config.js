@@ -7,7 +7,7 @@ module.exports = {
     debug: false,
     i18n: {
         defaultLocale: 'ru',
-        // defaultNS: 'common',
+        defaultNS: 'common',
         localeDetection: true,
         // localeExtension: 'json',
         // localePath: './public/locales',
