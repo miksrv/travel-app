@@ -157,6 +157,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                             notifyFetching ||
                             !notifyData?.items?.length
                         }
+                        loading={loadingClear || notifyFetching}
                         onClick={handleClearNotificationsClick}
                     >
                         {t('clearButton')}
