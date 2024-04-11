@@ -152,12 +152,12 @@ const Notifications: React.FC<NotificationsProps> = () => {
                     <Button
                         mode={'secondary'}
                         stretched={true}
-                        loading={loadingClear}
                         disabled={
                             loadingClear ||
                             notifyFetching ||
                             !notifyData?.items?.length
                         }
+                        loading={loadingClear || notifyFetching}
                         onClick={handleClearNotificationsClick}
                     >
                         {t('clearButton')}

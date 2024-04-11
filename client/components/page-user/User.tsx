@@ -33,32 +33,34 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     const [placesPage, setPlacesPage] = useState<number>(1)
     const [activeTab, setActiveTab] = useState<TabsEnum>(TabsEnum.PLACES)
 
-    const { data: bookmarksData } = API.usePlacesGetListQuery(
-        {
-            bookmarkUser: id,
-            limit: PLACES_PER_PAGE,
-            offset: (placesPage - 1) * PLACES_PER_PAGE,
-            order: ApiTypes.SortOrders.DESC,
-            sort: ApiTypes.SortFields.Updated
-        },
-        {
-            refetchOnMountOrArgChange: true,
-            skip: activeTab === TabsEnum.PLACES
-        }
-    )
+    const { data: bookmarksData, isLoading: loadingBookmarks } =
+        API.usePlacesGetListQuery(
+            {
+                bookmarkUser: id,
+                limit: PLACES_PER_PAGE,
+                offset: (placesPage - 1) * PLACES_PER_PAGE,
+                order: ApiTypes.SortOrders.DESC,
+                sort: ApiTypes.SortFields.Updated
+            },
+            {
+                refetchOnMountOrArgChange: true,
+                skip: activeTab === TabsEnum.PLACES
+            }
+        )
 
-    const { data: placesData } = API.usePlacesGetListQuery(
-        {
-            author: id,
-            limit: PLACES_PER_PAGE,
-            offset: (placesPage - 1) * PLACES_PER_PAGE,
-            order: ApiTypes.SortOrders.DESC,
-            sort: ApiTypes.SortFields.Updated
-        },
-        {
-            skip: activeTab === TabsEnum.BOOKMARKS
-        }
-    )
+    const { data: placesData, isLoading: loadingPlaces } =
+        API.usePlacesGetListQuery(
+            {
+                author: id,
+                limit: PLACES_PER_PAGE,
+                offset: (placesPage - 1) * PLACES_PER_PAGE,
+                order: ApiTypes.SortOrders.DESC,
+                sort: ApiTypes.SortFields.Updated
+            },
+            {
+                skip: activeTab === TabsEnum.BOOKMARKS
+            }
+        )
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const placesCount =
@@ -189,6 +191,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 }
             >
                 <PlacesListFlat
+                    loading={loadingPlaces || loadingBookmarks}
                     places={
                         activeTab === TabsEnum.PLACES
                             ? placesData?.items
