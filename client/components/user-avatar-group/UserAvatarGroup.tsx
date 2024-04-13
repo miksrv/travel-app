@@ -35,10 +35,10 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
         {totalCount && totalCount <= 99 ? (
             <div className={styles.totalCountAvatar}>{`+${totalCount}`}</div>
         ) : (
-            ''
+            <></>
         )}
 
-        {totalCount && totalCount > 99 ? (
+        {(totalCount ?? 0) > 99 && (
             <>
                 <div className={styles.totalCountText}>
                     <Trans
@@ -48,8 +48,6 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
                 </div>
                 <div className={styles.mobileCount}>{`+${totalCount}`}</div>
             </>
-        ) : (
-            ''
         )}
     </div>
 )
