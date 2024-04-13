@@ -47,7 +47,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
     const handleChangeCategory = (
         event: React.ChangeEvent<HTMLInputElement>
     ) => {
-        const category = event.target.name as Categories
+        const category = event.target.id as Categories
 
         onChangeCategories?.(
             !event.target.checked
@@ -108,7 +108,6 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                     <li key={item.name}>
                         <Checkbox
                             id={item.name}
-                            name={item.name}
                             label={
                                 <>
                                     <Image

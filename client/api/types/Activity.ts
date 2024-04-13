@@ -6,6 +6,8 @@ import { Rating } from './Rating'
 import { User } from './User'
 
 export const ActivityTypes = {
+    Comment: 'comment',
+    Cover: 'cover',
     Edit: 'edit',
     Photo: 'photo',
     Place: 'place',
