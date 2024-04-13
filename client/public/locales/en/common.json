@@ -11,7 +11,7 @@
             "userLoginTitle": "Authorization on the site",
             "randomPlaceLinkTitle": "Go to a random place",
             "search": {
-                "placeholder": "Search places"
+                "placeholder": "Search places, coordinates"
             },
             "notifications": {
                 "noData": "No notifications",
