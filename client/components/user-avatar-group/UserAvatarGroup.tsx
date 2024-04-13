@@ -32,8 +32,10 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
             />
         ))}
 
-        {(totalCount ?? 0) <= 99 && (
+        {totalCount && totalCount <= 99 ? (
             <div className={styles.totalCountAvatar}>{`+${totalCount}`}</div>
+        ) : (
+            <></>
         )}
 
         {(totalCount ?? 0) > 99 && (
