@@ -11,7 +11,7 @@ import styles from './styles.module.sass'
 
 type MarkerPhotoProps = {
     photo: Placemark.Photo
-    onPhotoClick?: (photo: Placemark.Photo) => void
+    onPhotoClick?: (photos?: Placemark.Photo[], index?: number) => void
 }
 
 const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
@@ -30,7 +30,7 @@ const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {
             alt={photo.title}
             eventHandlers={{
                 click: () => {
-                    onPhotoClick?.(photo)
+                    onPhotoClick?.([])
                 }
             }}
         />

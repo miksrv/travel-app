@@ -80,7 +80,7 @@ type MapProps = {
     onChangeCategories?: (categories?: Place.Categories[]) => void
     onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
-    onPhotoClick?: (photo: Placemark.Photo) => void
+    onPhotoClick?: (photos: Placemark.Photo[], index?: number) => void
 } & MapOptions
 
 const DEFAULT_MAP_ZOOM = 12
@@ -379,7 +379,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <MarkerPhoto
                             key={`markerPhoto${i}`}
                             photo={photo}
-                            onPhotoClick={onPhotoClick}
+                            onPhotoClick={() => onPhotoClick?.(photos, i)}
                         />
                     )
                 )}
