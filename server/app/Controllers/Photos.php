@@ -292,7 +292,7 @@ class Photos extends ResourceController {
         }
 
         $photosModel = new PhotosModel();
-        $photoData   = $photosModel->select('id, place_id, filename, extension')->find($id);
+        $photoData   = $photosModel->select('id, place_id, filename, extension, width, height')->find($id);
 
         if (!$photoData) {
             return $this->failValidationErrors('No photo found with this ID');
@@ -313,7 +313,11 @@ class Photos extends ResourceController {
         unlink($photoDir . $photoData->filename . '.' . $photoData->extension);
         unlink($photoDir . $photoData->filename . '_preview.' . $photoData->extension);
 
-        $photosModel->update($id, ['filename' => $name]);
+        $photosModel->update($id, [
+            'filename' => $name,
+            'width'    => $photoData->height,
+            'height'   => $photoData->width,
+        ]);
 
         $photoPath = PATH_PHOTOS . $photoData->place_id . '/' . $name;
 

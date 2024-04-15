@@ -92,21 +92,25 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const handleImageLoad = (e: any) => {
         const { width, height } = e.currentTarget
 
+        if (!selectedPhoto?.height || !selectedPhoto?.width) {
+            return
+        }
+
         const ratioW = selectedPhoto?.width ? selectedPhoto.width / width : 1
         const ratioH = selectedPhoto?.height ? selectedPhoto.height / height : 1
 
         setWidthRatio(ratioW)
         setHeightRatio(ratioH)
 
-        if (selectedPhoto?.height && selectedPhoto?.width) {
-            setImageCropData({
-                height: (300 / selectedPhoto.height) * 100,
-                unit: '%',
-                width: (870 / selectedPhoto.width) * 100,
-                x: 0,
-                y: 0
-            })
-        }
+        const newHeight = (width / 870) * 300
+
+        setImageCropData({
+            height: (newHeight / height) * 100,
+            unit: '%',
+            width: 100,
+            x: 0,
+            y: 0
+        })
     }
 
     useEffect(() => {
