@@ -9,7 +9,7 @@ import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { ApiTypes } from '@/api/types'
-import { NotifySettingEnum, User } from '@/api/types/User'
+import { User, UserSettingEnum } from '@/api/types/User'
 
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
@@ -43,8 +43,8 @@ const UserForm: React.FC<UserFormProps> = ({
     )
 
     const disabled =
-        JSON.stringify(mapFormValues(values)?.notifySettings) ===
-            JSON.stringify(formData.notifySettings) &&
+        JSON.stringify(mapFormValues(values)?.settings) ===
+            JSON.stringify(formData.settings) &&
         values?.name === formData?.name &&
         values?.website === formData?.website &&
         !formData?.newPassword &&
@@ -61,9 +61,9 @@ const UserForm: React.FC<UserFormProps> = ({
     ) => {
         setFormData({
             ...formData,
-            notifySettings: {
-                ...formData?.notifySettings,
-                [event.target.id as NotifySettingEnum]: event.target.checked
+            settings: {
+                ...formData?.settings,
+                [event.target.id as UserSettingEnum]: event.target.checked
             }
         })
     }
@@ -167,43 +167,43 @@ const UserForm: React.FC<UserFormProps> = ({
                 </h3>
 
                 <Checkbox
-                    className={styles.notifySetting}
+                    className={styles.settings}
                     id={'emailPhoto'}
                     label={'Загрузка фотографии'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailPhoto}
+                    checked={formData?.settings?.emailPhoto}
                 />
 
                 <Checkbox
-                    className={styles.notifySetting}
+                    className={styles.settings}
                     id={'emailRating'}
                     label={'Выставление рейтинга'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailRating}
+                    checked={formData?.settings?.emailRating}
                 />
 
                 <Checkbox
-                    className={styles.notifySetting}
+                    className={styles.settings}
                     id={'emailComment'}
                     label={'Добавление комментария'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailComment}
+                    checked={formData?.settings?.emailComment}
                 />
 
                 <Checkbox
-                    className={styles.notifySetting}
+                    className={styles.settings}
                     id={'emailEdit'}
                     label={'Редактирование геометки'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailEdit}
+                    checked={formData?.settings?.emailEdit}
                 />
 
                 <Checkbox
-                    className={styles.notifySetting}
+                    className={styles.settings}
                     id={'emailCover'}
                     label={'Изменение обложки'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailCover}
+                    checked={formData?.settings?.emailCover}
                 />
             </div>
 
@@ -309,15 +309,15 @@ const mapFormValues = (values?: FormDataType): FormDataType => ({
     id: values?.id ?? '',
     name: values?.name ?? '',
     newPassword: '',
-    notifySettings: {
-        emailComment: values?.notifySettings?.emailComment ?? true,
-        emailCover: values?.notifySettings?.emailCover ?? true,
-        emailEdit: values?.notifySettings?.emailEdit ?? true,
-        emailPhoto: values?.notifySettings?.emailPhoto ?? true,
-        emailPlace: values?.notifySettings?.emailPlace ?? true,
-        emailRating: values?.notifySettings?.emailRating ?? true
-    },
     oldPassword: '',
+    settings: {
+        emailComment: values?.settings?.emailComment ?? true,
+        emailCover: values?.settings?.emailCover ?? true,
+        emailEdit: values?.settings?.emailEdit ?? true,
+        emailPhoto: values?.settings?.emailPhoto ?? true,
+        emailPlace: values?.settings?.emailPlace ?? true,
+        emailRating: values?.settings?.emailRating ?? true
+    },
     website: values?.website
 })
 

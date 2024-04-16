@@ -30,6 +30,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const { data: userData } = API.useUsersGetItemQuery(
         authSlice.user?.id || '',
         {
+            refetchOnMountOrArgChange: true,
             skip: !authSlice.user?.id
         }
     )
@@ -64,6 +65,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 formData?.oldPassword?.length! > 1
                     ? formData?.oldPassword
                     : undefined,
+            settings: formData?.settings,
             website:
                 formData?.website !== userData?.website
                     ? formData?.website

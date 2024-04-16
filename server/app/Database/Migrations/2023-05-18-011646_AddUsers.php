@@ -64,6 +64,10 @@ class AddUsers extends Migration {
                 'constraint' => 50,
                 'null'       => true,
             ],
+            'settings' => [
+                'type' => 'TEXT',
+                'null' => true,
+            ],
             'created_at DATETIME default current_timestamp',
             'updated_at DATETIME default current_timestamp',
             'activity_at' => [

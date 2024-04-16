@@ -76,10 +76,11 @@ class Users extends ResourceController {
      * @throws Exception
      */
     public function show($id = null): ResponseInterface {
+        $session     = new SessionLibrary();
         $userLevels  = new LevelsLibrary();
         $usersModel  = new UsersModel();
         $placesModel = new PlacesModel();
-        $usersData   = $usersModel->getUserById($id);
+        $usersData   = $usersModel->getUserById($id, $id === $session->user?->id);
 
         if (!$usersData) {
             return $this->failNotFound();
@@ -144,7 +145,7 @@ class Users extends ResourceController {
             'name'    => 'if_exist|min_length[6]|max_length[150]|is_unique[users.name]',
             'website' => 'if_exist|max_length[150]|string',
             'oldPassword' => 'if_exist|min_length[8]|max_length[50]',
-            'newPassword' => 'if_exist|min_length[8]|max_length[50]',
+            'newPassword' => 'if_exist|min_length[8]|max_length[50]'
         ];
 
         if (!$this->validateData((array) $input, $rules)) {
@@ -175,6 +176,30 @@ class Users extends ResourceController {
 
         if (isset($input->website)) {
             $updateData['website'] = $input->website;
+        }
+
+        if (isset($input->settings)) {
+            $updateData['settings'] = json_encode((object) [
+                'emailComment' => isset($input->settings->emailComment) && is_bool($input->settings->emailComment)
+                    ? $input->settings->emailComment
+                    : $session->settings->emailComment ?? true,
+
+                'emailEdit' => isset($input->settings->emailEdit) && is_bool($input->settings->emailEdit)
+                    ? $input->settings->emailEdit
+                    : $session->settings->emailEdit ?? true,
+
+                'emailPhoto' => isset($input->settings->emailPhoto) && is_bool($input->settings->emailPhoto)
+                    ? $input->settings->emailPhoto
+                    : $session->settings->emailPhoto ?? true,
+
+                'emailRating' => isset($input->settings->emailRating) && is_bool($input->settings->emailRating)
+                    ? $input->settings->emailRating
+                    : $session->settings->emailRating ?? true,
+
+                'emailCover' => isset($input->settings->emailCover) && is_bool($input->settings->emailCover)
+                    ? $input->settings->emailCover
+                    : $session->settings->emailCover ?? true,
+            ]);
         }
 
         if (empty($updateData)) {

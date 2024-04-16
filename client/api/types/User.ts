@@ -14,10 +14,10 @@ export type User = {
     activity?: ApiTypes.DateTimeType
     authType?: ApiTypes.AuthServiceType
     statistic?: Statistic
-    notifySettings?: NotifySetting
+    settings?: UserSettings
 }
 
-export type NotifySetting = {
+export type UserSettings = {
     emailComment?: boolean
     emailEdit?: boolean
     emailPhoto?: boolean
@@ -42,7 +42,7 @@ export type Statistic = {
     comment: number
 }
 
-export const NotifySettingTypes = {
+export const UserSettingTypes = {
     Comment: 'comment',
     Cover: 'cover',
     Edit: 'edit',
@@ -50,5 +50,5 @@ export const NotifySettingTypes = {
     Place: 'place',
     Rating: 'rating'
 } as const
-export type NotifySettingEnum =
-    (typeof NotifySettingTypes)[keyof typeof NotifySettingTypes]
+export type UserSettingEnum =
+    (typeof UserSettingTypes)[keyof typeof UserSettingTypes]

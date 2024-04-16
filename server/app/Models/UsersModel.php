@@ -27,6 +27,7 @@ class UsersModel extends MyBaseModel {
         'avatar',
         'website',
         'reputation',
+        'settings',
         'created_at',
         'updated_at',
         'activity_at',
@@ -69,7 +70,7 @@ class UsersModel extends MyBaseModel {
      */
     public function findUserByEmailAddress(string $emailAddress): User | array | null {
         return $this
-            ->select('id, name, avatar, email, password, auth_type')
+            ->select('id, name, avatar, email, password, auth_type, locale, settings')
             ->where('email', $emailAddress)
             ->first();
     }
@@ -92,13 +93,16 @@ class UsersModel extends MyBaseModel {
 
     /**
      * @param string $userId
+     * @param bool $settings
      * @return array|object|null
      */
-    public function getUserById(string $userId): array|object|null {
+    public function getUserById(string $userId, bool $settings = false): array|object|null {
+        $settings = $settings ? ', settings' : '';
+
         return $this
             ->select('id, name, avatar, created_at as created,
                 updated_at as updated, activity_at as activity, level, 
-                auth_type as authType, website, experience, reputation'
+                auth_type as authType, website, experience, reputation' . $settings
             )->find($userId);
     }
 }
