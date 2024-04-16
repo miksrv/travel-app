@@ -16,7 +16,7 @@ const Checkbox: React.FC<CheckboxProps> = ({
     indeterminate,
     ...props
 }) => (
-    <div className={styles.checkbox}>
+    <div className={cn(props?.className, styles.checkbox)}>
         <div
             className={cn(
                 styles.formField,

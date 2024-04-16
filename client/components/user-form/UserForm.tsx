@@ -43,6 +43,8 @@ const UserForm: React.FC<UserFormProps> = ({
     )
 
     const disabled =
+        JSON.stringify(mapFormValues(values)?.notifySettings) ===
+            JSON.stringify(formData.notifySettings) &&
         values?.name === formData?.name &&
         values?.website === formData?.website &&
         !formData?.newPassword &&
@@ -163,39 +165,45 @@ const UserForm: React.FC<UserFormProps> = ({
                 <h3 className={styles.header}>
                     {'Отправка уведомлений на электронную почту'}
                 </h3>
+
                 <Checkbox
+                    className={styles.notifySetting}
                     id={'emailPhoto'}
                     label={'Загрузка фотографии'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailPhoto ?? true}
+                    checked={formData?.notifySettings?.emailPhoto}
                 />
 
                 <Checkbox
+                    className={styles.notifySetting}
                     id={'emailRating'}
                     label={'Выставление рейтинга'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailRating ?? true}
+                    checked={formData?.notifySettings?.emailRating}
                 />
 
                 <Checkbox
+                    className={styles.notifySetting}
                     id={'emailComment'}
                     label={'Добавление комментария'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailComment ?? true}
+                    checked={formData?.notifySettings?.emailComment}
                 />
 
                 <Checkbox
+                    className={styles.notifySetting}
                     id={'emailEdit'}
                     label={'Редактирование геометки'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailEdit ?? true}
+                    checked={formData?.notifySettings?.emailEdit}
                 />
 
                 <Checkbox
+                    className={styles.notifySetting}
                     id={'emailCover'}
                     label={'Изменение обложки'}
                     onChange={handleChangeCheckbox}
-                    checked={formData?.notifySettings?.emailCover ?? true}
+                    checked={formData?.notifySettings?.emailCover}
                 />
             </div>
 
@@ -301,6 +309,14 @@ const mapFormValues = (values?: FormDataType): FormDataType => ({
     id: values?.id ?? '',
     name: values?.name ?? '',
     newPassword: '',
+    notifySettings: {
+        emailComment: values?.notifySettings?.emailComment ?? true,
+        emailCover: values?.notifySettings?.emailCover ?? true,
+        emailEdit: values?.notifySettings?.emailEdit ?? true,
+        emailPhoto: values?.notifySettings?.emailPhoto ?? true,
+        emailPlace: values?.notifySettings?.emailPlace ?? true,
+        emailRating: values?.notifySettings?.emailRating ?? true
+    },
     oldPassword: '',
     website: values?.website
 })
