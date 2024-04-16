@@ -27,7 +27,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: userData } = API.useUsersGetItemQuery(
+    const { data: userData, isFetching } = API.useUsersGetItemQuery(
         authSlice.user?.id || '',
         {
             refetchOnMountOrArgChange: true,
@@ -111,7 +111,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 {!authSlice?.isAuth && <ScreenSpinner />}
 
                 <UserForm
-                    loading={isLoading || isSuccess}
+                    loading={isLoading || isSuccess || isFetching}
                     values={userData}
                     errors={validationErrors}
                     onSubmit={handleSubmit}

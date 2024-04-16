@@ -170,6 +170,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     className={styles.settings}
                     id={'emailPhoto'}
                     label={'Загрузка фотографии'}
+                    disabled={loading}
                     onChange={handleChangeCheckbox}
                     checked={formData?.settings?.emailPhoto}
                 />
@@ -178,6 +179,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     className={styles.settings}
                     id={'emailRating'}
                     label={'Выставление рейтинга'}
+                    disabled={loading}
                     onChange={handleChangeCheckbox}
                     checked={formData?.settings?.emailRating}
                 />
@@ -186,6 +188,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     className={styles.settings}
                     id={'emailComment'}
                     label={'Добавление комментария'}
+                    disabled={loading}
                     onChange={handleChangeCheckbox}
                     checked={formData?.settings?.emailComment}
                 />
@@ -194,6 +197,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     className={styles.settings}
                     id={'emailEdit'}
                     label={'Редактирование геометки'}
+                    disabled={loading}
                     onChange={handleChangeCheckbox}
                     checked={formData?.settings?.emailEdit}
                 />
@@ -202,6 +206,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     className={styles.settings}
                     id={'emailCover'}
                     label={'Изменение обложки'}
+                    disabled={loading}
                     onChange={handleChangeCheckbox}
                     checked={formData?.settings?.emailCover}
                 />
@@ -286,6 +291,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 <Button
                     size={'m'}
                     mode={'primary'}
+                    loading={loading}
                     disabled={loading || disabled}
                     onClick={handleSubmit}
                 >

@@ -87,6 +87,7 @@ class Users extends ResourceController {
         }
 
         // Calculate new user reputation value
+        // TODO Separate this function to other library
         if ($placesData  = $placesModel->select('id')->where('user_id', $id)->findAll()) {
             $ratingModel = new RatingModel();
             $placesIds   = [];
@@ -120,8 +121,8 @@ class Users extends ResourceController {
         $usersData->level     = $userLevels->getLevelData($usersData);
         $usersData->statistic = $userLevels->statistic;
         $usersData->avatar    = $usersData->avatar
-                ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
-                : null;
+            ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
+            : null;
 
         unset($usersData->experience);
 
@@ -179,27 +180,14 @@ class Users extends ResourceController {
         }
 
         if (isset($input->settings)) {
-            $updateData['settings'] = json_encode((object) [
-                'emailComment' => isset($input->settings->emailComment) && is_bool($input->settings->emailComment)
-                    ? $input->settings->emailComment
-                    : $session->settings->emailComment ?? true,
+            $defaultSettings = ['emailComment', 'emailEdit', 'emailPhoto', 'emailRating', 'emailCover'];
 
-                'emailEdit' => isset($input->settings->emailEdit) && is_bool($input->settings->emailEdit)
-                    ? $input->settings->emailEdit
-                    : $session->settings->emailEdit ?? true,
+            $updateData['settings'] = json_encode((object) array_combine($defaultSettings, array_map(function($setting) use ($input, $session) {
+                $inputValue   = isset($input->settings->$setting) && is_bool($input->settings->$setting) ? $input->settings->$setting : null;
+                $sessionValue = $session->settings->$setting ?? true;
 
-                'emailPhoto' => isset($input->settings->emailPhoto) && is_bool($input->settings->emailPhoto)
-                    ? $input->settings->emailPhoto
-                    : $session->settings->emailPhoto ?? true,
-
-                'emailRating' => isset($input->settings->emailRating) && is_bool($input->settings->emailRating)
-                    ? $input->settings->emailRating
-                    : $session->settings->emailRating ?? true,
-
-                'emailCover' => isset($input->settings->emailCover) && is_bool($input->settings->emailCover)
-                    ? $input->settings->emailCover
-                    : $session->settings->emailCover ?? true,
-            ]);
+                return $inputValue !== null ? $inputValue : $sessionValue;
+            }, $defaultSettings)));
         }
 
         if (empty($updateData)) {
@@ -215,7 +203,7 @@ class Users extends ResourceController {
      * @return ResponseInterface
      */
     public function avatar(): ResponseInterface {
-        $session    = new SessionLibrary();
+        $session = new SessionLibrary();
 
         if (!$session->isAuth || !$session->user?->id) {
             return $this->failUnauthorized();
