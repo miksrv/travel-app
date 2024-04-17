@@ -9,7 +9,7 @@ import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { ApiTypes } from '@/api/types'
-import { User, UserSettingEnum } from '@/api/types/User'
+import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
@@ -133,7 +133,9 @@ const UserForm: React.FC<UserFormProps> = ({
             )}
 
             <div>
-                <h3 className={styles.header}>{'Общие настройки'}</h3>
+                <h3 className={styles.header}>
+                    {t(`${TKEY}titleGeneralSettings`)}
+                </h3>
                 <div className={styles.formElement}>
                     <Input
                         name={'name'}
@@ -163,67 +165,43 @@ const UserForm: React.FC<UserFormProps> = ({
 
             <div className={styles.section}>
                 <h3 className={styles.header}>
-                    {'Отправка уведомлений на электронную почту'}
+                    {t(`${TKEY}titleEmailSettings`)}
                 </h3>
-
-                <Checkbox
-                    className={styles.settings}
-                    id={'emailPhoto'}
-                    label={'Загрузка фотографии'}
-                    disabled={loading}
-                    onChange={handleChangeCheckbox}
-                    checked={formData?.settings?.emailPhoto}
-                />
-
-                <Checkbox
-                    className={styles.settings}
-                    id={'emailRating'}
-                    label={'Выставление рейтинга'}
-                    disabled={loading}
-                    onChange={handleChangeCheckbox}
-                    checked={formData?.settings?.emailRating}
-                />
-
-                <Checkbox
-                    className={styles.settings}
-                    id={'emailComment'}
-                    label={'Добавление комментария'}
-                    disabled={loading}
-                    onChange={handleChangeCheckbox}
-                    checked={formData?.settings?.emailComment}
-                />
-
-                <Checkbox
-                    className={styles.settings}
-                    id={'emailEdit'}
-                    label={'Редактирование геометки'}
-                    disabled={loading}
-                    onChange={handleChangeCheckbox}
-                    checked={formData?.settings?.emailEdit}
-                />
-
-                <Checkbox
-                    className={styles.settings}
-                    id={'emailCover'}
-                    label={'Изменение обложки'}
-                    disabled={loading}
-                    onChange={handleChangeCheckbox}
-                    checked={formData?.settings?.emailCover}
-                />
+                {[
+                    'emailPhoto',
+                    'emailRating',
+                    'emailComment',
+                    'emailEdit',
+                    'emailCover'
+                ].map((setting) => (
+                    <Checkbox
+                        className={styles.settings}
+                        key={setting}
+                        id={setting}
+                        label={t(`${TKEY}${setting}`)}
+                        disabled={loading}
+                        onChange={handleChangeCheckbox}
+                        checked={
+                            formData?.settings?.[setting as keyof UserSettings]
+                        }
+                    />
+                ))}
             </div>
 
             <div className={styles.section}>
-                <h3 className={styles.header}>{'Изменить пароль'}</h3>
+                <h3 className={styles.header}>
+                    {t(`${TKEY}titleChangePassword`)}
+                </h3>
                 {values?.authType === 'native' ? (
                     <>
                         <div className={styles.formElement}>
                             <Input
                                 name={'oldPassword'}
-                                label={'Текущий пароль'}
+                                label={t(`${TKEY}currentPassword`)}
                                 type={'password'}
-                                placeholder={
-                                    'Введите свой текущий пароль на сайте'
-                                }
+                                placeholder={t(
+                                    `${TKEY}currentPasswordPlaceholder`
+                                )}
                                 disabled={loading}
                                 value={formData?.oldPassword}
                                 error={formErrors?.oldPassword}
@@ -235,9 +213,9 @@ const UserForm: React.FC<UserFormProps> = ({
                         <div className={styles.formElement}>
                             <Input
                                 name={'newPassword'}
-                                label={'Новый пароль'}
+                                label={t(`${TKEY}newPassword`)}
                                 type={'password'}
-                                placeholder={'Придумайте новый пароль'}
+                                placeholder={t(`${TKEY}newPasswordPlaceholder`)}
                                 disabled={loading}
                                 value={formData?.newPassword}
                                 error={formErrors?.newPassword}
@@ -249,9 +227,11 @@ const UserForm: React.FC<UserFormProps> = ({
                         <div className={styles.formElement}>
                             <Input
                                 name={'confirmPassword'}
-                                label={'Повторите ввод пароля'}
+                                label={t(`${TKEY}confirmPassword`)}
                                 type={'password'}
-                                placeholder={'Повторите ввод нового пароля'}
+                                placeholder={t(
+                                    `${TKEY}confirmPasswordPlaceholder`
+                                )}
                                 disabled={loading}
                                 value={formData?.confirmPassword}
                                 error={formErrors?.confirmPassword}

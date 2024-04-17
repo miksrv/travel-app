@@ -193,7 +193,21 @@
             "errorNewPassword": "Придумайте новый пароль",
             "errorOldPassword": "Укажите свой текущий пароль",
             "errorConfirmPassword": "Введенные пароли на совпадают",
-            "errorPasswordLength": "Пароль должен содержать минимум 8 символов"
+            "errorPasswordLength": "Пароль должен содержать минимум 8 символов",
+            "titleGeneralSettings": "Общие настройки",
+            "titleEmailSettings": "Отправка уведомлений на электронную почту",
+            "emailPhoto": "Загрузка фотографии",
+            "emailRating": "Выставление рейтинга",
+            "emailComment": "Добавление комментария",
+            "emailEdit": "Редактирование геометки",
+            "emailCover": "Изменение обложки",
+            "titleChangePassword": "Изменить пароль",
+            "currentPassword": "Текущий пароль",
+            "currentPasswordPlaceholder": "Введите свой текущий пароль на сайте",
+            "newPassword": "Новый пароль",
+            "newPasswordPlaceholder": "Придумайте новый пароль",
+            "confirmPassword": "Повторите ввод пароля",
+            "confirmPasswordPlaceholder": "Повторите ввод нового пароля"
         },
         "placeFilterPanel": {
             "sort": {

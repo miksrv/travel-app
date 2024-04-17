@@ -192,7 +192,21 @@
             "errorNewPassword": "Create a new password",
             "errorOldPassword": "Please enter your current password",
             "errorConfirmPassword": "The entered passwords do not match",
-            "errorPasswordLength": "Password must contain at least 8 characters"
+            "errorPasswordLength": "Password must contain at least 8 characters",
+            "titleGeneralSettings": "General settings",
+            "titleEmailSettings": "Sending notifications by email",
+            "emailPhoto": "Uploading a photo",
+            "emailRating": "Rating",
+            "emailComment": "Adding a comment",
+            "emailEdit": "Editing a geotag",
+            "emailCover": "Change the cover",
+            "titleChangePassword": "Change Password",
+            "currentPassword": "Current Password",
+            "currentPasswordPlaceholder": "Enter your current password on the site",
+            "newPassword": "New password",
+            "newPasswordPlaceholder": "Create a new password",
+            "confirmPassword": "Re-enter your password",
+            "confirmPasswordPlaceholder": "Re-enter the new password"
         },
         "placeFilterPanel": {
             "sort": {
