@@ -290,7 +290,9 @@
             "title": "News feed of interesting places",
             "description": "Interesting places and attractions - news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
             "buttonAllPlaces": "All places of interest",
-            "titleActiveUsers": "Active Users",
+            "titleActiveUsers": "Active Travelers",
+            "allActiveUsers": "All",
+            "allUsersPlaceholder": "All travelers",
             "titleLastPhotos": "Last uploaded photos"
         },
         "categories": {
