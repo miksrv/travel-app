@@ -313,32 +313,20 @@ class Places extends ResourceController {
             $placeData->distance = round((float) $placeData->distance, 1);
         }
 
-        if ($placeData->country_id) {
-            $placeData->address->country = [
-                'id'    => $placeData->country_id,
-                'title' => $placeData->{"country_$locale"}
-            ];
-        }
+        $locations = [
+            'country'   => ['country_id', 'country'],
+            'region'    => ['region_id', 'region'],
+            'district'  => ['district_id', 'district'],
+            'locality'  => ['locality_id', 'city']
+        ];
 
-        if ($placeData->region_id) {
-            $placeData->address->region = [
-                'id'    => $placeData->region_id,
-                'title' => $placeData->{"region_$locale"}
-            ];
-        }
-
-        if ($placeData->district_id) {
-            $placeData->address->district = [
-                'id'    => $placeData->district_id,
-                'title' => $placeData->{"district_$locale"}
-            ];
-        }
-
-        if ($placeData->locality_id) {
-            $placeData->address->locality = [
-                'id'    => $placeData->locality_id,
-                'title' => $placeData->{"city_$locale"}
-            ];
+        foreach ($locations as $field => $ids) {
+            if ($placeData->{$ids[0]}) {
+                $placeData->address->{$field} = [
+                    'id'    => $placeData->{$ids[0]},
+                    'title' => $placeData->{$ids[1] . "_$locale"}
+                ];
+            }
         }
 
         if ($placeData->{"address_$locale"}) {

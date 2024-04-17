@@ -22,7 +22,7 @@ import { formatDateUTC } from '@/functions/helpers'
 
 interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
 
-const TKEY = 'components.pagePlace.place.'
+const KEY = 'components.pagePlace.place.'
 
 const Place: React.FC<PlaceProps> = ({
     place,
@@ -47,7 +47,7 @@ const Place: React.FC<PlaceProps> = ({
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}places`,
-                name: t(`${TKEY}breadCrumbPlacesLink`),
+                name: t(`${KEY}breadCrumbPlacesLink`),
                 position: 1
             },
             {
@@ -155,7 +155,7 @@ const Place: React.FC<PlaceProps> = ({
                 breadcrumbs={[
                     {
                         link: '/places/',
-                        text: t(`${TKEY}breadCrumbPlacesLink`)
+                        text: t(`${KEY}breadCrumbPlacesLink`)
                     }
                 ]}
             />
@@ -200,7 +200,7 @@ const Place: React.FC<PlaceProps> = ({
                         link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                         style={{ marginTop: '5px' }}
                     >
-                        {t(`${TKEY}allNearPlacesButton`)}
+                        {t(`${KEY}allNearPlacesButton`)}
                     </Button>
                 </>
             )}
