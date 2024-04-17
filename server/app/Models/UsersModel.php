@@ -105,4 +105,24 @@ class UsersModel extends MyBaseModel {
                 auth_type as authType, website, experience, reputation' . $settings
             )->find($userId);
     }
+
+    /**
+     * @param string $userId
+     * @return object
+     */
+    public function getUserSettingsById(string $userId): object {
+        $data = $this->select('settings')->find($userId);
+
+        if (!empty($data) && isset($data->settings->emailEdit)) {
+            return $data->settings;
+        }
+
+        return (object) [
+            'emailComment' => true,
+            'emailEdit'    => true,
+            'emailPhoto'   => true,
+            'emailRating'  => true,
+            'emailCover'   => true,
+        ];
+    }
 }

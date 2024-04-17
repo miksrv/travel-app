@@ -1,6 +1,7 @@
 <?php namespace App\Libraries;
 
 use App\Models\ActivityModel;
+use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 use Exception;
 use ReflectionException;
@@ -144,6 +145,15 @@ class ActivityLibrary {
         if (isset($this->owner) && $this->owner !== $session->user?->id) {
             $notify = new NotifyLibrary();
             $notify->push($type, $this->owner, $model->getInsertID());
+
+            // Get owner email settings
+            $userModel = new UsersModel();
+            $settings  = $userModel->getUserSettingsById($this->owner);
+
+            if ($settings->emailPhoto && $type === 'photo') {
+                $emailLibrary = new EmailLibrary();
+                $emailLibrary->send('miksoft.tm@gmail.com', 'Загружена фотография', 'Загружена фотография в ваше интересное место');
+            }
         }
     }
 }
