@@ -39,8 +39,8 @@ class PlacesContent {
      * @param int $trim
      */
     public function __construct(int $trim = 0) {
-        $this->model   = new PlacesContentModel();
-        $this->trim    = $trim;
+        $this->model = new PlacesContentModel();
+        $this->trim  = $trim;
 
         $this->model->select(
             'id, place_id, title, user_id, locale, delta, created_at, updated_at,' .

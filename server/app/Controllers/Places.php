@@ -11,7 +11,6 @@ use App\Models\ActivityModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
-use App\Models\RatingModel;
 use App\Models\PlacesContentModel;
 use App\Models\TagsModel;
 use App\Models\UsersBookmarksModel;
@@ -190,7 +189,6 @@ class Places extends ResourceController {
                 'bookmarks' => (int) $place->bookmarks,
                 'title'     => $placeContent->title($place->id),
                 'content'   => $placeContent->content($place->id),
-                'updated'   => new \DateTime($place->updated_at),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->{"category_$locale"},
@@ -286,13 +284,6 @@ class Places extends ResourceController {
         $placesTagsModel = new PlacesTagsModel();
         $placeData->tags = $placesTagsModel->getAllTagsForPlaceById($id);
 
-        // Has the user already voted for this material or not?
-        $ratingModel = new RatingModel();
-        $ratingData  = $ratingModel
-            ->select('id')
-            ->where(['place_id' => $id, 'session_id' => $this->session->id])
-            ->first();
-
         $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
         $placeData->editors = $this->_editors($id, $placeData->user_id);
         $placeData->author  = [
@@ -322,32 +313,20 @@ class Places extends ResourceController {
             $placeData->distance = round((float) $placeData->distance, 1);
         }
 
-        if ($placeData->country_id) {
-            $placeData->address->country = [
-                'id'    => $placeData->country_id,
-                'title' => $placeData->{"country_$locale"}
-            ];
-        }
+        $locations = [
+            'country'   => ['country_id', 'country'],
+            'region'    => ['region_id', 'region'],
+            'district'  => ['district_id', 'district'],
+            'locality'  => ['locality_id', 'city']
+        ];
 
-        if ($placeData->region_id) {
-            $placeData->address->region = [
-                'id'    => $placeData->region_id,
-                'title' => $placeData->{"region_$locale"}
-            ];
-        }
-
-        if ($placeData->district_id) {
-            $placeData->address->district = [
-                'id'    => $placeData->district_id,
-                'title' => $placeData->{"district_$locale"}
-            ];
-        }
-
-        if ($placeData->locality_id) {
-            $placeData->address->locality = [
-                'id'    => $placeData->locality_id,
-                'title' => $placeData->{"city_$locale"}
-            ];
+        foreach ($locations as $field => $ids) {
+            if ($placeData->{$ids[0]}) {
+                $placeData->address->{$field} = [
+                    'id'    => $placeData->{$ids[0]},
+                    'title' => $placeData->{$ids[1] . "_$locale"}
+                ];
+            }
         }
 
         if ($placeData->{"address_$locale"}) {
