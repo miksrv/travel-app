@@ -11,7 +11,6 @@ use App\Models\ActivityModel;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
-use App\Models\RatingModel;
 use App\Models\PlacesContentModel;
 use App\Models\TagsModel;
 use App\Models\UsersBookmarksModel;
@@ -190,7 +189,6 @@ class Places extends ResourceController {
                 'bookmarks' => (int) $place->bookmarks,
                 'title'     => $placeContent->title($place->id),
                 'content'   => $placeContent->content($place->id),
-                'updated'   => new \DateTime($place->updated_at),
                 'category'  => [
                     'name'  => $place->category,
                     'title' => $place->{"category_$locale"},
@@ -285,13 +283,6 @@ class Places extends ResourceController {
         // Collect tags
         $placesTagsModel = new PlacesTagsModel();
         $placeData->tags = $placesTagsModel->getAllTagsForPlaceById($id);
-
-        // Has the user already voted for this material or not?
-        $ratingModel = new RatingModel();
-        $ratingData  = $ratingModel
-            ->select('id')
-            ->where(['place_id' => $id, 'session_id' => $this->session->id])
-            ->first();
 
         $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
         $placeData->editors = $this->_editors($id, $placeData->user_id);
