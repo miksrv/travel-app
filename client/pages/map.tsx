@@ -42,7 +42,8 @@ const MapPage: NextPage<MapPageProps> = () => {
     // const [initMapLayer, setInitMapLayer] = useState<MapLayersType>()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [currentPhoto, setCurrentPhoto] = useState<Placemark.Photo>()
+    const [photoIndex, setPhotoIndex] = useState<number>()
+    const [photoLightbox, setPhotoLightbox] = useState<Placemark.Photo[]>()
     const [categories, setCategories] = useState<Place.Categories[]>()
 
     const [mapCategories, setMapCategories] = useState<Place.Categories[]>()
@@ -72,8 +73,9 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(false)
     }
 
-    const handlePhotoClick = (photo: Placemark.Photo) => {
-        setCurrentPhoto(photo)
+    const handlePhotoClick = (photos: Placemark.Photo[], index?: number) => {
+        setPhotoLightbox(photos)
+        setPhotoIndex(index ?? 0)
         setShowLightbox(true)
     }
 
@@ -194,9 +196,10 @@ const MapPage: NextPage<MapPageProps> = () => {
             />
 
             <PhotoLightbox
-                photos={currentPhoto ? [currentPhoto] : []}
-                photoIndex={0}
+                photos={photoLightbox}
+                photoIndex={photoIndex}
                 showLightbox={showLightbox}
+                onChangeIndex={setPhotoIndex}
                 onCloseLightBox={handleCloseLightbox}
             />
 

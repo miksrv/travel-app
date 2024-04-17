@@ -27,6 +27,7 @@ interface DropdownProps<T> {
     clearable?: boolean
     hideArrow?: boolean
     debouncing?: boolean
+    debounceDelay?: number
     placeholder?: string
     label?: string
     value?: T
@@ -46,6 +47,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     clearable,
     hideArrow,
     debouncing = true,
+    debounceDelay = 1000,
     value,
     minLength = 3,
     placeholder,
@@ -75,7 +77,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         debounce((value) => {
             onSearch?.(value)
             setLocalLoading(false)
-        }, 1000),
+        }, debounceDelay ?? 1000),
         []
     )
 
@@ -90,6 +92,10 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
 
         setSearch(value)
 
+        if (value === '' && isOpen) {
+            setIsOpen(false)
+        }
+
         if (debouncing) {
             handleDebouncedSearch(value)
         } else {
@@ -99,7 +105,12 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && options?.length && options?.length >= 1) {
+        if (
+            event.key === 'Enter' &&
+            options?.length &&
+            options?.length >= 1 &&
+            search !== ''
+        ) {
             handleSelect(options?.[0])
         }
     }

@@ -13,7 +13,7 @@ import styles from './styles.module.sass'
 
 type HistoricalPhotosProps = {
     position?: MapPositionType
-    onPhotoClick?: (photo: Placemark.Photo) => void
+    onPhotoClick?: (photos: Placemark.Photo[], index?: number) => void
 }
 
 const IMG_HOST = 'https://pastvu.com/_p'
@@ -34,7 +34,7 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
         `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
 
     return photosData?.result?.photos?.length ? (
-        photosData?.result?.photos?.map((photo) => (
+        photosData?.result?.photos?.map((photo, index) => (
             <Marker
                 key={photo?.cid}
                 position={[photo.geo[0], photo.geo[1]]}
@@ -50,15 +50,18 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
                 alt={photo.title}
                 eventHandlers={{
                     click: () => {
-                        onPhotoClick?.({
-                            full: photoUrl(photo.file, true),
-                            lat: photo.geo[0],
-                            lon: photo.geo[1],
-                            preview: photoUrl(photo.file),
-                            title: `${photo.title}${
-                                photo.year ? ` (${photo.year})` : ''
-                            }`
-                        })
+                        onPhotoClick?.(
+                            photosData?.result?.photos?.map((item) => ({
+                                full: photoUrl(item.file, true),
+                                lat: item.geo[0],
+                                lon: item.geo[1],
+                                preview: photoUrl(item.file),
+                                title: `${item.title}${
+                                    item.year ? ` (${item.year})` : ''
+                                }`
+                            })),
+                            index
+                        )
                     }
                 }}
             />

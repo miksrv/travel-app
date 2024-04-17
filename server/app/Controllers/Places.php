@@ -603,9 +603,9 @@ class Places extends ResourceController {
 
         list($width, $height) = getimagesize($file->getRealPath());
 
-//        if ($input->width > $width || $input->height > $height) {
-//            return $this->failValidationErrors('The cover dimensions cannot exceed the image dimensions');
-//        }
+        if ($input->width > $width || $input->height > $height) {
+            return $this->failValidationErrors('The cover dimensions cannot exceed the image dimensions');
+        }
 
         $image = Services::image('gd'); // imagick
         $image->withFile($file->getRealPath())
