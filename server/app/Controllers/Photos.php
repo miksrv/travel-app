@@ -274,7 +274,7 @@ class Photos extends ResourceController {
         $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
 
         // Update photos count on the current place
-        $placesModel->update($photoData->place_id, ['photos' => $placesData->photos - 1]);
+        $placesModel->update($photoData->place_id, ['photos' => $placesData->photos <= 1 ? 0 : $placesData->photos - 1]);
 
         return $this->respondDeleted(['id' => $id]);
     }

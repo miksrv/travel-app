@@ -7,6 +7,7 @@ class EmailLibrary {
         $config['SMTPUser'] = getenv('smtp.user');
         $config['SMTPPass'] = getenv('smtp.pass');
         $config['SMTPPort'] = getenv('smtp.port');
+        $config['mailType'] = 'html';
         $config['SMTPCrypto'] = 'ssl';
 
         $email = \Config\Services::email();
