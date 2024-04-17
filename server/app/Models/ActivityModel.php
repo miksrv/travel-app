@@ -39,7 +39,7 @@ class ActivityModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    // protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = []; // ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
@@ -66,5 +66,36 @@ class ActivityModel extends MyBaseModel {
             ->whereIn('type', ['edit', 'cover', 'photo'])
             ->groupBy('user_id')
             ->findAll();
+    }
+
+    public function getActivityList(
+        string $lastDate = null,
+        string $userId = null,
+        string $placeId = null,
+        int $limit = 20,
+        int $offset = 0,
+    ): array {
+        $model = $this->select(
+            'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
+                users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
+            ->join('places', 'activity.place_id = places.id', 'left')
+            ->join('photos', 'activity.photo_id = photos.id', 'left')
+            ->join('users', 'activity.user_id = users.id', 'left');
+
+        if ($lastDate) {
+            $model->where('activity.created_at < ', $lastDate);
+        }
+
+        if ($userId) {
+            $model->where('activity.user_id', $userId);
+        }
+
+        if ($placeId) {
+            $model->where('activity.place_id', $placeId);
+        }
+
+        return $model->whereIn('activity.type', ['photo', 'place', 'edit'])
+            ->orderBy('activity.created_at, activity.type', 'DESC')
+            ->findAll(min(abs($limit), 100), abs($offset));
     }
 }
