@@ -4,7 +4,6 @@ import { Notification } from '@/api/types/Notification'
 
 type SnackbarStateProps = {
     list: Notification[]
-    deleted: string[]
     counter: number
 }
 
@@ -28,7 +27,6 @@ export const Notify = createAsyncThunk(
 const notificationSlice = createSlice({
     initialState: {
         counter: 0,
-        deleted: [],
         list: []
     } as SnackbarStateProps,
     name: 'snackbar',
@@ -40,13 +38,9 @@ const notificationSlice = createSlice({
         },
         deleteAllNotifications: (state) => {
             state.list = []
-            state.deleted = []
         },
         deleteNotification: (state, { payload }: PayloadAction<string>) => {
             state.list = state.list?.filter(({ id }) => id !== payload)
-            state.deleted = [
-                ...(state.deleted?.filter((id) => id !== payload) || [])
-            ]
         },
         setReadNotification: (state, { payload }: PayloadAction<string>) => {
             const notification = state.list?.find(({ id }) => id === payload)
