@@ -354,7 +354,8 @@
             "settings": {
                 "title": "Edit Profile",
                 "breadCrumbUsersLink": "Travelers",
-                "breadCrumbMyPageLink": "My Page"
+                "breadCrumbMyPageLink": "My Page",
+                "notifySuccess": "Settings have been saved"
             },
             "levels": {
                 "title": "User levels",

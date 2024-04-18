@@ -355,7 +355,8 @@
             "settings": {
                 "title": "Редактирование профиля",
                 "breadCrumbUsersLink": "Путешественники",
-                "breadCrumbMyPageLink": "Моя страница"
+                "breadCrumbMyPageLink": "Моя страница",
+                "notifySuccess": "Настройки сохранены"
             },
             "levels": {
                 "title": "Уровни пользователей",

@@ -1,6 +1,5 @@
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import uniqueId from 'lodash-es/uniqueId'
 import { useTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -15,7 +14,7 @@ import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
-import { addNotification } from '@/api/notificationSlice'
+import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
@@ -124,7 +123,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             onSubmit?.(formData)
         } else {
             dispatch(
-                addNotification({
+                Notify({
                     id: 'placeFormError',
                     message: t('errorsMessageTitle'),
                     type: 'error'

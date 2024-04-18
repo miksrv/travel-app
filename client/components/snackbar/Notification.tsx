@@ -16,25 +16,32 @@ import styles from './styles.module.sass'
 interface NotificationProps extends NotificationType {
     showDate?: boolean
     onClose?: (id: string) => void
+    onLoad?: (id: string) => void
 }
 
 const Notification: React.FC<NotificationProps> = ({
     showDate,
     onClose,
+    onLoad,
     ...props
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.notification'
     })
 
+    React.useEffect(() => {
+        onLoad?.(props.id)
+    }, [])
+
     return (
         <div
             className={cn(
                 styles.notification,
-                props?.read === false && styles.unread
+                styles[props?.type!],
+                !props?.read && styles.unread
             )}
         >
-            <div className={cn(styles.before, styles[props?.type!])}>
+            <div className={cn(styles.before)}>
                 <NotificationIcon {...props} />
             </div>
             <div className={styles.body}>
@@ -87,6 +94,8 @@ const NotificationIcon: React.FC<NotificationType> = ({
         <Icon name={'DoubleUp'} />
     ) : props.type === 'error' ? (
         <Icon name={'ReportError'} />
+    ) : props.type === 'success' ? (
+        <Icon name={'CheckCircle'} />
     ) : props.type === 'level' ? (
         <Image
             src={levelImage(props?.meta?.level)?.src}

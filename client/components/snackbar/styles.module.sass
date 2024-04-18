@@ -12,11 +12,13 @@
     z-index: 1
 
     .notification
-        transition: transform .32s cubic-bezier(0.4,0,0.2,1)
-        animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
         border-radius: $borderRadius
         box-shadow: $boxShadow4
         padding: 8px 12px
+
+        &.unread
+            transition: transform .32s cubic-bezier(0.4,0,0.2,1)
+            animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
 
 .notification
     background-color: #FFF
@@ -41,36 +43,6 @@
             fill: $colorLinkSvg
             width: 26px
             height: 26px
-
-        &.success
-            svg
-                fill: $greenColor
-
-        &.warning
-            svg
-                fill: $orangeColor
-
-        &.error
-            svg
-                fill: $redColor
-
-    .closeButton
-        position: absolute
-        border: none
-        background: none
-        margin: 0
-        padding: 0
-        right: 2px
-        top: 2px
-        cursor: pointer
-
-        &:hover
-            opacity: .6
-
-        svg
-            width: 12px
-            height: 12px
-            fill: $colorTextSecond
 
     .body
         display: flex
@@ -101,6 +73,36 @@
         .datetime
             font-size: $fontSizeCaption
             color: $colorTextSecond
+
+    &.success
+        svg
+            fill: $greenColor
+
+    &.warning
+        svg
+            fill: $orangeColor
+
+    &.error
+        svg
+            fill: $redColor
+
+    .closeButton
+        position: absolute
+        border: none
+        background: none
+        margin: 0
+        padding: 0
+        right: 2px
+        top: 2px
+        cursor: pointer
+
+        &:hover
+            opacity: .6
+
+        svg
+            width: 12px
+            height: 12px
+            fill: $colorTextSecond
 
 @keyframes snackbar-horizontal
     0%
