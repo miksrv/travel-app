@@ -20,6 +20,9 @@ export const addNotification = createAsyncThunk(
         if (
             (getState() as RootState).notification.deleted.includes(
                 notification.id
+            ) ||
+            !!(getState() as RootState).notification.list?.find(
+                ({ id }) => id === notification.id
             )
         ) {
             notificationSlice.actions.deleteNotification(notification.id)

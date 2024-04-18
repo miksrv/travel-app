@@ -85,6 +85,8 @@ const NotificationIcon: React.FC<NotificationType> = ({
 }): React.ReactNode =>
     props.type === 'experience' ? (
         <Icon name={'DoubleUp'} />
+    ) : props.type === 'error' ? (
+        <Icon name={'ReportError'} />
     ) : props.type === 'level' ? (
         <Image
             src={levelImage(props?.meta?.level)?.src}
@@ -104,8 +106,6 @@ const NotificationIcon: React.FC<NotificationType> = ({
                 objectFit: 'cover'
             }}
         />
-    ) : props.type === 'success' ? (
-        <Icon name={'ReportError'} />
     ) : (
         <></>
     )

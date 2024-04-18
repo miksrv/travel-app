@@ -168,7 +168,7 @@
             "noPhotos": "No photos uploaded"
         },
         "placeForm": {
-            "errorsMessageTitle": "Fix errors",
+            "errorsMessageTitle": "Errors were made when adding a geotag",
             "errorTitle": "Title is required",
             "errorCategory": "Select a location category",
             "inputTitleLabel": "Title of the point of interest",
