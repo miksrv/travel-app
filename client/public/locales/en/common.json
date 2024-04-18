@@ -38,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Copy to clipboard",
+                "copySuccess": "Coordinates copied",
                 "addNewPlace": "Add a geotag"
             },
             "layerSwitcher": {
@@ -139,7 +140,7 @@
                 "comments": "Comments:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
-                "buttonEdit": "Edit",
+                "buttonEdit": "Settings",
                 "dateFormat": "MMM D, YYYY"
             },
             "photos": {
@@ -269,7 +270,7 @@
             "error": "Error",
             "level": "New level!",
             "achievements": "New achievement!",
-            "cover": "New cover loaded",
+            "cover": "Cover changed",
             "edit": "Place edited",
             "rating": "New assessment",
             "comment": "New comment added",

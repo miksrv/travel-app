@@ -38,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Копировать в буфер обмена",
+                "copySuccess": "Координаты скопированы",
                 "addNewPlace": "Добавить геометку"
             },
             "layerSwitcher": {
@@ -140,7 +141,7 @@
                 "comments": "Комментариев:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
-                "buttonEdit": "Редактировать",
+                "buttonEdit": "Настройки",
                 "dateFormat": "D MMMM YYYY"
             },
             "photos": {
@@ -270,7 +271,7 @@
             "error": "Ошибка",
             "level": "Новый уровень!",
             "achievements": "Новое достижение!",
-            "cover": "Загружена новая обложка",
+            "cover": "Обложка изменена",
             "edit": "Место отредактировано",
             "rating": "Поставлена новая оценка",
             "comment": "Добавлен новый комментарий",
