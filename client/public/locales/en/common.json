@@ -264,6 +264,9 @@
             "emptyList": "Something went wrong and there are no users here."
         },
         "notification": {
+            "success": "Success",
+            "warning": "Warning",
+            "error": "Error",
             "level": "New level!",
             "achievements": "New achievement!",
             "cover": "New cover loaded",

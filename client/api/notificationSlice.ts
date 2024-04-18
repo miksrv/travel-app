@@ -13,6 +13,10 @@ type SnackbarStateProps = {
 export const addNotification = createAsyncThunk(
     'snackbar/addNotification',
     async (notification: Notification, { dispatch, getState }) => {
+        if (!notification.type && !notification.message) {
+            return
+        }
+
         if (
             (getState() as RootState).notification.deleted.includes(
                 notification.id
@@ -26,14 +30,6 @@ export const addNotification = createAsyncThunk(
         const newNotification: Notification = {
             ...notification,
             id: notification.id || uniqueId()
-        }
-
-        dispatch(notificationSlice.actions.hideNotification(newNotification.id))
-
-        if (notification.id) {
-            dispatch(
-                notificationSlice.actions.deleteNotification(newNotification.id)
-            )
         }
 
         dispatch(notificationSlice.actions.addNotification(newNotification))
@@ -59,15 +55,13 @@ const notificationSlice = createSlice({
         },
         deleteAllNotifications: (state) => {
             state.list = []
+            state.deleted = []
         },
         deleteNotification: (state, { payload }: PayloadAction<string>) => {
-            state.deleted = [...state.deleted, payload]
-            state.list = state.list.filter(
-                (notification) => notification.id !== payload
-            )
-        },
-        hideNotification: (state, { payload }: PayloadAction<string>) => {
-            state.deleted = [...state.deleted, payload]
+            state.list = state.list.filter(({ id }) => id !== payload)
+            state.deleted = [
+                ...(state.deleted?.filter((id) => id !== payload) || [])
+            ]
         },
         setUnreadCounter: (state, { payload }: PayloadAction<number>) => {
             state.counter = payload

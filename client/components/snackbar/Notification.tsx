@@ -34,7 +34,7 @@ const Notification: React.FC<NotificationProps> = ({
                 props?.read === false && styles.unread
             )}
         >
-            <div className={cn(styles.before)}>
+            <div className={cn(styles.before, styles[props?.type!])}>
                 <NotificationIcon {...props} />
             </div>
             <div className={styles.body}>
@@ -44,6 +44,7 @@ const Notification: React.FC<NotificationProps> = ({
                         : t(props?.type!)}
                 </span>
                 <span className={styles.content}>
+                    {props?.message}
                     {props.type === 'experience' ? (
                         `+${props?.meta?.value} ${t('experience')}`
                     ) : props.type === 'level' ? (
@@ -103,6 +104,8 @@ const NotificationIcon: React.FC<NotificationType> = ({
                 objectFit: 'cover'
             }}
         />
+    ) : props.type === 'success' ? (
+        <Icon name={'ReportError'} />
     ) : (
         <></>
     )
