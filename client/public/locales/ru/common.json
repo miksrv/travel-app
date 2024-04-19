@@ -38,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Копировать в буфер обмена",
+                "copySuccess": "Координаты скопированы",
                 "addNewPlace": "Добавить геометку"
             },
             "layerSwitcher": {
@@ -140,7 +141,7 @@
                 "comments": "Комментариев:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
-                "buttonEdit": "Редактировать",
+                "buttonEdit": "Настройки",
                 "dateFormat": "D MMMM YYYY"
             },
             "photos": {
@@ -169,7 +170,7 @@
             "noPhotos": "Нет загруженных фотографий"
         },
         "placeForm": {
-            "errorsMessageTitle": "Исправьте ошибки",
+            "errorsMessageTitle": "При добавлении геометки были допущены ошибки",
             "errorTitle": "Название обязательно для заполнения",
             "errorCategory": "Выберите категорию места",
             "inputTitleLabel": "Заголовок интересного места",
@@ -177,6 +178,7 @@
             "inputCategoryLabel": "Категория интересного места",
             "inputCategoryPlaceholder": "Выберите категорию",
             "inputTagsLabel": "Выберите или добавьте метки интересного места",
+            "inputTagsPlaceholder": "Начните вводить текст",
             "inputDescriptionLabel": "Описание",
             "buttonSave": "Сохранить",
             "buttonCancel": "Отмена"
@@ -265,9 +267,12 @@
             "emptyList": "Что-то пошло не так и здесь нет пользователей."
         },
         "notification": {
+            "success": "Успешно",
+            "warning": "Предупреждение",
+            "error": "Ошибка",
             "level": "Новый уровень!",
             "achievements": "Новое достижение!",
-            "cover": "Загружена новая обложка",
+            "cover": "Обложка изменена",
             "edit": "Место отредактировано",
             "rating": "Поставлена новая оценка",
             "comment": "Добавлен новый комментарий",
@@ -352,7 +357,8 @@
             "settings": {
                 "title": "Редактирование профиля",
                 "breadCrumbUsersLink": "Путешественники",
-                "breadCrumbMyPageLink": "Моя страница"
+                "breadCrumbMyPageLink": "Моя страница",
+                "notifySuccess": "Настройки сохранены"
             },
             "levels": {
                 "title": "Уровни пользователей",

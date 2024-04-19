@@ -9,7 +9,8 @@ import React, { useEffect, useRef, useState } from 'react'
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 
-import { useAppSelector } from '@/api/store'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
@@ -23,6 +24,8 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import styles from './styles.module.sass'
 
 const ContextMenu: React.FC = () => {
+    const dispatch = useAppDispatch()
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.contextMenu'
@@ -51,6 +54,14 @@ const ContextMenu: React.FC = () => {
     const handleCopyCoordinates = () => {
         navigator?.clipboard?.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
         setIsShowMenu(false)
+
+        dispatch(
+            Notify({
+                id: 'copyCoordinates',
+                message: t('copySuccess'),
+                type: 'success'
+            })
+        )
     }
 
     useEffect(() => {

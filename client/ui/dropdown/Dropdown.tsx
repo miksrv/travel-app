@@ -101,7 +101,12 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
     return (
         <div
             ref={dropdownRef}
-            className={cn(className, styles.dropdown, error && styles.error)}
+            className={cn(
+                className,
+                styles.dropdown,
+                error && styles.error,
+                disabled && styles.disabled
+            )}
         >
             {label && <label className={styles.label}>{label}</label>}
             <div

@@ -14,7 +14,8 @@ import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
-import { useAppSelector } from '@/api/store'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import { categoryImage } from '@/functions/categories'
@@ -42,6 +43,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     onSubmit,
     onCancel
 }) => {
+    const dispatch = useAppDispatch()
+
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placeForm'
     })
@@ -118,6 +121,14 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     const handleSubmit = () => {
         if (validateForm()) {
             onSubmit?.(formData)
+        } else {
+            dispatch(
+                Notify({
+                    id: 'placeFormError',
+                    message: t('errorsMessageTitle'),
+                    type: 'error'
+                })
+            )
         }
     }
 
@@ -205,7 +216,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <ChipsSelect
                     label={t('inputTagsLabel')}
-                    placeholder={''}
+                    placeholder={t('inputTagsPlaceholder')}
                     disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}

@@ -38,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Copy to clipboard",
+                "copySuccess": "Coordinates copied",
                 "addNewPlace": "Add a geotag"
             },
             "layerSwitcher": {
@@ -139,7 +140,7 @@
                 "comments": "Comments:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
-                "buttonEdit": "Edit",
+                "buttonEdit": "Settings",
                 "dateFormat": "MMM D, YYYY"
             },
             "photos": {
@@ -168,7 +169,7 @@
             "noPhotos": "No photos uploaded"
         },
         "placeForm": {
-            "errorsMessageTitle": "Fix errors",
+            "errorsMessageTitle": "Errors were made when adding a geotag",
             "errorTitle": "Title is required",
             "errorCategory": "Select a location category",
             "inputTitleLabel": "Title of the point of interest",
@@ -176,6 +177,7 @@
             "inputCategoryLabel": "Point of Interest Category",
             "inputCategoryPlaceholder": "Select a category",
             "inputTagsLabel": "Select or add POI tags",
+            "inputTagsPlaceholder": "Start typing",
             "inputDescriptionLabel": "Description",
             "buttonSave": "Save",
             "buttonCancel": "Cancel"
@@ -264,9 +266,12 @@
             "emptyList": "Something went wrong and there are no users here."
         },
         "notification": {
+            "success": "Success",
+            "warning": "Warning",
+            "error": "Error",
             "level": "New level!",
             "achievements": "New achievement!",
-            "cover": "New cover loaded",
+            "cover": "Cover changed",
             "edit": "Place edited",
             "rating": "New assessment",
             "comment": "New comment added",
@@ -351,7 +356,8 @@
             "settings": {
                 "title": "Edit Profile",
                 "breadCrumbUsersLink": "Travelers",
-                "breadCrumbMyPageLink": "My Page"
+                "breadCrumbMyPageLink": "My Page",
+                "notifySuccess": "Settings have been saved"
             },
             "levels": {
                 "title": "User levels",

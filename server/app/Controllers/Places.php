@@ -134,7 +134,7 @@ class Places extends ResourceController {
 
         $coordinates = $lat && $lon
             ? $this->model->makeDistanceSQL($lat, $lon)
-            : $this->model->makeDistanceSQL($this->session->lon, $this->session->lat);
+            : $this->model->makeDistanceSQL($this->session->lat, $this->session->lon);
 
         if ($coordinates) {
             $this->coordinatesAvailable = true;
@@ -272,7 +272,7 @@ class Places extends ResourceController {
 
         $coordinates = $lat && $lon
             ? $this->model->makeDistanceSQL($lat, $lon)
-            : $this->model->makeDistanceSQL($this->session->lon, $this->session->lat);
+            : $this->model->makeDistanceSQL($this->session->lat, $this->session->lon);
 
         $placeData = $this->model->getPlaceDataByID($id, $coordinates);
 

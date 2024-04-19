@@ -128,16 +128,14 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     return (
         <div
             ref={dropdownRef}
-            className={cn(className, styles.chipsSelect)}
+            className={cn(
+                className,
+                styles.chipsSelect,
+                disabled && styles.disabled
+            )}
         >
             {label && <label className={styles.label}>{label}</label>}
-            <div
-                className={cn(
-                    styles.container,
-                    isOpen && styles.open,
-                    disabled && styles.disabled
-                )}
-            >
+            <div className={cn(styles.container, isOpen && styles.open)}>
                 <div className={styles.searchContainer}>
                     {value?.map((item, i) => (
                         <Chip
@@ -149,6 +147,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                     <input
                         type={'text'}
                         value={search || ''}
+                        disabled={disabled}
                         className={styles.searchInput}
                         placeholder={placeholder ?? t('placeholder')}
                         onKeyDown={handleKeyPress}
@@ -161,6 +160,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                             <button
                                 className={styles.toggleButton}
                                 type={'button'}
+                                disabled={disabled}
                                 onClick={toggleDropdown}
                             >
                                 {isOpen ? (
