@@ -20,6 +20,11 @@ body
   input, button
     font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif
 
+    &::placeholder
+      letter-spacing: 0.00938em
+      font-family: inherit
+      font-size: inherit
+
 h1
   margin: 0
   font-size: $fontSizeTitleH1
@@ -242,21 +247,45 @@ a
     color: #FFFFFF !important
 
 /* MD Editor */
-.w-md-editor
-  border-radius: $borderRadius !important
-  font-size: $fontSize !important
-  line-height: 1.5 !important
-  font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif !important
-  border: 0.5px solid $borderBottomColor !important
+.md-editor
+  border: .5px solid $borderInputColor !important
   box-shadow: none !important
+  font-size: $fontSize
+  letter-spacing: 0.00938em
+  font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif
 
-.w-md-editor-content
-  min-height: 350px
+  .md-editor-preview *
+    font-size: $fontSize
+    letter-spacing: 0.00938em
+    font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif
 
-.w-md-editor-preview
-  padding: 10px 15px !important
+  .md-editor-toolbar-warp
+    padding: 4px 6px
 
-.w-md-editor-toolbar
-  border-bottom: 0.5px solid $borderBottomColor !important
-  background-color: $inputBackgroundColor !important
+    svg
+      color: #6d7885
+
+  .cm-scroller
+    overflow-x: unset
+    width: 100%
+
+  .cm-content
+    width: 100%
+    white-space: break-spaces
+
+  .cm-gutters
+    display: none
+
+  .cm-editor
+    background-color: transparent
+    border-bottom-right-radius: $borderRadius
+    border-bottom-left-radius: $borderRadius
+
+    &.cm-focused
+      outline: none
+
+  .cm-editor *
+    font-size: 13px
+    letter-spacing: 0.00938em
+    font-family: -apple-system, system-ui, "Helvetica Neue", Roboto,sans-serif
 

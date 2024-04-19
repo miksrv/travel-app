@@ -1,29 +1,22 @@
 'use client'
 
-import '@uiw/react-markdown-preview/markdown.css'
-import { MDEditorProps } from '@uiw/react-md-editor'
-import '@uiw/react-md-editor/markdown-editor.css'
+import { IMarkdownEditor } from '@uiw/react-markdown-editor'
 import dynamic from 'next/dynamic'
 import React from 'react'
-import Markdown from 'react-markdown'
 
-const MDEditor = dynamic(() => import('@uiw/react-md-editor'), {
+const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
     ssr: false
 })
 
-interface ContentEditorProps extends MDEditorProps {}
+interface ContentEditorProps extends IMarkdownEditor {}
 
 const ContentEditor: React.FC<ContentEditorProps> = (props) => (
     <div data-color-mode={'light'}>
-        <MDEditor
+        <MarkdownEditor
             {...props}
-            visibleDragbar={false}
-            minHeight={400}
-            height={'100%'}
-            preview={'edit'}
-            components={{
-                preview: (content) => <Markdown>{content}</Markdown>
-            }}
+            value={props.value || ''}
+            previewWidth={'100%'}
+            enableScroll={true}
         />
     </div>
 )
