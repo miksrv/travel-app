@@ -178,6 +178,7 @@
             "inputCategoryLabel": "Категория интересного места",
             "inputCategoryPlaceholder": "Выберите категорию",
             "inputTagsLabel": "Выберите или добавьте метки интересного места",
+            "inputTagsPlaceholder": "Начните вводить текст",
             "inputDescriptionLabel": "Описание",
             "buttonSave": "Сохранить",
             "buttonCancel": "Отмена"

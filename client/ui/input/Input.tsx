@@ -10,7 +10,13 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const Input: React.FC<InputProps> = ({ label, error, ...props }) => (
-    <div className={cn(styles.input, error && styles.error)}>
+    <div
+        className={cn(
+            styles.input,
+            error && styles.error,
+            props.disabled && styles.disabled
+        )}
+    >
         {label && <label className={styles.label}>{label}</label>}
         <span className={styles.formField}>
             <input

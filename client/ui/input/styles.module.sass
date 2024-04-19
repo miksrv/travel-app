@@ -27,9 +27,7 @@
     .input
       appearance: none
       background: transparent
-      border-width: 0.5px
-      border-style: solid
-      border-color: $borderInputColor
+      border: 0.5px solid $borderInputColor
       border-radius: inherit
       box-shadow: none
       box-sizing: border-box
@@ -47,6 +45,17 @@
         outline: none
         border-color: $inputFocusBorderColor
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
+
+  &.disabled
+    .label
+      opacity: 0.7
+
+    .formField
+      .input
+        opacity: 0.5
+
+      &:focus, &:active
+        border-color: inherit
 
   &.error
     .formField

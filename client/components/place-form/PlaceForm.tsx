@@ -216,7 +216,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <ChipsSelect
                     label={t('inputTagsLabel')}
-                    placeholder={''}
+                    placeholder={t('inputTagsPlaceholder')}
                     disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}

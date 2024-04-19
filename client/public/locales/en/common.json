@@ -177,6 +177,7 @@
             "inputCategoryLabel": "Point of Interest Category",
             "inputCategoryPlaceholder": "Select a category",
             "inputTagsLabel": "Select or add POI tags",
+            "inputTagsPlaceholder": "Start typing",
             "inputDescriptionLabel": "Description",
             "buttonSave": "Save",
             "buttonCancel": "Cancel"
