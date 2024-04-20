@@ -14,6 +14,18 @@ const ContentEditor: React.FC<ContentEditorProps> = (props) => (
     <div data-color-mode={'light'}>
         <MarkdownEditor
             {...props}
+            toolbars={[
+                'bold',
+                'italic',
+                'header',
+                'strike',
+                'underline',
+                'quote',
+                'link',
+                'image',
+                'fullscreen',
+                'preview'
+            ]}
             value={props.value || ''}
             previewWidth={'100%'}
             enableScroll={true}
