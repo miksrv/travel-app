@@ -189,6 +189,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
+                    tabIndex={0}
+                    autoFocus={true}
                     name={'title'}
                     label={t('inputTitleLabel')}
                     placeholder={t('inputTitlePlaceholder')}
