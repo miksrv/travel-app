@@ -123,6 +123,8 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
+                    tabIndex={0}
+                    autoFocus={true}
                     label={t('inputNameLabel')}
                     name={'name'}
                     disabled={isLoading}
