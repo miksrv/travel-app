@@ -195,7 +195,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         value={search || ''}
                         defaultValue={selectedOption?.title ?? value?.name}
                         className={styles.searchInput}
-                        placeholder={placeholder ?? t('placeholder')}
+                        placeholder={placeholder ?? ''}
                         onMouseMove={(e) => e.stopPropagation()}
                         onWheelCapture={(e) => e.stopPropagation()}
                         onKeyDown={handleKeyPress}
