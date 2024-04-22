@@ -103,9 +103,12 @@
                 "extensions": [".js", ".jsx", ".ts", ".tsx"]
             }
         ],
-        "jsx-a11y/no-autofocus": [ 2, {
-            "ignoreNonDOM": true
-        }],
+        "jsx-a11y/no-autofocus": [
+            2,
+            {
+                "ignoreNonDOM": true
+            }
+        ],
         "react/prop-types": "off",
         "sort-imports": [
             "warn",
