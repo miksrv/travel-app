@@ -383,7 +383,6 @@
     },
     "ui": {
         "autocomplete": {
-            "placeholder": "Введите значение для поиска",
             "notFound": "Пока что ничего не найдено"
         },
         "breadcrumbs": {

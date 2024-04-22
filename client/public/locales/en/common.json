@@ -382,7 +382,6 @@
     },
     "ui": {
         "autocomplete": {
-            "placeholder": "Enter a value to search for",
             "notFound": "Nothing found yet"
         },
         "breadcrumbs": {
