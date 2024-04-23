@@ -24,55 +24,61 @@ interface MenuProps {
     onClick?: () => void
 }
 
+const KEY = 'components.appLayout.menu.'
+
 const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.appLayout.menu'
-    })
+    const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
 
     const menuItems: MenuItemType[] = [
         {
+            auth: true,
+            icon: 'User',
+            link: userId ? `/users/${userId}` : undefined,
+            text: t(`${KEY}profile`)
+        },
+        {
+            auth: true,
+            icon: 'Photo',
+            link: userId ? `/users/${userId}/photos` : undefined,
+            text: t(`${KEY}photos`)
+        },
+        {
             icon: 'Map',
             link: '/map',
-            text: t('map')
+            text: t(`${KEY}map`)
         },
         {
             icon: 'Place',
             link: '/places',
-            text: t('places')
+            text: t(`${KEY}places`)
         },
         {
             auth: true,
             icon: 'PlusCircle',
             link: '/places/create',
-            text: t('create')
+            text: t(`${KEY}create`)
         },
         {
             icon: 'Category',
             link: '/categories',
-            text: t('categories')
+            text: t(`${KEY}categories`)
         },
         {
             icon: 'Tag',
             link: '/tags',
-            text: t('tags')
-        },
-        {
-            auth: true,
-            icon: 'User',
-            link: userId ? `/users/${userId}` : undefined,
-            text: t('profile')
+            text: t(`${KEY}tags`)
         },
         {
             icon: 'Users',
             link: '/users/',
-            text: t('users')
+            text: t(`${KEY}users`)
         },
         {
             icon: 'Telegram',
             link: 'https://t.me/geometki',
-            text: t('telegram')
+            text: t(`${KEY}telegram`)
         }
     ]
 

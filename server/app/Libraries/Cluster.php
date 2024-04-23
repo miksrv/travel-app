@@ -75,7 +75,7 @@ class Cluster {
         $x2 = $this->lonToX($lon2);
         $y2 = $this->latToY($lat2);
 
-        return sqrt(pow(($x1-$x2),2) + pow(($y1-$y2),2)) >> (21 - $zoom);
+        return round(sqrt(pow(($x1-$x2),2) + pow(($y1-$y2),2))) >> (21 - $zoom);
     }
 
     /**

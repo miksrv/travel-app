@@ -50,3 +50,5 @@ export type IconTypes =
     | 'HeartEmpty'
     | 'HeartFull'
     | 'PinDrop'
+    | 'Settings'
+    | 'Exit'

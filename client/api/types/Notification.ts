@@ -12,6 +12,9 @@ export type Types =
     | 'experience'
     | 'level'
     | 'achievements'
+    | 'success'
+    | 'warning'
+    | 'error'
 
 export type ExperienceData = {
     value?: number
@@ -19,6 +22,7 @@ export type ExperienceData = {
 
 export type Notification = {
     id: string
+    message?: string
     read?: boolean
     type?: Types
     meta?: User.LevelData & ExperienceData

@@ -138,6 +138,8 @@ const UserForm: React.FC<UserFormProps> = ({
                 </h3>
                 <div className={styles.formElement}>
                     <Input
+                        tabIndex={0}
+                        autoFocus={true}
                         name={'name'}
                         label={t(`${TKEY}inputNameLabel`)}
                         placeholder={t(`${TKEY}inputNamePlaceholder`)}

@@ -13,14 +13,15 @@ import styles from '@/components/users-list/styles.module.sass'
 
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
-interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer'> {
+interface UsersListProps
+    extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
     users?: User[]
 }
 
+const KEY = 'components.userList.'
+
 const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.userList'
-    })
+    const { t } = useTranslation()
 
     return users?.length ? (
         <Container {...props}>
@@ -43,13 +44,13 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                                     width={16}
                                     height={16}
                                 />
-                                {user?.level?.level} {t('level')}
+                                {user?.level?.level} {t(`${KEY}level`)}
                             </>
                         }
                     />
 
                     <div className={styles.reputation}>
-                        <p>{`${t('reputation')}: `}</p>
+                        <p>{`${t(`${KEY}reputation`)}: `}</p>
                         <Reputation value={user?.reputation || 0} />
                     </div>
 
@@ -69,7 +70,9 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
             ))}
         </Container>
     ) : (
-        <Container className={styles.emptyList}>{t('emptyList')}</Container>
+        <Container className={styles.emptyList}>
+            {t(`${KEY}emptyList`)}
+        </Container>
     )
 }
 

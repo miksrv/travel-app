@@ -5,7 +5,7 @@
             "userProfileCaption": "My page",
             "userProfileTitle": "Go to my page",
             "userSettingsCaption": "Settings",
-            "userSettingsTitle": "Go to profile editing",
+            "userSettingsTitle": "Go to settings",
             "userLogout": "Logout",
             "userLoginCaption": "Sign in",
             "userLoginTitle": "Authorization on the site",
@@ -27,6 +27,7 @@
                 "categories": "Geotag categories",
                 "tags": "Geotag hashtags",
                 "profile": "Personal page",
+                "photos": "My Photos",
                 "users": "Travelers",
                 "telegram": "Project diary"
             }
@@ -37,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Copy to clipboard",
+                "copySuccess": "Coordinates copied",
                 "addNewPlace": "Add a geotag"
             },
             "layerSwitcher": {
@@ -138,7 +140,7 @@
                 "comments": "Comments:",
                 "covers": "Changed covers:",
                 "breadCrumbUsersLink": "Travelers",
-                "buttonEdit": "Edit",
+                "buttonEdit": "Settings",
                 "dateFormat": "MMM D, YYYY"
             },
             "photos": {
@@ -167,7 +169,7 @@
             "noPhotos": "No photos uploaded"
         },
         "placeForm": {
-            "errorsMessageTitle": "Fix errors",
+            "errorsMessageTitle": "Errors were made when adding a geotag",
             "errorTitle": "Title is required",
             "errorCategory": "Select a location category",
             "inputTitleLabel": "Title of the point of interest",
@@ -175,6 +177,7 @@
             "inputCategoryLabel": "Point of Interest Category",
             "inputCategoryPlaceholder": "Select a category",
             "inputTagsLabel": "Select or add POI tags",
+            "inputTagsPlaceholder": "Start typing",
             "inputDescriptionLabel": "Description",
             "buttonSave": "Save",
             "buttonCancel": "Cancel"
@@ -277,9 +280,12 @@
             "emptyList": "Something went wrong and there are no users here."
         },
         "notification": {
+            "success": "Success",
+            "warning": "Warning",
+            "error": "Error",
             "level": "New level!",
             "achievements": "New achievement!",
-            "cover": "New cover loaded",
+            "cover": "Cover changed",
             "edit": "Place edited",
             "rating": "New assessment",
             "comment": "New comment added",
@@ -304,7 +310,9 @@
             "title": "News feed of interesting places",
             "description": "Interesting places and attractions - news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
             "buttonAllPlaces": "All places of interest",
-            "titleActiveUsers": "Active Users",
+            "titleActiveUsers": "Active Travelers",
+            "allActiveUsers": "All",
+            "allUsersPlaceholder": "All travelers",
             "titleLastPhotos": "Last uploaded photos"
         },
         "categories": {
@@ -360,9 +368,10 @@
             "usersCount": "Travelers:",
             "titlePage": "Page",
             "settings": {
-                "title": "Edit Profile",
+                "title": "Settings",
                 "breadCrumbUsersLink": "Travelers",
-                "breadCrumbMyPageLink": "My Page"
+                "breadCrumbMyPageLink": "My Page",
+                "notifySuccess": "Settings have been saved"
             },
             "levels": {
                 "title": "User levels",
@@ -387,7 +396,6 @@
     },
     "ui": {
         "autocomplete": {
-            "placeholder": "Enter a value to search for",
             "notFound": "Nothing found yet"
         },
         "breadcrumbs": {

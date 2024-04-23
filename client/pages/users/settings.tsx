@@ -10,7 +10,8 @@ import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
-import { useAppSelector, wrapper } from '@/api/store'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import AppLayout from '@/components/app-layout'
@@ -20,6 +21,8 @@ import UserForm from '@/components/user-form'
 interface SettingsUserPageProps {}
 
 const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
+    const dispatch = useAppDispatch()
+
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.users.settings'
     })
@@ -81,7 +84,15 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            router.push(`/users/${authSlice.user?.id}`)
+            router.replace(`/users/${authSlice.user?.id}`)
+
+            dispatch(
+                Notify({
+                    id: 'userFormSuccess',
+                    message: t('notifySuccess'),
+                    type: 'success'
+                })
+            )
         }
     }, [isSuccess, data])
 

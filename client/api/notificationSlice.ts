@@ -1,73 +1,59 @@
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-import uniqueId from 'lodash-es/uniqueId'
 
-import { RootState } from '@/api/store'
 import { Notification } from '@/api/types/Notification'
 
 type SnackbarStateProps = {
     list: Notification[]
-    deleted: string[]
     counter: number
 }
 
-export const addNotification = createAsyncThunk(
+export const Notify = createAsyncThunk(
     'snackbar/addNotification',
-    async (notification: Notification, { dispatch, getState }) => {
-        if (
-            (getState() as RootState).notification.deleted.includes(
-                notification.id
-            )
-        ) {
-            notificationSlice.actions.deleteNotification(notification.id)
-
+    async (notification: Notification, { dispatch }) => {
+        if (!notification.type && !notification.message) {
             return
         }
 
-        const newNotification: Notification = {
-            ...notification,
-            id: notification.id || uniqueId()
-        }
-
-        dispatch(notificationSlice.actions.hideNotification(newNotification.id))
-
-        if (notification.id) {
-            dispatch(
-                notificationSlice.actions.deleteNotification(newNotification.id)
-            )
-        }
-
-        dispatch(notificationSlice.actions.addNotification(newNotification))
+        dispatch(notificationSlice.actions.addNotification(notification))
 
         setTimeout(() => {
-            dispatch(deleteNotification(newNotification.id))
-        }, 5000)
+            dispatch(deleteNotification(notification.id))
+        }, 10000)
 
-        return newNotification
+        return notification
     }
 )
 
 const notificationSlice = createSlice({
     initialState: {
         counter: 0,
-        deleted: [],
         list: []
     } as SnackbarStateProps,
     name: 'snackbar',
     reducers: {
         addNotification: (state, { payload }: PayloadAction<Notification>) => {
-            state.list.push(payload)
+            if (!state.list?.find(({ id }) => id === payload.id)) {
+                state.list = [...state.list, payload]
+            }
         },
         deleteAllNotifications: (state) => {
             state.list = []
         },
         deleteNotification: (state, { payload }: PayloadAction<string>) => {
-            state.deleted = [...state.deleted, payload]
-            state.list = state.list.filter(
-                (notification) => notification.id !== payload
-            )
+            state.list = state.list?.filter(({ id }) => id !== payload)
         },
-        hideNotification: (state, { payload }: PayloadAction<string>) => {
-            state.deleted = [...state.deleted, payload]
+        setReadNotification: (state, { payload }: PayloadAction<string>) => {
+            const notification = state.list?.find(({ id }) => id === payload)
+
+            if (notification) {
+                state.list = [
+                    ...(state.list?.filter(({ id }) => id !== payload) || []),
+                    {
+                        ...notification,
+                        read: true
+                    }
+                ]
+            }
         },
         setUnreadCounter: (state, { payload }: PayloadAction<number>) => {
             state.counter = payload
@@ -75,7 +61,11 @@ const notificationSlice = createSlice({
     }
 })
 
-export const { deleteAllNotifications, deleteNotification, setUnreadCounter } =
-    notificationSlice.actions
+export const {
+    deleteAllNotifications,
+    setReadNotification,
+    deleteNotification,
+    setUnreadCounter
+} = notificationSlice.actions
 
 export default notificationSlice.reducer

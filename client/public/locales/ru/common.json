@@ -5,7 +5,7 @@
             "userProfileCaption": "Моя страница",
             "userProfileTitle": "Перейти на мою страницу",
             "userSettingsCaption": "Настройки",
-            "userSettingsTitle": "Перейти в редактирование профиля",
+            "userSettingsTitle": "Перейти в настройки",
             "userLogout": "Выход",
             "userLoginCaption": "Войти",
             "userLoginTitle": "Авторизация на сайте",
@@ -27,6 +27,7 @@
                 "categories": "Категории геометок",
                 "tags": "Хештеги геометок",
                 "profile": "Моя страница",
+                "photos": "Мои фотографии",
                 "users": "Путешественники",
                 "telegram": "Дневник проекта"
             }
@@ -37,6 +38,7 @@
             },
             "contextMenu": {
                 "copyToClipboard": "Копировать в буфер обмена",
+                "copySuccess": "Координаты скопированы",
                 "addNewPlace": "Добавить геометку"
             },
             "layerSwitcher": {
@@ -139,7 +141,7 @@
                 "comments": "Комментариев:",
                 "covers": "Изменено обложек:",
                 "breadCrumbUsersLink": "Путешественники",
-                "buttonEdit": "Редактировать",
+                "buttonEdit": "Настройки",
                 "dateFormat": "D MMMM YYYY"
             },
             "photos": {
@@ -168,7 +170,7 @@
             "noPhotos": "Нет загруженных фотографий"
         },
         "placeForm": {
-            "errorsMessageTitle": "Исправьте ошибки",
+            "errorsMessageTitle": "При добавлении геометки были допущены ошибки",
             "errorTitle": "Название обязательно для заполнения",
             "errorCategory": "Выберите категорию места",
             "inputTitleLabel": "Заголовок интересного места",
@@ -176,6 +178,7 @@
             "inputCategoryLabel": "Категория интересного места",
             "inputCategoryPlaceholder": "Выберите категорию",
             "inputTagsLabel": "Выберите или добавьте метки интересного места",
+            "inputTagsPlaceholder": "Начните вводить текст",
             "inputDescriptionLabel": "Описание",
             "buttonSave": "Сохранить",
             "buttonCancel": "Отмена"
@@ -278,9 +281,12 @@
             "emptyList": "Что-то пошло не так и здесь нет пользователей."
         },
         "notification": {
+            "success": "Успешно",
+            "warning": "Предупреждение",
+            "error": "Ошибка",
             "level": "Новый уровень!",
             "achievements": "Новое достижение!",
-            "cover": "Загружена новая обложка",
+            "cover": "Обложка изменена",
             "edit": "Место отредактировано",
             "rating": "Поставлена новая оценка",
             "comment": "Добавлен новый комментарий",
@@ -305,7 +311,9 @@
             "title": "Лента новостей интересных мест",
             "description": "Интересные места и достопримечательности - лента новостей интересных мест и достопримечательностей, последние загруженные фотографии различных объектов и достопримечательностей, активные путешественники.",
             "buttonAllPlaces": "Все интересные места",
-            "titleActiveUsers": "Активные пользователи",
+            "titleActiveUsers": "Активные путешественники",
+            "allActiveUsers": "Все",
+            "allUsersPlaceholder": "Все путешественники",
             "titleLastPhotos": "Последние загруженные фотографии"
         },
         "categories": {
@@ -361,9 +369,10 @@
             "usersCount": "Путешественников:",
             "titlePage": "Страница",
             "settings": {
-                "title": "Редактирование профиля",
+                "title": "Настройки",
                 "breadCrumbUsersLink": "Путешественники",
-                "breadCrumbMyPageLink": "Моя страница"
+                "breadCrumbMyPageLink": "Моя страница",
+                "notifySuccess": "Настройки сохранены"
             },
             "levels": {
                 "title": "Уровни пользователей",
@@ -388,7 +397,6 @@
     },
     "ui": {
         "autocomplete": {
-            "placeholder": "Введите значение для поиска",
             "notFound": "Пока что ничего не найдено"
         },
         "breadcrumbs": {

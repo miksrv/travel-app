@@ -39,15 +39,19 @@ const CommentForm: React.FC<CommentFormProps> = ({
     ) => {
         if (event.key === 'Enter' && comment && comment?.length > 1) {
             event.preventDefault()
-            submit({
-                answerId,
-                comment,
-                placeId
-            })
-
-            setComment('')
-            onCommentAdded?.()
+            handleSubmit()
         }
+    }
+
+    const handleSubmit = () => {
+        submit({
+            answerId,
+            comment,
+            placeId
+        })
+
+        setComment('')
+        onCommentAdded?.()
     }
 
     return isAuth ? (
@@ -75,6 +79,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
                 disabled={isLoading || !comment}
                 mode={'secondary'}
                 icon={'Right'}
+                onClick={handleSubmit}
             />
         </div>
     ) : (

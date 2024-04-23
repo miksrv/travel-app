@@ -51,8 +51,24 @@
 
   .topPanel
     @extend .headerPanel
-    left: auto
-    flex-direction: row-reverse
+    justify-content: space-between
+
+    .backLink
+      border-radius: 50%
+      width: 32px
+      height: 32px
+      background-color: #ffffff
+      transition: opacity .15s ease-out
+      opacity: 0
+
+      svg
+        width: 28px
+        height: 28px
+        fill: #737373
+        position: absolute
+
+      &:hover
+        opacity: .9
 
   .bottomPanel
     @extend .headerPanel
@@ -78,3 +94,7 @@
       text-align: center
       font-size: $fontSizeCaption
       white-space: nowrap
+
+  &:hover
+    .backLink
+      opacity: .6

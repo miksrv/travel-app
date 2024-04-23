@@ -75,6 +75,17 @@
       &:hover, &:focus
         opacity: .7
 
+  .userInfo
+    padding: 10px
+    font-size: $fontSizeHeadline
+    min-width: 220px
+
+    .userName
+      font-weight: 600
+
+    .levelImage
+      vertical-align: middle
+
   .notificationsButton
     position: relative
     border: none
@@ -150,6 +161,12 @@
         text-align: left
         display: flex
         align-items: center
+
+        svg
+          fill: $colorLinkSvg
+          margin: -10px 10px -10px 0
+          width: 22px
+          height: 22px
 
       &:hover, &.active
         background-color: $inputBackgroundColor

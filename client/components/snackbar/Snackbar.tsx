@@ -4,9 +4,9 @@ import React, { useEffect } from 'react'
 
 import { API } from '@/api/api'
 import {
-    addNotification,
-    deleteAllNotifications,
+    Notify,
     deleteNotification,
+    setReadNotification,
     setUnreadCounter
 } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
@@ -24,6 +24,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     const { data } = API.useNotificationsGetUpdatesQuery(undefined, {
         pollingInterval: 15 * 1000,
+        refetchOnMountOrArgChange: true,
         skip: !isAuth
     })
 
@@ -33,18 +34,11 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     useEffect(() => {
         data?.items?.forEach((item) => {
-            dispatch(addNotification(item))
+            dispatch(Notify(item))
         })
 
         dispatch(setUnreadCounter(data?.count ?? 0))
     }, [data])
-
-    useEffect(() => {
-        return () => {
-            // TODO Сразу после авторизации не показываются моментальные уведомления из-за редиректов
-            dispatch(deleteAllNotifications())
-        }
-    }, [])
 
     return (
         <div className={styles.snackbar}>
@@ -52,6 +46,12 @@ const Snackbar: React.FC<SnackbarProps> = () => {
                 <Notification
                     key={notification.id}
                     onClose={handleCloseNotification}
+                    onLoad={(id) => {
+                        !notification.read &&
+                            setTimeout(() => {
+                                dispatch(setReadNotification(id))
+                            }, 500)
+                    }}
                     {...notification}
                 />
             ))}

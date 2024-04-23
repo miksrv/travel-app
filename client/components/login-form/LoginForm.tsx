@@ -205,6 +205,8 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
             <div className={styles.formElement}>
                 <Input
+                    tabIndex={0}
+                    autoFocus={true}
                     label={t('inputEmail')}
                     name={'email'}
                     error={formErrors?.email}
