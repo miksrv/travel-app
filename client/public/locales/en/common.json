@@ -5,7 +5,7 @@
             "userProfileCaption": "My page",
             "userProfileTitle": "Go to my page",
             "userSettingsCaption": "Settings",
-            "userSettingsTitle": "Go to profile editing",
+            "userSettingsTitle": "Go to settings",
             "userLogout": "Logout",
             "userLoginCaption": "Sign in",
             "userLoginTitle": "Authorization on the site",
@@ -354,7 +354,7 @@
             "usersCount": "Travelers:",
             "titlePage": "Page",
             "settings": {
-                "title": "Edit Profile",
+                "title": "Settings",
                 "breadCrumbUsersLink": "Travelers",
                 "breadCrumbMyPageLink": "My Page",
                 "notifySuccess": "Settings have been saved"
