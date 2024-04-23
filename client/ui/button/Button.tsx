@@ -51,7 +51,7 @@ const Button: React.FC<ButtonProps> = ({
             )}
         >
             {loading ? (
-                <Spinner />
+                <Spinner className={styles.loader} />
             ) : (
                 <>
                     {icon && <Icon name={icon} />}
