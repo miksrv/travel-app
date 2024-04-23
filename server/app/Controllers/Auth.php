@@ -315,6 +315,8 @@ class Auth extends ResourceController {
             $response->token = generateAuthToken($this->session->user->email);
         }
 
+        unset($response->user->password, $response->user->auth_type);
+
         return $this->respond($response);
     }
 
