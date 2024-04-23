@@ -150,6 +150,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                 )}
                 <div className={styles.notifyFooter}>
                     <Button
+                        size={'s'}
                         mode={'secondary'}
                         stretched={true}
                         disabled={

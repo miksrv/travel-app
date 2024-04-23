@@ -2,6 +2,7 @@
 
 use App\Entities\User;
 use App\Libraries\GoogleClient;
+use App\Libraries\LevelsLibrary;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use App\Libraries\YandexClient;
@@ -311,11 +312,22 @@ class Auth extends ResourceController {
         ];
 
         if ($this->session->isAuth && $this->session->user) {
+            $levelsLibrary = new LevelsLibrary();
+
+            $userLevel = $levelsLibrary->getLevelData($this->session->user);
+
+            $this->session->user->level = [
+                'level'      => $userLevel->level,
+                'title'      => $userLevel->title,
+                'experience' => $this->session->user->experience,
+                'nextLevel'  => $userLevel->nextLevel,
+            ];
+
             $response->user  = $this->session->user;
             $response->token = generateAuthToken($this->session->user->email);
-        }
 
-        unset($response->user->password, $response->user->auth_type);
+            unset($response->user->password, $response->user->auth_type, $response->user->experience);
+        }
 
         return $this->respond($response);
     }

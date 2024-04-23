@@ -6,7 +6,6 @@ import useGeolocation from 'react-hook-geolocation'
 
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
 
 import { API } from '@/api/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
@@ -15,7 +14,7 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
 import AppAuthChecker from '@/components/app-auth-checker'
-import UserAvatar from '@/components/user-avatar'
+import UserMenu from '@/components/app-bar/UserMenu'
 
 import { concatClassNames as cn, round } from '@/functions/helpers'
 
@@ -56,8 +55,7 @@ const AppBar: React.FC<HeaderProps> = ({
         dispatch(openAuthDialog())
     }
 
-    const handleLogout = (event: React.MouseEvent) => {
-        event.preventDefault()
+    const handleLogout = () => {
         dispatch(logout())
     }
 
@@ -118,48 +116,14 @@ const AppBar: React.FC<HeaderProps> = ({
                         </Link>
                     )}
 
-                    {appAuth.isAuth && appAuth.user?.id && (
-                        <>
-                            <Notifications />
-                            <Popout
-                                action={
-                                    <UserAvatar
-                                        size={'medium'}
-                                        user={appAuth.user}
-                                        disableLink={true}
-                                        hideOnlineIcon={true}
-                                    />
-                                }
-                            >
-                                <ul className={styles.userMenu}>
-                                    <li>
-                                        <Link
-                                            href={`/users/${appAuth.user?.id}`}
-                                            title={t('userProfileTitle')}
-                                        >
-                                            {t('userProfileCaption')}
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href={'/users/settings'}
-                                            title={t('userSettingsTitle')}
-                                        >
-                                            {t('userSettingsCaption')}
-                                        </Link>
-                                    </li>
-                                    <li>
-                                        <Link
-                                            href={'/'}
-                                            title={''}
-                                            onClick={handleLogout}
-                                        >
-                                            {t('userLogout')}
-                                        </Link>
-                                    </li>
-                                </ul>
-                            </Popout>
-                        </>
+                    {appAuth.isAuth && <Notifications />}
+
+                    {appAuth.user && (
+                        <UserMenu
+                            user={appAuth.user}
+                            onLogout={handleLogout}
+                            translate={t}
+                        />
                     )}
 
                     {appAuth.isAuth === false && (
