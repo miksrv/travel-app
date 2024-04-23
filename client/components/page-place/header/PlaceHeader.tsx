@@ -1,4 +1,5 @@
 import { useTranslation } from 'next-i18next'
+import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
 
 import Badge from '@/ui/badge'
@@ -36,6 +37,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         keyPrefix: 'components.pagePlace.placeHeader'
     })
 
+    const router = useRouter()
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth?.isAuth)
     const [coverHash, setCoverHash] = useState<string | number>('')
@@ -52,6 +54,11 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             () => setCoverHash(Math.floor(Date.now() / 1000).toString()),
             400
         )
+    }
+
+    const handleBackLinkClick = async () => {
+        await router.push('/places')
+        // router.back()
     }
 
     useEffect(() => {
@@ -85,6 +92,12 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
 
             <div className={styles.topPanel}>
+                <Button
+                    className={styles.backLink}
+                    icon={'Left'}
+                    onClick={handleBackLinkClick}
+                />
+
                 {(place?.rating || (!!ratingCount && ratingValue)) && (
                     <RatingColored
                         className={styles.rating}
