@@ -5,7 +5,7 @@
             "userProfileCaption": "Моя страница",
             "userProfileTitle": "Перейти на мою страницу",
             "userSettingsCaption": "Настройки",
-            "userSettingsTitle": "Перейти в редактирование профиля",
+            "userSettingsTitle": "Перейти в настройки",
             "userLogout": "Выход",
             "userLoginCaption": "Войти",
             "userLoginTitle": "Авторизация на сайте",
@@ -355,7 +355,7 @@
             "usersCount": "Путешественников:",
             "titlePage": "Страница",
             "settings": {
-                "title": "Редактирование профиля",
+                "title": "Настройки",
                 "breadCrumbUsersLink": "Путешественники",
                 "breadCrumbMyPageLink": "Моя страница",
                 "notifySuccess": "Настройки сохранены"
