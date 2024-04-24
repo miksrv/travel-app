@@ -11,11 +11,6 @@ class AddSendingMail extends Migration {
                 'null'       => false,
                 'unique'     => true
             ],
-            'user_id' => [
-                'type'       => 'VARCHAR',
-                'constraint' => 15,
-                'null'       => false,
-            ],
             'activity_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 15,
@@ -29,6 +24,11 @@ class AddSendingMail extends Migration {
             'email' => [
                 'type' => 'TEXT',
                 'null' => true
+            ],
+            'locale' => [
+                'type'    => 'ENUM("ru", "en")',
+                'default' => 'ru',
+                'null'    => false,
             ],
             'subject' => [
                 'type'       => 'VARCHAR',
@@ -52,7 +52,6 @@ class AddSendingMail extends Migration {
         ]);
 
         $this->forge->addPrimaryKey('id');
-        $this->forge->addForeignKey('user_id', 'users', 'id', 'CASCADE', 'CASCADE');
         $this->forge->addForeignKey('activity_id', 'activity', 'id', 'CASCADE', 'CASCADE');
         $this->forge->createTable('sending_mail');
     }

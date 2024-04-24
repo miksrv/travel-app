@@ -5,8 +5,9 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); //  php index.php system recalculate_tags_count
-$routes->cli('system/generate_users_online', 'System::generateUsersOnline'); //  php index.php system generate_users_online
+$routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); // php index.php system recalculate_tags_count
+$routes->cli('system/generate_users_online', 'System::generateUsersOnline'); // php index.php system generate_users_online
+$routes->cli('system/send_email', 'System::sendEmail'); // php index.php system send_email
 
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');

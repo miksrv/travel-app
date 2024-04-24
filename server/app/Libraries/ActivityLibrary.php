@@ -158,10 +158,14 @@ class ActivityLibrary {
                 || ($settings->emailRating && $type === 'rating')
                 || ($settings->emailCover && $type === 'cover')
             ) {
+                /**
+                 * When we send email as notification of any activity on the site, we
+                 * do not fill in subject and message, they are filled in themselves if activity_id is set
+                 */
                 $email = new \App\Entities\SendingMail();
-                $email->user_id = $ownerUser->id;
                 $email->activity_id = $model->getInsertID();
-                $email->email = $ownerUser->email;
+                $email->email       = $ownerUser->email;
+                $email->locale      = $ownerUser->locale;
 
                 $sendingEmailModel = new SendingMail();
                 $sendingEmailModel->insert($email);

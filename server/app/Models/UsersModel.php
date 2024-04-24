@@ -100,7 +100,7 @@ class UsersModel extends MyBaseModel {
         $settings = $settings ? ', settings' : '';
 
         $data = $this
-            ->select('id, name, email, avatar, created_at as created,
+            ->select('id, name, email, locale, avatar, created_at as created,
                 updated_at as updated, activity_at as activity, level, 
                 auth_type as authType, website, experience, reputation' . $settings
             )->find($userId);

@@ -8,10 +8,10 @@ class SendingMail extends MyBaseModel {
     protected $useSoftDeletes   = true;
     protected $protectFields    = true;
     protected $allowedFields    = [
-        'user_id',
         'activity_id',
         'status',
         'email',
+        'locale',
         'subject',
         'message',
         'sent_email',
