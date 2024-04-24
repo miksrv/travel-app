@@ -99,30 +99,24 @@ class UsersModel extends MyBaseModel {
     public function getUserById(string $userId, bool $settings = false): array|object|null {
         $settings = $settings ? ', settings' : '';
 
-        return $this
-            ->select('id, name, avatar, created_at as created,
+        $data = $this
+            ->select('id, name, email, avatar, created_at as created,
                 updated_at as updated, activity_at as activity, level, 
                 auth_type as authType, website, experience, reputation' . $settings
             )->find($userId);
-    }
 
-    /**
-     * @param string $userId
-     * @return object
-     */
-    public function getUserSettingsById(string $userId): object {
-        $data = $this->select('settings')->find($userId);
-
-        if (!empty($data) && isset($data->settings->emailEdit)) {
-            return $data->settings;
+        if (!$settings) {
+            return $data;
         }
 
-        return (object) [
-            'emailComment' => true,
-            'emailEdit'    => true,
-            'emailPhoto'   => true,
-            'emailRating'  => true,
-            'emailCover'   => true,
+        $data->settings = (object) [
+            'emailComment' => $data->settings->emailComment ?? true,
+            'emailEdit'    => $data->settings->emailEdit ?? true,
+            'emailPhoto'   => $data->settings->emailPhoto ?? true,
+            'emailRating'  => $data->settings->emailRating ?? true,
+            'emailCover'   => $data->settings->emailCover ?? true,
         ];
+
+        return $data;
     }
 }

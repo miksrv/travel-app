@@ -1,6 +1,7 @@
 <?php namespace App\Libraries;
 
 use App\Models\ActivityModel;
+use App\Models\SendingMail;
 use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 use Exception;
@@ -148,11 +149,22 @@ class ActivityLibrary {
 
             // Get owner email settings
             $userModel = new UsersModel();
-            $settings  = $userModel->getUserSettingsById($this->owner);
+            $ownerUser = $userModel->getUserById($this->owner, true);
+            $settings  = $ownerUser->settings;
 
-            if ($settings->emailPhoto && $type === 'photo') {
-                $emailLibrary = new EmailLibrary();
-                $emailLibrary->send('miksoft.tm@gmail.com', 'Загружена фотография', 'Загружена фотография в ваше интересное место');
+            if (($settings->emailPhoto && $type === 'photo')
+                || ($settings->emailComment && $type === 'comment')
+                || ($settings->emailEdit && $type === 'edit')
+                || ($settings->emailRating && $type === 'rating')
+                || ($settings->emailCover && $type === 'cover')
+            ) {
+                $email = new \App\Entities\SendingMail();
+                $email->user_id = $ownerUser->id;
+                $email->activity_id = $model->getInsertID();
+                $email->email = $ownerUser->email;
+
+                $sendingEmailModel = new SendingMail();
+                $sendingEmailModel->insert($email);
             }
         }
     }
