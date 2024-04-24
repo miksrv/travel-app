@@ -79,7 +79,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
             <Header
                 hideHomePage={true}
                 title={t(`${KEY}title`)}
-                currentPage={t(`${KEY}title`)}
+                currentPage={t(`${KEY}breadCrumbCurrent`)}
             />
 
             <PlacesList places={placesList} />

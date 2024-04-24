@@ -57,8 +57,11 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     }
 
     const handleBackLinkClick = async () => {
-        await router.push('/places')
-        // router.back()
+        if (document?.referrer) {
+            await router.push('/places')
+        } else {
+            router.back()
+        }
     }
 
     useEffect(() => {

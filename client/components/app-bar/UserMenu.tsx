@@ -54,13 +54,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                 До нового уровня:{' '}
                 {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
             </div>
-            <Progress
-                className={styles.progress}
-                value={nextLevelPercentage(
-                    user?.level?.experience || 0,
-                    user?.level?.nextLevel || user?.level?.experience || 0
-                )}
-            />
         </div>
         <ul className={styles.userMenu}>
             <li>
