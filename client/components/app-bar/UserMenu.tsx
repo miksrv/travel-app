@@ -5,13 +5,12 @@ import React from 'react'
 
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
-import Progress from '@/ui/progress'
 
 import { User } from '@/api/types/User'
 
 import UserAvatar from '@/components/user-avatar'
 
-import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
+import { levelImage } from '@/functions/userLevels'
 
 import styles from './styles.module.sass'
 
