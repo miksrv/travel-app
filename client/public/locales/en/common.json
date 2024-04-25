@@ -308,6 +308,7 @@
     "pages": {
         "index": {
             "title": "News feed of interesting places",
+            "breadCrumbCurrent": "Updated points of interest, active users and latest uploaded photos",
             "description": "Interesting places and attractions - news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
             "buttonAllPlaces": "All places of interest",
             "titleActiveUsers": "Active Travelers",

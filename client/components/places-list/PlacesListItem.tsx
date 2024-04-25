@@ -35,7 +35,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
 
     return (
         <article className={styles.placesListItem}>
-            <section className={styles.photoSection}>
+            <div className={styles.photoSection}>
                 <Image
                     className={styles.categoryIcon}
                     src={categoryImage(place.category?.name).src}
@@ -103,7 +103,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         />
                     )}
                 </div>
-            </section>
+            </div>
 
             <h2 className={styles.title}>
                 <Link

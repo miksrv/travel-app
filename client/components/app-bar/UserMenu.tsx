@@ -5,13 +5,12 @@ import React from 'react'
 
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
-import Progress from '@/ui/progress'
 
 import { User } from '@/api/types/User'
 
 import UserAvatar from '@/components/user-avatar'
 
-import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
+import { levelImage } from '@/functions/userLevels'
 
 import styles from './styles.module.sass'
 
@@ -54,13 +53,6 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                 До нового уровня:{' '}
                 {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
             </div>
-            <Progress
-                className={styles.progress}
-                value={nextLevelPercentage(
-                    user?.level?.experience || 0,
-                    user?.level?.nextLevel || user?.level?.experience || 0
-                )}
-            />
         </div>
         <ul className={styles.userMenu}>
             <li>
