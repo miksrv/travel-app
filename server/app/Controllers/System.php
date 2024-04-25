@@ -13,6 +13,9 @@ use Exception;
 
 set_time_limit(0);
 
+const MONTH_EMAIL_LIMIT = 2000;
+const DAY_EMAIL_LIMIT = 500;
+
 class System extends ResourceController {
     /**
      * We recalculate and update the geotag tag usage counter
@@ -73,36 +76,48 @@ class System extends ResourceController {
         $sendingEmailData  = $sendingEmailModel
             ->select('activity.type, sending_mail.*')
             ->join('activity', 'activity.id = sending_mail.activity_id', 'left')
-            ->where('status', 'created')
+            ->where('sending_mail.created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)')
             ->orderBy('created_at', 'DESC')
             ->findAll();
 
-        if (empty($sendingEmailData)) {
+        $monthEmailCount = $sendingEmailModel
+            ->select('id')
+            ->where('created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)')
+            ->countAllResults();
+
+        if (empty($sendingEmailData)
+            || $monthEmailCount >= MONTH_EMAIL_LIMIT
+            || count($sendingEmailData) >= DAY_EMAIL_LIMIT)
+        {
             return;
         }
 
-        $emailLibrary = new EmailLibrary();
+//        $emailLibrary = new EmailLibrary();
+//
+//        foreach ($sendingEmailData as $item) {
+//            if (empty($item->email)) {
+//                $sendingEmailModel->update($item->id, ['status' => 'rejected']);
+//
+//                continue ;
+//            }
+//
+//            $locale  = $item->locale ?? 'ru';
+//            $subject = isset($item->type) && $item->type
+//                ? lang('SendingMail.emailSubject_' . $item->type , [], $locale)
+//                : $item->subject;
+//
+//            $message = view('email', ['message' => 'Привет, как дела?']);
+//
+//            try {
+//                $emailLibrary->send($item->email, $subject, $message);
+//                $sendingEmailModel->update($item->id, ['status' => 'completed']);
+//            } catch (Exception $e) {
+//                $sendingEmailModel->update($item->id, ['status' => 'error']);
+//            }
+//        }
 
-        foreach ($sendingEmailData as $item) {
-            if (empty($item->email)) {
-                $sendingEmailModel->update($item->id, ['status' => 'rejected']);
-
-                continue ;
-            }
-
-            $locale  = $item->locale ?? 'ru';
-            $subject = isset($item->type) && $item->type
-                ? lang('SendingMail.emailSubject_' . $item->type , [], $locale)
-                : $item->subject;
-
-            $message = view('email', ['message' => 'Привет, как дела?']);
-
-            try {
-                $emailLibrary->send($item->email, $subject, $message);
-                $sendingEmailModel->update($item->id, ['status' => 'completed']);
-            } catch (Exception $e) {
-                $sendingEmailModel->update($item->id, ['status' => 'error']);
-            }
-        }
+        echo '<pre>';
+        var_dump($monthEmailCount);
+        exit();
     }
 }
