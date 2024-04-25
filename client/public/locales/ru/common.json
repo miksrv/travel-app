@@ -107,7 +107,9 @@
             },
             "placePhotos": {
                 "title": "Фотографии",
-                "buttonUpload": "Загрузить"
+                "buttonUpload": "Загрузить",
+                "acceptConfirmMessage": "Удалить фотографию?",
+                "acceptConfirmDelete": "Удалить"
             },
             "socialRating": {
                 "userRating": "Оцените место:"
@@ -232,6 +234,11 @@
             "placesInCategory": "Интересных мест в категории:",
             "allCategoryPlaces": "Все интересные места категории",
             "goToCategory": "Перейти в категорию"
+        },
+        "confirmationDialog": {
+            "defaultText": "Вы подтверждаете выполенение этого действия?",
+            "defaultAcceptButton": "Подтвердить",
+            "defaultRejectButton": "Отмена"
         },
         "commentList": {
             "answerCancel": "отмена",

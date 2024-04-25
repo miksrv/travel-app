@@ -5,7 +5,7 @@ import Icon from '@/ui/icon'
 
 import styles from './styles.module.sass'
 
-interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
+export interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
     header?: string
     contentHeight?: string

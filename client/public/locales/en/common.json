@@ -106,7 +106,9 @@
             },
             "placePhotos": {
                 "title": "Photos",
-                "buttonUpload": "Upload"
+                "buttonUpload": "Upload",
+                "acceptConfirmMessage": "Delete photo?",
+                "acceptConfirmDelete": "Delete"
             },
             "socialRating": {
                 "userRating": "Rate this place:"
@@ -231,6 +233,11 @@
             "placesInCategory": "Interesting places in the category:",
             "allCategoryPlaces": "All interesting places in the category",
             "goToCategory": "Go to category"
+        },
+        "confirmationDialog": {
+            "defaultText": "Do you confirm this action?",
+            "defaultAcceptButton": "Accept",
+            "defaultRejectButton": "Cancel"
         },
         "commentList": {
             "answerCancel": "cancel",
