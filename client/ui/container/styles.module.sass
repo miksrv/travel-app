@@ -9,6 +9,17 @@
   box-shadow: $boxShadow3
   position: relative
 
+  &:before
+    border-radius: inherit
+    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+    content: ""
+    height: 100%
+    left: 0
+    pointer-events: none
+    position: absolute
+    top: 0
+    width: 100%
+
   .header
     border-bottom: .5px solid $borderBottomColor
     margin: -5px -15px 10px -15px

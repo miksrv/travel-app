@@ -26,7 +26,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
     return users?.length ? (
         <Container {...props}>
             {users.map((user) => (
-                <section
+                <div
                     key={user.id}
                     className={styles.usersListItem}
                 >
@@ -70,7 +70,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                             )}
                         />
                     </div>
-                </section>
+                </div>
             ))}
         </Container>
     ) : (
