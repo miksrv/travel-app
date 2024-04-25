@@ -9,6 +9,7 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
+import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoLightbox from '@/components/photo-lightbox'
 
@@ -25,9 +26,11 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
+    const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false)
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
     const [photoLoading, setPhotoLoading] = useState<string>()
+    const [deleteID, setDeleteID] = useState<string>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos || [])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
@@ -55,8 +58,8 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const handlePhotoRemoveClick = (photoId: string) => {
         if (isAuth && !deleteLoading) {
-            setPhotoLoading(photoId)
-            deletePhoto(photoId)
+            setDeleteID(photoId)
+            setConfirmationOpen(true)
         }
     }
 
@@ -208,6 +211,22 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 type={'file'}
                 accept={'image/png, image/gif, image/jpeg'}
                 onChange={handleSelectedFilesUpload}
+            />
+
+            <ConfirmationDialog
+                open={confirmationOpen}
+                message={t('acceptConfirmMessage')}
+                acceptText={t('acceptConfirmDelete')}
+                onReject={() => setConfirmationOpen(false)}
+                onAccept={() => {
+                    if (deleteID) {
+                        setPhotoLoading(deleteID)
+                        deletePhoto(deleteID)
+                    }
+
+                    setConfirmationOpen(false)
+                    setDeleteID(undefined)
+                }}
             />
         </Container>
     )

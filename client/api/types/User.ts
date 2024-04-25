@@ -7,6 +7,7 @@ export type User = {
     avatar?: string
     reputation?: number
     website?: string
+    role?: 'user' | 'moderator' | 'admin'
     locale?: LocaleType
     level?: LevelData
     created?: ApiTypes.DateTimeType
