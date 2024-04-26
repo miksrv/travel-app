@@ -9,6 +9,12 @@ import { encodeQueryData } from '@/functions/helpers'
 
 type Maybe<T> = T | void
 
+type APIErrorType = {
+    messages: {
+        error?: string
+    }
+}
+
 export const IMG_HOST =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
@@ -317,7 +323,8 @@ export const API = createApi({
                 method: 'PATCH',
                 url: `places/cover/${data.placeId}`
             }),
-            transformErrorResponse: (response) => response.data
+            transformErrorResponse: (response) =>
+                (response.data as APIErrorType)?.messages?.error
         }),
         placesPatchItem: builder.mutation<
             ApiTypes.ResponsePlacesPatchItem,
