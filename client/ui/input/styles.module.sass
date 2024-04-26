@@ -57,6 +57,12 @@
       &:focus, &:active
         border-color: inherit
 
+  &.required
+    .label:after
+      content: '*'
+      margin-left: 3px
+      color: $redColor
+
   &.error
     .formField
       background-color: #faebeb

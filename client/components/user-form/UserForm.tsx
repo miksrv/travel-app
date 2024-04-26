@@ -120,6 +120,7 @@ const UserForm: React.FC<UserFormProps> = ({
             <div className={styles.formElement}>
                 <Input
                     tabIndex={0}
+                    required={true}
                     autoFocus={true}
                     name={'name'}
                     label={t('inputNameLabel')}
