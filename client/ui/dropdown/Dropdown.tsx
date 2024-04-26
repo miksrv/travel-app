@@ -19,6 +19,7 @@ export type DropdownOption = {
 interface DropdownProps<T> {
     className?: string
     options?: DropdownOption[]
+    required?: boolean
     disabled?: boolean
     clearable?: boolean
     placeholder?: string
@@ -31,6 +32,7 @@ interface DropdownProps<T> {
 
 const Dropdown: React.FC<DropdownProps<any>> = ({
     className,
+    required,
     options,
     disabled,
     clearable,
@@ -105,6 +107,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                 className,
                 styles.dropdown,
                 error && styles.error,
+                required && styles.required,
                 disabled && styles.disabled
             )}
         >

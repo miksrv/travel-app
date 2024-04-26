@@ -14,6 +14,7 @@ const Input: React.FC<InputProps> = ({ label, error, ...props }) => (
         className={cn(
             styles.input,
             error && styles.error,
+            props.required && styles.required,
             props.disabled && styles.disabled
         )}
     >

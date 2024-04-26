@@ -190,6 +190,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             <div className={styles.formElement}>
                 <Input
                     tabIndex={0}
+                    required={true}
                     autoFocus={true}
                     name={'title'}
                     label={t('inputTitleLabel')}
@@ -204,6 +205,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
             <div className={styles.formElement}>
                 <Dropdown
+                    required={true}
                     clearable={true}
                     label={t('inputCategoryLabel')}
                     placeholder={t('inputCategoryPlaceholder')}

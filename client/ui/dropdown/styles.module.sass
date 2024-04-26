@@ -125,6 +125,12 @@
       opacity: 0.5
       cursor: default
 
+  &.required
+    .label:after
+      content: '*'
+      margin-left: 3px
+      color: $redColor
+
   &.error
     .dropdownButton
       background-color: #faebeb
