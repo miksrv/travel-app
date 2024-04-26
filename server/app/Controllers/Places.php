@@ -562,11 +562,11 @@ class Places extends ResourceController {
         $input = $this->request->getJSON();
 
         if (!isset($input->x) || !isset($input->y) || !$input->photoId || !$input->width || !$input->height) {
-            return $this->failValidationErrors('Incorrect data format when saving cover image');
+            return $this->failValidationErrors(lang('Places.coverIncorrectData'));
         }
 
         if ($input->width < PLACE_COVER_WIDTH || $input->height < PLACE_COVER_HEIGHT) {
-            return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
+            return $this->failValidationErrors(lang('Places.coverFailDimensions'));
         }
 
         $photosModel = new PhotosModel();
@@ -574,7 +574,7 @@ class Places extends ResourceController {
         $photoData   = $photosModel->select('id, filename, extension')->find($input->photoId);
 
         if (!$placeData || !$photoData) {
-            return $this->failValidationErrors('There is no point with this ID');
+            return $this->failValidationErrors(lang('Places.coverPointNotExist'));
         }
 
         $photoDir = UPLOAD_PHOTOS . $id . '/';
@@ -583,7 +583,7 @@ class Places extends ResourceController {
         list($width, $height) = getimagesize($file->getRealPath());
 
         if ($input->width > $width || $input->height > $height) {
-            return $this->failValidationErrors('The cover dimensions cannot exceed the image dimensions');
+            return $this->failValidationErrors(lang('Places.coverExceedDimensions'));
         }
 
         $image = Services::image('gd'); // imagick
