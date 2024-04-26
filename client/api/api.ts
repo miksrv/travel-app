@@ -270,12 +270,6 @@ export const API = createApi({
                 url: `photos/rotate/${photoId}`
             })
         }),
-        photosGetActions: builder.query<
-            ApiTypes.ResponsePhotosGetActions,
-            Maybe<ApiTypes.RequestPhotosGetActions>
-        >({
-            query: (params) => `photos/actions${encodeQueryData(params)}`
-        }),
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>

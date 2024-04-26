@@ -27,7 +27,6 @@ $routes->options('places/(:alphanum)', 'Places');
 $routes->options('places/(:alphanum)/(:alphanum)', 'Places');
 
 $routes->get('photos', 'Photos::list');
-$routes->get('photos/actions', 'Photos::actions');
 $routes->post('photos', 'Photos::create');
 $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
 $routes->patch('photos/rotate/(:alphanum)', 'Photos::rotate/$1');

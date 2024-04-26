@@ -7,14 +7,14 @@ import Icon from '@/ui/icon'
 import Spinner from '@/ui/spinner'
 
 import { IMG_HOST } from '@/api/api'
-import { ApiTypes } from '@/api/types'
+import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
 import styles from './styles.module.sass'
 
 interface PhotoGalleryProps {
     photos?: Photo[]
-    actions?: ApiTypes.ItemActionType[]
+    showActions?: boolean
     photoLoading?: string
     uploadingPhotos?: string[]
     onPhotoClick?: (index: number) => void
@@ -24,13 +24,14 @@ interface PhotoGalleryProps {
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
+    showActions,
     uploadingPhotos,
     photoLoading,
-    actions,
     onPhotoClick,
     onPhotoRemoveClick,
     onPhotoRotateClick
 }) => {
+    const user = useAppSelector((state) => state.auth.user)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
     })
@@ -91,25 +92,31 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         />
                     </Link>
 
-                    <div className={styles.actions}>
-                        {actions?.find(({ id }) => id === photo.id)?.rotate && (
-                            <button
-                                onClick={() => onPhotoRotateClick?.(photo.id)}
-                                disabled={!!photoLoading}
-                            >
-                                <Icon name={'Rotate'} />
-                            </button>
-                        )}
+                    {showActions && (
+                        <div className={styles.actions}>
+                            {user?.id && (
+                                <button
+                                    onClick={() =>
+                                        onPhotoRotateClick?.(photo.id)
+                                    }
+                                    disabled={!!photoLoading}
+                                >
+                                    <Icon name={'Rotate'} />
+                                </button>
+                            )}
 
-                        {actions?.find(({ id }) => id === photo.id)?.remove && (
-                            <button
-                                onClick={() => onPhotoRemoveClick?.(photo.id)}
-                                disabled={!!photoLoading}
-                            >
-                                <Icon name={'Close'} />
-                            </button>
-                        )}
-                    </div>
+                            {user?.id === photo.author?.id && (
+                                <button
+                                    onClick={() =>
+                                        onPhotoRemoveClick?.(photo.id)
+                                    }
+                                    disabled={!!photoLoading}
+                                >
+                                    <Icon name={'Close'} />
+                                </button>
+                            )}
+                        </div>
+                    )}
                 </li>
             ))}
         </ul>
