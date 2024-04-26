@@ -35,11 +35,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
 
-    const { data: actionsData } = API.usePhotosGetActionsQuery(
-        { ids: photos?.map(({ id }) => id)?.join(',') },
-        { skip: isAuth !== true || !photos?.length }
-    )
-
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
         API.usePhotoDeleteItemMutation()
 
@@ -187,8 +182,8 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             }
         >
             <PhotoGallery
+                showActions={true}
                 photos={localPhotos}
-                actions={actionsData?.items}
                 uploadingPhotos={uploadingPhotos}
                 photoLoading={photoLoading}
                 onPhotoClick={handlePhotoClick}

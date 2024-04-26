@@ -16,7 +16,6 @@ use ReflectionException;
 
 /**
  * Available methods:
- *   - actions()
  *   - list()
  *   - upload($id)
  *   - delete($id)
@@ -29,38 +28,6 @@ class Photos extends ResourceController {
         new LocaleLibrary();
 
         $this->session = new SessionLibrary();
-    }
-
-    /**
-     * Getting a list of actions available to the user for a photo by their ID
-     * @example /photos?ids=1,2,3,4,5
-     * @return ResponseInterface
-     */
-    public function actions(): ResponseInterface {
-        $photos  = $this->request->getGet('ids', FILTER_SANITIZE_SPECIAL_CHARS);
-        $IDList  = explode(',', $photos);
-
-        if (empty($IDList)) {
-            return $this->failValidationErrors('No photos IDs');
-        }
-
-        $resultData  = [];
-        $photosModel = new PhotosModel();
-        $photosData  = $photosModel->select('id, user_id')->whereIn('id', $IDList)->findAll();
-
-        if (empty($photosData)) {
-            return $this->failValidationErrors('Photos with this IDs not exists');
-        }
-
-        foreach ($photosData as $photo) {
-            $resultData[] = [
-                'id'     => $photo->id,
-                'remove' => $photo->user_id === $this->session->user?->id,
-                'rotate' => $this->session->isAuth
-            ];
-        }
-
-        return $this->respond(['items' => $resultData]);
     }
 
     /**
