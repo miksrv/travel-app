@@ -127,6 +127,12 @@
             }
         },
         "pageUser": {
+            "tabs": {
+                "feed": "Лента активности",
+                "places": "Геометки",
+                "bookmarks": "Избранное",
+                "photos": "Фотографии"
+            },
             "userHeader": {
                 "reputation": "Репутация:",
                 "level": "Уровень:",

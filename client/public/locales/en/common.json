@@ -126,6 +126,12 @@
             }
         },
         "pageUser": {
+            "tabs": {
+                "feed": "Activity feed",
+                "places": "Geotags",
+                "bookmarks": "Favorites",
+                "photos": "Photos"
+            },
             "userHeader": {
                 "reputation": "Reputation:",
                 "level": "Level:",

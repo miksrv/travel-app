@@ -20,7 +20,7 @@ interface UserTabsProps {
 
 const UserTabs: React.FC<UserTabsProps> = ({ user, currentPage }) => {
     const { t } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.userHeader'
+        keyPrefix: 'components.pageUser.tabs'
     })
 
     const router = useRouter()
@@ -40,10 +40,10 @@ const UserTabs: React.FC<UserTabsProps> = ({ user, currentPage }) => {
     return (
         <Tabs<UserPagesEnum>
             tabs={[
-                { key: UserPagesEnum.FEED, label: 'Лента' },
-                { key: UserPagesEnum.PLACES, label: 'Геометки' },
-                { key: UserPagesEnum.BOOKMARKS, label: 'Избранное' },
-                { key: UserPagesEnum.PHOTOS, label: 'Фотографии' }
+                { key: UserPagesEnum.FEED, label: t('feed') },
+                { key: UserPagesEnum.PLACES, label: t('places') },
+                { key: UserPagesEnum.BOOKMARKS, label: t('bookmarks') },
+                { key: UserPagesEnum.PHOTOS, label: t('photos') }
             ]}
             activeTab={page}
             onChangeTab={setPage}

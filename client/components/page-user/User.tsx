@@ -22,35 +22,6 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         keyPrefix: 'components.pageUser.user'
     })
 
-    // const { data: bookmarksData, isLoading: loadingBookmarks } =
-    //     API.usePlacesGetListQuery(
-    //         {
-    //             bookmarkUser: id,
-    //             limit: PLACES_PER_PAGE,
-    //             offset: (placesPage - 1) * PLACES_PER_PAGE,
-    //             order: ApiTypes.SortOrders.DESC,
-    //             sort: ApiTypes.SortFields.Updated
-    //         },
-    //         {
-    //             refetchOnMountOrArgChange: true,
-    //             skip: activeTab === TabsEnum.PLACES
-    //         }
-    //     )
-    //
-    // const { data: placesData, isLoading: loadingPlaces } =
-    //     API.usePlacesGetListQuery(
-    //         {
-    //             author: id,
-    //             limit: PLACES_PER_PAGE,
-    //             offset: (placesPage - 1) * PLACES_PER_PAGE,
-    //             order: ApiTypes.SortOrders.DESC,
-    //             sort: ApiTypes.SortFields.Updated
-    //         },
-    //         {
-    //             skip: activeTab === TabsEnum.BOOKMARKS
-    //         }
-    //     )
-
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const breadCrumbSchema: BreadcrumbList = {
