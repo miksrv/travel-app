@@ -10,36 +10,46 @@ import { API, IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
+import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoLightbox from '@/components/photo-lightbox'
 
 import styles from './styles.module.sass'
 
 interface PhotoGalleryProps {
     photos?: Photo[]
+    hideActions?: boolean
     uploadingPhotos?: string[]
-    onPhotoRemoveClick?: (photoId: string) => void
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
-    uploadingPhotos,
-    onPhotoRemoveClick
+    hideActions,
+    uploadingPhotos
 }) => {
     const user = useAppSelector((state) => state.auth.user)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
     })
 
+    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
+        API.usePhotoDeleteItemMutation()
+
     const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
         API.usePhotoRotateItemMutation()
 
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
     const [photoLoadingID, setPhotoLoadingID] = useState<string>()
-    const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setPhotoIndex] = useState<number>()
+    const [photoDeleteID, setPhotoDeleteID] = useState<string>()
+    const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
 
-    const handlePhotoRotateClick = (photoId: string) => {
-        if (user?.id && !rotateLoading) {
+    const handleRemoveClick = (photoId: string) => {
+        if (user?.id && !deleteLoading && !hideActions) {
+            setPhotoDeleteID(photoId)
+        }
+    }
+
+    const handleRotateClick = (photoId: string) => {
+        if (user?.id && !rotateLoading && !hideActions) {
             setPhotoLoadingID(photoId)
             rotatePhoto(photoId)
         }
@@ -65,6 +75,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
         setPhotoLoadingID(undefined)
     }, [rotateData])
+
+    /**
+     *  After deleting a photo, remove it from the local photo list
+     */
+    React.useEffect(() => {
+        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
+    }, [deleteData])
 
     useEffect(() => {
         if (photos?.length) {
@@ -115,8 +132,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             }`}
                             onClick={(event) => {
                                 event.preventDefault()
-                                setPhotoIndex(index)
-                                setShowLightbox(true)
+                                setLightboxPhotoIndex(index)
                             }}
                         >
                             <Image
@@ -131,22 +147,18 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         </Link>
 
                         <div className={styles.actions}>
-                            {user?.id && (
+                            {user?.id && !hideActions && (
                                 <button
-                                    onClick={() =>
-                                        handlePhotoRotateClick(photo.id)
-                                    }
+                                    onClick={() => handleRotateClick(photo.id)}
                                     disabled={!!photoLoadingID}
                                 >
                                     <Icon name={'Rotate'} />
                                 </button>
                             )}
 
-                            {user?.id === photo.author?.id && (
+                            {user?.id === photo.author?.id && !hideActions && (
                                 <button
-                                    onClick={() =>
-                                        onPhotoRemoveClick?.(photo.id)
-                                    }
+                                    onClick={() => handleRemoveClick(photo.id)}
                                     disabled={!!photoLoadingID}
                                 >
                                     <Icon name={'Close'} />
@@ -159,10 +171,23 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
             <PhotoLightbox
                 photos={localPhotos}
-                photoIndex={photoIndex}
-                showLightbox={showLightbox}
-                onChangeIndex={setPhotoIndex}
-                onCloseLightBox={() => setShowLightbox(false)}
+                photoIndex={lightboxPhotoIndex}
+                showLightbox={typeof lightboxPhotoIndex === 'number'}
+                onChangeIndex={setLightboxPhotoIndex}
+                onCloseLightBox={() => setLightboxPhotoIndex(undefined)}
+            />
+
+            <ConfirmationDialog
+                open={!!photoDeleteID}
+                message={t('acceptConfirmMessage')}
+                acceptText={t('acceptConfirmDelete')}
+                onReject={() => setPhotoDeleteID(undefined)}
+                onAccept={() => {
+                    if (photoDeleteID) {
+                        deletePhoto(photoDeleteID)
+                        setPhotoDeleteID(undefined)
+                    }
+                }}
             />
         </>
     )

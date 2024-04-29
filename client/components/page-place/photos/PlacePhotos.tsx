@@ -9,7 +9,6 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
-import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoGallery from '@/components/photo-gallery'
 
 interface PlacePhotosProps {
@@ -25,26 +24,14 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false)
-    const [deleteID, setDeleteID] = useState<string>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos || [])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
-
-    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
-        API.usePhotoDeleteItemMutation()
 
     const [
         uploadPhoto,
         { data: uploadData, isLoading: uploadLoading, isError: uploadError }
     ] = API.usePhotoPostUploadMutation()
-
-    const handlePhotoRemoveClick = (photoId: string) => {
-        if (isAuth && !deleteLoading) {
-            setDeleteID(photoId)
-            setConfirmationOpen(true)
-        }
-    }
 
     const handlePhotoUploadClick = () => {
         if (isAuth) {
@@ -111,13 +98,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         }
     }, [selectedFiles])
 
-    /**
-     *  After deleting a photo, remove it from the local photo list
-     */
-    React.useEffect(() => {
-        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
-    }, [deleteData])
-
     React.useEffect(() => {
         setSelectedFiles([])
         setLocalPhotos(photos || [])
@@ -139,7 +119,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             <PhotoGallery
                 photos={localPhotos}
                 uploadingPhotos={uploadingPhotos}
-                onPhotoRemoveClick={handlePhotoRemoveClick}
             />
 
             <input
@@ -149,21 +128,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 type={'file'}
                 accept={'image/png, image/gif, image/jpeg'}
                 onChange={handleSelectedFilesUpload}
-            />
-
-            <ConfirmationDialog
-                open={confirmationOpen}
-                message={t('acceptConfirmMessage')}
-                acceptText={t('acceptConfirmDelete')}
-                onReject={() => setConfirmationOpen(false)}
-                onAccept={() => {
-                    if (deleteID) {
-                        deletePhoto(deleteID)
-                    }
-
-                    setConfirmationOpen(false)
-                    setDeleteID(undefined)
-                }}
             />
         </Container>
     )

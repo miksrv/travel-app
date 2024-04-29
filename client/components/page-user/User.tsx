@@ -101,6 +101,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
             <UserGallery
                 title={t('photos')}
                 photos={photosList}
+                hideActions={true}
                 footer={
                     photosCount > 8 && (
                         <Button

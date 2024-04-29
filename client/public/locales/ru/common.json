@@ -107,9 +107,7 @@
             },
             "placePhotos": {
                 "title": "Фотографии",
-                "buttonUpload": "Загрузить",
-                "acceptConfirmMessage": "Удалить фотографию?",
-                "acceptConfirmDelete": "Удалить"
+                "buttonUpload": "Загрузить"
             },
             "socialRating": {
                 "userRating": "Оцените место:"
@@ -175,7 +173,9 @@
         },
         "photoGallery": {
             "noPhotos": "Нет фотографий",
-            "linkPhotoTitle": "Фото"
+            "linkPhotoTitle": "Фото",
+            "acceptConfirmMessage": "Удалить фотографию?",
+            "acceptConfirmDelete": "Удалить"
         },
         "placeCoverEditor": {
             "buttonCover": "Обложка",

@@ -106,9 +106,7 @@
             },
             "placePhotos": {
                 "title": "Photos",
-                "buttonUpload": "Upload",
-                "acceptConfirmMessage": "Delete photo?",
-                "acceptConfirmDelete": "Delete"
+                "buttonUpload": "Upload"
             },
             "socialRating": {
                 "userRating": "Rate this place:"
@@ -174,7 +172,9 @@
         },
         "photoGallery": {
             "noPhotos": "No photos",
-            "linkPhotoTitle": "Photo"
+            "linkPhotoTitle": "Photo",
+            "acceptConfirmMessage": "Delete photo?",
+            "acceptConfirmDelete": "Delete"
         },
         "placeCoverEditor": {
             "buttonCover": "Cover",

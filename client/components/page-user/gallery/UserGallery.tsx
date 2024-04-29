@@ -8,11 +8,19 @@ import PhotoGallery from '@/components/photo-gallery'
 
 interface UserGalleryProps extends Pick<ContainerProps, 'title' | 'footer'> {
     photos?: Photo[]
+    hideActions?: boolean
 }
 
-const UserGallery: React.FC<UserGalleryProps> = ({ photos, ...props }) => (
+const UserGallery: React.FC<UserGalleryProps> = ({
+    photos,
+    hideActions,
+    ...props
+}) => (
     <Container {...props}>
-        <PhotoGallery photos={photos} />
+        <PhotoGallery
+            photos={photos}
+            hideActions={hideActions}
+        />
     </Container>
 )
 
