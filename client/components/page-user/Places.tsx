@@ -1,4 +1,4 @@
-import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import React from 'react'
@@ -6,24 +6,24 @@ import React from 'react'
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
-import { SITE_LINK } from '@/api/api'
+import { API, SITE_LINK } from '@/api/api'
 
 import Header from '@/components/header'
-import UserGallery from '@/components/page-user/gallery'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import PlacesList from '@/components/places-list'
 
-interface UserPhotosProps
+interface UserPlacesProps
     extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {}
 
-const UserPhotos: React.FC<UserPhotosProps> = ({
-    id,
-    user,
-    photosList,
-    photosCount,
-    currentPage
-}) => {
+const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage }) => {
     const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.photos'
+        keyPrefix: 'components.pageUser.places'
+    })
+
+    const { data } = API.usePlacesGetListQuery({
+        author: id,
+        limit: PLACES_PER_PAGE,
+        offset: 0
     })
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
@@ -56,25 +56,25 @@ const UserPhotos: React.FC<UserPhotosProps> = ({
 
             <UserTabs
                 user={user}
-                currentPage={UserPagesEnum.PHOTOS}
+                currentPage={UserPagesEnum.PLACES}
             />
 
-            <UserGallery photos={photosList} />
+            <PlacesList places={data?.items} />
 
             <Container className={'pagination'}>
                 <div>
-                    {t('photos')} <strong>{photosCount ?? 0}</strong>
+                    {t('count')} <strong>{data?.count ?? 0}</strong>
                 </div>
 
                 <Pagination
                     currentPage={currentPage}
-                    totalItemsCount={photosCount}
-                    perPage={PHOTOS_PER_PAGE}
-                    linkPart={`users/${id}/photos`}
+                    totalItemsCount={data?.count ?? 0}
+                    perPage={PLACES_PER_PAGE}
+                    linkPart={`users/${id}/places`}
                 />
             </Container>
         </>
     )
 }
 
-export default UserPhotos
+export default UserPlaces

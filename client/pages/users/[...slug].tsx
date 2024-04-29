@@ -10,12 +10,13 @@ import { Photo } from '@/api/types/Photo'
 import { User as UserType } from '@/api/types/User'
 
 import AppLayout from '@/components/app-layout'
-import Photos from '@/components/page-user/Photos'
+import UserPhotos from '@/components/page-user/Photos'
+import UserPlaces from '@/components/page-user/Places'
 import User from '@/components/page-user/User'
 
 export const PHOTOS_PER_PAGE = 32
-export const PLACES_PER_PAGE = 10
-const PAGES = ['photos', undefined] as const
+export const PLACES_PER_PAGE = 21
+const PAGES = ['photos', 'places', undefined] as const
 
 type PageType = (typeof PAGES)[number]
 
@@ -53,7 +54,8 @@ const UserPage: NextPage<UserPageProps> = ({ page, ...props }) => {
     return (
         <AppLayout>
             {!page && <User {...props} />}
-            {page === 'photos' && <Photos {...props} />}
+            {page === 'photos' && <UserPhotos {...props} />}
+            {page === 'places' && <UserPlaces {...props} />}
 
             {/*{activeTab === 0 && (*/}
             {/*    <ActivityList*/}

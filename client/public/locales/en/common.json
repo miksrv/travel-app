@@ -152,6 +152,13 @@
                 "photos": "Photos:",
                 "page": "Page"
             },
+            "places": {
+                "title": "Geotags",
+                "description": "All traveler geotags",
+                "breadCrumbLink": "Travelers",
+                "count": "Geotag:",
+                "page": "Page"
+            },
             "user": {
                 "photos": "Photos",
                 "places": "Added places",
