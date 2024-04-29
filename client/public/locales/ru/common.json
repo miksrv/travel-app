@@ -175,7 +175,9 @@
             "noPhotos": "Нет фотографий",
             "linkPhotoTitle": "Фото",
             "acceptConfirmMessage": "Удалить фотографию?",
-            "acceptConfirmDelete": "Удалить"
+            "acceptConfirmDelete": "Удалить",
+            "actionRotate": "Повернуть",
+            "actionDelete": "Удалить"
         },
         "placeCoverEditor": {
             "buttonCover": "Обложка",

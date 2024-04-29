@@ -4,6 +4,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
 
 import { API, IMG_HOST } from '@/api/api'
@@ -44,6 +45,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     const handleRemoveClick = (photoId: string) => {
         if (user?.id && !deleteLoading && !hideActions) {
+            setPhotoLoadingID(photoId)
             setPhotoDeleteID(photoId)
         }
     }
@@ -146,25 +148,37 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             />
                         </Link>
 
-                        <div className={styles.actions}>
-                            {user?.id && !hideActions && (
-                                <button
-                                    onClick={() => handleRotateClick(photo.id)}
-                                    disabled={!!photoLoadingID}
-                                >
-                                    <Icon name={'Rotate'} />
-                                </button>
-                            )}
-
-                            {user?.id === photo.author?.id && !hideActions && (
-                                <button
-                                    onClick={() => handleRemoveClick(photo.id)}
-                                    disabled={!!photoLoadingID}
-                                >
-                                    <Icon name={'Close'} />
-                                </button>
-                            )}
-                        </div>
+                        {!hideActions && (
+                            <Popout
+                                className={styles.actions}
+                                action={<Icon name={'VerticalDots'} />}
+                            >
+                                <ul className={styles.actionMenu}>
+                                    <li>
+                                        <button
+                                            onClick={() =>
+                                                handleRotateClick(photo.id)
+                                            }
+                                            disabled={!!photoLoadingID}
+                                        >
+                                            <Icon name={'Rotate'} />{' '}
+                                            {t('actionRotate')}
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() =>
+                                                handleRemoveClick(photo.id)
+                                            }
+                                            disabled={!!photoLoadingID}
+                                        >
+                                            <Icon name={'Close'} />{' '}
+                                            {t('actionDelete')}
+                                        </button>
+                                    </li>
+                                </ul>
+                            </Popout>
+                        )}
                     </li>
                 ))}
             </ul>
@@ -181,11 +195,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 open={!!photoDeleteID}
                 message={t('acceptConfirmMessage')}
                 acceptText={t('acceptConfirmDelete')}
-                onReject={() => setPhotoDeleteID(undefined)}
+                onReject={() => {
+                    setPhotoDeleteID(undefined)
+                    setPhotoLoadingID(undefined)
+                }}
                 onAccept={() => {
                     if (photoDeleteID) {
                         deletePhoto(photoDeleteID)
                         setPhotoDeleteID(undefined)
+                        setPhotoLoadingID(undefined)
                     }
                 }}
             />
