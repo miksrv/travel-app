@@ -4,6 +4,8 @@
   .tabsHeader
     display: flex
     align-items: stretch
+    width: 100%
+    overflow-y: auto
 
     .tabsHeaderItem
       position: relative
@@ -11,9 +13,8 @@
       flex-grow: 1
       flex-shrink: 0
       min-width: 48px
-      padding: 12px 6px
+      padding: 6px 30px
       max-width: 100%
-      width: 100%
       overflow: hidden
       text-overflow: ellipsis
       transition: color .15s ease-out, background-color .15s ease-out
@@ -23,12 +24,22 @@
       background-color: transparent
       border-radius: $borderRadius
       color: $colorTextSecond
+      margin-right: 10px
+
+      @media only screen and (max-width: $mobileMaxWidth)
+        min-width: 24px
+        padding: 6px 10px
+
+      &:last-of-type
+        margin-right: 0
 
       &:hover
         background-color: rgba(242, 243, 252, 0.7)
 
       &.active
-        color: $colorTextMain
+        //color: $colorTextMain
+        background-color: rgba(242, 243, 252, 0.7)
+        color: $colorLink
 
       .itemBottom
         background: $colorLink
@@ -41,8 +52,15 @@
         pointer-events: none
         position: absolute
         transition: opacity .15s ease-out
+        display: none
 
         &.active
           opacity: 1
 
-  .tabContent
+  &.noContent
+    padding-bottom: 0
+
+    & > div:first-of-type
+      border-bottom: 0
+      margin-bottom: 0
+      padding: 0 10px 10px

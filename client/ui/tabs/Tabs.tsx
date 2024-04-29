@@ -2,6 +2,8 @@ import React from 'react'
 
 import Container, { ContainerProps } from '@/ui/container'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import TabHeader from './TabHeader'
 import styles from './styles.module.sass'
 
@@ -26,7 +28,7 @@ const Tabs = <T extends string>({
 }: TabsProps<T>) => (
     <Container
         {...props}
-        className={styles.tabs}
+        className={cn(styles.tabs, !children && styles.noContent)}
         header={
             <div className={styles.tabsHeader}>
                 {tabs?.map(({ label, key }) => (
@@ -40,7 +42,7 @@ const Tabs = <T extends string>({
             </div>
         }
     >
-        <div className={styles.tabContent}>{children}</div>
+        {children && <div className={styles.tabContent}>{children}</div>}
     </Container>
 )
 
