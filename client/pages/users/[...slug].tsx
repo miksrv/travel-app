@@ -16,7 +16,7 @@ import User from '@/components/page-user/User'
 
 export const PHOTOS_PER_PAGE = 32
 export const PLACES_PER_PAGE = 21
-const PAGES = ['photos', 'places', undefined] as const
+const PAGES = ['photos', 'places', 'bookmarks', undefined] as const
 
 type PageType = (typeof PAGES)[number]
 
@@ -55,7 +55,20 @@ const UserPage: NextPage<UserPageProps> = ({ page, ...props }) => {
         <AppLayout>
             {!page && <User {...props} />}
             {page === 'photos' && <UserPhotos {...props} />}
-            {page === 'places' && <UserPlaces {...props} />}
+
+            {page === 'places' && (
+                <UserPlaces
+                    {...props}
+                    type={'places'}
+                />
+            )}
+
+            {page === 'bookmarks' && (
+                <UserPlaces
+                    {...props}
+                    type={'bookmarks'}
+                />
+            )}
 
             {/*{activeTab === 0 && (*/}
             {/*    <ActivityList*/}

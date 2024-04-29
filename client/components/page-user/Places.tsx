@@ -13,17 +13,25 @@ import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PlacesList from '@/components/places-list'
 
 interface UserPlacesProps
-    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {}
+    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {
+    type: 'places' | 'bookmarks'
+}
 
-const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage }) => {
+const UserPlaces: React.FC<UserPlacesProps> = ({
+    id,
+    user,
+    currentPage,
+    type
+}) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.places'
     })
 
     const { data } = API.usePlacesGetListQuery({
-        author: id,
+        author: type === 'places' ? id : undefined,
+        bookmarkUser: type === 'bookmarks' ? id : undefined,
         limit: PLACES_PER_PAGE,
-        offset: 0
+        offset: (currentPage - 1) * PLACES_PER_PAGE
     })
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
@@ -56,7 +64,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage }) => {
 
             <UserTabs
                 user={user}
-                currentPage={UserPagesEnum.PLACES}
+                currentPage={type as UserPagesEnum}
             />
 
             <PlacesList places={data?.items} />
@@ -70,7 +78,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage }) => {
                     currentPage={currentPage}
                     totalItemsCount={data?.count ?? 0}
                     perPage={PLACES_PER_PAGE}
-                    linkPart={`users/${id}/places`}
+                    linkPart={`users/${id}/${type}`}
                 />
             </Container>
         </>
