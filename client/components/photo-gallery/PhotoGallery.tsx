@@ -1,12 +1,12 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Icon from '@/ui/icon'
 import Spinner from '@/ui/spinner'
 
-import { IMG_HOST } from '@/api/api'
+import { API, IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
@@ -16,32 +16,65 @@ import styles from './styles.module.sass'
 
 interface PhotoGalleryProps {
     photos?: Photo[]
-    showActions?: boolean
-    photoLoading?: string
     uploadingPhotos?: string[]
     onPhotoRemoveClick?: (photoId: string) => void
-    onPhotoRotateClick?: (photoId: string) => void
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
-    showActions,
     uploadingPhotos,
-    photoLoading,
-    onPhotoRemoveClick,
-    onPhotoRotateClick
+    onPhotoRemoveClick
 }) => {
     const user = useAppSelector((state) => state.auth.user)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
     })
 
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
+        API.usePhotoRotateItemMutation()
+
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
+    const [photoLoadingID, setPhotoLoadingID] = useState<string>()
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
 
+    const handlePhotoRotateClick = (photoId: string) => {
+        if (user?.id && !rotateLoading) {
+            setPhotoLoadingID(photoId)
+            rotatePhoto(photoId)
+        }
+    }
+
+    /**
+     * After rotate photo - add time hash for rotated photo
+     */
+    useEffect(() => {
+        setLocalPhotos(
+            localPhotos?.map((photo) => ({
+                ...photo,
+                full:
+                    photo.id === rotateData?.id
+                        ? rotateData?.full!
+                        : photo.full,
+                preview:
+                    photo.id === rotateData?.id
+                        ? rotateData?.preview!
+                        : photo.preview
+            }))
+        )
+
+        setPhotoLoadingID(undefined)
+    }, [rotateData])
+
+    useEffect(() => {
+        if (photos?.length) {
+            setLocalPhotos(photos)
+        }
+    }, [photos])
+
     return (
         <>
-            {!photos?.length && !uploadingPhotos?.length && (
+            {!localPhotos?.length && !uploadingPhotos?.length && (
                 <div className={styles.emptyList}>{t('noPhotos')}</div>
             )}
 
@@ -63,12 +96,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     </li>
                 ))}
 
-                {photos?.map((photo, index) => (
+                {localPhotos?.map((photo, index) => (
                     <li
                         key={photo.id}
                         className={styles.photoItem}
                     >
-                        {photo.id === photoLoading && (
+                        {photo.id === photoLoadingID && (
                             <div className={styles.loader}>
                                 <Spinner />
                             </div>
@@ -97,37 +130,35 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             />
                         </Link>
 
-                        {showActions && (
-                            <div className={styles.actions}>
-                                {user?.id && (
-                                    <button
-                                        onClick={() =>
-                                            onPhotoRotateClick?.(photo.id)
-                                        }
-                                        disabled={!!photoLoading}
-                                    >
-                                        <Icon name={'Rotate'} />
-                                    </button>
-                                )}
+                        <div className={styles.actions}>
+                            {user?.id && (
+                                <button
+                                    onClick={() =>
+                                        handlePhotoRotateClick(photo.id)
+                                    }
+                                    disabled={!!photoLoadingID}
+                                >
+                                    <Icon name={'Rotate'} />
+                                </button>
+                            )}
 
-                                {user?.id === photo.author?.id && (
-                                    <button
-                                        onClick={() =>
-                                            onPhotoRemoveClick?.(photo.id)
-                                        }
-                                        disabled={!!photoLoading}
-                                    >
-                                        <Icon name={'Close'} />
-                                    </button>
-                                )}
-                            </div>
-                        )}
+                            {user?.id === photo.author?.id && (
+                                <button
+                                    onClick={() =>
+                                        onPhotoRemoveClick?.(photo.id)
+                                    }
+                                    disabled={!!photoLoadingID}
+                                >
+                                    <Icon name={'Close'} />
+                                </button>
+                            )}
+                        </div>
                     </li>
                 ))}
             </ul>
 
             <PhotoLightbox
-                photos={photos}
+                photos={localPhotos}
                 photoIndex={photoIndex}
                 showLightbox={showLightbox}
                 onChangeIndex={setPhotoIndex}
