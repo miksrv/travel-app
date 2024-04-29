@@ -11,7 +11,6 @@ import { Photo } from '@/api/types/Photo'
 
 import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoGallery from '@/components/photo-gallery'
-import PhotoLightbox from '@/components/photo-lightbox'
 
 interface PlacePhotosProps {
     placeId?: string
@@ -27,8 +26,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [confirmationOpen, setConfirmationOpen] = useState<boolean>(false)
-    const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setPhotoIndex] = useState<number>()
     const [photoLoading, setPhotoLoading] = useState<string>()
     const [deleteID, setDeleteID] = useState<string>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos || [])
@@ -46,11 +43,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         { data: uploadData, isLoading: uploadLoading, isError: uploadError }
     ] = API.usePhotoPostUploadMutation()
 
-    const handlePhotoClick = (index: number) => {
-        setPhotoIndex(index)
-        setShowLightbox(true)
-    }
-
     const handlePhotoRemoveClick = (photoId: string) => {
         if (isAuth && !deleteLoading) {
             setDeleteID(photoId)
@@ -63,10 +55,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
             setPhotoLoading(photoId)
             rotatePhoto(photoId)
         }
-    }
-
-    const handleCloseLightbox = () => {
-        setShowLightbox(false)
     }
 
     const handlePhotoUploadClick = () => {
@@ -186,17 +174,8 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
                 photos={localPhotos}
                 uploadingPhotos={uploadingPhotos}
                 photoLoading={photoLoading}
-                onPhotoClick={handlePhotoClick}
                 onPhotoRemoveClick={handlePhotoRemoveClick}
                 onPhotoRotateClick={handlePhotoRotateClick}
-            />
-
-            <PhotoLightbox
-                photos={localPhotos}
-                photoIndex={photoIndex}
-                showLightbox={showLightbox}
-                onChangeIndex={setPhotoIndex}
-                onCloseLightBox={handleCloseLightbox}
             />
 
             <input
