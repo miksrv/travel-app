@@ -40,6 +40,7 @@ const Photos: React.FC<PhotosProps> = ({
                 title={`${user?.name} - ${t('title')}${pageTitle}`}
                 currentPage={t('title')}
                 backLink={`/users/${id}`}
+                userData={user}
                 links={[
                     {
                         link: '/users/',
