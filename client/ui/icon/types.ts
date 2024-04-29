@@ -52,3 +52,4 @@ export type IconTypes =
     | 'PinDrop'
     | 'Settings'
     | 'Exit'
+    | 'VerticalDots'

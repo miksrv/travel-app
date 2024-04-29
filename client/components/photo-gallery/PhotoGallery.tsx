@@ -1,125 +1,213 @@
 import { useTranslation } from 'next-i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
 
-import { IMG_HOST } from '@/api/api'
+import { API, IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
+
+import ConfirmationDialog from '@/components/confirmation-dialog'
+import PhotoLightbox from '@/components/photo-lightbox'
 
 import styles from './styles.module.sass'
 
 interface PhotoGalleryProps {
     photos?: Photo[]
-    showActions?: boolean
-    photoLoading?: string
+    hideActions?: boolean
     uploadingPhotos?: string[]
-    onPhotoClick?: (index: number) => void
-    onPhotoRemoveClick?: (photoId: string) => void
-    onPhotoRotateClick?: (photoId: string) => void
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     photos,
-    showActions,
-    uploadingPhotos,
-    photoLoading,
-    onPhotoClick,
-    onPhotoRemoveClick,
-    onPhotoRotateClick
+    hideActions,
+    uploadingPhotos
 }) => {
     const user = useAppSelector((state) => state.auth.user)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
     })
 
+    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
+        API.usePhotoDeleteItemMutation()
+
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
+        API.usePhotoRotateItemMutation()
+
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
+    const [photoLoadingID, setPhotoLoadingID] = useState<string>()
+    const [photoDeleteID, setPhotoDeleteID] = useState<string>()
+    const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
+
+    const handleRemoveClick = (photoId: string) => {
+        if (user?.id && !deleteLoading && !hideActions) {
+            setPhotoLoadingID(photoId)
+            setPhotoDeleteID(photoId)
+        }
+    }
+
+    const handleRotateClick = (photoId: string) => {
+        if (user?.id && !rotateLoading && !hideActions) {
+            setPhotoLoadingID(photoId)
+            rotatePhoto(photoId)
+        }
+    }
+
+    /**
+     * After rotate photo - add time hash for rotated photo
+     */
+    useEffect(() => {
+        setLocalPhotos(
+            localPhotos?.map((photo) => ({
+                ...photo,
+                full:
+                    photo.id === rotateData?.id
+                        ? rotateData?.full!
+                        : photo.full,
+                preview:
+                    photo.id === rotateData?.id
+                        ? rotateData?.preview!
+                        : photo.preview
+            }))
+        )
+
+        setPhotoLoadingID(undefined)
+    }, [rotateData])
+
+    /**
+     *  After deleting a photo, remove it from the local photo list
+     */
+    React.useEffect(() => {
+        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
+    }, [deleteData])
+
+    useEffect(() => {
+        if (photos?.length) {
+            setLocalPhotos(photos)
+        }
+    }, [photos])
+
     return (
-        <ul className={styles.photoGallery}>
-            {!photos?.length && !uploadingPhotos?.length && (
+        <>
+            {!localPhotos?.length && !uploadingPhotos?.length && (
                 <div className={styles.emptyList}>{t('noPhotos')}</div>
             )}
 
-            {uploadingPhotos?.map((photo) => (
-                <li
-                    key={photo}
-                    className={styles.photoItem}
-                >
-                    <div className={styles.loader}>
-                        <Spinner />
-                    </div>
-                    <Image
-                        src={photo}
-                        alt={''}
-                        width={206}
-                        height={150}
-                    />
-                </li>
-            ))}
-
-            {photos?.map((photo, index) => (
-                <li
-                    key={photo.id}
-                    className={styles.photoItem}
-                >
-                    {photo.id === photoLoading && (
+            <ul className={styles.photoGallery}>
+                {uploadingPhotos?.map((photo) => (
+                    <li
+                        key={photo}
+                        className={styles.photoItem}
+                    >
                         <div className={styles.loader}>
                             <Spinner />
                         </div>
-                    )}
-
-                    <Link
-                        className={styles.link}
-                        href={`${IMG_HOST}${photo.full}`}
-                        title={`${photo.title}. ${t('linkPhotoTitle')} ${
-                            index + 1
-                        }`}
-                        onClick={(event) => {
-                            event.preventDefault()
-                            onPhotoClick?.(index)
-                        }}
-                    >
                         <Image
-                            src={`${IMG_HOST}${photo.preview}`}
-                            alt={`${photo.title}. ${t('linkPhotoTitle')} ${
-                                index + 1
-                            }`}
-                            quality={50}
+                            src={photo}
+                            alt={''}
                             width={206}
                             height={150}
                         />
-                    </Link>
+                    </li>
+                ))}
 
-                    {showActions && (
-                        <div className={styles.actions}>
-                            {user?.id && (
-                                <button
-                                    onClick={() =>
-                                        onPhotoRotateClick?.(photo.id)
-                                    }
-                                    disabled={!!photoLoading}
-                                >
-                                    <Icon name={'Rotate'} />
-                                </button>
-                            )}
+                {localPhotos?.map((photo, index) => (
+                    <li
+                        key={photo.id}
+                        className={styles.photoItem}
+                    >
+                        {photo.id === photoLoadingID && (
+                            <div className={styles.loader}>
+                                <Spinner />
+                            </div>
+                        )}
 
-                            {user?.id === photo.author?.id && (
-                                <button
-                                    onClick={() =>
-                                        onPhotoRemoveClick?.(photo.id)
-                                    }
-                                    disabled={!!photoLoading}
-                                >
-                                    <Icon name={'Close'} />
-                                </button>
-                            )}
-                        </div>
-                    )}
-                </li>
-            ))}
-        </ul>
+                        <Link
+                            className={styles.link}
+                            href={`${IMG_HOST}${photo.full}`}
+                            title={`${photo.title}. ${t('linkPhotoTitle')} ${
+                                index + 1
+                            }`}
+                            onClick={(event) => {
+                                event.preventDefault()
+                                setLightboxPhotoIndex(index)
+                            }}
+                        >
+                            <Image
+                                src={`${IMG_HOST}${photo.preview}`}
+                                alt={`${photo.title}. ${t('linkPhotoTitle')} ${
+                                    index + 1
+                                }`}
+                                quality={50}
+                                width={206}
+                                height={150}
+                            />
+                        </Link>
+
+                        {!hideActions && (
+                            <Popout
+                                className={styles.actions}
+                                action={<Icon name={'VerticalDots'} />}
+                            >
+                                <ul className={styles.actionMenu}>
+                                    <li>
+                                        <button
+                                            onClick={() =>
+                                                handleRotateClick(photo.id)
+                                            }
+                                            disabled={!!photoLoadingID}
+                                        >
+                                            <Icon name={'Rotate'} />{' '}
+                                            {t('actionRotate')}
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button
+                                            onClick={() =>
+                                                handleRemoveClick(photo.id)
+                                            }
+                                            disabled={!!photoLoadingID}
+                                        >
+                                            <Icon name={'Close'} />{' '}
+                                            {t('actionDelete')}
+                                        </button>
+                                    </li>
+                                </ul>
+                            </Popout>
+                        )}
+                    </li>
+                ))}
+            </ul>
+
+            <PhotoLightbox
+                photos={localPhotos}
+                photoIndex={lightboxPhotoIndex}
+                showLightbox={typeof lightboxPhotoIndex === 'number'}
+                onChangeIndex={setLightboxPhotoIndex}
+                onCloseLightBox={() => setLightboxPhotoIndex(undefined)}
+            />
+
+            <ConfirmationDialog
+                open={!!photoDeleteID}
+                message={t('acceptConfirmMessage')}
+                acceptText={t('acceptConfirmDelete')}
+                onReject={() => {
+                    setPhotoDeleteID(undefined)
+                    setPhotoLoadingID(undefined)
+                }}
+                onAccept={() => {
+                    if (photoDeleteID) {
+                        deletePhoto(photoDeleteID)
+                        setPhotoDeleteID(undefined)
+                        setPhotoLoadingID(undefined)
+                    }
+                }}
+            />
+        </>
     )
 }
 

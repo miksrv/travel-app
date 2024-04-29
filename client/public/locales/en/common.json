@@ -106,9 +106,7 @@
             },
             "placePhotos": {
                 "title": "Photos",
-                "buttonUpload": "Upload",
-                "acceptConfirmMessage": "Delete photo?",
-                "acceptConfirmDelete": "Delete"
+                "buttonUpload": "Upload"
             },
             "socialRating": {
                 "userRating": "Rate this place:"
@@ -126,6 +124,12 @@
             }
         },
         "pageUser": {
+            "tabs": {
+                "feed": "Activity feed",
+                "places": "Geotags",
+                "bookmarks": "Favorites",
+                "photos": "Photos"
+            },
             "userHeader": {
                 "reputation": "Reputation:",
                 "level": "Level:",
@@ -152,6 +156,13 @@
                 "photos": "Photos:",
                 "page": "Page"
             },
+            "places": {
+                "title": "Geotags",
+                "description": "All traveler geotags",
+                "breadCrumbLink": "Travelers",
+                "count": "Geotag:",
+                "page": "Page"
+            },
             "user": {
                 "photos": "Photos",
                 "places": "Added places",
@@ -161,7 +172,11 @@
         },
         "photoGallery": {
             "noPhotos": "No photos",
-            "linkPhotoTitle": "Photo"
+            "linkPhotoTitle": "Photo",
+            "acceptConfirmMessage": "Delete photo?",
+            "acceptConfirmDelete": "Delete",
+            "actionRotate": "Rotate",
+            "actionDelete": "Remove"
         },
         "placeCoverEditor": {
             "buttonCover": "Cover",

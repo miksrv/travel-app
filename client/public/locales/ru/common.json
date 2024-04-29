@@ -107,9 +107,7 @@
             },
             "placePhotos": {
                 "title": "Фотографии",
-                "buttonUpload": "Загрузить",
-                "acceptConfirmMessage": "Удалить фотографию?",
-                "acceptConfirmDelete": "Удалить"
+                "buttonUpload": "Загрузить"
             },
             "socialRating": {
                 "userRating": "Оцените место:"
@@ -127,6 +125,12 @@
             }
         },
         "pageUser": {
+            "tabs": {
+                "feed": "Лента активности",
+                "places": "Геометки",
+                "bookmarks": "Избранное",
+                "photos": "Фотографии"
+            },
             "userHeader": {
                 "reputation": "Репутация:",
                 "level": "Уровень:",
@@ -153,6 +157,13 @@
                 "photos": "Фотографий:",
                 "page": "Страница"
             },
+            "places": {
+                "title": "Геометки",
+                "description": "Все геометки путешественника",
+                "breadCrumbLink": "Путешественники",
+                "count": "Геометок:",
+                "page": "Страница"
+            },
             "user": {
                 "photos": "Фотографии",
                 "places": "Добавленные места",
@@ -162,7 +173,11 @@
         },
         "photoGallery": {
             "noPhotos": "Нет фотографий",
-            "linkPhotoTitle": "Фото"
+            "linkPhotoTitle": "Фото",
+            "acceptConfirmMessage": "Удалить фотографию?",
+            "acceptConfirmDelete": "Удалить",
+            "actionRotate": "Повернуть",
+            "actionDelete": "Удалить"
         },
         "placeCoverEditor": {
             "buttonCover": "Обложка",
