@@ -22,7 +22,7 @@ class Activity extends ResourceController {
         $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $placeContent    = new PlacesContent(400);
+        $placeContent    = new PlacesContent();
         $categoriesModel = new CategoryModel();
         $activityModel   = new ActivityModel();
 
@@ -37,11 +37,7 @@ class Activity extends ResourceController {
 
         $placeContent->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities(
-            $activityData,
-            $categoriesData,
-            $placeContent
-        );
+        $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
         if (!$author && !$place) {
@@ -72,9 +68,10 @@ class Activity extends ResourceController {
 
         foreach ($activityData as $item) {
             $lastGroup = end($groupData);
+            $photoPath = PATH_PHOTOS . $item->place_id . '/';
             $itemPhoto = $item->type === 'photo' && $item->filename ? [
-                'filename'  => $item->filename,
-                'extension' => $item->extension,
+                'full'      => $photoPath . $item->filename . '.' . $item->extension,
+                'preview'   => $photoPath . $item->filename . '_preview.' . $item->extension,
                 'width'     => (int) $item->width,
                 'height'    => (int) $item->height,
                 'placeId'   => $item->place_id
@@ -117,6 +114,11 @@ class Activity extends ResourceController {
             }
 
             if ($item->user_id) {
+                $avatar = $item->user_avatar ? explode('.', $item->user_avatar) : null;
+                $item->user_avatar = $avatar
+                    ? PATH_AVATARS . $item->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    : null;
+
                 $currentGroup->author = (object) [
                     'id'     => $item->user_id,
                     'name'   => $item->user_name,

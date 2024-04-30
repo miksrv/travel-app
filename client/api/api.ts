@@ -62,18 +62,23 @@ export const API = createApi({
             Maybe<ApiTypes.RequestActivityGetList>
         >({
             // Refetch when the page arg changes
-            forceRefetch: ({ currentArg, previousArg }) =>
-                currentArg !== previousArg,
-            // Always merge incoming data to the cache entry
-            merge: (currentCache, newItems) => {
-                currentCache.items.push(...newItems.items)
-            },
+            // forceRefetch: ({ currentArg, previousArg }) =>
+            //     currentArg !== previousArg,
+            // // Always merge incoming data to the cache entry
+            // merge: (currentCache, newItems, { arg }) => {
+            //     if (arg?.date) {
+            //         currentCache.items.push(...newItems.items)
+            //     } else {
+            //         currentCache.items = newItems.items
+            //     }
+            // },
             providesTags: (result, error, arg) => [
-                { id: arg?.place || arg?.author, type: 'Activity' }
+                { id: arg?.author ?? arg?.place, type: 'Activity' }
             ],
-            query: (params) => `activity${encodeQueryData(params)}`,
+            query: (params) => `activity${encodeQueryData(params)}`
             // Only have one cache entry because the arg always maps to one string
-            serializeQueryArgs: ({ endpointName }) => endpointName
+            // serializeQueryArgs: ({ endpointName, queryArgs }) =>
+            //     queryArgs?.author ?? queryArgs?.place ?? endpointName
         }),
         activityGetList: builder.query<
             ApiTypes.ResponseActivityGetList,
