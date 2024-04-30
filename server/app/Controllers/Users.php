@@ -112,7 +112,9 @@ class Users extends ResourceController {
             }
         }
 
-        $userLevels->calculate($usersData);
+        // This is a heavy operation to recalculate the user level,
+        // we will not call it every time the user page is requested
+         $userLevels->calculate($usersData);
 
         $avatar = $usersData->avatar ? explode('.', $usersData->avatar) : null;
 
