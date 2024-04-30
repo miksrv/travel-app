@@ -1,6 +1,6 @@
-import Image from 'next/image'
 import Link from 'next/link'
 import React, { useState } from 'react'
+import Markdown from 'react-markdown'
 import Gallery from 'react-photo-gallery'
 
 import Container from '@/ui/container'
@@ -11,35 +11,24 @@ import { ActivityTypes, Item } from '@/api/types/Activity'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 
-import { categoryImage } from '@/functions/categories'
 import { formatDate } from '@/functions/helpers'
 
+import styles from './styles.module.sass'
+
 interface PlacesListProps {
-    perPage?: number
-    loading?: boolean
     activities?: Item[]
-    hideBorder?: boolean
 }
 
-const ActivityList: React.FC<PlacesListProps> = ({
-    perPage,
-    activities,
-    loading,
-    hideBorder
-}) => (
-    <>
-        {activities?.map((item, index) => (
-            <ActivityListItem
-                key={`activity-${index}`}
-                item={item}
-            />
-        ))}
-    </>
-)
+const ActivityList: React.FC<PlacesListProps> = ({ activities }) =>
+    activities?.map((item, index) => (
+        <ActivityListItem
+            key={`activity-${index}`}
+            item={item}
+        />
+    ))
 
 interface ActivityListItemProps {
     item: Item
-    hidePlaceName?: boolean
 }
 
 const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
@@ -56,8 +45,9 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
     }
 
     return (
-        <Container>
+        <Container className={styles.activityContainer}>
             <UserAvatar
+                className={styles.userAvatar}
                 size={'medium'}
                 user={item.author}
                 showName={true}
@@ -73,60 +63,36 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                                 [ActivityTypes.Rating]: 'Поставил(а) оценку'
                             }[item.type]
                         }
-                        {item.type === ActivityTypes.Edit &&
-                        item.place?.difference ? (
-                            <>
-                                {' ('}
-                                <span
-                                    className={
-                                        item.place.difference > 0
-                                            ? 'green'
-                                            : 'red'
-                                    }
-                                >
-                                    {item.place.difference > 0 && '+'}
-                                    {item.place.difference}
-                                </span>
-                                {')'}
-                            </>
-                        ) : (
-                            ''
-                        )}
+                        {/*{item.type === ActivityTypes.Edit &&*/}
+                        {/*item.place?.difference ? (*/}
+                        {/*    <>*/}
+                        {/*        {' ('}*/}
+                        {/*        <span*/}
+                        {/*            className={*/}
+                        {/*                item.place.difference > 0*/}
+                        {/*                    ? 'green'*/}
+                        {/*                    : 'red'*/}
+                        {/*            }*/}
+                        {/*        >*/}
+                        {/*            {item.place.difference > 0 && '+'}*/}
+                        {/*            {item.place.difference}*/}
+                        {/*        </span>*/}
+                        {/*        {')'}*/}
+                        {/*    </>*/}
+                        {/*) : (*/}
+                        {/*    ''*/}
+                        {/*)}*/}
                     </>
                 }
             />
 
-            <Link
-                href={`/places/${item.place?.id}`}
-                title={item.place?.title}
-                style={{
-                    color: 'rgba(0, 0, 0, 0.87)',
-                    textDecoration: 'none'
-                }}
-            >
-                <Image
-                    style={{
-                        float: 'left',
-                        marginLeft: '2px',
-                        marginRight: '4px',
-                        marginTop: '1px'
-                    }}
-                    src={categoryImage(item.place?.category?.name).src}
-                    alt={item.place?.category?.title || ''}
-                    width={16}
-                    height={18}
-                />
-                {item.place?.title}
-            </Link>
-
             {(item.type === ActivityTypes.Place ||
-                item.type === ActivityTypes.Edit) && (
-                <div>
-                    {item.place?.content
-                        ? `${item.place.content}...`
-                        : 'Нет данных для отображения'}
-                </div>
-            )}
+                item.type === ActivityTypes.Edit) &&
+                item.place?.content && (
+                    <Markdown className={styles.content}>
+                        {item.place?.content}
+                    </Markdown>
+                )}
 
             {!!item.photos?.length && (
                 <>
@@ -138,6 +104,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                         }))}
                         onClick={handlePhotoClick}
                     />
+
                     <PhotoLightbox
                         photos={item.photos}
                         photoIndex={photoIndex}
@@ -147,6 +114,14 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                     />
                 </>
             )}
+
+            <Link
+                href={`/places/${item.place?.id}`}
+                title={item.place?.title}
+                className={styles.pointLink}
+            >
+                {item.place?.title}
+            </Link>
         </Container>
     )
 }

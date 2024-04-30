@@ -22,7 +22,7 @@ class Activity extends ResourceController {
         $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $placeContent    = new PlacesContent(400);
+        $placeContent    = new PlacesContent();
         $categoriesModel = new CategoryModel();
         $activityModel   = new ActivityModel();
 
@@ -37,11 +37,7 @@ class Activity extends ResourceController {
 
         $placeContent->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities(
-            $activityData,
-            $categoriesData,
-            $placeContent
-        );
+        $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
         if (!$author && !$place) {
