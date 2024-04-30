@@ -8,6 +8,9 @@ use CodeIgniter\Router\RouteCollection;
 $routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); //  php index.php system recalculate_tags_count
 $routes->cli('system/generate_users_online', 'System::generateUsersOnline'); //  php index.php system generate_users_online
 
+// Must be deleted
+$routes->cli('system/remove_deleted_photos', 'System::removeDeletedPhotos'); //  php index.php system remove_deleted_photos
+
 $routes->get('poi', 'Poi::list');
 $routes->get('poi/photos', 'Poi::photos');
 $routes->get('poi/users', 'Poi::users');

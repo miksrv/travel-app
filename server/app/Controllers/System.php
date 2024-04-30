@@ -1,5 +1,8 @@
 <?php namespace App\Controllers;
 
+use App\Libraries\LevelsLibrary;
+use App\Models\PhotosModel;
+use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\TagsModel;
 use App\Models\UsersModel;
@@ -58,6 +61,37 @@ class System extends ResourceController {
                 'updated_at'  => $usersData[$key]->updated_at,
                 'activity_at' => $currentTime,
             ]);
+        }
+    }
+
+    /**
+     * Temporary function, must be DELETED after first use
+     * @return void
+     * @throws ReflectionException
+     */
+    public function removeDeletedPhotos(): void {
+        $photosModel   = new PhotosModel();
+        $deletedPhotos = $photosModel->where('deleted_at !=', 'null')->withDeleted()->findAll();
+
+        foreach ($deletedPhotos as $photo) {
+            if (!$photosModel->delete($photo->id, true)) {
+                echo '<pre>';
+                var_dump('Delete Error');
+                exit();
+            }
+
+            if (file_exists(UPLOAD_PHOTOS . $photo->place_id . '/' . $photo->filename . '.' . $photo->extension)) {
+                unlink(UPLOAD_PHOTOS . $photo->place_id . '/' . $photo->filename . '.' . $photo->extension);
+                unlink(UPLOAD_PHOTOS . $photo->place_id . '/' . $photo->filename . '_preview.' . $photo->extension);
+            }
+
+            $userModel  = new UsersModel();
+            $userLevels = new LevelsLibrary();
+            $userLevels->calculate($userModel->getUserById($photo->user_id));
+
+            $placesModel = new PlacesModel();
+            $countPhotos = $photosModel->select('id')->where('place_id', $photo->place_id)->countAllResults();
+            $placesModel->update($photo->place_id, ['photos' => $countPhotos]);
         }
     }
 }
