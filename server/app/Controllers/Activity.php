@@ -72,9 +72,10 @@ class Activity extends ResourceController {
 
         foreach ($activityData as $item) {
             $lastGroup = end($groupData);
+            $photoPath = PATH_PHOTOS . $item->place_id . '/';
             $itemPhoto = $item->type === 'photo' && $item->filename ? [
-                'filename'  => $item->filename,
-                'extension' => $item->extension,
+                'full'      => $photoPath . $item->filename . '.' . $item->extension,
+                'preview'   => $photoPath . $item->filename . '_preview.' . $item->extension,
                 'width'     => (int) $item->width,
                 'height'    => (int) $item->height,
                 'placeId'   => $item->place_id
@@ -117,6 +118,11 @@ class Activity extends ResourceController {
             }
 
             if ($item->user_id) {
+                $avatar = $item->user_avatar ? explode('.', $item->user_avatar) : null;
+                $item->user_avatar = $avatar
+                    ? PATH_AVATARS . $item->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    : null;
+
                 $currentGroup->author = (object) [
                     'id'     => $item->user_id,
                     'name'   => $item->user_name,

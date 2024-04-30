@@ -2,13 +2,14 @@ import { UserPageProps } from '@/pages/users/[...slug]'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { BreadcrumbList, ProfilePage } from 'schema-dts'
 
 import Button from '@/ui/button'
 
-import { IMG_HOST, SITE_LINK } from '@/api/api'
+import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
+import ActivityList from '@/components/activity-list/ActivityList'
 import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
@@ -23,6 +24,30 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     })
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
+    const [lastDate, setLastDate] = useState<string>()
+    const { data, isFetching } = API.useActivityGetInfinityListQuery({
+        author: user?.id,
+        date: lastDate
+    })
+
+    useEffect(() => {
+        const onScroll = () => {
+            const scrolledToBottom =
+                window.innerHeight + window.scrollY >=
+                document.body.offsetHeight - 20
+
+            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
+                setLastDate(data.items[data.items?.length - 1].created?.date)
+            }
+        }
+
+        document.addEventListener('scroll', onScroll)
+
+        return function () {
+            document.removeEventListener('scroll', onScroll)
+        }
+    }, [lastDate, isFetching, data])
 
     const breadCrumbSchema: BreadcrumbList = {
         // @ts-ignore
@@ -121,6 +146,8 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 user={user}
                 currentPage={UserPagesEnum.FEED}
             />
+
+            <ActivityList activities={data?.items} />
         </>
     )
 }

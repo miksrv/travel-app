@@ -39,6 +39,7 @@
         "react-image-lightbox": "^5.1.4",
         "react-leaflet": "^4.2.1",
         "react-markdown": "^9.0.1",
+        "react-photo-gallery": "^8.0.0",
         "react-redux": "^9.1.1",
         "react-share": "^5.1.0",
         "sass": "^1.75.0",
