@@ -27,7 +27,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
         keyPrefix: 'components.pageUser.places'
     })
 
-    const { data } = API.usePlacesGetListQuery({
+    const { data, isLoading } = API.usePlacesGetListQuery({
         author: type === 'places' ? id : undefined,
         bookmarkUser: type === 'bookmarks' ? id : undefined,
         limit: PLACES_PER_PAGE,
@@ -67,7 +67,10 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
                 currentPage={type as UserPagesEnum}
             />
 
-            <PlacesList places={data?.items} />
+            <PlacesList
+                places={data?.items}
+                loading={isLoading}
+            />
 
             <Container className={'pagination'}>
                 <div>

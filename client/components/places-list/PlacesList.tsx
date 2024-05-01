@@ -5,29 +5,50 @@ import Container from '@/ui/container'
 
 import { Place } from '@/api/types/Place'
 
+import PlacesListItemLoader from '@/components/places-list/PlacesListItemLoader'
+
 import PlacesListItem from './PlacesListItem'
 import styles from './styles.module.sass'
 
 interface PlacesListProps {
     places?: Place[]
+    loading?: boolean
 }
 
-const PlacesList: React.FC<PlacesListProps> = ({ places }) => {
+const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placesList'
     })
 
-    return places?.length ? (
-        <section className={styles.component}>
-            {places?.map((place) => (
-                <PlacesListItem
-                    key={place.id}
-                    place={place}
-                />
-            ))}
-        </section>
-    ) : (
-        <Container className={styles.emptyList}>{t('emptyList')}</Container>
+    return (
+        <>
+            {!!places?.length && (
+                <section className={styles.component}>
+                    {places?.map((place) => (
+                        <PlacesListItem
+                            key={place.id}
+                            place={place}
+                        />
+                    ))}
+                </section>
+            )}
+
+            {loading && (
+                <section className={styles.component}>
+                    {Array(3)
+                        .fill('')
+                        .map((_, i) => (
+                            <PlacesListItemLoader key={i} />
+                        ))}
+                </section>
+            )}
+
+            {!places?.length && !loading && (
+                <Container className={styles.emptyList}>
+                    {t('emptyList')}
+                </Container>
+            )}
+        </>
     )
 }
 export default PlacesList
