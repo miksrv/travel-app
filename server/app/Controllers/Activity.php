@@ -37,9 +37,7 @@ class Activity extends ResourceController {
         $response = $this->_groupSimilarActivities($activityData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
-        if (!$author && !$place) {
-            array_pop($response);
-        }
+        array_pop($response);
 
         return $this->respond(['items' => $response]);
     }

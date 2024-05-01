@@ -23,15 +23,15 @@ class Users extends ResourceController {
      * @throws Exception
      */
     public function list(): ResponseInterface {
-        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
-        $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit  = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40);
+        $offset = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
 
         $userLevels = new LevelsLibrary();
         $usersModel = new UsersModel();
         $usersData  = $usersModel
             ->select('id, name, avatar, created_at, activity_at, updated_at, level, experience, reputation')
             ->orderBy('activity_at, updated_at', 'DESC')
-            ->findAll(abs($limit), abs($offset));
+            ->findAll(min($limit, 40), $offset);
 
         $result = [];
 

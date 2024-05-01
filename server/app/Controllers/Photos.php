@@ -43,10 +43,10 @@ class Photos extends ResourceController {
      */
     public function list(): ResponseInterface {
         $locale = $this->request->getLocale();
-        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
-        $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit  = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40);
+        $offset = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
 
-        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll(abs($limit), abs($offset));
+        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll(min($limit, 40), $offset);
 
         if (empty($photosData)) {
             return $this->respond([
