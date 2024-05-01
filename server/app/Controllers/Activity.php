@@ -77,7 +77,7 @@ class Activity extends ResourceController {
                 $lastGroup->type === 'photo' &&
                 (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
                 $lastGroup->author->id === $item->user_id &&
-                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
+                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 600
             ) {
                 $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
                 $lastGroup->photos[] = $itemPhoto;
@@ -138,20 +138,26 @@ class Activity extends ResourceController {
                 && isset($groupData[$key + 1])
                 && $groupData[$key + 1]->type === 'place'
                 && $item->place?->id === $groupData[$key + 1]->place?->id
-                && (strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
+                && abs(strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
             ) {
                 $groupData[$key + 1]->photos = $item->photos;
 
                 unset($groupData[$key]);
             }
+        }
 
+        $groupData = array_values($groupData);
+
+        foreach ($groupData as $key => $item) {
             // This situation is when we add a translation for a geotag that we created less than 40 minutes ago
             if ($item->type === 'edit'
                 && isset($groupData[$key + 1])
                 && $groupData[$key + 1]->type === 'place'
                 && $item->place?->id === $groupData[$key + 1]->place?->id
-                && (strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
+                && abs(strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
             ) {
+                $groupData[$key + 1]->place->content = $item->place->content;
+
                 unset($groupData[$key]);
             }
         }
