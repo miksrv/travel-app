@@ -1,3 +1,4 @@
+import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
@@ -22,66 +23,82 @@ interface PlacesListProps {
     loading?: boolean
 }
 
-const ActivityList: React.FC<PlacesListProps> = ({ activities, loading }) => (
-    <>
-        {activities?.map((item, index) => (
-            <ActivityListItem
-                key={`activity-${index}`}
-                item={item}
-            />
-        ))}
+const ActivityList: React.FC<PlacesListProps> = ({ activities, loading }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.activityList'
+    })
 
-        {loading && (
-            <Container className={styles.activityContainer}>
-                <div
-                    className={styles.userAvatar}
-                    style={{ display: 'flex' }}
-                >
-                    <Skeleton
-                        style={{
-                            borderRadius: '50%',
-                            height: '32px',
-                            width: '32px'
-                        }}
-                    />
-                    <div style={{ marginLeft: '10px' }}>
+    return (
+        <>
+            {activities?.map((item, index) => (
+                <ActivityListItem
+                    key={`activity-${index}`}
+                    item={item}
+                />
+            ))}
+
+            {!activities?.length && !loading && (
+                <Container className={styles.emptyList}>
+                    {t('emptyList')}
+                </Container>
+            )}
+
+            {loading && (
+                <Container className={styles.activityContainer}>
+                    <div
+                        className={styles.userAvatar}
+                        style={{ display: 'flex' }}
+                    >
                         <Skeleton
                             style={{
-                                height: '16px',
-                                marginBottom: '5px',
-                                width: '100px'
+                                borderRadius: '50%',
+                                height: '32px',
+                                width: '32px'
                             }}
                         />
-                        <Skeleton
-                            style={{
-                                height: '12px',
-                                width: '200px'
-                            }}
-                        />
+                        <div style={{ marginLeft: '10px' }}>
+                            <Skeleton
+                                style={{
+                                    height: '16px',
+                                    marginBottom: '5px',
+                                    width: '100px'
+                                }}
+                            />
+                            <Skeleton
+                                style={{
+                                    height: '12px',
+                                    width: '200px'
+                                }}
+                            />
+                        </div>
                     </div>
-                </div>
-                {Array(5)
-                    .fill('')
-                    .map((_, i) => (
-                        <Skeleton
-                            key={i}
-                            style={{
-                                height: '16px',
-                                marginBottom: '5px',
-                                width: i === 4 ? '75%' : '100%'
-                            }}
-                        />
-                    ))}
-            </Container>
-        )}
-    </>
-)
+                    {Array(5)
+                        .fill('')
+                        .map((_, i) => (
+                            <Skeleton
+                                key={i}
+                                style={{
+                                    height: '16px',
+                                    marginBottom: '5px',
+                                    width: i === 4 ? '75%' : '100%'
+                                }}
+                            />
+                        ))}
+                </Container>
+            )}
+        </>
+    )
+}
 
 interface ActivityListItemProps {
     item: Item
 }
 
 const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.activityList'
+    })
+
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
 
@@ -103,14 +120,14 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                 showName={true}
                 caption={
                     <>
-                        {formatDate(item.created?.date)}
+                        {formatDate(item.created?.date, t('dateFormat'))}
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Edit]: 'Редактирование',
-                                [ActivityTypes.Place]: 'Новая геометка',
-                                [ActivityTypes.Photo]: 'Загрузка фотографий',
-                                [ActivityTypes.Rating]: 'Оценка геометки'
+                                [ActivityTypes.Edit]: t('edit'),
+                                [ActivityTypes.Place]: t('place'),
+                                [ActivityTypes.Photo]: t('photo'),
+                                [ActivityTypes.Rating]: t('rating')
                             }[item.type]
                         }
                         {/*{item.type === ActivityTypes.Edit &&*/}

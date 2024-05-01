@@ -77,6 +77,14 @@
             "googleMap": "на Google картах",
             "wikimapiaMap": "на карте Wikimapia"
         },
+        "activityList": {
+            "emptyList": "Тут еще ничего нет",
+            "edit": "Редактирование",
+            "place": "Новая геометка",
+            "photo": "Загрузка фотографий",
+            "rating": "Оценка геометки",
+            "dateFormat": "D MMMM YYYY, HH:mm"
+        },
         "pagePlace": {
             "edit": {
                 "pageTitle": "Редактирование",

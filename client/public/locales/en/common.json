@@ -77,6 +77,14 @@
             "googleMap": "on Google Maps",
             "wikimapiaMap": "on the Wikimapia map"
         },
+        "activityList": {
+            "emptyList": "Nothing here yet",
+            "edit": "Editing",
+            "place": "New geotag",
+            "photo": "Uploading photos",
+            "rating": "Geotag rating",
+            "dateFormat": "MMMM D, YYYY, h:mm A"
+        },
         "pagePlace": {
             "edit": {
                 "breadCrumbCurrent": "Editing",

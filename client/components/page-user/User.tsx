@@ -163,7 +163,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
             <ActivityList
                 activities={activityCache}
-                loading={true}
+                loading={isFetching}
             />
         </>
     )
