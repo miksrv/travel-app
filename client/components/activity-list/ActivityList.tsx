@@ -5,9 +5,8 @@ import Container from '@/ui/container'
 
 import { Item } from '@/api/types/Activity'
 
-import ActivityListItemLoader from '@/components/activity-list/ActivityListItemLoader'
-
 import ActivityListItem from './ActivityListItem'
+import ActivityListItemLoader from './ActivityListItemLoader'
 import styles from './styles.module.sass'
 
 interface PlacesListProps {
