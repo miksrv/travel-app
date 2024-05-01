@@ -17,17 +17,14 @@ class Activity extends ResourceController {
      */
     public function list(): ResponseInterface {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
-        $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
-        $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
+        $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $placeContent    = new PlacesContent();
-        $categoriesModel = new CategoryModel();
-        $activityModel   = new ActivityModel();
-
-        $categoriesData = $categoriesModel->findAll();
-        $activityData   = $activityModel->getActivityList($lastDate, $author, $place, $limit, $offset);
+        $placeContent  = new PlacesContent();
+        $activityModel = new ActivityModel();
+        $activityData  = $activityModel->getActivityList($lastDate, $author, $place, min($limit, 40), $offset);
 
         $placesIds = [];
 
@@ -37,7 +34,7 @@ class Activity extends ResourceController {
 
         $placeContent->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities($activityData, $categoriesData, $placeContent);
+        $response = $this->_groupSimilarActivities($activityData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
         if (!$author && !$place) {
@@ -51,15 +48,13 @@ class Activity extends ResourceController {
      * We group similar user activities. For example, uploaded photos of one user
      * for one place with an interval of 5 minutes - we combine them into one activity
      * @param array $activityData
-     * @param array|null $categoriesData
      * @param PlacesContent|null $placeContent
      * @return array
      */
-    protected function _groupSimilarActivities(
-        array $activityData,
-        array $categoriesData = null,
-        PlacesContent $placeContent = null
-    ): array {
+    protected function _groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array {
+        $categoriesModel = new CategoryModel();
+        $categoriesData  = $categoriesModel->findAll();
+
         $groupData = [];
 
         if (empty($activityData)) {
@@ -86,7 +81,7 @@ class Activity extends ResourceController {
                 $lastGroup->author->id === $item->user_id &&
                 (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
             ) {
-                $lastGroup->created  = $item->created_at; // Каждый раз обновляем время загрузки последней фотографии
+                $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
                 $lastGroup->photos[] = $itemPhoto;
 
                 continue;
@@ -139,6 +134,20 @@ class Activity extends ResourceController {
             $groupData[] = $currentGroup;
         }
 
-        return $groupData;
+        // Combine the creation of a place and uploading photos to this place into one group
+        foreach ($groupData as $key => $item) {
+            if ($item->type === 'photo'
+                && isset($groupData[$key + 1])
+                && $groupData[$key + 1]->type === 'place'
+                && $item->place?->id === $groupData[$key + 1]->place?->id
+                && (strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
+            ) {
+                $groupData[$key + 1]->photos = $item->photos;
+
+                unset($groupData[$key]);
+            }
+        }
+
+        return array_values($groupData);
     }
 }

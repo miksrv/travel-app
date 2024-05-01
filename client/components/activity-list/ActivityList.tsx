@@ -11,6 +11,7 @@ import { ActivityTypes, Item } from '@/api/types/Activity'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 
+import { concatClassNames as cn } from '@/functions/helpers'
 import { formatDate } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
@@ -57,10 +58,10 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Edit]: 'Материал отредактирован',
-                                [ActivityTypes.Place]: 'Добавлено на карту',
-                                [ActivityTypes.Photo]: 'Загрузил(а) фотографии',
-                                [ActivityTypes.Rating]: 'Поставил(а) оценку'
+                                [ActivityTypes.Edit]: 'Редактирование',
+                                [ActivityTypes.Place]: 'Новая геометка',
+                                [ActivityTypes.Photo]: 'Загрузка фотографий',
+                                [ActivityTypes.Rating]: 'Оценка геометки'
                             }[item.type]
                         }
                         {/*{item.type === ActivityTypes.Edit &&*/}
@@ -89,7 +90,12 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
             {(item.type === ActivityTypes.Place ||
                 item.type === ActivityTypes.Edit) &&
                 item.place?.content && (
-                    <Markdown className={styles.content}>
+                    <Markdown
+                        className={cn(
+                            styles.content,
+                            !!item.photos?.length && styles.contentGallery
+                        )}
+                    >
                         {item.place?.content}
                     </Markdown>
                 )}
@@ -99,7 +105,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                     <Gallery
                         photos={item.photos?.map((photo) => ({
                             height: photo.height,
-                            src: `${IMG_HOST}${photo.full}`,
+                            src: `${IMG_HOST}${photo.preview}`,
                             width: photo.width
                         }))}
                         onClick={handlePhotoClick}
