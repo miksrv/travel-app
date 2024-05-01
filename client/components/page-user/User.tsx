@@ -161,7 +161,10 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 currentPage={UserPagesEnum.FEED}
             />
 
-            <ActivityList activities={activityCache} />
+            <ActivityList
+                activities={activityCache}
+                loading={isFetching}
+            />
         </>
     )
 }

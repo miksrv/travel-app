@@ -622,8 +622,8 @@ class Places extends ResourceController {
         $region   = $this->request->getGet('region', FILTER_SANITIZE_NUMBER_INT);
         $district = $this->request->getGet('district', FILTER_SANITIZE_NUMBER_INT);
         $locality = $this->request->getGet('locality', FILTER_SANITIZE_NUMBER_INT);
-        $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
-        $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
+        $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->coordinatesAvailable) {
@@ -669,7 +669,7 @@ class Places extends ResourceController {
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 
-        return $placesModel->limit($limit <= 0 || $limit > 21 ? 21 : $limit, abs($offset));
+        return $placesModel->limit(min($limit, 40), $offset);
     }
 
     /**

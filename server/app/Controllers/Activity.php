@@ -37,9 +37,7 @@ class Activity extends ResourceController {
         $response = $this->_groupSimilarActivities($activityData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
-        if (!$author && !$place) {
-            array_pop($response);
-        }
+        array_pop($response);
 
         return $this->respond(['items' => $response]);
     }
@@ -67,8 +65,8 @@ class Activity extends ResourceController {
             $itemPhoto = $item->type === 'photo' && $item->filename ? [
                 'full'      => $photoPath . $item->filename . '.' . $item->extension,
                 'preview'   => $photoPath . $item->filename . '_preview.' . $item->extension,
-                'width'     => (int) $item->width,
-                'height'    => (int) $item->height,
+                'width'     => PHOTO_PREVIEW_WIDTH, // (int) $item->width,
+                'height'    => PHOTO_PREVIEW_HEIGHT, // (int) $item->height,
                 'placeId'   => $item->place_id
             ] : null;
 
@@ -134,8 +132,8 @@ class Activity extends ResourceController {
             $groupData[] = $currentGroup;
         }
 
-        // Combine the creation of a place and uploading photos to this place into one group
         foreach ($groupData as $key => $item) {
+            // Combine the creation of a place and uploading photos to this place into one group
             if ($item->type === 'photo'
                 && isset($groupData[$key + 1])
                 && $groupData[$key + 1]->type === 'place'
@@ -144,6 +142,16 @@ class Activity extends ResourceController {
             ) {
                 $groupData[$key + 1]->photos = $item->photos;
 
+                unset($groupData[$key]);
+            }
+
+            // This situation is when we add a translation for a geotag that we created less than 40 minutes ago
+            if ($item->type === 'edit'
+                && isset($groupData[$key + 1])
+                && $groupData[$key + 1]->type === 'place'
+                && $item->place?->id === $groupData[$key + 1]->place?->id
+                && (strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
+            ) {
                 unset($groupData[$key]);
             }
         }
