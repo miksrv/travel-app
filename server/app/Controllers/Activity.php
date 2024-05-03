@@ -144,6 +144,17 @@ class Activity extends ResourceController {
 
                 unset($groupData[$key]);
             }
+
+            if ($item->type === 'photo'
+                && isset($groupData[$key + 2])
+                && $groupData[$key + 2]->type === 'place'
+                && $item->place?->id === $groupData[$key + 2]->place?->id
+                && abs(strtotime($item->created) - strtotime($groupData[$key + 2]->created)) <= 2400
+            ) {
+                $groupData[$key + 2]->photos = $item->photos;
+
+                unset($groupData[$key]);
+            }
         }
 
         $groupData = array_values($groupData);
