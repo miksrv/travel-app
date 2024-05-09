@@ -4,7 +4,7 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
 
@@ -12,9 +12,11 @@ import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
+import { Item } from '@/api/types/Activity'
 import { Photo } from '@/api/types/Photo'
 import { User } from '@/api/types/User'
 
+import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
@@ -40,6 +42,42 @@ const IndexPage: NextPage<IndexPageProps> = ({
     const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
+
+    const [lastDate, setLastDate] = useState<string>()
+    const [activityCache, setActivityCache] = useState<Item[]>([])
+
+    const { data, isFetching } = API.useActivityGetInfinityListQuery({
+        date: lastDate
+    })
+
+    useEffect(() => {
+        const onScroll = () => {
+            const scrolledToBottom =
+                window.innerHeight + window.scrollY >=
+                document.body.offsetHeight - 20
+
+            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
+                setLastDate(data.items[data.items?.length - 1].created?.date)
+            }
+        }
+
+        document.addEventListener('scroll', onScroll)
+
+        return function () {
+            document.removeEventListener('scroll', onScroll)
+        }
+    }, [lastDate, isFetching, data])
+
+    useEffect(() => {
+        if (data?.items) {
+            setActivityCache([...(activityCache || []), ...data.items])
+        }
+    }, [data?.items])
+
+    useEffect(() => {
+        setActivityCache([])
+        setLastDate(undefined)
+    }, [])
 
     return (
         <AppLayout>
@@ -110,6 +148,11 @@ const IndexPage: NextPage<IndexPageProps> = ({
             <UserGallery
                 title={t(`${KEY}titleLastPhotos`)}
                 photos={photosList}
+            />
+
+            <ActivityList
+                activities={activityCache}
+                loading={isFetching}
             />
         </AppLayout>
     )

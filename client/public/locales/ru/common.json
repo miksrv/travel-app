@@ -83,7 +83,9 @@
             "place": "Новая геометка",
             "photo": "Загрузка фотографий",
             "rating": "Оценка геометки",
-            "dateFormat": "D MMMM YYYY, HH:mm"
+            "dateFormat": "D MMMM YYYY, HH:mm",
+            "readMore": "Показать больше",
+            "readLess": "Показать меньше"
         },
         "pagePlace": {
             "edit": {
