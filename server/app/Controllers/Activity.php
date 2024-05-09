@@ -73,14 +73,18 @@ class Activity extends ResourceController {
             // We group activity by photos of one user, uploaded for one place and with a difference of no more than 5 minutes
             if (
                 $lastGroup &&
-                $item->type === 'photo' &&
-                $lastGroup->type === 'photo' &&
+//                $item->type === 'photo' &&
+//                $lastGroup->type === 'photo' &&
                 (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
                 $lastGroup->author->id === $item->user_id &&
                 (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 600
             ) {
                 $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
-                $lastGroup->photos[] = $itemPhoto;
+                $lastGroup->type     = $item->type;
+
+                if ($itemPhoto) {
+                    $lastGroup->photos[] = $itemPhoto;
+                }
 
                 continue;
             }
@@ -130,47 +134,6 @@ class Activity extends ResourceController {
             }
 
             $groupData[] = $currentGroup;
-        }
-
-        foreach ($groupData as $key => $item) {
-            // Combine the creation of a place and uploading photos to this place into one group
-            if ($item->type === 'photo'
-                && isset($groupData[$key + 1])
-                && $groupData[$key + 1]->type === 'place'
-                && $item->place?->id === $groupData[$key + 1]->place?->id
-                && abs(strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
-            ) {
-                $groupData[$key + 1]->photos = $item->photos;
-
-                unset($groupData[$key]);
-            }
-
-            if ($item->type === 'photo'
-                && isset($groupData[$key + 2])
-                && $groupData[$key + 2]->type === 'place'
-                && $item->place?->id === $groupData[$key + 2]->place?->id
-                && abs(strtotime($item->created) - strtotime($groupData[$key + 2]->created)) <= 2400
-            ) {
-                $groupData[$key + 2]->photos = $item->photos;
-
-                unset($groupData[$key]);
-            }
-        }
-
-        $groupData = array_values($groupData);
-
-        foreach ($groupData as $key => $item) {
-            // This situation is when we add a translation for a geotag that we created less than 40 minutes ago
-            if ($item->type === 'edit'
-                && isset($groupData[$key + 1])
-                && $groupData[$key + 1]->type === 'place'
-                && $item->place?->id === $groupData[$key + 1]->place?->id
-                && abs(strtotime($item->created) - strtotime($groupData[$key + 1]->created)) <= 2400
-            ) {
-                $groupData[$key + 1]->place->content = $item->place->content;
-
-                unset($groupData[$key]);
-            }
         }
 
         return array_values($groupData);
