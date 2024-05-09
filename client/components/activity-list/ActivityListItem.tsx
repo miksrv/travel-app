@@ -5,6 +5,7 @@ import Markdown from 'react-markdown'
 import Gallery from 'react-photo-gallery'
 
 import Container from '@/ui/container'
+import ReadMore from '@/ui/read-more'
 
 import { IMG_HOST } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
@@ -83,14 +84,14 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
             {(item.type === ActivityTypes.Place ||
                 item.type === ActivityTypes.Edit) &&
                 item.place?.content && (
-                    <Markdown
+                    <ReadMore
                         className={cn(
                             styles.content,
                             !!item.photos?.length && styles.contentGallery
                         )}
                     >
                         {item.place?.content}
-                    </Markdown>
+                    </ReadMore>
                 )}
 
             {!!item.photos?.length && (
