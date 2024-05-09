@@ -11,10 +11,15 @@ import styles from './styles.module.sass'
 
 interface PlacesListProps {
     activities?: Item[]
+    title?: string
     loading?: boolean
 }
 
-const ActivityList: React.FC<PlacesListProps> = ({ activities, loading }) => {
+const ActivityList: React.FC<PlacesListProps> = ({
+    activities,
+    loading,
+    title
+}) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.activityList'
     })
@@ -25,6 +30,7 @@ const ActivityList: React.FC<PlacesListProps> = ({ activities, loading }) => {
                 <ActivityListItem
                     key={`activity-${index}`}
                     item={item}
+                    title={title && index === 0 ? title : undefined}
                 />
             ))}
 

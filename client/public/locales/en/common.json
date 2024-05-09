@@ -332,7 +332,8 @@
             "titleActiveUsers": "Active Travelers",
             "allActiveUsers": "All",
             "allUsersPlaceholder": "All travelers",
-            "titleLastPhotos": "Last uploaded photos"
+            "titleLastPhotos": "Last uploaded photos",
+            "titleNewsFeed": "News feed"
         },
         "categories": {
             "title": "Geotag Categories",

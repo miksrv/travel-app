@@ -26,20 +26,27 @@ const ReadMore: React.FC<ReadMoreProps> = ({
         setReadMore(!readMore)
     }
 
-    const toggleButton = () => (
-        <button
-            onClick={toggleReadMore}
-            className={styles.readMoreButton}
-        >
-            {readMore ? showLessText : showMoreText}
-        </button>
-    )
+    const toggleButton = () =>
+        children && children?.length > charCount ? (
+            <button
+                onClick={toggleReadMore}
+                className={styles.readMoreButton}
+            >
+                {readMore ? showLessText : showMoreText}
+            </button>
+        ) : (
+            ''
+        )
 
     return (
         <div className={cn(className, styles.readMore)}>
             {!readMore ? (
                 <p>
-                    {truncateText(children, charCount) + '...'} {toggleButton()}
+                    {truncateText(children, charCount) +
+                        (children && children?.length > charCount
+                            ? '...'
+                            : '')}{' '}
+                    {toggleButton()}
                 </p>
             ) : (
                 <>

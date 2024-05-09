@@ -333,7 +333,8 @@
             "titleActiveUsers": "Активные путешественники",
             "allActiveUsers": "Все",
             "allUsersPlaceholder": "Все путешественники",
-            "titleLastPhotos": "Последние загруженные фотографии"
+            "titleLastPhotos": "Последние загруженные фотографии",
+            "titleNewsFeed": "Новостная лента"
         },
         "categories": {
             "title": "Категории геометок",
