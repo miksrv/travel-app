@@ -1,7 +1,6 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import Markdown from 'react-markdown'
 import Gallery from 'react-photo-gallery'
 
 import Container from '@/ui/container'
@@ -13,8 +12,7 @@ import { ActivityTypes, Item } from '@/api/types/Activity'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-import { formatDate } from '@/functions/helpers'
+import { concatClassNames as cn, formatDate } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
@@ -89,6 +87,8 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
                             styles.content,
                             !!item.photos?.length && styles.contentGallery
                         )}
+                        showMoreText={t('readMore')}
+                        showLessText={t('readLess')}
                     >
                         {item.place?.content}
                     </ReadMore>

@@ -83,7 +83,9 @@
             "place": "New geotag",
             "photo": "Uploading photos",
             "rating": "Geotag rating",
-            "dateFormat": "MMMM D, YYYY, h:mm A"
+            "dateFormat": "MMMM D, YYYY, h:mm A",
+            "readMore": "Show more",
+            "readLess": "Show less"
         },
         "pagePlace": {
             "edit": {
