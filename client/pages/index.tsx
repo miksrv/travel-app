@@ -151,6 +151,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
             />
 
             <ActivityList
+                title={t(`${KEY}titleNewsFeed`)}
                 activities={activityCache}
                 loading={isFetching}
             />

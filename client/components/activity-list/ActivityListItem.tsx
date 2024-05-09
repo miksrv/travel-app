@@ -18,9 +18,10 @@ import styles from './styles.module.sass'
 
 interface ActivityListItemProps {
     item: Item
+    title?: string
 }
 
-const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
+const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.activityList'
     })
@@ -38,7 +39,10 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item }) => {
     }
 
     return (
-        <Container className={styles.activityContainer}>
+        <Container
+            title={title}
+            className={styles.activityContainer}
+        >
             <UserAvatar
                 className={styles.userAvatar}
                 size={'medium'}
