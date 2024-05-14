@@ -13,6 +13,7 @@ class ActivityModel extends MyBaseModel {
 
     protected $allowedFields = [
         'type',
+        'views',
         'session_id',
         'user_id',
         'photo_id',

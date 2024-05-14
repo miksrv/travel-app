@@ -5,6 +5,7 @@ use App\Models\CategoryModel;
 use App\Models\ActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 /**
  * User activity controller
@@ -14,6 +15,7 @@ class Activity extends ResourceController {
     /**
      * Show all activities for all users and all places, photos
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function list(): ResponseInterface {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
@@ -26,10 +28,15 @@ class Activity extends ResourceController {
         $activityModel = new ActivityModel();
         $activityData  = $activityModel->getActivityList($lastDate, $author, $place, min($limit, 40), $offset);
 
-        $placesIds = [];
+        $placesIds   = [];
+        $activityIds = [];
 
         foreach ($activityData as $item) {
-            $placesIds[] = $item->place_id;
+            if (!in_array($item->place_id, $placesIds)) {
+                $placesIds[] = $item->place_id;
+            }
+
+            $activityIds[] = $item->id;
         }
 
         $placeContent->translate($placesIds, true);
@@ -40,6 +47,12 @@ class Activity extends ResourceController {
         if (count($response) >= $limit) {
             array_pop($response);
         }
+
+        // Incrementing view counter
+        $activityModel
+            ->set('views', 'views + 1', false)
+            ->whereIn('id', $activityIds)
+            ->update();
 
         return $this->respond(['items' => $response]);
     }
