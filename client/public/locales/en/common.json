@@ -119,7 +119,8 @@
                 "buttonUpload": "Upload"
             },
             "socialRating": {
-                "userRating": "Rate this place:"
+                "userRating": "Rate this place:",
+                "ratingSuccess": "Thanks for rating the place!"
             },
             "placeDescription": {
                 "title": "Description",

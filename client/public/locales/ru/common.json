@@ -120,7 +120,8 @@
                 "buttonUpload": "Загрузить"
             },
             "socialRating": {
-                "userRating": "Оцените место:"
+                "userRating": "Оцените место:",
+                "ratingSuccess": "Спасибо за оценку места!"
             },
             "placeDescription": {
                 "title": "Описание",
