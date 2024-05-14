@@ -7,6 +7,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
+import Carousel from '@/ui/carousel/Carousel'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -20,7 +21,7 @@ import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
-import PlacesList from '@/components/places-list'
+import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 
 import { LOCAL_STORGE } from '@/functions/constants'
@@ -120,7 +121,16 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 currentPage={t(`${KEY}breadCrumbCurrent`)}
             />
 
-            <PlacesList places={placesList} />
+            <Carousel options={{ dragFree: true, loop: true }}>
+                {placesList?.map((place) => (
+                    <PlacesListItem
+                        key={place.id}
+                        place={place}
+                    />
+                ))}
+            </Carousel>
+
+            {/*<PlacesList places={placesList} />*/}
 
             <Button
                 size={'m'}
