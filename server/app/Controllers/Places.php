@@ -358,11 +358,12 @@ class Places extends ResourceController {
             $placeData->category_en, $placeData->category_ru,
         );
 
-        // Update view counts
-        $this->model->update($placeData->id, [
-            'views'      => $placeData->views + 1,
-            'updated_at' => $placeData->updated
-        ]);
+        // Incrementing view counter
+        $this->model
+            ->set('views', 'views + 1', false)
+            ->set('updated_at', $placeData->updated)
+            ->where('id', $placeData->id)
+            ->update();
 
         // TODO Get random place ID
         $placeData->randomId = $this->model->getRandomPlaceId()->id;
