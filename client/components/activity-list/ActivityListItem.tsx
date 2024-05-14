@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Gallery from 'react-photo-gallery'
 
 import Container from '@/ui/container'
+import Icon from '@/ui/icon'
 import ReadMore from '@/ui/read-more'
 
 import { IMG_HOST } from '@/api/api'
@@ -119,13 +120,20 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                 </>
             )}
 
-            <Link
-                href={`/places/${item.place?.id}`}
-                title={item.place?.title}
-                className={styles.pointLink}
-            >
-                {item.place?.title}
-            </Link>
+            <div className={styles.bottomBar}>
+                <Link
+                    href={`/places/${item.place?.id}`}
+                    title={item.place?.title}
+                    className={styles.pointLink}
+                >
+                    {item.place?.title}
+                </Link>
+
+                <div className={styles.viewCounter}>
+                    <Icon name={'Eye'} />
+                    {item?.views || 0}
+                </div>
+            </div>
         </Container>
     )
 }

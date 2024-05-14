@@ -106,6 +106,7 @@ class Activity extends ResourceController {
 
             $currentGroup = (object) [
                 'type'    => $item->type,
+                'views'   => $item->views,
                 'created' => $item->created_at,
                 'photos'  => []
             ];
