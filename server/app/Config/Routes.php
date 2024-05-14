@@ -16,7 +16,6 @@ $routes->options('poi', 'Poi');
 $routes->options('poi/(:alphanum)', 'Poi');
 
 $routes->get('places', 'Places::list');
-$routes->get('places/random', 'Places::random');
 $routes->get('places/(:alphanum)', 'Places::show/$1');
 $routes->post('places', 'Places::create');
 $routes->patch('places/cover/(:alphanum)', 'Places::cover/$1');

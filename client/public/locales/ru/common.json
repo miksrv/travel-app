@@ -9,7 +9,6 @@
             "userLogout": "Выход",
             "userLoginCaption": "Войти",
             "userLoginTitle": "Авторизация на сайте",
-            "randomPlaceLinkTitle": "Перейти на случайное место",
             "search": {
                 "placeholder": "Поиск мест, координат"
             },

@@ -312,9 +312,6 @@ export const API = createApi({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
-        placesGetRandom: builder.query<ApiTypes.ResponsePlacesGetRandom, void>({
-            query: () => 'places/random'
-        }),
         placesPatchCover: builder.mutation<
             void,
             ApiTypes.RequestPlacesPatchCover

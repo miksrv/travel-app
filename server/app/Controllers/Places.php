@@ -38,13 +38,6 @@ class Places extends ResourceController {
 
     /**
      * @return ResponseInterface
-     */
-    public function random(): ResponseInterface{
-        return $this->respond(['id' => $this->model->getRandomPlaceId()->id]);
-    }
-
-    /**
-     * @return ResponseInterface
      * @throws \Exception
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      */
@@ -364,9 +357,6 @@ class Places extends ResourceController {
             ->set('updated_at', $placeData->updated)
             ->where('id', $placeData->id)
             ->update();
-
-        // TODO Get random place ID
-        $placeData->randomId = $this->model->getRandomPlaceId()->id;
 
         return $this->respond($placeData);
     }

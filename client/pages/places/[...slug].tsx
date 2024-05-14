@@ -19,7 +19,6 @@ const PAGES = ['edit', undefined] as const
 type PageType = (typeof PAGES)[number]
 
 export interface PlacePageProps {
-    randomId?: string
     page: PageType | null
     ratingCount: number
     place?: PlaceType.Place
@@ -27,23 +26,14 @@ export interface PlacePageProps {
     nearPlaces?: PlaceType.Place[] | null
 }
 
-const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
+const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
 
-    // const { data: activityData } = API.useActivityGetListQuery(
-    //     {
-    //         place: placeData?.id
-    //     },
-    //     {
-    //         skip: !placeData?.id
-    //     }
-    // )
-
     return (
-        <AppLayout randomPlaceId={randomId}>
+        <AppLayout>
             {page === 'edit' && isAuth ? (
                 <Edit {...props} />
             ) : (
@@ -120,7 +110,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,
-                    randomId: placeData?.randomId,
                     ratingCount: ratingData?.count ?? 0
                 }
             }

@@ -20,7 +20,7 @@ import PlacesListItem from '@/components/places-list/PlacesListItem'
 
 import { formatDateUTC } from '@/functions/helpers'
 
-interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
+interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
 const KEY = 'components.pagePlace.place.'
 

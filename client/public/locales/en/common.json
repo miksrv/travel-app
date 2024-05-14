@@ -9,7 +9,6 @@
             "userLogout": "Logout",
             "userLoginCaption": "Sign in",
             "userLoginTitle": "Authorization on the site",
-            "randomPlaceLinkTitle": "Go to a random place",
             "search": {
                 "placeholder": "Search places, coordinates"
             },
