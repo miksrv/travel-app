@@ -20,6 +20,7 @@
         "appLayout": {
             "scrollToTop": "Go up",
             "menu": {
+                "feed": "News feed",
                 "map": "Map of places",
                 "places": "Interesting places",
                 "create": "Add a place",

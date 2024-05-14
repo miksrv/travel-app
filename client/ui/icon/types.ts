@@ -45,6 +45,7 @@ export type IconTypes =
     | 'Category'
     | 'Place'
     | 'Tag'
+    | 'Feed'
     | 'Comment'
     | 'HeartEmpty'
     | 'HeartFull'

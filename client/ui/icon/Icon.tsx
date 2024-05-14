@@ -249,6 +249,11 @@ const Icon: React.FC<IconProps> = ({ name }) => {
                 <path d='m21.41 11.41-8.83-8.83c-.37-.37-.88-.58-1.41-.58H4c-1.1 0-2 .9-2 2v7.17c0 .53.21 1.04.59 1.41l8.83 8.83c.78.78 2.05.78 2.83 0l7.17-7.17c.78-.78.78-2.04-.01-2.83M12.83 20 4 11.17V4h7.17L20 12.83z' />
             )
             break
+        case 'Feed':
+            iconToRender = (
+                <path d='M16 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8zm3 16H5V5h10v4h4zM7 17h10v-2H7zm5-10H7v2h5zm-5 6h10v-2H7z' />
+            )
+            break
         case 'Comment':
             iconToRender = (
                 <path d='M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4zM20 4v13.17L18.83 16H4V4zM6 12h12v2H6zm0-3h12v2H6zm0-3h12v2H6z' />
