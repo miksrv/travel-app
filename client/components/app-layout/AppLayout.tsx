@@ -23,14 +23,12 @@ import styles from './styles.module.sass'
 type AuthFormType = 'login' | 'registration'
 
 interface AppLayoutProps {
-    randomPlaceId?: string
     className?: string
     fullSize?: boolean
     children?: React.ReactNode
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({
-    randomPlaceId,
     className,
     fullSize,
     children
@@ -163,7 +161,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
             <AppBar
                 fullSize={fullSize}
-                randomPlaceId={randomPlaceId}
                 onMenuClick={handleOpenSideBar}
             />
 

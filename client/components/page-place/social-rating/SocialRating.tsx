@@ -1,5 +1,5 @@
 import { useTranslation } from 'next-i18next'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
     OKIcon,
     OKShareButton,
@@ -19,6 +19,8 @@ import Container from '@/ui/container'
 import Rating from '@/ui/rating'
 
 import { API } from '@/api/api'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch } from '@/api/store'
 
 import styles from './styles.module.sass'
 
@@ -33,6 +35,8 @@ const SocialRating: React.FC<SocialRatingProps> = ({
     placeUrl,
     ratingValue
 }) => {
+    const dispatch = useAppDispatch()
+
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.socialRating'
     })
@@ -41,7 +45,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({
         refetchOnMountOrArgChange: true
     })
 
-    const [changeRating, { isLoading: ratingLoading }] =
+    const [changeRating, { isLoading: ratingLoading, isSuccess }] =
         API.useRatingPutScoreMutation()
 
     const handleRatingChange = (value?: number) => {
@@ -52,6 +56,18 @@ const SocialRating: React.FC<SocialRatingProps> = ({
             })
         }
     }
+
+    useEffect(() => {
+        if (isSuccess && !ratingData?.vote) {
+            dispatch(
+                Notify({
+                    id: 'placeRating',
+                    message: t('ratingSuccess'),
+                    type: 'success'
+                })
+            )
+        }
+    }, [isSuccess])
 
     return (
         <Container className={styles.socialRating}>

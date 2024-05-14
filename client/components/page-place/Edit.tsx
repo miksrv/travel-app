@@ -14,7 +14,7 @@ import PlaceForm from '@/components/place-form'
 
 import { equalsArrays } from '@/functions/helpers'
 
-interface EditProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
+interface EditProps extends Omit<PlacePageProps, 'page'> {}
 
 const TKEY = 'components.pagePlace.edit.'
 

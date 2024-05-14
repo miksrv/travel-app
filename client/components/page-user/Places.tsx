@@ -12,8 +12,7 @@ import Header from '@/components/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PlacesList from '@/components/places-list'
 
-interface UserPlacesProps
-    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {
+interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
     type: 'places' | 'bookmarks'
 }
 

@@ -5,6 +5,7 @@ use CodeIgniter\Entity\Entity;
 class Activity extends Entity {
     protected $casts = [
         'type'       => 'string',
+        'views'      => 'integer',
         'session_id' => 'string',
         'user_id'    => 'string',
         'photo_id'   => 'string',

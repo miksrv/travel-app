@@ -12,8 +12,7 @@ import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 
-interface UserPhotosProps
-    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {}
+interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
 
 const UserPhotos: React.FC<UserPhotosProps> = ({
     id,

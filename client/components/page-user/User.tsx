@@ -17,7 +17,7 @@ import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 
 import { formatDateISO } from '@/functions/helpers'
 
-interface UserProps extends Omit<UserPageProps, 'randomId' | 'page'> {}
+interface UserProps extends Omit<UserPageProps, 'page'> {}
 
 const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     const { t, i18n } = useTranslation('common', {

@@ -106,17 +106,11 @@ export interface RequestPlacesGetItem {
     lon?: number | null
 }
 
-export interface ResponsePlacesGetItem extends Place {
-    randomId?: string
-}
+export interface ResponsePlacesGetItem extends Place {}
 
 export interface ResponsePlacesGetList {
     items?: Place[]
     count?: number
-}
-
-export interface ResponsePlacesGetRandom {
-    id?: string
 }
 
 export interface RequestPlacesGetList {

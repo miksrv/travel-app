@@ -45,6 +45,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t(`${KEY}photos`)
         },
         {
+            icon: 'Feed',
+            link: '/',
+            text: t(`${KEY}feed`)
+        },
+        {
             icon: 'Map',
             link: '/map',
             text: t(`${KEY}map`)

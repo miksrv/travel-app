@@ -20,4 +20,25 @@
 
   .pointLink
     display: inline-block
+    overflow: hidden
+    white-space: nowrap
+    text-overflow: ellipsis
+    padding-right: 5px
+
+  .bottomBar
+    display: flex
+    justify-content: space-between
+    align-items: center
     margin-top: 10px
+
+    .viewCounter
+      display: flex
+      font-size: $fontSizeCaption
+      color: $colorTextSecond
+      align-items: center
+
+      svg
+        width: 16px
+        height: 16px
+        fill: $colorTextSecond
+        margin-right: 5px

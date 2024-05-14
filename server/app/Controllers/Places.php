@@ -38,13 +38,6 @@ class Places extends ResourceController {
 
     /**
      * @return ResponseInterface
-     */
-    public function random(): ResponseInterface{
-        return $this->respond(['id' => $this->model->getRandomPlaceId()->id]);
-    }
-
-    /**
-     * @return ResponseInterface
      * @throws \Exception
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      */
@@ -358,14 +351,12 @@ class Places extends ResourceController {
             $placeData->category_en, $placeData->category_ru,
         );
 
-        // Update view counts
-        $this->model->update($placeData->id, [
-            'views'      => $placeData->views + 1,
-            'updated_at' => $placeData->updated
-        ]);
-
-        // TODO Get random place ID
-        $placeData->randomId = $this->model->getRandomPlaceId()->id;
+        // Incrementing view counter
+        $this->model
+            ->set('views', 'views + 1', false)
+            ->set('updated_at', $placeData->updated)
+            ->where('id', $placeData->id)
+            ->update();
 
         return $this->respond($placeData);
     }
