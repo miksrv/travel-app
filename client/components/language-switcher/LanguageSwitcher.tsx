@@ -6,7 +6,7 @@ import { setLocale } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import styles from './styles.module.sass'
@@ -16,7 +16,7 @@ const LanguageSwitcher: React.FC = () => {
     const router = useRouter()
     const dispatch = useAppDispatch()
 
-    const [, setStorageLocale] = useLocalStorage<string>(LOCAL_STORGE.LOCALE)
+    const [, setStorageLocale] = useLocalStorage<string>(LOCAL_STORAGE.LOCALE)
 
     const { language: currentLanguage } = i18n
     const { pathname, asPath, query } = router

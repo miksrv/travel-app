@@ -13,7 +13,7 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
 
@@ -23,7 +23,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     const { store } = wrapper.useWrappedStore(pageProps)
 
     useEffect(() => {
-        const storage = localStorage?.getItem(LOCAL_STORGE.LOCALE)
+        const storage = localStorage?.getItem(LOCAL_STORAGE.LOCALE)
         const locale = storage
             ? JSON.parse(storage)
             : i18Config.i18n.defaultLocale

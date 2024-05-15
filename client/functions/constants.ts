@@ -1,4 +1,4 @@
-export const LOCAL_STORGE = {
+export const LOCAL_STORAGE = {
     AUTH_SESSION: 'geometki_session',
     AUTH_TOKEN: 'geometki_token',
     LOCALE: 'geometki_locale',

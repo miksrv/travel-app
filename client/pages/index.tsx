@@ -24,7 +24,7 @@ import UserGallery from '@/components/page-user/gallery'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 
 interface IndexPageProps {
@@ -180,8 +180,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let lat = null
             let lon = null
 
-            if (cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     lat = parseFloat(userLocation[0])
