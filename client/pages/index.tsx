@@ -7,7 +7,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
-import Carousel from '@/ui/carousel/Carousel'
+import Carousel from '@/ui/carousel'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
