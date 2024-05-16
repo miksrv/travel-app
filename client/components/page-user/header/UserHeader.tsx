@@ -208,7 +208,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                             <UserAvatarEditor onSaveAvatar={setReplaceAvatar} />
 
                             <Button
-                                size={'m'}
+                                size={'medium'}
                                 icon={'Pencil'}
                                 mode={'secondary'}
                                 link={'/users/settings'}

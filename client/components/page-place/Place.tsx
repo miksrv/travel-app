@@ -193,7 +193,7 @@ const Place: React.FC<PlaceProps> = ({
                     </Carousel>
 
                     <Button
-                        size={'m'}
+                        size={'medium'}
                         mode={'secondary'}
                         stretched={true}
                         noIndex={true}

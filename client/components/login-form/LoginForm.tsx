@@ -156,7 +156,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             <div className={styles.loginServiceButtons}>
                 <Button
                     stretched={true}
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('google')}
@@ -173,7 +173,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
                 <Button
                     stretched={true}
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('yandex')}

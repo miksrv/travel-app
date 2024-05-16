@@ -134,7 +134,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     return (
         <>
             <Button
-                size={'m'}
+                size={'medium'}
                 icon={'Photo'}
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
@@ -151,7 +151,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                 actions={
                     selectedPhoto && (
                         <Button
-                            size={'s'}
+                            size={'small'}
                             mode={'primary'}
                             onClick={handleSaveCover}
                             disabled={disabled}

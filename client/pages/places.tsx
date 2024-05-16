@@ -329,7 +329,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 currentPage={breadCrumbCurrent}
                 actions={
                     <Button
-                        size={'m'}
+                        size={'medium'}
                         mode={'primary'}
                         icon={'Tune'}
                         onClick={handleClickOpenFiltersDialog}

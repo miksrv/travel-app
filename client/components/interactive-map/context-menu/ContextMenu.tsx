@@ -156,7 +156,7 @@ const ContextMenu: React.FC = () => {
                     <li className={styles.divider}>
                         <Button
                             mode={'link'}
-                            size={'s'}
+                            size={'small'}
                             title={t('copyToClipboard')}
                             onClick={handleCopyCoordinates}
                         >

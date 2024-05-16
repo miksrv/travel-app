@@ -144,7 +144,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 footer={
                     photosCount > 8 && (
                         <Button
-                            size={'m'}
+                            size={'medium'}
                             mode={'secondary'}
                             stretched={true}
                             link={`/users/${id}/photos`}

@@ -133,7 +133,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
             {/*<PlacesList places={placesList} />*/}
 
             <Button
-                size={'m'}
+                size={'medium'}
                 mode={'secondary'}
                 stretched={true}
                 link={'/places'}

@@ -270,7 +270,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
 
             <div className={styles.actions}>
                 <Button
-                    size={'m'}
+                    size={'medium'}
                     mode={'primary'}
                     disabled={loading}
                     onClick={handleSubmit}
@@ -279,7 +279,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                 </Button>
 
                 <Button
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loading}
                     onClick={onCancel}

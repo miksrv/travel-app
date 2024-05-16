@@ -152,7 +152,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
                 <div>
                     <BookmarkButton
-                        size={'m'}
+                        size={'medium'}
                         placeId={place?.id}
                     />
                 </div>
@@ -171,7 +171,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         />
 
                         <Button
-                            size={'m'}
+                            size={'medium'}
                             icon={'EditLocation'}
                             mode={'secondary'}
                             link={
