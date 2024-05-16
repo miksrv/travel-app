@@ -77,9 +77,11 @@ const App = ({ Component, pageProps }: AppProps) => {
                     href='/site.webmanifest'
                 />
             </Head>
+
             <Provider store={store}>
                 <Component {...pageProps} />
             </Provider>
+
             {process.env.NODE_ENV === 'production' && (
                 <div
                     dangerouslySetInnerHTML={{

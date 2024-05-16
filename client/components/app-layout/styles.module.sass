@@ -86,7 +86,7 @@ $sideBarWidth: 300px
             .buttonToTop
                 background-color: #f4f7f8
 
-        @media only screen and (max-width: var(--width-max-mobile))
+        @media only screen and (max-width: $mobileMaxWidth)
             display: none !important
 
     .mainContainer
@@ -117,7 +117,7 @@ $sideBarWidth: 300px
             max-width: 870px
             margin-bottom: 20px
 
-        @media only screen and (max-width: var(--width-max-mobile))
+        @media only screen and (max-width: $mobileMaxWidth)
             .menubar
                 display: none
 

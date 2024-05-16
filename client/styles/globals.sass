@@ -116,7 +116,7 @@ a
     justify-content: space-between
     align-items: center
 
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       flex-direction: column
       align-items: flex-start
 
@@ -138,12 +138,12 @@ a
 /* Index (map) page */
 .mainLayout
   & > section > main
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       padding: 0 !important
       margin-bottom: 0 !important
 
 .mainHeader
-  @media only screen and (max-width: var(--width-max-mobile))
+  @media only screen and (max-width: $mobileMaxWidth)
     display: none !important
 
 .mainContainer
@@ -151,7 +151,7 @@ a
   min-height: 300px
   padding: 4px !important
 
-  @media only screen and (max-width: var(--width-max-mobile))
+  @media only screen and (max-width: $mobileMaxWidth)
     height: calc(100vh - 50px)
     margin: 0 !important
     padding: 0 !important
@@ -186,7 +186,7 @@ a
   justify-content: space-between
   align-items: center
 
-  @media only screen and (max-width: var(--width-max-mobile))
+  @media only screen and (max-width: $mobileMaxWidth)
     justify-content: center
 
     & > div:first-of-type
