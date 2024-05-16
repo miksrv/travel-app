@@ -33,4 +33,23 @@
     --container-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
 
     --overlay-background: rgba(35, 35, 36, 0.57);
+
+    --button-default-background: transparent;
+    --button-default-color: var(--text-main-color);
+    --button-default-background-hover: rgba(255, 255, 255, 0.04);
+    --button-default-background-active: rgba(255, 255, 255, 0.08);
+    --button-primary-background: var(--text-main-color);
+    --button-primary-color: var(--body-background);
+    --button-primary-background-hover: #EBEDF0;
+    --button-primary-background-active: #D7D8DB;
+    --button-negative-background: #ff5c5c;
+    --button-negative-color: var(--text-main-color);
+    --button-negative-background-hover: #FF6363;
+    --button-negative-background-active: #FF6969;
+    --button-secondary-background: rgba(255, 255, 255, 0.10);
+    --button-secondary-color: var(--text-main-color);
+    --button-secondary-background-hover: rgba(255, 255, 255, 0.12);
+    --button-secondary-color-hover: var(--text-main-color);
+    --button-secondary-background-active: rgba(255, 255, 255, 0.14);
+    --button-secondary-color-active: var(--text-main-color);
 }
