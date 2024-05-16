@@ -6,7 +6,7 @@ import React from 'react'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
 import Button from '@/ui/button'
-import Carousel from '@/ui/carousel/Carousel'
+import Carousel from '@/ui/carousel'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -193,7 +193,7 @@ const Place: React.FC<PlaceProps> = ({
                     </Carousel>
 
                     <Button
-                        size={'m'}
+                        size={'medium'}
                         mode={'secondary'}
                         stretched={true}
                         noIndex={true}

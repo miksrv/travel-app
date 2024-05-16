@@ -5,7 +5,7 @@
 
   .label
     display: block
-    color: $inputLabelColor
+    color: var(--input-label-color)
     overflow: hidden
     padding-bottom: 4px
     padding-top: 2px
@@ -24,13 +24,13 @@
       width: 100%
       line-height: 20px
       position: relative
-      background-color: $inputBackgroundColor
+      background-color: var(--input-background-color)
       -webkit-tap-highlight-color: transparent
       align-items: center
-      border-radius: $borderRadius
+      border-radius: var(--border-radius)
       box-sizing: border-box
-      border: 0.5px solid $borderInputColor
-      color: $colorTextMain
+      border: var(--input-border)
+      color: var(--text-main-color)
       height: 34px
       margin: 0
       padding: 0 10px 0 0
@@ -54,17 +54,18 @@
         padding-left: 12px
         padding-bottom: 0
         font-family: inherit
+        color: inherit
 
         &::placeholder
-          font-size: $fontSize
+          font-size: var(--font-size)
 
       &:focus, &:active, &:hover
         outline: none
-        border-color: $inputFocusBorderColor
+        border-color: var(--input-border-focus-color)
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
-        color: $colorTextMain
+        color: var(--text-main-color)
 
       span
         overflow: hidden
@@ -86,7 +87,7 @@
         svg
           width: 24px
           height: 24px
-          fill: $inputLabelColor
+          fill: var(--input-label-color)
 
       .clear, .toggleButton
         background: transparent
@@ -101,7 +102,7 @@
           height: 18px !important
 
           &:hover
-            fill: $inputLabelColorHover
+            fill: var(--input-label-color)Hover
 
     &.open
       .searchContainer
@@ -141,6 +142,7 @@
           display: flex
           align-items: center
           flex-wrap: wrap
+          color: var(--text-main-color)
 
           img
             width: 14px
@@ -155,12 +157,12 @@
             white-space: nowrap
 
           .description
-            color: $colorTextSecond
+            color: var(--text-second-color)
             font-size: $fontSizeCaption
             flex-basis: 100%
 
         &:hover, &.active
-          background-color: $inputBackgroundColor
+          background-color: var(--input-background-color)
 
         &:last-of-type
           border-bottom-left-radius: 8px

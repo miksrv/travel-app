@@ -10,7 +10,7 @@
   align-items: center
   margin-bottom: 10px
   padding-bottom: 10px
-  border-bottom: .5px solid $borderBottomColor
+  border-bottom: var(--container-border-separator)
 
   &:last-of-type
     margin-bottom: 0
@@ -20,7 +20,7 @@
   & > div
     width: 33%
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       width: 50%
 
   .avatar
@@ -34,7 +34,7 @@
       line-height: 0
       margin: 0 10px 0 0
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       width: 30px
       min-width: auto
       margin: 0 10px
@@ -47,7 +47,7 @@
     margin-right: 3px
 
   .level
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       display: none
 
     p

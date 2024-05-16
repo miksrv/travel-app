@@ -4,13 +4,13 @@
   display: flex
   justify-content: space-between
 
-  @media only screen and (max-width: $mobileMaxWidth)
+  @media only screen and (max-width: var(--width-max-mobile))
     flex-direction: column
 
   .information
     width: 55%
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       width: 100%
 
     li
@@ -29,7 +29,7 @@
         margin-right: 5px
 
       .key
-        color: $colorTextSecond
+        color: var(--text-second-color)
         margin-right: 5px
 
       .value
@@ -45,13 +45,13 @@
     margin-right: 10px
 
   .map
-    border: 0.5px solid $borderInputColor
-    border-radius: $borderRadius
+    border: var(--input-border)
+    border-radius: var(--border-radius)
     width: 40%
     flex-grow: 1
     min-width: 300px
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       height: 200px
       width: 100%
       margin-top: 20px

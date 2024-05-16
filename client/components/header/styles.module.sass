@@ -44,7 +44,7 @@
     align-items: center
     margin-left: auto
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       & > div
         display: none
 
@@ -55,6 +55,6 @@
     button
       margin-left: 10px
 
-      @media only screen and (max-width: $mobileMaxWidth)
+      @media only screen and (max-width: var(--width-max-mobile))
         svg
           margin: 0

@@ -5,7 +5,7 @@
 
   .label
     display: block
-    color: $inputLabelColor
+    color: var(--input-label-color)
     overflow: hidden
     padding-bottom: 6px
     padding-top: 2px
@@ -16,22 +16,22 @@
   .formField
     line-height: 20px
     position: relative
-    background-color: $inputBackgroundColor
+    background-color: var(--input-background-color)
     -webkit-tap-highlight-color: transparent
     align-items: center
-    border-radius: $borderRadius
+    border-radius: var(--border-radius)
     box-sizing: border-box
     display: flex
-    font-family: -apple-system, system-ui, "Helvetica Neue", Roboto, sans-serif
+    font-family: var(--font-family)
 
     .input
       appearance: none
       background: transparent
-      border: 0.5px solid $borderInputColor
+      border: var(--input-border)
       border-radius: inherit
       box-shadow: none
       box-sizing: border-box
-      color: $colorTextMain
+      color: var(--text-main-color)
       height: 36px
       margin: 0
       padding: 0 12px
@@ -43,7 +43,7 @@
 
       &:focus, &:active
         outline: none
-        border-color: $inputFocusBorderColor
+        border-color: var(--input-border-focus-color)
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
   &.disabled

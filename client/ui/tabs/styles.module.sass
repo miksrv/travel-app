@@ -22,11 +22,11 @@
       cursor: pointer
       border: none
       background-color: transparent
-      border-radius: $borderRadius
-      color: $colorTextSecond
+      border-radius: var(--border-radius)
+      color: var(--text-second-color)
       margin-right: 10px
 
-      @media only screen and (max-width: $mobileMaxWidth)
+      @media only screen and (max-width: var(--width-max-mobile))
         min-width: 24px
         padding: 6px 10px
 
@@ -34,15 +34,15 @@
         margin-right: 0
 
       &:hover
-        background-color: rgba(242, 243, 252, 0.7)
+        background-color: var(--overlay-background)
 
       &.active
-        //color: $colorTextMain
-        background-color: rgba(242, 243, 252, 0.7)
-        color: $colorLink
+        //color: var(--text-main-color)
+        background-color: var(--overlay-background)
+        color: var(--link-color)
 
       .itemBottom
-        background: $colorLink
+        background: var(--link-color)
         border-radius: 2px
         bottom: 3px
         left: 5px

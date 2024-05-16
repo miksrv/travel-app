@@ -29,7 +29,7 @@
     margin-left: 15px !important
     font-size: $fontSizeParagraph
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       display: none
 
   .mobileCount
@@ -37,5 +37,5 @@
     font-weight: 600
     display: none
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       display: block

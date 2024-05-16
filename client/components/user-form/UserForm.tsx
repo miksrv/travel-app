@@ -219,7 +219,7 @@ const UserForm: React.FC<UserFormProps> = ({
 
             <div className={styles.actions}>
                 <Button
-                    size={'m'}
+                    size={'medium'}
                     mode={'primary'}
                     disabled={loading || disabled}
                     onClick={handleSubmit}
@@ -228,7 +228,7 @@ const UserForm: React.FC<UserFormProps> = ({
                 </Button>
 
                 <Button
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loading}
                     onClick={onCancel}

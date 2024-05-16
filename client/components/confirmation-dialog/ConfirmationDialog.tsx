@@ -57,7 +57,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
             <div className={styles.bottomActions}>
                 <Button
-                    size={'s'}
+                    size={'small'}
                     mode={'secondary'}
                     onClick={onReject}
                 >
@@ -65,7 +65,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                 </Button>
 
                 <Button
-                    size={'s'}
+                    size={'small'}
                     variant={'negative'}
                     mode={'primary'}
                     onClick={onAccept}

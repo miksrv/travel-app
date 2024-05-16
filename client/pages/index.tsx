@@ -7,7 +7,7 @@ import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
-import Carousel from '@/ui/carousel/Carousel'
+import Carousel from '@/ui/carousel'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -24,7 +24,7 @@ import UserGallery from '@/components/page-user/gallery'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 
 interface IndexPageProps {
@@ -133,7 +133,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
             {/*<PlacesList places={placesList} />*/}
 
             <Button
-                size={'m'}
+                size={'medium'}
                 mode={'secondary'}
                 stretched={true}
                 link={'/places'}
@@ -180,8 +180,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let lat = null
             let lon = null
 
-            if (cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     lat = parseFloat(userLocation[0])

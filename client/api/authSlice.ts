@@ -4,7 +4,7 @@ import { deleteCookie, setCookie } from 'cookies-next'
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 type AuthStateProps = {
     isAuth?: boolean
@@ -15,14 +15,14 @@ type AuthStateProps = {
 
 export const getStorageToken = (): string | undefined =>
     typeof window !== 'undefined' &&
-    localStorage.getItem(LOCAL_STORGE.AUTH_TOKEN)
-        ? localStorage.getItem(LOCAL_STORGE.AUTH_TOKEN) ?? ''
+    localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
+        ? localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN) ?? ''
         : ''
 
 export const getStorageSession = (): string | undefined =>
     typeof window !== 'undefined' &&
-    localStorage.getItem(LOCAL_STORGE.AUTH_SESSION)
-        ? localStorage.getItem(LOCAL_STORGE.AUTH_SESSION) ?? ''
+    localStorage.getItem(LOCAL_STORAGE.AUTH_SESSION)
+        ? localStorage.getItem(LOCAL_STORAGE.AUTH_SESSION) ?? ''
         : ''
 
 const authSlice = createSlice({
@@ -42,15 +42,15 @@ const authSlice = createSlice({
             state.isAuth = payload?.auth || false
 
             if (payload?.auth && !!payload?.token) {
-                setCookie(LOCAL_STORGE.AUTH_TOKEN, true)
+                setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
                 localStorage.setItem(
-                    LOCAL_STORGE.AUTH_TOKEN,
+                    LOCAL_STORAGE.AUTH_TOKEN,
                     payload?.token || ''
                 )
             } else {
-                deleteCookie(LOCAL_STORGE.AUTH_TOKEN)
-                localStorage.removeItem(LOCAL_STORGE.AUTH_TOKEN)
+                deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
+                localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN)
             }
         },
         logout: (state) => {
@@ -58,8 +58,8 @@ const authSlice = createSlice({
             state.user = undefined
             state.isAuth = false
 
-            deleteCookie(LOCAL_STORGE.AUTH_TOKEN)
-            localStorage.removeItem(LOCAL_STORGE.AUTH_TOKEN)
+            deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
+            localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN)
         },
         saveSession: (state, { payload }: PayloadAction<string>) => {
             state.session = payload

@@ -2,25 +2,25 @@
 
 .component
   margin-top: 15px
-  border-radius: $borderRadius
+  border-radius: var(--border-radius)
   background-color: #FFFFFF
   position: relative
-  box-shadow: $boxShadow3
+  box-shadow: var(--container-shadow)
 
   .content
     padding: 15px
     display: flex
     justify-content: space-between
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: var(--width-max-mobile))
       flex-direction: column
 
       ul
         margin-top: 20px
 
     &:before
-      border-radius: $borderRadius
-      box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+      border-radius: var(--border-radius)
+      box-shadow: var(--container-shadow)
       content: ""
       height: 100%
       left: 0
@@ -33,7 +33,7 @@
       min-width: 260px
       height: 240px
       display: block
-      border-radius: $borderRadius
+      border-radius: var(--border-radius)
       border: 1px solid rgba(0,0,0,.08)
       margin-bottom: 5px
       background-image: url('/images/no-avatar.png')
@@ -42,7 +42,7 @@
       background-size: cover
       object-fit: cover
 
-      @media only screen and (max-width: $mobileMaxWidth)
+      @media only screen and (max-width: var(--width-max-mobile))
         width: 100%
 
     .levelImage
@@ -68,7 +68,7 @@
           margin-top: 1px
 
         .key
-          color: $colorTextSecond
+          color: var(--text-second-color)
           margin-right: 5px
 
         .value
@@ -81,7 +81,7 @@
             text-overflow: ellipsis
             overflow: hidden
 
-            @media only screen and (max-width: $mobileMaxWidth)
+            @media only screen and (max-width: var(--width-max-mobile))
               max-width: 185px
 
       .online
@@ -100,8 +100,8 @@
 
   .header
     padding: 8px 15px
-    border-bottom-left-radius: $borderRadius
-    border-bottom-right-radius: $borderRadius
+    border-bottom-left-radius: var(--border-radius)
+    border-bottom-right-radius: var(--border-radius)
     display: flex
     text-align: center
     justify-content: space-between

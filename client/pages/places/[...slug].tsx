@@ -11,7 +11,7 @@ import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 const NEAR_PLACES_COUNT = 10
 const PAGES = ['edit', undefined] as const
@@ -59,8 +59,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             let lat, lon
 
-            if (cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     lat = parseFloat(userLocation[0])

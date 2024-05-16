@@ -86,7 +86,6 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                 <div className={styles.loginContainer}>
                     <div>{t('loginForComment')}</div>
                     <Button
-                        mode={'secondary'}
                         className={styles.loginButton}
                         onClick={handleLoginClick}
                     >

@@ -3,7 +3,7 @@ import { setCookie } from 'cookies-next'
 
 import { ApiTypes } from '@/api/types'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
 
@@ -15,8 +15,8 @@ type ApplicationStateProps = {
 }
 
 export const getStorageLocale = (): string | undefined =>
-    typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORGE.LOCALE)
-        ? localStorage.getItem(LOCAL_STORGE.LOCALE) ??
+    typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE.LOCALE)
+        ? localStorage.getItem(LOCAL_STORAGE.LOCALE) ??
           i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
 
@@ -43,7 +43,7 @@ const applicationSlice = createSlice({
             state,
             { payload }: PayloadAction<ApiTypes.LatLonCoordinate>
         ) => {
-            setCookie(LOCAL_STORGE.LOCATION, `${payload.lat};${payload.lon}`)
+            setCookie(LOCAL_STORAGE.LOCATION, `${payload.lat};${payload.lon}`)
 
             state.userLocation = payload
         },

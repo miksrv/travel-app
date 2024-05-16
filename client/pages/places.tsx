@@ -24,7 +24,7 @@ import PlacesFilterPanel from '@/components/places-filter-panel'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
 
@@ -329,7 +329,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 currentPage={breadCrumbCurrent}
                 actions={
                     <Button
-                        size={'m'}
+                        size={'medium'}
                         mode={'primary'}
                         icon={'Tune'}
                         onClick={handleClickOpenFiltersDialog}
@@ -414,8 +414,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 (context.query.order as ApiTypes.SortOrdersType) ||
                 DEFAULT_ORDER
 
-            if (!lat && !lon && cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (!lat && !lon && cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     isUserLocation = true
