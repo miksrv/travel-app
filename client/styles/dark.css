@@ -1,0 +1,36 @@
+:root {
+    --font-size: 14px;
+    --font-family: -apple-system, system-ui, 'Helvetica Neue', Roboto,
+        sans-serif;
+    --letter-spacing: 0.00938em;
+
+    --width-max: 1100px;
+    --width-max-mobile: 1100px;
+    --width-menu: 230px;
+
+    --body-background: #1b1b1b;
+
+    --modal-background: #2c2d2e;
+
+    --menu-background-hover: #282828;
+
+    --border-radius: 4px;
+
+    --text-main-color: #e1e3e6;
+    --text-second-color: #76787a;
+
+    --input-background-color: #232324;
+    --input-label-color: #969a9f;
+    --input-border: 0.5px solid #444546;
+    --input-border-focus-color: #1976d2;
+
+    --link-color: #529ef4;
+    --link-color-hover: #77adec;
+    --link-color-active: #60a6f5;
+
+    --container-background: #282828;
+    --container-border-separator: 0.5px solid #444546;
+    --container-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+
+    --overlay-background: rgba(35, 35, 36, 0.57);
+}

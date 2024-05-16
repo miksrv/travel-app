@@ -2,8 +2,8 @@
 
 .dialog
   position: fixed
-  background-color: #fff
-  border-radius: $borderRadius
+  background-color: var(--modal-background)
+  border-radius: var(--border-radius)
   border: none
   box-shadow: $boxShadow5
   width: 100%
@@ -12,13 +12,13 @@
   overflow: hidden
   padding: 0
 
-  @media only screen and (max-width: $mobileMaxWidth)
+  @media only screen and (max-width: var(--width-max-mobile))
     width: 96%
 
   .header
     padding: 15px
     text-align: center
-    border-bottom: 0.5px solid $borderInputColor
+    border-bottom: var(--input-border)
 
     .backLink
       position: absolute
@@ -32,10 +32,10 @@
       svg
         width: 24px
         height: 24px
-        fill: $inputLabelColor
+        fill: var(--input-label-color)
 
       div
-        color: $inputLabelColor
+        color: var(--input-label-color)
 
     .actions
       position: absolute

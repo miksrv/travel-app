@@ -5,10 +5,10 @@
   justify-content: center
 
   .item
-    color: #7c8795
+    color: var(--text-second-color)
     vertical-align: middle
     text-align: center
-    border-radius: $borderRadius
+    border-radius: var(--border-radius)
     text-decoration: none
     width: 32px
     height: 32px
@@ -18,13 +18,18 @@
     border: 1px solid rgba(255, 255, 255, 0.23)
     transition: color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms
 
-    &.active, &:active
-      background-color: rgba(0,16,61,.08)
-      font-weight: 500
-      color: $colorTextMain
-
-    &:hover
-      background-color: rgba(0,16,61,.04)
-
     svg
       margin-top: 6px
+      fill: var(--text-second-color)
+
+    &:hover
+      color: var(--text-main-color)
+      background-color: rgba(0,16,61,.04)
+
+      svg
+        fill: var(--text-main-color)
+
+    &.active, &:active
+      color: var(--text-main-color)
+      background-color: rgba(0,16,61,.08)
+      font-weight: 500

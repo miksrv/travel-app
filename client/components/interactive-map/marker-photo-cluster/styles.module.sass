@@ -1,13 +1,13 @@
 @import ../../../styles/variables
 
 .markerPhotoCluster
-  border-radius: $borderRadius
+  border-radius: var(--border-radius)
   border: 1px solid #FFF
   object-fit: cover
   background-image: url('/images/no-image.svg')
   background-position: center
   background-size: cover
-  background-color: $inputBackgroundColor
+  background-color: var(--input-background-color)
   width: 32px !important
   height: 32px !important
   margin-left: -20px !important
@@ -19,7 +19,7 @@
     box-shadow: 0 0 1px 1px #ffb700
 
   & > img
-    border-radius: $borderRadius
+    border-radius: var(--border-radius)
     width: 100% !important
     height: 100% !important
     object-fit: cover
@@ -33,5 +33,5 @@
     width: 100%
     text-align: center
     background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%)
-    border-bottom-right-radius: $borderRadius
-    border-bottom-left-radius: $borderRadius
+    border-bottom-right-radius: var(--border-radius)
+    border-bottom-left-radius: var(--border-radius)
