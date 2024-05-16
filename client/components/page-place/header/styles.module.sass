@@ -24,7 +24,7 @@
     background-size: cover
     overflow: hidden
 
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       height: 240px
 
     & > div
@@ -53,7 +53,7 @@
     .mobile
       display: none
 
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       .desktop
         display: none
 

@@ -31,7 +31,7 @@
     top: 0
     width: 100%
 
-  @media only screen and (max-width: var(--width-max-mobile))
+  @media only screen and (max-width: $mobileMaxWidth)
     flex-basis: 100%
     max-width: 100%
     height: 402px
@@ -46,7 +46,7 @@
     background-position: center
     background-size: cover
 
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       height: 220px
 
     & > a
@@ -84,7 +84,7 @@
       object-fit: cover
       margin-bottom: -5px
 
-      @media only screen and (max-width: var(--width-max-mobile))
+      @media only screen and (max-width: $mobileMaxWidth)
         height: 220px
 
     .bottomPanel

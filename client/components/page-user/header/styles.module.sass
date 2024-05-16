@@ -12,7 +12,7 @@
     display: flex
     justify-content: space-between
 
-    @media only screen and (max-width: var(--width-max-mobile))
+    @media only screen and (max-width: $mobileMaxWidth)
       flex-direction: column
 
       ul
@@ -42,7 +42,7 @@
       background-size: cover
       object-fit: cover
 
-      @media only screen and (max-width: var(--width-max-mobile))
+      @media only screen and (max-width: $mobileMaxWidth)
         width: 100%
 
     .levelImage
@@ -81,7 +81,7 @@
             text-overflow: ellipsis
             overflow: hidden
 
-            @media only screen and (max-width: var(--width-max-mobile))
+            @media only screen and (max-width: $mobileMaxWidth)
               max-width: 185px
 
       .online
