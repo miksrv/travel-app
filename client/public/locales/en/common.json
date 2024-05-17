@@ -169,12 +169,14 @@
             },
             "places": {
                 "title": "Geotags",
+                "favorites": "Favorites",
                 "description": "All traveler geotags",
                 "breadCrumbLink": "Travelers",
                 "count": "Geotag:",
                 "page": "Page"
             },
             "user": {
+                "title": "Profile",
                 "photos": "Photos",
                 "places": "Added places",
                 "buttonShowAllPhotos": "Show all photos",
