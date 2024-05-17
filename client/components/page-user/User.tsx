@@ -114,7 +114,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
             </Head>
 
             <NextSeo
-                title={user?.name}
+                title={`${user?.name} - ${t('title')}`}
                 canonical={`${canonicalUrl}users/${user?.id}`}
                 description={`${user?.name} - ${t('description')}`}
                 openGraph={{

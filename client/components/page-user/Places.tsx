@@ -35,18 +35,21 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pageTitle = currentPage > 1 ? ` - ${t('page')} ${currentPage}` : ''
+    const title = type === 'places' ? t('title') : t('favorites')
 
     return (
         <>
             <NextSeo
-                title={`${user?.name} - ${t('title')}${pageTitle}`}
+                title={`${user?.name} - ${title}${pageTitle}`}
                 description={`${user?.name} - ${t('description')}${pageTitle}`}
-                canonical={`${canonicalUrl}users/${id}/photos`}
+                canonical={`${canonicalUrl}users/${id}/${
+                    type === 'places' ? 'places' : 'bookmarks'
+                }`}
             />
 
             <Header
-                title={`${user?.name} - ${t('title')}${pageTitle}`}
-                currentPage={t('title')}
+                title={`${user?.name} - ${title}${pageTitle}`}
+                currentPage={title}
                 backLink={`/users/${id}`}
                 userData={user}
                 links={[
@@ -71,7 +74,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
                 loading={isLoading}
             />
 
-            <Container className={'pagination'}>
+            <Container className={`pagination${!data?.count && ' hide'}`}>
                 <div>
                     {t('count')} <strong>{data?.count ?? 0}</strong>
                 </div>
