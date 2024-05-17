@@ -62,7 +62,6 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                     <div>{t('noComments')}</div>
                     {!appAuth.isAuth && (
                         <Button
-                            mode={'secondary'}
                             className={styles.loginButton}
                             onClick={handleLoginClick}
                         >
