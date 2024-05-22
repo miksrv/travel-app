@@ -129,7 +129,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                     {item.place?.title}
                 </Link>
 
-                {item?.views && (
+                {!!item?.views && (
                     <div className={styles.viewCounter}>
                         <Icon name={'Eye'} />
                         {item?.views || 0}
