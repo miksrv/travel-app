@@ -285,4 +285,65 @@ describe('helpers', () => {
             ).toBe('example.com/path?query=1')
         })
     })
+
+    describe('numberFormatter', () => {
+        test('formats numbers less than 1000 without a suffix', () => {
+            expect(helpers.numberFormatter(0)).toBe(0)
+            expect(helpers.numberFormatter(123)).toBe('123')
+            expect(helpers.numberFormatter(999)).toBe('999')
+        })
+
+        test('formats numbers in thousands with "k" suffix', () => {
+            expect(helpers.numberFormatter(1000)).toBe('1k')
+            expect(helpers.numberFormatter(1500)).toBe('1.5k')
+            expect(helpers.numberFormatter(999999)).toBe('1000k')
+        })
+
+        test('formats numbers in millions with "M" suffix', () => {
+            expect(helpers.numberFormatter(1e6)).toBe('1M')
+            expect(helpers.numberFormatter(2.5e6)).toBe('2.5M')
+            expect(helpers.numberFormatter(999999999)).toBe('1000M')
+        })
+
+        test('formats numbers in billions with "G" suffix', () => {
+            expect(helpers.numberFormatter(1e9)).toBe('1G')
+            expect(helpers.numberFormatter(2.5e9)).toBe('2.5G')
+            expect(helpers.numberFormatter(999999999999)).toBe('1000G')
+        })
+
+        test('formats numbers in trillions with "T" suffix', () => {
+            expect(helpers.numberFormatter(1e12)).toBe('1T')
+            expect(helpers.numberFormatter(2.5e12)).toBe('2.5T')
+            expect(helpers.numberFormatter(999999999999999)).toBe('1000T')
+        })
+
+        test('formats numbers in quadrillions with "P" suffix', () => {
+            expect(helpers.numberFormatter(1e15)).toBe('1P')
+            expect(helpers.numberFormatter(2.5e15)).toBe('2.5P')
+            // eslint-disable-next-line no-loss-of-precision
+            expect(helpers.numberFormatter(999999999999999999)).toBe('1E')
+        })
+
+        test('formats numbers in quintillions with "E" suffix', () => {
+            expect(helpers.numberFormatter(1e18)).toBe('1E')
+            expect(helpers.numberFormatter(2.5e18)).toBe('2.5E')
+        })
+
+        test('formats numbers with custom digits', () => {
+            expect(helpers.numberFormatter(1500, 2)).toBe('1.5k')
+            expect(helpers.numberFormatter(2.5e6, 3)).toBe('2.5M')
+            expect(helpers.numberFormatter(2.5e18, 0)).toBe('2.5E')
+        })
+
+        test('handles edge cases', () => {
+            expect(helpers.numberFormatter(0.123)).toBe(0.123)
+            expect(helpers.numberFormatter(0.999)).toBe(0.999)
+            expect(helpers.numberFormatter(1)).toBe('1')
+        })
+
+        test('returns the original number if less than 1', () => {
+            expect(helpers.numberFormatter(0.5)).toBe(0.5)
+            expect(helpers.numberFormatter(0)).toBe(0)
+        })
+    })
 })
