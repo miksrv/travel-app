@@ -229,4 +229,60 @@ describe('helpers', () => {
             expect(helpers.equalsArrays(array1, array2)).toBe(true)
         })
     })
+
+    describe('removeProtocolFromUrl', () => {
+        test('removes http protocol from url', () => {
+            expect(helpers.removeProtocolFromUrl('http://example.com')).toBe(
+                'example.com'
+            )
+            expect(
+                helpers.removeProtocolFromUrl('http://www.example.com')
+            ).toBe('www.example.com')
+        })
+
+        test('removes https protocol from url', () => {
+            expect(helpers.removeProtocolFromUrl('https://example.com')).toBe(
+                'example.com'
+            )
+            expect(
+                helpers.removeProtocolFromUrl('https://www.example.com')
+            ).toBe('www.example.com')
+        })
+
+        test('does not alter urls without http or https protocol', () => {
+            expect(helpers.removeProtocolFromUrl('ftp://example.com')).toBe(
+                'ftp://example.com'
+            )
+            expect(helpers.removeProtocolFromUrl('www.example.com')).toBe(
+                'www.example.com'
+            )
+            expect(helpers.removeProtocolFromUrl('example.com')).toBe(
+                'example.com'
+            )
+        })
+
+        test('handles urls with mixed case protocols', () => {
+            expect(helpers.removeProtocolFromUrl('Http://example.com')).toBe(
+                'Http://example.com'
+            )
+            expect(helpers.removeProtocolFromUrl('Https://example.com')).toBe(
+                'Https://example.com'
+            )
+        })
+
+        test('does not alter an empty string', () => {
+            expect(helpers.removeProtocolFromUrl('')).toBe('')
+        })
+
+        test('removes protocol from urls with paths and queries', () => {
+            expect(
+                helpers.removeProtocolFromUrl(
+                    'https://example.com/path?query=1'
+                )
+            ).toBe('example.com/path?query=1')
+            expect(
+                helpers.removeProtocolFromUrl('http://example.com/path?query=1')
+            ).toBe('example.com/path?query=1')
+        })
+    })
 })
