@@ -346,4 +346,37 @@ describe('helpers', () => {
             expect(helpers.numberFormatter(0)).toBe(0)
         })
     })
+
+    describe('ratingColor', () => {
+        test('returns "red" for values less than or equal to 1', () => {
+            expect(helpers.ratingColor(0)).toBe('red')
+            expect(helpers.ratingColor(1)).toBe('red')
+            expect(helpers.ratingColor(0.5)).toBe('red')
+        })
+
+        test('returns "orange" for values greater than 1 and less than 3', () => {
+            expect(helpers.ratingColor(1.1)).toBe('orange')
+            expect(helpers.ratingColor(2)).toBe('orange')
+            expect(helpers.ratingColor(2.9)).toBe('orange')
+        })
+
+        test('returns "green" for values greater than or equal to 3', () => {
+            expect(helpers.ratingColor(3)).toBe('green')
+            expect(helpers.ratingColor(4)).toBe('green')
+            expect(helpers.ratingColor(5)).toBe('green')
+        })
+
+        test('does not return "gray" for any valid input', () => {
+            expect(helpers.ratingColor(0)).not.toBe('gray')
+            expect(helpers.ratingColor(1)).not.toBe('gray')
+            expect(helpers.ratingColor(2)).not.toBe('gray')
+            expect(helpers.ratingColor(3)).not.toBe('gray')
+        })
+
+        test('handles boundary values correctly', () => {
+            expect(helpers.ratingColor(1)).toBe('red')
+            expect(helpers.ratingColor(2.999)).toBe('orange')
+            expect(helpers.ratingColor(3)).toBe('green')
+        })
+    })
 })
