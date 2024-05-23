@@ -231,7 +231,7 @@ describe('helpers', () => {
     })
 
     describe('removeProtocolFromUrl', () => {
-        test('removes http protocol from url', () => {
+        it('removes http protocol from url', () => {
             expect(helpers.removeProtocolFromUrl('http://example.com')).toBe(
                 'example.com'
             )
@@ -240,7 +240,7 @@ describe('helpers', () => {
             ).toBe('www.example.com')
         })
 
-        test('removes https protocol from url', () => {
+        it('removes https protocol from url', () => {
             expect(helpers.removeProtocolFromUrl('https://example.com')).toBe(
                 'example.com'
             )
@@ -249,7 +249,7 @@ describe('helpers', () => {
             ).toBe('www.example.com')
         })
 
-        test('does not alter urls without http or https protocol', () => {
+        it('does not alter urls without http or https protocol', () => {
             expect(helpers.removeProtocolFromUrl('ftp://example.com')).toBe(
                 'ftp://example.com'
             )
@@ -261,7 +261,7 @@ describe('helpers', () => {
             )
         })
 
-        test('handles urls with mixed case protocols', () => {
+        it('handles urls with mixed case protocols', () => {
             expect(helpers.removeProtocolFromUrl('Http://example.com')).toBe(
                 'Http://example.com'
             )
@@ -270,11 +270,11 @@ describe('helpers', () => {
             )
         })
 
-        test('does not alter an empty string', () => {
+        it('does not alter an empty string', () => {
             expect(helpers.removeProtocolFromUrl('')).toBe('')
         })
 
-        test('removes protocol from urls with paths and queries', () => {
+        it('removes protocol from urls with paths and queries', () => {
             expect(
                 helpers.removeProtocolFromUrl(
                     'https://example.com/path?query=1'
@@ -287,93 +287,93 @@ describe('helpers', () => {
     })
 
     describe('numberFormatter', () => {
-        test('formats numbers less than 1000 without a suffix', () => {
+        it('formats numbers less than 1000 without a suffix', () => {
             expect(helpers.numberFormatter(0)).toBe(0)
             expect(helpers.numberFormatter(123)).toBe('123')
             expect(helpers.numberFormatter(999)).toBe('999')
         })
 
-        test('formats numbers in thousands with "k" suffix', () => {
+        it('formats numbers in thousands with "k" suffix', () => {
             expect(helpers.numberFormatter(1000)).toBe('1k')
             expect(helpers.numberFormatter(1500)).toBe('1.5k')
             expect(helpers.numberFormatter(999999)).toBe('1000k')
         })
 
-        test('formats numbers in millions with "M" suffix', () => {
+        it('formats numbers in millions with "M" suffix', () => {
             expect(helpers.numberFormatter(1e6)).toBe('1M')
             expect(helpers.numberFormatter(2.5e6)).toBe('2.5M')
             expect(helpers.numberFormatter(999999999)).toBe('1000M')
         })
 
-        test('formats numbers in billions with "G" suffix', () => {
+        it('formats numbers in billions with "G" suffix', () => {
             expect(helpers.numberFormatter(1e9)).toBe('1G')
             expect(helpers.numberFormatter(2.5e9)).toBe('2.5G')
             expect(helpers.numberFormatter(999999999999)).toBe('1000G')
         })
 
-        test('formats numbers in trillions with "T" suffix', () => {
+        it('formats numbers in trillions with "T" suffix', () => {
             expect(helpers.numberFormatter(1e12)).toBe('1T')
             expect(helpers.numberFormatter(2.5e12)).toBe('2.5T')
             expect(helpers.numberFormatter(999999999999999)).toBe('1000T')
         })
 
-        test('formats numbers in quadrillions with "P" suffix', () => {
+        it('formats numbers in quadrillions with "P" suffix', () => {
             expect(helpers.numberFormatter(1e15)).toBe('1P')
             expect(helpers.numberFormatter(2.5e15)).toBe('2.5P')
             // eslint-disable-next-line no-loss-of-precision
             expect(helpers.numberFormatter(999999999999999999)).toBe('1E')
         })
 
-        test('formats numbers in quintillions with "E" suffix', () => {
+        it('formats numbers in quintillions with "E" suffix', () => {
             expect(helpers.numberFormatter(1e18)).toBe('1E')
             expect(helpers.numberFormatter(2.5e18)).toBe('2.5E')
         })
 
-        test('formats numbers with custom digits', () => {
+        it('formats numbers with custom digits', () => {
             expect(helpers.numberFormatter(1500, 2)).toBe('1.5k')
             expect(helpers.numberFormatter(2.5e6, 3)).toBe('2.5M')
             expect(helpers.numberFormatter(2.5e18, 0)).toBe('2.5E')
         })
 
-        test('handles edge cases', () => {
+        it('handles edge cases', () => {
             expect(helpers.numberFormatter(0.123)).toBe(0.123)
             expect(helpers.numberFormatter(0.999)).toBe(0.999)
             expect(helpers.numberFormatter(1)).toBe('1')
         })
 
-        test('returns the original number if less than 1', () => {
+        it('returns the original number if less than 1', () => {
             expect(helpers.numberFormatter(0.5)).toBe(0.5)
             expect(helpers.numberFormatter(0)).toBe(0)
         })
     })
 
     describe('ratingColor', () => {
-        test('returns "red" for values less than or equal to 1', () => {
+        it('returns "red" for values less than or equal to 1', () => {
             expect(helpers.ratingColor(0)).toBe('red')
             expect(helpers.ratingColor(1)).toBe('red')
             expect(helpers.ratingColor(0.5)).toBe('red')
         })
 
-        test('returns "orange" for values greater than 1 and less than 3', () => {
+        it('returns "orange" for values greater than 1 and less than 3', () => {
             expect(helpers.ratingColor(1.1)).toBe('orange')
             expect(helpers.ratingColor(2)).toBe('orange')
             expect(helpers.ratingColor(2.9)).toBe('orange')
         })
 
-        test('returns "green" for values greater than or equal to 3', () => {
+        it('returns "green" for values greater than or equal to 3', () => {
             expect(helpers.ratingColor(3)).toBe('green')
             expect(helpers.ratingColor(4)).toBe('green')
             expect(helpers.ratingColor(5)).toBe('green')
         })
 
-        test('does not return "gray" for any valid input', () => {
+        it('does not return "gray" for any valid input', () => {
             expect(helpers.ratingColor(0)).not.toBe('gray')
             expect(helpers.ratingColor(1)).not.toBe('gray')
             expect(helpers.ratingColor(2)).not.toBe('gray')
             expect(helpers.ratingColor(3)).not.toBe('gray')
         })
 
-        test('handles boundary values correctly', () => {
+        it('handles boundary values correctly', () => {
             expect(helpers.ratingColor(1)).toBe('red')
             expect(helpers.ratingColor(2.999)).toBe('orange')
             expect(helpers.ratingColor(3)).toBe('green')
