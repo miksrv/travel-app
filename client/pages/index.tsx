@@ -137,7 +137,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 mode={'secondary'}
                 stretched={true}
                 link={'/places'}
-                style={{ margin: '15px 0' }}
+                style={{ margin: '5px 0' }}
             >
                 {t(`${KEY}buttonAllPlaces`)}
             </Button>
