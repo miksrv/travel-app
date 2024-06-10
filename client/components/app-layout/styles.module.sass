@@ -84,7 +84,7 @@ $sideBarWidth: 300px
 
         &:hover
             .buttonToTop
-                background-color: #f4f7f8
+                background-color: var(--menu-background-hover)
 
         @media only screen and (max-width: $mobileMaxWidth)
             display: none !important
@@ -111,6 +111,9 @@ $sideBarWidth: 300px
 
                     &:hover
                         background-color: var(--menu-background-hover)
+
+            .switchers
+                display: flex
 
         .main
             width: 100%
@@ -149,7 +152,7 @@ $sideBarWidth: 300px
 
     .sidebar
         position: fixed
-        background-color: #fff
+        background-color: var(--modal-background)
         width: $sideBarWidth
         height: 100vh
         z-index: 600
@@ -167,3 +170,6 @@ $sideBarWidth: 300px
 
         .content
             padding: 20px
+
+        .switchers
+            display: flex

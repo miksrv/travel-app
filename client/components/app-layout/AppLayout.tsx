@@ -14,6 +14,7 @@ import LanguageSwitcher from '@/components/language-switcher'
 import LoginForm from '@/components/login-form'
 import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
+import ThemeSwitcher from '@/components/theme-switcher'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -177,7 +178,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     onClick={handleCloseOverlay}
                 />
                 <div className={styles.content}>
-                    <LanguageSwitcher />
+                    <div className={styles.switchers}>
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
+                    </div>
                     <Footer />
                 </div>
             </aside>
@@ -193,7 +197,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                             userId={authSlice?.user?.id}
                             isAuth={authSlice?.isAuth}
                         />
-                        <LanguageSwitcher />
+                        <div className={styles.switchers}>
+                            <ThemeSwitcher />
+                            <LanguageSwitcher />
+                        </div>
                         <Footer />
                     </div>
                 </aside>

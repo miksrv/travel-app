@@ -1,4 +1,4 @@
-// import '@/styles/dark.css'
+import '@/styles/dark.css'
 import '@/styles/globals.sass'
 import '@/styles/light.css'
 import dayjs from 'dayjs'
