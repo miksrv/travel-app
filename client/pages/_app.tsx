@@ -9,7 +9,7 @@ import { appWithTranslation, useTranslation } from 'next-i18next'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import 'react-image-lightbox/style.css'
 import { Provider } from 'react-redux'
 
@@ -23,18 +23,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
     const { i18n } = useTranslation()
     const { store } = wrapper.useWrappedStore(pageProps)
-
-    const [darkTheme, setDarkTheme] = useState(false)
-
-    useEffect(() => {
-        if (darkTheme) {
-            document.documentElement.classList.remove('light')
-            document.documentElement.classList.add('dark')
-        } else {
-            document.documentElement.classList.remove('dark')
-            document.documentElement.classList.add('light')
-        }
-    }, [darkTheme])
 
     useEffect(() => {
         const storage = localStorage?.getItem(LOCAL_STORAGE.LOCALE)

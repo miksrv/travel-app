@@ -1,19 +1,14 @@
 @import ../../styles/variables
 
-.languageSwitcher
-  display: flex
-  margin-top: 10px
+.themeSwitchButton
+  background: none !important
+  padding: 0
+  min-height: auto
+  margin-right: 10px
+  transition: opacity .3s
 
-  button
-    border: none
-    background-color: transparent
-    cursor: pointer
-    padding: 0
-    color: var(--text-second-color)
-    margin-right: 10px
+  svg
+    margin-top: 0
 
-    &:hover, &:active, &:focus, &.active
-      color: var(--text-main-color)
-
-    &:last-of-type
-      margin-right: 0
+  &:hover
+    opacity: .7

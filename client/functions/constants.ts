@@ -4,5 +4,6 @@ export const LOCAL_STORAGE = {
     LOCALE: 'geometki_locale',
     LOCATION: 'geometki_location',
     MAP_CENTER: 'geometki_mapCenter',
-    RETURN_PATH: 'geometki_returnPath'
+    RETURN_PATH: 'geometki_returnPath',
+    THEME: 'geometki_theme'
 }

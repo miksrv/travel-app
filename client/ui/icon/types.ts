@@ -53,3 +53,5 @@ export type IconTypes =
     | 'Settings'
     | 'Exit'
     | 'VerticalDots'
+    | 'Light'
+    | 'Dark'

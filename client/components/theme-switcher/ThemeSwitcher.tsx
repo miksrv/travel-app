@@ -1,29 +1,31 @@
-import { useTranslation } from 'next-i18next'
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 
-import { setLocale } from '@/api/applicationSlice'
-import { useAppDispatch } from '@/api/store'
-import { ApiTypes } from '@/api/types'
+import Button from '@/ui/button'
 
-import { LOCAL_STORAGE } from '@/functions/constants'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import { toggleTheme } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+
+import useClientOnly from '@/functions/hooks/useClientOnly'
 
 import styles from './styles.module.sass'
 
 const ThemeSwitcher: React.FC = () => {
-    const [isDarkTheme, setIsDarkTheme] = useState(false)
+    const dispatch = useAppDispatch()
+    const isClient = useClientOnly()
+    const theme = useAppSelector((state) => state.application.theme)
 
-    const toggleTheme = () => {
-        setIsDarkTheme(!isDarkTheme)
+    const handleToggleTheme = () => {
+        dispatch(toggleTheme(theme === 'dark' ? 'light' : 'dark'))
     }
 
-    return (
-        <div>
-            <button onClick={toggleTheme}>Toggle Theme</button>
-        </div>
-    )
+    return isClient ? (
+        <Button
+            className={styles.themeSwitchButton}
+            icon={theme === 'dark' ? 'Light' : 'Dark'}
+            mode={'outline'}
+            onClick={handleToggleTheme}
+        />
+    ) : null
 }
 
 export default ThemeSwitcher
