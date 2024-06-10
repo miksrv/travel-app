@@ -1,14 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import styles from './styles.module.sass'
 
 interface PaginationProps {
+    className?: string
     position?: 'left' | 'right'
     action?: React.ReactNode | string
     children?: React.ReactNode
 }
 
-const Popout: React.FC<PaginationProps> = ({ position, action, children }) => {
+const Popout: React.FC<PaginationProps> = ({
+    className,
+    position,
+    action,
+    children
+}) => {
     const popoutRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -38,7 +46,7 @@ const Popout: React.FC<PaginationProps> = ({ position, action, children }) => {
     return (
         <div
             ref={popoutRef}
-            className={styles.popout}
+            className={cn(className, styles.popout)}
         >
             <button
                 className={styles.trigger}
@@ -46,6 +54,7 @@ const Popout: React.FC<PaginationProps> = ({ position, action, children }) => {
             >
                 {action}
             </button>
+
             {isOpen && (
                 <div
                     className={styles.content}

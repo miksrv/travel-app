@@ -11,7 +11,7 @@ import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 const NEAR_PLACES_COUNT = 10
 const PAGES = ['edit', undefined] as const
@@ -19,7 +19,6 @@ const PAGES = ['edit', undefined] as const
 type PageType = (typeof PAGES)[number]
 
 export interface PlacePageProps {
-    randomId?: string
     page: PageType | null
     ratingCount: number
     place?: PlaceType.Place
@@ -27,23 +26,14 @@ export interface PlacePageProps {
     nearPlaces?: PlaceType.Place[] | null
 }
 
-const PlacePage: NextPage<PlacePageProps> = ({ randomId, page, ...props }) => {
+const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
 
-    // const { data: activityData } = API.useActivityGetListQuery(
-    //     {
-    //         place: placeData?.id
-    //     },
-    //     {
-    //         skip: !placeData?.id
-    //     }
-    // )
-
     return (
-        <AppLayout randomPlaceId={randomId}>
+        <AppLayout>
             {page === 'edit' && isAuth ? (
                 <Edit {...props} />
             ) : (
@@ -69,8 +59,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             let lat, lon
 
-            if (cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     lat = parseFloat(userLocation[0])
@@ -120,7 +110,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     page: page ?? null,
                     photoList: photosData?.items,
                     place: placeData,
-                    randomId: placeData?.randomId,
                     ratingCount: ratingData?.count ?? 0
                 }
             }

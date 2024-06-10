@@ -5,6 +5,7 @@ use App\Models\CategoryModel;
 use App\Models\ActivityModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
+use ReflectionException;
 
 /**
  * User activity controller
@@ -14,39 +15,44 @@ class Activity extends ResourceController {
     /**
      * Show all activities for all users and all places, photos
      * @return ResponseInterface
+     * @throws ReflectionException
      */
     public function list(): ResponseInterface {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
-        $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
-        $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
+        $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
-        $placeContent    = new PlacesContent(400);
-        $categoriesModel = new CategoryModel();
-        $activityModel   = new ActivityModel();
+        $placeContent  = new PlacesContent();
+        $activityModel = new ActivityModel();
+        $activityData  = $activityModel->getActivityList($lastDate, $author, $place, min($limit, 40), $offset);
 
-        $categoriesData = $categoriesModel->findAll();
-        $activityData   = $activityModel->getActivityList($lastDate, $author, $place, $limit, $offset);
-
-        $placesIds = [];
+        $placesIds   = [];
+        $activityIds = [];
 
         foreach ($activityData as $item) {
-            $placesIds[] = $item->place_id;
+            if (!in_array($item->place_id, $placesIds)) {
+                $placesIds[] = $item->place_id;
+            }
+
+            $activityIds[] = $item->id;
         }
 
         $placeContent->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities(
-            $activityData,
-            $categoriesData,
-            $placeContent
-        );
+        $response = $this->_groupSimilarActivities($activityData, $placeContent);
 
         // We remove the last object in the array because it may not be completely grouped
-        if (!$author && !$place) {
+        if (count($response) >= $limit) {
             array_pop($response);
         }
+
+        // Incrementing view counter
+        $activityModel
+            ->set('views', 'views + 1', false)
+            ->whereIn('id', $activityIds)
+            ->update();
 
         return $this->respond(['items' => $response]);
     }
@@ -55,15 +61,13 @@ class Activity extends ResourceController {
      * We group similar user activities. For example, uploaded photos of one user
      * for one place with an interval of 5 minutes - we combine them into one activity
      * @param array $activityData
-     * @param array|null $categoriesData
      * @param PlacesContent|null $placeContent
      * @return array
      */
-    protected function _groupSimilarActivities(
-        array $activityData,
-        array $categoriesData = null,
-        PlacesContent $placeContent = null
-    ): array {
+    protected function _groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array {
+        $categoriesModel = new CategoryModel();
+        $categoriesData  = $categoriesModel->findAll();
+
         $groupData = [];
 
         if (empty($activityData)) {
@@ -72,31 +76,37 @@ class Activity extends ResourceController {
 
         foreach ($activityData as $item) {
             $lastGroup = end($groupData);
+            $photoPath = PATH_PHOTOS . $item->place_id . '/';
             $itemPhoto = $item->type === 'photo' && $item->filename ? [
-                'filename'  => $item->filename,
-                'extension' => $item->extension,
-                'width'     => (int) $item->width,
-                'height'    => (int) $item->height,
+                'full'      => $photoPath . $item->filename . '.' . $item->extension,
+                'preview'   => $photoPath . $item->filename . '_preview.' . $item->extension,
+                'width'     => PHOTO_PREVIEW_WIDTH, // (int) $item->width,
+                'height'    => PHOTO_PREVIEW_HEIGHT, // (int) $item->height,
                 'placeId'   => $item->place_id
             ] : null;
 
             // We group activity by photos of one user, uploaded for one place and with a difference of no more than 5 minutes
             if (
                 $lastGroup &&
-                $item->type === 'photo' &&
-                $lastGroup->type === 'photo' &&
+//                $item->type === 'photo' &&
+//                $lastGroup->type === 'photo' &&
                 (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
                 $lastGroup->author->id === $item->user_id &&
-                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 300
+                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 600
             ) {
-                $lastGroup->created  = $item->created_at; // Каждый раз обновляем время загрузки последней фотографии
-                $lastGroup->photos[] = $itemPhoto;
+                $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
+                $lastGroup->type     = $item->type;
+
+                if ($itemPhoto) {
+                    $lastGroup->photos[] = $itemPhoto;
+                }
 
                 continue;
             }
 
             $currentGroup = (object) [
                 'type'    => $item->type,
+                'views'   => $item->views,
                 'created' => $item->created_at,
                 'photos'  => []
             ];
@@ -117,6 +127,11 @@ class Activity extends ResourceController {
             }
 
             if ($item->user_id) {
+                $avatar = $item->user_avatar ? explode('.', $item->user_avatar) : null;
+                $item->user_avatar = $avatar
+                    ? PATH_AVATARS . $item->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    : null;
+
                 $currentGroup->author = (object) [
                     'id'     => $item->user_id,
                     'name'   => $item->user_name,
@@ -137,6 +152,6 @@ class Activity extends ResourceController {
             $groupData[] = $currentGroup;
         }
 
-        return $groupData;
+        return array_values($groupData);
     }
 }

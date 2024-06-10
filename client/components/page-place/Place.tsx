@@ -6,7 +6,7 @@ import React from 'react'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
 import Button from '@/ui/button'
-import Carousel from '@/ui/carousel/Carousel'
+import Carousel from '@/ui/carousel'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 
@@ -20,7 +20,7 @@ import PlacesListItem from '@/components/places-list/PlacesListItem'
 
 import { formatDateUTC } from '@/functions/helpers'
 
-interface PlaceProps extends Omit<PlacePageProps, 'randomId' | 'page'> {}
+interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
 const KEY = 'components.pagePlace.place.'
 
@@ -193,7 +193,7 @@ const Place: React.FC<PlaceProps> = ({
                     </Carousel>
 
                     <Button
-                        size={'m'}
+                        size={'medium'}
                         mode={'secondary'}
                         stretched={true}
                         noIndex={true}

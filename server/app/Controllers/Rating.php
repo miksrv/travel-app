@@ -69,7 +69,7 @@ class Rating extends ResourceController {
 
             $inputRating  = (int) $input->score;
             $alreadyVoted = null; // Пользователь меняет свою оценку? Будем тут хранить ID записи рейтинга
-            $ratingValue  = $inputRating;
+            $ratingValue  = abs($inputRating);
 
             if (!$placesData) {
                 return $this->failNotFound();

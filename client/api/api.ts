@@ -9,6 +9,12 @@ import { encodeQueryData } from '@/functions/helpers'
 
 type Maybe<T> = T | void
 
+type APIErrorType = {
+    messages: {
+        error?: string
+    }
+}
+
 export const IMG_HOST =
     process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 
@@ -56,18 +62,23 @@ export const API = createApi({
             Maybe<ApiTypes.RequestActivityGetList>
         >({
             // Refetch when the page arg changes
-            forceRefetch: ({ currentArg, previousArg }) =>
-                currentArg !== previousArg,
-            // Always merge incoming data to the cache entry
-            merge: (currentCache, newItems) => {
-                currentCache.items.push(...newItems.items)
-            },
+            // forceRefetch: ({ currentArg, previousArg }) =>
+            //     currentArg !== previousArg,
+            // // Always merge incoming data to the cache entry
+            // merge: (currentCache, newItems, { arg }) => {
+            //     if (arg?.date) {
+            //         currentCache.items.push(...newItems.items)
+            //     } else {
+            //         currentCache.items = newItems.items
+            //     }
+            // },
             providesTags: (result, error, arg) => [
-                { id: arg?.place || arg?.author, type: 'Activity' }
+                { id: arg?.author ?? arg?.place, type: 'Activity' }
             ],
-            query: (params) => `activity${encodeQueryData(params)}`,
+            query: (params) => `activity${encodeQueryData(params)}`
             // Only have one cache entry because the arg always maps to one string
-            serializeQueryArgs: ({ endpointName }) => endpointName
+            // serializeQueryArgs: ({ endpointName, queryArgs }) =>
+            //     queryArgs?.author ?? queryArgs?.place ?? endpointName
         }),
         activityGetList: builder.query<
             ApiTypes.ResponseActivityGetList,
@@ -270,12 +281,6 @@ export const API = createApi({
                 url: `photos/rotate/${photoId}`
             })
         }),
-        photosGetActions: builder.query<
-            ApiTypes.ResponsePhotosGetActions,
-            Maybe<ApiTypes.RequestPhotosGetActions>
-        >({
-            query: (params) => `photos/actions${encodeQueryData(params)}`
-        }),
         photosGetList: builder.query<
             ApiTypes.ResponsePhotosGetList,
             Maybe<ApiTypes.RequestPhotosGetList>
@@ -307,9 +312,6 @@ export const API = createApi({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
-        placesGetRandom: builder.query<ApiTypes.ResponsePlacesGetRandom, void>({
-            query: () => 'places/random'
-        }),
         placesPatchCover: builder.mutation<
             void,
             ApiTypes.RequestPlacesPatchCover
@@ -323,7 +325,8 @@ export const API = createApi({
                 method: 'PATCH',
                 url: `places/cover/${data.placeId}`
             }),
-            transformErrorResponse: (response) => response.data
+            transformErrorResponse: (response) =>
+                (response.data as APIErrorType)?.messages?.error
         }),
         placesPatchItem: builder.mutation<
             ApiTypes.ResponsePlacesPatchItem,

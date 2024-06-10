@@ -10,11 +10,11 @@ import { SITE_LINK } from '@/api/api'
 
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
+import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 
-interface PhotosProps
-    extends Omit<UserPageProps, 'randomId' | 'page' | 'placesList'> {}
+interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
 
-const Photos: React.FC<PhotosProps> = ({
+const UserPhotos: React.FC<UserPhotosProps> = ({
     id,
     user,
     photosList,
@@ -40,6 +40,7 @@ const Photos: React.FC<PhotosProps> = ({
                 title={`${user?.name} - ${t('title')}${pageTitle}`}
                 currentPage={t('title')}
                 backLink={`/users/${id}`}
+                userData={user}
                 links={[
                     {
                         link: '/users/',
@@ -50,6 +51,11 @@ const Photos: React.FC<PhotosProps> = ({
                         text: user?.name || ''
                     }
                 ]}
+            />
+
+            <UserTabs
+                user={user}
+                currentPage={UserPagesEnum.PHOTOS}
             />
 
             <UserGallery photos={photosList} />
@@ -70,4 +76,4 @@ const Photos: React.FC<PhotosProps> = ({
     )
 }
 
-export default Photos
+export default UserPhotos

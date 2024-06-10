@@ -32,8 +32,8 @@ $sideBarWidth: 300px
         display: flex
         min-height: 32px
         align-items: center
-        border-radius: $borderRadius
-        color: $colorTextMain
+        border-radius: var(--border-radius)
+        color: var(--text-main-color)
         text-decoration: none
         font-weight: 400
         transition: background-color .15s ease-out,opacity .15s ease-out
@@ -42,7 +42,7 @@ $sideBarWidth: 300px
             background-color: #ebedf0
 
         svg
-            fill: $colorLinkSvg
+            fill: var(--link-color)
             margin: -10px 10px -10px 0
             width: 22px
             height: 22px
@@ -71,7 +71,7 @@ $sideBarWidth: 300px
             align-items: flex-end
             transition: background-color 0.5s ease
             padding-bottom: 20px
-            color: $colorTextSecond
+            color: var(--text-second-color)
             justify-content: center
             font-size: $fontSizeHeadline
 
@@ -80,24 +80,24 @@ $sideBarWidth: 300px
                 height: 24px
                 margin-bottom: -2px
                 margin-left: -10px
-                fill: $colorTextSecond
+                fill: var(--text-second-color)
 
         &:hover
             .buttonToTop
-                background-color: #f4f7f8
+                background-color: var(--menu-background-hover)
 
         @media only screen and (max-width: $mobileMaxWidth)
             display: none !important
 
     .mainContainer
         display: flex
-        max-width: $maxWidth
+        max-width: var(--width-max)
         margin: 0 auto
         padding-top: 50px
 
         .menubar
-            width: $menuBarWidth
-            min-width: $menuBarWidth
+            width: var(--width-menu)
+            min-width: var(--width-menu)
 
             .rails
                 position: fixed
@@ -110,7 +110,10 @@ $sideBarWidth: 300px
                     padding: 0 10px
 
                     &:hover
-                        background-color: rgba(255, 255, 255, .7)
+                        background-color: var(--menu-background-hover)
+
+            .switchers
+                display: flex
 
         .main
             width: 100%
@@ -149,7 +152,7 @@ $sideBarWidth: 300px
 
     .sidebar
         position: fixed
-        background-color: #fff
+        background-color: var(--modal-background)
         width: $sideBarWidth
         height: 100vh
         z-index: 600
@@ -167,3 +170,6 @@ $sideBarWidth: 300px
 
         .content
             padding: 20px
+
+        .switchers
+            display: flex

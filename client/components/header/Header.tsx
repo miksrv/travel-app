@@ -4,6 +4,10 @@ import Breadcrumbs, { BreadcrumbsProps } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import Container from '@/ui/container'
 
+import { User } from '@/api/types/User'
+
+import UserAvatar from '@/components/user-avatar'
+
 import { concatClassNames as cn } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
@@ -13,6 +17,7 @@ interface HeaderProps extends BreadcrumbsProps {
     backLink?: string
     className?: string
     attachedBottom?: boolean
+    userData?: User
     actions?: React.ReactNode
 }
 
@@ -21,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({
     backLink,
     className,
     attachedBottom,
+    userData,
     actions,
     ...props
 }) => (
@@ -36,6 +42,13 @@ const Header: React.FC<HeaderProps> = ({
                 className={styles.backLink}
                 icon={'LargeLeft'}
                 link={backLink}
+            />
+        )}
+        {userData?.id && (
+            <UserAvatar
+                className={styles.userAvatar}
+                user={userData}
+                size={'medium'}
             />
         )}
         <header>

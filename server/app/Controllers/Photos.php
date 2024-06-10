@@ -1,6 +1,7 @@
 <?php namespace App\Controllers;
 
 use App\Entities\Photo;
+use App\Libraries\LevelsLibrary;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
@@ -8,6 +9,7 @@ use App\Libraries\ActivityLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\ActivityModel;
+use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
@@ -16,7 +18,6 @@ use ReflectionException;
 
 /**
  * Available methods:
- *   - actions()
  *   - list()
  *   - upload($id)
  *   - delete($id)
@@ -32,38 +33,6 @@ class Photos extends ResourceController {
     }
 
     /**
-     * Getting a list of actions available to the user for a photo by their ID
-     * @example /photos?ids=1,2,3,4,5
-     * @return ResponseInterface
-     */
-    public function actions(): ResponseInterface {
-        $photos  = $this->request->getGet('ids', FILTER_SANITIZE_SPECIAL_CHARS);
-        $IDList  = explode(',', $photos);
-
-        if (empty($IDList)) {
-            return $this->failValidationErrors('No photos IDs');
-        }
-
-        $resultData  = [];
-        $photosModel = new PhotosModel();
-        $photosData  = $photosModel->select('id, user_id')->whereIn('id', $IDList)->findAll();
-
-        if (empty($photosData)) {
-            return $this->failValidationErrors('Photos with this IDs not exists');
-        }
-
-        foreach ($photosData as $photo) {
-            $resultData[] = [
-                'id'     => $photo->id,
-                'remove' => $photo->user_id === $this->session->user?->id,
-                'rotate' => $this->session->isAuth
-            ];
-        }
-
-        return $this->respond(['items' => $resultData]);
-    }
-
-    /**
      * Getting a list of all photos
      * GET parameters:
      *   - author (string)
@@ -74,10 +43,10 @@ class Photos extends ResourceController {
      */
     public function list(): ResponseInterface {
         $locale = $this->request->getLocale();
-        $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40;
-        $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit  = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40);
+        $offset = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
 
-        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll(abs($limit), abs($offset));
+        $photosData = $this->_makeListFilters()->orderBy('photos.created_at')->findAll(min($limit, 40), $offset);
 
         if (empty($photosData)) {
             return $this->respond([
@@ -248,7 +217,7 @@ class Photos extends ResourceController {
         }
 
         $photosModel = new PhotosModel();
-        $photoData   = $photosModel->select('id, user_id, place_id')->find($id);
+        $photoData   = $photosModel->select('id, user_id, place_id, filename, extension')->find($id);
 
         if (!$photoData) {
             return $this->failValidationErrors('No photo found with this ID');
@@ -261,7 +230,12 @@ class Photos extends ResourceController {
         $placesModel = new PlacesModel();
         $placesData  = $placesModel->select('id, photos')->find($photoData->place_id);
 
-        $photosModel->delete($id);
+        if (!$photosModel->delete($id, true)) {
+            return $this->failServerError('An error occurred on the server when deleting a photo');
+        }
+
+        unlink(UPLOAD_PHOTOS . $photoData->place_id . '/' . $photoData->filename . '.' . $photoData->extension);
+        unlink(UPLOAD_PHOTOS . $photoData->place_id . '/' . $photoData->filename . '_preview.' . $photoData->extension);
 
         // If this was last photo of place - we need to remove place cover files
         if ($placesData->photos === 1) {
@@ -269,11 +243,13 @@ class Photos extends ResourceController {
             unlink(UPLOAD_PHOTOS . $photoData->place_id . '/cover_preview.jpg');
         }
 
-        $activityModel = new ActivityModel();
-        $activityModel->where(['photo_id' => $id, 'user_id' => $this->session->user?->id])->delete();
+        $userModel  = new UsersModel();
+        $userLevels = new LevelsLibrary();
+        $userLevels->calculate($userModel->getUserById($photoData->user_id));
 
         // Update photos count on the current place
-        $placesModel->update($photoData->place_id, ['photos' => $placesData->photos <= 1 ? 0 : $placesData->photos - 1]);
+        $countPhotos = $photosModel->select('id')->where('place_id', $photoData->place_id)->countAllResults();
+        $placesModel->update($photoData->place_id, ['photos' => $countPhotos]);
 
         return $this->respondDeleted(['id' => $id]);
     }

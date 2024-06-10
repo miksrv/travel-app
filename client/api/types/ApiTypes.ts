@@ -75,16 +75,6 @@ export interface ApiResponseError<T> {
     messages: Record<keyof T, any>
 }
 
-/**
- * The type is used to map possible actions with list items, for example with photographs.
- * We request possible actions from the API for a list of photos, and an array of such elements is returned in response.
- */
-export type ItemActionType = {
-    id?: string
-    remove?: boolean
-    rotate?: boolean
-}
-
 export interface RequestAuthLogin {
     email?: string
     password?: string
@@ -116,17 +106,11 @@ export interface RequestPlacesGetItem {
     lon?: number | null
 }
 
-export interface ResponsePlacesGetItem extends Place {
-    randomId?: string
-}
+export interface ResponsePlacesGetItem extends Place {}
 
 export interface ResponsePlacesGetList {
     items?: Place[]
     count?: number
-}
-
-export interface ResponsePlacesGetRandom {
-    id?: string
 }
 
 export interface RequestPlacesGetList {
@@ -177,14 +161,6 @@ export interface ResponsePlacesPostItem {
 }
 
 /* Controller: Photos */
-export interface ResponsePhotosGetActions {
-    items?: ItemActionType[]
-}
-
-export interface RequestPhotosGetActions {
-    ids?: string
-}
-
 export interface ResponsePhotoDeleteItem {
     id?: string
 }

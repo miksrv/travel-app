@@ -12,6 +12,7 @@
       height: 100%
       width: 100%
       padding: 8px 10px
+      color: var(--text-main-color)
       font-size: $fontSizeParagraph
       cursor: pointer
       background: transparent
@@ -31,14 +32,14 @@
       opacity: .5
 
     &:hover, &.active
-      background-color: $inputBackgroundColor
+      background-color: var(--input-background-color)
 
 .dropdown
   display: block
 
   .label
     display: block
-    color: $inputLabelColor
+    color: var(--input-label-color)
     overflow: hidden
     padding-bottom: 4px
     padding-top: 2px
@@ -48,7 +49,7 @@
 
   .container
     position: relative
-    background-color: $inputBackgroundColor
+    background-color: var(--input-background-color)
 
     .dropdownButton
       width: 100%
@@ -57,11 +58,11 @@
       position: relative
       -webkit-tap-highlight-color: transparent
       align-items: center
-      border-radius: $borderRadius
+      border-radius: var(--border-radius)
       box-sizing: border-box
-      border: 0.5px solid $borderInputColor
+      border: var(--input-border)
       background-color: transparent
-      color: $inputLabelColor
+      color: var(--input-label-color)
       height: 36px
       margin: 0
       padding: 0 12px
@@ -72,11 +73,11 @@
 
       &:focus, &:active, &:hover
         outline: none
-        border-color: $inputFocusBorderColor
+        border-color: var(--input-border-focus-color)
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
-        color: $colorTextMain
+        color: var(--text-main-color)
 
       span
         overflow: hidden
@@ -91,7 +92,7 @@
           float: left
 
         .placeHolder
-          color: $inputLabelColor
+          color: var(--input-label-color)
 
       .arrow
         display: flex
@@ -100,7 +101,7 @@
         svg
           width: 24px
           height: 24px
-          fill: $inputLabelColor
+          fill: var(--input-label-color)
 
       .clear
         background: transparent
@@ -115,7 +116,7 @@
           height: 18px !important
 
           &:hover
-            fill: $inputLabelColorHover
+            fill: var(--input-label-color)Hover
 
   &.disabled
     .label
@@ -124,6 +125,12 @@
     .dropdownButton
       opacity: 0.5
       cursor: default
+
+  &.required
+    .label:after
+      content: '*'
+      margin-left: 3px
+      color: $redColor
 
   &.error
     .dropdownButton
@@ -141,8 +148,8 @@
     box-shadow: $boxShadow2
     border: 1px solid $borderDropdownColor
     top: 33px
-    border-bottom-left-radius: $borderRadius
-    border-bottom-right-radius: $borderRadius
+    border-bottom-left-radius: var(--border-radius)
+    border-bottom-right-radius: var(--border-radius)
     max-height: 200px
     z-index: 405
     overflow: hidden
@@ -150,5 +157,5 @@
 
     li
       &:last-of-type
-        border-bottom-left-radius: $borderRadius
-        border-bottom-right-radius: $borderRadius
+        border-bottom-left-radius: var(--border-radius)
+        border-bottom-right-radius: var(--border-radius)

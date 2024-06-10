@@ -19,7 +19,7 @@ class Poi extends ResourceController {
      */
     public function list(): ResponseInterface {
         $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
-        $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
+        $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
         $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = $this->_getBounds();
 
@@ -56,7 +56,7 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function photos(): ResponseInterface {
-        $zoom   = $this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10;
+        $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
         $locale = $this->request->getLocale();
         $bounds = $this->_getBounds();
 

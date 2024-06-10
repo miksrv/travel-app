@@ -10,7 +10,6 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
 import PhotoGallery from '@/components/photo-gallery'
-import PhotoLightbox from '@/components/photo-lightbox'
 
 interface PlacePhotosProps {
     placeId?: string
@@ -25,51 +24,14 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [showLightbox, setShowLightbox] = useState<boolean>(false)
-    const [photoIndex, setPhotoIndex] = useState<number>()
-    const [photoLoading, setPhotoLoading] = useState<string>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos || [])
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
-
-    const { data: actionsData } = API.usePhotosGetActionsQuery(
-        { ids: photos?.map(({ id }) => id)?.join(',') },
-        { skip: isAuth !== true || !photos?.length }
-    )
-
-    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
-        API.usePhotoDeleteItemMutation()
-
-    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
-        API.usePhotoRotateItemMutation()
 
     const [
         uploadPhoto,
         { data: uploadData, isLoading: uploadLoading, isError: uploadError }
     ] = API.usePhotoPostUploadMutation()
-
-    const handlePhotoClick = (index: number) => {
-        setPhotoIndex(index)
-        setShowLightbox(true)
-    }
-
-    const handlePhotoRemoveClick = (photoId: string) => {
-        if (isAuth && !deleteLoading) {
-            setPhotoLoading(photoId)
-            deletePhoto(photoId)
-        }
-    }
-
-    const handlePhotoRotateClick = (photoId: string) => {
-        if (isAuth && !rotateLoading) {
-            setPhotoLoading(photoId)
-            rotatePhoto(photoId)
-        }
-    }
-
-    const handleCloseLightbox = () => {
-        setShowLightbox(false)
-    }
 
     const handlePhotoUploadClick = () => {
         if (isAuth) {
@@ -136,35 +98,6 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         }
     }, [selectedFiles])
 
-    /**
-     *  After deleting a photo, remove it from the local photo list
-     */
-    React.useEffect(() => {
-        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
-        setPhotoLoading(undefined)
-    }, [deleteData])
-
-    /**
-     * After rotate photo - add time hash for rotated photo
-     */
-    React.useEffect(() => {
-        setLocalPhotos(
-            localPhotos?.map((photo) => ({
-                ...photo,
-                full:
-                    photo.id === rotateData?.id
-                        ? rotateData?.full!
-                        : photo.full,
-                preview:
-                    photo.id === rotateData?.id
-                        ? rotateData?.preview!
-                        : photo.preview
-            }))
-        )
-
-        setPhotoLoading(undefined)
-    }, [rotateData])
-
     React.useEffect(() => {
         setSelectedFiles([])
         setLocalPhotos(photos || [])
@@ -185,20 +118,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         >
             <PhotoGallery
                 photos={localPhotos}
-                actions={actionsData?.items}
                 uploadingPhotos={uploadingPhotos}
-                photoLoading={photoLoading}
-                onPhotoClick={handlePhotoClick}
-                onPhotoRemoveClick={handlePhotoRemoveClick}
-                onPhotoRotateClick={handlePhotoRotateClick}
-            />
-
-            <PhotoLightbox
-                photos={localPhotos}
-                photoIndex={photoIndex}
-                showLightbox={showLightbox}
-                onChangeIndex={setPhotoIndex}
-                onCloseLightBox={handleCloseLightbox}
             />
 
             <input

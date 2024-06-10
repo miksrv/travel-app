@@ -13,7 +13,7 @@ import Spinner from '@/ui/spinner'
 
 import { ApiTypes, Place, Placemark } from '@/api/types'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
@@ -125,7 +125,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         useState<ApiTypes.LatLonCoordinate>()
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
-        storeMapKey || LOCAL_STORGE.MAP_CENTER
+        storeMapKey || LOCAL_STORAGE.MAP_CENTER
     )
 
     const handleUserPosition = () => {

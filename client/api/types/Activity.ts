@@ -17,6 +17,7 @@ export type ActivityEnum = (typeof ActivityTypes)[keyof typeof ActivityTypes]
 
 export type Item = {
     type: ActivityEnum
+    views?: number
     place?: Place
     photos?: Photo[]
     rating?: Rating

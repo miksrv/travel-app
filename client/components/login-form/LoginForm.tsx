@@ -15,7 +15,7 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
 
@@ -40,7 +40,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     const dispatch = useAppDispatch()
     const router = useRouter()
 
-    const [, setReturnPath] = useLocalStorage<string>(LOCAL_STORGE.RETURN_PATH)
+    const [, setReturnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
 
     const [localeError, setLocaleError] = useState<string>('')
     const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()
@@ -156,7 +156,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             <div className={styles.loginServiceButtons}>
                 <Button
                     stretched={true}
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('google')}
@@ -173,7 +173,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
 
                 <Button
                     stretched={true}
-                    size={'m'}
+                    size={'medium'}
                     mode={'secondary'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('yandex')}

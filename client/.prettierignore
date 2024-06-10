@@ -1,6 +1,7 @@
 .next
 .vscode
 .github
+*.css
 site.webmanifest
 node_modules
 out

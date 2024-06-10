@@ -15,6 +15,12 @@ class AddActivity extends Migration {
                 'type' => 'ENUM("photo", "place", "rating", "edit", "cover", "comment")',
                 'null' => false,
             ],
+            'views' => [
+                'type'       => 'MEDIUMINT',
+                'constraint' => 10,
+                'null'       => false,
+                'default'    => 0
+            ],
             'session_id' => [
                 'type'       => 'VARCHAR',
                 'constraint' => 32,

@@ -1,4 +1,3 @@
-// yarn add embla-carousel-react
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 import React from 'react'

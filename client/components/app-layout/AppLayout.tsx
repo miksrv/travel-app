@@ -14,6 +14,7 @@ import LanguageSwitcher from '@/components/language-switcher'
 import LoginForm from '@/components/login-form'
 import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
+import ThemeSwitcher from '@/components/theme-switcher'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
@@ -23,14 +24,12 @@ import styles from './styles.module.sass'
 type AuthFormType = 'login' | 'registration'
 
 interface AppLayoutProps {
-    randomPlaceId?: string
     className?: string
     fullSize?: boolean
     children?: React.ReactNode
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({
-    randomPlaceId,
     className,
     fullSize,
     children
@@ -163,7 +162,6 @@ const AppLayout: React.FC<AppLayoutProps> = ({
 
             <AppBar
                 fullSize={fullSize}
-                randomPlaceId={randomPlaceId}
                 onMenuClick={handleOpenSideBar}
             />
 
@@ -180,7 +178,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     onClick={handleCloseOverlay}
                 />
                 <div className={styles.content}>
-                    <LanguageSwitcher />
+                    <div className={styles.switchers}>
+                        <ThemeSwitcher />
+                        <LanguageSwitcher />
+                    </div>
                     <Footer />
                 </div>
             </aside>
@@ -196,7 +197,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                             userId={authSlice?.user?.id}
                             isAuth={authSlice?.isAuth}
                         />
-                        <LanguageSwitcher />
+                        <div className={styles.switchers}>
+                            <ThemeSwitcher />
+                            <LanguageSwitcher />
+                        </div>
                         <Footer />
                     </div>
                 </aside>

@@ -10,89 +10,59 @@ import { Photo } from '@/api/types/Photo'
 import { User as UserType } from '@/api/types/User'
 
 import AppLayout from '@/components/app-layout'
-import Photos from '@/components/page-user/Photos'
+import UserPhotos from '@/components/page-user/Photos'
+import UserPlaces from '@/components/page-user/Places'
 import User from '@/components/page-user/User'
+import { UserPagesEnum } from '@/components/page-user/tabs'
 
 export const PHOTOS_PER_PAGE = 32
-export const PLACES_PER_PAGE = 10
-const PAGES = ['photos', undefined] as const
-
-type PageType = (typeof PAGES)[number]
+export const PLACES_PER_PAGE = 21
 
 export interface UserPageProps {
     id: string
-    page: PageType | null
+    page: UserPagesEnum
     user?: UserType
     photosList?: Photo[]
     photosCount: number
     currentPage: number
 }
 
-const UserPage: NextPage<UserPageProps> = ({ page, ...props }) => {
-    // const { data: dataBookmarks, isLoading: dataBookmarksLoading } =
-    //     API.usePlacesGetListQuery({
-    //         bookmarkUser: id,
-    //         limit: 20,
-    //         offset: 0
-    //     })
-    //
-    // const { data: dataPlaces, isLoading: dataPlacesLoading } =
-    //     API.usePlacesGetListQuery({
-    //         author: id,
-    //         limit: 20,
-    //         offset: 0
-    //     })
-    //
-    // const { data: dataActivities, isLoading: dataActivitiesLoading } =
-    //     API.useActivityGetListQuery({
-    //         author: id,
-    //         limit: 20,
-    //         offset: 0
-    //     })
+const UserPage: NextPage<UserPageProps> = ({ page, ...props }) => (
+    <AppLayout>
+        {!page && <User {...props} />}
 
-    return (
-        <AppLayout>
-            {!page && <User {...props} />}
-            {page === 'photos' && <Photos {...props} />}
+        {page === UserPagesEnum.PHOTOS && <UserPhotos {...props} />}
 
-            {/*{activeTab === 0 && (*/}
-            {/*    <ActivityList*/}
-            {/*        perPage={30}*/}
-            {/*        activities={dataActivities?.items}*/}
-            {/*        loading={dataActivitiesLoading}*/}
-            {/*    />*/}
-            {/*)}*/}
+        {page === UserPagesEnum.PLACES && (
+            <UserPlaces
+                {...props}
+                type={'places'}
+            />
+        )}
 
-            {/*{activeTab === 1 && (*/}
-            {/*    <PlacesList*/}
-            {/*        perPage={6}*/}
-            {/*        places={dataPlaces?.items}*/}
-            {/*        loading={dataPlacesLoading}*/}
-            {/*    />*/}
-            {/*)}*/}
-
-            {/*{activeTab === 2 && (*/}
-            {/*    <PlacesList*/}
-            {/*        perPage={6}*/}
-            {/*        places={dataBookmarks?.items}*/}
-            {/*        loading={dataBookmarksLoading}*/}
-            {/*    />*/}
-            {/*)}*/}
-        </AppLayout>
-    )
-}
+        {page === UserPagesEnum.BOOKMARKS && (
+            <UserPlaces
+                {...props}
+                type={'bookmarks'}
+            />
+        )}
+    </AppLayout>
+)
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<UserPageProps>> => {
             const id = context.params?.slug?.[0]
-            const page = context.params?.slug?.[1] as PageType
+            const page = context.params?.slug?.[1] as UserPagesEnum
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
             const currentPage = parseInt(context.query.page as string, 10) || 1
 
             const translations = await serverSideTranslations(locale)
 
-            if (typeof id !== 'string' || !PAGES.includes(page)) {
+            if (
+                typeof id !== 'string' ||
+                (page && !Object.values(UserPagesEnum).includes(page))
+            ) {
                 return { notFound: true }
             }
 
@@ -105,9 +75,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const { data: photosData } = await store.dispatch(
                 API.endpoints.photosGetList.initiate({
                     author: id,
-                    limit: page === 'photos' ? PHOTOS_PER_PAGE : 8,
+                    limit: page === UserPagesEnum.PHOTOS ? PHOTOS_PER_PAGE : 8,
                     offset:
-                        page === 'photos'
+                        page === UserPagesEnum.PHOTOS
                             ? (currentPage - 1) * PHOTOS_PER_PAGE
                             : 0
                 })

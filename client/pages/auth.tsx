@@ -14,7 +14,7 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 interface AuthPageProps {}
@@ -23,7 +23,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const [returnPath] = useLocalStorage<string>(LOCAL_STORGE.RETURN_PATH)
+    const [returnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
 
     const { t } = useTranslation('common', {
         keyPrefix: 'pages.auth'
@@ -46,7 +46,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
             if (returnPath) {
                 const returnLink = returnPath
 
-                localStorage.removeItem(LOCAL_STORGE.RETURN_PATH)
+                localStorage.removeItem(LOCAL_STORAGE.RETURN_PATH)
 
                 router.push(returnLink)
             } else {

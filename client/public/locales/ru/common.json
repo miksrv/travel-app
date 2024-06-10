@@ -9,7 +9,6 @@
             "userLogout": "Выход",
             "userLoginCaption": "Войти",
             "userLoginTitle": "Авторизация на сайте",
-            "randomPlaceLinkTitle": "Перейти на случайное место",
             "search": {
                 "placeholder": "Поиск мест, координат"
             },
@@ -21,6 +20,7 @@
         "appLayout": {
             "scrollToTop": "Наверх",
             "menu": {
+                "feed": "Новостная лента",
                 "map": "Карта интересных мест",
                 "places": "Интересные места",
                 "create": "Добавить место",
@@ -77,6 +77,16 @@
             "googleMap": "на Google картах",
             "wikimapiaMap": "на карте Wikimapia"
         },
+        "activityList": {
+            "emptyList": "Тут еще ничего нет",
+            "edit": "Редактирование",
+            "place": "Новая геометка",
+            "photo": "Загрузка фотографий",
+            "rating": "Оценка геометки",
+            "dateFormat": "D MMMM YYYY, HH:mm",
+            "readMore": "Показать больше",
+            "readLess": "Показать меньше"
+        },
         "pagePlace": {
             "edit": {
                 "pageTitle": "Редактирование",
@@ -110,7 +120,8 @@
                 "buttonUpload": "Загрузить"
             },
             "socialRating": {
-                "userRating": "Оцените место:"
+                "userRating": "Оцените место:",
+                "ratingSuccess": "Спасибо за оценку места!"
             },
             "placeDescription": {
                 "title": "Описание",
@@ -125,6 +136,12 @@
             }
         },
         "pageUser": {
+            "tabs": {
+                "feed": "Лента активности",
+                "places": "Геометки",
+                "bookmarks": "Избранное",
+                "photos": "Фотографии"
+            },
             "userHeader": {
                 "reputation": "Репутация:",
                 "level": "Уровень:",
@@ -151,7 +168,16 @@
                 "photos": "Фотографий:",
                 "page": "Страница"
             },
+            "places": {
+                "title": "Геометки",
+                "favorites": "Избранное",
+                "description": "Все геометки путешественника",
+                "breadCrumbLink": "Путешественники",
+                "count": "Геометок:",
+                "page": "Страница"
+            },
             "user": {
+                "title": "Профиль",
                 "photos": "Фотографии",
                 "places": "Добавленные места",
                 "buttonShowAllPhotos": "Показать все фотографии",
@@ -160,7 +186,11 @@
         },
         "photoGallery": {
             "noPhotos": "Нет фотографий",
-            "linkPhotoTitle": "Фото"
+            "linkPhotoTitle": "Фото",
+            "acceptConfirmMessage": "Удалить фотографию?",
+            "acceptConfirmDelete": "Удалить",
+            "actionRotate": "Повернуть",
+            "actionDelete": "Удалить"
         },
         "placeCoverEditor": {
             "buttonCover": "Обложка",
@@ -247,6 +277,11 @@
             "allCategoryPlaces": "Все интересные места категории",
             "goToCategory": "Перейти в категорию"
         },
+        "confirmationDialog": {
+            "defaultText": "Вы подтверждаете выполенение этого действия?",
+            "defaultAcceptButton": "Подтвердить",
+            "defaultRejectButton": "Отмена"
+        },
         "commentList": {
             "answerCancel": "отмена",
             "answerAdd": "ответить",
@@ -315,7 +350,8 @@
             "titleActiveUsers": "Активные путешественники",
             "allActiveUsers": "Все",
             "allUsersPlaceholder": "Все путешественники",
-            "titleLastPhotos": "Последние загруженные фотографии"
+            "titleLastPhotos": "Последние загруженные фотографии",
+            "titleNewsFeed": "Новостная лента"
         },
         "categories": {
             "title": "Категории геометок",

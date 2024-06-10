@@ -27,9 +27,14 @@ class AddUsers extends Migration {
                 'constraint' => 200,
                 'null'       => false
             ],
-            'auth_type'      => [
-                'type'       => 'ENUM("native", "google", "yandex")',
-                'null'       => true
+            'auth_type' => [
+                'type'  => 'ENUM("native", "google", "yandex")',
+                'null'  => true
+            ],
+            'role' => [
+                'type'    => 'ENUM("user", "moderator", "admin")',
+                'null'    => false,
+                'default' => 'user'
             ],
             'locale' => [
                 'type'    => 'ENUM("ru", "en")',

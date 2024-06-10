@@ -38,13 +38,6 @@ class Places extends ResourceController {
 
     /**
      * @return ResponseInterface
-     */
-    public function random(): ResponseInterface{
-        return $this->respond(['id' => $this->model->getRandomPlaceId()->id]);
-    }
-
-    /**
-     * @return ResponseInterface
      * @throws \Exception
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      */
@@ -358,14 +351,12 @@ class Places extends ResourceController {
             $placeData->category_en, $placeData->category_ru,
         );
 
-        // Update view counts
-        $this->model->update($placeData->id, [
-            'views'      => $placeData->views + 1,
-            'updated_at' => $placeData->updated
-        ]);
-
-        // TODO Get random place ID
-        $placeData->randomId = $this->model->getRandomPlaceId()->id;
+        // Incrementing view counter
+        $this->model
+            ->set('views', 'views + 1', false)
+            ->set('updated_at', $placeData->updated)
+            ->where('id', $placeData->id)
+            ->update();
 
         return $this->respond($placeData);
     }
@@ -562,11 +553,11 @@ class Places extends ResourceController {
         $input = $this->request->getJSON();
 
         if (!isset($input->x) || !isset($input->y) || !$input->photoId || !$input->width || !$input->height) {
-            return $this->failValidationErrors('Incorrect data format when saving cover image');
+            return $this->failValidationErrors(lang('Places.coverIncorrectData'));
         }
 
         if ($input->width < PLACE_COVER_WIDTH || $input->height < PLACE_COVER_HEIGHT) {
-            return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
+            return $this->failValidationErrors(lang('Places.coverFailDimensions'));
         }
 
         $photosModel = new PhotosModel();
@@ -574,7 +565,7 @@ class Places extends ResourceController {
         $photoData   = $photosModel->select('id, filename, extension')->find($input->photoId);
 
         if (!$placeData || !$photoData) {
-            return $this->failValidationErrors('There is no point with this ID');
+            return $this->failValidationErrors(lang('Places.coverPointNotExist'));
         }
 
         $photoDir = UPLOAD_PHOTOS . $id . '/';
@@ -583,7 +574,7 @@ class Places extends ResourceController {
         list($width, $height) = getimagesize($file->getRealPath());
 
         if ($input->width > $width || $input->height > $height) {
-            return $this->failValidationErrors('The cover dimensions cannot exceed the image dimensions');
+            return $this->failValidationErrors(lang('Places.coverExceedDimensions'));
         }
 
         $image = Services::image('gd'); // imagick
@@ -622,8 +613,8 @@ class Places extends ResourceController {
         $region   = $this->request->getGet('region', FILTER_SANITIZE_NUMBER_INT);
         $district = $this->request->getGet('district', FILTER_SANITIZE_NUMBER_INT);
         $locality = $this->request->getGet('locality', FILTER_SANITIZE_NUMBER_INT);
-        $limit    = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20;
-        $offset   = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
+        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
+        $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->coordinatesAvailable) {
@@ -669,7 +660,7 @@ class Places extends ResourceController {
             $placesModel->orderBy($sort, in_array($order, $orderFields) ? $order : $orderDefault);
         }
 
-        return $placesModel->limit($limit <= 0 || $limit > 21 ? 21 : $limit, abs($offset));
+        return $placesModel->limit(min($limit, 40), $offset);
     }
 
     /**

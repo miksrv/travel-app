@@ -11,9 +11,9 @@
 
 .placesListItem
   position: relative
-  background: #fff
-  border-radius: $borderRadius
-  box-shadow: $boxShadow3
+  background: var(--container-background)
+  border-radius: var(--border-radius)
+  box-shadow: var(--container-shadow)
   height: 340px
   max-width: 300px
   overflow: hidden
@@ -22,7 +22,7 @@
 
   &:before
     border-radius: inherit
-    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+    box-shadow: var(--container-shadow)
     content: ""
     height: 100%
     left: 0
@@ -54,6 +54,18 @@
       width: 100%
       height: 100%
 
+    &:before
+      border-top-left-radius: var(--border-radius)
+      border-top-right-radius: var(--border-radius)
+      box-shadow: var(--container-shadow)
+      content: ""
+      height: 100%
+      left: 0
+      pointer-events: none
+      position: absolute
+      top: 0
+      width: 100%
+
     .rating
       position: absolute
       right: 8px
@@ -67,8 +79,8 @@
 
     .photo
       width: 100%
-      border-top-left-radius: $borderRadius
-      border-top-right-radius: $borderRadius
+      border-top-left-radius: var(--border-radius)
+      border-top-right-radius: var(--border-radius)
       object-fit: cover
       margin-bottom: -5px
 
@@ -89,7 +101,7 @@
     max-width: 100%
 
     a
-      color: $colorTextMain
+      color: var(--text-main-color)
       text-decoration: none
       font-weight: 500
 
@@ -99,15 +111,16 @@
     text-overflow: ellipsis
     overflow: hidden
     font-size: $fontSizeHeadline
-    color: $colorTextSecond
+    color: var(--text-second-color)
 
     a
-      color: $colorTextSecond
+      color: var(--text-second-color)
 
   p
     margin: 0 10px 10px
+    line-height: 20px
 
   .emptyContent
-    color: $colorTextSecond
+    color: var(--text-second-color)
     margin-top: 50px
     text-align: center

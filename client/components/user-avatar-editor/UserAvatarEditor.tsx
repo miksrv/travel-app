@@ -162,7 +162,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     return (
         <>
             <Button
-                size={'m'}
+                size={'medium'}
                 icon={'Photo'}
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
@@ -182,7 +182,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 showBackLink={!!uploadedFile}
                 actions={
                     <Button
-                        size={'s'}
+                        size={'small'}
                         mode={'primary'}
                         onClick={handleSaveCover}
                         disabled={disabled}
@@ -211,7 +211,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                 <Button
                                     icon={'Camera'}
                                     mode={'primary'}
-                                    size={'m'}
+                                    size={'medium'}
                                     disabled={uploadLoading}
                                     onClick={handlePhotoUploadClick}
                                 >

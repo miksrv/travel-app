@@ -1,9 +1,9 @@
 import type { NextRequest } from 'next/server'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 
 export const middleware = (request: NextRequest) => {
-    const currentUser = request.cookies.get(LOCAL_STORGE.AUTH_TOKEN)?.value
+    const currentUser = request.cookies.get(LOCAL_STORAGE.AUTH_TOKEN)?.value
 
     // if (!currentUser && request.nextUrl.pathname.startsWith('/places/create')) {
     //     return Response.redirect(new URL('/places', request.url))

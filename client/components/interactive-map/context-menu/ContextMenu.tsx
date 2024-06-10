@@ -16,7 +16,7 @@ import { ApiTypes } from '@/api/types'
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -32,7 +32,7 @@ const ContextMenu: React.FC = () => {
     })
 
     const [, setCoordinates] = useLocalStorage<MapPositionType>(
-        LOCAL_STORGE.MAP_CENTER
+        LOCAL_STORAGE.MAP_CENTER
     )
 
     const getContext = useLeafletContext()
@@ -156,7 +156,7 @@ const ContextMenu: React.FC = () => {
                     <li className={styles.divider}>
                         <Button
                             mode={'link'}
-                            size={'s'}
+                            size={'small'}
                             title={t('copyToClipboard')}
                             onClick={handleCopyCoordinates}
                         >

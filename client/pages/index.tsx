@@ -4,24 +4,27 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import Head from 'next/head'
 import Link from 'next/link'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import Button from '@/ui/button'
+import Carousel from '@/ui/carousel'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
+import { Item } from '@/api/types/Activity'
 import { Photo } from '@/api/types/Photo'
 import { User } from '@/api/types/User'
 
+import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
-import PlacesList from '@/components/places-list'
+import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 
-import { LOCAL_STORGE } from '@/functions/constants'
+import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 
 interface IndexPageProps {
@@ -40,6 +43,42 @@ const IndexPage: NextPage<IndexPageProps> = ({
     const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
+
+    const [lastDate, setLastDate] = useState<string>()
+    const [activityCache, setActivityCache] = useState<Item[]>([])
+
+    const { data, isFetching } = API.useActivityGetInfinityListQuery({
+        date: lastDate
+    })
+
+    useEffect(() => {
+        const onScroll = () => {
+            const scrolledToBottom =
+                window.innerHeight + window.scrollY >=
+                document.body.offsetHeight - 20
+
+            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
+                setLastDate(data.items[data.items?.length - 1].created?.date)
+            }
+        }
+
+        document.addEventListener('scroll', onScroll)
+
+        return function () {
+            document.removeEventListener('scroll', onScroll)
+        }
+    }, [lastDate, isFetching, data])
+
+    useEffect(() => {
+        if (data?.items) {
+            setActivityCache([...(activityCache || []), ...data.items])
+        }
+    }, [data?.items])
+
+    useEffect(() => {
+        setActivityCache([])
+        setLastDate(undefined)
+    }, [])
 
     return (
         <AppLayout>
@@ -82,14 +121,23 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 currentPage={t(`${KEY}breadCrumbCurrent`)}
             />
 
-            <PlacesList places={placesList} />
+            <Carousel options={{ dragFree: true, loop: true }}>
+                {placesList?.map((place) => (
+                    <PlacesListItem
+                        key={place.id}
+                        place={place}
+                    />
+                ))}
+            </Carousel>
+
+            {/*<PlacesList places={placesList} />*/}
 
             <Button
-                size={'m'}
+                size={'medium'}
                 mode={'secondary'}
                 stretched={true}
                 link={'/places'}
-                style={{ margin: '15px 0' }}
+                style={{ margin: '5px 0' }}
             >
                 {t(`${KEY}buttonAllPlaces`)}
             </Button>
@@ -111,6 +159,12 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 title={t(`${KEY}titleLastPhotos`)}
                 photos={photosList}
             />
+
+            <ActivityList
+                title={t(`${KEY}titleNewsFeed`)}
+                activities={activityCache}
+                loading={isFetching}
+            />
         </AppLayout>
     )
 }
@@ -126,8 +180,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let lat = null
             let lon = null
 
-            if (cookies?.[LOCAL_STORGE.LOCATION]) {
-                const userLocation = cookies[LOCAL_STORGE.LOCATION]?.split(';')
+            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+                const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
                 if (userLocation?.[0] && userLocation?.[1]) {
                     lat = parseFloat(userLocation[0])

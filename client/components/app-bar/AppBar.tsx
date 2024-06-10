@@ -25,16 +25,11 @@ import Search from './Search'
 import styles from './styles.module.sass'
 
 interface HeaderProps {
-    randomPlaceId?: string
     fullSize?: boolean
     onMenuClick?: () => void
 }
 
-const AppBar: React.FC<HeaderProps> = ({
-    randomPlaceId,
-    fullSize,
-    onMenuClick
-}) => {
+const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
     const { t } = useTranslation('common', { keyPrefix: 'components.appBar' })
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
@@ -45,10 +40,6 @@ const AppBar: React.FC<HeaderProps> = ({
     )
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
-
-    const { data: randomPlace } = API.usePlacesGetRandomQuery(undefined, {
-        skip: !!randomPlaceId
-    })
 
     const handleLoginClick = (event: React.MouseEvent) => {
         event.preventDefault()
@@ -107,15 +98,6 @@ const AppBar: React.FC<HeaderProps> = ({
                 <Search />
 
                 <div className={styles.rightSection}>
-                    {(randomPlaceId || randomPlace?.id) && (
-                        <Link
-                            href={`/places/${randomPlaceId ?? randomPlace?.id}`}
-                            title={t('randomPlaceLinkTitle')}
-                        >
-                            <Icon name={'RandomLocation'} />
-                        </Link>
-                    )}
-
                     {appAuth.isAuth && <Notifications />}
 
                     {appAuth.user && (

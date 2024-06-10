@@ -65,7 +65,7 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                                             : undefined
                                     )
                                 }
-                                size={'s'}
+                                size={'small'}
                                 mode={'link'}
                             >
                                 {formAnswerId === comment.id

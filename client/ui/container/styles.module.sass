@@ -4,14 +4,15 @@
   margin-top: 15px
   padding: 15px
   width: 100%
-  background: #fff
-  border-radius: $borderRadius
-  box-shadow: $boxShadow3
+  background: var(--container-background)
+  border-radius: var(--border-radius)
+  box-shadow: var(--container-shadow)
   position: relative
+  transition: background-color 0.5s ease
 
   &:before
     border-radius: inherit
-    box-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12)
+    box-shadow: inherit
     content: ""
     height: 100%
     left: 0
@@ -21,7 +22,7 @@
     width: 100%
 
   .header
-    border-bottom: .5px solid $borderBottomColor
+    border-bottom: var(--container-border-separator)
     margin: -5px -15px 10px -15px
     padding: 0 10px 8px 15px
     display: flex

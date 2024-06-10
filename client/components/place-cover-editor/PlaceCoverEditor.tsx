@@ -9,6 +9,7 @@ import Dialog from '@/ui/dialog'
 
 import { API, IMG_HOST } from '@/api/api'
 import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
+import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
 import styles from './styles.module.sass'
@@ -32,7 +33,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const { data: photosData, isLoading: photoLoading } =
         API.usePhotosGetListQuery({ place: placeId })
 
-    const [updateCover, { isLoading, isSuccess }] =
+    const [updateCover, { isLoading, isSuccess, isError, error }] =
         API.usePlacesPatchCoverMutation()
 
     const [heightRatio, setHeightRatio] = useState<number>(1)
@@ -118,10 +119,22 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
         onSaveCover?.()
     }, [isSuccess])
 
+    useEffect(() => {
+        if (error) {
+            dispatch(
+                Notify({
+                    id: 'placeCoverEditor',
+                    message: error as string,
+                    type: 'error'
+                })
+            )
+        }
+    }, [isError, error])
+
     return (
         <>
             <Button
-                size={'m'}
+                size={'medium'}
                 icon={'Photo'}
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
@@ -138,7 +151,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                 actions={
                     selectedPhoto && (
                         <Button
-                            size={'s'}
+                            size={'small'}
                             mode={'primary'}
                             onClick={handleSaveCover}
                             disabled={disabled}

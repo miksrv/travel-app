@@ -7,24 +7,26 @@
   cursor: pointer
   padding: 6px 10px
   border: 0
-  font-size: 1em
-  border-radius: $borderRadius
+  border-radius: var(--border-radius)
   min-height: 28px
-  color: $colorButton
-  background: transparent
+  color: var(--button-default-color)
+  background: var(--button-default-background)
+  font-family: var(--font-family)
+  font-size: var(--font-size)
   font-weight: 500
   display: flex
   align-content: center
   justify-content: center
   align-items: center
   outline: none
-  font-family: inherit
+  transition: background-color .15s ease-out, color .15s ease-out
 
   svg
     width: 16px
     height: 16px
     margin-right: 5px
-    fill: $colorButton
+    margin-top: 2px
+    fill: var(--button-default-color)
 
   img
     margin-right: 5px
@@ -37,12 +39,12 @@
       margin-right: 0
 
   &:hover, &:focus
-    background-color: #f7f8fa
+    background-color: var(--button-default-background-hover)
 
   &:active
-    background-color: #f1f2f5
+    background-color: var(--button-default-background-active)
 
-  &.s
+  &.small
     padding: 6px 10px
     height: 28px
     line-height: 15px
@@ -52,7 +54,7 @@
       width: 20px
       margin-top: 0
 
-  &.m
+  &.medium
     padding: 8px 10px
     height: 34px
 
@@ -61,29 +63,39 @@
       height: 18px
 
   &.primary
-    background-color: #447bba
-    color: #ffffff
+    background-color: var(--button-primary-background)
+    color: var(--button-primary-color)
 
     svg
-      fill: #ffffff
+      fill: var(--button-primary-color)
 
     &:hover, &:focus
-      background-color: #4177b5
+      background-color: var(--button-primary-background-hover)
 
     &:active
-      background-color: #3f72b0
+      background-color: var(--button-primary-background-active)
+
+    &.negative
+      background-color: var(--button-negative-background)
+      color: var(--button-negative-color)
+
+      &:hover, &:focus
+        background-color: var(--button-negative-background-hover)
+
+      &:active
+        background-color: var(--button-negative-background-active)
 
   &.secondary
-    background-color: rgba(235,242,250,.99)
-    color: #3770b1
+    background-color: var(--button-secondary-background)
+    color: var(--button-secondary-color)
 
     &:hover, &:focus
-      background-color: rgba(223,234,246,.99)
-      color: #356cac
+      background-color: var(--button-secondary-background-hover)
+      color: var(--button-secondary-color-hover)
 
     &:active
-      background-color: rgba(213,226,241,.99)
-      color: #3368a8
+      background-color: var(--button-secondary-background-active)
+      color: var(--button-secondary-color-active)
 
   &[disabled]
     opacity: .64

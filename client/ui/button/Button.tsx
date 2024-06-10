@@ -16,7 +16,7 @@ export interface ButtonProps
     noIndex?: boolean
     stretched?: boolean
     loading?: boolean
-    size?: 's' | 'm'
+    size?: 'small' | 'medium'
     mode?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'link'
     variant?: 'positive' | 'negative' | 'neutral'
     icon?: IconTypes
