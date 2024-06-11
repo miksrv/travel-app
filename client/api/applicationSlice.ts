@@ -3,6 +3,7 @@ import { setCookie } from 'cookies-next'
 
 import { ApiTypes } from '@/api/types'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
@@ -16,16 +17,14 @@ type ApplicationStateProps = {
 }
 
 export const getStorageLocale = (): string | undefined =>
-    typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE.LOCALE)
-        ? localStorage.getItem(LOCAL_STORAGE.LOCALE) ??
-          i18Config.i18n.defaultLocale
+    typeof window !== 'undefined'
+        ? LocalStorage.getItem('LOCALE') ?? i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
 
 export const getStorageTheme = (): string | undefined => {
     const theme =
-        typeof window !== 'undefined' &&
-        localStorage.getItem(LOCAL_STORAGE.THEME)
-            ? localStorage.getItem(LOCAL_STORAGE.THEME) ?? 'light'
+        typeof window !== 'undefined'
+            ? LocalStorage.getItem('THEME') ?? 'light'
             : 'light'
 
     if (theme === 'dark') {
@@ -73,7 +72,7 @@ const applicationSlice = createSlice({
                 document.documentElement.classList.remove('dark')
             }
 
-            localStorage.setItem(LOCAL_STORAGE.THEME, payload)
+            LocalStorage.setItem('LOCATION', payload)
             state.theme = payload
         }
     }

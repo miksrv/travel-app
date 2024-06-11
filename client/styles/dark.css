@@ -20,9 +20,13 @@
     --color-icon-secondary: #76787a;
 
     --input-background-color: #232324;
+    --input-background-color-error: #5b4c4c;
     --input-label-color: #969a9f;
     --input-border: 0.5px solid #444546;
     --input-border-focus-color: #1976d2;
+
+    --dropdown-background-color: #232324;
+    --dropdown-background-color-hover: #3a3a3b;
 
     --link-color: #529ef4;
     --link-color-hover: #77adec;

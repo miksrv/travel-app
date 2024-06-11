@@ -134,7 +134,7 @@
 
   &.error
     .dropdownButton
-      background-color: #faebeb
+      background-color: var(--input-background-color-error)
       border-color: #e64646 !important
 
     &.open
@@ -144,9 +144,9 @@
 
   .optionsList
     position: absolute
-    background-color: #FFFFFF
+    background-color: var(--dropdown-background-color)
     box-shadow: $boxShadow2
-    border: 1px solid $borderDropdownColor
+    border: var(--input-border)
     top: 33px
     border-bottom-left-radius: var(--border-radius)
     border-bottom-right-radius: var(--border-radius)
@@ -156,6 +156,9 @@
     overflow-y: scroll
 
     li
+      &:hover, &.active
+        background-color: var(--dropdown-background-color-hover)
+
       &:last-of-type
         border-bottom-left-radius: var(--border-radius)
         border-bottom-right-radius: var(--border-radius)
