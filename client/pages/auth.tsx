@@ -14,6 +14,7 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
@@ -46,7 +47,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
             if (returnPath) {
                 const returnLink = returnPath
 
-                localStorage.removeItem(LOCAL_STORAGE.RETURN_PATH)
+                LocalStorage.removeItem('RETURN_PATH')
 
                 router.push(returnLink)
             } else {

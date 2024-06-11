@@ -139,3 +139,17 @@ export const addDecimalPoint = (input: number | string | undefined): string => {
 
     return inputValue
 }
+
+export const isValidJSON = (string: string) => {
+    if (!string || !string?.length) {
+        return true
+    }
+
+    try {
+        JSON.parse(string)
+    } catch (e) {
+        return false
+    }
+
+    return true
+}

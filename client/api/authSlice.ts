@@ -4,6 +4,7 @@ import { deleteCookie, setCookie } from 'cookies-next'
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 type AuthStateProps = {
@@ -13,17 +14,11 @@ type AuthStateProps = {
     user?: User
 }
 
-export const getStorageToken = (): string | undefined =>
-    typeof window !== 'undefined' &&
-    localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN)
-        ? localStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN) ?? ''
-        : ''
+export const getStorageToken = (): string =>
+    typeof window !== 'undefined' ? LocalStorage.getItem('AUTH_TOKEN') : ''
 
 export const getStorageSession = (): string | undefined =>
-    typeof window !== 'undefined' &&
-    localStorage.getItem(LOCAL_STORAGE.AUTH_SESSION)
-        ? localStorage.getItem(LOCAL_STORAGE.AUTH_SESSION) ?? ''
-        : ''
+    typeof window !== 'undefined' ? LocalStorage.getItem('AUTH_SESSION') : ''
 
 const authSlice = createSlice({
     initialState: {
@@ -44,13 +39,10 @@ const authSlice = createSlice({
             if (payload?.auth && !!payload?.token) {
                 setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
-                localStorage.setItem(
-                    LOCAL_STORAGE.AUTH_TOKEN,
-                    payload?.token || ''
-                )
+                LocalStorage.setItem('AUTH_TOKEN', payload?.token || '')
             } else {
                 deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-                localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN)
+                LocalStorage.removeItem('AUTH_TOKEN')
             }
         },
         logout: (state) => {
@@ -59,7 +51,7 @@ const authSlice = createSlice({
             state.isAuth = false
 
             deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-            localStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN)
+            LocalStorage.removeItem('AUTH_TOKEN')
         },
         saveSession: (state, { payload }: PayloadAction<string>) => {
             state.session = payload
