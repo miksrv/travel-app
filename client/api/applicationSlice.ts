@@ -18,13 +18,14 @@ type ApplicationStateProps = {
 
 export const getStorageLocale = (): string | undefined =>
     typeof window !== 'undefined'
-        ? LocalStorage.getItem('LOCALE') ?? i18Config.i18n.defaultLocale
+        ? LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ??
+          i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
 
 export const getStorageTheme = (): string | undefined => {
     const theme =
         typeof window !== 'undefined'
-            ? LocalStorage.getItem('THEME') ?? 'light'
+            ? LocalStorage.getItem(LOCAL_STORAGE.THEME as any) ?? 'light'
             : 'light'
 
     if (theme === 'dark') {
@@ -72,7 +73,7 @@ const applicationSlice = createSlice({
                 document.documentElement.classList.remove('dark')
             }
 
-            LocalStorage.setItem('LOCATION', payload)
+            LocalStorage.setItem(LOCAL_STORAGE.THEME as any, payload)
             state.theme = payload
         }
     }
