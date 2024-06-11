@@ -15,10 +15,14 @@ type AuthStateProps = {
 }
 
 export const getStorageToken = (): string =>
-    typeof window !== 'undefined' ? LocalStorage.getItem('AUTH_TOKEN') : ''
+    typeof window !== 'undefined'
+        ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN as any)
+        : ''
 
 export const getStorageSession = (): string | undefined =>
-    typeof window !== 'undefined' ? LocalStorage.getItem('AUTH_SESSION') : ''
+    typeof window !== 'undefined'
+        ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_SESSION as any)
+        : ''
 
 const authSlice = createSlice({
     initialState: {
@@ -39,10 +43,13 @@ const authSlice = createSlice({
             if (payload?.auth && !!payload?.token) {
                 setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
-                LocalStorage.setItem('AUTH_TOKEN', payload?.token || '')
+                LocalStorage.setItem(
+                    LOCAL_STORAGE.AUTH_TOKEN as any,
+                    payload?.token || ''
+                )
             } else {
                 deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-                LocalStorage.removeItem('AUTH_TOKEN')
+                LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as any)
             }
         },
         logout: (state) => {
@@ -51,7 +58,7 @@ const authSlice = createSlice({
             state.isAuth = false
 
             deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-            LocalStorage.removeItem('AUTH_TOKEN')
+            LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as any)
         },
         saveSession: (state, { payload }: PayloadAction<string>) => {
             state.session = payload

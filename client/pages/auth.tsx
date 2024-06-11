@@ -47,7 +47,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
             if (returnPath) {
                 const returnLink = returnPath
 
-                LocalStorage.removeItem('RETURN_PATH')
+                LocalStorage.removeItem(LOCAL_STORAGE.RETURN_PATH as any)
 
                 router.push(returnLink)
             } else {
