@@ -52,6 +52,7 @@
         flex-direction: column
         justify-content: center
         font-family: inherit
+        color: inherit
 
       &:focus, &:active, &:hover
         outline: none
@@ -106,9 +107,9 @@
 
     .optionsList
       position: absolute
-      background-color: #FFFFFF
+      background-color: var(--dropdown-background-color)
       box-shadow: $boxShadow2
-      border: 1px solid $borderDropdownColor
+      border: var(--input-border)
       list-style: none
       padding: 0
       width: 100%
@@ -141,7 +142,7 @@
             margin-right: 4px
 
         &:hover, &.active
-          background-color: var(--input-background-color)
+          background-color: var(--dropdown-background-color-hover)
 
         &:last-of-type
           border-bottom-left-radius: 8px
@@ -169,7 +170,7 @@
   font-size: $fontSizeHeadline
   box-sizing: border-box
   border: 0.5px solid rgba(0, 0, 0, 0.08)
-  background: #ffffff
+  background: var(--input-background-color)
   align-items: center
   height: 28px
 

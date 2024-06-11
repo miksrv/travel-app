@@ -115,9 +115,9 @@
 
     .optionsList
       position: absolute
-      background-color: #FFFFFF
+      background-color: var(--dropdown-background-color)
       box-shadow: $boxShadow2
-      border: 1px solid $borderDropdownColor
+      border: var(--input-border)
       list-style: none
       padding: 0
       width: 100%
@@ -162,7 +162,7 @@
             flex-basis: 100%
 
         &:hover, &.active
-          background-color: var(--input-background-color)
+          background-color: var(--dropdown-background-color-hover)
 
         &:last-of-type
           border-bottom-left-radius: 8px
