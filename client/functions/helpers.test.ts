@@ -379,4 +379,71 @@ describe('helpers', () => {
             expect(helpers.ratingColor(3)).toBe('green')
         })
     })
+
+    describe('isValidJSON', () => {
+        it('returns true for valid JSON strings', () => {
+            expect(helpers.isValidJSON(null as unknown as string)).toBe(true)
+            expect(
+                helpers.isValidJSON(
+                    '{"name": "John", "age": 30, "city": "New York"}'
+                )
+            ).toBe(true)
+            expect(helpers.isValidJSON('["apple", "banana", "cherry"]')).toBe(
+                true
+            )
+            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]}')).toBe(
+                true
+            )
+            expect(helpers.isValidJSON('true')).toBe(true)
+            expect(helpers.isValidJSON('null')).toBe(true)
+            expect(helpers.isValidJSON('"string"')).toBe(true)
+            expect(helpers.isValidJSON('123')).toBe(true)
+        })
+
+        it('returns false for invalid JSON strings', () => {
+            expect(
+                helpers.isValidJSON(
+                    '{"name": "John", "age": 30, "city": "New York"'
+                )
+            ).toBe(false) // missing closing brace
+            expect(helpers.isValidJSON('["apple", "banana", "cherry"')).toBe(
+                false
+            ) // missing closing bracket
+            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]')).toBe(
+                false
+            ) // missing closing brace
+            expect(helpers.isValidJSON('undefined')).toBe(false) // not a valid JSON value
+            expect(helpers.isValidJSON('truefalse')).toBe(false) // not a valid JSON value
+            expect(
+                helpers.isValidJSON('{name: "John", age: 30, city: "New York"}')
+            ).toBe(false) // keys must be double-quoted
+        })
+    })
+
+    describe('addDecimalPoint', () => {
+        it('adds .0 to integers', () => {
+            expect(helpers.addDecimalPoint(123)).toBe('123.0')
+            expect(helpers.addDecimalPoint('456')).toBe('456.0')
+            expect(helpers.addDecimalPoint('789.')).toBe('789.0')
+        })
+
+        it('adds . to non-integer strings without decimal point', () => {
+            expect(helpers.addDecimalPoint('123')).toBe('123.0')
+            expect(helpers.addDecimalPoint('456.')).toBe('456.0')
+        })
+
+        it('returns input with trailing .0 if it already contains a decimal point but no digits after it', () => {
+            expect(helpers.addDecimalPoint('789.')).toBe('789.0')
+        })
+
+        it('returns input as is if it already contains a decimal point and digits after it', () => {
+            expect(helpers.addDecimalPoint('123.45')).toBe('123.45')
+            expect(helpers.addDecimalPoint(678.9)).toBe('678.9')
+        })
+
+        it('returns empty string for undefined or empty input', () => {
+            expect(helpers.addDecimalPoint(undefined)).toBe('')
+            expect(helpers.addDecimalPoint('')).toBe('')
+        })
+    })
 })

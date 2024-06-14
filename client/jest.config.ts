@@ -32,7 +32,7 @@ const config: Config.InitialOptions = {
         '^@/public/(.*)$': '<rootDir>/public/$1',
         '^@/styles/(.*)$': '<rootDir>/styles/$1'
     },
-    // setupFilesAfterEnv: ['<rootDir>/setupTests.config.tsx'],
+    setupFilesAfterEnv: ['<rootDir>/setupTests.config.tsx'],
     silent: true, // hide all warnings
     testEnvironment: 'jsdom',
     testPathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/.next/'],
