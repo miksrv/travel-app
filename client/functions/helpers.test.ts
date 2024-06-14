@@ -419,4 +419,31 @@ describe('helpers', () => {
             ).toBe(false) // keys must be double-quoted
         })
     })
+
+    describe('addDecimalPoint', () => {
+        it('adds .0 to integers', () => {
+            expect(helpers.addDecimalPoint(123)).toBe('123.0')
+            expect(helpers.addDecimalPoint('456')).toBe('456.0')
+            expect(helpers.addDecimalPoint('789.')).toBe('789.0')
+        })
+
+        it('adds . to non-integer strings without decimal point', () => {
+            expect(helpers.addDecimalPoint('123')).toBe('123.0')
+            expect(helpers.addDecimalPoint('456.')).toBe('456.0')
+        })
+
+        it('returns input with trailing .0 if it already contains a decimal point but no digits after it', () => {
+            expect(helpers.addDecimalPoint('789.')).toBe('789.0')
+        })
+
+        it('returns input as is if it already contains a decimal point and digits after it', () => {
+            expect(helpers.addDecimalPoint('123.45')).toBe('123.45')
+            expect(helpers.addDecimalPoint(678.9)).toBe('678.9')
+        })
+
+        it('returns empty string for undefined or empty input', () => {
+            expect(helpers.addDecimalPoint(undefined)).toBe('')
+            expect(helpers.addDecimalPoint('')).toBe('')
+        })
+    })
 })
