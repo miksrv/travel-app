@@ -42,7 +42,7 @@ const applicationSlice = createSlice({
         showOverlay: false,
         theme: getStorageTheme()
     } as ApplicationStateProps,
-    name: 'auth',
+    name: 'application',
     reducers: {
         closeAuthDialog: (state) => {
             state.showOverlay = false
