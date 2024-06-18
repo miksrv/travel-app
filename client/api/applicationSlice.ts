@@ -28,10 +28,6 @@ export const getStorageTheme = (): string | undefined => {
             ? LocalStorage.getItem(LOCAL_STORAGE.THEME as any) ?? 'light'
             : 'light'
 
-    if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
-    }
-
     return theme
 }
 

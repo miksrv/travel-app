@@ -15,9 +15,17 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
+
+const theme = LocalStorage.getItem(LOCAL_STORAGE.THEME as any)
+const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
+
+if (theme === 'dark') {
+    document.documentElement.classList.add('dark')
+}
 
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
@@ -25,11 +33,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     const { store } = wrapper.useWrappedStore(pageProps)
 
     useEffect(() => {
-        const storage = localStorage?.getItem(LOCAL_STORAGE.LOCALE)
-        const locale = storage
-            ? JSON.parse(storage)
-            : i18Config.i18n.defaultLocale
-
         if (
             i18n?.language !== locale &&
             i18Config.i18n.locales.includes(locale) &&
