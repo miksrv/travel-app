@@ -45,7 +45,7 @@ const authSlice = createSlice({
 
                 LocalStorage.setItem(
                     LOCAL_STORAGE.AUTH_TOKEN as any,
-                    payload?.token || ''
+                    payload.token
                 )
             } else {
                 deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)

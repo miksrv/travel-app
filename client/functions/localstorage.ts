@@ -2,7 +2,11 @@ import { LOCAL_STORAGE, LOCAL_STORAGE_KEY } from '@/functions/constants'
 import { isValidJSON } from '@/functions/helpers'
 
 const _getLocalStorage = (): undefined | typeof LOCAL_STORAGE => {
-    const localstorageData = localStorage.getItem(LOCAL_STORAGE_KEY)
+    if (typeof window === 'undefined') {
+        return
+    }
+
+    const localstorageData = localStorage?.getItem(LOCAL_STORAGE_KEY)
 
     if (
         localstorageData &&

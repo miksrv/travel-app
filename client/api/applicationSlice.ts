@@ -28,10 +28,6 @@ export const getStorageTheme = (): string | undefined => {
             ? LocalStorage.getItem(LOCAL_STORAGE.THEME as any) ?? 'light'
             : 'light'
 
-    if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
-    }
-
     return theme
 }
 
@@ -42,7 +38,7 @@ const applicationSlice = createSlice({
         showOverlay: false,
         theme: getStorageTheme()
     } as ApplicationStateProps,
-    name: 'auth',
+    name: 'application',
     reducers: {
         closeAuthDialog: (state) => {
             state.showOverlay = false
