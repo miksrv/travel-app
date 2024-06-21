@@ -11,7 +11,6 @@ import i18Config from '../next-i18next.config'
 type ApplicationStateProps = {
     showOverlay?: boolean
     showAuthDialog?: boolean
-    theme?: 'light' | 'dark'
     userLocation?: ApiTypes.LatLonCoordinate
     locale?: ApiTypes.LocaleType
 }
@@ -22,21 +21,11 @@ export const getStorageLocale = (): string | undefined =>
           i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
 
-export const getStorageTheme = (): string | undefined => {
-    const theme =
-        typeof window !== 'undefined'
-            ? LocalStorage.getItem(LOCAL_STORAGE.THEME as any) ?? 'light'
-            : 'light'
-
-    return theme
-}
-
 const applicationSlice = createSlice({
     initialState: {
         locale: getStorageLocale(),
         showAuthDialog: false,
-        showOverlay: false,
-        theme: getStorageTheme()
+        showOverlay: false
     } as ApplicationStateProps,
     name: 'application',
     reducers: {
@@ -61,23 +50,12 @@ const applicationSlice = createSlice({
         },
         toggleOverlay: (state, { payload }: PayloadAction<boolean>) => {
             state.showOverlay = payload
-        },
-        toggleTheme: (state, { payload }: PayloadAction<'light' | 'dark'>) => {
-            if (payload === 'dark') {
-                document.documentElement.classList.add('dark')
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
-
-            LocalStorage.setItem(LOCAL_STORAGE.THEME as any, payload)
-            state.theme = payload
         }
     }
 })
 
 export const {
     toggleOverlay,
-    toggleTheme,
     closeAuthDialog,
     openAuthDialog,
     setLocale,
