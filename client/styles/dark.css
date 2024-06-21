@@ -19,8 +19,12 @@
     --text-second-color: #76787a;
     --color-icon-secondary: #76787a;
 
+    --container-background-color-error: #522e2e;
+    --container-color-error: #ff5c5c;
+
     --input-background-color: #232324;
-    --input-background-color-error: #5b4c4c;
+    --input-background-content: #19191a;
+    --input-background-color-error: var(--container-background-color-error);
     --input-label-color: #969a9f;
     --input-border: 0.5px solid #444546;
     --input-border-focus-color: #1976d2;
