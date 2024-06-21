@@ -34,7 +34,7 @@
 
     --container-background: #282828;
     --container-border-separator: 0.5px solid #444546;
-    --container-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+    --container-shadow: inset 0 0 0 0.5px #363738;
 
     --overlay-background: rgba(35, 35, 36, 0.57);
 
