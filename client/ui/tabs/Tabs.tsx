@@ -42,7 +42,7 @@ const Tabs = <T extends string>({
             </div>
         }
     >
-        {children && <div className={styles.tabContent}>{children}</div>}
+        {children}
     </Container>
 )
 
