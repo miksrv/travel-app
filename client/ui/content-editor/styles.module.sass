@@ -44,6 +44,10 @@
   :global(.cm-activeLine)
     background-color: transparent
 
+  :global(.wmde-markdown)
+    background-color: var(--container-background)
+    color: var(--text-color-primary)
+
   :global(.wmde-markdown-var)
     --color-prettylights-syntax-comment: #8b949e
     --color-prettylights-syntax-constant: #79c0ff
@@ -78,7 +82,7 @@
     --color-fg-default: var(--text-color-primary)
     --color-fg-muted: #8b949e
     --color-fg-subtle: #484f58
-    --color-canvas-default: #0d1117
+    --color-canvas-default: var(--container-background)
     --color-canvas-subtle: var(--input-background-color)
     --color-border-default: var(--input-border-color)
     --color-border-muted: var(--input-border-color)

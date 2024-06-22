@@ -9,6 +9,8 @@ import { Comments } from '@/api/types/Comments'
 
 import CommentForm from '@/components/comment-list/CommentForm'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 import CommentListItem from './CommentListItem'
 import styles from './styles.module.sass'
 
@@ -55,21 +57,7 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
 
     return (
         <section className={styles.commentList}>
-            {comments?.length ? (
-                renderComments(comments)
-            ) : (
-                <div className={styles.emptyList}>
-                    <div>{t('noComments')}</div>
-                    {!appAuth.isAuth && (
-                        <Button
-                            className={styles.loginButton}
-                            onClick={handleLoginClick}
-                        >
-                            {t('userLogin')}
-                        </Button>
-                    )}
-                </div>
-            )}
+            {!!comments?.length && renderComments(comments)}
 
             {appAuth.isAuth && (
                 <div className={styles.formSection}>
@@ -81,8 +69,13 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                 </div>
             )}
 
-            {!appAuth.isAuth && !!comments?.length && (
-                <div className={styles.loginContainer}>
+            {!appAuth.isAuth && (
+                <div
+                    className={cn(
+                        styles.loginContainer,
+                        !!comments?.length && styles.topBorder
+                    )}
+                >
                     <div>{t('loginForComment')}</div>
                     <Button
                         className={styles.loginButton}

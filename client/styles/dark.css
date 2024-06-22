@@ -24,6 +24,9 @@
 
     --container-background-color-error: #522e2e;
     --container-color-error: #ff5c5c;
+    --container-background: #282828;
+    --container-border-separator: 0.5px solid #444546;
+    --container-shadow: inset 0 0 0 0.5px #363738;
 
     --input-background-color: #232324;
     --input-background-content: #19191a;
@@ -39,10 +42,6 @@
     --link-color: #529ef4;
     --link-color-hover: #77adec;
     --link-color-active: #60a6f5;
-
-    --container-background: #282828;
-    --container-border-separator: 0.5px solid #444546;
-    --container-shadow: inset 0 0 0 0.5px #363738;
 
     --overlay-background: rgba(35, 35, 36, 0.57);
 
@@ -64,4 +63,8 @@
     --button-secondary-color-hover: var(--text-color-primary);
     --button-secondary-background-active: rgba(255, 255, 255, 0.14);
     --button-secondary-color-active: var(--text-color-primary);
+
+    --color-green: #4bb34b;
+    --color-orange: #ea5d2e;
+    --color-red: #e64646;
 }
