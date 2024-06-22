@@ -216,6 +216,7 @@
         },
         "userForm": {
             "errorsMessageTitle": "Correct errors",
+            "inputEmailLabel": "Your email (it cannot be changed)",
             "inputNameLabel": "Your name on the site",
             "inputNamePlaceholder": "Inputs your username",
             "inputWebsiteLabel": "Personal Page",

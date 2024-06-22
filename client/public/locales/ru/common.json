@@ -217,6 +217,7 @@
         },
         "userForm": {
             "errorsMessageTitle": "Исправьте ошибки",
+            "inputEmailLabel": "Ваш email (его нельзя менять)",
             "inputNameLabel": "Ваше имя на сайта",
             "inputNamePlaceholder": "Введиет свое имя пользователя",
             "inputWebsiteLabel": "Персональная страница",
