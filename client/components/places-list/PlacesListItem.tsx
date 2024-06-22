@@ -72,10 +72,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </Link>
 
                 <div className={styles.bottomPanel}>
-                    <Badge
-                        icon={'Photo'}
-                        content={place?.photos || 0}
-                    />
+                    {/*<Badge*/}
+                    {/*    icon={'Photo'}*/}
+                    {/*    content={place?.photos || 0}*/}
+                    {/*/>*/}
 
                     {!!place?.comments && (
                         <Badge
@@ -91,10 +91,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                         />
                     )}
 
-                    <Badge
-                        icon={'Eye'}
-                        content={numberFormatter(place?.views || 0)}
-                    />
+                    {/*<Badge*/}
+                    {/*    icon={'Eye'}*/}
+                    {/*    content={numberFormatter(place?.views || 0)}*/}
+                    {/*/>*/}
 
                     {!!place?.distance && (
                         <Badge
