@@ -101,15 +101,17 @@
                 "buttonEdit": "Редактировать",
                 "ratingCount_one": "{{count}} голос",
                 "ratingCount_few": "{{count}} голоса",
-                "ratingCount_many": "{{count}} голосов",
-                "km": "км"
+                "ratingCount_many": "{{count}} голосов"
             },
             "placeInformation": {
                 "author": "Автор:",
                 "editors": "Редакторы:",
                 "category": "Категория:",
                 "allCategoryPlaces": "Все интересные места категории",
+                "views": "Просмотров:",
                 "coordinates": "Координаты:",
+                "distance": "Расстояние до меня:",
+                "km": "км",
                 "editTime": "Отредактировано:",
                 "address": "Адрес:",
                 "addressLinkTitle": "Интересные места:",
