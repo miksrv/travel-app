@@ -273,8 +273,7 @@
             "answerCancel": "cancel",
             "answerAdd": "answer",
             "userLogin": "Login",
-            "noComments": "No comments yet, be the first",
-            "writeComment": "Write a comment...",
+            "writeComment": "Write a comment",
             "loginForComment": "Login to write a comment"
         },
         "registrationForm": {
