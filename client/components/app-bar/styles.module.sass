@@ -2,7 +2,7 @@
 
 .appBar
   z-index: 450
-  color: var(--text-main-color)
+  color: var(--text-color-primary)
   background-color: var(--container-background)
   padding: 0 14px
   box-shadow: $boxShadow1
@@ -40,7 +40,7 @@
     svg
       width: 30px
       height: 30px
-      fill: var(--text-main-color)
+      fill: var(--text-color-primary)
 
   .logo
     padding-left: 8px
@@ -70,7 +70,7 @@
       margin-top: 5px
       height: 24px
       width: 24px
-      fill: $headerSvgColor
+      fill: var(--icon-color-primary)
 
       &:hover, &:focus
         opacity: .7
@@ -104,7 +104,7 @@
 
   .noData
     text-align: center
-    color: var(--text-second-color)
+    color: var(--text-color-secondary)
     height: 140px
     min-width: 260px
     display: flex
@@ -121,7 +121,7 @@
     svg
       width: 32px
       height: 32px
-      fill: var(--text-second-color)
+      fill: var(--icon-color-secondary)
 
   .notificationsContent
     min-height: 140px
@@ -154,7 +154,7 @@
         width: 100%
         padding: 10px 20px
         font-size: $fontSizeHeadline
-        color: var(--text-main-color)
+        color: var(--text-color-primary)
         cursor: pointer
         background: transparent
         border: none

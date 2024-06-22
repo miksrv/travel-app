@@ -30,7 +30,7 @@
       border-radius: var(--border-radius)
       box-sizing: border-box
       border: var(--input-border)
-      color: var(--text-main-color)
+      color: var(--text-color-primary)
       height: 34px
       margin: 0
       padding: 0 10px 0 0
@@ -43,7 +43,7 @@
           width: 24px
           height: 24px
           margin: 4px 1px 0 8px
-          fill: $headerSvgColor
+          fill: var(--icon-color-secondary)
 
       .searchInput
         background: transparent
@@ -65,7 +65,7 @@
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
-        color: var(--text-main-color)
+        color: var(--text-color-primary)
 
       span
         overflow: hidden
@@ -87,7 +87,7 @@
         svg
           width: 24px
           height: 24px
-          fill: var(--input-label-color)
+          fill: var(--icon-color-secondary)
 
       .clear, .toggleButton
         background: transparent
@@ -102,7 +102,7 @@
           height: 18px !important
 
           &:hover
-            fill: var(--input-label-color)Hover
+            fill: var(--icon-color-secondary-hover)
 
     &.open
       .searchContainer
@@ -142,7 +142,7 @@
           display: flex
           align-items: center
           flex-wrap: wrap
-          color: var(--text-main-color)
+          color: var(--text-color-primary)
 
           img
             width: 14px
@@ -157,7 +157,7 @@
             white-space: nowrap
 
           .description
-            color: var(--text-second-color)
+            color: var(--text-color-secondary)
             font-size: $fontSizeCaption
             flex-basis: 100%
 

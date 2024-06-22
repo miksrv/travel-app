@@ -8,7 +8,7 @@ interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
     list?: string[]
     text?: string
-    type?: 'negative'
+    type?: 'negative' | 'positive'
 }
 
 const Message: React.FC<MessageProps> = ({
@@ -25,7 +25,7 @@ const Message: React.FC<MessageProps> = ({
         {title && <p className={styles.title}>{title}</p>}
         {text && <p className={styles.content}>{text}</p>}
         {list && (
-            <ul className={styles.list}>
+            <ul>
                 {list?.map((item) =>
                     item.length ? <li key={`item${item}`}>{item}</li> : ''
                 )}

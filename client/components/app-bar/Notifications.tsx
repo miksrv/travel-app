@@ -138,7 +138,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         ))}
                     </div>
                 )}
-                {notifyLoading && (
+                {(notifyLoading || notifyFetching) && (
                     <div className={styles.loader}>
                         <Spinner />
                     </div>
@@ -158,7 +158,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                             notifyFetching ||
                             !notifyData?.items?.length
                         }
-                        loading={loadingClear || notifyFetching}
+                        loading={loadingClear}
                         onClick={handleClearNotificationsClick}
                     >
                         {t('clearButton')}

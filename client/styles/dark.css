@@ -1,4 +1,4 @@
-:root.dark {
+:root[data-theme='dark'] {
     --font-size: 14px;
     --font-family: -apple-system, system-ui, 'Helvetica Neue', Roboto,
         sans-serif;
@@ -15,14 +15,22 @@
 
     --border-radius: 4px;
 
-    --text-main-color: #e1e3e6;
-    --text-second-color: #76787a;
-    --color-icon-secondary: #76787a;
+    --text-color-primary: #e1e3e6;
+    --text-color-secondary: #76787a;
+    --icon-color-primary: #e1e3e6;
+    --icon-color-primary-hover: #E2E4E7;
+    --icon-color-secondary: #76787a;
+    --icon-color-secondary-hover: #7B7D7F;
+
+    --container-background-color-error: #522e2e;
+    --container-color-error: #ff5c5c;
 
     --input-background-color: #232324;
-    --input-background-color-error: #5b4c4c;
+    --input-background-content: #19191a;
+    --input-background-color-error: var(--container-background-color-error);
     --input-label-color: #969a9f;
-    --input-border: 0.5px solid #444546;
+    --input-border-color: #444546;
+    --input-border: 0.5px solid var(--input-border-color);
     --input-border-focus-color: #1976d2;
 
     --dropdown-background-color: #232324;
@@ -34,26 +42,26 @@
 
     --container-background: #282828;
     --container-border-separator: 0.5px solid #444546;
-    --container-shadow: inset 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+    --container-shadow: inset 0 0 0 0.5px #363738;
 
     --overlay-background: rgba(35, 35, 36, 0.57);
 
     --button-default-background: transparent;
-    --button-default-color: var(--text-main-color);
+    --button-default-color: var(--text-color-primary);
     --button-default-background-hover: rgba(255, 255, 255, 0.04);
     --button-default-background-active: rgba(255, 255, 255, 0.08);
-    --button-primary-background: var(--text-main-color);
+    --button-primary-background: var(--text-color-primary);
     --button-primary-color: var(--body-background);
     --button-primary-background-hover: #EBEDF0;
     --button-primary-background-active: #D7D8DB;
     --button-negative-background: #ff5c5c;
-    --button-negative-color: var(--text-main-color);
+    --button-negative-color: var(--text-color-primary);
     --button-negative-background-hover: #FF6363;
     --button-negative-background-active: #FF6969;
     --button-secondary-background: rgba(255, 255, 255, 0.10);
-    --button-secondary-color: var(--text-main-color);
+    --button-secondary-color: var(--text-color-primary);
     --button-secondary-background-hover: rgba(255, 255, 255, 0.12);
-    --button-secondary-color-hover: var(--text-main-color);
+    --button-secondary-color-hover: var(--text-color-primary);
     --button-secondary-background-active: rgba(255, 255, 255, 0.14);
-    --button-secondary-color-active: var(--text-main-color);
+    --button-secondary-color-active: var(--text-color-primary);
 }

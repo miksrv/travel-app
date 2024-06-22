@@ -77,7 +77,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                 <Link
                     href={'/'}
                     title={''}
-                    onClick={onLogout}
+                    onClick={(event) => {
+                        event.preventDefault()
+                        onLogout?.()
+                    }}
                 >
                     <Icon name={'Exit'} />
                     {translate?.('userLogout')}

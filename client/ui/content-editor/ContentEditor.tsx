@@ -4,6 +4,8 @@ import { IMarkdownEditor } from '@uiw/react-markdown-editor'
 import dynamic from 'next/dynamic'
 import React from 'react'
 
+import styles from './styles.module.sass'
+
 const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
     ssr: false
 })
@@ -11,7 +13,7 @@ const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
 interface ContentEditorProps extends IMarkdownEditor {}
 
 const ContentEditor: React.FC<ContentEditorProps> = (props) => (
-    <div data-color-mode={'light'}>
+    <div className={styles.contentEditor}>
         <MarkdownEditor
             {...props}
             toolbars={[
@@ -22,9 +24,7 @@ const ContentEditor: React.FC<ContentEditorProps> = (props) => (
                 'underline',
                 'quote',
                 'link',
-                'image',
-                'fullscreen',
-                'preview'
+                'image'
             ]}
             value={props.value || ''}
             previewWidth={'100%'}

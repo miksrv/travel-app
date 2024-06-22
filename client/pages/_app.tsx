@@ -6,6 +6,7 @@ import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import { appWithTranslation, useTranslation } from 'next-i18next'
+import { ThemeProvider } from 'next-themes'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
@@ -20,12 +21,7 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
 
-const theme = LocalStorage.getItem(LOCAL_STORAGE.THEME as any)
 const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
-
-if (theme === 'dark') {
-    document.documentElement.classList.add('dark')
-}
 
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
@@ -47,7 +43,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
 
     return (
-        <>
+        <ThemeProvider>
             <Head>
                 <meta
                     name='viewport'
@@ -92,7 +88,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     }}
                 />
             )}
-        </>
+        </ThemeProvider>
     )
 }
 
