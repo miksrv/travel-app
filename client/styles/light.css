@@ -63,4 +63,8 @@
     --button-secondary-color-hover: #356cac;
     --button-secondary-background-active: rgba(213,226,241,.99);
     --button-secondary-color-active: #3368a8;
+
+    --color-green: #4bb34b;
+    --color-orange: #ea5d2e;
+    --color-red: #e64646;
 }

@@ -63,4 +63,8 @@
     --button-secondary-color-hover: var(--text-color-primary);
     --button-secondary-background-active: rgba(255, 255, 255, 0.14);
     --button-secondary-color-active: var(--text-color-primary);
+
+    --color-green: #4bb34b;
+    --color-orange: #ea5d2e;
+    --color-red: #e64646;
 }
