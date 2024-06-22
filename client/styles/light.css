@@ -17,9 +17,10 @@
 
     --text-color-primary: rgba(0, 0, 0, 0.9);
     --text-color-secondary: #818c99;
-    /*--icon-color-primary: #2c2d2e;*/
-    /*--icon-color-primary-hover: #2A2C2F;*/
+    --icon-color-primary: #2c2d2e;
+    --icon-color-primary-hover: #2A2C2F;
     --icon-color-secondary: #818c99;
+    --icon-color-secondary-hover: #939CA9;
 
     --container-background-color-error: #FFE9E9;
     --container-color-error: #e64646;

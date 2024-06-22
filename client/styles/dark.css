@@ -17,9 +17,10 @@
 
     --text-color-primary: #e1e3e6;
     --text-color-secondary: #76787a;
-    /*--icon-color-primary: #e1e3e6;*/
-    /*--icon-color-primary-hover: #E2E4E7;*/
+    --icon-color-primary: #e1e3e6;
+    --icon-color-primary-hover: #E2E4E7;
     --icon-color-secondary: #76787a;
+    --icon-color-secondary-hover: #7B7D7F;
 
     --container-background-color-error: #522e2e;
     --container-color-error: #ff5c5c;
