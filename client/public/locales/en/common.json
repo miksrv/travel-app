@@ -326,6 +326,10 @@
         },
         "photoLightbox": {
             "dateFormat": "MMMM D, YYYY, h:mm A"
+        },
+        "bookmarkButton": {
+            "bookmarkResultAdd": "Geomark added to bookmarks",
+            "bookmarkResultRemove": "Geomark removed from bookmarks"
         }
     },
     "pages": {
