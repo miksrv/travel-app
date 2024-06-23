@@ -327,6 +327,10 @@
         },
         "photoLightbox": {
             "dateFormat": "D MMMM YYYY, HH:mm"
+        },
+        "bookmarkButton": {
+            "bookmarkResultAdd": "Геометка добавлена в закладки",
+            "bookmarkResultRemove": "Геометка удалена из закладок"
         }
     },
     "pages": {
