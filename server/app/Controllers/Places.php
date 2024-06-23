@@ -384,14 +384,23 @@ class Places extends ResourceController {
             return $this->failValidationErrors($this->validator->getErrors());
         }
 
+        $placeTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
+        $placeContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
+
+        $existingPlace = $this->model
+            ->select('id')
+            ->where(['user_id' => $this->session->user?->id, 'lat' => $input->lat, 'lon' => $input->lon])
+            ->first();
+
+        if ($existingPlace) {
+            return $this->respondCreated(['id' => $existingPlace->id]);
+        }
+
         $placeTags = new PlaceTags();
         $geocoder  = new Geocoder();
         $place     = new \App\Entities\Place();
 
         $geocoder->coordinates($input->lat, $input->lon);
-
-        $placeTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
-        $placeContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
 
         $place->lat         = $input->lat;
         $place->lon         = $input->lon;
@@ -412,21 +421,30 @@ class Places extends ResourceController {
             $placeTags->saveTags($input->tags, $newPlaceId);
         }
 
-        $placesContentModel = new PlacesContentModel();
+        try {
+            $placesContentModel = new PlacesContentModel();
 
-        $content = new \App\Entities\PlaceContent();
-        $content->place_id = $newPlaceId;
-        $content->language = 'ru';
-        $content->user_id  = $this->session->user?->id;
-        $content->title    = $placeTitle;
-        $content->content  = $placeContent;
+            $content = new \App\Entities\PlaceContent();
+            $content->place_id = $newPlaceId;
+            $content->language = 'ru';
+            $content->user_id  = $this->session->user?->id;
+            $content->title    = $placeTitle;
+            $content->content  = $placeContent;
 
-        $placesContentModel->insert($content);
+            $placesContentModel->insert($content);
+        } catch (Exception $e) {
+            $this->model->delete($newPlaceId);
+
+            log_message('error', '{exception}', ['exception' => $e]);
+
+            return $this->failValidationErrors(lang('Places.createFailError'));
+        }
+
 
         $activity = new ActivityLibrary();
         $activity->place($newPlaceId);
 
-        return $this->respondCreated((object) ['id' => $newPlaceId]);
+        return $this->respondCreated(['id' => $newPlaceId]);
     }
 
     /**
