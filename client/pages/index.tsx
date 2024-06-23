@@ -203,7 +203,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const { data: usersList } = await store.dispatch(
                 API.endpoints?.usersGetList.initiate({
-                    limit: 8
+                    limit: 4
                 })
             )
 
