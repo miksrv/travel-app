@@ -34,6 +34,12 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
     const menuItems: MenuItemType[] = [
         {
             auth: true,
+            icon: 'PlusCircle',
+            link: '/places/create',
+            text: t(`${KEY}create`)
+        },
+        {
+            auth: true,
             icon: 'User',
             link: userId ? `/users/${userId}` : undefined,
             text: t(`${KEY}profile`)
@@ -58,12 +64,6 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             icon: 'Place',
             link: '/places',
             text: t(`${KEY}places`)
-        },
-        {
-            auth: true,
-            icon: 'PlusCircle',
-            link: '/places/create',
-            text: t(`${KEY}create`)
         },
         {
             icon: 'Category',
