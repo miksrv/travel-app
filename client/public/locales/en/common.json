@@ -108,8 +108,10 @@
                 "editors": "Editors:",
                 "category": "Category:",
                 "allCategoryPlaces": "Все интересные места категории",
+                "views": "Views:",
                 "coordinates": "Coordinates:",
-                "editTime": "Edited:",
+                "distance": "Distance to me:",
+                "km": "km",
                 "address": "Address:",
                 "addressLinkTitle": "Points of Interest::",
                 "dateFormat": "MMMM D, YYYY, h:mm A"
@@ -214,6 +216,7 @@
         },
         "userForm": {
             "errorsMessageTitle": "Correct errors",
+            "inputEmailLabel": "Your email (it cannot be changed)",
             "inputNameLabel": "Your name on the site",
             "inputNamePlaceholder": "Inputs your username",
             "inputWebsiteLabel": "Personal Page",
@@ -285,8 +288,7 @@
             "answerCancel": "cancel",
             "answerAdd": "answer",
             "userLogin": "Login",
-            "noComments": "No comments yet, be the first",
-            "writeComment": "Write a comment...",
+            "writeComment": "Write a comment",
             "loginForComment": "Login to write a comment"
         },
         "registrationForm": {
@@ -338,6 +340,10 @@
         },
         "photoLightbox": {
             "dateFormat": "MMMM D, YYYY, h:mm A"
+        },
+        "bookmarkButton": {
+            "bookmarkResultAdd": "Geomark added to bookmarks",
+            "bookmarkResultRemove": "Geomark removed from bookmarks"
         }
     },
     "pages": {

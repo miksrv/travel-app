@@ -8,6 +8,7 @@ import Input from '@/ui/input'
 import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
+import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 
@@ -36,6 +37,8 @@ const UserForm: React.FC<UserFormProps> = ({
     onCancel
 }) => {
     const { t } = useTranslation()
+
+    const userEmail = useAppSelector((state) => state.auth?.user?.email)
 
     const [formErrors, setFormErrors] = useState<FormDataType>()
     const [formData, setFormData] = useState<FormDataType>(
@@ -132,6 +135,33 @@ const UserForm: React.FC<UserFormProps> = ({
                 />
             )}
 
+            <div>
+                <h3 className={styles.header}>
+                    {t(`${TKEY}titleGeneralSettings`)}
+                </h3>
+            <div className={styles.formElement}>
+                <Input
+                    tabIndex={0}
+                    required={true}
+                    autoFocus={true}
+                    name={'name'}
+                    label={t('inputNameLabel')}
+                    placeholder={t('inputNamePlaceholder')}
+                    disabled={loading}
+                    value={formData?.name}
+                    error={formErrors?.name}
+                    onKeyDown={handleKeyPress}
+                    onChange={handleChange}
+                />
+            </div>
+
+            <div className={styles.formElement}>
+                <Input
+                    label={t('inputEmailLabel')}
+                    disabled={true}
+                    value={userEmail}
+                />
+            </div>
             <div>
                 <h3 className={styles.header}>
                     {t(`${TKEY}titleGeneralSettings`)}

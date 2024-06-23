@@ -118,10 +118,10 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
             <div className={styles.bottomPanel}>
                 <div>
-                    <Badge
-                        icon={'Photo'}
-                        content={place?.photos || 0}
-                    />
+                    {/*<Badge*/}
+                    {/*    icon={'Photo'}*/}
+                    {/*    content={place?.photos || 0}*/}
+                    {/*/>*/}
 
                     {!!place?.comments && (
                         <Badge
@@ -134,18 +134,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         <Badge
                             icon={'HeartEmpty'}
                             content={place.bookmarks}
-                        />
-                    )}
-
-                    <Badge
-                        icon={'Eye'}
-                        content={place?.views || 0}
-                    />
-
-                    {place?.distance && (
-                        <Badge
-                            icon={'Ruler'}
-                            content={`${place?.distance} ${t('km')}`}
                         />
                     )}
                 </div>

@@ -4,6 +4,7 @@ import { LocaleType } from '@/api/types/ApiTypes'
 export type User = {
     id: string
     name: string
+    email?: string
     avatar?: string
     reputation?: number
     website?: string

@@ -3,6 +3,7 @@ import { setCookie } from 'cookies-next'
 
 import { ApiTypes } from '@/api/types'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
@@ -10,39 +11,23 @@ import i18Config from '../next-i18next.config'
 type ApplicationStateProps = {
     showOverlay?: boolean
     showAuthDialog?: boolean
-    theme?: 'light' | 'dark'
     userLocation?: ApiTypes.LatLonCoordinate
     locale?: ApiTypes.LocaleType
 }
 
 export const getStorageLocale = (): string | undefined =>
-    typeof window !== 'undefined' && localStorage.getItem(LOCAL_STORAGE.LOCALE)
-        ? localStorage.getItem(LOCAL_STORAGE.LOCALE) ??
+    typeof window !== 'undefined'
+        ? LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ??
           i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
-
-export const getStorageTheme = (): string | undefined => {
-    const theme =
-        typeof window !== 'undefined' &&
-        localStorage.getItem(LOCAL_STORAGE.THEME)
-            ? localStorage.getItem(LOCAL_STORAGE.THEME) ?? 'light'
-            : 'light'
-
-    if (theme === 'dark') {
-        document.documentElement.classList.add('dark')
-    }
-
-    return theme
-}
 
 const applicationSlice = createSlice({
     initialState: {
         locale: getStorageLocale(),
         showAuthDialog: false,
-        showOverlay: false,
-        theme: getStorageTheme()
+        showOverlay: false
     } as ApplicationStateProps,
-    name: 'auth',
+    name: 'application',
     reducers: {
         closeAuthDialog: (state) => {
             state.showOverlay = false
@@ -65,23 +50,12 @@ const applicationSlice = createSlice({
         },
         toggleOverlay: (state, { payload }: PayloadAction<boolean>) => {
             state.showOverlay = payload
-        },
-        toggleTheme: (state, { payload }: PayloadAction<'light' | 'dark'>) => {
-            if (payload === 'dark') {
-                document.documentElement.classList.add('dark')
-            } else {
-                document.documentElement.classList.remove('dark')
-            }
-
-            localStorage.setItem(LOCAL_STORAGE.THEME, payload)
-            state.theme = payload
         }
     }
 })
 
 export const {
     toggleOverlay,
-    toggleTheme,
     closeAuthDialog,
     openAuthDialog,
     setLocale,

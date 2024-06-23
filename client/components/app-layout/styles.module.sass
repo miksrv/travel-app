@@ -33,7 +33,7 @@ $sideBarWidth: 300px
         min-height: 32px
         align-items: center
         border-radius: var(--border-radius)
-        color: var(--text-main-color)
+        color: var(--text-color-primary)
         text-decoration: none
         font-weight: 400
         transition: background-color .15s ease-out,opacity .15s ease-out
@@ -71,7 +71,7 @@ $sideBarWidth: 300px
             align-items: flex-end
             transition: background-color 0.5s ease
             padding-bottom: 20px
-            color: var(--text-second-color)
+            color: var(--text-color-secondary)
             justify-content: center
             font-size: $fontSizeHeadline
 
@@ -80,7 +80,7 @@ $sideBarWidth: 300px
                 height: 24px
                 margin-bottom: -2px
                 margin-left: -10px
-                fill: var(--text-second-color)
+                fill: var(--icon-color-secondary)
 
         &:hover
             .buttonToTop
@@ -114,6 +114,7 @@ $sideBarWidth: 300px
 
             .switchers
                 display: flex
+                padding-left: 12px
 
         .main
             width: 100%
@@ -173,3 +174,4 @@ $sideBarWidth: 300px
 
         .switchers
             display: flex
+            padding-left: 12px

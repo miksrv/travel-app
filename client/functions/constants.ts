@@ -1,9 +1,11 @@
+export const LOCAL_STORAGE_KEY = 'geometki'
+
 export const LOCAL_STORAGE = {
-    AUTH_SESSION: 'geometki_session',
-    AUTH_TOKEN: 'geometki_token',
-    LOCALE: 'geometki_locale',
-    LOCATION: 'geometki_location',
-    MAP_CENTER: 'geometki_mapCenter',
-    RETURN_PATH: 'geometki_returnPath',
-    THEME: 'geometki_theme'
+    AUTH_SESSION: 'session',
+    AUTH_TOKEN: 'token',
+    LOCALE: 'locale',
+    LOCATION: 'location',
+    MAP_CENTER: 'mapCenter',
+    RETURN_PATH: 'returnPath',
+    THEME: 'theme'
 }

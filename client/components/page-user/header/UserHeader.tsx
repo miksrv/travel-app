@@ -49,7 +49,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         className={styles.avatar}
                         alt={user?.name || ''}
                         priority={true}
-                        height={240}
+                        height={260}
                         width={260}
                         src={
                             user?.avatar || replaceAvatar

@@ -1,5 +1,7 @@
 import React, { useDebugValue, useEffect, useState } from 'react'
 
+import * as LocalStorage from '@/functions/localstorage'
+
 export const useLocalStorage = <S>(
     key: string,
     initialState?: S | (() => S)
@@ -9,25 +11,17 @@ export const useLocalStorage = <S>(
     useDebugValue(state)
 
     useEffect(() => {
-        const item = localStorage.getItem(key)
-        setState(item ? parse(item) : null)
+        const item = LocalStorage.getItem(key as any)
+        setState((item ?? null) as S)
     }, [])
 
     useEffect(() => {
         if (state) {
-            localStorage.setItem(key, JSON.stringify(state))
+            LocalStorage.setItem(key as any, state as string | number)
         }
     }, [state])
 
     return [state, setState]
-}
-
-const parse = (value: string) => {
-    try {
-        return JSON.parse(value)
-    } catch {
-        return value
-    }
 }
 
 export default useLocalStorage

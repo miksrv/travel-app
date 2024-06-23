@@ -6,6 +6,7 @@ import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
 import { appWithTranslation, useTranslation } from 'next-i18next'
+import { ThemeProvider } from 'next-themes'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
@@ -15,9 +16,12 @@ import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'
 
+import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 import i18Config from '../next-i18next.config'
+
+const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
 
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
@@ -25,11 +29,6 @@ const App = ({ Component, pageProps }: AppProps) => {
     const { store } = wrapper.useWrappedStore(pageProps)
 
     useEffect(() => {
-        const storage = localStorage?.getItem(LOCAL_STORAGE.LOCALE)
-        const locale = storage
-            ? JSON.parse(storage)
-            : i18Config.i18n.defaultLocale
-
         if (
             i18n?.language !== locale &&
             i18Config.i18n.locales.includes(locale) &&
@@ -44,7 +43,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
 
     return (
-        <>
+        <ThemeProvider>
             <Head>
                 <meta
                     name='viewport'
@@ -89,7 +88,7 @@ const App = ({ Component, pageProps }: AppProps) => {
                     }}
                 />
             )}
-        </>
+        </ThemeProvider>
     )
 }
 

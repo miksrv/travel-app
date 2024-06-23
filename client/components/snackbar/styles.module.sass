@@ -21,7 +21,7 @@
             animation: snackbar-horizontal .34s cubic-bezier(0.4,0,0.2,1)
 
 .notification
-    background-color: #FFF
+    background-color: var(--container-background)
     display: flex
     align-items: center
     position: relative
@@ -52,7 +52,7 @@
         flex-direction: column
 
         .title
-            color: var(--text-main-color)
+            color: var(--text-color-primary)
             display: -webkit-box
             flex: 1
             width: 100%
@@ -61,7 +61,7 @@
             overflow: hidden
 
         .content
-            color: var(--text-second-color)
+            color: var(--text-color-secondary)
 
             a
                 display: block
@@ -72,19 +72,19 @@
 
         .datetime
             font-size: $fontSizeCaption
-            color: var(--text-second-color)
+            color: var(--text-color-secondary)
 
     &.success
         svg
-            fill: $greenColor
+            fill: var(--color-green)
 
     &.warning
         svg
-            fill: $orangeColor
+            fill: var(--color-orange)
 
     &.error
         svg
-            fill: $redColor
+            fill: var(--color-red)
 
     .closeButton
         position: absolute
@@ -102,7 +102,7 @@
         svg
             width: 12px
             height: 12px
-            fill: var(--text-second-color)
+            fill: var(--icon-color-secondary)
 
 @keyframes snackbar-horizontal
     0%

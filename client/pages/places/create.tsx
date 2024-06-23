@@ -3,7 +3,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 
 import Container from '@/ui/container'
 import ScreenSpinner from '@/ui/screen-spinner'
@@ -27,6 +27,8 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
+    const [clickedButton, setClickedButton] = useState<boolean>(false)
+
     const [createPlace, { data, error, isLoading, isSuccess }] =
         API.usePlacesPostItemMutation()
 
@@ -43,7 +45,10 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     }
 
     const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
-        createPlace(formData as ApiTypes.RequestPlacesPostItem)
+        if (formData) {
+            setClickedButton(true)
+            createPlace(formData)
+        }
     }
 
     useEffect(() => {
@@ -53,6 +58,8 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     })
 
     useEffect(() => {
+        setClickedButton(false)
+
         if (data?.id && isSuccess) {
             router.push(`/places/${data.id}`)
         }
@@ -79,7 +86,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                 {!authSlice?.isAuth && <ScreenSpinner />}
 
                 <PlaceForm
-                    loading={isLoading || isSuccess}
+                    loading={isLoading || isSuccess || clickedButton}
                     errors={validationErrors}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}

@@ -127,15 +127,28 @@ export const addDecimalPoint = (input: number | string | undefined): string => {
     const inputValue: string =
         typeof input === 'number' ? input.toString() : input
 
-    const isInteger: boolean = inputValue.includes('.')
-        ? inputValue.split('.')[1].length === 0
-        : true
+    if (inputValue.includes('.')) {
+        const [integerPart, decimalPart] = inputValue.split('.')
+        if (decimalPart === '') {
+            return `${integerPart}.0`
+        }
 
-    if (isInteger) {
+        return inputValue
+    } else {
         return `${inputValue}.0`
-    } else if (!inputValue.includes('.')) {
-        return `${inputValue}.`
+    }
+}
+
+export const isValidJSON = (string: string) => {
+    if (!string || !string?.length) {
+        return true
     }
 
-    return inputValue
+    try {
+        JSON.parse(string)
+    } catch (e) {
+        return false
+    }
+
+    return true
 }

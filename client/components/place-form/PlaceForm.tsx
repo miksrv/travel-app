@@ -247,6 +247,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     enableFullScreen={true}
                     enableCoordsControl={true}
                     enableLayersSwitcher={true}
+                    scrollWheelZoom={!placeId}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
                     zoom={placeId ? 15 : undefined}

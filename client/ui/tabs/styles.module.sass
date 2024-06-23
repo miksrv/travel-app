@@ -13,7 +13,7 @@
       flex-grow: 1
       flex-shrink: 0
       min-width: 48px
-      padding: 6px 30px
+      padding: 10px 30px
       max-width: 100%
       overflow: hidden
       text-overflow: ellipsis
@@ -23,8 +23,11 @@
       border: none
       background-color: transparent
       border-radius: var(--border-radius)
-      color: var(--text-second-color)
+      color: var(--text-color-secondary)
+      font-family: var(--font-family)
+      font-size: var(--font-size)
       margin-right: 10px
+      font-weight: 500
 
       @media only screen and (max-width: $mobileMaxWidth)
         min-width: 24px
@@ -37,9 +40,8 @@
         background-color: var(--overlay-background)
 
       &.active
-        //color: var(--text-main-color)
-        background-color: var(--overlay-background)
-        color: var(--link-color)
+        color: var(--text-color-primary)
+        background-color: var(--input-background-content)
 
       .itemBottom
         background: var(--link-color)

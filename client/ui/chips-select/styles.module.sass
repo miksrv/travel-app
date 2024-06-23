@@ -31,7 +31,7 @@
       border-radius: var(--border-radius)
       box-sizing: border-box
       border: var(--input-border)
-      color: var(--text-main-color)
+      color: var(--text-color-primary)
       min-height: 36px
       margin: 0
       padding: 0 12px 0 2px
@@ -51,7 +51,9 @@
         flex: 1
         flex-direction: column
         justify-content: center
-        font-family: inherit
+        color: inherit
+        font-family: var(--font-family)
+        font-size: var(--font-size)
 
       &:focus, &:active, &:hover
         outline: none
@@ -59,7 +61,7 @@
         //box-shadow: rgba(25, 118, 210, 0.25) 0 0 0 0.05rem
 
       &.selected
-        color: var(--text-main-color)
+        color: var(--text-color-primary)
 
       span
         overflow: hidden
@@ -80,7 +82,7 @@
         svg
           width: 24px
           height: 24px
-          fill: var(--input-label-color)
+          fill: var(--icon-color-secondary)
 
       .clear, .toggleButton
         background: transparent
@@ -97,7 +99,7 @@
           height: 18px !important
 
           &:hover
-            fill: var(--input-label-color)Hover
+            fill: var(--icon-color-secondary-hover)
 
     &.open
       .searchContainer
@@ -106,9 +108,9 @@
 
     .optionsList
       position: absolute
-      background-color: #FFFFFF
+      background-color: var(--dropdown-background-color)
       box-shadow: $boxShadow2
-      border: 1px solid $borderDropdownColor
+      border: var(--input-border)
       list-style: none
       padding: 0
       width: 100%
@@ -141,7 +143,7 @@
             margin-right: 4px
 
         &:hover, &.active
-          background-color: var(--input-background-color)
+          background-color: var(--dropdown-background-color-hover)
 
         &:last-of-type
           border-bottom-left-radius: 8px
@@ -169,7 +171,7 @@
   font-size: $fontSizeHeadline
   box-sizing: border-box
   border: 0.5px solid rgba(0, 0, 0, 0.08)
-  background: #ffffff
+  background: var(--input-background-content)
   align-items: center
   height: 28px
 
@@ -185,7 +187,7 @@
     svg
       width: 16px
       height: 16px
-      fill: #99a2ad
+      fill: var(--icon-color-secondary)
       vertical-align: middle
 
     &:hover

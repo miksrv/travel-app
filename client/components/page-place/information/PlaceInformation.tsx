@@ -55,8 +55,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
         addressTypes.forEach((type) => {
             if (place?.address?.[type]?.id) {
                 address.push({
-                    id: place.address[type]?.id,
-                    name: place.address[type]?.title,
+                    id: place?.address[type]?.id,
+                    name: place?.address[type]?.title,
                     type
                 })
             }
@@ -85,7 +85,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     <div className={styles.key}>{t('category')}</div>
                     <div className={styles.value}>
                         <Image
-                            className={styles.categoryImage}
                             src={categoryImage(place?.category?.name)?.src}
                             alt={''}
                             width={15}
@@ -132,12 +131,28 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     </li>
                 )}
                 <li>
-                    <Icon name={'Time'} />
-                    <div className={styles.key}>{t('editTime')}</div>
-                    <div className={styles.value}>
-                        {formatDate(place?.updated?.date, t('dateFormat'))}
-                    </div>
+                    <Icon name={'Eye'} />
+                    <div className={styles.key}>{t('views')}</div>
+                    <div className={styles.value}>{place?.views || 0}</div>
                 </li>
+                {place?.updated && (
+                    <li>
+                        <Icon name={'Time'} />
+                        <div className={styles.key}>{t('editTime')}</div>
+                        <div className={styles.value}>
+                            {formatDate(place?.updated?.date, t('dateFormat'))}
+                        </div>
+                    </li>
+                )}
+                {place?.distance && (
+                    <li>
+                        <Icon name={'Ruler'} />
+                        <div className={styles.key}>{t('distance')}</div>
+                        <div className={styles.value}>
+                            {`${place?.distance} ${t('km')}`}
+                        </div>
+                    </li>
+                )}
                 <li>
                     <Icon name={'Point'} />
                     <div className={styles.key}>{t('coordinates')}</div>
