@@ -157,7 +157,6 @@ class Places extends ResourceController {
         // IDs of the places found using the search criteria
         $placesList = $this->_makeListFilters($this->model, $searchPlacesIds)->get()->getResult();
         $placesIds  = [];
-        $response   = [];
         foreach ($placesList as $place) {
             $placesIds[] = $place->id;
         }
@@ -171,75 +170,80 @@ class Places extends ResourceController {
         // Mapping places to array list
         foreach ($placesList as $place) {
             $avatar = $place->user_avatar ? explode('.', $place->user_avatar) : null;
-            $return = [
-                'id'        => $place->id,
-                'lat'       => (float) $place->lat,
-                'lon'       => (float) $place->lon,
-                'rating'    => (float) $place->rating,
-                'views'     => (int) $place->views,
-                'photos'    => (int) $place->photos,
-                'comments'  => (int) $place->comments,
-                'bookmarks' => (int) $place->bookmarks,
-                'title'     => $placeContent->title($place->id),
-                'content'   => $placeContent->content($place->id),
-                'category'  => [
-                    'name'  => $place->category,
-                    'title' => $place->{"category_$locale"},
-                ],
-                'author'    => [
-                    'id'     => $place->user_id,
-                    'name'   => $place->user_name,
-                    'avatar' => $avatar
-                        ? PATH_AVATARS . $place->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
-                        : null
-                ],
+
+            $place->address   = (object) [];
+            $place->rating    = (int) $place->rating;
+            $place->views     = (int) $place->views;
+            $place->photos    = (int) $place->photos;
+            $place->comments  = (int) $place->comments;
+            $place->bookmarks = (int) $place->bookmarks;
+            $place->title     = $placeContent->title($place->id);
+            $place->content   = $placeContent->content($place->id);
+            $place->category  = [
+                'name'  => $place->category,
+                'title' => $place->{"category_$locale"},
             ];
 
-            if ($coordinates && $place->distance) {
-                $return['distance'] = round((float) $place->distance, 1);
-            }
+            $place->author = [
+                'id'     => $place->user_id,
+                'name'   => $place->user_name,
+                'avatar' => $avatar
+                    ? PATH_AVATARS . $place->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    : null
+            ];
 
             if ($place->country_id) {
-                $return['address']['country'] = [
+                $place->address->country = [
                     'id'    => (int) $place->country_id,
                     'title' => $place->{"country_$locale"}
                 ];
             }
 
             if ($place->region_id) {
-                $return['address']['region'] = [
+                $place->address->region = [
                     'id'    => (int) $place->region_id,
                     'title' => $place->{"region_$locale"}
                 ];
             }
 
             if ($place->district_id) {
-                $return['address']['district'] = [
+                $place->address->district = [
                     'id'    => (int) $place->district_id,
                     'title' => $place->{"district_$locale"}
                 ];
             }
 
             if ($place->locality_id) {
-                $return['address']['locality'] = [
+                $place->address->locality = [
                     'id'    => (int) $place->locality_id,
                     'title' => $place->{"city_$locale"}
                 ];
             }
 
-            // Place cover
+            if ($coordinates && $place->distance) {
+                $place->distance = round((float) $place->distance, 1);
+            }
+
             if ($place->photos && file_exists(UPLOAD_PHOTOS . $place->id . '/cover.jpg')) {
-                $return['cover'] = [
+                $place->cover = [
                     'full'    => PATH_PHOTOS . $place->id . '/cover.jpg',
                     'preview' => PATH_PHOTOS . $place->id . '/cover_preview.jpg',
                 ];
             }
 
-            $response[] = $return;
+            unset(
+                $place->address_en, $place->address_ru, $place->category_en, $place->category_ru,
+                $place->user_id, $place->user_name, $place->user_avatar,
+                $place->country_id, $place->country_en, $place->country_ru,
+                $place->region_id, $place->region_en, $place->region_ru,
+                $place->district_id, $place->district_en, $place->district_ru,
+                $place->locality_id, $place->city_en, $place->city_ru,
+                $place->created_at, $place->updated_at, $place->deleted_at,
+            );
         }
 
         return $this->respond([
-            'items'  => $response,
+            'items'  => $placesList,
             'count'  => $this->_makeListFilters($this->model, $searchPlacesIds)->countAllResults(),
         ]);
     }
