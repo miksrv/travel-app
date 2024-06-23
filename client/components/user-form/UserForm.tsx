@@ -27,8 +27,6 @@ interface UserFormProps {
 
 type FormDataType = ApiTypes.RequestUsersPatch & { confirmPassword?: string }
 
-const TKEY = 'components.userForm.'
-
 const UserForm: React.FC<UserFormProps> = ({
     loading,
     values,
@@ -36,7 +34,7 @@ const UserForm: React.FC<UserFormProps> = ({
     onSubmit,
     onCancel
 }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('components.userForm')
 
     const userEmail = useAppSelector((state) => state.auth?.user?.email)
 
@@ -75,15 +73,15 @@ const UserForm: React.FC<UserFormProps> = ({
         const errors: FormDataType = {}
 
         if (!formData?.name) {
-            errors.name = t(`${TKEY}errorName`)
+            errors.name = t('errorName')
         }
 
         if (formData?.newPassword && !formData?.oldPassword) {
-            errors.oldPassword = t(`${TKEY}errorOldPassword`)
+            errors.oldPassword = t('errorOldPassword')
         }
 
         if (!formData?.newPassword && formData?.oldPassword) {
-            errors.newPassword = t(`${TKEY}errorNewPassword`)
+            errors.newPassword = t('errorNewPassword')
         }
 
         if (
@@ -91,11 +89,11 @@ const UserForm: React.FC<UserFormProps> = ({
             formData?.newPassword?.length! > 0 &&
             formData?.newPassword !== formData?.confirmPassword
         ) {
-            errors.confirmPassword = t(`${TKEY}errorConfirmPassword`)
+            errors.confirmPassword = t('errorConfirmPassword')
         }
 
         if (formData?.newPassword && formData?.newPassword?.length < 8) {
-            errors.newPassword = t(`${TKEY}errorPasswordLength`)
+            errors.newPassword = t('errorPasswordLength')
         }
 
         setFormErrors(errors)
@@ -130,15 +128,12 @@ const UserForm: React.FC<UserFormProps> = ({
             {!!Object.values(formErrors || {})?.length && (
                 <Message
                     type={'negative'}
-                    title={t(`${TKEY}errorsMessageTitle`)}
+                    title={t('errorsMessageTitle')}
                     list={Object.values(formErrors || {})}
                 />
             )}
 
-            <div>
-                <h3 className={styles.header}>
-                    {t(`${TKEY}titleGeneralSettings`)}
-                </h3>
+            <h3 className={styles.header}>{t('titleGeneralSettings')}</h3>
             <div className={styles.formElement}>
                 <Input
                     tabIndex={0}
@@ -163,16 +158,14 @@ const UserForm: React.FC<UserFormProps> = ({
                 />
             </div>
             <div>
-                <h3 className={styles.header}>
-                    {t(`${TKEY}titleGeneralSettings`)}
-                </h3>
+                <h3 className={styles.header}>{t('titleGeneralSettings')}</h3>
                 <div className={styles.formElement}>
                     <Input
                         tabIndex={0}
                         autoFocus={true}
                         name={'name'}
-                        label={t(`${TKEY}inputNameLabel`)}
-                        placeholder={t(`${TKEY}inputNamePlaceholder`)}
+                        label={t('inputNameLabel')}
+                        placeholder={t('inputNamePlaceholder')}
                         disabled={loading}
                         value={formData?.name}
                         error={formErrors?.name}
@@ -184,8 +177,8 @@ const UserForm: React.FC<UserFormProps> = ({
                 <div className={styles.formElement}>
                     <Input
                         name={'website'}
-                        label={t(`${TKEY}inputWebsiteLabel`)}
-                        placeholder={t(`${TKEY}inputWebsitePlaceholder`)}
+                        label={t('inputWebsiteLabel')}
+                        placeholder={t('inputWebsitePlaceholder')}
                         disabled={loading}
                         value={formData?.website}
                         error={formErrors?.website}
@@ -196,9 +189,7 @@ const UserForm: React.FC<UserFormProps> = ({
             </div>
 
             <div className={styles.section}>
-                <h3 className={styles.header}>
-                    {t(`${TKEY}titleEmailSettings`)}
-                </h3>
+                <h3 className={styles.header}>{t('titleEmailSettings')}</h3>
                 {[
                     'emailPhoto',
                     'emailRating',
@@ -221,19 +212,15 @@ const UserForm: React.FC<UserFormProps> = ({
             </div>
 
             <div className={styles.section}>
-                <h3 className={styles.header}>
-                    {t(`${TKEY}titleChangePassword`)}
-                </h3>
+                <h3 className={styles.header}>{t('titleChangePassword')}</h3>
                 {values?.authType === 'native' ? (
                     <>
                         <div className={styles.formElement}>
                             <Input
                                 name={'oldPassword'}
-                                label={t(`${TKEY}currentPassword`)}
+                                label={t('currentPassword')}
                                 type={'password'}
-                                placeholder={t(
-                                    `${TKEY}currentPasswordPlaceholder`
-                                )}
+                                placeholder={t('currentPasswordPlaceholder')}
                                 disabled={loading}
                                 value={formData?.oldPassword}
                                 error={formErrors?.oldPassword}
@@ -245,9 +232,9 @@ const UserForm: React.FC<UserFormProps> = ({
                         <div className={styles.formElement}>
                             <Input
                                 name={'newPassword'}
-                                label={t(`${TKEY}newPassword`)}
+                                label={t('newPassword')}
                                 type={'password'}
-                                placeholder={t(`${TKEY}newPasswordPlaceholder`)}
+                                placeholder={t('newPasswordPlaceholder')}
                                 disabled={loading}
                                 value={formData?.newPassword}
                                 error={formErrors?.newPassword}
@@ -259,11 +246,9 @@ const UserForm: React.FC<UserFormProps> = ({
                         <div className={styles.formElement}>
                             <Input
                                 name={'confirmPassword'}
-                                label={t(`${TKEY}confirmPassword`)}
+                                label={t('confirmPassword')}
                                 type={'password'}
-                                placeholder={t(
-                                    `${TKEY}confirmPasswordPlaceholder`
-                                )}
+                                placeholder={t('confirmPasswordPlaceholder')}
                                 disabled={loading}
                                 value={formData?.confirmPassword}
                                 error={formErrors?.confirmPassword}
@@ -307,7 +292,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     disabled={loading || disabled}
                     onClick={handleSubmit}
                 >
-                    {t(`${TKEY}buttonSave`)}
+                    {t('buttonSave')}
                 </Button>
 
                 <Button
@@ -316,7 +301,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     disabled={loading}
                     onClick={onCancel}
                 >
-                    {t(`${TKEY}buttonCancel`)}
+                    {t('buttonCancel')}
                 </Button>
             </div>
         </section>
