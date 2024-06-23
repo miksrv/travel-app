@@ -163,7 +163,7 @@ class Users extends ResourceController {
                 ->first();
 
             if (!password_verify($input->oldPassword, $validatePassword->password)) {
-                return $this->failValidationErrors('Введенный старый пароль не верный');
+                return $this->failValidationErrors(lang('Users.passwordComparisonFail'));
             }
 
             $updateData['password'] = hashUserPassword($input->newPassword);
@@ -178,7 +178,7 @@ class Users extends ResourceController {
         }
 
         if (empty($updateData)) {
-            return $this->failValidationErrors('No data for update');
+            return $this->failValidationErrors(lang('Users.noDataForUpdate'));
         }
 
         $userModel->update($id, $updateData);
@@ -197,7 +197,7 @@ class Users extends ResourceController {
         }
 
         if (!$photo = $this->request->getFile('avatar')) {
-            return $this->failValidationErrors('No photo for upload');
+            return $this->failValidationErrors(lang('Users.noPhotoForUpload'));
         }
 
         if (!$photo->hasMoved()) {
@@ -250,7 +250,7 @@ class Users extends ResourceController {
         }
 
         if (!$user = $usersModel->find($session->user?->id)) {
-            return $this->failValidationErrors('User not found');
+            return $this->failValidationErrors(lang('Users.userNotFound'));
         }
 
         $input = $this->request->getJSON();
@@ -262,11 +262,11 @@ class Users extends ResourceController {
             !isset($input->filename) ||
             !file_exists(UPLOAD_TEMPORARY . $input->filename))
         {
-            return $this->failValidationErrors('Incorrect data format when saving cover image');
+            return $this->failValidationErrors(lang('Users.incorrectAvatarData'));
         }
 
         if ($input->width < AVATAR_SMALL_WIDTH || $input->height < AVATAR_SMALL_HEIGHT) {
-            return $this->failValidationErrors('The width and length measurements are not correct, they are less than the minimum values');
+            return $this->failValidationErrors(lang('Users.smallAvatarDimensions', [AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT]));
         }
 
         $userAvatarDir = UPLOAD_AVATARS . $user->id . '/';
