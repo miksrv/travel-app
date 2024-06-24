@@ -1,4 +1,4 @@
-import { GetServerSidePropsResult, NextPage } from 'next'
+import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
@@ -12,10 +12,11 @@ import Carousel from '@/ui/carousel'
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes, Place } from '@/api/types'
-import { Item } from '@/api/types/Activity'
-import { Photo } from '@/api/types/Photo'
-import { User } from '@/api/types/User'
+import type { Place } from '@/api/types';
+import { ApiTypes } from '@/api/types'
+import type { Item } from '@/api/types/Activity'
+import type { Photo } from '@/api/types/Photo'
+import type { User } from '@/api/types/User'
 
 import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
@@ -57,8 +58,8 @@ const IndexPage: NextPage<IndexPageProps> = ({
                 window.innerHeight + window.scrollY >=
                 document.body.offsetHeight - 20
 
-            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
-                setLastDate(data.items[data.items?.length - 1].created?.date)
+            if (scrolledToBottom && !isFetching && !!data?.items.length) {
+                setLastDate(data.items[data.items.length - 1].created?.date)
             }
         }
 
@@ -122,7 +123,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
             />
 
             <Carousel options={{ dragFree: true, loop: true }}>
-                {placesList?.map((place) => (
+                {placesList.map((place) => (
                     <PlacesListItem
                         key={place.id}
                         place={place}
@@ -180,10 +181,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let lat = null
             let lon = null
 
-            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+            if (cookies[LOCAL_STORAGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
-                if (userLocation?.[0] && userLocation?.[1]) {
+                if (userLocation?.[0] && userLocation[1]) {
                     lat = parseFloat(userLocation[0])
                     lon = parseFloat(userLocation[1])
                 }
@@ -192,7 +193,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(setLocale(locale))
 
             const { data: placesList } = await store.dispatch(
-                API.endpoints?.placesGetList.initiate({
+                API.endpoints.placesGetList.initiate({
                     lat,
                     limit: 6,
                     lon,
@@ -202,13 +203,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
             )
 
             const { data: usersList } = await store.dispatch(
-                API.endpoints?.usersGetList.initiate({
+                API.endpoints.usersGetList.initiate({
                     limit: 4
                 })
             )
 
             const { data: photosList } = await store.dispatch(
-                API.endpoints?.photosGetList.initiate({
+                API.endpoints.photosGetList.initiate({
                     limit: 8
                 })
             )

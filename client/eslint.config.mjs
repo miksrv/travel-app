@@ -6,7 +6,8 @@ import nextPlugin from '@next/eslint-plugin-next';
 // import nextCoreWebVitals from '@next/core-web-vitals';
 import jestPlugin from 'eslint-plugin-jest';
 import eslintCommentsPlugin from 'eslint-plugin-eslint-comments';
-import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+// import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
 
 export default [
     // register all the plugins up-front
@@ -21,7 +22,7 @@ export default [
             // ['jsx-a11y']: jsxA11yPlugin,
             // ['react-hooks']: reactHooksPlugin,
             // ['react']: reactPlugin,
-            // ['simple-import-sort']: simpleImportSortPlugin,
+            ['simple-import-sort']: simpleImportSortPlugin,
             // ['unicorn']: unicornPlugin,
         }
     },
@@ -258,6 +259,36 @@ export default [
             'import/no-self-import': 'error',
             // Require modules with a single export to use a default export
             'import/prefer-default-export': 'off', // we want everything to be named
+
+            'simple-import-sort/imports': [
+                'error',
+                {
+                    groups: [
+                        // Packages `react` related packages come first.
+                        ['^react', '^\\w', '^@hookform', '^@radix-ui'],
+                        // npm packages
+                        // Anything that starts with a letter (or digit or underscore), or `@` followed by a letter.
+                        // ['^\\w'],
+                        // Internal packages.
+                        ['^@store(/.*|$)'],
+                        ['^@components(/.*|$)'],
+                        ['^@ui(/.*|$)'],
+                        ['^@lib(/.*|$)'],
+                        ['^@pages(/.*|$)'],
+                        ['^@utils(/.*|$)'],
+                        ['^@hooks(/.*|$)'],
+                        ['^@services(/.*|$)'],
+                        // Side effect imports.
+                        ['^\\u0000'],
+                        // Parent imports. Put `..` last.
+                        ['^\\.\\.(?!/?$)', '^\\.\\./?$'],
+                        // Other relative imports. Put same-folder imports and `.` last.
+                        ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
+                        // Style imports.
+                        ['^.+\\.?(css)$'],
+                    ],
+                },
+            ]
         }
     },
 
