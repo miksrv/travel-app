@@ -2,6 +2,8 @@ import globals from "globals";
 import pluginJs from "@eslint/js";
 import tseslint from "typescript-eslint";
 import importPlugin from 'eslint-plugin-import';
+import nextPlugin from '@next/eslint-plugin-next';
+// import nextCoreWebVitals from '@next/core-web-vitals';
 import jestPlugin from 'eslint-plugin-jest';
 import eslintCommentsPlugin from 'eslint-plugin-eslint-comments';
 import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
@@ -15,6 +17,7 @@ export default [
             ['eslint-comments']: eslintCommentsPlugin,
             ['import']: importPlugin,
             ['jest']: jestPlugin,
+            ['next']: nextPlugin,
             // ['jsx-a11y']: jsxA11yPlugin,
             // ['react-hooks']: reactHooksPlugin,
             // ['react']: reactPlugin,
@@ -202,6 +205,28 @@ export default [
                 },
             ],
 
+            //
+            // next
+            //
+            "next/google-font-display": "warn",
+            "next/google-font-preconnect": "warn",
+            "next/next-script-for-ga": "warn",
+            "next/no-async-client-component": "warn",
+            "next/no-before-interactive-script-outside-document": "warn",
+            "next/no-css-tags": "warn",
+            "next/no-head-element": "warn",
+            "next/no-html-link-for-pages": "warn",
+            "next/no-img-element": "warn",
+            "next/no-styled-jsx-in-document": "warn",
+            "next/no-sync-scripts": "warn",
+            "next/no-title-in-document-head": "warn",
+            "next/no-typos": "warn",
+            "next/no-unwanted-polyfillio": "warn",
+            "next/inline-script-id": "error",
+            "next/no-assign-module-variable": "error",
+            "next/no-document-import-in-page": "error",
+            "next/no-head-import-in-document": "error",
+            "next/no-script-component-in-head": "error",
 
             //
             // eslint-plugin-import
@@ -241,7 +266,7 @@ export default [
     // define the jest globals for all test files
     //
     {
-        files: ['packages/*/tests/**/*.{ts,tsx,cts,mts}'],
+        files: ['**/*.{ts,tsx,cts,mts}'],
         languageOptions: {
             globals: {
                 ...jestPlugin.environments.globals.globals,
