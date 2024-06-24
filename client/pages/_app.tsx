@@ -12,11 +12,10 @@ import { ThemeProvider } from 'next-themes'
 
 import '@/styles/globals.sass'
 import 'dayjs/locale/ru'
-
-import i18Config from '../next-i18next.config'
-
 import '@/styles/dark.css'
 import '@/styles/light.css'
+
+import i18Config from '../next-i18next.config'
 
 import { wrapper } from '@/api/store'
 import { LOCAL_STORAGE } from '@/functions/constants'

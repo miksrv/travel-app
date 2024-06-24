@@ -56,12 +56,14 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
             name:
                 formData?.name !== userData?.name ? formData?.name : undefined,
             newPassword:
-                userData?.authType === 'native' && formData?.newPassword &&
+                userData?.authType === 'native' &&
+                formData?.newPassword &&
                 formData.newPassword.length > 1
                     ? formData.newPassword
                     : undefined,
             oldPassword:
-                userData?.authType === 'native' && formData?.oldPassword &&
+                userData?.authType === 'native' &&
+                formData?.oldPassword &&
                 formData.oldPassword.length > 1
                     ? formData.oldPassword
                     : undefined,

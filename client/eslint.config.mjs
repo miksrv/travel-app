@@ -90,6 +90,7 @@ export default [
             // eslint-base
             //
             curly: ['error', 'all'],
+            semi: ['error', 'never'],
             eqeqeq: [
                 'error',
                 'always',
@@ -275,7 +276,12 @@ export default [
             'import/no-self-import': 'error',
             // Require modules with a single export to use a default export
             'import/prefer-default-export': 'off', // we want everything to be named
+        }
+    },
 
+    {
+        files: ['**/*.{ts,tsx}'],
+        rules: {
             'simple-import-sort/imports': [
                 'error',
                 {
@@ -284,9 +290,10 @@ export default [
                         ['^react', '^\\w', '^@hookform', '^@radix-ui'],
                         // npm packages
                         // Anything that starts with a letter (or digit or underscore), or `@` followed by a letter.
-                        // ['^\\w'],
+                        ['^\\w'],
                         // Internal packages.
                         ['^@store(/.*|$)'],
+                        ['^@api(/.*|$)'],
                         ['^@components(/.*|$)'],
                         ['^@ui(/.*|$)'],
                         ['^@lib(/.*|$)'],
@@ -301,11 +308,12 @@ export default [
                         // Other relative imports. Put same-folder imports and `.` last.
                         ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
                         // Style imports.
-                        ['^.+\\.?(css)$']
-                    ]
-                }
-            ]
-        }
+                        ['^.+\\.?(css,sass)$'],
+                        // SASS modules
+                    ],
+                },
+            ],
+        },
     },
 
     //

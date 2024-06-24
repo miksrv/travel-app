@@ -70,7 +70,8 @@ const UserForm: React.FC<UserFormProps> = ({
         }
 
         if (
-            formData.oldPassword && formData.newPassword &&
+            formData.oldPassword &&
+            formData.newPassword &&
             formData.newPassword.length > 0 &&
             formData.newPassword !== formData.confirmPassword
         ) {

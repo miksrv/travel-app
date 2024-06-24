@@ -5,10 +5,10 @@ import Lightbox, { Slide } from 'yet-another-react-lightbox'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
-import styles from './styles.module.sass'
-
 import 'yet-another-react-lightbox/plugins/captions.css'
 import 'yet-another-react-lightbox/styles.css'
+
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Photo, Placemark } from '@/api/types'

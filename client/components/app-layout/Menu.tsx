@@ -23,10 +23,10 @@ interface MenuProps {
     onClick?: () => void
 }
 
-const KEY = 'components.appLayout.menu.'
-
 const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
-    const { t } = useTranslation()
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.appLayout.menu'
+    })
 
     const dispatch = useAppDispatch()
 
@@ -35,54 +35,54 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             auth: true,
             icon: 'PlusCircle',
             link: '/places/create',
-            text: t(`${KEY}create`)
+            text: t('create')
         },
         {
             auth: true,
             icon: 'User',
             link: userId ? `/users/${userId}` : undefined,
-            text: t(`${KEY}profile`)
+            text: t('profile')
         },
         {
             auth: true,
             icon: 'Photo',
             link: userId ? `/users/${userId}/photos` : undefined,
-            text: t(`${KEY}photos`)
+            text: t('photos')
         },
         {
             icon: 'Feed',
             link: '/',
-            text: t(`${KEY}feed`)
+            text: t('feed')
         },
         {
             icon: 'Map',
             link: '/map',
-            text: t(`${KEY}map`)
+            text: t('map')
         },
         {
             icon: 'Place',
             link: '/places',
-            text: t(`${KEY}places`)
+            text: t('places')
         },
         {
             icon: 'Category',
             link: '/categories',
-            text: t(`${KEY}categories`)
+            text: t('categories')
         },
         {
             icon: 'Tag',
             link: '/tags',
-            text: t(`${KEY}tags`)
+            text: t('tags')
         },
         {
             icon: 'Users',
             link: '/users/',
-            text: t(`${KEY}users`)
+            text: t('users')
         },
         {
             icon: 'Telegram',
             link: 'https://t.me/geometki',
-            text: t(`${KEY}telegram`)
+            text: t('telegram')
         }
     ]
 

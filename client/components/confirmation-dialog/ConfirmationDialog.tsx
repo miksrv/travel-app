@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
 
-import styles from './styles.module.sass'
-
 import 'react-image-crop/src/ReactCrop.scss'
+
+import styles from './styles.module.sass'
 
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'

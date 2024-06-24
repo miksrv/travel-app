@@ -7,6 +7,7 @@ import isEqual from 'lodash-es/isEqual'
 import { useRouter } from 'next/dist/client/router'
 
 import 'leaflet.heat'
+import 'leaflet/dist/leaflet.css'
 
 import ContextMenu from './context-menu/ContextMenu'
 import CoordinatesControl from './coordinates-control/CoordinatesControl'
@@ -22,8 +23,6 @@ import CategoryControl from './CategoryControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerUser from './MarkerUser'
 import styles from './styles.module.sass'
-
-import 'leaflet/dist/leaflet.css'
 
 import { ApiTypes, Place, Placemark } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'

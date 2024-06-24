@@ -2,9 +2,9 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 import { useTranslation } from 'next-i18next'
 
-import styles from './styles.module.sass'
-
 import 'react-image-crop/src/ReactCrop.scss'
+
+import styles from './styles.module.sass'
 
 import { API, IMG_HOST } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
