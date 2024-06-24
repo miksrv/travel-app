@@ -128,7 +128,7 @@ const Place: React.FC<PlaceProps> = ({
                         section: place?.category?.name,
                         tags: place?.tags
                     },
-                    description: place?.content.substring(0, 250),
+                    description: place?.content?.substring(0, 250),
                     images: photoList?.slice(0, 3).map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
