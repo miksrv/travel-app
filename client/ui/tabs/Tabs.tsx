@@ -1,11 +1,10 @@
 import React from 'react'
 
-import Container, { ContainerProps } from '@/ui/container'
+import styles from './styles.module.sass'
+import TabHeader from './TabHeader'
 
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import TabHeader from './TabHeader'
-import styles from './styles.module.sass'
+import Container, { ContainerProps } from '@/ui/container'
 
 type TabType<T> = {
     label: string
@@ -16,7 +15,7 @@ interface TabsProps<T> extends ContainerProps {
     children?: React.ReactNode
     tabs?: TabType<T>[]
     activeTab?: T
-    onChangeTab?: (key: T) => void
+    onChangeTab?: (key?: T) => void
 }
 
 const Tabs = <T extends string>({

@@ -2,9 +2,9 @@
 
 import React, { useEffect } from 'react'
 
-import Spinner from '@/ui/spinner'
-
 import styles from './styles.module.sass'
+
+import Spinner from '@/ui/spinner'
 
 interface ScreenSpinnerProps {
     text?: string

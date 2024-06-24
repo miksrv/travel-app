@@ -1,11 +1,10 @@
-import type { Action, PayloadAction } from '@reduxjs/toolkit'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { encodeQueryData } from '@/functions/helpers'
+import type { Action, PayloadAction } from '@reduxjs/toolkit'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type Maybe<T> = T | void
 
@@ -226,12 +225,12 @@ export const API = createApi({
             merge: (currentCache, newItems, { arg }) => {
                 if (
                     (arg?.offset as number) === 0 &&
-                    newItems?.count === 0 &&
+                    newItems.count === 0 &&
                     currentCache.items
                 ) {
                     currentCache.items.length = 0
                 } else {
-                    currentCache.items?.push(...(newItems?.items || []))
+                    currentCache.items?.push(...(newItems.items ?? []))
                 }
             },
             providesTags: ['Notifications'],
@@ -326,7 +325,7 @@ export const API = createApi({
                 url: `places/cover/${data.placeId}`
             }),
             transformErrorResponse: (response) =>
-                (response.data as APIErrorType)?.messages?.error
+                (response.data as APIErrorType).messages.error
         }),
         placesPatchItem: builder.mutation<
             ApiTypes.ResponsePlacesPatchItem,

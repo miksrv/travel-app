@@ -1,12 +1,11 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { setCookie } from 'cookies-next'
 
-import { ApiTypes } from '@/api/types'
-
-import * as LocalStorage from '@/functions/localstorage'
-import { LOCAL_STORAGE } from '@/functions/constants'
-
 import i18Config from '../next-i18next.config'
+
+import { ApiTypes } from '@/api/types'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import * as LocalStorage from '@/functions/localstorage'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type ApplicationStateProps = {
     showOverlay?: boolean

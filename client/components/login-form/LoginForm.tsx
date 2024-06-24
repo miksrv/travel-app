@@ -1,28 +1,25 @@
 'use client'
 
-import { useTranslation } from 'next-i18next'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
+import styles from './styles.module.sass'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
-
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Input from '@/ui/input'
+import Message from '@/ui/message'
 
 interface LoginFormProps {
     onClickRegistration?: () => void
@@ -69,7 +66,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
     const validationErrors = useMemo(
         () =>
             isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
-                ? error?.messages
+                ? error.messages
                 : undefined,
         [error]
     )
@@ -85,7 +82,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
             errors.password = t('errorPassword')
         }
 
-        if (formData?.password && formData?.password?.length < 8) {
+        if (formData?.password && formData.password.length < 8) {
             errors.password = t('errorPasswordLength')
         }
 
@@ -195,7 +192,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
                 />
             )}
 
-            {!!Object.values(formErrors || {})?.length && (
+            {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
                     title={t('errorsMessageTitle')}

@@ -1,10 +1,10 @@
-import Image from 'next/image'
 import React from 'react'
+import Image from 'next/image'
+
+import type { DropdownOption } from './Dropdown'
+import styles from './styles.module.sass'
 
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import { DropdownOption } from './Dropdown'
-import styles from './styles.module.sass'
 
 interface DropdownProps {
     options?: DropdownOption[]
@@ -33,7 +33,6 @@ const OptionsList: React.FC<DropdownProps> = ({
                 >
                     {option.image && (
                         <Image
-                            className={styles.categoryIcon}
                             src={option.image.src}
                             alt={''}
                             width={22}

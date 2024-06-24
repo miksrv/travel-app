@@ -1,20 +1,18 @@
-import { Trans, useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useCallback, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { Trans, useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
-import ScreenSpinner from '@/ui/screen-spinner'
+import styles from './styles.module.sass'
 
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
-
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Input from '@/ui/input'
+import Message from '@/ui/message'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 interface UserFormProps {
     loading?: boolean
@@ -37,7 +35,7 @@ const UserForm: React.FC<UserFormProps> = ({
         keyPrefix: 'components.userForm'
     })
 
-    const userEmail = useAppSelector((state) => state.auth?.user?.email)
+    const userEmail = useAppSelector((state) => state.auth.user?.email)
 
     const [formErrors, setFormErrors] = useState<FormDataType>()
     const [formData, setFormData] = useState<FormDataType>(
@@ -45,10 +43,10 @@ const UserForm: React.FC<UserFormProps> = ({
     )
 
     const disabled =
-        values?.name === formData?.name &&
-        values?.website === formData?.website &&
-        !formData?.newPassword &&
-        !formData?.oldPassword
+        values?.name === formData.name &&
+        values?.website === formData.website &&
+        !formData.newPassword &&
+        !formData.oldPassword
 
     const handleChange = ({
         target: { name, value }
@@ -59,27 +57,28 @@ const UserForm: React.FC<UserFormProps> = ({
     const validateForm = useCallback(() => {
         const errors: FormDataType = {}
 
-        if (!formData?.name) {
+        if (!formData.name) {
             errors.name = t('errorName')
         }
 
-        if (formData?.newPassword && !formData?.oldPassword) {
+        if (formData.newPassword && !formData.oldPassword) {
             errors.oldPassword = t('errorOldPassword')
         }
 
-        if (!formData?.newPassword && formData?.oldPassword) {
+        if (!formData.newPassword && formData.oldPassword) {
             errors.newPassword = t('errorNewPassword')
         }
 
         if (
-            formData?.oldPassword &&
-            formData?.newPassword?.length! > 0 &&
-            formData?.newPassword !== formData?.confirmPassword
+            formData.oldPassword &&
+            formData.newPassword &&
+            formData.newPassword.length > 0 &&
+            formData.newPassword !== formData.confirmPassword
         ) {
             errors.confirmPassword = t('errorConfirmPassword')
         }
 
-        if (formData?.newPassword && formData?.newPassword?.length < 8) {
+        if (formData.newPassword && formData.newPassword.length < 8) {
             errors.newPassword = t('errorPasswordLength')
         }
 
@@ -112,7 +111,7 @@ const UserForm: React.FC<UserFormProps> = ({
         <section className={styles.component}>
             {loading && <ScreenSpinner />}
 
-            {!!Object.values(formErrors || {})?.length && (
+            {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
                     title={t('errorsMessageTitle')}
@@ -129,7 +128,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     label={t('inputNameLabel')}
                     placeholder={t('inputNamePlaceholder')}
                     disabled={loading}
-                    value={formData?.name}
+                    value={formData.name}
                     error={formErrors?.name}
                     onKeyDown={handleKeyPress}
                     onChange={handleChange}
@@ -150,7 +149,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     label={t('inputWebsiteLabel')}
                     placeholder={t('inputWebsitePlaceholder')}
                     disabled={loading}
-                    value={formData?.website}
+                    value={formData.website}
                     error={formErrors?.website}
                     onKeyDown={handleKeyPress}
                     onChange={handleChange}
@@ -167,7 +166,7 @@ const UserForm: React.FC<UserFormProps> = ({
                             type={'password'}
                             placeholder={'Введите свой текущий пароль на сайте'}
                             disabled={loading}
-                            value={formData?.oldPassword}
+                            value={formData.oldPassword}
                             error={formErrors?.oldPassword}
                             onKeyDown={handleKeyPress}
                             onChange={handleChange}
@@ -181,7 +180,7 @@ const UserForm: React.FC<UserFormProps> = ({
                             type={'password'}
                             placeholder={'Придумайте новый пароль'}
                             disabled={loading}
-                            value={formData?.newPassword}
+                            value={formData.newPassword}
                             error={formErrors?.newPassword}
                             onKeyDown={handleKeyPress}
                             onChange={handleChange}
@@ -195,7 +194,7 @@ const UserForm: React.FC<UserFormProps> = ({
                             type={'password'}
                             placeholder={'Повторите ввод нового пароля'}
                             disabled={loading}
-                            value={formData?.confirmPassword}
+                            value={formData.confirmPassword}
                             error={formErrors?.confirmPassword}
                             onKeyDown={handleKeyPress}
                             onChange={handleChange}

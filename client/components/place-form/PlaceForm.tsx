@@ -1,10 +1,17 @@
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import { useTranslation } from 'next-i18next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
+import styles from './styles.module.sass'
+
+import { API } from '@/api/api'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+import { ApiTypes } from '@/api/types'
+import { categoryImage } from '@/functions/categories'
 import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
@@ -12,15 +19,6 @@ import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
-
-import { API } from '@/api/api'
-import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-
-import { categoryImage } from '@/functions/categories'
-
-import styles from './styles.module.sass'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -82,7 +80,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
             !placeId ||
             (placeId &&
                 (formData?.lat || formData?.lat === 0) &&
-                (formData?.lon || formData?.lon === 0))
+                (formData.lon || formData.lon === 0))
         ) {
             setFormData({
                 ...formData,
@@ -139,7 +137,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     }
 
     const handleSearchTags = (value: string) => {
-        if (value?.length > 0) {
+        if (value.length > 0) {
             searchTags(value)
         }
     }
@@ -179,7 +177,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         <section className={styles.component}>
             {loading && <ScreenSpinner />}
 
-            {!!Object.values(formErrors || {})?.length && (
+            {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
                     title={t('errorsMessageTitle')}
@@ -236,7 +234,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                 {selectedCategory && (
                     <Image
                         className={styles.categoryImage}
-                        src={categoryImage(selectedCategory.key)?.src}
+                        src={categoryImage(selectedCategory.key).src}
                         alt={''}
                         width={17}
                         height={20}
@@ -253,7 +251,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     zoom={placeId ? 15 : undefined}
                     center={
                         placeId && formData
-                            ? [formData?.lat!, formData?.lon!]
+                            ? [formData.lat!, formData.lon!]
                             : undefined
                     }
                     userLatLon={location}

@@ -1,10 +1,8 @@
 import React from 'react'
 
-import Container, { ContainerProps } from '@/ui/container'
-
 import { Photo } from '@/api/types/Photo'
-
 import PhotoGallery from '@/components/photo-gallery'
+import Container, { ContainerProps } from '@/ui/container'
 
 interface UserGalleryProps extends Pick<ContainerProps, 'title' | 'footer'> {
     photos?: Photo[]

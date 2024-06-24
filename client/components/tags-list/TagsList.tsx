@@ -1,11 +1,10 @@
-import Link from 'next/link'
 import React from 'react'
-
-import Container, { ContainerProps } from '@/ui/container'
-
-import { Tag } from '@/api/types/Tag'
+import Link from 'next/link'
 
 import styles from './styles.module.sass'
+
+import { Tag } from '@/api/types/Tag'
+import Container, { ContainerProps } from '@/ui/container'
 
 interface TagsListProps extends Pick<ContainerProps, 'title'> {
     tags?: Tag[]

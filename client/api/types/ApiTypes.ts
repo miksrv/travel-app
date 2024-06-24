@@ -1,5 +1,3 @@
-import { Comments } from '@/api/types/Comments'
-
 import { Item } from './Activity'
 import { Notification } from './Notification'
 import { Photo } from './Photo'
@@ -13,6 +11,8 @@ import {
 import { Photo as poiPhoto, Place as poiPlace } from './Placemark'
 import { Tag } from './Tag'
 import { LevelData, User } from './User'
+
+import { Comments } from '@/api/types/Comments'
 
 /** General Types **/
 export type LatLonCoordinate = {

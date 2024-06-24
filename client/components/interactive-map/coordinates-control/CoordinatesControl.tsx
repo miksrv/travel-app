@@ -2,12 +2,11 @@
 
 import React, { useState } from 'react'
 
-import Button from '@/ui/button'
-import Container from '@/ui/container'
+import styles from './styles.module.sass'
 
 import { ApiTypes } from '@/api/types'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
 
 interface CoordinatesControlProps {
     coordinates?: ApiTypes.LatLonCoordinate

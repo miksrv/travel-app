@@ -1,13 +1,11 @@
-import { useTranslation } from 'next-i18next'
 import React from 'react'
-
-import Container from '@/ui/container'
-
-import { API } from '@/api/api'
-
-import CommentList from '@/components/comment-list'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import { API } from '@/api/api'
+import CommentList from '@/components/comment-list'
+import Container from '@/ui/container'
 
 interface CommentsProps {
     placeId: string

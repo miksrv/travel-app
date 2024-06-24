@@ -1,24 +1,21 @@
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import React, { useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
-import Badge from '@/ui/badge'
-import { BreadcrumbLink } from '@/ui/breadcrumbs'
-import Button from '@/ui/button'
-import RatingColored from '@/ui/rating-colored'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Place } from '@/api/types/Place'
-
 import BookmarkButton from '@/components/bookmark-button'
 import Header from '@/components/header'
 import PlaceCoverEditor from '@/components/place-cover-editor'
-
 import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Badge from '@/ui/badge'
+import { BreadcrumbLink } from '@/ui/breadcrumbs'
+import Button from '@/ui/button'
+import RatingColored from '@/ui/rating-colored'
 
 interface PlaceHeaderProps {
     place?: Place
@@ -39,7 +36,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const isAuth = useAppSelector((state) => state.auth?.isAuth)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
     const [coverHash, setCoverHash] = useState<string | number>('')
 
     const handleEditPlaceClick = (event: React.MouseEvent) => {
@@ -57,7 +54,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     }
 
     const handleBackLinkClick = async () => {
-        if (document?.referrer) {
+        if (document.referrer) {
             await router.push('/places')
         } else {
             router.back()

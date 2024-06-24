@@ -1,17 +1,15 @@
-import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Categories } from '@/api/types/Place'
-
 import { categoryImage } from '@/functions/categories'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
+import Container from '@/ui/container'
 
 interface CategoryControlProps {
     categories?: Categories[]
@@ -51,13 +49,13 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
 
         onChangeCategories?.(
             !event.target.checked
-                ? categories?.filter((item) => item !== category) || []
-                : [...(categories || []), category]
+                ? categories?.filter((item) => item !== category) ?? []
+                : [...(categories ?? []), category]
         )
     }
 
     const handleChangeAllCategories = () => {
-        if (categories?.length === Object.values(Categories)?.length) {
+        if (categories?.length === Object.values(Categories).length) {
             onChangeCategories?.([])
         } else {
             onChangeCategories?.(Object.values(Categories))
@@ -94,12 +92,13 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                         label={t('allCategories')}
                         checked={
                             categories?.length ===
-                            Object.values(Categories)?.length
+                            Object.values(Categories).length
                         }
                         indeterminate={
-                            categories?.length !==
-                                Object.values(Categories)?.length &&
-                            categories?.length! > 0
+                            categories &&
+                            categories.length !==
+                                Object.values(Categories).length &&
+                            categories.length > 0
                         }
                         onChange={handleChangeAllCategories}
                     />
@@ -112,7 +111,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                             label={
                                 <>
                                     <Image
-                                        src={categoryImage(item.name)?.src}
+                                        src={categoryImage(item.name).src}
                                         alt={''}
                                         width={15}
                                         height={18}

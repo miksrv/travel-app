@@ -1,22 +1,20 @@
+import React, { useEffect } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
-
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
-import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import * as LocalStorage from '@/functions/localstorage'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 interface AuthPageProps {}
 

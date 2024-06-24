@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
@@ -26,7 +26,7 @@ const Message: React.FC<MessageProps> = ({
         {text && <p className={styles.content}>{text}</p>}
         {list && (
             <ul>
-                {list?.map((item) =>
+                {list.map((item) =>
                     item.length ? <li key={`item${item}`}>{item}</li> : ''
                 )}
             </ul>

@@ -1,20 +1,16 @@
-import { useTranslation } from 'next-i18next'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Icon from '@/ui/icon'
-import Progress from '@/ui/progress'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { User } from '@/api/types/User'
-
 import Header from '@/components/header'
 import Reputation from '@/components/reputation'
 import UserAvatarEditor from '@/components/user-avatar-editor'
-
 import {
     formatDate,
     makeActiveLink,
@@ -23,10 +19,10 @@ import {
     timeAgo
 } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
-
 import defaultAvatar from '@/public/images/no-avatar.png'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Icon from '@/ui/icon'
+import Progress from '@/ui/progress'
 
 interface UserHeaderProps {
     user?: User
@@ -85,7 +81,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                             [<b>{user?.level?.level}</b>]{' '}
                             <Image
                                 className={styles.levelImage}
-                                src={levelImage(user?.level?.level)?.src}
+                                src={levelImage(user?.level?.level).src}
                                 alt={''}
                                 width={20}
                                 height={20}

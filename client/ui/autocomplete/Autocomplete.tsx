@@ -1,15 +1,14 @@
-import debounce from 'lodash-es/debounce'
-import { useTranslation } from 'next-i18next'
-import Image, { StaticImageData } from 'next/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import debounce from 'lodash-es/debounce'
+import Image, { StaticImageData } from 'next/image'
+import { useTranslation } from 'next-i18next'
 
+import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 import Spinner from '@/ui/spinner'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 export type DropdownOption = {
     title: string
@@ -108,10 +107,10 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         if (
             event.key === 'Enter' &&
             options?.length &&
-            options?.length >= 1 &&
+            options.length >= 1 &&
             search !== ''
         ) {
-            handleSelect(options?.[0])
+            handleSelect(options[0])
         }
     }
 
@@ -244,7 +243,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                 key={`option${i}`}
                                 className={cn(
                                     option.title === selectedOption?.title &&
-                                        option?.type === selectedOption?.type &&
+                                        option.type === selectedOption.type &&
                                         styles.active
                                 )}
                             >
@@ -264,7 +263,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                         )}
                                         <span>{option.title}</span>
                                     </div>
-                                    {option?.description && (
+                                    {option.description && (
                                         <div className={styles.description}>
                                             {option.description}
                                         </div>

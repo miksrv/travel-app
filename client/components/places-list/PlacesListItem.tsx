@@ -1,14 +1,12 @@
-import { useTranslation } from 'next-i18next'
+import React, { useMemo } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useMemo } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Badge from '@/ui/badge'
-import RatingColored from '@/ui/rating-colored'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
-
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
 import {
@@ -16,8 +14,8 @@ import {
     dateToUnixTime,
     numberFormatter
 } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Badge from '@/ui/badge'
+import RatingColored from '@/ui/rating-colored'
 
 interface PlacesListItemProps {
     place: Place
@@ -30,7 +28,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
 
     const placeAddress = useMemo(
         () => addressToString(place.address),
-        [place?.address]
+        [place.address]
     )
 
     return (
@@ -57,10 +55,10 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     href={`/places/${place.id}`}
                     title={place.title}
                 >
-                    {place?.cover && (
+                    {place.cover && (
                         <Image
                             className={styles.photo}
-                            alt={place?.title || ''}
+                            alt={place.title || ''}
                             quality={70}
                             height={180}
                             width={280}
@@ -77,14 +75,14 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {/*    content={place?.photos || 0}*/}
                     {/*/>*/}
 
-                    {!!place?.comments && (
+                    {!!place.comments && (
                         <Badge
                             icon={'Comment'}
                             content={numberFormatter(place.comments)}
                         />
                     )}
 
-                    {!!place?.bookmarks && (
+                    {!!place.bookmarks && (
                         <Badge
                             icon={'HeartEmpty'}
                             content={place.bookmarks}
@@ -96,7 +94,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {/*    content={numberFormatter(place?.views || 0)}*/}
                     {/*/>*/}
 
-                    {!!place?.distance && (
+                    {!!place.distance && (
                         <Badge
                             icon={'Ruler'}
                             content={numberFormatter(place.distance)}
@@ -110,12 +108,12 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     href={`/places/${place.id}`}
                     title={place.title}
                 >
-                    {place?.title}
+                    {place.title}
                 </Link>
             </h2>
 
             <div className={styles.address}>
-                {placeAddress?.map((address, i) => (
+                {placeAddress.map((address, i) => (
                     <span key={`address${address.type}${place.id}`}>
                         <Link
                             href={`/places?${address.type}=${address.id}`}
@@ -128,7 +126,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 ))}
             </div>
 
-            {place?.content ? (
+            {place.content ? (
                 <p>{place.content}</p>
             ) : (
                 <div className={styles.emptyContent}>{t('noData')}</div>

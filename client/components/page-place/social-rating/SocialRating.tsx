@@ -1,4 +1,3 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect } from 'react'
 import {
     OKIcon,
@@ -7,22 +6,22 @@ import {
     RedditShareButton,
     TelegramIcon,
     TelegramShareButton,
-    VKIcon,
-    VKShareButton,
     ViberIcon,
     ViberShareButton,
+    VKIcon,
+    VKShareButton,
     WhatsappIcon,
     WhatsappShareButton
 } from 'react-share'
+import { useTranslation } from 'next-i18next'
 
-import Container from '@/ui/container'
-import Rating from '@/ui/rating'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch } from '@/api/store'
-
-import styles from './styles.module.sass'
+import Container from '@/ui/container'
+import Rating from '@/ui/rating'
 
 interface SocialRatingProps {
     placeId?: string

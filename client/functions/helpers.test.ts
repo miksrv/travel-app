@@ -320,7 +320,8 @@ describe('helpers', () => {
         it('formats numbers in quadrillions with "P" suffix', () => {
             expect(helpers.numberFormatter(1e15)).toBe('1P')
             expect(helpers.numberFormatter(2.5e15)).toBe('2.5P')
-            // eslint-disable-next-line no-loss-of-precision
+
+            // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
             expect(helpers.numberFormatter(999999999999999999)).toBe('1E')
         })
 

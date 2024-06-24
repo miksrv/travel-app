@@ -1,36 +1,35 @@
 'use client'
 
+import React, { useEffect, useRef, useState } from 'react'
 import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
-import 'leaflet.heat'
-import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useRef, useState } from 'react'
 
-import Button from '@/ui/button'
-import Spinner from '@/ui/spinner'
+import 'leaflet.heat'
+import 'leaflet/dist/leaflet.css'
 
-import { ApiTypes, Place, Placemark } from '@/api/types'
-
-import { LOCAL_STORAGE } from '@/functions/constants'
-import { round } from '@/functions/helpers'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
-
-import CategoryControl from './CategoryControl'
-import LayerSwitcherControl from './LayerSwitcherControl'
-import MarkerUser from './MarkerUser'
 import ContextMenu from './context-menu/ContextMenu'
 import CoordinatesControl from './coordinates-control/CoordinatesControl'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
 import HistoricalPhotos from './historical-photos/HistoricalPhotos'
-import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
 import MarkerPhoto from './marker-photo/MarkerPhoto'
-import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
+import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
 import MarkerPoint from './marker-point/MarkerPoint'
+import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
 import PlaceMark from './place-mark/PlaceMark'
 import SearchControl from './search-control/SearchControl'
+import CategoryControl from './CategoryControl'
+import LayerSwitcherControl from './LayerSwitcherControl'
+import MarkerUser from './MarkerUser'
 import styles from './styles.module.sass'
+
+import { ApiTypes, Place, Placemark } from '@/api/types'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import Button from '@/ui/button'
+import Spinner from '@/ui/spinner'
 
 export const MapAdditionalLayers = {
     Heatmap: 'Heatmap',
@@ -129,7 +128,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     )
 
     const handleUserPosition = () => {
-        if (userLatLon?.lat && userLatLon?.lon) {
+        if (userLatLon?.lat && userLatLon.lon) {
             mapRef.current?.setView(
                 [userLatLon.lat, userLatLon.lon],
                 DEFAULT_MAP_ZOOM
@@ -180,7 +179,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     ) => {
         setPlaceMark(coords)
 
-        const url = new URL(window?.location?.href)
+        const url = new URL(window.location.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
         const param = coords ? `?m=${coords.lat},${coords.lon}` : ''
 
@@ -202,21 +201,18 @@ const InteractiveMap: React.FC<MapProps> = ({
         } else if (mapElement.webkitRequestFullscreen) {
             // For Safari on iOS devices
             const fullscreenElement =
-                // @ts-ignore
-                document.webkitFullscreenElement ||
-                // @ts-ignore
-                document.webkitCurrentFullScreenElement
+                (document as any).webkitFullscreenElement ||
+                (document as any).webkitCurrentFullScreenElement
             if (!fullscreenElement) {
                 await mapElement.webkitRequestFullscreen()
             } else {
-                // @ts-ignore
-                await document.webkitExitFullscreen()
+                await (document as any).webkitExitFullscreen()
             }
         }
     }
 
     useEffect(() => {
-        const url = new URL(window?.location?.href)
+        const url = new URL(window.location.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
 
         if (match && !placeMark) {
@@ -234,14 +230,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                 !readyStorage &&
                 !props.center &&
                 storeMapPosition &&
-                coordinates?.lon &&
-                coordinates?.lat &&
-                coordinates?.zoom &&
-                mapRef?.current?.setView
+                coordinates.lon &&
+                coordinates.lat &&
+                coordinates.zoom &&
+                mapRef.current?.setView
             ) {
-                mapRef?.current?.setView(
-                    [coordinates?.lat, coordinates?.lon],
-                    coordinates?.zoom || DEFAULT_MAP_ZOOM
+                mapRef.current?.setView(
+                    [coordinates.lat, coordinates.lon],
+                    coordinates.zoom || DEFAULT_MAP_ZOOM
                 )
             }
 
@@ -273,8 +269,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                     cursor: enableCoordsControl
                         ? 'crosshair'
                         : props.dragging
-                        ? 'pointer'
-                        : 'default',
+                          ? 'pointer'
+                          : 'default',
                     height: '100%',
                     width: '100%'
                 }}
@@ -344,7 +340,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
 
                 {places?.map((place, i) =>
-                    place?.type === 'cluster' ? (
+                    place.type === 'cluster' ? (
                         <MarkerPointCluster
                             key={`markerPointCluster${i}`}
                             marker={place}
@@ -364,7 +360,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
 
                 {photos?.map((photo, i) =>
-                    photo?.type === 'cluster' ? (
+                    photo.type === 'cluster' ? (
                         <MarkerPhotoCluster
                             key={`markerPhotoCluster${i}`}
                             marker={photo}

@@ -1,16 +1,14 @@
-import { useTranslation } from 'next-i18next'
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useTranslation } from 'next-i18next'
+
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { User } from '@/api/types/User'
-
 import { concatClassNames as cn, minutesAgo } from '@/functions/helpers'
-
 import defaultAvatar from '@/public/images/no-avatar.png'
-
-import styles from './styles.module.sass'
 
 type SizeType = 'small' | 'tiny' | 'medium'
 
@@ -52,7 +50,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
                     <Link
                         className={styles.avatarLink}
                         href={`/users/${user.id}`}
-                        title={`${t('linkTitle')} ${user?.name}`}
+                        title={`${t('linkTitle')} ${user.name}`}
                         style={{
                             height: getDimension(size),
                             width: getDimension(size)
@@ -80,9 +78,9 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
                 >
                     <Link
                         href={`/users/${user.id}`}
-                        title={`${t('linkTitle')} ${user?.name}`}
+                        title={`${t('linkTitle')} ${user.name}`}
                     >
-                        {user?.name}
+                        {user.name}
                     </Link>
                     {caption && <div className={styles.caption}>{caption}</div>}
                 </div>

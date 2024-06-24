@@ -1,24 +1,25 @@
-import '@/styles/dark.css'
-import '@/styles/globals.sass'
-import '@/styles/light.css'
+import React, { useEffect } from 'react'
+import { Provider } from 'react-redux'
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
-import { appWithTranslation, useTranslation } from 'next-i18next'
-import { ThemeProvider } from 'next-themes'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
-import { Provider } from 'react-redux'
+// import { useReportWebVitals } from 'next/web-vitals'
+import { appWithTranslation, useTranslation } from 'next-i18next'
+import { ThemeProvider } from 'next-themes'
 
-import { wrapper } from '@/api/store'
-
-import * as LocalStorage from '@/functions/localstorage'
-import { LOCAL_STORAGE } from '@/functions/constants'
+import '@/styles/globals.sass'
+import 'dayjs/locale/ru'
+import '@/styles/dark.css'
+import '@/styles/light.css'
 
 import i18Config from '../next-i18next.config'
+
+import { wrapper } from '@/api/store'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import * as LocalStorage from '@/functions/localstorage'
 
 const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
 
@@ -29,7 +30,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     useEffect(() => {
         if (
-            i18n?.language !== locale &&
+            i18n.language !== locale &&
             i18Config.i18n.locales.includes(locale) &&
             router.pathname !== '/404'
         ) {
@@ -39,7 +40,11 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     dayjs.extend(utc)
     dayjs.extend(relativeTime)
-    dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
+    dayjs.locale(i18n.language ?? i18Config.i18n.defaultLocale)
+
+    // useReportWebVitals((metric) => {
+    //     console.log(metric)
+    // })
 
     return (
         <ThemeProvider>

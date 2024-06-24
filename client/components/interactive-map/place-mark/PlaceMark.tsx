@@ -1,14 +1,13 @@
 'use client'
 
-import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
-
-import { ApiTypes } from '@/api/types'
-
-import { convertDMS } from '@/functions/coordinates'
+import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
+
+import { ApiTypes } from '@/api/types'
+import { convertDMS } from '@/functions/coordinates'
 
 interface PlaceMarkProps extends ApiTypes.LatLonCoordinate {
     onClick?: () => void

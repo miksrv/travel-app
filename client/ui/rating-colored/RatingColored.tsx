@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface RatingColoredProps {
     className?: string
@@ -34,7 +34,7 @@ const interpolateColor = (
     endColor: string
 ): string => {
     const rgb = (color: any) =>
-        color.match(/\w\w/g).map((x: any) => parseInt(x, 16))
+        color.match(/\w\w/g).map((x: string) => parseInt(x, 16))
 
     const [startR, startG, startB] = rgb(startColor)
     const [endR, endG, endB] = rgb(endColor)

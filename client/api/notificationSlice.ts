@@ -1,6 +1,5 @@
-import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
-
 import { Notification } from '@/api/types/Notification'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type SnackbarStateProps = {
     list: Notification[]
@@ -32,7 +31,7 @@ const notificationSlice = createSlice({
     name: 'snackbar',
     reducers: {
         addNotification: (state, { payload }: PayloadAction<Notification>) => {
-            if (!state.list?.find(({ id }) => id === payload.id)) {
+            if (!state.list.find(({ id }) => id === payload.id)) {
                 state.list = [...state.list, payload]
             }
         },
@@ -40,14 +39,14 @@ const notificationSlice = createSlice({
             state.list = []
         },
         deleteNotification: (state, { payload }: PayloadAction<string>) => {
-            state.list = state.list?.filter(({ id }) => id !== payload)
+            state.list = state.list.filter(({ id }) => id !== payload)
         },
         setReadNotification: (state, { payload }: PayloadAction<string>) => {
-            const notification = state.list?.find(({ id }) => id === payload)
+            const notification = state.list.find(({ id }) => id === payload)
 
             if (notification) {
                 state.list = [
-                    ...(state.list?.filter(({ id }) => id !== payload) || []),
+                    ...(state.list.filter(({ id }) => id !== payload) || []),
                     {
                         ...notification,
                         read: true

@@ -1,13 +1,12 @@
-import { useTranslation } from 'next-i18next'
 import React from 'react'
-
-import Container from '@/ui/container'
-
-import { Item } from '@/api/types/Activity'
+import { useTranslation } from 'next-i18next'
 
 import ActivityListItem from './ActivityListItem'
 import ActivityListItemLoader from './ActivityListItemLoader'
 import styles from './styles.module.sass'
+
+import { Item } from '@/api/types/Activity'
+import Container from '@/ui/container'
 
 interface PlacesListProps {
     activities?: Item[]

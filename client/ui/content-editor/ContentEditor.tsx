@@ -1,10 +1,11 @@
 'use client'
 
-import { IMarkdownEditor } from '@uiw/react-markdown-editor'
-import dynamic from 'next/dynamic'
 import React from 'react'
+import dynamic from 'next/dynamic'
 
 import styles from './styles.module.sass'
+
+import { IMarkdownEditor } from '@uiw/react-markdown-editor'
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
     ssr: false

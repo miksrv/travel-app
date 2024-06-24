@@ -1,8 +1,8 @@
 import React, { useRef } from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface TextareaProps
     extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
@@ -19,10 +19,12 @@ const Textarea: React.FC<TextareaProps> = ({
 }) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-    const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>) => {
-        onChange?.(evt.target?.value)
+    const handleChange = (
+        evt: React.ChangeEvent<HTMLTextAreaElement>
+    ): void => {
+        onChange?.(evt.target.value)
 
-        if (textAreaRef && textAreaRef.current && !disableAutoresize) {
+        if (textAreaRef.current && !disableAutoresize) {
             textAreaRef.current.style.height = 'inherit'
             textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight}px`
         }

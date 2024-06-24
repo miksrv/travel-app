@@ -1,18 +1,15 @@
+import React from 'react'
 import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-
-import { User } from '@/api/types/User'
-
-import UserAvatar from '@/components/user-avatar'
-
-import { levelImage } from '@/functions/userLevels'
 
 import styles from './styles.module.sass'
+
+import { User } from '@/api/types/User'
+import UserAvatar from '@/components/user-avatar'
+import { levelImage } from '@/functions/userLevels'
+import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 
 interface UserMenuProps {
     user?: User
@@ -37,7 +34,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                 [<b>{user?.level?.level}</b>]{' '}
                 <Image
                     className={styles.levelImage}
-                    src={levelImage(user?.level?.level)?.src}
+                    src={levelImage(user?.level?.level).src}
                     alt={''}
                     width={20}
                     height={20}

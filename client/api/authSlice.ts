@@ -1,11 +1,10 @@
-import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 import { deleteCookie, setCookie } from 'cookies-next'
 
 import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
-
-import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
+import * as LocalStorage from '@/functions/localstorage'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthStateProps = {
     isAuth?: boolean
@@ -35,12 +34,12 @@ const authSlice = createSlice({
             state,
             { payload }: PayloadAction<ApiTypes.ResponseAuthLogin | undefined>
         ) => {
-            state.token = payload?.token || ''
-            state.session = payload?.session || ''
-            state.user = payload?.user || undefined
-            state.isAuth = payload?.auth || false
+            state.token = payload?.token ?? ''
+            state.session = payload?.session ?? ''
+            state.user = payload?.user ?? undefined
+            state.isAuth = payload?.auth ?? false
 
-            if (payload?.auth && !!payload?.token) {
+            if (payload?.auth && !!payload.token) {
                 setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
                 LocalStorage.setItem(

@@ -1,24 +1,21 @@
-import { useTranslation } from 'next-i18next'
+import React, { useMemo } from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useMemo } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Container from '@/ui/container'
-import Icon from '@/ui/icon'
+import styles from './styles.module.sass'
 
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
-
 import MapLinks from '@/components/map-links'
 import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
-
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Container from '@/ui/container'
+import Icon from '@/ui/icon'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -50,13 +47,13 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
             'district',
             'locality'
         ]
-        let address: PlaceAddress[] = []
+        const address: PlaceAddress[] = []
 
         addressTypes.forEach((type) => {
             if (place?.address?.[type]?.id) {
                 address.push({
-                    id: place?.address[type]?.id,
-                    name: place?.address[type]?.title,
+                    id: place.address[type].id,
+                    name: place.address[type].title,
                     type
                 })
             }
@@ -85,7 +82,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     <div className={styles.key}>{t('category')}</div>
                     <div className={styles.value}>
                         <Image
-                            src={categoryImage(place?.category?.name)?.src}
+                            src={categoryImage(place?.category?.name).src}
                             alt={''}
                             width={15}
                             height={18}
@@ -116,15 +113,15 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         <Icon name={'Users'} />
                         <div className={styles.key}>{t('editors')}</div>
                         <div className={styles.value}>
-                            {place?.editors?.length === 1 ? (
+                            {place.editors.length === 1 ? (
                                 <UserAvatar
-                                    user={place?.editors?.[0]}
+                                    user={place.editors[0]}
                                     showName={true}
                                 />
                             ) : (
                                 <UserAvatarGroup
                                     size={'small'}
-                                    users={place?.editors}
+                                    users={place.editors}
                                 />
                             )}
                         </div>
@@ -140,7 +137,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         <Icon name={'Time'} />
                         <div className={styles.key}>{t('editTime')}</div>
                         <div className={styles.value}>
-                            {formatDate(place?.updated?.date, t('dateFormat'))}
+                            {formatDate(place.updated.date, t('dateFormat'))}
                         </div>
                     </li>
                 )}
@@ -149,7 +146,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         <Icon name={'Ruler'} />
                         <div className={styles.key}>{t('distance')}</div>
                         <div className={styles.value}>
-                            {`${place?.distance} ${t('km')}`}
+                            {`${place.distance} ${t('km')}`}
                         </div>
                     </li>
                 )}
@@ -167,8 +164,8 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         </Link>
                         <MapLinks
                             title={place?.title}
-                            lat={place?.lat!}
-                            lon={place?.lon!}
+                            lat={place?.lat ?? 0}
+                            lon={place?.lon ?? 0}
                         />
                     </div>
                 </li>
@@ -179,7 +176,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         className={styles.value}
                         style={{ display: 'block' }}
                     >
-                        {placeAddress?.map((address, i) => (
+                        {placeAddress.map((address, i) => (
                             <span key={`address${address.type}`}>
                                 <Link
                                     href={`/places?${address.type}=${address.id}`}
@@ -194,13 +191,13 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         ))}
 
                         {place?.address?.street && (
-                            <>{`, ${place?.address?.street}`}</>
+                            <>{`, ${place.address.street}`}</>
                         )}
                     </div>
                 </li>
             </ul>
             <div className={styles.map}>
-                {place?.id && (
+                {place?.id && place.category && (
                     <InteractiveMap
                         zoom={15}
                         center={[place.lat, place.lon]}
@@ -210,7 +207,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         fullMapLink={`/map#${place.lat},${place.lon},14`}
                         places={[
                             {
-                                category: place.category?.name!,
+                                category: place.category.name,
                                 lat: place.lat,
                                 lon: place.lon
                             }

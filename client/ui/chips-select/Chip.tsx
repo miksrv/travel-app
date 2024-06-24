@@ -1,8 +1,8 @@
 import React from 'react'
 
-import Icon from '@/ui/icon'
-
 import styles from './styles.module.sass'
+
+import Icon from '@/ui/icon'
 
 interface ChipProps {
     text: string

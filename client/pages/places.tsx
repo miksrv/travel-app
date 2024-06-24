@@ -1,32 +1,29 @@
-import { GetServerSidePropsResult, NextPage } from 'next'
+import React, { useMemo, useState } from 'react'
+import type { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import Head from 'next/head'
-import React, { useMemo, useState } from 'react'
-import { BreadcrumbList } from 'schema-dts'
-
-import Button from '@/ui/button'
-import Container from '@/ui/container'
-import Dialog from '@/ui/dialog'
-import Pagination from '@/ui/pagination'
+import type { BreadcrumbList } from 'schema-dts'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
-import { Category, LocationObject } from '@/api/types/Place'
-
+import type { Category, LocationObject } from '@/api/types/Place'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlacesFilterPanel from '@/components/places-filter-panel'
-import { PlacesFilterType } from '@/components/places-filter-panel/types'
+import type { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
-
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
+import Dialog from '@/ui/dialog'
+import Pagination from '@/ui/pagination'
 
 const DEFAULT_SORT = ApiTypes.SortFields.Updated
 const DEFAULT_ORDER = ApiTypes.SortOrders.DESC
@@ -163,20 +160,20 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             await handleClearLocationFilter()
         } else {
             await handleChangeFilter(
-                location?.type ?? 'locality',
-                location?.value
+                location.type ?? 'locality',
+                location.value
             )
         }
     }
 
-    const currentCategory = categoriesData?.find(
+    const currentCategory = categoriesData.find(
         ({ name }) => name === category
     )?.title
 
     const title = useMemo(() => {
         const titleTag = tag ? ` #${tag}` : ''
         const titlePage =
-            initialFilter?.page && initialFilter.page > 1
+            initialFilter.page && initialFilter.page > 1
                 ? ` - ${t('titlePage')} ${initialFilter.page}`
                 : ''
 
@@ -184,7 +181,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             return t('title') + titleTag + titlePage
         }
 
-        let titles = []
+        const titles = []
 
         if (locationType) {
             titles.push(locationData?.title)
@@ -204,7 +201,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     ])
 
     const breadcrumbsLinks = useMemo(() => {
-        let breadcrumbs = []
+        const breadcrumbs = []
 
         if (category || locationType || tag || currentPage > 1) {
             breadcrumbs.push({
@@ -216,7 +213,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         if (locationType && category) {
             breadcrumbs.push({
                 link: `/places?${locationType}=${locationData?.id}`,
-                text: locationData?.title!
+                text: locationData?.title ?? ''
             })
         }
 
@@ -226,12 +223,12 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadCrumbCurrent = category
         ? currentCategory
         : locationType
-        ? locationData?.title
-        : tag
-        ? `#${tag}`
-        : currentPage > 1
-        ? `${t('titlePage')} ${initialFilter.page}`
-        : t('breadCrumbCurrent')
+          ? locationData?.title
+          : tag
+            ? `#${tag}`
+            : currentPage > 1
+              ? `${t('titlePage')} ${initialFilter.page}`
+              : t('breadCrumbCurrent')
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -262,23 +259,20 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle('')
     }
 
-    const breadCrumbSchema: BreadcrumbList = {
-        // @ts-ignore
+    const breadCrumbSchema: BreadcrumbList | any = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            // @ts-ignore
-            ...(breadcrumbsLinks?.map((link, i) => ({
+            ...(breadcrumbsLinks.map((link, i) => ({
                 '@type': 'ListItem',
                 item: canonicalUrl + link.link,
                 name: link.text,
                 position: i + 1
             })) || []),
             {
-                // @ts-ignore
                 '@type': 'ListItem',
                 name: breadCrumbCurrent,
-                position: breadcrumbsLinks?.length + 1
+                position: breadcrumbsLinks.length + 1
             }
         ]
     }
@@ -305,14 +299,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             <NextSeo
                 title={title}
                 description={`${title} - ${placesList
-                    ?.map(({ title }) => title)
+                    .map(({ title }) => title)
                     .join(', ')
                     .substring(0, 220)}`}
                 canonical={canonicalPage}
                 openGraph={{
                     images: placesList
-                        ?.filter(({ cover }) => cover?.full)
-                        ?.map(({ cover, title }) => ({
+                        .filter(({ cover }) => cover?.full)
+                        .map(({ cover, title }) => ({
                             alt: `${title}`,
                             height: 180,
                             url: `${IMG_HOST}${cover?.preview}`,
@@ -414,10 +408,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 (context.query.order as ApiTypes.SortOrdersType) ||
                 DEFAULT_ORDER
 
-            if (!lat && !lon && cookies?.[LOCAL_STORAGE.LOCATION]) {
+            if (!lat && !lon && cookies[LOCAL_STORAGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
-                if (userLocation?.[0] && userLocation?.[1]) {
+                if (userLocation?.[0] && userLocation[1]) {
                     isUserLocation = true
 
                     lat = parseFloat(userLocation[0])
@@ -431,19 +425,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 !country && !region && !district && !locality
                     ? null
                     : country
-                    ? 'country'
-                    : region
-                    ? 'region'
-                    : district
-                    ? 'district'
-                    : 'locality'
+                      ? 'country'
+                      : region
+                        ? 'region'
+                        : district
+                          ? 'district'
+                          : 'locality'
 
             store.dispatch(setLocale(locale))
 
             const locationData = !locationType
                 ? null
                 : await store.dispatch(
-                      API.endpoints?.locationGetByType.initiate({
+                      API.endpoints.locationGetByType.initiate({
                           id: country ?? region ?? district ?? locality,
                           type: locationType
                       })
@@ -454,11 +448,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
 
             const { data: categoriesData } = await store.dispatch(
-                API.endpoints?.categoriesGetList.initiate()
+                API.endpoints.categoriesGetList.initiate()
             )
 
             const { data: placesList } = await store.dispatch(
-                API.endpoints?.placesGetList.initiate({
+                API.endpoints.placesGetList.initiate({
                     category,
                     country,
                     district,
@@ -479,7 +473,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
-                    categoriesData: categoriesData?.items || [],
+                    categoriesData: categoriesData?.items ?? [],
                     category,
                     country,
                     currentPage,
@@ -490,8 +484,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     locationType,
                     lon: !isUserLocation ? lon : null,
                     order,
-                    placesCount: placesList?.count || 0,
-                    placesList: placesList?.items || [],
+                    placesCount: placesList?.count ?? 0,
+                    placesList: placesList?.items ?? [],
                     region,
                     sort,
                     tag

@@ -142,8 +142,8 @@ describe('CoordinatesProvider - parse good coordinates', () => {
         ['1 2 1 2', ['N 1°2′ E 1°2′']],
         ['1 2 3 1 2 3', ['N 1°2′3″ E 1°2′3″']]
     ].forEach(function ([query]) {
-        it(`Parse ${query}`, async function () {
-            expect(isCoordinates(`${query}`)).toBeTruthy()
+        it(`Parse ${query as string}`, async function () {
+            expect(isCoordinates(`${query as string}`)).toBeTruthy()
 
             // let error = true
             //

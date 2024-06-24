@@ -1,15 +1,14 @@
+import React, { useMemo } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React, { useMemo } from 'react'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Category } from '@/api/types/Place'
-
 import AppLayout from '@/components/app-layout'
 import CategoriesList from '@/components/categories-list'
 import Header from '@/components/header'
@@ -26,7 +25,7 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const description = useMemo(
-        () => categories.map(({ title }) => title)?.join(', '),
+        () => categories.map(({ title }) => title).join(', '),
         [categories]
     )
 
@@ -75,7 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(setLocale(locale))
 
             const { data: categoriesList } = await store.dispatch(
-                API.endpoints?.categoriesGetList.initiate({ places: true })
+                API.endpoints.categoriesGetList.initiate({ places: true })
             )
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))

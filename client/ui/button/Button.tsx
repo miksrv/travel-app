@@ -1,13 +1,12 @@
-import Link from 'next/link'
 import React from 'react'
+import Link from 'next/link'
 
+import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 import Spinner from '@/ui/spinner'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 export interface ButtonProps
     extends React.ButtonHTMLAttributes<HTMLButtonElement> {
@@ -39,7 +38,7 @@ const Button: React.FC<ButtonProps> = ({
     const button = (
         <button
             {...props}
-            type={props.type || 'button'}
+            type={props.type ?? 'button'}
             className={cn(
                 className,
                 styles.button,

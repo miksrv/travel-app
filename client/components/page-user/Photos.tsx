@@ -1,16 +1,14 @@
-import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import React from 'react'
-
-import Container from '@/ui/container'
-import Pagination from '@/ui/pagination'
 
 import { SITE_LINK } from '@/api/api'
-
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import Container from '@/ui/container'
+import Pagination from '@/ui/pagination'
 
 interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
 

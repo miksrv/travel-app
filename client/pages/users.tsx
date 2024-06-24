@@ -1,21 +1,19 @@
-import { GetServerSidePropsResult, NextPage } from 'next'
+import React, { useMemo } from 'react'
+import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import React, { useMemo } from 'react'
-
-import Container from '@/ui/container'
-import Pagination from '@/ui/pagination'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { User } from '@/api/types/User'
-
+import type { ApiTypes } from '@/api/types'
+import type { User } from '@/api/types/User'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UsersList from '@/components/users-list'
+import Container from '@/ui/container'
+import Pagination from '@/ui/pagination'
 
 const USERS_PER_PAGE = 30
 
@@ -50,7 +48,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
             <NextSeo
                 title={title}
                 description={`${title} - ${usersList
-                    ?.map(({ name }) => name)
+                    .map(({ name }) => name)
                     .join(', ')
                     .substring(0, 220)}`}
                 canonical={`${canonicalUrl}users${
@@ -92,7 +90,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             store.dispatch(setLocale(locale))
 
             const { data: usersList } = await store.dispatch(
-                API.endpoints?.usersGetList.initiate({
+                API.endpoints.usersGetList.initiate({
                     limit: USERS_PER_PAGE,
                     offset: (currentPage - 1) * USERS_PER_PAGE
                 })
@@ -104,8 +102,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 props: {
                     ...translations,
                     currentPage,
-                    usersCount: usersList?.count || 0,
-                    usersList: usersList?.items || []
+                    usersCount: usersList?.count ?? 0,
+                    usersList: usersList?.items ?? []
                 }
             }
         }
