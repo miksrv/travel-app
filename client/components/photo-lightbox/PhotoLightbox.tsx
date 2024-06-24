@@ -46,9 +46,9 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
             index={photoIndex}
             plugins={[Captions, Zoom]}
             close={onCloseLightBox}
-            render={{ slide: ImageSlide }}
+            render={{ slide: ImageSlide as any }}
             slides={photos?.map(
-                (photo: Photo.Photo & Placemark.Photo) =>
+                (photo) =>
                     ({
                         alt: photo.title,
                         description: photo?.author && (
@@ -63,7 +63,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                                 )}
                             />
                         ),
-                        height: photo.height,
+                        height: (photo as Photo.Photo).height,
                         src: imageHost(photo.full),
                         title: photo?.placeId ? (
                             <Link
@@ -76,7 +76,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                         ) : (
                             photo.title
                         ),
-                        width: photo.width
+                        width: (photo as Photo.Photo).width
                     } as Slide)
             )}
         />

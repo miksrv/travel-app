@@ -1,17 +1,28 @@
-import Image from 'next/image'
+import Image, { ImageProps } from 'next/image'
+import React from 'react'
 import {
+    Slide,
     isImageFitCover,
     isImageSlide,
     useLightboxProps,
     useLightboxState
 } from 'yet-another-react-lightbox'
 
-const isNextJsImage = (slide) =>
+interface ImageSlideProps {
+    slide: ImageProps
+    offset: number
+    rect: {
+        height: number
+        width: number
+    }
+}
+
+const isNextJsImage = (slide: Slide) =>
     isImageSlide(slide) &&
     typeof slide.width === 'number' &&
     typeof slide.height === 'number'
 
-const ImageSlide = ({ slide, offset, rect }) => {
+const ImageSlide: React.FC<ImageSlideProps> = ({ slide, offset, rect }) => {
     const {
         on: { click },
         carousel: { imageFit }
@@ -19,19 +30,27 @@ const ImageSlide = ({ slide, offset, rect }) => {
 
     const { currentIndex } = useLightboxState()
 
-    const cover = isImageSlide(slide) && isImageFitCover(slide, imageFit)
+    const cover =
+        isImageSlide(slide as Slide) &&
+        isImageFitCover(slide as Slide, imageFit)
 
-    if (!isNextJsImage(slide)) return undefined
+    if (!isNextJsImage(slide as Slide)) return undefined
 
     const width = !cover
         ? Math.round(
-              Math.min(rect.width, (rect.height / slide.height) * slide.width)
+              Math.min(
+                  rect.width,
+                  (rect.height / Number(slide.height)) * Number(slide.width)
+              )
           )
         : rect.width
 
     const height = !cover
         ? Math.round(
-              Math.min(rect.height, (rect.width / slide.width) * slide.height)
+              Math.min(
+                  rect.height,
+                  (rect.width / Number(slide.width)) * Number(slide.height)
+              )
           )
         : rect.height
 
@@ -40,7 +59,7 @@ const ImageSlide = ({ slide, offset, rect }) => {
             <Image
                 fill
                 alt=''
-                src={slide}
+                src={slide.src}
                 loading='eager'
                 draggable={false}
                 placeholder={slide.blurDataURL ? 'blur' : undefined}
