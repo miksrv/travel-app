@@ -1,7 +1,7 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React, { useState } from 'react'
-import Gallery from 'react-photo-gallery'
+import PhotoAlbum from 'react-photo-album'
 
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
@@ -34,8 +34,8 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
         setShowLightbox(false)
     }
 
-    const handlePhotoClick = (event: React.MouseEvent, photos: any) => {
-        setPhotoIndex(photos.index)
+    const handlePhotoClick = (index: number) => {
+        setPhotoIndex(index)
         setShowLightbox(true)
     }
 
@@ -101,20 +101,24 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
 
             {!!item.photos?.length && (
                 <>
-                    <Gallery
+                    {/*todo: https://react-photo-album.com/examples/nextjs*/}
+                    <PhotoAlbum
+                        layout={'rows'}
+                        spacing={5}
                         photos={item.photos?.map((photo) => ({
                             height: photo.height,
                             src: `${IMG_HOST}${photo.preview}`,
                             width: photo.width
                         }))}
-                        onClick={handlePhotoClick}
+                        onClick={({ index }) => {
+                            handlePhotoClick(index)
+                        }}
                     />
 
                     <PhotoLightbox
                         photos={item.photos}
                         photoIndex={photoIndex}
                         showLightbox={showLightbox}
-                        onChangeIndex={setPhotoIndex}
                         onCloseLightBox={handleCloseLightbox}
                     />
                 </>
