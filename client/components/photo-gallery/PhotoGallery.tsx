@@ -187,7 +187,6 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 photos={localPhotos}
                 photoIndex={lightboxPhotoIndex}
                 showLightbox={typeof lightboxPhotoIndex === 'number'}
-                onChangeIndex={setLightboxPhotoIndex}
                 onCloseLightBox={() => setLightboxPhotoIndex(undefined)}
             />
 

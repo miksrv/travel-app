@@ -199,7 +199,6 @@ const MapPage: NextPage<MapPageProps> = () => {
                 photos={photoLightbox}
                 photoIndex={photoIndex}
                 showLightbox={showLightbox}
-                onChangeIndex={setPhotoIndex}
                 onCloseLightBox={handleCloseLightbox}
             />
 

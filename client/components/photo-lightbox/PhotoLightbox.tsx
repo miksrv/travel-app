@@ -1,14 +1,21 @@
 import { useTranslation } from 'next-i18next'
 import Link from 'next/link'
 import React from 'react'
-import Lightbox from 'react-image-lightbox'
+import Lightbox, { Slide } from 'yet-another-react-lightbox'
+import Captions from 'yet-another-react-lightbox/plugins/captions'
+import 'yet-another-react-lightbox/plugins/captions.css'
+import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+import 'yet-another-react-lightbox/styles.css'
 
 import { IMG_HOST } from '@/api/api'
 import { Photo, Placemark } from '@/api/types'
 
+import ImageSlide from '@/components/photo-lightbox/ImageSlide'
 import UserAvatar from '@/components/user-avatar'
 
 import { formatDate } from '@/functions/helpers'
+
+import styles from './styles.module.sass'
 
 interface PhotoLightboxProps {
     photos?: Photo.Photo[] | Placemark.Photo[]
@@ -22,8 +29,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
     photos,
     photoIndex = 0,
     showLightbox,
-    onCloseLightBox,
-    onChangeIndex
+    onCloseLightBox
 }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoLightbox'
@@ -34,66 +40,46 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
             ? link
             : `${IMG_HOST}${link}`
 
-    const imageUrl = (index: number) => imageHost(photos?.[index]?.full)
-    const ImagePreviewUrl = (index: number) =>
-        imageHost(photos?.[index]?.preview)
-
     return (
-        <>
-            {showLightbox && !!photos?.length && (
-                <Lightbox
-                    mainSrc={imageUrl(photoIndex)}
-                    nextSrc={imageUrl((photoIndex + 1) % (photos.length || 0))}
-                    prevSrc={imageUrl(
-                        (photoIndex + (photos.length || 0) - 1) %
-                            (photos.length || 0)
-                    )}
-                    mainSrcThumbnail={ImagePreviewUrl(photoIndex)}
-                    prevSrcThumbnail={ImagePreviewUrl(
-                        (photoIndex + (photos.length || 0) - 1) %
-                            (photos.length || 0)
-                    )}
-                    nextSrcThumbnail={ImagePreviewUrl(
-                        (photoIndex + 1) % (photos.length || 0)
-                    )}
-                    imageTitle={
-                        photos[photoIndex]?.placeId ? (
-                            <Link
-                                href={`/places/${photos[photoIndex].placeId}`}
-                                title={photos[photoIndex]?.title}
-                            >
-                                {photos[photoIndex]?.title}
-                            </Link>
-                        ) : (
-                            photos[photoIndex]?.title
-                        )
-                    }
-                    imageCaption={
-                        photos[photoIndex]?.author && (
+        <Lightbox
+            open={!!showLightbox}
+            index={photoIndex}
+            plugins={[Captions, Zoom]}
+            close={onCloseLightBox}
+            render={{ slide: ImageSlide }}
+            slides={photos?.map(
+                (photo: Photo.Photo & Placemark.Photo) =>
+                    ({
+                        alt: photo.title,
+                        description: photo?.author && (
                             <UserAvatar
                                 size={'medium'}
                                 showName={true}
-                                user={photos[photoIndex]?.author}
+                                user={photo?.author}
+                                className={styles.caption}
                                 caption={formatDate(
-                                    photos[photoIndex]?.created?.date,
+                                    photo?.created?.date,
                                     t('dateFormat')
                                 )}
                             />
-                        )
-                    }
-                    onCloseRequest={() => onCloseLightBox?.()}
-                    onMovePrevRequest={() =>
-                        onChangeIndex?.(
-                            (photoIndex + (photos.length || 0) - 1) %
-                                (photos.length || 0)
-                        )
-                    }
-                    onMoveNextRequest={() =>
-                        onChangeIndex?.((photoIndex + 1) % (photos.length || 0))
-                    }
-                />
+                        ),
+                        height: photo.height,
+                        src: imageHost(photo.full),
+                        title: photo?.placeId ? (
+                            <Link
+                                href={`/places/${photo.placeId}`}
+                                title={photo?.title}
+                                className={styles.title}
+                            >
+                                {photo?.title}
+                            </Link>
+                        ) : (
+                            photo.title
+                        ),
+                        width: photo.width
+                    } as Slide)
             )}
-        </>
+        />
     )
 }
 

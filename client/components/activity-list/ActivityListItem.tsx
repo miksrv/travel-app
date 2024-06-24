@@ -114,7 +114,6 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                         photos={item.photos}
                         photoIndex={photoIndex}
                         showLightbox={showLightbox}
-                        onChangeIndex={setPhotoIndex}
                         onCloseLightBox={handleCloseLightbox}
                     />
                 </>
