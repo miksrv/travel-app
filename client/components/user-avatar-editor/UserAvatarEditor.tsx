@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-import ReactCrop, {Crop} from 'react-image-crop';
+import ReactCrop, { Crop } from 'react-image-crop'
 import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'

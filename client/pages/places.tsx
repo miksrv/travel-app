@@ -223,12 +223,12 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadCrumbCurrent = category
         ? currentCategory
         : locationType
-        ? locationData?.title
-        : tag
-        ? `#${tag}`
-        : currentPage > 1
-        ? `${t('titlePage')} ${initialFilter.page}`
-        : t('breadCrumbCurrent')
+          ? locationData?.title
+          : tag
+            ? `#${tag}`
+            : currentPage > 1
+              ? `${t('titlePage')} ${initialFilter.page}`
+              : t('breadCrumbCurrent')
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -425,12 +425,12 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 !country && !region && !district && !locality
                     ? null
                     : country
-                    ? 'country'
-                    : region
-                    ? 'region'
-                    : district
-                    ? 'district'
-                    : 'locality'
+                      ? 'country'
+                      : region
+                        ? 'region'
+                        : district
+                          ? 'district'
+                          : 'locality'
 
             store.dispatch(setLocale(locale))
 

@@ -19,7 +19,9 @@ const Textarea: React.FC<TextareaProps> = ({
 }) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-    const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
+    const handleChange = (
+        evt: React.ChangeEvent<HTMLTextAreaElement>
+    ): void => {
         onChange?.(evt.target.value)
 
         if (textAreaRef.current && !disableAutoresize) {

@@ -45,7 +45,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
     const link = `/${linkPart}`
 
     const fetchPageNumbers: (string | number)[] = useMemo(() => {
-        const totalNumbers = (pageNeighbours * 2) + 3
+        const totalNumbers = pageNeighbours * 2 + 3
         const totalBlocks = totalNumbers + 2
 
         if (totalPages > totalBlocks) {
@@ -116,26 +116,26 @@ const Pagination: React.FC<PaginationProps<any>> = ({
                                       page: currentPage + 1
                                   })}`
                                 : page === LEFT_PAGE
-                                ? `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page: currentPage - 1
-                                  })}`
-                                : page === 1
-                                ? `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page: undefined
-                                  })}`
-                                : `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page
-                                  })}`
+                                  ? `${link}${encodeQueryData({
+                                        ...urlParam,
+                                        page: currentPage - 1
+                                    })}`
+                                  : page === 1
+                                    ? `${link}${encodeQueryData({
+                                          ...urlParam,
+                                          page: undefined
+                                      })}`
+                                    : `${link}${encodeQueryData({
+                                          ...urlParam,
+                                          page
+                                      })}`
                         }
                         title={
                             page === RIGHT_PAGE
                                 ? t('nextPage')
                                 : page === LEFT_PAGE
-                                ? t('prevPage')
-                                : `${t('page')} - ${page}`
+                                  ? t('prevPage')
+                                  : `${t('page')} - ${page}`
                         }
                         key={page}
                         onClick={(event) => {

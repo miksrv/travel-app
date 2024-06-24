@@ -76,7 +76,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                             photo.title
                         ),
                         width: (photo as Photo.Photo).width
-                    } as Slide)
+                    }) as Slide
             )}
         />
     )

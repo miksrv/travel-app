@@ -3,7 +3,7 @@ import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 
-import { API, isApiValidationErrors,SITE_LINK } from '@/api/api'
+import { API, isApiValidationErrors, SITE_LINK } from '@/api/api'
 import { ApiTypes } from '@/api/types'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'

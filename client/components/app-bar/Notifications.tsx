@@ -76,7 +76,9 @@ const Notifications: React.FC<NotificationsProps> = () => {
     useEffect(() => {
         const onScroll = () => {
             const targetDiv = notifyContainerRef.current
-            if (!targetDiv) {return}
+            if (!targetDiv) {
+                return
+            }
 
             const scrolledToBottom =
                 targetDiv.scrollTop + targetDiv.clientHeight >=
@@ -94,7 +96,9 @@ const Notifications: React.FC<NotificationsProps> = () => {
         }
 
         const targetDiv = notifyContainerRef.current
-        if (!targetDiv) {return}
+        if (!targetDiv) {
+            return
+        }
 
         targetDiv.addEventListener('scroll', onScroll)
 

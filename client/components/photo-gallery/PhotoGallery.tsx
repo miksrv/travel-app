@@ -63,9 +63,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             localPhotos.map((photo) => ({
                 ...photo,
                 full:
-                    photo.id === rotateData?.id
-                        ? rotateData.full!
-                        : photo.full,
+                    photo.id === rotateData?.id ? rotateData.full! : photo.full,
                 preview:
                     photo.id === rotateData?.id
                         ? rotateData.preview!

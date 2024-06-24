@@ -100,7 +100,8 @@ const parseHemispheres = (
     const isLat = (h: string) => h === 'N' || h === 'S'
 
     let swapLatLon = false
-    let hLat; let hLon
+    let hLat
+    let hLon
     if (h1 && h2 && !h3) {
         hLat = h1.trim()
         hLon = h2.trim()

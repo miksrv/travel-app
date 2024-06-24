@@ -4,7 +4,7 @@ import { ApiTypes } from '@/api/types'
 import { User } from '@/api/types/User'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
-import { createSlice,PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthStateProps = {
     isAuth?: boolean

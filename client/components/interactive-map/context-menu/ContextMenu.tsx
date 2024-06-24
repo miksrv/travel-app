@@ -82,8 +82,9 @@ const ContextMenu: React.FC = () => {
                 menuWrapHeight: number,
                 mapSize: Point
             ) => {
-                if (pointY > mapSize.y - menuWrapHeight)
-                    {return pointY - menuWrapHeight}
+                if (pointY > mapSize.y - menuWrapHeight) {
+                    return pointY - menuWrapHeight
+                }
                 return pointY
             }
 
@@ -135,7 +136,9 @@ const ContextMenu: React.FC = () => {
         }
     }, [])
 
-    if (!getContext) {return null}
+    if (!getContext) {
+        return null
+    }
 
     return (
         <div

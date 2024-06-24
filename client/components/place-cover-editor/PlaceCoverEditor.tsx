@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import ReactCrop, {Crop} from 'react-image-crop';
+import ReactCrop, { Crop } from 'react-image-crop'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 
@@ -48,8 +48,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
         [selectedPhotoId]
     )
 
-    const disabled =
-        isLoading || !imageCropData?.width || !imageCropData.height
+    const disabled = isLoading || !imageCropData?.width || !imageCropData.height
 
     const handleChangeCoverClick = (event: React.MouseEvent) => {
         if (!authSlice.isAuth) {
@@ -81,12 +80,8 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
             width: Math.round(
                 selectedPhoto.width * ((imageCropData.width || 0) / 100)
             ),
-            x: Math.round(
-                selectedPhoto.width * ((imageCropData.x || 0) / 100)
-            ),
-            y: Math.round(
-                selectedPhoto.height * ((imageCropData.y || 0) / 100)
-            )
+            x: Math.round(selectedPhoto.width * ((imageCropData.x || 0) / 100)),
+            y: Math.round(selectedPhoto.height * ((imageCropData.y || 0) / 100))
         })
     }
 

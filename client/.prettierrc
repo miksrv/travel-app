@@ -9,17 +9,5 @@
     "bracketSameLine": false,
     "arrowParens": "always",
     "endOfLine": "lf",
-    "singleAttributePerLine": true,
-    "importOrder": [
-        "@/ui/(.*)$",
-        "@/api/(.*)$",
-        "@/@mui/(.*)$",
-        "@/components/(.*)$",
-        "@/functions/(.*)$",
-        "@/public/(.*)$",
-        "^[./]"
-    ],
-    "importOrderGroupNamespaceSpecifiers": true,
-    "importOrderSeparation": true,
-    "importOrderSortSpecifiers": true
+    "singleAttributePerLine": true
 }

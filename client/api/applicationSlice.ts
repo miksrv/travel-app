@@ -5,7 +5,7 @@ import i18Config from '../next-i18next.config'
 import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
-import { createSlice,PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type ApplicationStateProps = {
     showOverlay?: boolean

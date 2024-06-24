@@ -51,8 +51,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     }
 
     const uploadingPhotos = useMemo(
-        () =>
-            selectedFiles.map((file) => URL.createObjectURL(file)).reverse(),
+        () => selectedFiles.map((file) => URL.createObjectURL(file)).reverse(),
         [selectedFiles]
     )
 

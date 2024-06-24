@@ -1,5 +1,5 @@
 import { Notification } from '@/api/types/Notification'
-import { createAsyncThunk, createSlice,PayloadAction } from '@reduxjs/toolkit'
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type SnackbarStateProps = {
     list: Notification[]

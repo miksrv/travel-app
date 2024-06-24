@@ -39,9 +39,9 @@ const interpolateColor = (
     const [startR, startG, startB] = rgb(startColor)
     const [endR, endG, endB] = rgb(endColor)
 
-    const r = Math.round(startR + ((endR - startR) * value))
-    const g = Math.round(startG + ((endG - startG) * value))
-    const b = Math.round(startB + ((endB - startB) * value))
+    const r = Math.round(startR + (endR - startR) * value)
+    const g = Math.round(startG + (endG - startG) * value)
+    const b = Math.round(startB + (endB - startB) * value)
 
     return `rgb(${r}, ${g}, ${b})`
 }

@@ -270,8 +270,8 @@ const InteractiveMap: React.FC<MapProps> = ({
                     cursor: enableCoordsControl
                         ? 'crosshair'
                         : props.dragging
-                        ? 'pointer'
-                        : 'default',
+                          ? 'pointer'
+                          : 'default',
                     height: '100%',
                     width: '100%'
                 }}

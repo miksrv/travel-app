@@ -1,13 +1,13 @@
-import globals from 'globals';
-import pluginJs from '@eslint/js';
-import tseslint from 'typescript-eslint';
-import importPlugin from 'eslint-plugin-import';
-import nextPlugin from '@next/eslint-plugin-next';
+import globals from 'globals'
+import pluginJs from '@eslint/js'
+import tseslint from 'typescript-eslint'
+import importPlugin from 'eslint-plugin-import'
+import nextPlugin from '@next/eslint-plugin-next'
 // import nextCoreWebVitals from '@next/core-web-vitals';
-import jestPlugin from 'eslint-plugin-jest';
-import { fixupConfigRules } from '@eslint/compat';
-import eslintCommentsPlugin from 'eslint-plugin-eslint-comments';
-import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
+import jestPlugin from 'eslint-plugin-jest'
+import { fixupConfigRules } from '@eslint/compat'
+import eslintCommentsPlugin from 'eslint-plugin-eslint-comments'
+import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js'
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
 
 export default [
@@ -23,7 +23,7 @@ export default [
             // ['jsx-a11y']: jsxA11yPlugin,
             // ['react-hooks']: reactHooksPlugin,
             // ['react']: reactPlugin,
-            ['simple-import-sort']: simpleImportSortPlugin,
+            ['simple-import-sort']: simpleImportSortPlugin
             // ['unicorn']: unicornPlugin,
         }
     },
@@ -65,20 +65,18 @@ export default [
         languageOptions: {
             globals: {
                 ...globals.es2022,
-                ...globals.node,
+                ...globals.node
             },
             parserOptions: {
                 allowAutomaticSingleRunInference: true,
                 cacheLifetime: {
                     // we pretty well never create/change tsconfig structure - so no need to ever evict the cache
                     // in the rare case that we do - just need to manually restart their IDE.
-                    glob: 'Infinity',
+                    glob: 'Infinity'
                 },
-                project: [
-                    'tsconfig.json',
-                ],
-                warnOnUnsupportedTypeScriptVersion: false,
-            },
+                project: ['tsconfig.json'],
+                warnOnUnsupportedTypeScriptVersion: false
+            }
         },
 
         settings: {
@@ -96,8 +94,8 @@ export default [
                 'error',
                 'always',
                 {
-                    null: 'never',
-                },
+                    null: 'never'
+                }
             ],
             'no-duplicate-imports': 'warn',
             'logical-assignment-operators': 'error',
@@ -112,17 +110,17 @@ export default [
             'no-process-exit': 'error',
             'no-fallthrough': [
                 'error',
-                { commentPattern: '.*intentional fallthrough.*' },
+                { commentPattern: '.*intentional fallthrough.*' }
             ],
             'comma-dangle': ['warn', 'never'],
-            'quotes': ['warn', 'single'],
+            quotes: ['warn', 'single'],
             'jsx-quotes': ['warn', 'prefer-single'],
             'max-len': [
                 'warn',
                 {
-                    'code': 120,
-                    'ignoreTemplateLiterals': true,
-                    'ignoreStrings': true
+                    code: 120,
+                    ignoreTemplateLiterals: true,
+                    ignoreStrings: true
                 }
             ],
             'one-var': ['error', 'never'],
@@ -149,14 +147,14 @@ export default [
             '@typescript-eslint/prefer-literal-enum-member': [
                 'error',
                 {
-                    allowBitwiseExpressions: true,
-                },
+                    allowBitwiseExpressions: true
+                }
             ],
             '@typescript-eslint/prefer-string-starts-ends-with': [
                 'error',
                 {
-                    allowSingleElementEquality: 'always',
-                },
+                    allowSingleElementEquality: 'always'
+                }
             ],
             '@typescript-eslint/unbound-method': 'off',
             // '@typescript-eslint/restrict-template-expressions': [
@@ -174,8 +172,8 @@ export default [
                 {
                     caughtErrors: 'all',
                     varsIgnorePattern: '^_',
-                    argsIgnorePattern: '^_',
-                },
+                    argsIgnorePattern: '^_'
+                }
             ],
             // '@typescript-eslint/prefer-nullish-coalescing': [
             //     'error',
@@ -192,8 +190,8 @@ export default [
             'eslint-comments/disable-enable-pair': [
                 'error',
                 {
-                    allowWholeFile: true,
-                },
+                    allowWholeFile: true
+                }
             ],
             // disallow a eslint-enable comment for multiple eslint-disable comments
             'eslint-comments/no-aggregating-enable': 'error',
@@ -214,9 +212,9 @@ export default [
                         'eslint-disable-line',
                         'eslint-disable-next-line',
                         'eslint-enable',
-                        'global',
-                    ],
-                },
+                        'global'
+                    ]
+                }
             ],
 
             //
@@ -303,9 +301,9 @@ export default [
                         // Other relative imports. Put same-folder imports and `.` last.
                         ['^\\./(?=.*/)(?!/?$)', '^\\.(?!/?$)', '^\\./?$'],
                         // Style imports.
-                        ['^.+\\.?(css)$'],
-                    ],
-                },
+                        ['^.+\\.?(css)$']
+                    ]
+                }
             ]
         }
     },
@@ -318,20 +316,17 @@ export default [
         files: ['**/*.{ts,tsx,cts,mts}'],
         languageOptions: {
             globals: {
-                ...jestPlugin.environments.globals.globals,
-            },
-        },
+                ...jestPlugin.environments.globals.globals
+            }
+        }
     },
     // test file specific configuration
     {
-        files: [
-            '**/*.spec.{ts,tsx,cts,mts}',
-            '*.test.{ts,tsx,cts,mts}',
-        ],
+        files: ['**/*.spec.{ts,tsx,cts,mts}', '*.test.{ts,tsx,cts,mts}'],
         rules: {
             '@typescript-eslint/no-empty-function': [
                 'error',
-                { allow: ['arrowFunctions'] },
+                { allow: ['arrowFunctions'] }
             ],
             '@typescript-eslint/no-non-null-assertion': 'off',
             '@typescript-eslint/no-unsafe-assignment': 'off',
@@ -351,7 +346,7 @@ export default [
             'jest/prefer-to-have-length': 'error',
             'jest/prefer-spy-on': 'error',
             'jest/valid-expect': 'error',
-            'jest/no-deprecated-functions': 'error',
-        },
-    },
-];
+            'jest/no-deprecated-functions': 'error'
+        }
+    }
+]

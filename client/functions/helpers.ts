@@ -38,8 +38,7 @@ export const makeActiveLink = (link: string) => {
     if (link.includes('http://') || link.includes('https://')) {
         return link
     }
-        return `https://${link}`
-
+    return `https://${link}`
 }
 
 export const equalsArrays = (array1?: string[], array2?: string[]): boolean =>
@@ -101,8 +100,10 @@ export const minutesAgo = (date?: string | Date): number =>
 export const formatDateUTC = (date?: string | Date): string =>
     date ? dayjs(date).format('YYYY-MM-DDTHH:mm:ss[Z]') : ''
 
-export const round = (value?: number, digits: number = 4): number | undefined =>
-    value ? Number(value.toFixed(digits)) : undefined
+export const round = (
+    value?: number,
+    digits: number = 4
+): number | undefined => (value ? Number(value.toFixed(digits)) : undefined)
 
 export const concatClassNames = (
     ...args: Array<string | boolean | null | undefined>
@@ -114,10 +115,10 @@ export const ratingColor = (
     value <= 1
         ? 'red'
         : value > 1 && value < 3
-        ? 'orange'
-        : value >= 3
-        ? 'green'
-        : 'gray'
+          ? 'orange'
+          : value >= 3
+            ? 'green'
+            : 'gray'
 
 export const addDecimalPoint = (input: number | string | undefined): string => {
     if (!input) {
@@ -135,8 +136,7 @@ export const addDecimalPoint = (input: number | string | undefined): string => {
 
         return inputValue
     }
-        return `${inputValue}.0`
-
+    return `${inputValue}.0`
 }
 
 export const isValidJSON = (string: string) => {

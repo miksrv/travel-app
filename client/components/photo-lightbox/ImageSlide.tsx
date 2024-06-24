@@ -34,7 +34,9 @@ const ImageSlide: React.FC<ImageSlideProps> = ({ slide, offset, rect }) => {
         isImageSlide(slide as Slide) &&
         isImageFitCover(slide as Slide, imageFit)
 
-    if (!isNextJsImage(slide as Slide)) {return undefined}
+    if (!isNextJsImage(slide as Slide)) {
+        return undefined
+    }
 
     const width = !cover
         ? Math.round(
