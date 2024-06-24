@@ -1,10 +1,10 @@
-import packageInfo from '@/package.json'
-import { update } from '@/update'
 import React from 'react'
 
-import { formatDate } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { formatDate } from '@/functions/helpers'
+import packageInfo from '@/package.json'
+import { update } from '@/update'
 
 const Footer: React.FC = () => (
     <footer className={styles.footer}>

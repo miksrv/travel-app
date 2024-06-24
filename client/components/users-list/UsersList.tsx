@@ -1,17 +1,14 @@
-import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React from 'react'
-
-import Container, { ContainerProps } from '@/ui/container'
-import Progress from '@/ui/progress'
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 import { User } from '@/api/types/User'
-
 import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 import styles from '@/components/users-list/styles.module.sass'
-
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
+import Container, { ContainerProps } from '@/ui/container'
+import Progress from '@/ui/progress'
 
 interface UsersListProps
     extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
@@ -39,12 +36,12 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                             <>
                                 <Image
                                     className={styles.levelImage}
-                                    src={levelImage(user?.level?.level)?.src}
+                                    src={levelImage(user.level?.level).src}
                                     alt={''}
                                     width={16}
                                     height={16}
                                 />
-                                {user?.level?.level} {t(`${KEY}level`)}
+                                {user.level?.level} {t(`${KEY}level`)}
                             </>
                         }
                     />
@@ -53,19 +50,19 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                         <noindex>
                             <p>{`${t(`${KEY}reputation`)}: `}</p>
                         </noindex>
-                        <Reputation value={user?.reputation || 0} />
+                        <Reputation value={user.reputation || 0} />
                     </div>
 
                     <div className={styles.level}>
                         <noindex>
-                            <p>{user?.level?.title}</p>
+                            <p>{user.level?.title}</p>
                         </noindex>
                         <Progress
                             className={styles.progress}
                             value={nextLevelPercentage(
-                                user?.level?.experience || 0,
-                                user?.level?.nextLevel ||
-                                    user?.level?.experience ||
+                                user.level?.experience || 0,
+                                user.level?.nextLevel ||
+                                    user.level?.experience ||
                                     0
                             )}
                         />

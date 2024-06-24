@@ -1,27 +1,24 @@
 'use client'
 
-import { useLeafletContext } from '@react-leaflet/core'
-import { Point } from 'leaflet'
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useEffect, useRef, useState } from 'react'
+import { Point } from 'leaflet'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Container from '@/ui/container'
+import styles from './styles.module.sass'
 
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
-
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
+import { useLeafletContext } from '@react-leaflet/core'
 
 const ContextMenu: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -52,7 +49,7 @@ const ContextMenu: React.FC = () => {
     })
 
     const handleCopyCoordinates = () => {
-        navigator?.clipboard?.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
+        navigator.clipboard.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
         setIsShowMenu(false)
 
         dispatch(
@@ -86,8 +83,8 @@ const ContextMenu: React.FC = () => {
                 mapSize: Point
             ) => {
                 if (pointY > mapSize.y - menuWrapHeight)
-                    return pointY - menuWrapHeight
-                else return pointY
+                    {return pointY - menuWrapHeight}
+                return pointY
             }
 
             mapContext.current.map.on('contextmenu', (event) => {
@@ -138,7 +135,7 @@ const ContextMenu: React.FC = () => {
         }
     }, [])
 
-    if (!getContext) return null
+    if (!getContext) {return null}
 
     return (
         <div
@@ -160,7 +157,7 @@ const ContextMenu: React.FC = () => {
                             title={t('copyToClipboard')}
                             onClick={handleCopyCoordinates}
                         >
-                            {convertDMS(pointCords?.lat!, pointCords?.lon!)}
+                            {convertDMS(pointCords?.lat, pointCords?.lon)}
                         </Button>
                     </li>
                     {isAuth && (
@@ -170,8 +167,8 @@ const ContextMenu: React.FC = () => {
                                 title={t('addNewPlace')}
                                 onClick={() => {
                                     setCoordinates({
-                                        lat: pointCords?.lat!,
-                                        lon: pointCords?.lon!,
+                                        lat: pointCords?.lat ?? 0,
+                                        lon: pointCords?.lon ?? 0,
                                         zoom: 18
                                     })
                                 }}
@@ -183,25 +180,25 @@ const ContextMenu: React.FC = () => {
                     <li>
                         <Yandex
                             showTitle={true}
-                            lat={pointCords?.lat!}
-                            lon={pointCords?.lon!}
-                            zoom={mapContext.current.map?.getZoom()}
+                            lat={pointCords?.lat ?? 0}
+                            lon={pointCords?.lon ?? 0}
+                            zoom={mapContext.current.map.getZoom()}
                         />
                     </li>
                     <li>
                         <Google
                             showTitle={true}
-                            lat={pointCords?.lat!}
-                            lon={pointCords?.lon!}
-                            zoom={mapContext.current.map?.getZoom()}
+                            lat={pointCords?.lat ?? 0}
+                            lon={pointCords?.lon ?? 0}
+                            zoom={mapContext.current.map.getZoom()}
                         />
                     </li>
                     <li>
                         <Wikimapia
                             showTitle={true}
-                            lat={pointCords?.lat!}
-                            lon={pointCords?.lon!}
-                            zoom={mapContext.current.map?.getZoom()}
+                            lat={pointCords?.lat ?? 0}
+                            lon={pointCords?.lon ?? 0}
+                            zoom={mapContext.current.map.getZoom()}
                         />
                     </li>
                 </ul>

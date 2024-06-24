@@ -1,15 +1,10 @@
-import { PlacePageProps } from '@/pages/places/[...slug]'
+import React from 'react'
+import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import Head from 'next/head'
-import React from 'react'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
-import Button from '@/ui/button'
-import Carousel from '@/ui/carousel'
-
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
-
 import Comments from '@/components/page-place/comments'
 import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
@@ -17,8 +12,10 @@ import PlaceInformation from '@/components/page-place/information'
 import PlacePhotos from '@/components/page-place/photos'
 import SocialRating from '@/components/page-place/social-rating'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
-
 import { formatDateUTC } from '@/functions/helpers'
+import { PlacePageProps } from '@/pages/places/[...slug]'
+import Button from '@/ui/button'
+import Carousel from '@/ui/carousel'
 
 interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
@@ -32,15 +29,14 @@ const Place: React.FC<PlaceProps> = ({
 }) => {
     const { t, i18n } = useTranslation()
 
-    const { data: ratingData } = API.useRatingGetListQuery(place?.id!, {
+    const { data: ratingData } = API.useRatingGetListQuery(place?.id ?? '', {
         skip: !place?.id
     })
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pagePlaceUrl = `${canonicalUrl}places/${place?.id}`
 
-    const breadCrumbSchema: BreadcrumbList = {
-        // @ts-ignore
+    const breadCrumbSchema: BreadcrumbList | any = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -58,8 +54,7 @@ const Place: React.FC<PlaceProps> = ({
         ]
     }
 
-    const placeSchema: LocalBusiness = {
-        // @ts-ignore
+    const placeSchema: LocalBusiness | any = {
         '@context': 'https://schema.org',
         '@type': 'LocalBusiness',
         address: {
@@ -95,7 +90,7 @@ const Place: React.FC<PlaceProps> = ({
             longitude: place?.lon
         },
         image: photoList?.length
-            ? photoList?.map(({ full }) => `${IMG_HOST}${full}`)
+            ? photoList.map(({ full }) => `${IMG_HOST}${full}`)
             : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
@@ -123,7 +118,7 @@ const Place: React.FC<PlaceProps> = ({
 
             <NextSeo
                 title={place?.title}
-                description={place?.content?.substring(0, 220)}
+                description={place?.content.substring(0, 220)}
                 canonical={pagePlaceUrl}
                 openGraph={{
                     article: {
@@ -133,7 +128,7 @@ const Place: React.FC<PlaceProps> = ({
                         section: place?.category?.name,
                         tags: place?.tags
                     },
-                    description: place?.content?.substring(0, 250),
+                    description: place?.content.substring(0, 250),
                     images: photoList?.slice(0, 3).map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
@@ -179,12 +174,12 @@ const Place: React.FC<PlaceProps> = ({
                 tags={place?.tags}
             />
 
-            <Comments placeId={place?.id!} />
+            <Comments placeId={place?.id ?? ''} />
 
             {!!nearPlaces?.length && (
                 <>
                     <Carousel options={{ dragFree: true, loop: true }}>
-                        {nearPlaces?.map((place) => (
+                        {nearPlaces.map((place) => (
                             <PlacesListItem
                                 key={place.id}
                                 place={place}

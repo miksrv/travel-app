@@ -1,18 +1,18 @@
-import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useEffect, useMemo, useState } from 'react'
-import ReactCrop, { type Crop } from 'react-image-crop'
-import 'react-image-crop/src/ReactCrop.scss'
+import ReactCrop, {Crop} from 'react-image-crop';
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Dialog from '@/ui/dialog'
+import styles from './styles.module.sass'
+
+import 'react-image-crop/src/ReactCrop.scss'
 
 import { API, IMG_HOST } from '@/api/api'
 import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Dialog from '@/ui/dialog'
 
 interface PlaceCoverEditorProps {
     placeId?: string
@@ -49,7 +49,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     )
 
     const disabled =
-        isLoading || !imageCropData?.width || !imageCropData?.height
+        isLoading || !imageCropData?.width || !imageCropData.height
 
     const handleChangeCoverClick = (event: React.MouseEvent) => {
         if (!authSlice.isAuth) {
@@ -68,24 +68,24 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     }
 
     const handleSaveCover = () => {
-        if (!selectedPhoto?.width || !selectedPhoto?.height || disabled) {
+        if (!selectedPhoto?.width || !selectedPhoto.height || disabled) {
             return
         }
 
         updateCover({
             height: Math.round(
-                selectedPhoto.height * ((imageCropData?.height || 0) / 100)
+                selectedPhoto.height * ((imageCropData.height || 0) / 100)
             ),
             photoId: selectedPhotoId!,
             placeId: placeId!,
             width: Math.round(
-                selectedPhoto.width * ((imageCropData?.width || 0) / 100)
+                selectedPhoto.width * ((imageCropData.width || 0) / 100)
             ),
             x: Math.round(
-                selectedPhoto.width * ((imageCropData?.x || 0) / 100)
+                selectedPhoto.width * ((imageCropData.x || 0) / 100)
             ),
             y: Math.round(
-                selectedPhoto.height * ((imageCropData?.y || 0) / 100)
+                selectedPhoto.height * ((imageCropData.y || 0) / 100)
             )
         })
     }
@@ -93,12 +93,12 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const handleImageLoad = (e: any) => {
         const { width, height } = e.currentTarget
 
-        if (!selectedPhoto?.height || !selectedPhoto?.width) {
+        if (!selectedPhoto?.height || !selectedPhoto.width) {
             return
         }
 
-        const ratioW = selectedPhoto?.width ? selectedPhoto.width / width : 1
-        const ratioH = selectedPhoto?.height ? selectedPhoto.height / height : 1
+        const ratioW = selectedPhoto.width ? selectedPhoto.width / width : 1
+        const ratioH = selectedPhoto.height ? selectedPhoto.height / height : 1
 
         setWidthRatio(ratioW)
         setHeightRatio(ratioH)

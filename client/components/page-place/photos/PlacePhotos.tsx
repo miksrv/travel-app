@@ -1,15 +1,13 @@
-import { useTranslation } from 'next-i18next'
 import React, { useMemo, useRef, useState } from 'react'
-
-import Button from '@/ui/button'
-import Container from '@/ui/container'
+import { useTranslation } from 'next-i18next'
 
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
-
 import PhotoGallery from '@/components/photo-gallery'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
 
 interface PlacePhotosProps {
     placeId?: string
@@ -54,7 +52,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
 
     const uploadingPhotos = useMemo(
         () =>
-            selectedFiles?.map((file) => URL.createObjectURL(file))?.reverse(),
+            selectedFiles.map((file) => URL.createObjectURL(file)).reverse(),
         [selectedFiles]
     )
 

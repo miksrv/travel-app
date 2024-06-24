@@ -1,7 +1,7 @@
 import dayjs from 'dayjs'
 
 export const truncateText = (text?: string, maxLength: number = 300) => {
-    if (!text || text?.length <= maxLength) {
+    if (!text || text.length <= maxLength) {
         return text
     }
 
@@ -21,7 +21,7 @@ export const encodeQueryData = (data: any): string => {
 
     const ret = []
 
-    for (let d in data) {
+    for (const d in data) {
         if (d && data[d]) {
             ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]))
         }
@@ -37,17 +37,17 @@ export const makeActiveLink = (link: string) => {
 
     if (link.includes('http://') || link.includes('https://')) {
         return link
-    } else {
-        return `https://${link}`
     }
+        return `https://${link}`
+
 }
 
 export const equalsArrays = (array1?: string[], array2?: string[]): boolean =>
     (!array1?.length && !array2?.length) ||
     (!!array1?.length &&
         !!array2?.length &&
-        array1?.length === array2?.length &&
-        array1?.every((item) => array2?.includes(item)))
+        array1.length === array2.length &&
+        array1.every((item) => array2.includes(item)))
 
 export const removeProtocolFromUrl = (url: string): string =>
     url.replace(/^https?:\/\//, '')
@@ -134,19 +134,21 @@ export const addDecimalPoint = (input: number | string | undefined): string => {
         }
 
         return inputValue
-    } else {
-        return `${inputValue}.0`
     }
+        return `${inputValue}.0`
+
 }
 
 export const isValidJSON = (string: string) => {
-    if (!string || !string?.length) {
+    if (!string || !string.length) {
         return true
     }
 
     try {
         JSON.parse(string)
     } catch (e) {
+        console.error(e)
+
         return false
     }
 

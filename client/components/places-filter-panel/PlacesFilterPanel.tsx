@@ -1,19 +1,16 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Autocomplete from '@/ui/autocomplete'
-import Dropdown, { DropdownOption } from '@/ui/dropdown'
-import OptionsList from '@/ui/dropdown/OptionsList'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
-
 import { categoryImage } from '@/functions/categories'
-
-import styles from './styles.module.sass'
+import Autocomplete from '@/ui/autocomplete'
+import Dropdown, { DropdownOption } from '@/ui/dropdown'
+import OptionsList from '@/ui/dropdown/OptionsList'
 
 interface PlacesFilterPanelProps {
     sort?: ApiTypes.SortFieldsType
@@ -60,11 +57,11 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     const sortOptions: DropdownOption[] = useMemo(
         () =>
             Object.values(ApiTypes.SortFields)
-                ?.filter((sort) => sort !== ApiTypes.SortFields.Category)
+                .filter((sort) => sort !== ApiTypes.SortFields.Category)
                 .map((sort) => ({
                     disabled:
                         sort === ApiTypes.SortFields.Distance &&
-                        (!userLocation?.lat || !userLocation?.lon),
+                        (!userLocation?.lat || !userLocation.lon),
                     key: sort,
                     value: t(`sort.${sort}`)
                 })),
@@ -152,8 +149,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         [addressData]
     )
 
-    const selectedSort = sortOptions?.find(({ key }) => key === sort)
-    const selectedOrder = orderOptions?.find(({ key }) => key === order)
+    const selectedSort = sortOptions.find(({ key }) => key === sort)
+    const selectedOrder = orderOptions.find(({ key }) => key === order)
     const selectedCategory = categoryOptions?.find(
         ({ key }) => key === category
     )

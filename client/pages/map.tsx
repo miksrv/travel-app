@@ -1,26 +1,23 @@
+import React, { useCallback, useEffect, useState } from 'react'
 import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import dynamic from 'next/dynamic'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import dynamic from 'next/dynamic'
-import React, { useCallback, useEffect, useState } from 'react'
-
-import Container from '@/ui/container'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Place, Placemark } from '@/api/types'
-
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
 import PhotoLightbox from '@/components/photo-lightbox'
-
 import { round } from '@/functions/helpers'
+import Container from '@/ui/container'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -84,7 +81,7 @@ const MapPage: NextPage<MapPageProps> = () => {
         lon?: number,
         zoom?: number
     ) => {
-        const url = new URL(window?.location?.href)
+        const url = new URL(window.location.href)
         const hash = url.hash
 
         if (!lat || !lon) {
@@ -129,7 +126,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     }
 
     useEffect(() => {
-        const hash = window?.location?.hash ?? null
+        const hash = window.location.hash ?? null
 
         setCategories(Object.values(Place.Categories))
         setMapCategories(Object.values(Place.Categories))

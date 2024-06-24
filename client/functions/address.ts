@@ -8,7 +8,7 @@ type PlaceAddress = {
 }
 
 export const addressToString = (location?: Location): PlaceAddress[] => {
-    let address: PlaceAddress[] = []
+    const address: PlaceAddress[] = []
 
     if (location?.country?.id) {
         address.push({

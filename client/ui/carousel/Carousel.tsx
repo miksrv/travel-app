@@ -1,6 +1,6 @@
+import React from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
-import React from 'react'
 
 import { NextButton, PrevButton, usePrevNextButtons } from './CarouselButtons'
 import styles from './styles.module.sass'

@@ -1,16 +1,13 @@
 import React from 'react'
 
+import styles from './styles.module.sass'
+
+import { User } from '@/api/types/User'
+import UserAvatar from '@/components/user-avatar'
+import { concatClassNames as cn } from '@/functions/helpers'
 import Breadcrumbs, { BreadcrumbsProps } from '@/ui/breadcrumbs'
 import Button from '@/ui/button'
 import Container from '@/ui/container'
-
-import { User } from '@/api/types/User'
-
-import UserAvatar from '@/components/user-avatar'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 interface HeaderProps extends BreadcrumbsProps {
     title?: string

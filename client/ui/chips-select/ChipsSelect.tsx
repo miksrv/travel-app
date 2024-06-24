@@ -1,14 +1,13 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
 import { useTranslation } from 'next-i18next'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 import Chip from '@/ui/chips-select/Chip'
 import Icon from '@/ui/icon'
 import Spinner from '@/ui/spinner'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 interface ChipsSelectProps {
     className?: string
@@ -60,7 +59,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' && search?.length) {
             if (!optionInValue(search)) {
-                onSelect?.([...(value || []), search])
+                onSelect?.([...(value ?? []), search])
             }
 
             setIsOpen(false)
@@ -77,7 +76,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     }
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value?.trim()
+        const value = event.target.value.trim()
 
         if (value.length > 0) {
             setLocaLoading(true)
@@ -91,7 +90,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
 
     const handleSelect = (option: string) => {
         if (!optionInValue(option)) {
-            onSelect?.([...(value || []), option])
+            onSelect?.([...(value ?? []), option])
         }
 
         setSearch(undefined)
@@ -99,7 +98,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     }
 
     const handleClickRemove = (option: string): void => {
-        onSelect?.([...(value?.filter((item) => item !== option) || [])])
+        onSelect?.([...(value?.filter((item) => item !== option) ?? [])])
     }
 
     const handleClickOutside = (event: MouseEvent) => {

@@ -6,11 +6,11 @@ const _getLocalStorage = (): undefined | typeof LOCAL_STORAGE => {
         return
     }
 
-    const localstorageData = localStorage?.getItem(LOCAL_STORAGE_KEY)
+    const localstorageData = localStorage.getItem(LOCAL_STORAGE_KEY)
 
     if (
         localstorageData &&
-        !!localstorageData?.length &&
+        !!localstorageData.length &&
         isValidJSON(localstorageData)
     ) {
         return JSON.parse(localstorageData) as typeof LOCAL_STORAGE

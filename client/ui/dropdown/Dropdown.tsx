@@ -1,13 +1,12 @@
-import { useTranslation } from 'next-i18next'
-import Image, { StaticImageData } from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
-
-import OptionsList from '@/ui/dropdown/OptionsList'
-import Icon from '@/ui/icon'
-
-import { concatClassNames as cn } from '@/functions/helpers'
+import Image, { StaticImageData } from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
+import OptionsList from '@/ui/dropdown/OptionsList'
+import Icon from '@/ui/icon'
 
 export type DropdownOption = {
     key: string | number
@@ -55,7 +54,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
 
     const toggleDropdown = () => {
         if (onOpen) {
-            onOpen?.()
+            onOpen()
         } else {
             setIsOpen(!isOpen)
         }

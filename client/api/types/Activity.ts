@@ -1,9 +1,9 @@
-import { ApiTypes } from '@/api/types'
-
 import { Photo } from './Photo'
 import { Place } from './Place'
 import { Rating } from './Rating'
 import { User } from './User'
+
+import { ApiTypes } from '@/api/types'
 
 export const ActivityTypes = {
     Edit: 'edit',

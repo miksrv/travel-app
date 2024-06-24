@@ -1,32 +1,28 @@
+import React, { useEffect, useState } from 'react'
 import type { GetServerSidePropsResult, NextPage } from 'next'
+import Head from 'next/head'
+import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import Head from 'next/head'
-import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
-
-import Button from '@/ui/button'
-import Carousel from '@/ui/carousel'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import type { Place } from '@/api/types';
-import { ApiTypes } from '@/api/types'
+import { ApiTypes, Place } from '@/api/types'
 import type { Item } from '@/api/types/Activity'
 import type { Photo } from '@/api/types/Photo'
 import type { User } from '@/api/types/User'
-
 import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserGallery from '@/components/page-user/gallery'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
-
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
+import Button from '@/ui/button'
+import Carousel from '@/ui/carousel'
 
 interface IndexPageProps {
     placesList: Place.Place[]
@@ -65,7 +61,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
 
         document.addEventListener('scroll', onScroll)
 
-        return function () {
+        return () => {
             document.removeEventListener('scroll', onScroll)
         }
     }, [lastDate, isFetching, data])

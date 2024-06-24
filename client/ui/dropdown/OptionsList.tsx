@@ -1,10 +1,10 @@
-import Image from 'next/image'
 import React from 'react'
-
-import { concatClassNames as cn } from '@/functions/helpers'
+import Image from 'next/image'
 
 import type { DropdownOption } from './Dropdown'
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface DropdownProps {
     options?: DropdownOption[]

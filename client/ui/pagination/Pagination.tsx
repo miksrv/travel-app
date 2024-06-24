@@ -1,12 +1,11 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useMemo } from 'react'
-
-import Icon from '@/ui/icon'
-
-import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
+import Icon from '@/ui/icon'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
@@ -46,7 +45,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
     const link = `/${linkPart}`
 
     const fetchPageNumbers: (string | number)[] = useMemo(() => {
-        const totalNumbers = pageNeighbours * 2 + 3
+        const totalNumbers = (pageNeighbours * 2) + 3
         const totalBlocks = totalNumbers + 2
 
         if (totalPages > totalBlocks) {

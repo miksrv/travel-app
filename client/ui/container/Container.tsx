@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string

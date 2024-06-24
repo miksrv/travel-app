@@ -15,7 +15,11 @@ export const toDegreesMinutesAndSeconds = (coordinate: number): string => {
     return `${degrees}°${minutes}’${seconds}"`
 }
 
-export const convertDMS = (lat: number, lon: number): string => {
+export const convertDMS = (lat?: number, lon?: number): string => {
+    if (!lat || !lon) {
+        return ''
+    }
+
     const latitude = toDegreesMinutesAndSeconds(lat)
     const latitudeCardinal = lat >= 0 ? 'N' : 'S'
 
@@ -96,7 +100,7 @@ const parseHemispheres = (
     const isLat = (h: string) => h === 'N' || h === 'S'
 
     let swapLatLon = false
-    let hLat, hLon
+    let hLat; let hLon
     if (h1 && h2 && !h3) {
         hLat = h1.trim()
         hLon = h2.trim()
@@ -313,7 +317,7 @@ export const CoordinatesDM = {
     },
 
     regexp: new RegExp(
-        `^(${reHemisphere} )?(${reInteger}) (${reFractional}) (${reHemisphere} )?(${reInteger}) (${reFractional})( ${reHemisphere})?$`, // eslint-disable-line max-len
+        `^(${reHemisphere} )?(${reInteger}) (${reFractional}) (${reHemisphere} )?(${reInteger}) (${reFractional})( ${reHemisphere})?$`,
         'u'
     )
 }

@@ -1,12 +1,12 @@
 'use client'
 
-import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
-
-import { ApiTypes, Placemark } from '@/api/types'
+import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
+
+import { ApiTypes, Placemark } from '@/api/types'
 
 interface MarkerPointClusterProps {
     marker: Placemark.Place | Placemark.Photo

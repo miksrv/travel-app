@@ -1,5 +1,5 @@
-import { GetServerSidePropsResult, NextPage } from 'next'
 import React from 'react'
+import { GetServerSidePropsResult, NextPage } from 'next'
 
 import { API, SITE_LINK } from '@/api/api'
 import { wrapper } from '@/api/store'
@@ -17,7 +17,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<SiteMapProps>> => {
             const { data } = await store.dispatch(
-                API.endpoints?.sitemapGetList.initiate()
+                API.endpoints.sitemapGetList.initiate()
             )
 
             const staticPages = [

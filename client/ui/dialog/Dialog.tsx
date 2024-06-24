@@ -1,9 +1,9 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
-
-import Icon from '@/ui/icon'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import Icon from '@/ui/icon'
 
 export interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
@@ -38,10 +38,10 @@ const Dialog: React.FC<DialogProps> = ({
 
     const handleResize = () => {
         // const viewportWidth = window.innerWidth
-        const viewportHeight = window?.innerHeight
+        const viewportHeight = window.innerHeight
 
         // const dialogWidth = dialogRef?.current?.offsetWidth || 0
-        const dialogHeight = dialogRef?.current?.offsetHeight || 0
+        const dialogHeight = dialogRef.current?.offsetHeight || 0
 
         // const left = (viewportWidth - dialogWidth) / 2
         const top = (viewportHeight - dialogHeight) / 2

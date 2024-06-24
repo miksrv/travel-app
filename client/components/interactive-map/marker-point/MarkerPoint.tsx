@@ -1,24 +1,21 @@
 'use client'
 
+import React from 'react'
+import { Marker, Popup } from 'react-leaflet'
 import Leaflet from 'leaflet'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-import { Marker, Popup } from 'react-leaflet'
 
-import Badge from '@/ui/badge'
-import RatingColored from '@/ui/rating-colored'
-import Skeleton from '@/ui/skeleton'
+import styles from './styles.module.sass'
 
 import { API, IMG_HOST } from '@/api/api'
 import { Placemark } from '@/api/types'
-
 import BookmarkButton from '@/components/bookmark-button'
-
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Badge from '@/ui/badge'
+import RatingColored from '@/ui/rating-colored'
+import Skeleton from '@/ui/skeleton'
 
 interface MarkerPointProps {
     place: Placemark.Place
@@ -48,7 +45,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 click: placeClickHandler
             }}
         >
-            {place?.id && (
+            {place.id && (
                 <Popup
                     className={styles.markerPointPopup}
                     closeOnEscapeKey={true}
@@ -69,11 +66,11 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                         {addDecimalPoint(poiData.rating)}
                                     </RatingColored>
 
-                                    {poiData?.cover && (
+                                    {poiData.cover && (
                                         <Image
                                             className={styles.image}
-                                            src={`${IMG_HOST}${poiData.cover?.preview}`}
-                                            alt={poiData?.title || ''}
+                                            src={`${IMG_HOST}${poiData.cover.preview}`}
+                                            alt={poiData.title || ''}
                                             width={300}
                                             height={200}
                                         />
@@ -125,7 +122,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                     {isLoading || !poiData ? (
                         <Skeleton style={{ height: '18px', margin: '6px' }} />
                     ) : (
-                        <h3 className={styles.title}>{poiData?.title}</h3>
+                        <h3 className={styles.title}>{poiData.title}</h3>
                     )}
                 </Popup>
             )}

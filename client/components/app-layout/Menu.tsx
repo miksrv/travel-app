@@ -1,14 +1,13 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React from 'react'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
-import Icon from '@/ui/icon'
-import { IconTypes } from '@/ui/icon/types'
+import styles from './styles.module.sass'
 
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
-
-import styles from './styles.module.sass'
+import Icon from '@/ui/icon'
+import { IconTypes } from '@/ui/icon/types'
 
 export type MenuItemType = {
     icon?: IconTypes
@@ -100,7 +99,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         <menu className={styles.menu}>
             {menuItems
                 .filter(({ link }) => !!link)
-                ?.map((item, i) => (
+                .map((item, i) => (
                     <li key={`menu${type}${i}`}>
                         <Link
                             href={item.link!}

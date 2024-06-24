@@ -1,6 +1,6 @@
-import { ApiTypes } from '@/api/types'
-
 import { User } from './User'
+
+import { ApiTypes } from '@/api/types'
 
 export type Photo = {
     id: string

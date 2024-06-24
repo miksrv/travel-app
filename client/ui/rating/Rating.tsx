@@ -2,11 +2,10 @@
 
 import React, { useState } from 'react'
 
-import Icon from '@/ui/icon'
+import styles from './styles.module.sass'
 
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Icon from '@/ui/icon'
 
 interface RatingProps {
     value?: number

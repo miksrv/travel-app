@@ -1,15 +1,13 @@
-import { useTranslation } from 'next-i18next'
 import React, { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Textarea from '@/ui/textarea'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { User } from '@/api/types/User'
-
 import UserAvatar from '@/components/user-avatar'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Textarea from '@/ui/textarea'
 
 interface CommentFormProps {
     placeId: string
@@ -37,7 +35,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
     const handleKeyPress = (
         event: React.KeyboardEvent<HTMLTextAreaElement>
     ) => {
-        if (event.key === 'Enter' && comment && comment?.length > 1) {
+        if (event.key === 'Enter' && comment && comment.length > 1) {
             event.preventDefault()
             handleSubmit()
         }

@@ -1,11 +1,10 @@
-import { useTheme } from 'next-themes'
 import React from 'react'
-
-import Button from '@/ui/button'
-
-import useClientOnly from '@/functions/hooks/useClientOnly'
+import { useTheme } from 'next-themes'
 
 import styles from './styles.module.sass'
+
+import useClientOnly from '@/functions/hooks/useClientOnly'
+import Button from '@/ui/button'
 
 const ThemeSwitcher: React.FC = () => {
     const isClient = useClientOnly()

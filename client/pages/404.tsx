@@ -1,8 +1,8 @@
+import React from 'react'
 import { NextPage } from 'next'
-import { NextSeo } from 'next-seo'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { NextSeo } from 'next-seo'
 
 import logo from '@/public/images/geometki.svg'
 

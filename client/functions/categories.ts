@@ -1,7 +1,6 @@
 import { StaticImageData } from 'next/image'
 
 import { Place } from '@/api/types'
-
 import abandoned from '@/public/images/poi/abandoned.png'
 import animals from '@/public/images/poi/animals.png'
 import archeology from '@/public/images/poi/archeology.png'

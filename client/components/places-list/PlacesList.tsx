@@ -1,14 +1,12 @@
-import { useTranslation } from 'next-i18next'
 import React from 'react'
-
-import Container from '@/ui/container'
-
-import { Place } from '@/api/types/Place'
-
-import PlacesListItemLoader from '@/components/places-list/PlacesListItemLoader'
+import { useTranslation } from 'next-i18next'
 
 import PlacesListItem from './PlacesListItem'
 import styles from './styles.module.sass'
+
+import { Place } from '@/api/types/Place'
+import PlacesListItemLoader from '@/components/places-list/PlacesListItemLoader'
+import Container from '@/ui/container'
 
 interface PlacesListProps {
     places?: Place[]
@@ -24,7 +22,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
         <>
             {!!places?.length && (
                 <section className={styles.component}>
-                    {places?.map((place) => (
+                    {places.map((place) => (
                         <PlacesListItem
                             key={place.id}
                             place={place}

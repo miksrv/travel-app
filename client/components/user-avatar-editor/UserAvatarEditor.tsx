@@ -1,18 +1,18 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
-import ReactCrop, { type Crop } from 'react-image-crop'
-import 'react-image-crop/src/ReactCrop.scss'
+import ReactCrop, {Crop} from 'react-image-crop';
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Dialog from '@/ui/dialog'
-import Spinner from '@/ui/spinner'
+import styles from './styles.module.sass'
+
+import 'react-image-crop/src/ReactCrop.scss'
 
 import { API, IMG_HOST } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Dialog from '@/ui/dialog'
+import Spinner from '@/ui/spinner'
 
 type ImageSizesType = {
     ratioWidth: number
@@ -56,7 +56,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         cropLoading ||
         uploadLoading ||
         !imageCropData?.width ||
-        !imageCropData?.height ||
+        !imageCropData.height ||
         !imageSizes ||
         !uploadedFile
 
@@ -80,16 +80,16 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         cropAvatar({
             filename: uploadedFile.filename,
             height: Math.round(
-                imageSizes.realHeight * ((imageCropData?.height || 0) / 100)
+                imageSizes.realHeight * ((imageCropData.height || 0) / 100)
             ),
             width: Math.round(
-                imageSizes.realWidth * ((imageCropData?.width || 0) / 100)
+                imageSizes.realWidth * ((imageCropData.width || 0) / 100)
             ),
             x: Math.round(
-                imageSizes.realWidth * ((imageCropData?.x || 0) / 100)
+                imageSizes.realWidth * ((imageCropData.x || 0) / 100)
             ),
             y: Math.round(
-                imageSizes.realHeight * ((imageCropData?.y || 0) / 100)
+                imageSizes.realHeight * ((imageCropData.y || 0) / 100)
             )
         })
     }
@@ -116,11 +116,11 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
 
     // Select a photo to upload
     const handleImageLoad = () => {
-        if (imageSizes || !imageRef?.current) {
+        if (imageSizes || !imageRef.current) {
             return
         }
 
-        let sizes = {
+        const sizes = {
             halfRealSize: 0,
             halfSize: 0,
             height: imageRef.current.height,

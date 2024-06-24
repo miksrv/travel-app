@@ -1,10 +1,5 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
-
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
-import RadioButton from '@/ui/radio-button'
+import { useTranslation } from 'next-i18next'
 
 import {
     MapAdditionalLayers,
@@ -15,6 +10,11 @@ import {
     MapObjectsType
 } from './InteractiveMap'
 import styles from './styles.module.sass'
+
+import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
+import Container from '@/ui/container'
+import RadioButton from '@/ui/radio-button'
 
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
@@ -120,7 +120,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                                 onChange={() =>
                                     onSwitchAdditionalLayers?.(
                                         additionalLayers?.includes(type)
-                                            ? additionalLayers?.filter(
+                                            ? additionalLayers.filter(
                                                   (layer) => layer !== type
                                               )
                                             : [

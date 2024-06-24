@@ -1,20 +1,18 @@
-import { useTranslation } from 'next-i18next'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-import Spinner from '@/ui/spinner'
+import styles from './styles.module.sass'
 
 import { API, IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
-
 import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoLightbox from '@/components/photo-lightbox'
-
-import styles from './styles.module.sass'
+import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
+import Spinner from '@/ui/spinner'
 
 interface PhotoGalleryProps {
     photos?: Photo[]
@@ -62,15 +60,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
      */
     useEffect(() => {
         setLocalPhotos(
-            localPhotos?.map((photo) => ({
+            localPhotos.map((photo) => ({
                 ...photo,
                 full:
                     photo.id === rotateData?.id
-                        ? rotateData?.full!
+                        ? rotateData.full!
                         : photo.full,
                 preview:
                     photo.id === rotateData?.id
-                        ? rotateData?.preview!
+                        ? rotateData.preview!
                         : photo.preview
             }))
         )
@@ -82,7 +80,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
      *  After deleting a photo, remove it from the local photo list
      */
     React.useEffect(() => {
-        setLocalPhotos(localPhotos?.filter(({ id }) => id !== deleteData?.id))
+        setLocalPhotos(localPhotos.filter(({ id }) => id !== deleteData?.id))
     }, [deleteData])
 
     useEffect(() => {
@@ -93,7 +91,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     return (
         <>
-            {!localPhotos?.length && !uploadingPhotos?.length && (
+            {!localPhotos.length && !uploadingPhotos?.length && (
                 <div className={styles.emptyList}>{t('noPhotos')}</div>
             )}
 
@@ -115,7 +113,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     </li>
                 ))}
 
-                {localPhotos?.map((photo, index) => (
+                {localPhotos.map((photo, index) => (
                     <li
                         key={photo.id}
                         className={styles.photoItem}

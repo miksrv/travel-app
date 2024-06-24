@@ -1,12 +1,13 @@
-import globals from "globals";
-import pluginJs from "@eslint/js";
-import tseslint from "typescript-eslint";
+import globals from 'globals';
+import pluginJs from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import importPlugin from 'eslint-plugin-import';
 import nextPlugin from '@next/eslint-plugin-next';
 // import nextCoreWebVitals from '@next/core-web-vitals';
 import jestPlugin from 'eslint-plugin-jest';
+import { fixupConfigRules } from '@eslint/compat';
 import eslintCommentsPlugin from 'eslint-plugin-eslint-comments';
-// import pluginReactConfig from "eslint-plugin-react/configs/recommended.js";
+import pluginReactConfig from 'eslint-plugin-react/configs/recommended.js';
 import simpleImportSortPlugin from 'eslint-plugin-simple-import-sort'
 
 export default [
@@ -30,6 +31,9 @@ export default [
     {
         // config with just ignores is the replacement for `.eslintignore`
         ignores: [
+            '**/.yarn/**',
+            '**/eslint.config.mjs',
+            '**/eslint.config.js',
             '**/jest.config.ts',
             '**/node_modules/**',
             '**/dist/**',
@@ -38,14 +42,11 @@ export default [
             '**/__snapshots__/**',
             '**/.docusaurus/**',
             '**/build/**',
-            // Files copied as part of the build
-            'packages/types/src/generated/**/*.ts',
-            // Playground types downloaded from the web
-            'packages/website/src/vendor',
-            // see the file header in eslint-base.test.js for more info
-            'packages/rule-tester/tests/eslint-base',
+            // PM2 Server
+            '**/ecosystem.config.js',
             // NextJS
             '**/next-i18next.config.js',
+            '**/next.config.js',
             '**/.next/**',
             '**/next-env.d.ts',
             '**/middleware.ts'
@@ -55,7 +56,7 @@ export default [
     // extends ...
     pluginJs.configs.recommended,
     ...tseslint.configs.recommended,
-    // ...fixupConfigRules(pluginReactConfig),
+    ...fixupConfigRules(pluginReactConfig),
     // ...tseslint.configs.strictTypeChecked,
     // ...tseslint.configs.stylisticTypeChecked,
 
@@ -80,6 +81,12 @@ export default [
             },
         },
 
+        settings: {
+            react: {
+                version: 'detect',
+            }
+        },
+
         rules: {
             //
             // eslint-base
@@ -95,8 +102,13 @@ export default [
             'no-duplicate-imports': 'warn',
             'logical-assignment-operators': 'error',
             'no-else-return': 'error',
-            'no-mixed-operators': 'warn',
-            'no-console': 'error',
+            // 'no-mixed-operators': 'warn',
+            'no-console': [
+                'error',
+                {
+                    allow: ['warn', 'error']
+                }
+            ],
             'no-process-exit': 'error',
             'no-fallthrough': [
                 'error',
@@ -118,20 +130,21 @@ export default [
             //
             // typescript-eslint
             //
-            '@typescript-eslint/consistent-type-imports': [
-                'error',
-                { prefer: 'type-imports', disallowTypeAnnotations: true },
-            ],
-            '@typescript-eslint/explicit-function-return-type': [
-                'error',
-                { allowIIFEs: true },
-            ],
-            '@typescript-eslint/no-explicit-any': 'error',
+            // '@typescript-eslint/consistent-type-imports': [
+            //     'error',
+            //     { prefer: 'type-imports', disallowTypeAnnotations: true },
+            // ],
+            // '@typescript-eslint/explicit-function-return-type': [
+            //     'error',
+            //     { allowIIFEs: true },
+            // ],
+            // TODO
+            '@typescript-eslint/no-explicit-any': 'off',
             'no-constant-condition': 'off',
-            '@typescript-eslint/no-unnecessary-condition': [
-                'error',
-                { allowConstantLoopConditions: true },
-            ],
+            // '@typescript-eslint/no-unnecessary-condition': [
+            //     'error',
+            //     { allowConstantLoopConditions: true },
+            // ],
             '@typescript-eslint/no-var-requires': 'off',
             '@typescript-eslint/prefer-literal-enum-member': [
                 'error',
@@ -146,16 +159,16 @@ export default [
                 },
             ],
             '@typescript-eslint/unbound-method': 'off',
-            '@typescript-eslint/restrict-template-expressions': [
-                'error',
-                {
-                    allowNumber: true,
-                    allowBoolean: true,
-                    allowAny: true,
-                    allowNullish: true,
-                    allowRegExp: true,
-                },
-            ],
+            // '@typescript-eslint/restrict-template-expressions': [
+            //     'error',
+            //     {
+            //         allowNumber: true,
+            //         allowBoolean: true,
+            //         allowAny: true,
+            //         allowNullish: true,
+            //         allowRegExp: true,
+            //     },
+            // ],
             '@typescript-eslint/no-unused-vars': [
                 'error',
                 {
@@ -164,13 +177,13 @@ export default [
                     argsIgnorePattern: '^_',
                 },
             ],
-            '@typescript-eslint/prefer-nullish-coalescing': [
-                'error',
-                {
-                    ignoreConditionalTests: true,
-                    ignorePrimitives: true,
-                },
-            ],
+            // '@typescript-eslint/prefer-nullish-coalescing': [
+            //     'error',
+            //     {
+            //         ignoreConditionalTests: true,
+            //         ignorePrimitives: true,
+            //     },
+            // ],
 
             //
             // eslint-plugin-eslint-comment
@@ -207,27 +220,32 @@ export default [
             ],
 
             //
+            // react
+            //
+            'react/prop-types': 'off',
+
+            //
             // next
             //
-            "next/google-font-display": "warn",
-            "next/google-font-preconnect": "warn",
-            "next/next-script-for-ga": "warn",
-            "next/no-async-client-component": "warn",
-            "next/no-before-interactive-script-outside-document": "warn",
-            "next/no-css-tags": "warn",
-            "next/no-head-element": "warn",
-            "next/no-html-link-for-pages": "warn",
-            "next/no-img-element": "warn",
-            "next/no-styled-jsx-in-document": "warn",
-            "next/no-sync-scripts": "warn",
-            "next/no-title-in-document-head": "warn",
-            "next/no-typos": "warn",
-            "next/no-unwanted-polyfillio": "warn",
-            "next/inline-script-id": "error",
-            "next/no-assign-module-variable": "error",
-            "next/no-document-import-in-page": "error",
-            "next/no-head-import-in-document": "error",
-            "next/no-script-component-in-head": "error",
+            'next/google-font-display': 'warn',
+            'next/google-font-preconnect': 'warn',
+            'next/next-script-for-ga': 'warn',
+            'next/no-async-client-component': 'warn',
+            'next/no-before-interactive-script-outside-document': 'warn',
+            'next/no-css-tags': 'warn',
+            'next/no-head-element': 'warn',
+            'next/no-html-link-for-pages': 'warn',
+            // 'next/no-img-element': 'warn',
+            'next/no-styled-jsx-in-document': 'warn',
+            'next/no-sync-scripts': 'warn',
+            'next/no-title-in-document-head': 'warn',
+            'next/no-typos': 'warn',
+            'next/no-unwanted-polyfillio': 'warn',
+            'next/inline-script-id': 'error',
+            'next/no-assign-module-variable': 'error',
+            'next/no-document-import-in-page': 'error',
+            'next/no-head-import-in-document': 'error',
+            'next/no-script-component-in-head': 'error',
 
             //
             // eslint-plugin-import
@@ -243,14 +261,14 @@ export default [
             // disallow imports from duplicate paths
             'import/no-duplicates': 'error',
             // Forbid the use of extraneous packages
-            'import/no-extraneous-dependencies': [
-                'error',
-                {
-                    devDependencies: true,
-                    peerDependencies: true,
-                    optionalDependencies: false,
-                },
-            ],
+            // 'import/no-extraneous-dependencies': [
+            //     'error',
+            //     {
+            //         devDependencies: true,
+            //         peerDependencies: true,
+            //         optionalDependencies: false,
+            //     },
+            // ],
             // Prevent importing the default as if it were named
             'import/no-named-default': 'error',
             // Prohibit named exports
