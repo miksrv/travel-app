@@ -118,7 +118,7 @@ const Place: React.FC<PlaceProps> = ({
 
             <NextSeo
                 title={place?.title}
-                description={place?.content.substring(0, 220)}
+                description={place?.content?.substring(0, 220)}
                 canonical={pagePlaceUrl}
                 openGraph={{
                     article: {

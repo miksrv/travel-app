@@ -140,6 +140,7 @@ export default [
             // TODO
             '@typescript-eslint/no-explicit-any': 'off',
             'no-constant-condition': 'off',
+            '@typescript-eslint/no-unnecessary-condition': 'off',
             // '@typescript-eslint/no-unnecessary-condition': [
             //     'error',
             //     { allowConstantLoopConditions: true },

@@ -77,9 +77,9 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
                 title={t('title')}
                 canonical={`${canonicalUrl}categories`}
                 description={tagsList
-                    .map(({ title }) => title)
-                    .join(',')
-                    .substring(0, 220)}
+                    ?.map(({ title }) => title)
+                    ?.join(',')
+                    ?.substring(0, 220)}
             />
 
             <Header
