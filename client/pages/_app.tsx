@@ -11,7 +11,6 @@ import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
-import 'react-image-lightbox/style.css'
 import { Provider } from 'react-redux'
 
 import { wrapper } from '@/api/store'

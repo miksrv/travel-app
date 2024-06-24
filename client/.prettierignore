@@ -1,6 +1,7 @@
 .next
 .vscode
 .github
+.yarn
 *.css
 site.webmanifest
 node_modules
