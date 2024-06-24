@@ -12,6 +12,7 @@ import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
 import React, { useEffect } from 'react'
 import { Provider } from 'react-redux'
+import { useReportWebVitals } from 'next/web-vitals'
 
 import { wrapper } from '@/api/store'
 
@@ -40,6 +41,10 @@ const App = ({ Component, pageProps }: AppProps) => {
     dayjs.extend(utc)
     dayjs.extend(relativeTime)
     dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
+
+    useReportWebVitals((metric) => {
+        console.log(metric)
+    })
 
     return (
         <ThemeProvider>
