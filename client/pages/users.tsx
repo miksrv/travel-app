@@ -48,9 +48,9 @@ const UsersPage: NextPage<UsersPageProps> = ({
             <NextSeo
                 title={title}
                 description={`${title} - ${usersList
-                    .map(({ name }) => name)
-                    .join(', ')
-                    .substring(0, 220)}`}
+                    ?.map(({ name }) => name)
+                    ?.join(', ')
+                    ?.substring(0, 220)}`}
                 canonical={`${canonicalUrl}users${
                     currentPage && currentPage > 1 ? '?page=' + currentPage : ''
                 }`}

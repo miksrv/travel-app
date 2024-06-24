@@ -299,9 +299,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             <NextSeo
                 title={title}
                 description={`${title} - ${placesList
-                    .map(({ title }) => title)
-                    .join(', ')
-                    .substring(0, 220)}`}
+                    ?.map(({ title }) => title)
+                    ?.join(', ')
+                    ?.substring(0, 220)}`}
                 canonical={canonicalPage}
                 openGraph={{
                     images: placesList
