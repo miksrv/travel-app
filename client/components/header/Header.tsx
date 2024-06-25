@@ -18,22 +18,8 @@ interface HeaderProps extends BreadcrumbsProps {
     actions?: React.ReactNode
 }
 
-const Header: React.FC<HeaderProps> = ({
-    title,
-    backLink,
-    className,
-    attachedBottom,
-    userData,
-    actions,
-    ...props
-}) => (
-    <Container
-        className={cn(
-            className,
-            styles.header,
-            attachedBottom && styles.attachedBottom
-        )}
-    >
+const Header: React.FC<HeaderProps> = ({ title, backLink, className, attachedBottom, userData, actions, ...props }) => (
+    <Container className={cn(className, styles.header, attachedBottom && styles.attachedBottom)}>
         {backLink && (
             <Button
                 className={styles.backLink}

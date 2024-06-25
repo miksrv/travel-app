@@ -58,27 +58,19 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const translations = await serverSideTranslations(locale)
 
-            if (
-                typeof id !== 'string' ||
-                (page && !Object.values(UserPagesEnum).includes(page))
-            ) {
+            if (typeof id !== 'string' || (page && !Object.values(UserPagesEnum).includes(page))) {
                 return { notFound: true }
             }
 
             store.dispatch(setLocale(locale))
 
-            const { data: userData, isError } = await store.dispatch(
-                API.endpoints.usersGetItem.initiate(id)
-            )
+            const { data: userData, isError } = await store.dispatch(API.endpoints.usersGetItem.initiate(id))
 
             const { data: photosData } = await store.dispatch(
                 API.endpoints.photosGetList.initiate({
                     author: id,
                     limit: page === UserPagesEnum.PHOTOS ? PHOTOS_PER_PAGE : 8,
-                    offset:
-                        page === UserPagesEnum.PHOTOS
-                            ? (currentPage - 1) * PHOTOS_PER_PAGE
-                            : 0
+                    offset: page === UserPagesEnum.PHOTOS ? (currentPage - 1) * PHOTOS_PER_PAGE : 0
                 })
             )
 

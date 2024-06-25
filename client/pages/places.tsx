@@ -100,10 +100,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         sort: undefined
     })}`
 
-    const handleChangeFilter = async (
-        key: keyof PlacesFilterType,
-        value: string | number | undefined
-    ) => {
+    const handleChangeFilter = async (key: keyof PlacesFilterType, value: string | number | undefined) => {
         const filter = { ...initialFilter, [key]: value }
         const update = {
             category: filter.category ?? undefined,
@@ -153,29 +150,20 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle(filterTitle || '')
     }
 
-    const handleChangeLocation = async (
-        location?: ApiTypes.PlaceLocationType
-    ) => {
+    const handleChangeLocation = async (location?: ApiTypes.PlaceLocationType) => {
         if (!location) {
             await handleClearLocationFilter()
         } else {
-            await handleChangeFilter(
-                location.type ?? 'locality',
-                location.value
-            )
+            await handleChangeFilter(location.type ?? 'locality', location.value)
         }
     }
 
-    const currentCategory = categoriesData.find(
-        ({ name }) => name === category
-    )?.title
+    const currentCategory = categoriesData.find(({ name }) => name === category)?.title
 
     const title = useMemo(() => {
         const titleTag = tag ? ` #${tag}` : ''
         const titlePage =
-            initialFilter.page && initialFilter.page > 1
-                ? ` - ${t('titlePage')} ${initialFilter.page}`
-                : ''
+            initialFilter.page && initialFilter.page > 1 ? ` - ${t('titlePage')} ${initialFilter.page}` : ''
 
         if (!currentCategory && !locationType) {
             return t('title') + titleTag + titlePage
@@ -192,13 +180,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return `${t('title')}: ${titles.join(', ')}` + titleTag + titlePage
-    }, [
-        currentCategory,
-        locationData,
-        locationType,
-        i18n.language,
-        initialFilter
-    ])
+    }, [currentCategory, locationData, locationType, i18n.language, initialFilter])
 
     const breadcrumbsLinks = useMemo(() => {
         const breadcrumbs = []
@@ -289,9 +271,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 <script
                     type={'application/ld+json'}
                     dangerouslySetInnerHTML={{
-                        __html: JSON.stringify(
-                            placesList.map((place) => PlaceSchema(place))
-                        )
+                        __html: JSON.stringify(placesList.map((place) => PlaceSchema(place)))
                     }}
                 />
             </Head>
@@ -386,13 +366,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
-            const country =
-                parseInt(context.query.country as string, 10) || null
+            const country = parseInt(context.query.country as string, 10) || null
             const region = parseInt(context.query.region as string, 10) || null
-            const district =
-                parseInt(context.query.district as string, 10) || null
-            const locality =
-                parseInt(context.query.locality as string, 10) || null
+            const district = parseInt(context.query.district as string, 10) || null
+            const locality = parseInt(context.query.locality as string, 10) || null
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const category = (context.query.category as string) || null
@@ -402,11 +379,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let isUserLocation = false
 
             const tag = (context.query.tag as string) || null
-            const sort =
-                (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
-            const order =
-                (context.query.order as ApiTypes.SortOrdersType) ||
-                DEFAULT_ORDER
+            const sort = (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
+            const order = (context.query.order as ApiTypes.SortOrdersType) || DEFAULT_ORDER
 
             if (!lat && !lon && cookies[LOCAL_STORAGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
@@ -447,9 +421,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const { data: categoriesData } = await store.dispatch(
-                API.endpoints.categoriesGetList.initiate()
-            )
+            const { data: categoriesData } = await store.dispatch(API.endpoints.categoriesGetList.initiate())
 
             const { data: placesList } = await store.dispatch(
                 API.endpoints.placesGetList.initiate({

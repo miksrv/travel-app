@@ -11,13 +11,7 @@ import { User } from '@/api/types/User'
 import Header from '@/components/header'
 import Reputation from '@/components/reputation'
 import UserAvatarEditor from '@/components/user-avatar-editor'
-import {
-    formatDate,
-    makeActiveLink,
-    minutesAgo,
-    removeProtocolFromUrl,
-    timeAgo
-} from '@/functions/helpers'
+import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import defaultAvatar from '@/public/images/no-avatar.png'
 import Button from '@/ui/button'
@@ -49,20 +43,14 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         width={260}
                         src={
                             user?.avatar || replaceAvatar
-                                ? `${IMG_HOST}${
-                                      replaceAvatar
-                                          ? replaceAvatar
-                                          : user?.avatar
-                                  }`
+                                ? `${IMG_HOST}${replaceAvatar ? replaceAvatar : user?.avatar}`
                                 : defaultAvatar.src
                         }
                     />
                     <Progress
                         value={nextLevelPercentage(
                             user?.level?.experience || 0,
-                            user?.level?.nextLevel ||
-                                user?.level?.experience ||
-                                0
+                            user?.level?.nextLevel || user?.level?.experience || 0
                         )}
                     />
                 </div>
@@ -96,22 +84,15 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     </li>
                     <li>
                         <Icon name={'DoubleUp'} />
-                        <div className={styles.key}>
-                            {t('experienceForNewLevel')}
-                        </div>
+                        <div className={styles.key}>{t('experienceForNewLevel')}</div>
                         <div className={styles.value}>
-                            {(user?.level?.nextLevel || 0) -
-                                (user?.level?.experience || 0)}
+                            {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
                         </div>
                     </li>
                     <li>
                         <Icon name={'Time'} />
-                        <div className={styles.key}>
-                            {t('timeRegistration')}
-                        </div>
-                        <div className={styles.value}>
-                            {formatDate(user?.created?.date, t('dateFormat'))}
-                        </div>
+                        <div className={styles.key}>{t('timeRegistration')}</div>
+                        <div className={styles.value}>{formatDate(user?.created?.date, t('dateFormat'))}</div>
                     </li>
                     <li>
                         <Icon name={'Time'} />
@@ -123,9 +104,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                     {t('userOnline')}
                                 </span>
                             ) : (
-                                timeAgo(
-                                    user?.activity?.date ?? user?.updated?.date
-                                )
+                                timeAgo(user?.activity?.date ?? user?.updated?.date)
                             )}
                         </div>
                     </li>
@@ -151,39 +130,27 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                 <ul className={styles.information}>
                     <li>
                         <div className={styles.key}>{t('placesAdded')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.place}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.place}</div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('photosUploaded')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.photo}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.photo}</div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('ratingsAdded')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.rating}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.rating}</div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('comments')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.comment}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.comment}</div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('editions')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.edit}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.edit}</div>
                     </li>
                     <li>
                         <div className={styles.key}>{t('covers')}</div>
-                        <div className={styles.value}>
-                            {user?.statistic?.cover}
-                        </div>
+                        <div className={styles.value}>{user?.statistic?.cover}</div>
                     </li>
                 </ul>
             </div>

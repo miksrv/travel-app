@@ -56,8 +56,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             const beforeLastPage = totalPages - 1
 
             const startPage = leftBound > 2 ? leftBound : 2
-            const endPage =
-                rightBound < beforeLastPage ? rightBound : beforeLastPage
+            const endPage = rightBound < beforeLastPage ? rightBound : beforeLastPage
 
             pages = range(startPage, endPage)
 
@@ -68,16 +67,10 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             const rightSpill = endPage < beforeLastPage
 
             if (leftSpill && !rightSpill) {
-                const extraPages = range(
-                    startPage - singleSpillOffset,
-                    startPage - 1
-                )
+                const extraPages = range(startPage - singleSpillOffset, startPage - 1)
                 pages = [LEFT_PAGE, ...extraPages, ...pages]
             } else if (!leftSpill && rightSpill) {
-                const extraPages = range(
-                    endPage + 1,
-                    endPage + singleSpillOffset
-                )
+                const extraPages = range(endPage + 1, endPage + singleSpillOffset)
                 pages = [...pages, ...extraPages, RIGHT_PAGE]
             } else if (leftSpill && rightSpill) {
                 pages = [LEFT_PAGE, ...pages, RIGHT_PAGE]
@@ -97,18 +90,11 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             className={styles.pagination}
         >
             {fetchPageNumbers
-                .filter((page) =>
-                    !hideArrows
-                        ? true
-                        : page !== RIGHT_PAGE && page !== LEFT_PAGE
-                )
+                .filter((page) => (!hideArrows ? true : page !== RIGHT_PAGE && page !== LEFT_PAGE))
                 .map((page) => (
                     <Link
                         scroll={!disableScroll}
-                        className={cn(
-                            styles.item,
-                            currentPage === page ? styles.active : undefined
-                        )}
+                        className={cn(styles.item, currentPage === page ? styles.active : undefined)}
                         href={
                             page === RIGHT_PAGE
                                 ? `${link}${encodeQueryData({

@@ -14,12 +14,7 @@ interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
     type: 'places' | 'bookmarks'
 }
 
-const UserPlaces: React.FC<UserPlacesProps> = ({
-    id,
-    user,
-    currentPage,
-    type
-}) => {
+const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.places'
     })
@@ -40,9 +35,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
             <NextSeo
                 title={`${user?.name} - ${title}${pageTitle}`}
                 description={`${user?.name} - ${t('description')}${pageTitle}`}
-                canonical={`${canonicalUrl}users/${id}/${
-                    type === 'places' ? 'places' : 'bookmarks'
-                }`}
+                canonical={`${canonicalUrl}users/${id}/${type === 'places' ? 'places' : 'bookmarks'}`}
             />
 
             <Header

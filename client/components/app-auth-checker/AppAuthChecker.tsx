@@ -11,9 +11,7 @@ import useLocalStorage from '@/functions/hooks/useLocalStorage'
 const AppAuthChecker: React.FC = () => {
     const dispatch = useAppDispatch()
 
-    const [session, setSession] = useLocalStorage<string>(
-        LOCAL_STORAGE.AUTH_SESSION
-    )
+    const [session, setSession] = useLocalStorage<string>(LOCAL_STORAGE.AUTH_SESSION)
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 

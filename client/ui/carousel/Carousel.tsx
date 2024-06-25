@@ -13,12 +13,7 @@ interface CarouselProps {
 const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(options)
 
-    const {
-        prevBtnDisabled,
-        nextBtnDisabled,
-        onPrevButtonClick,
-        onNextButtonClick
-    } = usePrevNextButtons(emblaApi)
+    const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
 
     return (
         <div className={styles.carousel}>

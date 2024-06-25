@@ -12,13 +12,7 @@ import Pagination from '@/ui/pagination'
 
 interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
 
-const UserPhotos: React.FC<UserPhotosProps> = ({
-    id,
-    user,
-    photosList,
-    photosCount,
-    currentPage
-}) => {
+const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCount, currentPage }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.photos'
     })

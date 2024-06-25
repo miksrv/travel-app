@@ -13,11 +13,7 @@ const HeatmapLayer: React.FC = () => {
     const { data: usersData } = API.usePoiGetUsersQuery()
 
     useEffect(() => {
-        if (
-            usersData?.items &&
-            usersData.items.length > 0 &&
-            !heatmapLayerRef.current
-        ) {
+        if (usersData?.items && usersData.items.length > 0 && !heatmapLayerRef.current) {
             heatmapLayerRef.current = (L as any)
                 .heatLayer(usersData.items, {
                     gradient: { 0.1: '#2688eb', 0.5: '#4bb34b', 1: '#e64646' },
@@ -25,10 +21,7 @@ const HeatmapLayer: React.FC = () => {
                     minOpacity: 0.3
                 })
                 .addTo(map)
-        } else if (
-            heatmapLayerRef.current &&
-            (!usersData?.items || usersData.items.length === 0)
-        ) {
+        } else if (heatmapLayerRef.current && (!usersData?.items || usersData.items.length === 0)) {
             map.removeLayer(heatmapLayerRef.current)
             heatmapLayerRef.current = null
         }

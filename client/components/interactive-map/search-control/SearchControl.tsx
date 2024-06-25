@@ -11,25 +11,17 @@ import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
 
 interface SearchControlProps {
     onClear?: () => void
-    onSelectResult?: (
-        coordinates: ApiTypes.LatLonCoordinate,
-        zoom?: number,
-        showPosition?: boolean
-    ) => void
+    onSelectResult?: (coordinates: ApiTypes.LatLonCoordinate, zoom?: number, showPosition?: boolean) => void
 }
 
-const SearchControl: React.FC<SearchControlProps> = ({
-    onClear,
-    onSelectResult
-}) => {
+const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.searchControl'
     })
 
     const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
 
-    const [geoSearch, { data, isLoading }] =
-        API.useLocationGetGeosearchMutation()
+    const [geoSearch, { data, isLoading }] = API.useLocationGetGeosearchMutation()
 
     const locationOptions: DropdownOption[] = useMemo(
         () =>
@@ -59,12 +51,7 @@ const SearchControl: React.FC<SearchControlProps> = ({
                 return {
                     description: address.join(', '),
                     key: (item.lat || 0) + (item.lon || 0),
-                    title:
-                        item.locality ??
-                        item.region ??
-                        item.district ??
-                        item.country ??
-                        '',
+                    title: item.locality ?? item.region ?? item.district ?? item.country ?? '',
                     value: {
                         lat: item.lat,
                         lon: item.lon
@@ -131,14 +118,7 @@ const SearchControl: React.FC<SearchControlProps> = ({
             options={foundCoords ?? locationOptions}
             onSearch={handleSearchLocation}
             onClear={onClear}
-            onSelect={(option) =>
-                option?.value &&
-                onSelectResult?.(
-                    option.value,
-                    foundCoords ? 17 : 12,
-                    !!foundCoords
-                )
-            }
+            onSelect={(option) => option?.value && onSelectResult?.(option.value, foundCoords ? 17 : 12, !!foundCoords)}
         />
     )
 }

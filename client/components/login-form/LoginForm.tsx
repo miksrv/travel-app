@@ -26,10 +26,7 @@ interface LoginFormProps {
     onSuccessLogin?: () => void
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({
-    onClickRegistration,
-    onSuccessLogin
-}) => {
+const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLogin }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.loginForm'
     })
@@ -43,31 +40,16 @@ const LoginForm: React.FC<LoginFormProps> = ({
     const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestAuthLogin>()
 
-    const [
-        authLoginNative,
-        {
-            data: authData,
-            isLoading: nativeLoading,
-            isSuccess: nativeSuccess,
-            error
-        }
-    ] = API.useAuthPostLoginMutation()
+    const [authLoginNative, { data: authData, isLoading: nativeLoading, isSuccess: nativeSuccess, error }] =
+        API.useAuthPostLoginMutation()
 
     const [
         authLoginService,
-        {
-            data: serviceData,
-            isLoading: serviceLoading,
-            isSuccess: serviceSuccess,
-            isError: serviceError
-        }
+        { data: serviceData, isLoading: serviceLoading, isSuccess: serviceSuccess, isError: serviceError }
     ] = API.useAuthLoginServiceMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
-                ? error.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -91,9 +73,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         return !Object.keys(errors).length
     }, [formData])
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 
@@ -114,8 +94,7 @@ const LoginForm: React.FC<LoginFormProps> = ({
         }
     }
 
-    const loadingForm =
-        nativeLoading || nativeSuccess || serviceLoading || serviceSuccess
+    const loadingForm = nativeLoading || nativeSuccess || serviceLoading || serviceSuccess
 
     useEffect(() => {
         setFormErrors(validationErrors)

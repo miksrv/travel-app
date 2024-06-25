@@ -28,9 +28,7 @@ const ContextMenu: React.FC = () => {
         keyPrefix: 'components.interactiveMap.contextMenu'
     })
 
-    const [, setCoordinates] = useLocalStorage<MapPositionType>(
-        LOCAL_STORAGE.MAP_CENTER
-    )
+    const [, setCoordinates] = useLocalStorage<MapPositionType>(LOCAL_STORAGE.MAP_CENTER)
 
     const getContext = useLeafletContext()
     const mapContext = useRef<ReturnType<typeof useLeafletContext>>(getContext)
@@ -77,11 +75,7 @@ const ContextMenu: React.FC = () => {
                 []
             )
 
-            const menuPointYisOverFlow = (
-                pointY: number,
-                menuWrapHeight: number,
-                mapSize: Point
-            ) => {
+            const menuPointYisOverFlow = (pointY: number, menuWrapHeight: number, mapSize: Point) => {
                 if (pointY > mapSize.y - menuWrapHeight) {
                     return pointY - menuWrapHeight
                 }
@@ -90,22 +84,15 @@ const ContextMenu: React.FC = () => {
 
             mapContext.current.map.on('contextmenu', (event) => {
                 const pointRightClick: Point = event.containerPoint
-                const menuWrapWidth: number = menuWrapRef.current
-                    ? Number(menuWrapRef.current.offsetWidth)
-                    : 0
-                const menuWrapHeight: number = menuWrapRef.current
-                    ? Number(menuWrapRef.current.offsetHeight)
-                    : 0
+                const menuWrapWidth: number = menuWrapRef.current ? Number(menuWrapRef.current.offsetWidth) : 0
+                const menuWrapHeight: number = menuWrapRef.current ? Number(menuWrapRef.current.offsetHeight) : 0
 
                 setPointCords({
                     lat: round(event.latlng.lat, 6) || 0,
                     lon: round(event.latlng.lng, 6) || 0
                 })
 
-                if (
-                    mapSize.current &&
-                    pointRightClick.x > mapSize.current.x - menuWrapWidth
-                ) {
+                if (mapSize.current && pointRightClick.x > mapSize.current.x - menuWrapWidth) {
                     const calculationX =
                         pointRightClick.x === mapSize.current.x
                             ? pointRightClick.x - menuWrapWidth - 20
@@ -113,21 +100,13 @@ const ContextMenu: React.FC = () => {
 
                     setPoint({
                         x: calculationX,
-                        y: menuPointYisOverFlow(
-                            pointRightClick.y,
-                            menuWrapHeight,
-                            mapSize.current
-                        )
+                        y: menuPointYisOverFlow(pointRightClick.y, menuWrapHeight, mapSize.current)
                     })
                 } else {
                     mapSize.current &&
                         setPoint({
                             x: pointRightClick.x,
-                            y: menuPointYisOverFlow(
-                                pointRightClick.y,
-                                menuWrapHeight,
-                                mapSize.current
-                            )
+                            y: menuPointYisOverFlow(pointRightClick.y, menuWrapHeight, mapSize.current)
                         })
                 }
 

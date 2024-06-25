@@ -18,12 +18,7 @@ export interface BreadcrumbsProps {
     links?: BreadcrumbLink[]
 }
 
-const Breadcrumbs: React.FC<BreadcrumbsProps> = ({
-    hideHomePage,
-    links,
-    className,
-    currentPage
-}) => {
+const Breadcrumbs: React.FC<BreadcrumbsProps> = ({ hideHomePage, links, className, currentPage }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'ui.breadcrumbs'
     })

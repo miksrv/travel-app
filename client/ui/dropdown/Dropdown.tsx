@@ -48,9 +48,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
 
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [selectedOption, setSelectedOption] = useState<
-        DropdownOption | undefined
-    >(undefined)
+    const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined)
 
     const toggleDropdown = () => {
         if (onOpen) {
@@ -70,10 +68,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }
@@ -111,20 +106,11 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
             )}
         >
             {label && <label className={styles.label}>{label}</label>}
-            <div
-                className={cn(
-                    styles.container,
-                    isOpen && styles.open,
-                    disabled && styles.disabled
-                )}
-            >
+            <div className={cn(styles.container, isOpen && styles.open, disabled && styles.disabled)}>
                 <button
                     onClick={toggleDropdown}
                     disabled={disabled}
-                    className={cn(
-                        styles.dropdownButton,
-                        selectedOption && styles.selected
-                    )}
+                    className={cn(styles.dropdownButton, selectedOption && styles.selected)}
                 >
                     <span>
                         {selectedOption?.image && (
@@ -137,9 +123,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                             />
                         )}
                         {selectedOption?.value ?? (
-                            <span className={styles.placeHolder}>
-                                {placeholder ?? t('placeholder')}
-                            </span>
+                            <span className={styles.placeHolder}>{placeholder ?? t('placeholder')}</span>
                         )}
                     </span>
                     <span className={styles.arrow}>

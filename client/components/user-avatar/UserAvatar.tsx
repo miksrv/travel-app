@@ -23,8 +23,7 @@ export interface UserAvatarProps {
     hideOnlineIcon?: boolean
 }
 
-const getDimension = (size?: SizeType) =>
-    size === 'medium' ? 36 : size === 'tiny' ? 32 : 20
+const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : size === 'tiny' ? 32 : 20)
 
 const UserAvatar: React.FC<UserAvatarProps> = (props) => {
     const { t } = useTranslation('common', {
@@ -70,12 +69,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
             )}
 
             {showName && user?.id && (
-                <div
-                    className={cn(
-                        styles.info,
-                        size === 'medium' ? styles.medium : styles.small
-                    )}
-                >
+                <div className={cn(styles.info, size === 'medium' ? styles.medium : styles.small)}>
                     <Link
                         href={`/users/${user.id}`}
                         title={`${t('linkTitle')} ${user.name}`}
@@ -89,11 +83,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
     )
 }
 
-const AvatarImage: React.FC<UserAvatarProps> = ({
-    user,
-    size,
-    hideOnlineIcon
-}) => (
+const AvatarImage: React.FC<UserAvatarProps> = ({ user, size, hideOnlineIcon }) => (
     <>
         <Image
             alt={''}
@@ -108,11 +98,9 @@ const AvatarImage: React.FC<UserAvatarProps> = ({
             className={styles.avatarBorder}
         />
 
-        {!hideOnlineIcon &&
-            user?.activity?.date &&
-            minutesAgo(user.activity.date) <= 15 && (
-                <div className={styles.online} />
-            )}
+        {!hideOnlineIcon && user?.activity?.date && minutesAgo(user.activity.date) <= 15 && (
+            <div className={styles.online} />
+        )}
     </>
 )
 

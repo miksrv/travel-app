@@ -11,12 +11,7 @@ interface PaginationProps {
     children?: React.ReactNode
 }
 
-const Popout: React.FC<PaginationProps> = ({
-    className,
-    position,
-    action,
-    children
-}) => {
+const Popout: React.FC<PaginationProps> = ({ className, position, action, children }) => {
     const popoutRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -27,10 +22,7 @@ const Popout: React.FC<PaginationProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            popoutRef.current &&
-            !popoutRef.current.contains(event.target as Node)
-        ) {
+        if (popoutRef.current && !popoutRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }

@@ -13,10 +13,7 @@ interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({
-    placeId,
-    ...props
-}) => {
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation('common', {
         keyPrefix: 'components.bookmarkButton'
@@ -26,17 +23,13 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [setBookmark, { isLoading: bookmarkPutLoading, data: result }] =
-        API.useBookmarksPutPlaceMutation()
+    const [setBookmark, { isLoading: bookmarkPutLoading, data: result }] = API.useBookmarksPutPlaceMutation()
 
     const {
         data: bookmarkData,
         isLoading: bookmarksLoading,
         isFetching
-    } = API.useBookmarksGetPlaceQuery(
-        { placeId: placeId! },
-        { skip: !placeId || !isAuth }
-    )
+    } = API.useBookmarksGetPlaceQuery({ placeId: placeId! }, { skip: !placeId || !isAuth })
 
     const loading = bookmarkPutLoading || bookmarksLoading || isFetching
 
@@ -59,9 +52,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
         dispatch(
             Notify({
                 id: 'bookmarkButton',
-                message: bookmarkData?.result
-                    ? t('bookmarkResultRemove')
-                    : t('bookmarkResultAdd'),
+                message: bookmarkData?.result ? t('bookmarkResultRemove') : t('bookmarkResultAdd'),
                 type: 'success'
             })
         )

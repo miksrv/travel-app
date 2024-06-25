@@ -18,10 +18,7 @@ interface PlacesFilterPanelProps {
     location?: ApiTypes.PlaceLocationType
     category?: string | null
     optionsOpen?: boolean
-    onChange?: (
-        key: keyof PlacesFilterType,
-        value: string | number | undefined
-    ) => void
+    onChange?: (key: keyof PlacesFilterType, value: string | number | undefined) => void
     onOpenOptions?: (title?: string) => void
     onChangeLocation?: (option?: ApiTypes.PlaceLocationType) => void
 }
@@ -42,26 +39,20 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         keyPrefix: 'components.placeFilterPanel'
     })
 
-    const userLocation = useAppSelector(
-        (state) => state.application.userLocation
-    )
+    const userLocation = useAppSelector((state) => state.application.userLocation)
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
-    const [searchAddress, { data: addressData, isLoading: addressLoading }] =
-        API.useLocationGetSearchMutation()
+    const [searchAddress, { data: addressData, isLoading: addressLoading }] = API.useLocationGetSearchMutation()
 
-    const [openedOptions, setOpenedOptions] =
-        useState<OpenedOptionsType>(undefined)
+    const [openedOptions, setOpenedOptions] = useState<OpenedOptionsType>(undefined)
 
     const sortOptions: DropdownOption[] = useMemo(
         () =>
             Object.values(ApiTypes.SortFields)
                 .filter((sort) => sort !== ApiTypes.SortFields.Category)
                 .map((sort) => ({
-                    disabled:
-                        sort === ApiTypes.SortFields.Distance &&
-                        (!userLocation?.lat || !userLocation.lon),
+                    disabled: sort === ApiTypes.SortFields.Distance && (!userLocation?.lat || !userLocation.lon),
                     key: sort,
                     value: t(`sort.${sort}`)
                 })),
@@ -151,9 +142,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
 
     const selectedSort = sortOptions.find(({ key }) => key === sort)
     const selectedOrder = orderOptions.find(({ key }) => key === order)
-    const selectedCategory = categoryOptions?.find(
-        ({ key }) => key === category
-    )
+    const selectedCategory = categoryOptions?.find(({ key }) => key === category)
 
     useEffect(() => {
         if (!optionsOpen) {

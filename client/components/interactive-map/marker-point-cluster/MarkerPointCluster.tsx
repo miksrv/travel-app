@@ -13,10 +13,7 @@ interface MarkerPointClusterProps {
     onClick?: (coords: ApiTypes.LatLonCoordinate) => void
 }
 
-const MarkerPointCluster: React.FC<MarkerPointClusterProps> = ({
-    marker,
-    onClick
-}) => {
+const MarkerPointCluster: React.FC<MarkerPointClusterProps> = ({ marker, onClick }) => {
     const clusterMarkerIcon = new Leaflet.DivIcon({
         className: styles.mapPointCluster,
         html: '<div>' + marker.count + '</div>'

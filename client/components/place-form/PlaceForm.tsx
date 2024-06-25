@@ -33,14 +33,7 @@ interface PlaceFormProps {
     onCancel?: () => void
 }
 
-const PlaceForm: React.FC<PlaceFormProps> = ({
-    placeId,
-    loading,
-    values,
-    errors,
-    onSubmit,
-    onCancel
-}) => {
+const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors, onSubmit, onCancel }) => {
     const dispatch = useAppDispatch()
 
     const { t } = useTranslation('common', {
@@ -50,22 +43,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     const location = useAppSelector((state) => state.application.userLocation)
     const [mapBounds, setMapBounds] = useState<string>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
-    const [formErrors, setFormErrors] =
-        useState<ApiTypes.RequestPlacesPostItem>()
+    const [formErrors, setFormErrors] = useState<ApiTypes.RequestPlacesPostItem>()
 
-    const { data: poiListData } = API.usePoiGetListQuery(
-        { bounds: mapBounds },
-        { skip: !mapBounds }
-    )
+    const { data: poiListData } = API.usePoiGetListQuery({ bounds: mapBounds }, { skip: !mapBounds })
 
-    const [searchTags, { data: searchResult, isLoading: searchLoading }] =
-        API.useTagsGetSearchMutation()
+    const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 
@@ -76,12 +62,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
     const handleMapBounds = (bounds: LatLngBounds) => {
         const mapCenter = bounds.getCenter()
 
-        if (
-            !placeId ||
-            (placeId &&
-                (formData?.lat || formData?.lat === 0) &&
-                (formData.lon || formData.lon === 0))
-        ) {
+        if (!placeId || (placeId && (formData?.lat || formData?.lat === 0) && (formData.lon || formData.lon === 0))) {
             setFormData({
                 ...formData,
                 lat: mapCenter.lat,
@@ -152,9 +133,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
         [categoryData?.items]
     )
 
-    const selectedCategory = categoryOptions?.find(
-        ({ key }) => key === formData?.category
-    )
+    const selectedCategory = categoryOptions?.find(({ key }) => key === formData?.category)
 
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
@@ -249,11 +228,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
                     zoom={placeId ? 15 : undefined}
-                    center={
-                        placeId && formData
-                            ? [formData.lat!, formData.lon!]
-                            : undefined
-                    }
+                    center={placeId && formData ? [formData.lat!, formData.lon!] : undefined}
                     userLatLon={location}
                     onChangeBounds={handleMapBounds}
                 />

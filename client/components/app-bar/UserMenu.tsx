@@ -46,10 +46,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                     {user?.level?.title}
                 </Link>
             </div>
-            <div>
-                До нового уровня:{' '}
-                {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
-            </div>
+            <div>До нового уровня: {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}</div>
         </div>
         <ul className={styles.userMenu}>
             <li>

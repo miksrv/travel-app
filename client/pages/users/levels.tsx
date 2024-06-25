@@ -77,17 +77,11 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                                 />
                                 {level.title}
                             </div>
-                            <div className={'experience'}>
-                                {t('needExp', { experience: level.experience })}
-                            </div>
+                            <div className={'experience'}>{t('needExp', { experience: level.experience })}</div>
                         </div>
                         <UserAvatarGroup
                             users={level.users}
-                            totalCount={
-                                level.users?.length && level.count
-                                    ? level.count - level.users.length
-                                    : 0
-                            }
+                            totalCount={level.users?.length && level.count ? level.count - level.users.length : 0}
                         />
                     </div>
                 ))}
@@ -105,9 +99,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             store.dispatch(setLocale(locale))
 
-            const { data } = await store.dispatch(
-                API.endpoints.levelsGetList.initiate()
-            )
+            const { data } = await store.dispatch(API.endpoints.levelsGetList.initiate())
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 

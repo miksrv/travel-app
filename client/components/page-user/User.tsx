@@ -34,9 +34,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
     useEffect(() => {
         const onScroll = () => {
-            const scrolledToBottom =
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 20
+            const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20
 
             if (scrolledToBottom && !isFetching && !!data?.items.length) {
                 setLastDate(data.items[data.items.length - 1].created?.date)
@@ -140,9 +138,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 action={
                     <Link
                         href={`/users/${id}/photos`}
-                        title={t(
-                            `${t('buttonShowAllPhotos')} (${photosCount})`
-                        )}
+                        title={t(`${t('buttonShowAllPhotos')} (${photosCount})`)}
                     >
                         {t('linkAllPhotos')}
                     </Link>

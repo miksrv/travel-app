@@ -10,14 +10,10 @@ const PlacesListItemLoader: React.FC = () => (
             <Skeleton style={{ height: '100%', width: '100%' }} />
         </div>
 
-        <Skeleton
-            style={{ height: '17px', margin: '8px auto', width: '94%' }}
-        />
+        <Skeleton style={{ height: '17px', margin: '8px auto', width: '94%' }} />
 
         <div className={styles.address}>
-            <Skeleton
-                style={{ height: '12px', marginBottom: '10px', width: '70%' }}
-            />
+            <Skeleton style={{ height: '12px', marginBottom: '10px', width: '70%' }} />
         </div>
 
         {Array(5)

@@ -6,22 +6,19 @@ type SnackbarStateProps = {
     counter: number
 }
 
-export const Notify = createAsyncThunk(
-    'snackbar/addNotification',
-    async (notification: Notification, { dispatch }) => {
-        if (!notification.type && !notification.message) {
-            return
-        }
-
-        dispatch(notificationSlice.actions.addNotification(notification))
-
-        setTimeout(() => {
-            dispatch(deleteNotification(notification.id))
-        }, 10000)
-
-        return notification
+export const Notify = createAsyncThunk('snackbar/addNotification', async (notification: Notification, { dispatch }) => {
+    if (!notification.type && !notification.message) {
+        return
     }
-)
+
+    dispatch(notificationSlice.actions.addNotification(notification))
+
+    setTimeout(() => {
+        dispatch(deleteNotification(notification.id))
+    }, 10000)
+
+    return notification
+})
 
 const notificationSlice = createSlice({
     initialState: {
@@ -60,11 +57,7 @@ const notificationSlice = createSlice({
     }
 })
 
-export const {
-    deleteAllNotifications,
-    setReadNotification,
-    deleteNotification,
-    setUnreadCounter
-} = notificationSlice.actions
+export const { deleteAllNotifications, setReadNotification, deleteNotification, setUnreadCounter } =
+    notificationSlice.actions
 
 export default notificationSlice.reducer

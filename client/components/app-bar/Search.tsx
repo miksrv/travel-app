@@ -107,9 +107,7 @@ const Search: React.FC<SearchProps> = () => {
     const handleSelectLocation = async (value: DropdownOption) => {
         if (value.type === DropdownOptionType.COORDINATES) {
             const coords = value.value as ApiTypes.LatLonCoordinate
-            await router.push(
-                `/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`
-            )
+            await router.push(`/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`)
         } else {
             await router.push(`/places/${value.value}`)
         }

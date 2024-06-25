@@ -10,8 +10,7 @@ import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import Container, { ContainerProps } from '@/ui/container'
 import Progress from '@/ui/progress'
 
-interface UsersListProps
-    extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
+interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
     users?: User[]
 }
 
@@ -56,9 +55,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                             className={styles.progress}
                             value={nextLevelPercentage(
                                 user.level?.experience || 0,
-                                user.level?.nextLevel ||
-                                    user.level?.experience ||
-                                    0
+                                user.level?.nextLevel || user.level?.experience || 0
                             )}
                         />
                     </div>
@@ -66,9 +63,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
             ))}
         </Container>
     ) : (
-        <Container className={styles.emptyList}>
-            {t(`${KEY}emptyList`)}
-        </Container>
+        <Container className={styles.emptyList}>{t(`${KEY}emptyList`)}</Container>
     )
 }
 

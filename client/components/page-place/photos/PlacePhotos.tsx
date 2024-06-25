@@ -26,10 +26,8 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
     const inputFile = useRef<HTMLInputElement>(null)
 
-    const [
-        uploadPhoto,
-        { data: uploadData, isLoading: uploadLoading, isError: uploadError }
-    ] = API.usePhotoPostUploadMutation()
+    const [uploadPhoto, { data: uploadData, isLoading: uploadLoading, isError: uploadError }] =
+        API.usePhotoPostUploadMutation()
 
     const handlePhotoUploadClick = () => {
         if (isAuth) {
@@ -39,9 +37,7 @@ const PlacePhotos: React.FC<PlacePhotosProps> = ({ placeId, photos }) => {
         }
     }
 
-    const handleSelectedFilesUpload = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSelectedFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
 
         if (files?.length) {

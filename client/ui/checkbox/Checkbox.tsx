@@ -10,18 +10,9 @@ interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
     indeterminate?: boolean
 }
 
-const Checkbox: React.FC<CheckboxProps> = ({
-    label,
-    indeterminate,
-    ...props
-}) => (
+const Checkbox: React.FC<CheckboxProps> = ({ label, indeterminate, ...props }) => (
     <div className={styles.checkbox}>
-        <div
-            className={cn(
-                styles.formField,
-                (props.checked || indeterminate) && styles.checked
-            )}
-        >
+        <div className={cn(styles.formField, (props.checked || indeterminate) && styles.checked)}>
             {indeterminate ? (
                 <Icon name={'CheckboxIndeterminate'} />
             ) : props.checked ? (

@@ -42,10 +42,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({
         <div className={cn(className, styles.readMore)}>
             {!readMore ? (
                 <p>
-                    {truncateText(children, charCount) +
-                        (children && children.length > charCount
-                            ? '...'
-                            : '')}{' '}
+                    {truncateText(children, charCount) + (children && children.length > charCount ? '...' : '')}{' '}
                     {toggleButton()}
                 </p>
             ) : (

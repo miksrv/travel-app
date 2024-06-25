@@ -9,11 +9,7 @@ import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
-import {
-    addDecimalPoint,
-    dateToUnixTime,
-    numberFormatter
-} from '@/functions/helpers'
+import { addDecimalPoint, dateToUnixTime, numberFormatter } from '@/functions/helpers'
 import Badge from '@/ui/badge'
 
 interface PlacesListItemProps {
@@ -25,10 +21,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
         keyPrefix: 'components.placesList.placesListItem'
     })
 
-    const placeAddress = useMemo(
-        () => addressToString(place.address),
-        [place.address]
-    )
+    const placeAddress = useMemo(() => addressToString(place.address), [place.address])
 
     return (
         <article className={styles.placesListItem}>
@@ -52,9 +45,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             quality={70}
                             height={200}
                             width={280}
-                            src={`${IMG_HOST}${
-                                place.cover.preview
-                            }?d=${dateToUnixTime(place.updated?.date)}`}
+                            src={`${IMG_HOST}${place.cover.preview}?d=${dateToUnixTime(place.updated?.date)}`}
                         />
                     )}
                 </Link>
@@ -101,11 +92,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </div>
             </div>
 
-            {place.content ? (
-                <p>{place.content}</p>
-            ) : (
-                <div className={styles.emptyContent}>{t('noData')}</div>
-            )}
+            {place.content ? <p>{place.content}</p> : <div className={styles.emptyContent}>{t('noData')}</div>}
         </article>
     )
 }

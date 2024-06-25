@@ -29,11 +29,7 @@ interface SocialRatingProps {
     ratingValue?: number | null
 }
 
-const SocialRating: React.FC<SocialRatingProps> = ({
-    placeId,
-    placeUrl,
-    ratingValue
-}) => {
+const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl, ratingValue }) => {
     const dispatch = useAppDispatch()
 
     const { t } = useTranslation('common', {
@@ -44,8 +40,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({
         refetchOnMountOrArgChange: true
     })
 
-    const [changeRating, { isLoading: ratingLoading, isSuccess }] =
-        API.useRatingPutScoreMutation()
+    const [changeRating, { isLoading: ratingLoading, isSuccess }] = API.useRatingPutScoreMutation()
 
     const handleRatingChange = (value?: number) => {
         if (value && placeId) {

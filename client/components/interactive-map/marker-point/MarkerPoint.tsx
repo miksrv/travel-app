@@ -21,8 +21,7 @@ interface MarkerPointProps {
 }
 
 const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
-    const [getPlaceItem, { isLoading, data: poiData }] =
-        API.usePoiGetItemMutation()
+    const [getPlaceItem, { isLoading, data: poiData }] = API.usePoiGetItemMutation()
 
     const placeMarkerIcon = new Leaflet.Icon({
         iconAnchor: [8.4, 19],
@@ -81,9 +80,7 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                 {!!poiData?.rating && (
                                     <Badge
                                         icon={'Star'}
-                                        content={addDecimalPoint(
-                                            poiData.rating
-                                        )}
+                                        content={addDecimalPoint(poiData.rating)}
                                     />
                                 )}
 

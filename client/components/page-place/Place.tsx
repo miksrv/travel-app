@@ -21,12 +21,7 @@ interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
 const KEY = 'components.pagePlace.place.'
 
-const Place: React.FC<PlaceProps> = ({
-    place,
-    photoList,
-    ratingCount,
-    nearPlaces
-}) => {
+const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces }) => {
     const { t, i18n } = useTranslation()
 
     const { data: ratingData } = API.useRatingGetListQuery(place?.id ?? '', {
@@ -89,9 +84,7 @@ const Place: React.FC<PlaceProps> = ({
             latitude: place?.lat,
             longitude: place?.lon
         },
-        image: photoList?.length
-            ? photoList.map(({ full }) => `${IMG_HOST}${full}`)
-            : undefined,
+        image: photoList?.length ? photoList.map(({ full }) => `${IMG_HOST}${full}`) : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
             userInteractionCount: place?.views

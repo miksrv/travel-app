@@ -24,12 +24,7 @@ interface PlaceHeaderProps {
     ratingCount?: number
 }
 
-const PlaceHeader: React.FC<PlaceHeaderProps> = ({
-    place,
-    breadcrumbs,
-    ratingValue,
-    ratingCount
-}) => {
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, breadcrumbs, ratingValue, ratingCount }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeHeader'
     })
@@ -47,10 +42,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     }
 
     const handleSaveCover = () => {
-        setTimeout(
-            () => setCoverHash(Math.floor(Date.now() / 1000).toString()),
-            400
-        )
+        setTimeout(() => setCoverHash(Math.floor(Date.now() / 1000).toString()), 400)
     }
 
     const handleBackLinkClick = async () => {
@@ -103,12 +95,8 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                         className={styles.rating}
                         value={ratingValue}
                     >
-                        <div className={styles.value}>
-                            {addDecimalPoint(ratingValue ?? place?.rating)}
-                        </div>
-                        <div className={styles.count}>
-                            {t('ratingCount', { count: ratingCount ?? 0 })}
-                        </div>
+                        <div className={styles.value}>{addDecimalPoint(ratingValue ?? place?.rating)}</div>
+                        <div className={styles.count}>{t('ratingCount', { count: ratingCount ?? 0 })}</div>
                     </RatingColored>
                 )}
             </div>
@@ -159,9 +147,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
                             size={'medium'}
                             icon={'EditLocation'}
                             mode={'secondary'}
-                            link={
-                                isAuth ? `/places/${place?.id}/edit` : undefined
-                            }
+                            link={isAuth ? `/places/${place?.id}/edit` : undefined}
                             onClick={handleEditPlaceClick}
                         >
                             {t('buttonEdit')}

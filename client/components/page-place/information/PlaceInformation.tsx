@@ -41,12 +41,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
     //     API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
 
     const placeAddress: PlaceAddress[] = useMemo(() => {
-        const addressTypes: ApiTypes.LocationTypes[] = [
-            'country',
-            'region',
-            'district',
-            'locality'
-        ]
+        const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []
 
         addressTypes.forEach((type) => {
@@ -90,9 +85,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         />
                         <Link
                             href={`/places?category=${place?.category?.name}`}
-                            title={`${place?.category?.title} - ${t(
-                                'allCategoryPlaces'
-                            )}`}
+                            title={`${place?.category?.title} - ${t('allCategoryPlaces')}`}
                         >
                             {place?.category?.title}
                         </Link>
@@ -136,18 +129,14 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     <li>
                         <Icon name={'Time'} />
                         <div className={styles.key}>{t('editTime')}</div>
-                        <div className={styles.value}>
-                            {formatDate(place.updated.date, t('dateFormat'))}
-                        </div>
+                        <div className={styles.value}>{formatDate(place.updated.date, t('dateFormat'))}</div>
                     </li>
                 )}
                 {place?.distance && (
                     <li>
                         <Icon name={'Ruler'} />
                         <div className={styles.key}>{t('distance')}</div>
-                        <div className={styles.value}>
-                            {`${place.distance} ${t('km')}`}
-                        </div>
+                        <div className={styles.value}>{`${place.distance} ${t('km')}`}</div>
                     </li>
                 )}
                 <li>
@@ -180,9 +169,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                             <span key={`address${address.type}`}>
                                 <Link
                                     href={`/places?${address.type}=${address.id}`}
-                                    title={`${t('addressLinkTitle')} ${
-                                        address.name
-                                    }`}
+                                    title={`${t('addressLinkTitle')} ${address.name}`}
                                 >
                                     {address.name}
                                 </Link>
@@ -190,9 +177,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                             </span>
                         ))}
 
-                        {place?.address?.street && (
-                            <>{`, ${place.address.street}`}</>
-                        )}
+                        {place?.address?.street && <>{`, ${place.address.street}`}</>}
                     </div>
                 </li>
             </ul>

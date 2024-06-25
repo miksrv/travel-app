@@ -39,26 +39,18 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     const inputFile = useRef<HTMLInputElement>(null)
     const imageRef = useRef<HTMLImageElement>(null)
 
-    const [uploadAvatar, { data: uploadData, isLoading: uploadLoading }] =
-        API.useUsersPostUploadAvatarMutation()
+    const [uploadAvatar, { data: uploadData, isLoading: uploadLoading }] = API.useUsersPostUploadAvatarMutation()
 
-    const [cropAvatar, { data: cropData, isLoading: cropLoading, isSuccess }] =
-        API.useUsersPatchCropAvatarMutation()
+    const [cropAvatar, { data: cropData, isLoading: cropLoading, isSuccess }] = API.useUsersPatchCropAvatarMutation()
 
-    const [uploadedFile, setUploadedFile] =
-        useState<ApiTypes.ResponseUserUploadAvatar>()
+    const [uploadedFile, setUploadedFile] = useState<ApiTypes.ResponseUserUploadAvatar>()
 
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [imageCropData, setImageCropData] = useState<Crop>()
     const [imageSizes, setImageSizes] = useState<ImageSizesType>()
 
     const disabled =
-        cropLoading ||
-        uploadLoading ||
-        !imageCropData?.width ||
-        !imageCropData.height ||
-        !imageSizes ||
-        !uploadedFile
+        cropLoading || uploadLoading || !imageCropData?.width || !imageCropData.height || !imageSizes || !uploadedFile
 
     const handleChangeCoverClick = () => {
         dispatch(toggleOverlay(true))
@@ -79,18 +71,10 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
 
         cropAvatar({
             filename: uploadedFile.filename,
-            height: Math.round(
-                imageSizes.realHeight * ((imageCropData.height || 0) / 100)
-            ),
-            width: Math.round(
-                imageSizes.realWidth * ((imageCropData.width || 0) / 100)
-            ),
-            x: Math.round(
-                imageSizes.realWidth * ((imageCropData.x || 0) / 100)
-            ),
-            y: Math.round(
-                imageSizes.realHeight * ((imageCropData.y || 0) / 100)
-            )
+            height: Math.round(imageSizes.realHeight * ((imageCropData.height || 0) / 100)),
+            width: Math.round(imageSizes.realWidth * ((imageCropData.width || 0) / 100)),
+            x: Math.round(imageSizes.realWidth * ((imageCropData.x || 0) / 100)),
+            y: Math.round(imageSizes.realHeight * ((imageCropData.y || 0) / 100))
         })
     }
 
@@ -98,9 +82,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         inputFile.current?.click()
     }
 
-    const handleSelectedFilesUpload = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSelectedFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
 
         if (!files?.[0]) {
@@ -173,11 +155,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
             <Dialog
                 contentHeight={'500px'}
                 maxWidth={'700px'}
-                header={
-                    !uploadedFile
-                        ? t('dialogTitleUpload')
-                        : t('dialogTitleSave')
-                }
+                header={!uploadedFile ? t('dialogTitleUpload') : t('dialogTitleSave')}
                 open={coverDialogOpen}
                 showBackLink={!!uploadedFile}
                 actions={
@@ -225,19 +203,11 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                 aspect={1}
                                 minHeight={
                                     // 50% in px of width
-                                    imageSizes
-                                        ? imageSizes.halfRealSize /
-                                          2 /
-                                          imageSizes.ratioHeight
-                                        : 500
+                                    imageSizes ? imageSizes.halfRealSize / 2 / imageSizes.ratioHeight : 500
                                 }
                                 minWidth={
                                     // 50% in px of height
-                                    imageSizes
-                                        ? imageSizes.halfRealSize /
-                                          2 /
-                                          imageSizes.ratioWidth
-                                        : 500
+                                    imageSizes ? imageSizes.halfRealSize / 2 / imageSizes.ratioWidth : 500
                                 }
                                 onChange={(c, p) => setImageCropData(p)}
                             >

@@ -26,11 +26,7 @@ interface AppLayoutProps {
     children?: React.ReactNode
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({
-    className,
-    fullSize,
-    children
-}) => {
+const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.appLayout'
     })
@@ -99,13 +95,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }, [application.showOverlay, sidebarOpen])
 
     return (
-        <div
-            className={cn(
-                className,
-                styles.appLayout,
-                fullSize && styles.fullSize
-            )}
-        >
+        <div className={cn(className, styles.appLayout, fullSize && styles.fullSize)}>
             <NextNProgress
                 color={'#2688eb'}
                 options={{ showSpinner: false }}
@@ -133,9 +123,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 tabIndex={0}
                 className={cn(
                     styles.overlay,
-                    application.showOverlay || sidebarOpen
-                        ? styles.displayed
-                        : styles.hidden
+                    application.showOverlay || sidebarOpen ? styles.displayed : styles.hidden
                 )}
                 onKeyDown={handleCloseOverlay}
                 onClick={handleCloseOverlay}
@@ -145,16 +133,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 open={application.showAuthDialog}
                 onCloseDialog={handleCloseAuthDialog}
             >
-                {authForm === 'login' && (
-                    <LoginForm
-                        onClickRegistration={() => setAuthForm('registration')}
-                    />
-                )}
-                {authForm === 'registration' && (
-                    <RegistrationForm
-                        onClickLogin={() => setAuthForm('login')}
-                    />
-                )}
+                {authForm === 'login' && <LoginForm onClickRegistration={() => setAuthForm('registration')} />}
+                {authForm === 'registration' && <RegistrationForm onClickLogin={() => setAuthForm('login')} />}
             </Dialog>
 
             <AppBar
@@ -162,12 +142,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 onMenuClick={handleOpenSideBar}
             />
 
-            <aside
-                className={cn(
-                    styles.sidebar,
-                    sidebarOpen ? styles.opened : styles.closed
-                )}
-            >
+            <aside className={cn(styles.sidebar, sidebarOpen ? styles.opened : styles.closed)}>
                 <Menu
                     type={'mobile'}
                     userId={authSlice.user?.id}

@@ -28,11 +28,7 @@ const UserTabs: React.FC<UserTabsProps> = ({ user, currentPage }) => {
 
     useEffect(() => {
         if (page) {
-            router.push(
-                `/users/${user?.id}${
-                    page === UserPagesEnum.FEED ? '' : `/${page}`
-                }`
-            )
+            router.push(`/users/${user?.id}${page === UserPagesEnum.FEED ? '' : `/${page}`}`)
         }
     }, [page])
 

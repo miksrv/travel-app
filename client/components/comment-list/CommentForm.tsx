@@ -17,13 +17,7 @@ interface CommentFormProps {
     onCommentAdded?: () => void
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({
-    placeId,
-    answerId,
-    isAuth,
-    user,
-    onCommentAdded
-}) => {
+const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, user, onCommentAdded }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.commentList'
     })
@@ -32,9 +26,7 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
     const [submit, { isLoading }] = API.useCommentsPostMutation()
 
-    const handleKeyPress = (
-        event: React.KeyboardEvent<HTMLTextAreaElement>
-    ) => {
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && comment && comment.length > 1) {
             event.preventDefault()
             handleSubmit()
