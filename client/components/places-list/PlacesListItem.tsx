@@ -60,7 +60,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             className={styles.photo}
                             alt={place.title || ''}
                             quality={70}
-                            height={180}
+                            height={200}
                             width={280}
                             src={`${IMG_HOST}${
                                 place.cover.preview
@@ -75,55 +75,55 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     {/*    content={place?.photos || 0}*/}
                     {/*/>*/}
 
-                    {!!place.comments && (
-                        <Badge
-                            icon={'Comment'}
-                            content={numberFormatter(place.comments)}
-                        />
-                    )}
+                    {/*{!!place.comments && (*/}
+                    {/*    <Badge*/}
+                    {/*        icon={'Comment'}*/}
+                    {/*        content={numberFormatter(place.comments)}*/}
+                    {/*    />*/}
+                    {/*)}*/}
 
-                    {!!place.bookmarks && (
-                        <Badge
-                            icon={'HeartEmpty'}
-                            content={place.bookmarks}
-                        />
-                    )}
+                    {/*{!!place.bookmarks && (*/}
+                    {/*    <Badge*/}
+                    {/*        icon={'HeartEmpty'}*/}
+                    {/*        content={place.bookmarks}*/}
+                    {/*    />*/}
+                    {/*)}*/}
 
                     {/*<Badge*/}
                     {/*    icon={'Eye'}*/}
                     {/*    content={numberFormatter(place?.views || 0)}*/}
                     {/*/>*/}
 
-                    {!!place.distance && (
-                        <Badge
-                            icon={'Ruler'}
-                            content={numberFormatter(place.distance)}
-                        />
-                    )}
-                </div>
-            </div>
+                    {/*{!!place.distance && (*/}
+                    {/*    <Badge*/}
+                    {/*        icon={'Ruler'}*/}
+                    {/*        content={numberFormatter(place.distance)}*/}
+                    {/*    />*/}
+                    {/*)}*/}
 
-            <h2 className={styles.title}>
-                <Link
-                    href={`/places/${place.id}`}
-                    title={place.title}
-                >
-                    {place.title}
-                </Link>
-            </h2>
-
-            <div className={styles.address}>
-                {placeAddress.map((address, i) => (
-                    <span key={`address${address.type}${place.id}`}>
+                    <h2 className={styles.title}>
                         <Link
-                            href={`/places?${address.type}=${address.id}`}
-                            title={`${t('addressLinkTitle')} ${address.name}`}
+                            href={`/places/${place.id}`}
+                            title={place.title}
                         >
-                            {address.name}
+                            {place.title}
                         </Link>
-                        {placeAddress.length - 1 !== i && ', '}
-                    </span>
-                ))}
+                    </h2>
+
+                    <div className={styles.address}>
+                        {placeAddress.map((address, i) => (
+                            <span key={`address${address.type}${place.id}`}>
+                                <Link
+                                    href={`/places?${address.type}=${address.id}`}
+                                    title={`${t('addressLinkTitle')} ${address.name}`}
+                                >
+                                    {address.name}
+                                </Link>
+                                {placeAddress.length - 1 !== i && ', '}
+                            </span>
+                        ))}
+                    </div>
+                </div>
             </div>
 
             {place.content ? (
