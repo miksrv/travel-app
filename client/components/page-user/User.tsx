@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import Head from 'next/head'
+import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import type { BreadcrumbList, ProfilePage } from 'schema-dts'
@@ -136,6 +137,16 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                 title={t('photos')}
                 photos={photosList}
                 hideActions={true}
+                action={
+                    <Link
+                        href={`/users/${id}/photos`}
+                        title={t(
+                            `${t('buttonShowAllPhotos')} (${photosCount})`
+                        )}
+                    >
+                        {t('linkAllPhotos')}
+                    </Link>
+                }
                 footer={
                     photosCount > 8 && (
                         <Button

@@ -182,6 +182,7 @@
                 "title": "Профиль",
                 "photos": "Фотографии",
                 "places": "Добавленные места",
+                "linkAllPhotos": "Все",
                 "buttonShowAllPhotos": "Показать все фотографии",
                 "breadCrumbUsersLink": "Путешественники"
             }

@@ -66,7 +66,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
     }, [])
 
     return (
-        <section className={styles.component}>
+        <section className={styles.placeHeader}>
             <div className={styles.image}>
                 {place?.cover && (
                     <>

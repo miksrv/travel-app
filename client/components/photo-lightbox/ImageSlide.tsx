@@ -56,6 +56,7 @@ const ImageSlide: React.FC<ImageSlideProps> = ({ slide, offset, rect }) => {
           )
         : rect.height
 
+    // TODO https://yet-another-react-lightbox.com/examples/nextjs
     return (
         <div style={{ height, position: 'relative', width }}>
             <Image

@@ -181,6 +181,7 @@
                 "title": "Profile",
                 "photos": "Photos",
                 "places": "Added places",
+                "linkAllPhotos": "All",
                 "buttonShowAllPhotos": "Show all photos",
                 "breadCrumbUsersLink": "Travelers"
             }
