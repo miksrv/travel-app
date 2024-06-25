@@ -15,7 +15,6 @@ import {
     numberFormatter
 } from '@/functions/helpers'
 import Badge from '@/ui/badge'
-import RatingColored from '@/ui/rating-colored'
 
 interface PlacesListItemProps {
     place: Place
@@ -42,15 +41,6 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                     height={26}
                 />
 
-                {!!place.rating && (
-                    <RatingColored
-                        className={styles.rating}
-                        value={place.rating}
-                    >
-                        {addDecimalPoint(place.rating)}
-                    </RatingColored>
-                )}
-
                 <Link
                     href={`/places/${place.id}`}
                     title={place.title}
@@ -70,36 +60,21 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </Link>
 
                 <div className={styles.bottomPanel}>
-                    {/*<Badge*/}
-                    {/*    icon={'Photo'}*/}
-                    {/*    content={place?.photos || 0}*/}
-                    {/*/>*/}
+                    <div className={styles.iconsPanel}>
+                        {!!place.rating && (
+                            <Badge
+                                icon={'Star'}
+                                content={addDecimalPoint(place.rating)}
+                            />
+                        )}
 
-                    {/*{!!place.comments && (*/}
-                    {/*    <Badge*/}
-                    {/*        icon={'Comment'}*/}
-                    {/*        content={numberFormatter(place.comments)}*/}
-                    {/*    />*/}
-                    {/*)}*/}
-
-                    {/*{!!place.bookmarks && (*/}
-                    {/*    <Badge*/}
-                    {/*        icon={'HeartEmpty'}*/}
-                    {/*        content={place.bookmarks}*/}
-                    {/*    />*/}
-                    {/*)}*/}
-
-                    {/*<Badge*/}
-                    {/*    icon={'Eye'}*/}
-                    {/*    content={numberFormatter(place?.views || 0)}*/}
-                    {/*/>*/}
-
-                    {/*{!!place.distance && (*/}
-                    {/*    <Badge*/}
-                    {/*        icon={'Ruler'}*/}
-                    {/*        content={numberFormatter(place.distance)}*/}
-                    {/*    />*/}
-                    {/*)}*/}
+                        {!!place.distance && (
+                            <Badge
+                                icon={'Ruler'}
+                                content={numberFormatter(place.distance)}
+                            />
+                        )}
+                    </div>
 
                     <h2 className={styles.title}>
                         <Link

@@ -73,7 +73,7 @@
         filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
     }
 
-    .leaflet-container {
+    .leaflet-container, .leaflet-popup-tip {
         background-color: var(--input-background-color);
     }
 
