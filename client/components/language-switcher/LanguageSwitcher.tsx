@@ -26,6 +26,7 @@ const LanguageSwitcher: React.FC = () => {
             return
         }
 
+        setCookie('NEXT_LOCALE', locale)
         setStorageLocale(locale)
 
         dispatch(setLocale(locale))
