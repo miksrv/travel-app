@@ -101,7 +101,8 @@
             "placeHeader": {
                 "edit": "Редактировать",
                 "photoUpload": "Загрузить фото",
-                "addressLinkTitle": "Интересные места:"
+                "allPlacesAtAddress": "Все место по адресу",
+                "openPlaceOnMap": "Открыть на карте"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -257,7 +258,8 @@
         "placesList": {
             "emptyList": "Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.",
             "placesListItem": {
-                "noData": "Пока ничего нет"
+                "emptyContent": "Описание еще не добавлено",
+                "allPlacesAtAddress": "Все место по адресу"
             }
         },
         "categoriesList": {

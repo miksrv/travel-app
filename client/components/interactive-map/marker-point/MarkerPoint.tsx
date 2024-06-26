@@ -47,6 +47,9 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 <Popup
                     className={styles.markerPointPopup}
                     closeOnEscapeKey={true}
+                    autoPan={false}
+                    keepInView={false}
+                    autoClose={true}
                 >
                     <div className={styles.content}>
                         <Link

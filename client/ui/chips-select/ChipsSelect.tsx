@@ -54,7 +54,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     )
 
     const optionInValue = (option?: string): boolean =>
-        !!value?.find((item) => item.toLowerCase() === option?.toLowerCase())
+        !!value?.find((item) => item?.toLowerCase() === option?.toLowerCase())
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' && search?.length) {

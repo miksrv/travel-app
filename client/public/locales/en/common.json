@@ -101,7 +101,8 @@
             "placeHeader": {
                 "edit": "Edit",
                 "photoUpload": "Upload photo",
-                "addressLinkTitle": "Points of Interest:"
+                "allPlacesAtAddress": "All place at address",
+                "openPlaceOnMap": "Open on the map"
             },
             "placeInformation": {
                 "author": "Author:",
@@ -256,7 +257,8 @@
         "placesList": {
             "emptyList": "There are no interesting places matching your request. Try changing your search terms.",
             "placesListItem": {
-                "noData": "Nothing yet"
+                "emptyContent": "Description not added yet",
+                "allPlacesAtAddress": "All place at address"
             }
         },
         "categoriesList": {

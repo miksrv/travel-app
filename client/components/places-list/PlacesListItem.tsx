@@ -81,7 +81,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             <span key={`address${address.type}${place.id}`}>
                                 <Link
                                     href={`/places?${address.type}=${address.id}`}
-                                    title={`${t('addressLinkTitle')} ${address.name}`}
+                                    title={`${t('allPlacesAtAddress')} ${address.name}`}
                                 >
                                     {address.name}
                                 </Link>
@@ -92,7 +92,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </div>
             </div>
 
-            {place.content ? <p>{place.content}</p> : <div className={styles.emptyContent}>{t('noData')}</div>}
+            <p>{place.content ?? <span className={styles.emptyContent}>{t('emptyContent')}</span>}</p>
         </article>
     )
 }

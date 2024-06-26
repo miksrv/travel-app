@@ -12,6 +12,7 @@ use Geocoder\Query\GeocodeQuery;
 use Geocoder\Query\ReverseQuery;
 use Geocoder\StatefulGeocoder;
 use GuzzleHttp\Client;
+use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
 /**
@@ -23,8 +24,8 @@ class Geocoder {
     public ?int $districtId = null;
     public ?int $localityId = null;
 
-    public string $addressEn;
-    public string $addressRu;
+    public string $addressEn = '';
+    public string $addressRu = '';
 
     private Client $httpClient;
     private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $requestApi;
@@ -88,11 +89,12 @@ class Geocoder {
     /**
      * @param float $lat
      * @param float $lng
-     * @return void
+     * @param bool $changeProvider
+     * @return bool
      * @throws Exception
      * @throws ReflectionException
      */
-    public function coordinates(float $lat, float $lng): void {
+    public function coordinates(float $lat, float $lng, bool $changeProvider = false): bool {
         $geocoderEn = new StatefulGeocoder($this->provider, 'en');
         $geocoderRu = new StatefulGeocoder($this->provider, 'ru');
         $locationEn = $geocoderEn->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
@@ -100,6 +102,18 @@ class Geocoder {
 
         $countryTitleEn = $locationEn->getCountry()?->getName();
         $countryTitleRu = $locationRu->getCountry()?->getName();
+
+        // If the first geocoder cannot find the address, then connect the second one and try again
+        if (!$countryTitleEn || !$countryTitleRu) {
+            $this->provider = Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
+
+            // In order not to go into recursion, if we still cannot determine the address, we exit the function
+            if ($changeProvider) {
+                return false;
+            }
+
+            return $this->coordinates($lat, $lng, true);
+        }
 
         $this->_getCountryId($countryTitleEn, $countryTitleRu);
 
@@ -119,6 +133,8 @@ class Geocoder {
 
         $this->addressEn = $locationEn->getStreetName() . ($locationEn->getStreetNumber() ? ', ' . $locationEn->getStreetNumber() : '');
         $this->addressRu = $locationRu->getStreetName() . ($locationRu->getStreetNumber() ? ', ' . $locationRu->getStreetNumber() : '');
+
+        return true;
     }
 
     /**
