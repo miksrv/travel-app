@@ -256,7 +256,7 @@
         "placesList": {
             "emptyList": "There are no interesting places matching your request. Try changing your search terms.",
             "placesListItem": {
-                "noData": "Nothing yet",
+                "emptyContent": "Description not added yet",
                 "allPlacesAtAddress": "All place at address"
             }
         },
