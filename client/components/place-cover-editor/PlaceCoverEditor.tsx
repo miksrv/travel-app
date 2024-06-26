@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
@@ -19,7 +19,14 @@ interface PlaceCoverEditorProps {
     onSaveCover?: () => void
 }
 
-const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, onSaveCover }) => {
+export interface PlaceCoverEditorHandle {
+    handleChangeCoverClick: (event: React.MouseEvent) => void
+}
+
+const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, PlaceCoverEditorProps> = (
+    { placeId, onSaveCover },
+    ref
+) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placeCoverEditor'
     })
@@ -97,6 +104,10 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, onSaveCove
         })
     }
 
+    useImperativeHandle(ref, () => ({
+        handleChangeCoverClick
+    }))
+
     useEffect(() => {
         handleCoverDialogClose()
         onSaveCover?.()
@@ -116,14 +127,14 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, onSaveCove
 
     return (
         <>
-            <Button
-                size={'medium'}
-                icon={'Photo'}
-                mode={'secondary'}
-                onClick={handleChangeCoverClick}
-            >
-                {t('buttonCover')}
-            </Button>
+            {/*<Button*/}
+            {/*    size={'medium'}*/}
+            {/*    icon={'Photo'}*/}
+            {/*    mode={'secondary'}*/}
+            {/*    onClick={handleChangeCoverClick}*/}
+            {/*>*/}
+            {/*    {t('buttonCover')}*/}
+            {/*</Button>*/}
 
             <Dialog
                 contentHeight={'490px'}
@@ -193,4 +204,4 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, onSaveCove
         </>
     )
 }
-export default PlaceCoverEditor
+export default forwardRef(PlaceCoverEditor)

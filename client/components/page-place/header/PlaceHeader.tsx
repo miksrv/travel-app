@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -11,14 +11,15 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import BookmarkButton from '@/components/bookmark-button'
-import { dateToUnixTime } from '@/functions/helpers'
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 
 interface PlaceHeaderProps {
     place?: Place
+    coverHash?: number
     onPhotoUploadClick?: (event?: React.MouseEvent) => void
+    onChangePlaceCoverClick?: (event?: React.MouseEvent) => void
 }
 
 type PlaceAddress = {
@@ -27,7 +28,7 @@ type PlaceAddress = {
     type: ApiTypes.LocationTypes
 }
 
-const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) => {
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUploadClick, onChangePlaceCoverClick }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeHeader'
     })
@@ -35,7 +36,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
     const router = useRouter()
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
-    const [coverHash, setCoverHash] = useState<string | number>('')
 
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
@@ -68,10 +68,6 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
             router.back()
         }
     }
-
-    useEffect(() => {
-        setCoverHash(dateToUnixTime(place?.updated?.date))
-    }, [])
 
     return (
         <section className={styles.placeHeader}>
@@ -136,15 +132,16 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
                                     {t('photoUpload')}
                                 </Link>
                             </li>
-                            {/*<li>*/}
-                            {/*    <Link*/}
-                            {/*        href={''}*/}
-                            {/*        title={''}*/}
-                            {/*    >*/}
-                            {/*        <Icon name={'Photo'}/>*/}
-                            {/*        Изменить обложку*/}
-                            {/*    </Link>*/}
-                            {/*</li>*/}
+                            <li>
+                                <Link
+                                    href={'#'}
+                                    title={''}
+                                    onClick={onChangePlaceCoverClick}
+                                >
+                                    <Icon name={'Photo'} />
+                                    Изменить обложку
+                                </Link>
+                            </li>
                             <li>
                                 <Link
                                     href={isAuth ? `/places/${place?.id}/edit` : '#'}

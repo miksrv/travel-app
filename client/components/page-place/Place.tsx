@@ -15,8 +15,10 @@ import PlaceInformation from '@/components/page-place/information'
 import SocialRating from '@/components/page-place/social-rating'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
+import PlaceCoverEditor from '@/components/place-cover-editor'
+import { PlaceCoverEditorHandle } from '@/components/place-cover-editor/PlaceCoverEditor'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
-import { formatDateUTC } from '@/functions/helpers'
+import { dateToUnixTime, formatDateUTC } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
@@ -30,8 +32,10 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const dispatch = useAppDispatch()
     const { t, i18n } = useTranslation()
 
+    const placeCoverEditorRef = useRef<PlaceCoverEditorHandle>(null)
     const inputFileRef = useRef<HTMLInputElement>()
 
+    const [coverHash, setCoverHash] = useState<number>(dateToUnixTime(place?.updated?.date))
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList || [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
 
@@ -40,9 +44,15 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pagePlaceUrl = `${canonicalUrl}places/${place?.id}`
 
-    // const handleSaveCover = () => {
-    //     setTimeout(() => setCoverHash(Math.floor(Date.now() / 1000).toString()), 400)
-    // }
+    const handleSaveCover = () => {
+        setTimeout(() => setCoverHash(Math.floor(Date.now() / 1000)), 400)
+    }
+
+    const handleEditPlaceCoverClick = () => {
+        if (placeCoverEditorRef?.current) {
+            placeCoverEditorRef.current?.handleChangeCoverClick({} as React.MouseEvent)
+        }
+    }
 
     const handleUploadPhotoClick = (event: React.MouseEvent | undefined) => {
         event?.preventDefault()
@@ -159,13 +169,10 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 }}
             />
 
-            {/*<PlaceCoverEditor*/}
-            {/*    placeId={place?.id}*/}
-            {/*    onSaveCover={handleSaveCover}*/}
-            {/*/>*/}
-
             <PlaceHeader
                 place={place}
+                coverHash={coverHash}
+                onChangePlaceCoverClick={handleEditPlaceCoverClick}
                 onPhotoUploadClick={handleUploadPhotoClick}
             />
 
@@ -224,6 +231,12 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                     </Button>
                 </>
             )}
+
+            <PlaceCoverEditor
+                ref={placeCoverEditorRef as any}
+                placeId={place?.id}
+                onSaveCover={handleSaveCover}
+            />
 
             <PhotoUploader
                 placeId={place?.id}
