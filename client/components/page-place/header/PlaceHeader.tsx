@@ -62,7 +62,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
     }
 
     const handleBackLinkClick = async () => {
-        if (document.referrer) {
+        if (!document.referrer) {
             await router.push('/places')
         } else {
             router.back()
