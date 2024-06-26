@@ -9,11 +9,12 @@ import Icon from '@/ui/icon'
 
 interface RatingProps {
     value?: number
+    voted?: boolean
     disabled?: boolean
     onChange?: (rating: number) => void
 }
 
-const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
+const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => {
     const [hoverRating, setHoverRating] = useState<number>()
 
     const showFullStar = (rating: number) =>
@@ -26,6 +27,7 @@ const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
                     key={`ratingItem${rating}`}
                     className={cn(
                         hoverRating && hoverRating >= rating ? styles.hovered : undefined,
+                        voted && styles.voted,
                         hoverRating === rating ? styles.current : undefined
                     )}
                     onMouseEnter={() => {
@@ -35,7 +37,7 @@ const Rating: React.FC<RatingProps> = ({ value, disabled, onChange }) => {
                         setHoverRating(undefined)
                     }}
                 >
-                    <label className={showFullStar(rating) ? styles.fullStar : undefined}>
+                    <label>
                         {showFullStar(rating) ? <Icon name={'FilledStar'} /> : <Icon name={'Star'} />}
                         <input
                             type={'radio'}

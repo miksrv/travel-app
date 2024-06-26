@@ -93,14 +93,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                 isAuth && editorMode ? (
                     <>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSaveEditorClick}
                         >
                             {t('buttonSave')}
                         </Button>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSetEditorClick}
                         >
@@ -109,7 +109,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                     </>
                 ) : (
                     <Button
-                        icon={'Pencil'}
+                        mode={'link'}
                         onClick={handleSetEditorClick}
                     >
                         {t('buttonEdit')}

@@ -1,28 +1,27 @@
 @import ../../../styles/variables
 
 .socialRating
-  display: flex
-  justify-content: space-between
-  align-items: center
-
-  .rating
     display: flex
+    justify-content: space-between
+    align-items: center
 
-  .ratingCaption
-    margin-right: 5px
+    .rating
+        display: flex
 
-    @media only screen and (max-width: $mobileMaxWidth)
-      display: none
+    .ratingValue
+        color: var(--text-color-secondary)
+        margin-left: 10px
+        line-height: 22px
 
-  .share
-    font-size: 0
+    .share
+        font-size: 0
 
-    button
-      font-size: 0 !important
-      margin-left: 4px
+        button
+            font-size: 0 !important
+            margin-left: 4px
 
-      &:first-of-type
-        margin-left: 0
+            &:first-of-type
+                margin-left: 0
 
-      svg
-        border-radius: var(--border-radius)
+            svg
+                border-radius: var(--border-radius)

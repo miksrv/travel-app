@@ -93,15 +93,15 @@
                 "breadCrumbPlacesLink": "Interesting Places"
             },
             "place": {
-                "siteName": "Geometki",
                 "breadCrumbPlacesLink": "Interesting Places",
-                "allNearPlacesButton": "All places nearby"
+                "allNearPlacesButton": "All places nearby",
+                "photos": "Photos",
+                "uploadPhoto": "Upload photos"
             },
             "placeHeader": {
-                "buttonEdit": "Edit",
-                "ratingCount_one": "{{count}} vote",
-                "ratingCount_other": "{{count}} votes",
-                "km": "km"
+                "edit": "Edit",
+                "photoUpload": "Upload photo",
+                "addressLinkTitle": "Points of Interest:"
             },
             "placeInformation": {
                 "author": "Author:",
@@ -113,7 +113,6 @@
                 "distance": "Distance to me:",
                 "km": "km",
                 "address": "Address:",
-                "addressLinkTitle": "Points of Interest::",
                 "dateFormat": "MMMM D, YYYY, h:mm A"
             },
             "placePhotos": {
@@ -121,7 +120,6 @@
                 "buttonUpload": "Upload"
             },
             "socialRating": {
-                "userRating": "Rate this place:",
                 "ratingSuccess": "Thanks for rating the place!"
             },
             "placeDescription": {
@@ -195,7 +193,7 @@
             "actionDelete": "Remove"
         },
         "placeCoverEditor": {
-            "buttonCover": "Cover",
+            "buttonCover": "Replace cover",
             "buttonSave": "Save",
             "selectPhoto": "Select a photo",
             "saveNewCover": "Save the new cover",

@@ -1,57 +1,60 @@
 @import ../../../styles/variables
 
 .component
-  display: flex
-  justify-content: space-between
-
-  @media only screen and (max-width: $mobileMaxWidth)
-    flex-direction: column
-
-  .information
-    width: 55%
+    display: flex
+    justify-content: space-between
+    border-top-left-radius: 0
+    border-top-right-radius: 0
+    margin-top: 0
 
     @media only screen and (max-width: $mobileMaxWidth)
-      width: 100%
+        flex-direction: column
 
-    li
-      display: flex
-      align-items: flex-start
-      margin-bottom: 10px
-      font-size: $fontSizeHeadline
+    .information
+        width: 55%
 
-      &:last-of-type
-        margin-bottom: 0
+        @media only screen and (max-width: $mobileMaxWidth)
+            width: 100%
 
-      svg
-        width: 18px
-        height: 18px
-        fill: var(--icon-color-secondary)
-        margin-right: 5px
+        li
+            display: flex
+            align-items: center
+            margin-bottom: 10px
+            font-size: $fontSizeHeadline
 
-      .key
-        color: var(--text-color-secondary)
-        margin-right: 5px
+            &:last-of-type
+                margin-bottom: 0
 
-      .value
-        max-width: 80%
-        min-width: 200px
-        display: flex
-        align-items: center
+            svg
+                width: 19px
+                height: 19px
+                fill: var(--icon-color-secondary)
+                margin-right: 5px
 
-        & > div
-          height: 19px
+            .key
+                color: var(--text-color-secondary)
+                margin-right: 5px
 
-  .coordinatesLink
-    margin-right: 10px
+            .value
+                max-width: 80%
+                min-width: 200px
+                display: flex
+                align-items: center
 
-  .map
-    border: var(--input-border)
-    border-radius: var(--border-radius)
-    width: 40%
-    flex-grow: 1
-    min-width: 300px
+                & > div
+                    height: 19px
 
-    @media only screen and (max-width: $mobileMaxWidth)
-      height: 200px
-      width: 100%
-      margin-top: 20px
+    .coordinatesLink
+        margin-right: 10px
+
+    .map
+        border: var(--input-border)
+        border-radius: var(--border-radius)
+        width: 40%
+        flex-grow: 1
+        min-width: 300px
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            height: 200px
+            width: 100%
+            margin-top: 20px

@@ -74,9 +74,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             }
 
             const { data: ratingData } = await store.dispatch(API.endpoints.ratingGetList.initiate(id))
-
             const { data: photosData } = await store.dispatch(API.endpoints.photosGetList.initiate({ place: id }))
-
             const { data: nearPlaces } = await store.dispatch(
                 API.endpoints.placesGetList.initiate({
                     excludePlaces: [id],

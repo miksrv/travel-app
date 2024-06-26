@@ -77,7 +77,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
             <Header
                 title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
-                currentPage={t(`${TKEY}breadCrumbCurrent`)}
+                currentPage={t(`${TKEY}pageTitle`)}
                 backLink={`/places/${place?.id}`}
                 links={[
                     {
