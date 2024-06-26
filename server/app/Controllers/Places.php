@@ -404,7 +404,9 @@ class Places extends ResourceController {
         $geocoder  = new Geocoder();
         $place     = new \App\Entities\Place();
 
-        $geocoder->coordinates($input->lat, $input->lon);
+        if (!$geocoder->coordinates($input->lat, $input->lon)) {
+            return $this->failValidationErrors(lang('Places.createFailError'));
+        }
 
         $place->lat         = $input->lat;
         $place->lon         = $input->lon;
