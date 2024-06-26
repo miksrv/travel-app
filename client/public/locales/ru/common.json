@@ -101,7 +101,7 @@
             "placeHeader": {
                 "edit": "Редактировать",
                 "photoUpload": "Загрузить фото",
-                "addressLinkTitle": "Интересные места:"
+                "allPlacesAtAddress": "Все место по адресу"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -257,7 +257,8 @@
         "placesList": {
             "emptyList": "Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.",
             "placesListItem": {
-                "noData": "Пока ничего нет"
+                "noData": "Пока ничего нет",
+                "allPlacesAtAddress": "Все место по адресу"
             }
         },
         "categoriesList": {

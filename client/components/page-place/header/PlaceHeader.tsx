@@ -158,7 +158,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
                         <span key={`address${address.type}`}>
                             <Link
                                 href={`/places?${address.type}=${address.id}`}
-                                title={`${t('addressLinkTitle')} ${address.name}`}
+                                title={`${t('allPlacesAtAddress')} ${address.name}`}
                             >
                                 {address.name}
                             </Link>

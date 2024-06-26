@@ -81,7 +81,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                             <span key={`address${address.type}${place.id}`}>
                                 <Link
                                     href={`/places?${address.type}=${address.id}`}
-                                    title={`${t('addressLinkTitle')} ${address.name}`}
+                                    title={`${t('allPlacesAtAddress')} ${address.name}`}
                                 >
                                     {address.name}
                                 </Link>
