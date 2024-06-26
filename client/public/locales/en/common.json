@@ -101,7 +101,8 @@
             "placeHeader": {
                 "edit": "Edit",
                 "photoUpload": "Upload photo",
-                "allPlacesAtAddress": "All place at address"
+                "allPlacesAtAddress": "All place at address",
+                "openPlaceOnMap": "Open on the map"
             },
             "placeInformation": {
                 "author": "Author:",

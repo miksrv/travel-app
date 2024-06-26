@@ -119,6 +119,15 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, onPhotoUploadClick }) 
                         <ul className={'contextListMenu'}>
                             <li>
                                 <Link
+                                    href={`/map#${place?.lat},${place?.lon},14`}
+                                    title={t('openPlaceOnMap')}
+                                >
+                                    <Icon name={'Map'} />
+                                    {t('openPlaceOnMap')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
                                     href={'#'}
                                     title={t('photoUpload')}
                                     onClick={onPhotoUploadClick}
