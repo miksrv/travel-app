@@ -17,16 +17,7 @@ const ContentEditor: React.FC<ContentEditorProps> = (props) => (
     <div className={styles.contentEditor}>
         <MarkdownEditor
             {...props}
-            toolbars={[
-                'bold',
-                'italic',
-                'header',
-                'strike',
-                'underline',
-                'quote',
-                'link',
-                'image'
-            ]}
+            toolbars={['bold', 'italic', 'header', 'strike', 'underline', 'quote', 'link', 'image']}
             value={props.value || ''}
             previewWidth={'100%'}
             enableScroll={true}

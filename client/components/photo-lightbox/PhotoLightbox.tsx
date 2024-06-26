@@ -24,20 +24,13 @@ interface PhotoLightboxProps {
     onChangeIndex?: (index: number) => void
 }
 
-const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
-    photos,
-    photoIndex = 0,
-    showLightbox,
-    onCloseLightBox
-}) => {
+const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, showLightbox, onCloseLightBox }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoLightbox'
     })
 
     const imageHost = (link?: string) =>
-        link?.includes('http://') || link?.includes('https://')
-            ? link
-            : `${IMG_HOST}${link}`
+        link?.includes('http://') || link?.includes('https://') ? link : `${IMG_HOST}${link}`
 
     return (
         <Lightbox
@@ -56,10 +49,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                                 showName={true}
                                 user={photo.author}
                                 className={styles.caption}
-                                caption={formatDate(
-                                    photo.created?.date,
-                                    t('dateFormat')
-                                )}
+                                caption={formatDate(photo.created?.date, t('dateFormat'))}
                             />
                         ),
                         height: (photo as Photo.Photo).height,

@@ -45,23 +45,16 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            layersContainerRef.current &&
-            !layersContainerRef.current.contains(event.target as Node)
-        ) {
+        if (layersContainerRef.current && !layersContainerRef.current.contains(event.target as Node)) {
             setOpen(false)
         }
     }
 
-    const handleSwitchMapLayer = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSwitchMapLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSwitchMapLayer?.(event.target.id as MapLayersType)
     }
 
-    const handleSwitchMapType = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSwitchMapType = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSwitchMapType?.(event.target.id as MapObjectsType)
     }
 
@@ -120,13 +113,8 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                                 onChange={() =>
                                     onSwitchAdditionalLayers?.(
                                         additionalLayers?.includes(type)
-                                            ? additionalLayers.filter(
-                                                  (layer) => layer !== type
-                                              )
-                                            : [
-                                                  ...(additionalLayers || []),
-                                                  type
-                                              ]
+                                            ? additionalLayers.filter((layer) => layer !== type)
+                                            : [...(additionalLayers || []), type]
                                     )
                                 }
                             />

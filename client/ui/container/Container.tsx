@@ -13,15 +13,7 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     footer?: React.ReactNode
 }
 
-const Container: React.FC<ContainerProps> = ({
-    className,
-    title,
-    action,
-    header,
-    children,
-    footer,
-    ...props
-}) => (
+const Container: React.FC<ContainerProps> = ({ className, title, action, header, children, footer, ...props }) => (
     <section
         {...props}
         className={cn(className, styles.container)}

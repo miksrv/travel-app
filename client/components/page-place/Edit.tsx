@@ -22,8 +22,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const [updatePlace, { error, isLoading, isSuccess }] =
-        API.usePlacesPatchItemMutation()
+    const [updatePlace, { error, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
 
     const placeValuesData: ApiTypes.RequestPlacesPostItem = useMemo(
         () => ({
@@ -38,10 +37,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
     )
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error)
-                ? error.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -55,15 +51,10 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
         updatePlace({
             ...formData,
-            category:
-                formData?.category !== place?.category?.name
-                    ? formData?.category
-                    : undefined,
+            category: formData?.category !== place?.category?.name ? formData?.category : undefined,
             content: content !== place?.content ? content : undefined,
             id: place?.id ?? '',
-            tags: !equalsArrays(place?.tags, formData?.tags)
-                ? formData?.tags
-                : undefined,
+            tags: !equalsArrays(place?.tags, formData?.tags) ? formData?.tags : undefined,
             title: title !== place?.title ? title : undefined
         })
     }
@@ -86,7 +77,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
             <Header
                 title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
-                currentPage={t(`${TKEY}breadCrumbCurrent`)}
+                currentPage={t(`${TKEY}pageTitle`)}
                 backLink={`/places/${place?.id}`}
                 links={[
                     {

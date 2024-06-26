@@ -81,20 +81,15 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                 }
             />
 
-            {(item.type === ActivityTypes.Place ||
-                item.type === ActivityTypes.Edit) &&
-                item.place?.content && (
-                    <ReadMore
-                        className={cn(
-                            styles.content,
-                            !!item.photos?.length && styles.contentGallery
-                        )}
-                        showMoreText={t('readMore')}
-                        showLessText={t('readLess')}
-                    >
-                        {item.place.content}
-                    </ReadMore>
-                )}
+            {(item.type === ActivityTypes.Place || item.type === ActivityTypes.Edit) && item.place?.content && (
+                <ReadMore
+                    className={cn(styles.content, !!item.photos?.length && styles.contentGallery)}
+                    showMoreText={t('readMore')}
+                    showLessText={t('readLess')}
+                >
+                    {item.place.content}
+                </ReadMore>
+            )}
 
             {!!item.photos?.length && (
                 <>

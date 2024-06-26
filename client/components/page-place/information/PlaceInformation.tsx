@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -6,7 +6,6 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import MapLinks from '@/components/map-links'
 import UserAvatar from '@/components/user-avatar'
@@ -21,58 +20,14 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-type PlaceAddress = {
-    id?: number
-    name?: string
-    type: ApiTypes.LocationTypes
-}
-
 interface PlaceInformationProps {
     place?: Place
-    // onChangeWasHere?: (wasHere: boolean) => void
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeInformation'
     })
-
-    // const { data: visitedUsersData, isLoading: visitedUsersLoading } =
-    //     API.useVisitedGetUsersListQuery(place?.id!, { skip: !place?.id })
-
-    const placeAddress: PlaceAddress[] = useMemo(() => {
-        const addressTypes: ApiTypes.LocationTypes[] = [
-            'country',
-            'region',
-            'district',
-            'locality'
-        ]
-        const address: PlaceAddress[] = []
-
-        addressTypes.forEach((type) => {
-            if (place?.address?.[type]?.id) {
-                address.push({
-                    id: place.address[type].id,
-                    name: place.address[type].title,
-                    type
-                })
-            }
-        })
-
-        return address
-    }, [place?.address])
-
-    // const iWasHere = useMemo(
-    //     () =>
-    //         !visitedUsersData?.items?.find(
-    //             ({ id }) => id === authSlice?.user?.id
-    //         )?.id,
-    //     [visitedUsersData, authSlice]
-    // )
-
-    // React.useEffect(() => {
-    //     onChangeWasHere?.(iWasHere)
-    // }, [visitedUsersData, authSlice])
 
     return (
         <Container className={styles.component}>
@@ -90,9 +45,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                         />
                         <Link
                             href={`/places?category=${place?.category?.name}`}
-                            title={`${place?.category?.title} - ${t(
-                                'allCategoryPlaces'
-                            )}`}
+                            title={`${place?.category?.title} - ${t('allCategoryPlaces')}`}
                         >
                             {place?.category?.title}
                         </Link>
@@ -136,18 +89,14 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                     <li>
                         <Icon name={'Time'} />
                         <div className={styles.key}>{t('editTime')}</div>
-                        <div className={styles.value}>
-                            {formatDate(place.updated.date, t('dateFormat'))}
-                        </div>
+                        <div className={styles.value}>{formatDate(place.updated.date, t('dateFormat'))}</div>
                     </li>
                 )}
                 {place?.distance && (
                     <li>
                         <Icon name={'Ruler'} />
                         <div className={styles.key}>{t('distance')}</div>
-                        <div className={styles.value}>
-                            {`${place.distance} ${t('km')}`}
-                        </div>
+                        <div className={styles.value}>{`${place.distance} ${t('km')}`}</div>
                     </li>
                 )}
                 <li>
@@ -167,32 +116,6 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ place }) => {
                             lat={place?.lat ?? 0}
                             lon={place?.lon ?? 0}
                         />
-                    </div>
-                </li>
-                <li>
-                    <Icon name={'Address'} />
-                    <div className={styles.key}>{t('address')}</div>
-                    <div
-                        className={styles.value}
-                        style={{ display: 'block' }}
-                    >
-                        {placeAddress.map((address, i) => (
-                            <span key={`address${address.type}`}>
-                                <Link
-                                    href={`/places?${address.type}=${address.id}`}
-                                    title={`${t('addressLinkTitle')} ${
-                                        address.name
-                                    }`}
-                                >
-                                    {address.name}
-                                </Link>
-                                {placeAddress.length - 1 !== i && ', '}
-                            </span>
-                        ))}
-
-                        {place?.address?.street && (
-                            <>{`, ${place.address.street}`}</>
-                        )}
                     </div>
                 </li>
             </ul>

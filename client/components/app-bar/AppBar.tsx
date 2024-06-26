@@ -31,9 +31,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
     const geolocation = useGeolocation()
 
     const appAuth = useAppSelector((state) => state.auth)
-    const userLocation = useAppSelector(
-        (state) => state.application.userLocation
-    )
+    const userLocation = useAppSelector((state) => state.application.userLocation)
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
 
@@ -50,12 +48,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
         const updateLat = round(geolocation.latitude, 3)
         const updateLng = round(geolocation.longitude, 3)
 
-        if (
-            updateLat &&
-            updateLng &&
-            updateLat !== userLocation?.lat &&
-            updateLng !== userLocation?.lon
-        ) {
+        if (updateLat && updateLng && updateLat !== userLocation?.lat && updateLng !== userLocation?.lon) {
             const data: ApiTypes.LatLonCoordinate = {
                 lat: updateLat,
                 lon: updateLng

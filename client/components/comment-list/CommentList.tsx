@@ -34,9 +34,7 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
 
     const renderComments = (comments: Comments[], answerId?: string) =>
         comments
-            .filter((item) =>
-                !answerId ? !item.answerId : item.answerId === answerId
-            )
+            .filter((item) => (!answerId ? !item.answerId : item.answerId === answerId))
             .map((item) => (
                 <React.Fragment key={item.id}>
                     <CommentListItem
@@ -67,12 +65,7 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
             )}
 
             {!appAuth.isAuth && (
-                <div
-                    className={cn(
-                        styles.loginContainer,
-                        !!comments?.length && styles.topBorder
-                    )}
-                >
+                <div className={cn(styles.loginContainer, !!comments?.length && styles.topBorder)}>
                     <div>{t('loginForComment')}</div>
                     <Button
                         className={styles.loginButton}

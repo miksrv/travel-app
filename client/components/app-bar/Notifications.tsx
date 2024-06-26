@@ -4,10 +4,7 @@ import { useTranslation } from 'next-i18next'
 import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
-import {
-    deleteAllNotifications,
-    setUnreadCounter
-} from '@/api/notificationSlice'
+import { deleteAllNotifications, setUnreadCounter } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import Notification from '@/components/snackbar/Notification'
 import Button from '@/ui/button'
@@ -31,8 +28,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
     const [notifyShow, setNotifyShow] = useState<boolean>(false)
     const [notifyPage, setNotifyPage] = useState<number>(1)
 
-    const [clearNotification, { isLoading: loadingClear }] =
-        API.useNotificationsDeleteMutation()
+    const [clearNotification, { isLoading: loadingClear }] = API.useNotificationsDeleteMutation()
 
     const {
         data: notifyData,
@@ -63,9 +59,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
     }
 
     useEffect(() => {
-        const unreadCount = notifyData?.items?.filter(
-            ({ read }) => !read
-        ).length
+        const unreadCount = notifyData?.items?.filter(({ read }) => !read).length
 
         if (unreadCount) {
             const newUnreadValue = notifyCounter - unreadCount
@@ -80,9 +74,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                 return
             }
 
-            const scrolledToBottom =
-                targetDiv.scrollTop + targetDiv.clientHeight >=
-                targetDiv.scrollHeight - 20
+            const scrolledToBottom = targetDiv.scrollTop + targetDiv.clientHeight >= targetDiv.scrollHeight - 20
 
             if (
                 notifyData?.count &&
@@ -155,11 +147,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         size={'small'}
                         mode={'secondary'}
                         stretched={true}
-                        disabled={
-                            loadingClear ||
-                            notifyFetching ||
-                            !notifyData?.items?.length
-                        }
+                        disabled={loadingClear || notifyFetching || !notifyData?.items?.length}
                         loading={loadingClear}
                         onClick={handleClearNotificationsClick}
                     >

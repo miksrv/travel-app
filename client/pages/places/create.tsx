@@ -27,14 +27,10 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 
     const [clickedButton, setClickedButton] = useState<boolean>(false)
 
-    const [createPlace, { data, error, isLoading, isSuccess }] =
-        API.usePlacesPostItemMutation()
+    const [createPlace, { data, error, isLoading, isSuccess }] = API.usePlacesPostItemMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error)
-                ? error.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -96,9 +92,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (
-            context
-        ): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)

@@ -12,25 +12,14 @@ interface DropdownProps {
     onSelect?: (selectedOption: DropdownOption) => void
 }
 
-const OptionsList: React.FC<DropdownProps> = ({
-    selectedOption,
-    options,
-    onSelect
-}) => (
+const OptionsList: React.FC<DropdownProps> = ({ selectedOption, options, onSelect }) => (
     <ul className={styles.optionsList}>
         {options?.map((option) => (
             <li
                 key={option.key}
-                className={cn(
-                    option.key === selectedOption?.key && styles.active,
-                    option.disabled && styles.disabled
-                )}
+                className={cn(option.key === selectedOption?.key && styles.active, option.disabled && styles.disabled)}
             >
-                <button
-                    onClick={() =>
-                        !option.disabled ? onSelect?.(option) : undefined
-                    }
-                >
+                <button onClick={() => (!option.disabled ? onSelect?.(option) : undefined)}>
                     {option.image && (
                         <Image
                             src={option.image.src}

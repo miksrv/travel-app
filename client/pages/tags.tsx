@@ -28,14 +28,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
     const tagsList = [...tags]
 
     const topUpdatedTags = useMemo(
-        () =>
-            tagsList
-                .sort(
-                    (a, b) =>
-                        dateToUnixTime(b.updated?.date) -
-                        dateToUnixTime(a.updated?.date)
-                )
-                .slice(0, 20),
+        () => tagsList.sort((a, b) => dateToUnixTime(b.updated?.date) - dateToUnixTime(a.updated?.date)).slice(0, 20),
         [tagsList]
     )
 
@@ -43,12 +36,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
         () =>
             tagsList
                 .sort((a, b) => b.count! - a.count!)
-                .filter(
-                    ({ title }) =>
-                        title !==
-                        topUpdatedTags.find((search) => search.title === title)
-                            ?.title
-                )
+                .filter(({ title }) => title !== topUpdatedTags.find((search) => search.title === title)?.title)
                 .slice(0, 20),
         [tagsList, topUpdatedTags]
     )
@@ -59,14 +47,8 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
                 .sort((a, b) => b.count! - a.count!)
                 .filter(
                     ({ title }) =>
-                        title !==
-                            topUpdatedTags.find(
-                                (search) => search.title === title
-                            )?.title &&
-                        title !==
-                            topPopularTags.find(
-                                (search) => search.title === title
-                            )?.title
+                        title !== topUpdatedTags.find((search) => search.title === title)?.title &&
+                        title !== topPopularTags.find((search) => search.title === title)?.title
                 ),
         [tagsList, topUpdatedTags, topPopularTags]
     )
@@ -114,9 +96,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             store.dispatch(setLocale(locale))
 
-            const { data: tagsList } = await store.dispatch(
-                API.endpoints.tagsGetList.initiate()
-            )
+            const { data: tagsList } = await store.dispatch(API.endpoints.tagsGetList.initiate())
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 

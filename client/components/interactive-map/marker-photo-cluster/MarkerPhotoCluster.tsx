@@ -14,10 +14,7 @@ interface MarkerPhotoClusterProps {
     onClick?: (coords: ApiTypes.LatLonCoordinate) => void
 }
 
-const MarkerPhotoCluster: React.FC<MarkerPhotoClusterProps> = ({
-    marker,
-    onClick
-}) => {
+const MarkerPhotoCluster: React.FC<MarkerPhotoClusterProps> = ({ marker, onClick }) => {
     const clusterMarkerIcon = new Leaflet.DivIcon({
         className: styles.markerPhotoCluster,
         html:

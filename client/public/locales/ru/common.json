@@ -90,18 +90,18 @@
         "pagePlace": {
             "edit": {
                 "pageTitle": "Редактирование",
-                "breadCrumbCurrent": "Редактирование",
                 "breadCrumbPlacesLink": "Интересные места"
             },
             "place": {
                 "breadCrumbPlacesLink": "Интересные места",
-                "allNearPlacesButton": "Все места рядом"
+                "allNearPlacesButton": "Все места рядом",
+                "photos": "Фотографии",
+                "uploadPhoto": "Загрузить фотографии"
             },
             "placeHeader": {
-                "buttonEdit": "Редактировать",
-                "ratingCount_one": "{{count}} голос",
-                "ratingCount_few": "{{count}} голоса",
-                "ratingCount_many": "{{count}} голосов"
+                "edit": "Редактировать",
+                "photoUpload": "Загрузить фото",
+                "addressLinkTitle": "Интересные места:"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -114,7 +114,6 @@
                 "km": "км",
                 "editTime": "Отредактировано:",
                 "address": "Адрес:",
-                "addressLinkTitle": "Интересные места:",
                 "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "placePhotos": {
@@ -122,7 +121,6 @@
                 "buttonUpload": "Загрузить"
             },
             "socialRating": {
-                "userRating": "Оцените место:",
                 "ratingSuccess": "Спасибо за оценку места!"
             },
             "placeDescription": {
@@ -182,6 +180,7 @@
                 "title": "Профиль",
                 "photos": "Фотографии",
                 "places": "Добавленные места",
+                "linkAllPhotos": "Все",
                 "buttonShowAllPhotos": "Показать все фотографии",
                 "breadCrumbUsersLink": "Путешественники"
             }
@@ -195,7 +194,7 @@
             "actionDelete": "Удалить"
         },
         "placeCoverEditor": {
-            "buttonCover": "Обложка",
+            "buttonCover": "Заменить обложку",
             "buttonSave": "Сохранить",
             "selectPhoto": "Выберите фотографию",
             "saveNewCover": "Сохраните новую обложку",

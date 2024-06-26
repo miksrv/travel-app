@@ -4,16 +4,12 @@ import { Photo } from '@/api/types/Photo'
 import PhotoGallery from '@/components/photo-gallery'
 import Container, { ContainerProps } from '@/ui/container'
 
-interface UserGalleryProps extends Pick<ContainerProps, 'title' | 'footer'> {
+interface UserGalleryProps extends Pick<ContainerProps, 'title' | 'action' | 'footer'> {
     photos?: Photo[]
     hideActions?: boolean
 }
 
-const UserGallery: React.FC<UserGalleryProps> = ({
-    photos,
-    hideActions,
-    ...props
-}) => (
+const UserGallery: React.FC<UserGalleryProps> = ({ photos, hideActions, ...props }) => (
     <Container {...props}>
         <PhotoGallery
             photos={photos}

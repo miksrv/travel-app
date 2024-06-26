@@ -30,15 +30,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
 
-    return (
-        <AppLayout>
-            {page === 'edit' && isAuth ? (
-                <Edit {...props} />
-            ) : (
-                <Place {...props} />
-            )}
-        </AppLayout>
-    )
+    return <AppLayout>{page === 'edit' && isAuth ? <Edit {...props} /> : <Place {...props} />}</AppLayout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -81,14 +73,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const { data: ratingData } = await store.dispatch(
-                API.endpoints.ratingGetList.initiate(id)
-            )
-
-            const { data: photosData } = await store.dispatch(
-                API.endpoints.photosGetList.initiate({ place: id })
-            )
-
+            const { data: ratingData } = await store.dispatch(API.endpoints.ratingGetList.initiate(id))
+            const { data: photosData } = await store.dispatch(API.endpoints.photosGetList.initiate({ place: id }))
             const { data: nearPlaces } = await store.dispatch(
                 API.endpoints.placesGetList.initiate({
                     excludePlaces: [id],

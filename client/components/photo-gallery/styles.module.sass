@@ -8,11 +8,11 @@
 .photoGallery
   display: flex
   flex-wrap: wrap
-  margin: -4px
+  margin: 0 -5px
 
   .photoItem
-    flex-basis: calc(25% - 6px)
-    margin: 3px 3px 3px
+    flex-basis: calc(25% - 10px)
+    margin: 5px
     position: relative
     height: 150px
     border-radius: var(--border-radius)
@@ -21,7 +21,7 @@
     background-size: cover
 
     @media only screen and (max-width: $mobileMaxWidth)
-      flex-basis: calc(50% - 6px)
+      flex-basis: calc(50% - 10px)
 
     .link
       display: block

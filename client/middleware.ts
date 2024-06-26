@@ -9,10 +9,7 @@ export const middleware = (request: NextRequest) => {
     //     return Response.redirect(new URL('/places', request.url))
     // }
 
-    if (
-        !currentUser &&
-        request.nextUrl.pathname.startsWith('/users/settings')
-    ) {
+    if (!currentUser && request.nextUrl.pathname.startsWith('/users/settings')) {
         return Response.redirect(new URL('/users', request.url))
     }
 

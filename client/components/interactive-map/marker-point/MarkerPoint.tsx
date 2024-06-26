@@ -12,9 +12,8 @@ import { API, IMG_HOST } from '@/api/api'
 import { Placemark } from '@/api/types'
 import BookmarkButton from '@/components/bookmark-button'
 import { categoryImage } from '@/functions/categories'
-import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
+import { addDecimalPoint } from '@/functions/helpers'
 import Badge from '@/ui/badge'
-import RatingColored from '@/ui/rating-colored'
 import Skeleton from '@/ui/skeleton'
 
 interface MarkerPointProps {
@@ -22,8 +21,7 @@ interface MarkerPointProps {
 }
 
 const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
-    const [getPlaceItem, { isLoading, data: poiData }] =
-        API.usePoiGetItemMutation()
+    const [getPlaceItem, { isLoading, data: poiData }] = API.usePoiGetItemMutation()
 
     const placeMarkerIcon = new Leaflet.Icon({
         iconAnchor: [8.4, 19],
@@ -50,34 +48,27 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                     className={styles.markerPointPopup}
                     closeOnEscapeKey={true}
                 >
-                    <div className={styles.link}>
+                    <div className={styles.content}>
                         <Link
                             href={`/places/${place.id}`}
                             title={poiData?.title}
                         >
                             {(isLoading || !poiData) && <Skeleton />}
 
-                            {!isLoading && poiData && (
-                                <>
-                                    <RatingColored
-                                        className={styles.rating}
-                                        value={poiData.rating}
-                                    >
-                                        {addDecimalPoint(poiData.rating)}
-                                    </RatingColored>
-
-                                    {poiData.cover && (
-                                        <Image
-                                            className={styles.image}
-                                            src={`${IMG_HOST}${poiData.cover.preview}`}
-                                            alt={poiData.title || ''}
-                                            width={300}
-                                            height={200}
-                                        />
-                                    )}
-                                </>
+                            {!isLoading && poiData && poiData?.cover && (
+                                <Image
+                                    className={styles.image}
+                                    src={`${IMG_HOST}${poiData.cover.preview}`}
+                                    alt={poiData.title || ''}
+                                    width={300}
+                                    height={220}
+                                />
                             )}
                         </Link>
+
+                        <div className={styles.bookmarkButton}>
+                            <BookmarkButton placeId={poiData?.id} />
+                        </div>
 
                         <div
                             className={styles.bottomPanel}
@@ -85,18 +76,13 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                 opacity: poiData ? 1 : 0
                             }}
                         >
-                            <div>
-                                <Badge
-                                    icon={'Photo'}
-                                    content={poiData?.photos || 0}
-                                />
-
-                                <Badge
-                                    icon={'Eye'}
-                                    content={numberFormatter(
-                                        poiData?.views || 0
-                                    )}
-                                />
+                            <div className={styles.iconsPanel}>
+                                {!!poiData?.rating && (
+                                    <Badge
+                                        icon={'Star'}
+                                        content={addDecimalPoint(poiData.rating)}
+                                    />
+                                )}
 
                                 {!!poiData?.comments && (
                                     <Badge
@@ -113,17 +99,9 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                 )}
                             </div>
 
-                            <div>
-                                <BookmarkButton placeId={poiData?.id} />
-                            </div>
+                            <h3 className={styles.title}>{poiData?.title}</h3>
                         </div>
                     </div>
-
-                    {isLoading || !poiData ? (
-                        <Skeleton style={{ height: '18px', margin: '6px' }} />
-                    ) : (
-                        <h3 className={styles.title}>{poiData.title}</h3>
-                    )}
                 </Popup>
             )}
         </Marker>

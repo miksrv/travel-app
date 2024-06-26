@@ -14,14 +14,10 @@ type AuthStateProps = {
 }
 
 export const getStorageToken = (): string =>
-    typeof window !== 'undefined'
-        ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN as any)
-        : ''
+    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN as any) : ''
 
 export const getStorageSession = (): string | undefined =>
-    typeof window !== 'undefined'
-        ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_SESSION as any)
-        : ''
+    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_SESSION as any) : ''
 
 const authSlice = createSlice({
     initialState: {
@@ -30,10 +26,7 @@ const authSlice = createSlice({
     } as AuthStateProps,
     name: 'auth',
     reducers: {
-        login: (
-            state,
-            { payload }: PayloadAction<ApiTypes.ResponseAuthLogin | undefined>
-        ) => {
+        login: (state, { payload }: PayloadAction<ApiTypes.ResponseAuthLogin | undefined>) => {
             state.token = payload?.token ?? ''
             state.session = payload?.session ?? ''
             state.user = payload?.user ?? undefined
@@ -42,10 +35,7 @@ const authSlice = createSlice({
             if (payload?.auth && !!payload.token) {
                 setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
-                LocalStorage.setItem(
-                    LOCAL_STORAGE.AUTH_TOKEN as any,
-                    payload.token
-                )
+                LocalStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN as any, payload.token)
             } else {
                 deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
                 LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as any)

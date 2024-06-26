@@ -28,21 +28,14 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: userData } = API.useUsersGetItemQuery(
-        authSlice.user?.id || '',
-        {
-            skip: !authSlice.user?.id
-        }
-    )
+    const { data: userData } = API.useUsersGetItemQuery(authSlice.user?.id || '', {
+        skip: !authSlice.user?.id
+    })
 
-    const [updateProfile, { data, error, isLoading, isSuccess }] =
-        API.useUsersPatchProfileMutation()
+    const [updateProfile, { data, error, isLoading, isSuccess }] = API.useUsersPatchProfileMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestUsersPatch>(error)
-                ? error.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestUsersPatch>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -53,24 +46,16 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const handleSubmit = (formData?: ApiTypes.RequestUsersPatch) => {
         updateProfile({
             id: authSlice.user?.id,
-            name:
-                formData?.name !== userData?.name ? formData?.name : undefined,
+            name: formData?.name !== userData?.name ? formData?.name : undefined,
             newPassword:
-                userData?.authType === 'native' &&
-                formData?.newPassword &&
-                formData.newPassword.length > 1
+                userData?.authType === 'native' && formData?.newPassword && formData.newPassword.length > 1
                     ? formData.newPassword
                     : undefined,
             oldPassword:
-                userData?.authType === 'native' &&
-                formData?.oldPassword &&
-                formData.oldPassword.length > 1
+                userData?.authType === 'native' && formData?.oldPassword && formData.oldPassword.length > 1
                     ? formData.oldPassword
                     : undefined,
-            website:
-                formData?.website !== userData?.website
-                    ? formData?.website
-                    : undefined
+            website: formData?.website !== userData?.website ? formData?.website : undefined
         })
     }
 
@@ -133,9 +118,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (
-            context
-        ): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)

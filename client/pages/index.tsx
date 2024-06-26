@@ -32,11 +32,7 @@ interface IndexPageProps {
 
 const KEY = 'pages.index.'
 
-const IndexPage: NextPage<IndexPageProps> = ({
-    placesList,
-    usersList,
-    photosList
-}) => {
+const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList }) => {
     const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
@@ -50,9 +46,7 @@ const IndexPage: NextPage<IndexPageProps> = ({
 
     useEffect(() => {
         const onScroll = () => {
-            const scrolledToBottom =
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 20
+            const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20
 
             if (scrolledToBottom && !isFetching && !!data?.items.length) {
                 setLastDate(data.items[data.items.length - 1].created?.date)

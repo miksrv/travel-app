@@ -1,40 +1,58 @@
-import React from 'react'
+import React, { useRef, useState } from 'react'
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 
-import { API, IMG_HOST, SITE_LINK } from '@/api/api'
+import { IMG_HOST, SITE_LINK } from '@/api/api'
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+import { Photo } from '@/api/types/Photo'
 import Comments from '@/components/page-place/comments'
 import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
 import PlaceInformation from '@/components/page-place/information'
-import PlacePhotos from '@/components/page-place/photos'
 import SocialRating from '@/components/page-place/social-rating'
+import PhotoGallery from '@/components/photo-gallery'
+import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import { formatDateUTC } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
+import Container from '@/ui/container'
 
 interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
 const KEY = 'components.pagePlace.place.'
 
-const Place: React.FC<PlaceProps> = ({
-    place,
-    photoList,
-    ratingCount,
-    nearPlaces
-}) => {
+const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces }) => {
+    const dispatch = useAppDispatch()
     const { t, i18n } = useTranslation()
 
-    const { data: ratingData } = API.useRatingGetListQuery(place?.id ?? '', {
-        skip: !place?.id
-    })
+    const inputFileRef = useRef<HTMLInputElement>()
+
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList || [])
+    const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
+
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pagePlaceUrl = `${canonicalUrl}places/${place?.id}`
+
+    // const handleSaveCover = () => {
+    //     setTimeout(() => setCoverHash(Math.floor(Date.now() / 1000).toString()), 400)
+    // }
+
+    const handleUploadPhotoClick = (event: React.MouseEvent | undefined) => {
+        event?.preventDefault()
+
+        if (!isAuth) {
+            dispatch(openAuthDialog())
+        } else {
+            inputFileRef?.current?.click()
+        }
+    }
 
     const breadCrumbSchema: BreadcrumbList | any = {
         '@context': 'https://schema.org',
@@ -89,9 +107,7 @@ const Place: React.FC<PlaceProps> = ({
             latitude: place?.lat,
             longitude: place?.lon
         },
-        image: photoList?.length
-            ? photoList.map(({ full }) => `${IMG_HOST}${full}`)
-            : undefined,
+        image: photoList?.length ? photoList.map(({ full }) => `${IMG_HOST}${full}`) : undefined,
         interactionStatistic: {
             '@type': 'InteractionCounter',
             userInteractionCount: place?.views
@@ -143,16 +159,14 @@ const Place: React.FC<PlaceProps> = ({
                 }}
             />
 
+            {/*<PlaceCoverEditor*/}
+            {/*    placeId={place?.id}*/}
+            {/*    onSaveCover={handleSaveCover}*/}
+            {/*/>*/}
+
             <PlaceHeader
                 place={place}
-                ratingValue={ratingData?.rating ?? place?.rating}
-                ratingCount={ratingData?.count}
-                breadcrumbs={[
-                    {
-                        link: '/places/',
-                        text: t(`${KEY}breadCrumbPlacesLink`)
-                    }
-                ]}
+                onPhotoUploadClick={handleUploadPhotoClick}
             />
 
             <PlaceInformation place={place} />
@@ -160,13 +174,24 @@ const Place: React.FC<PlaceProps> = ({
             <SocialRating
                 placeId={place?.id}
                 placeUrl={pagePlaceUrl}
-                ratingValue={ratingData?.vote}
             />
 
-            <PlacePhotos
-                photos={photoList}
-                placeId={place?.id}
-            />
+            <Container
+                title={t(`${KEY}photos`)}
+                action={
+                    <Button
+                        mode={'link'}
+                        onClick={handleUploadPhotoClick}
+                    >
+                        {t(`${KEY}uploadPhoto`)}
+                    </Button>
+                }
+            >
+                <PhotoGallery
+                    photos={localPhotos}
+                    uploadingPhotos={uploadingPhotos}
+                />
+            </Container>
 
             <PlaceDescription
                 placeId={place?.id}
@@ -199,6 +224,15 @@ const Place: React.FC<PlaceProps> = ({
                     </Button>
                 </>
             )}
+
+            <PhotoUploader
+                placeId={place?.id}
+                fileInputRef={inputFileRef}
+                onSelectFiles={setUploadingPhotos}
+                onUploadPhoto={(photo) => {
+                    setLocalPhotos([...localPhotos, photo])
+                }}
+            />
         </>
     )
 }

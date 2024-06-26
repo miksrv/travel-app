@@ -8,8 +8,7 @@ import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 import Spinner from '@/ui/spinner'
 
-export interface ButtonProps
-    extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string
     link?: string
     noIndex?: boolean

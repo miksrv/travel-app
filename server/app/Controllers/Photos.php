@@ -115,6 +115,8 @@ class Photos extends ResourceController {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
+        sleep(1);
+
 //        if (!$this->validate([
 //            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
 //        ])) {

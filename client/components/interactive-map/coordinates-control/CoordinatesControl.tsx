@@ -13,10 +13,7 @@ interface CoordinatesControlProps {
     onChangeOpen?: (open: boolean) => void
 }
 
-const CoordinatesControl: React.FC<CoordinatesControlProps> = ({
-    coordinates,
-    onChangeOpen
-}) => {
+const CoordinatesControl: React.FC<CoordinatesControlProps> = ({ coordinates, onChangeOpen }) => {
     const [open, setOpen] = useState<boolean>(false)
 
     const handleToggleOpen = () => {

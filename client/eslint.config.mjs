@@ -223,6 +223,7 @@ export default [
             // react
             //
             'react/prop-types': 'off',
+            'react/jsx-max-props-per-line': [1, { 'when': 'always' }],
 
             //
             // next

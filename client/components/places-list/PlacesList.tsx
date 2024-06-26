@@ -41,11 +41,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
                 </section>
             )}
 
-            {!places?.length && !loading && (
-                <Container className={styles.emptyList}>
-                    {t('emptyList')}
-                </Container>
-            )}
+            {!places?.length && !loading && <Container className={styles.emptyList}>{t('emptyList')}</Container>}
         </>
     )
 }

@@ -16,10 +16,7 @@ interface CategoryControlProps {
     onChangeCategories?: (categories?: Categories[]) => void
 }
 
-const CategoryControl: React.FC<CategoryControlProps> = ({
-    categories,
-    onChangeCategories
-}) => {
+const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeCategories }) => {
     const layersContainerRef = useRef<HTMLUListElement>(null)
     const [open, setOpen] = useState<boolean>(false)
 
@@ -34,17 +31,12 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            layersContainerRef.current &&
-            !layersContainerRef.current.contains(event.target as Node)
-        ) {
+        if (layersContainerRef.current && !layersContainerRef.current.contains(event.target as Node)) {
             setOpen(false)
         }
     }
 
-    const handleChangeCategory = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
         const category = event.target.name as Categories
 
         onChangeCategories?.(
@@ -90,14 +82,10 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                     <Checkbox
                         id={'allCategories'}
                         label={t('allCategories')}
-                        checked={
-                            categories?.length ===
-                            Object.values(Categories).length
-                        }
+                        checked={categories?.length === Object.values(Categories).length}
                         indeterminate={
                             categories &&
-                            categories.length !==
-                                Object.values(Categories).length &&
+                            categories.length !== Object.values(Categories).length &&
                             categories.length > 0
                         }
                         onChange={handleChangeAllCategories}

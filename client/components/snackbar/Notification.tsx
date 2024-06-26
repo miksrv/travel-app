@@ -17,12 +17,7 @@ interface NotificationProps extends NotificationType {
     onLoad?: (id: string) => void
 }
 
-const Notification: React.FC<NotificationProps> = ({
-    showDate,
-    onClose,
-    onLoad,
-    ...props
-}) => {
+const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, ...props }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.notification'
     })
@@ -32,21 +27,13 @@ const Notification: React.FC<NotificationProps> = ({
     }, [])
 
     return (
-        <div
-            className={cn(
-                styles.notification,
-                styles[props.type!],
-                !props.read && styles.unread
-            )}
-        >
+        <div className={cn(styles.notification, styles[props.type!], !props.read && styles.unread)}>
             <div className={cn(styles.before)}>
                 <NotificationIcon {...props} />
             </div>
             <div className={styles.body}>
                 <span className={styles.title}>
-                    {props.type === 'experience'
-                        ? t(props.activity!)
-                        : t(props.type!)}
+                    {props.type === 'experience' ? t(props.activity!) : t(props.type!)}
                 </span>
                 <span className={styles.content}>
                     {props.message}
@@ -67,11 +54,7 @@ const Notification: React.FC<NotificationProps> = ({
                         <></>
                     )}
                 </span>
-                {showDate && (
-                    <div className={styles.datetime}>
-                        {formatDate(props.created?.date, t('dateFormat'))}
-                    </div>
-                )}
+                {showDate && <div className={styles.datetime}>{formatDate(props.created?.date, t('dateFormat'))}</div>}
             </div>
             {onClose && (
                 <button
@@ -85,9 +68,7 @@ const Notification: React.FC<NotificationProps> = ({
     )
 }
 
-const NotificationIcon: React.FC<NotificationType> = ({
-    ...props
-}): React.ReactNode =>
+const NotificationIcon: React.FC<NotificationType> = ({ ...props }): React.ReactNode =>
     props.type === 'experience' ? (
         <Icon name={'DoubleUp'} />
     ) : props.type === 'error' ? (

@@ -24,13 +24,7 @@ interface UserFormProps {
 
 type FormDataType = ApiTypes.RequestUsersPatch & { confirmPassword?: string }
 
-const UserForm: React.FC<UserFormProps> = ({
-    loading,
-    values,
-    errors,
-    onSubmit,
-    onCancel
-}) => {
+const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, onCancel }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.userForm'
     })
@@ -38,9 +32,7 @@ const UserForm: React.FC<UserFormProps> = ({
     const userEmail = useAppSelector((state) => state.auth.user?.email)
 
     const [formErrors, setFormErrors] = useState<FormDataType>()
-    const [formData, setFormData] = useState<FormDataType>(
-        mapFormValues(values)
-    )
+    const [formData, setFormData] = useState<FormDataType>(mapFormValues(values))
 
     const disabled =
         values?.name === formData.name &&
@@ -48,9 +40,7 @@ const UserForm: React.FC<UserFormProps> = ({
         !formData.newPassword &&
         !formData.oldPassword
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 
@@ -204,11 +194,7 @@ const UserForm: React.FC<UserFormProps> = ({
             ) : (
                 <div className={styles.authService}>
                     <Image
-                        src={
-                            values?.authType === 'google'
-                                ? googleLogo.src
-                                : yandexLogo.src
-                        }
+                        src={values?.authType === 'google' ? googleLogo.src : yandexLogo.src}
                         width={48}
                         height={48}
                         alt={''}
@@ -217,10 +203,7 @@ const UserForm: React.FC<UserFormProps> = ({
                         <Trans
                             i18nKey={'components.userForm.loginViaService'}
                             values={{
-                                service:
-                                    values?.authType === 'google'
-                                        ? 'Google'
-                                        : 'Yandex'
+                                service: values?.authType === 'google' ? 'Google' : 'Yandex'
                             }}
                         />
                     </p>

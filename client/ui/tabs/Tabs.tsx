@@ -18,13 +18,7 @@ interface TabsProps<T> extends ContainerProps {
     onChangeTab?: (key?: T) => void
 }
 
-const Tabs = <T extends string>({
-    tabs,
-    activeTab,
-    children,
-    onChangeTab,
-    ...props
-}: TabsProps<T>) => (
+const Tabs = <T extends string>({ tabs, activeTab, children, onChangeTab, ...props }: TabsProps<T>) => (
     <Container
         {...props}
         className={cn(styles.tabs, !children && styles.noContent)}

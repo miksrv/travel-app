@@ -20,21 +20,15 @@ interface PhotoGalleryProps {
     uploadingPhotos?: string[]
 }
 
-const PhotoGallery: React.FC<PhotoGalleryProps> = ({
-    photos,
-    hideActions,
-    uploadingPhotos
-}) => {
+const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, uploadingPhotos }) => {
     const user = useAppSelector((state) => state.auth.user)
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoGallery'
     })
 
-    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] =
-        API.usePhotoDeleteItemMutation()
+    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] = API.usePhotoDeleteItemMutation()
 
-    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] =
-        API.usePhotoRotateItemMutation()
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] = API.usePhotoRotateItemMutation()
 
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
     const [photoLoadingID, setPhotoLoadingID] = useState<string>()
@@ -62,12 +56,8 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         setLocalPhotos(
             localPhotos.map((photo) => ({
                 ...photo,
-                full:
-                    photo.id === rotateData?.id ? rotateData.full! : photo.full,
-                preview:
-                    photo.id === rotateData?.id
-                        ? rotateData.preview!
-                        : photo.preview
+                full: photo.id === rotateData?.id ? rotateData.full! : photo.full,
+                preview: photo.id === rotateData?.id ? rotateData.preview! : photo.preview
             }))
         )
 
@@ -89,9 +79,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
     return (
         <>
-            {!localPhotos.length && !uploadingPhotos?.length && (
-                <div className={styles.emptyList}>{t('noPhotos')}</div>
-            )}
+            {!localPhotos.length && !uploadingPhotos?.length && <div className={styles.emptyList}>{t('noPhotos')}</div>}
 
             <ul className={styles.photoGallery}>
                 {uploadingPhotos?.map((photo) => (
@@ -125,9 +113,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         <Link
                             className={styles.link}
                             href={`${IMG_HOST}${photo.full}`}
-                            title={`${photo.title}. ${t('linkPhotoTitle')} ${
-                                index + 1
-                            }`}
+                            title={`${photo.title}. ${t('linkPhotoTitle')} ${index + 1}`}
                             onClick={(event) => {
                                 event.preventDefault()
                                 setLightboxPhotoIndex(index)
@@ -135,9 +121,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                         >
                             <Image
                                 src={`${IMG_HOST}${photo.preview}`}
-                                alt={`${photo.title}. ${t('linkPhotoTitle')} ${
-                                    index + 1
-                                }`}
+                                alt={`${photo.title}. ${t('linkPhotoTitle')} ${index + 1}`}
                                 quality={50}
                                 width={206}
                                 height={150}
@@ -152,24 +136,18 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                 <ul className={styles.actionMenu}>
                                     <li>
                                         <button
-                                            onClick={() =>
-                                                handleRotateClick(photo.id)
-                                            }
+                                            onClick={() => handleRotateClick(photo.id)}
                                             disabled={!!photoLoadingID}
                                         >
-                                            <Icon name={'Rotate'} />{' '}
-                                            {t('actionRotate')}
+                                            <Icon name={'Rotate'} /> {t('actionRotate')}
                                         </button>
                                     </li>
                                     <li>
                                         <button
-                                            onClick={() =>
-                                                handleRemoveClick(photo.id)
-                                            }
+                                            onClick={() => handleRemoveClick(photo.id)}
                                             disabled={!!photoLoadingID}
                                         >
-                                            <Icon name={'Close'} />{' '}
-                                            {t('actionDelete')}
+                                            <Icon name={'Close'} /> {t('actionDelete')}
                                         </button>
                                     </li>
                                 </ul>

@@ -21,11 +21,7 @@ interface PlaceDescriptionProps {
     tags?: string[]
 }
 
-const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
-    placeId,
-    content,
-    tags
-}) => {
+const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, tags }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeDescription'
     })
@@ -33,18 +29,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [updatePlace, { data: saveData, isLoading, isSuccess }] =
-        API.usePlacesPatchItemMutation()
+    const [updatePlace, { data: saveData, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
 
-    const [searchTags, { data: searchResult, isLoading: searchLoading }] =
-        API.useTagsGetSearchMutation()
+    const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
 
     const [editorMode, setEditorMode] = useState<boolean>(false)
     const [editorTags, setEditorTags] = useState<string[]>()
     const [localTags, setLocalTags] = useState<string[]>()
-    const [localContent, setLocalContent] = useState<string | undefined>(
-        content
-    )
+    const [localContent, setLocalContent] = useState<string | undefined>(content)
 
     const handleSetEditorClick = () => {
         if (isAuth) {
@@ -101,14 +93,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                 isAuth && editorMode ? (
                     <>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSaveEditorClick}
                         >
                             {t('buttonSave')}
                         </Button>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSetEditorClick}
                         >
@@ -117,7 +109,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                     </>
                 ) : (
                     <Button
-                        icon={'Pencil'}
+                        mode={'link'}
                         onClick={handleSetEditorClick}
                     >
                         {t('buttonEdit')}

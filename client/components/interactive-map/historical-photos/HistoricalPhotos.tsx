@@ -17,10 +17,7 @@ type HistoricalPhotosProps = {
 
 const IMG_HOST = 'https://pastvu.com/_p'
 
-const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
-    position,
-    onPhotoClick
-}) => {
+const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({ position, onPhotoClick }) => {
     const { data: photosData } = APIPastvu.useNearestGetPhotosQuery(
         {
             lat: position?.lat ?? 0,
@@ -29,8 +26,7 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
         { skip: !position?.lat || !position.lon }
     )
 
-    const photoUrl = (file: string, full?: boolean) =>
-        `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
+    const photoUrl = (file: string, full?: boolean) => `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
 
     return photosData?.result.photos.length ? (
         photosData.result.photos.map((photo, index) => (
@@ -55,9 +51,7 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
                                 lat: item.geo[0],
                                 lon: item.geo[1],
                                 preview: photoUrl(item.file),
-                                title: `${item.title}${
-                                    item.year ? ` (${item.year})` : ''
-                                }`
+                                title: `${item.title}${item.year ? ` (${item.year})` : ''}`
                             })),
                             index
                         )

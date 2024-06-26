@@ -16,8 +16,7 @@ type ApplicationStateProps = {
 
 export const getStorageLocale = (): string | undefined =>
     typeof window !== 'undefined'
-        ? LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ??
-          i18Config.i18n.defaultLocale
+        ? LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ?? i18Config.i18n.defaultLocale
         : i18Config.i18n.defaultLocale
 
 const applicationSlice = createSlice({
@@ -39,10 +38,7 @@ const applicationSlice = createSlice({
         setLocale: (state, { payload }: PayloadAction<ApiTypes.LocaleType>) => {
             state.locale = payload
         },
-        setUserLocation: (
-            state,
-            { payload }: PayloadAction<ApiTypes.LatLonCoordinate>
-        ) => {
+        setUserLocation: (state, { payload }: PayloadAction<ApiTypes.LatLonCoordinate>) => {
             setCookie(LOCAL_STORAGE.LOCATION, `${payload.lat};${payload.lon}`)
 
             state.userLocation = payload
@@ -53,12 +49,6 @@ const applicationSlice = createSlice({
     }
 })
 
-export const {
-    toggleOverlay,
-    closeAuthDialog,
-    openAuthDialog,
-    setLocale,
-    setUserLocation
-} = applicationSlice.actions
+export const { toggleOverlay, closeAuthDialog, openAuthDialog, setLocale, setUserLocation } = applicationSlice.actions
 
 export default applicationSlice.reducer

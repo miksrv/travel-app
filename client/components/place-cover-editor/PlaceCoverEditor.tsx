@@ -19,10 +19,7 @@ interface PlaceCoverEditorProps {
     onSaveCover?: () => void
 }
 
-const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
-    placeId,
-    onSaveCover
-}) => {
+const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, onSaveCover }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.placeCoverEditor'
     })
@@ -30,11 +27,9 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const dispatch = useAppDispatch()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: photosData, isLoading: photoLoading } =
-        API.usePhotosGetListQuery({ place: placeId })
+    const { data: photosData, isLoading: photoLoading } = API.usePhotosGetListQuery({ place: placeId })
 
-    const [updateCover, { isLoading, isSuccess, isError, error }] =
-        API.usePlacesPatchCoverMutation()
+    const [updateCover, { isLoading, isSuccess, isError, error }] = API.usePlacesPatchCoverMutation()
 
     const [heightRatio, setHeightRatio] = useState<number>(1)
     const [widthRatio, setWidthRatio] = useState<number>(1)
@@ -43,10 +38,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
     const [selectedPhotoId, setSelectedPhotoId] = useState<string>('')
     const [imageCropData, setImageCropData] = useState<Crop>()
 
-    const selectedPhoto = useMemo(
-        () => photosData?.items?.find(({ id }) => id === selectedPhotoId),
-        [selectedPhotoId]
-    )
+    const selectedPhoto = useMemo(() => photosData?.items?.find(({ id }) => id === selectedPhotoId), [selectedPhotoId])
 
     const disabled = isLoading || !imageCropData?.width || !imageCropData.height
 
@@ -72,14 +64,10 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
         }
 
         updateCover({
-            height: Math.round(
-                selectedPhoto.height * ((imageCropData.height || 0) / 100)
-            ),
+            height: Math.round(selectedPhoto.height * ((imageCropData.height || 0) / 100)),
             photoId: selectedPhotoId!,
             placeId: placeId!,
-            width: Math.round(
-                selectedPhoto.width * ((imageCropData.width || 0) / 100)
-            ),
+            width: Math.round(selectedPhoto.width * ((imageCropData.width || 0) / 100)),
             x: Math.round(selectedPhoto.width * ((imageCropData.x || 0) / 100)),
             y: Math.round(selectedPhoto.height * ((imageCropData.y || 0) / 100))
         })
@@ -176,9 +164,7 @@ const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({
                             </li>
                         ))}
                         {!photoLoading && !photosData?.items?.length && (
-                            <div className={styles.noPhotos}>
-                                {t('noPhotos')}
-                            </div>
+                            <div className={styles.noPhotos}>{t('noPhotos')}</div>
                         )}
                     </ul>
                 ) : (

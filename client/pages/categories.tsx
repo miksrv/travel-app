@@ -24,10 +24,7 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const description = useMemo(
-        () => categories.map(({ title }) => title).join(', '),
-        [categories]
-    )
+    const description = useMemo(() => categories.map(({ title }) => title).join(', '), [categories])
 
     return (
         <AppLayout>
@@ -64,9 +61,7 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (
-            context
-        ): Promise<GetServerSidePropsResult<CategoriesPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<CategoriesPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)

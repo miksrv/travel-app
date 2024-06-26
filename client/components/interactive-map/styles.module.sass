@@ -34,19 +34,19 @@
       min-height: 33px
       margin-bottom: 5px
       border: var(--input-border) !important
-      background-color: #ffffff
+      background-color: var(--input-background-color)
 
       svg
-        fill: #616161
-
-        &:hover
-          fill: #000000
+        fill: var(--icon-color-primary)
 
       &:last-of-type
         margin-bottom: 0
 
       &:hover
-        background-color: #ffffff
+        background-color: var(--dropdown-background-color-hover)
+
+        svg
+            fill: var(--icon-color-primary-hover)
 
   .bottomControls
     height: auto
@@ -78,7 +78,7 @@
         border-radius: var(--border-radius)
 
         &:hover
-          background-color: #ebedf0
+          background-color: var(--body-background)
 
     .mapCategoryList
       margin: -10px -10px -10px

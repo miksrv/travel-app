@@ -55,19 +55,11 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                         {isAuth && (
                             <Button
                                 className={styles.answerButton}
-                                onClick={() =>
-                                    onAnswerClick?.(
-                                        formAnswerId !== comment.id
-                                            ? comment.id
-                                            : undefined
-                                    )
-                                }
+                                onClick={() => onAnswerClick?.(formAnswerId !== comment.id ? comment.id : undefined)}
                                 size={'small'}
                                 mode={'link'}
                             >
-                                {formAnswerId === comment.id
-                                    ? t('answerCancel')
-                                    : t('answerAdd')}
+                                {formAnswerId === comment.id ? t('answerCancel') : t('answerAdd')}
                             </Button>
                         )}
                     </div>

@@ -50,21 +50,19 @@ const MapPage: NextPage<MapPageProps> = () => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const { data: poiListData, isFetching: placesLoading } =
-        API.usePoiGetListQuery(
-            {
-                bounds: mapBounds,
-                categories: mapCategories ?? [],
-                zoom: mapZoom
-            },
-            { skip: !mapBounds || mapType !== 'Places' }
-        )
+    const { data: poiListData, isFetching: placesLoading } = API.usePoiGetListQuery(
+        {
+            bounds: mapBounds,
+            categories: mapCategories ?? [],
+            zoom: mapZoom
+        },
+        { skip: !mapBounds || mapType !== 'Places' }
+    )
 
-    const { data: photoListData, isFetching: photosLoading } =
-        API.usePoiGetPhotoListQuery(
-            { bounds: mapBounds, zoom: mapZoom },
-            { skip: !mapBounds || mapType !== 'Photos' }
-        )
+    const { data: photoListData, isFetching: photosLoading } = API.usePoiGetPhotoListQuery(
+        { bounds: mapBounds, zoom: mapZoom },
+        { skip: !mapBounds || mapType !== 'Photos' }
+    )
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
@@ -76,11 +74,7 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(true)
     }
 
-    const updateUrlCoordinates = async (
-        lat?: number,
-        lon?: number,
-        zoom?: number
-    ) => {
+    const updateUrlCoordinates = async (lat?: number, lon?: number, zoom?: number) => {
         const url = new URL(window.location.href)
         const hash = url.hash
 
@@ -176,17 +170,9 @@ const MapPage: NextPage<MapPageProps> = () => {
                 className={'mainHeader'}
                 actions={
                     <>
-                        {t(
-                            `${TKEY}${
-                                mapType === 'Places'
-                                    ? 'pointsCount'
-                                    : 'photosCount'
-                            }`
-                        )}
+                        {t(`${TKEY}${mapType === 'Places' ? 'pointsCount' : 'photosCount'}`)}
                         <strong style={{ marginLeft: '5px' }}>
-                            {(mapType === 'Places'
-                                ? poiListData?.count
-                                : photoListData?.count) ?? 0}
+                            {(mapType === 'Places' ? poiListData?.count : photoListData?.count) ?? 0}
                         </strong>
                     </>
                 }

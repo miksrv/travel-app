@@ -1,8 +1,4 @@
-import {
-    isCoordinates,
-    normalizeInput,
-    toDegreesMinutesAndSeconds
-} from '@/functions/coordinates'
+import { isCoordinates, normalizeInput, toDegreesMinutesAndSeconds } from '@/functions/coordinates'
 
 describe('toDegreesMinutesAndSeconds', () => {
     it('converts positive coordinate correctly', () => {

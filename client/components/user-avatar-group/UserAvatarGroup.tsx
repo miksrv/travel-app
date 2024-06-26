@@ -14,12 +14,7 @@ interface UserAvatarGroupProps extends Pick<UserAvatarProps, 'size'> {
     className?: string
 }
 
-const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
-    users,
-    totalCount,
-    className,
-    ...props
-}) => (
+const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({ users, totalCount, className, ...props }) => (
     <div className={cn(styles.avatarsGroup, className)}>
         {users?.map((user) => (
             <UserAvatar
@@ -30,11 +25,7 @@ const UserAvatarGroup: React.FC<UserAvatarGroupProps> = ({
             />
         ))}
 
-        {totalCount && totalCount <= 99 ? (
-            <div className={styles.totalCountAvatar}>{`+${totalCount}`}</div>
-        ) : (
-            <></>
-        )}
+        {totalCount && totalCount <= 99 ? <div className={styles.totalCountAvatar}>{`+${totalCount}`}</div> : <></>}
 
         {(totalCount ?? 0) > 99 && (
             <>

@@ -4,24 +4,16 @@ import styles from './styles.module.sass'
 
 import { concatClassNames as cn } from '@/functions/helpers'
 
-interface TextareaProps
-    extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
+interface TextareaProps extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
     label?: string
     disableAutoresize?: boolean
     onChange?: (value?: string) => void
 }
 
-const Textarea: React.FC<TextareaProps> = ({
-    label,
-    onChange,
-    disableAutoresize,
-    ...props
-}) => {
+const Textarea: React.FC<TextareaProps> = ({ label, onChange, disableAutoresize, ...props }) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
-    const handleChange = (
-        evt: React.ChangeEvent<HTMLTextAreaElement>
-    ): void => {
+    const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
         onChange?.(evt.target.value)
 
         if (textAreaRef.current && !disableAutoresize) {

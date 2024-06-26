@@ -20,13 +20,7 @@ interface ServiceMapLinkProps {
     image?: StaticImageData
 }
 
-const ServiceMapLink: React.FC<ServiceMapLinkProps> = ({
-    link,
-    image,
-    title,
-    translate,
-    showTitle
-}) => (
+const ServiceMapLink: React.FC<ServiceMapLinkProps> = ({ link, image, title, translate, showTitle }) => (
     <Link
         className={styles.mapLink}
         color={'inherit'}
@@ -87,9 +81,7 @@ const Google: React.FC<MapLinksProps> = (props) => {
             {...props}
             image={googleLogo}
             translate={t('googleMap')}
-            link={`https://maps.google.com/maps?ll=${props.lat},${
-                props.lon
-            }&q=${props.lat},${props.lon}&z=${
+            link={`https://maps.google.com/maps?ll=${props.lat},${props.lon}&q=${props.lat},${props.lon}&z=${
                 props.zoom ?? DEFAULT_ZOOM
             }&spn=0.1,0.1&t=h&hl=${i18n.language}`}
         />

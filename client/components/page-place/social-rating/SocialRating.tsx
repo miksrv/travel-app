@@ -1,3 +1,5 @@
+'use client'
+
 import React, { useEffect } from 'react'
 import {
     OKIcon,
@@ -20,32 +22,28 @@ import styles from './styles.module.sass'
 import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch } from '@/api/store'
+import { addDecimalPoint } from '@/functions/helpers'
 import Container from '@/ui/container'
 import Rating from '@/ui/rating'
 
 interface SocialRatingProps {
     placeId?: string
     placeUrl?: string
-    ratingValue?: number | null
 }
 
-const SocialRating: React.FC<SocialRatingProps> = ({
-    placeId,
-    placeUrl,
-    ratingValue
-}) => {
+const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const dispatch = useAppDispatch()
 
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.socialRating'
     })
 
-    const { data: ratingData } = API.useRatingGetListQuery(placeId!, {
+    const { data: ratingData } = API.useRatingGetListQuery(placeId ?? '', {
+        skip: !placeId,
         refetchOnMountOrArgChange: true
     })
 
-    const [changeRating, { isLoading: ratingLoading, isSuccess }] =
-        API.useRatingPutScoreMutation()
+    const [changeRating, { isLoading: ratingLoading, isSuccess }] = API.useRatingPutScoreMutation()
 
     const handleRatingChange = (value?: number) => {
         if (value && placeId) {
@@ -71,12 +69,18 @@ const SocialRating: React.FC<SocialRatingProps> = ({
     return (
         <Container className={styles.socialRating}>
             <div className={styles.rating}>
-                <div className={styles.ratingCaption}>{t('userRating')}</div>
                 <Rating
-                    value={ratingData?.vote ?? ratingValue ?? undefined}
+                    value={ratingData?.rating}
+                    voted={!!ratingData?.vote}
                     disabled={ratingLoading}
                     onChange={handleRatingChange}
                 />
+
+                {ratingData?.rating ? (
+                    <div className={styles.ratingValue}>{addDecimalPoint(ratingData?.rating)}</div>
+                ) : (
+                    ''
+                )}
             </div>
 
             <div className={styles.share}>

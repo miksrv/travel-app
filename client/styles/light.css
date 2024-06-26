@@ -37,7 +37,7 @@
     --input-border-focus-color: #1976d2;
 
     --dropdown-background-color: #ffffff;
-    --dropdown-background-color-hover: #f2f3f5l;
+    --dropdown-background-color-hover: #f2f3f5;
 
     --link-color: #2688eb;
     --link-color-hover: #2483e4;
@@ -67,4 +67,8 @@
     --color-green: #4bb34b;
     --color-orange: #ea5d2e;
     --color-red: #e64646;
+
+    .leaflet-container {
+        background-color: var(--input-background-color);
+    }
 }

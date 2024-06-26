@@ -23,11 +23,7 @@ interface UsersPageProps {
     currentPage: number
 }
 
-const UsersPage: NextPage<UsersPageProps> = ({
-    usersList,
-    usersCount,
-    currentPage
-}) => {
+const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPage }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'pages.users'
     })
@@ -35,10 +31,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const title = useMemo(() => {
-        const titlePage =
-            currentPage && currentPage > 1
-                ? ` - ${t('titlePage')} ${currentPage}`
-                : ''
+        const titlePage = currentPage && currentPage > 1 ? ` - ${t('titlePage')} ${currentPage}` : ''
 
         return t('title') + titlePage
     }, [currentPage, i18n.language])
@@ -51,9 +44,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
                     ?.map(({ name }) => name)
                     ?.join(', ')
                     ?.substring(0, 220)}`}
-                canonical={`${canonicalUrl}users${
-                    currentPage && currentPage > 1 ? '?page=' + currentPage : ''
-                }`}
+                canonical={`${canonicalUrl}users${currentPage && currentPage > 1 ? '?page=' + currentPage : ''}`}
             />
 
             <Header

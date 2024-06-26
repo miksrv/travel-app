@@ -24,9 +24,7 @@ interface RegistrationFormProps {
     onClickLogin?: () => void
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({
-    onClickLogin
-}) => {
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.registrationForm'
     })
@@ -37,14 +35,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     const [formData, setFormData] = useState<FormDataType>()
     const [formErrors, setFormErrors] = useState<FormDataType>()
 
-    const [registration, { data, error, isLoading }] =
-        API.useAuthPostRegistrationMutation()
+    const [registration, { data, error, isLoading }] = API.useAuthPostRegistrationMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
-                ? error.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -67,10 +61,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             errors.password = t('errorPasswordLength')
         }
 
-        if (
-            !formData?.repeat_password ||
-            formData.repeat_password !== formData.password
-        ) {
+        if (!formData?.repeat_password || formData.repeat_password !== formData.password) {
             errors.repeat_password = t('errorPasswordMismatch')
         }
 
@@ -79,9 +70,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         return !Object.keys(errors).length
     }, [formData])
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 

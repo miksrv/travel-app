@@ -27,12 +27,8 @@ export const APIPastvu = createApi({
         baseUrl: 'https://pastvu.com/api2'
     }),
     endpoints: (builder) => ({
-        nearestGetPhotos: builder.query<
-            ResponseNearestGetPhotos,
-            RequestNearestGetPhotos
-        >({
-            query: ({ lat, lon }) =>
-                `?method=photo.giveNearestPhotos&params={"geo":[${lat},${lon}],"limit":30}`
+        nearestGetPhotos: builder.query<ResponseNearestGetPhotos, RequestNearestGetPhotos>({
+            query: ({ lat, lon }) => `?method=photo.giveNearestPhotos&params={"geo":[${lat},${lon}],"limit":30}`
         })
     }),
     reducerPath: 'APIPastvu'

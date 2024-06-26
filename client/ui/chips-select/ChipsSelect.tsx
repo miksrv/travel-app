@@ -102,10 +102,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }
@@ -127,11 +124,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     return (
         <div
             ref={dropdownRef}
-            className={cn(
-                className,
-                styles.chipsSelect,
-                disabled && styles.disabled
-            )}
+            className={cn(className, styles.chipsSelect, disabled && styles.disabled)}
         >
             {label && <label className={styles.label}>{label}</label>}
             <div className={cn(styles.container, isOpen && styles.open)}>
@@ -162,11 +155,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                                 disabled={disabled}
                                 onClick={toggleDropdown}
                             >
-                                {isOpen ? (
-                                    <Icon name={'Up'} />
-                                ) : (
-                                    <Icon name={'Down'} />
-                                )}
+                                {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
                             </button>
                         )}
                     </span>
@@ -176,17 +165,11 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {!options?.length && (
-                            <li className={styles.emptyItem}>
-                                {t('notFound')}
-                            </li>
-                        )}
+                        {!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}
                         {options?.map((option) => (
                             <li
                                 key={option}
-                                className={cn(
-                                    value?.includes(option) && styles.active
-                                )}
+                                className={cn(value?.includes(option) && styles.active)}
                             >
                                 <button onClick={() => handleSelect(option)}>
                                     <span>{option}</span>
