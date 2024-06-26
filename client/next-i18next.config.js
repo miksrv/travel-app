@@ -7,8 +7,7 @@ module.exports = {
     debug: false,
     i18n: {
         defaultLocale: 'ru',
-        locales: ['ru', 'en'],
-        localeDetection: true
+        locales: ['ru', 'en']
     },
     /** To avoid issues when deploying to some paas (vercel...) */
     // localePath:
