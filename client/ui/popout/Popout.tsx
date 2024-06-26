@@ -56,6 +56,7 @@ const Popout: React.FC<PaginationProps> = ({ className, position, action, childr
                 <div
                     ref={popoutRef}
                     className={styles.content}
+                    onClick={() => setIsOpen(false)}
                     style={position === 'left' ? { left: 0 } : { right: 0 }}
                 >
                     {children}
