@@ -31,10 +31,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
         <div className={styles.userInfo}>
             <div className={styles.userName}>{user?.name}</div>
             <div>
-                [<b>{user?.level?.level}</b>]{' '}
+                [<b>{user?.levelData?.level}</b>]{' '}
                 <Image
                     className={styles.levelImage}
-                    src={levelImage(user?.level?.level).src}
+                    src={levelImage(user?.levelData?.level).src}
                     alt={''}
                     width={20}
                     height={20}
@@ -43,10 +43,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                     href={'/users/levels'}
                     title={''}
                 >
-                    {user?.level?.title}
+                    {user?.levelData?.title}
                 </Link>
             </div>
-            <div>До нового уровня: {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}</div>
+            <div>До нового уровня: {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}</div>
         </div>
         <ul className={'contextListMenu'}>
             <li>

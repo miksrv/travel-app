@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
@@ -36,7 +36,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const inputFileRef = useRef<HTMLInputElement>()
 
     const [coverHash, setCoverHash] = useState<number>(dateToUnixTime(place?.updated?.date))
-    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList || [])
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
@@ -124,6 +124,10 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
         },
         name: place?.title
     }
+
+    useEffect(() => {
+        setLocalPhotos(photoList ?? [])
+    }, [photoList])
 
     return (
         <>
