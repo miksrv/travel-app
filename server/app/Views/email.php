@@ -88,7 +88,7 @@
         .footer span,
         .footer a {
             color: #9a9ea6;
-            font-size: 16px;
+            font-size: 13px;
             text-align: center;
         }
         /* -------------------------------------
@@ -311,8 +311,7 @@
                     <tr>
                         <td class="wrapper">
                             <?= $message ?>
-                            <p>Hi there</p>
-                            <p>Sometimes you just want to send a simple HTML email with a simple design and clear call to action. This is it.</p>
+                            <?php if (!empty($actionText) && !empty($actionLink)): ?>
                             <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="btn btn-primary">
                                 <tbody>
                                 <tr>
@@ -320,7 +319,7 @@
                                         <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                                             <tbody>
                                             <tr>
-                                                <td> <a href="http://htmlemail.io" target="_blank">Call To Action</a> </td>
+                                                <td> <a href="<?= $actionLink ?>" target="_blank"><?= $actionText ?></a> </td>
                                             </tr>
                                             </tbody>
                                         </table>
@@ -328,8 +327,7 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <p>This is a really simple email template. It's sole purpose is to get the recipient to click the button with no distractions.</p>
-                            <p>Good luck! Hope it works.</p>
+                            <?php endif; ?>
                         </td>
                     </tr>
 
@@ -341,17 +339,18 @@
                     <table role="presentation" border="0" cellpadding="0" cellspacing="0">
                         <tr>
                             <td class="content-block">
-                                <span class="apple-link">Company Inc, 7-11 Commercial Ct, Belfast BT1 2NB</span>
-                                <br> Don't like these emails? <a href="http://htmlemail.io/blog">Unsubscribe</a>.
+                                <span class="apple-link">Вы получили это письмо, так как являетесь пользователем сервиса <a href="https://geometki.com" target="_blank">https://geometki.com</a></span>
                             </td>
                         </tr>
                         <tr>
                             <td class="content-block powered-by">
-                                Powered by <a href="http://htmlemail.io">HTMLemail.io</a>
+                                <?php if (!empty($unsubscribe)): ?>Получили письмо по ошибке? <a href="<?= $unsubscribe ?>">Отписаться</a><?php endif; ?>
                             </td>
                         </tr>
                     </table>
                 </div>
+                <br />
+                <br />
 
                 <!-- END FOOTER -->
 

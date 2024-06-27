@@ -52,4 +52,17 @@ class SendingMail extends MyBaseModel {
 
         return $data;
     }
+
+    /**
+     * @param string $email
+     * @param bool $activity
+     * @return object|array|null
+     */
+    public function checkSendLastEmail(string $email, bool $activity = true): object|array|null {
+        return $this
+            ->select('created_at')
+            ->where("email = '{$email}' AND activity_id " . ($activity ? 'IS NOT NULL' : 'IS NULL'))
+            ->orderBy('created_at', 'DESC')
+            ->first();
+    }
 }
