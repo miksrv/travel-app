@@ -44,7 +44,9 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                     <div>
                         <p>{category.content}</p>
                         <p className={styles.description}>
-                            {t('placesInCategory')} <strong>{category.count ?? 0}</strong>
+                            <div>
+                                {t('placesInCategory')} <strong>{category.count ?? 0}</strong>
+                            </div>
                             <Link
                                 href={`/places?category=${category.name}`}
                                 title={`${category.title} - ${t('allCategoryPlaces')}`}
