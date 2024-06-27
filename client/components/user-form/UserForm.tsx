@@ -7,7 +7,6 @@ import styles from './styles.module.sass'
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
-
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import Button from '@/ui/button'
@@ -37,8 +36,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
     const [formData, setFormData] = useState<FormDataType>(mapFormValues(values))
 
     const disabled =
-        JSON.stringify(mapFormValues(values)?.settings) ===
-            JSON.stringify(formData.settings) &&
+        JSON.stringify(mapFormValues(values)?.settings) === JSON.stringify(formData.settings) &&
         values?.name === formData?.name &&
         values?.website === formData?.website &&
         !formData?.newPassword &&
@@ -48,9 +46,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleChangeCheckbox = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({
             ...formData,
             settings: {
@@ -164,6 +160,21 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
             </div>
 
             <div className={styles.section}>
+                <h3 className={styles.header}>{t('titleEmailSettings')}</h3>
+                {['emailPhoto', 'emailRating', 'emailComment', 'emailEdit', 'emailCover'].map((setting) => (
+                    <Checkbox
+                        className={styles.settings}
+                        key={setting}
+                        id={setting}
+                        label={t('setting')}
+                        disabled={loading}
+                        onChange={handleChangeCheckbox}
+                        checked={formData?.settings?.[setting as keyof UserSettings]}
+                    />
+                ))}
+            </div>
+
+            <div className={styles.section}>
                 <h3 className={styles.header}>{t('titleChangePassword')}</h3>
                 {values?.authType === 'native' ? (
                     <>
@@ -212,11 +223,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 ) : (
                     <div className={styles.authService}>
                         <Image
-                            src={
-                                values?.authType === 'google'
-                                    ? googleLogo.src
-                                    : yandexLogo.src
-                            }
+                            src={values?.authType === 'google' ? googleLogo.src : yandexLogo.src}
                             width={48}
                             height={48}
                             alt={''}
@@ -225,10 +232,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                             <Trans
                                 i18nKey={'components.userForm.loginViaService'}
                                 values={{
-                                    service:
-                                        values?.authType === 'google'
-                                            ? 'Google'
-                                            : 'Yandex'
+                                    service: values?.authType === 'google' ? 'Google' : 'Yandex'
                                 }}
                             />
                         </p>

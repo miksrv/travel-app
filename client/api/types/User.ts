@@ -52,5 +52,4 @@ export const UserSettingTypes = {
     Place: 'place',
     Rating: 'rating'
 } as const
-export type UserSettingEnum =
-    (typeof UserSettingTypes)[keyof typeof UserSettingTypes]
+export type UserSettingEnum = (typeof UserSettingTypes)[keyof typeof UserSettingTypes]

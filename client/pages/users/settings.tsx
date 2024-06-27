@@ -28,13 +28,10 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: userData, isFetching } = API.useUsersGetItemQuery(
-        authSlice.user?.id || '',
-        {
-            refetchOnMountOrArgChange: true,
-            skip: !authSlice.user?.id
-        }
-    )
+    const { data: userData, isFetching } = API.useUsersGetItemQuery(authSlice.user?.id || '', {
+        refetchOnMountOrArgChange: true,
+        skip: !authSlice.user?.id
+    })
 
     const [updateProfile, { data, error, isLoading, isSuccess }] = API.useUsersPatchProfileMutation()
 
@@ -60,10 +57,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                     ? formData.oldPassword
                     : undefined,
             settings: formData?.settings,
-            website:
-                formData?.website !== userData?.website
-                    ? formData?.website
-                    : undefined
+            website: formData?.website !== userData?.website ? formData?.website : undefined
         })
     }
 
