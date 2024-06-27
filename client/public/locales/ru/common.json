@@ -129,7 +129,7 @@
                 "buttonSave": "Сохранить",
                 "buttonCancel": "Отмена",
                 "buttonEdit": "Редактировать",
-                "emptyContent": "Нет описания",
+                "emptyContent": "Описание еще не добавлено",
                 "tagSelectLabel": "Выберите или добавьте метки интересного места"
             },
             "placeComments": {
@@ -187,7 +187,7 @@
             }
         },
         "photoGallery": {
-            "noPhotos": "Нет фотографий",
+            "noPhotos": "Пока нет загруженных фотографий",
             "linkPhotoTitle": "Фото",
             "acceptConfirmMessage": "Удалить фотографию?",
             "acceptConfirmDelete": "Удалить",
