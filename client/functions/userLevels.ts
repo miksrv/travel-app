@@ -99,10 +99,7 @@ export const levelImage = (level?: number): StaticImageData => {
     }
 }
 
-export const nextLevelPercentage = (
-    currentExperience: number,
-    experienceToNextLevel: number
-): number => {
+export const nextLevelPercentage = (currentExperience: number, experienceToNextLevel: number): number => {
     if (currentExperience < 0 || experienceToNextLevel <= 0) {
         return 0
     }

@@ -1,22 +1,20 @@
+import React, { useEffect, useMemo } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useMemo } from 'react'
-
-import Container from '@/ui/container'
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserForm from '@/components/user-form'
+import Container from '@/ui/container'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 interface SettingsUserPageProps {}
 
@@ -38,14 +36,10 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
         }
     )
 
-    const [updateProfile, { data, error, isLoading, isSuccess }] =
-        API.useUsersPatchProfileMutation()
+    const [updateProfile, { data, error, isLoading, isSuccess }] = API.useUsersPatchProfileMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestUsersPatch>(error)
-                ? error?.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestUsersPatch>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -56,17 +50,14 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const handleSubmit = (formData?: ApiTypes.RequestUsersPatch) => {
         updateProfile({
             id: authSlice.user?.id,
-            name:
-                formData?.name !== userData?.name ? formData?.name : undefined,
+            name: formData?.name !== userData?.name ? formData?.name : undefined,
             newPassword:
-                userData?.authType === 'native' &&
-                formData?.newPassword?.length! > 1
-                    ? formData?.newPassword
+                userData?.authType === 'native' && formData?.newPassword && formData.newPassword.length > 1
+                    ? formData.newPassword
                     : undefined,
             oldPassword:
-                userData?.authType === 'native' &&
-                formData?.oldPassword?.length! > 1
-                    ? formData?.oldPassword
+                userData?.authType === 'native' && formData?.oldPassword && formData.oldPassword.length > 1
+                    ? formData.oldPassword
                     : undefined,
             settings: formData?.settings,
             website:
@@ -77,7 +68,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     }
 
     useEffect(() => {
-        if (!authSlice?.isAuth) {
+        if (!authSlice.isAuth) {
             router.push('/users')
         }
     })
@@ -119,7 +110,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 ]}
             />
             <Container>
-                {!authSlice?.isAuth && <ScreenSpinner />}
+                {!authSlice.isAuth && <ScreenSpinner />}
 
                 <UserForm
                     loading={isLoading || isSuccess || isFetching}
@@ -135,9 +126,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (
-            context
-        ): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
 
             const translations = await serverSideTranslations(locale)

@@ -1,13 +1,13 @@
 'use client'
 
-import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
+import Leaflet from 'leaflet'
+
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Placemark } from '@/api/types'
-
-import styles from './styles.module.sass'
 
 type MarkerPhotoProps = {
     photo: Placemark.Photo

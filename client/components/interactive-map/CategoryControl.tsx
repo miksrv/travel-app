@@ -1,27 +1,22 @@
-import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useEffect, useRef, useState } from 'react'
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Categories } from '@/api/types/Place'
-
 import { categoryImage } from '@/functions/categories'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
+import Container from '@/ui/container'
 
 interface CategoryControlProps {
     categories?: Categories[]
     onChangeCategories?: (categories?: Categories[]) => void
 }
 
-const CategoryControl: React.FC<CategoryControlProps> = ({
-    categories,
-    onChangeCategories
-}) => {
+const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeCategories }) => {
     const layersContainerRef = useRef<HTMLUListElement>(null)
     const [open, setOpen] = useState<boolean>(false)
 
@@ -36,28 +31,23 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            layersContainerRef.current &&
-            !layersContainerRef.current.contains(event.target as Node)
-        ) {
+        if (layersContainerRef.current && !layersContainerRef.current.contains(event.target as Node)) {
             setOpen(false)
         }
     }
 
-    const handleChangeCategory = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
-        const category = event.target.id as Categories
+    const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const category = event.target.name as Categories
 
         onChangeCategories?.(
             !event.target.checked
-                ? categories?.filter((item) => item !== category) || []
-                : [...(categories || []), category]
+                ? categories?.filter((item) => item !== category) ?? []
+                : [...(categories ?? []), category]
         )
     }
 
     const handleChangeAllCategories = () => {
-        if (categories?.length === Object.values(Categories)?.length) {
+        if (categories?.length === Object.values(Categories).length) {
             onChangeCategories?.([])
         } else {
             onChangeCategories?.(Object.values(Categories))
@@ -92,14 +82,11 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                     <Checkbox
                         id={'allCategories'}
                         label={t('allCategories')}
-                        checked={
-                            categories?.length ===
-                            Object.values(Categories)?.length
-                        }
+                        checked={categories?.length === Object.values(Categories).length}
                         indeterminate={
-                            categories?.length !==
-                                Object.values(Categories)?.length &&
-                            categories?.length! > 0
+                            categories &&
+                            categories.length !== Object.values(Categories).length &&
+                            categories.length > 0
                         }
                         onChange={handleChangeAllCategories}
                     />
@@ -111,7 +98,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({
                             label={
                                 <>
                                     <Image
-                                        src={categoryImage(item.name)?.src}
+                                        src={categoryImage(item.name).src}
                                         alt={''}
                                         width={15}
                                         height={18}

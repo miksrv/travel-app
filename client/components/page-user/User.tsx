@@ -1,21 +1,20 @@
-import { UserPageProps } from '@/pages/users/[...slug]'
+import React, { useEffect, useState } from 'react'
+import Head from 'next/head'
+import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import Head from 'next/head'
-import React, { useEffect, useState } from 'react'
-import { BreadcrumbList, ProfilePage } from 'schema-dts'
-
-import Button from '@/ui/button'
+import type { BreadcrumbList, ProfilePage } from 'schema-dts'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
-import { Item } from '@/api/types/Activity'
-
+import type { Item } from '@/api/types/Activity'
 import ActivityList from '@/components/activity-list/ActivityList'
-import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
-
+import PhotoGallery from '@/components/photo-gallery'
 import { formatDateISO } from '@/functions/helpers'
+import type { UserPageProps } from '@/pages/users/[...slug]'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
 
 interface UserProps extends Omit<UserPageProps, 'page'> {}
 
@@ -36,25 +35,23 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
     useEffect(() => {
         const onScroll = () => {
-            const scrolledToBottom =
-                window.innerHeight + window.scrollY >=
-                document.body.offsetHeight - 20
+            const scrolledToBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 20
 
-            if (scrolledToBottom && !isFetching && !!data?.items?.length) {
-                setLastDate(data.items[data.items?.length - 1].created?.date)
+            if (scrolledToBottom && !isFetching && !!data?.items.length) {
+                setLastDate(data.items[data.items.length - 1].created?.date)
             }
         }
 
         document.addEventListener('scroll', onScroll)
 
-        return function () {
+        return () => {
             document.removeEventListener('scroll', onScroll)
         }
     }, [lastDate, isFetching, data])
 
     useEffect(() => {
         if (data?.items) {
-            setActivityCache([...(activityCache || []), ...data.items])
+            setActivityCache([...(activityCache ?? []), ...data.items])
         }
     }, [data?.items])
 
@@ -63,8 +60,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         setLastDate(undefined)
     }, [id])
 
-    const breadCrumbSchema: BreadcrumbList = {
-        // @ts-ignore
+    const breadCrumbSchema: BreadcrumbList | any = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -82,8 +78,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         ]
     }
 
-    const userSchema: ProfilePage = {
-        // @ts-ignore
+    const userSchema: ProfilePage | any = {
         '@context': 'https://schema.org',
         '@type': 'ProfilePage',
         dateCreated: formatDateISO(user?.created?.date),
@@ -137,10 +132,18 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
             <UserHeader user={user} />
 
-            <UserGallery
+            <Container
                 title={t('photos')}
-                photos={photosList}
-                hideActions={true}
+                action={
+                    !!photosList?.length && (
+                        <Link
+                            href={`/users/${id}/photos`}
+                            title={t(`${t('buttonShowAllPhotos')} (${photosCount})`)}
+                        >
+                            {t('linkAllPhotos')}
+                        </Link>
+                    )
+                }
                 footer={
                     photosCount > 8 && (
                         <Button
@@ -154,7 +157,12 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         </Button>
                     )
                 }
-            />
+            >
+                <PhotoGallery
+                    photos={photosList}
+                    hideActions={true}
+                />
+            </Container>
 
             <UserTabs
                 user={user}

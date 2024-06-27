@@ -1,15 +1,14 @@
-import debounce from 'lodash-es/debounce'
-import { useTranslation } from 'next-i18next'
-import Image, { StaticImageData } from 'next/image'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
+import debounce from 'lodash-es/debounce'
+import Image, { StaticImageData } from 'next/image'
+import { useTranslation } from 'next-i18next'
 
+import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
 import Spinner from '@/ui/spinner'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 export type DropdownOption = {
     title: string
@@ -65,9 +64,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocalLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [selectedOption, setSelectedOption] = useState<
-        DropdownOption | undefined
-    >(undefined)
+    const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined)
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
@@ -105,13 +102,8 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (
-            event.key === 'Enter' &&
-            options?.length &&
-            options?.length >= 1 &&
-            search !== ''
-        ) {
-            handleSelect(options?.[0])
+        if (event.key === 'Enter' && options?.length && options.length >= 1 && search !== '') {
+            handleSelect(options[0])
         }
     }
 
@@ -127,10 +119,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }
@@ -157,11 +146,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
 
         if (value) {
             setSearch(value.title)
-            setSelectedOption(
-                options?.find(({ title }) => value === title) ??
-                    value ??
-                    undefined
-            )
+            setSelectedOption(options?.find(({ title }) => value === title) ?? value ?? undefined)
         }
     }, [value])
 
@@ -177,13 +162,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
             className={cn(className, styles.autocomplete)}
         >
             {label && <label className={styles.label}>{label}</label>}
-            <div
-                className={cn(
-                    styles.container,
-                    isOpen && styles.open,
-                    disabled && styles.disabled
-                )}
-            >
+            <div className={cn(styles.container, isOpen && styles.open, disabled && styles.disabled)}>
                 <div className={styles.searchContainer}>
                     {leftIcon && (
                         <span className={styles.leftIcon}>
@@ -218,11 +197,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                 type={'button'}
                                 onClick={toggleDropdown}
                             >
-                                {isOpen ? (
-                                    <Icon name={'Up'} />
-                                ) : (
-                                    <Icon name={'Down'} />
-                                )}
+                                {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
                             </button>
                         ) : (
                             <></>
@@ -234,17 +209,13 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {!options?.length && (
-                            <li className={styles.emptyItem}>
-                                {t('notFound')}
-                            </li>
-                        )}
+                        {!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}
                         {options?.map((option, i) => (
                             <li
                                 key={`option${i}`}
                                 className={cn(
                                     option.title === selectedOption?.title &&
-                                        option?.type === selectedOption?.type &&
+                                        option.type === selectedOption.type &&
                                         styles.active
                                 )}
                             >
@@ -264,10 +235,8 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                                         )}
                                         <span>{option.title}</span>
                                     </div>
-                                    {option?.description && (
-                                        <div className={styles.description}>
-                                            {option.description}
-                                        </div>
+                                    {option.description && (
+                                        <div className={styles.description}>{option.description}</div>
                                     )}
                                 </button>
                             </li>

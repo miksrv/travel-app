@@ -1,12 +1,11 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useMemo } from 'react'
-
-import Icon from '@/ui/icon'
-
-import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
+import Icon from '@/ui/icon'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
@@ -57,8 +56,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             const beforeLastPage = totalPages - 1
 
             const startPage = leftBound > 2 ? leftBound : 2
-            const endPage =
-                rightBound < beforeLastPage ? rightBound : beforeLastPage
+            const endPage = rightBound < beforeLastPage ? rightBound : beforeLastPage
 
             pages = range(startPage, endPage)
 
@@ -69,16 +67,10 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             const rightSpill = endPage < beforeLastPage
 
             if (leftSpill && !rightSpill) {
-                const extraPages = range(
-                    startPage - singleSpillOffset,
-                    startPage - 1
-                )
+                const extraPages = range(startPage - singleSpillOffset, startPage - 1)
                 pages = [LEFT_PAGE, ...extraPages, ...pages]
             } else if (!leftSpill && rightSpill) {
-                const extraPages = range(
-                    endPage + 1,
-                    endPage + singleSpillOffset
-                )
+                const extraPages = range(endPage + 1, endPage + singleSpillOffset)
                 pages = [...pages, ...extraPages, RIGHT_PAGE]
             } else if (leftSpill && rightSpill) {
                 pages = [LEFT_PAGE, ...pages, RIGHT_PAGE]
@@ -98,18 +90,11 @@ const Pagination: React.FC<PaginationProps<any>> = ({
             className={styles.pagination}
         >
             {fetchPageNumbers
-                .filter((page) =>
-                    !hideArrows
-                        ? true
-                        : page !== RIGHT_PAGE && page !== LEFT_PAGE
-                )
+                .filter((page) => (!hideArrows ? true : page !== RIGHT_PAGE && page !== LEFT_PAGE))
                 .map((page) => (
                     <Link
                         scroll={!disableScroll}
-                        className={cn(
-                            styles.item,
-                            currentPage === page ? styles.active : undefined
-                        )}
+                        className={cn(styles.item, currentPage === page ? styles.active : undefined)}
                         href={
                             page === RIGHT_PAGE
                                 ? `${link}${encodeQueryData({
@@ -117,26 +102,26 @@ const Pagination: React.FC<PaginationProps<any>> = ({
                                       page: currentPage + 1
                                   })}`
                                 : page === LEFT_PAGE
-                                ? `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page: currentPage - 1
-                                  })}`
-                                : page === 1
-                                ? `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page: undefined
-                                  })}`
-                                : `${link}${encodeQueryData({
-                                      ...urlParam,
-                                      page
-                                  })}`
+                                  ? `${link}${encodeQueryData({
+                                        ...urlParam,
+                                        page: currentPage - 1
+                                    })}`
+                                  : page === 1
+                                    ? `${link}${encodeQueryData({
+                                          ...urlParam,
+                                          page: undefined
+                                      })}`
+                                    : `${link}${encodeQueryData({
+                                          ...urlParam,
+                                          page
+                                      })}`
                         }
                         title={
                             page === RIGHT_PAGE
                                 ? t('nextPage')
                                 : page === LEFT_PAGE
-                                ? t('prevPage')
-                                : `${t('page')} - ${page}`
+                                  ? t('prevPage')
+                                  : `${t('page')} - ${page}`
                         }
                         key={page}
                         onClick={(event) => {

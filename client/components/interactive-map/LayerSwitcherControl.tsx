@@ -1,10 +1,5 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
-
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
-import RadioButton from '@/ui/radio-button'
+import { useTranslation } from 'next-i18next'
 
 import {
     MapAdditionalLayers,
@@ -15,6 +10,11 @@ import {
     MapObjectsType
 } from './InteractiveMap'
 import styles from './styles.module.sass'
+
+import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
+import Container from '@/ui/container'
+import RadioButton from '@/ui/radio-button'
 
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
@@ -45,23 +45,16 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            layersContainerRef.current &&
-            !layersContainerRef.current.contains(event.target as Node)
-        ) {
+        if (layersContainerRef.current && !layersContainerRef.current.contains(event.target as Node)) {
             setOpen(false)
         }
     }
 
-    const handleSwitchMapLayer = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSwitchMapLayer = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSwitchMapLayer?.(event.target.id as MapLayersType)
     }
 
-    const handleSwitchMapType = (
-        event: React.ChangeEvent<HTMLInputElement>
-    ) => {
+    const handleSwitchMapType = (event: React.ChangeEvent<HTMLInputElement>) => {
         onSwitchMapType?.(event.target.id as MapObjectsType)
     }
 
@@ -120,13 +113,8 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                                 onChange={() =>
                                     onSwitchAdditionalLayers?.(
                                         additionalLayers?.includes(type)
-                                            ? additionalLayers?.filter(
-                                                  (layer) => layer !== type
-                                              )
-                                            : [
-                                                  ...(additionalLayers || []),
-                                                  type
-                                              ]
+                                            ? additionalLayers.filter((layer) => layer !== type)
+                                            : [...(additionalLayers || []), type]
                                     )
                                 }
                             />

@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface PaginationProps {
     className?: string
@@ -11,13 +11,9 @@ interface PaginationProps {
     children?: React.ReactNode
 }
 
-const Popout: React.FC<PaginationProps> = ({
-    className,
-    position,
-    action,
-    children
-}) => {
+const Popout: React.FC<PaginationProps> = ({ className, position, action, children }) => {
     const popoutRef = useRef<HTMLDivElement>(null)
+    const popoutChildrenRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
 
     const toggleDropdown = (event: React.MouseEvent) => {
@@ -27,10 +23,11 @@ const Popout: React.FC<PaginationProps> = ({
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            popoutRef.current &&
-            !popoutRef.current.contains(event.target as Node)
-        ) {
+        if (popoutRef.current && !popoutRef.current.contains(event.target as Node)) {
+            setIsOpen(false)
+        }
+
+        if (popoutChildrenRef.current && !popoutChildrenRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }
@@ -57,7 +54,9 @@ const Popout: React.FC<PaginationProps> = ({
 
             {isOpen && (
                 <div
+                    ref={popoutRef}
                     className={styles.content}
+                    onClick={() => setIsOpen(false)}
                     style={position === 'left' ? { left: 0 } : { right: 0 }}
                 >
                     {children}

@@ -1,21 +1,19 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
+import styles from './styles.module.sass'
+
+import { API } from '@/api/api'
+import { openAuthDialog } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+import { equalsArrays } from '@/functions/helpers'
 import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
 import Container from '@/ui/container'
 import ContentEditor from '@/ui/content-editor'
 import ScreenSpinner from '@/ui/screen-spinner'
-
-import { API } from '@/api/api'
-import { openAuthDialog } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-
-import { equalsArrays } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
     placeId?: string
@@ -23,11 +21,7 @@ interface PlaceDescriptionProps {
     tags?: string[]
 }
 
-const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
-    placeId,
-    content,
-    tags
-}) => {
+const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, tags }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeDescription'
     })
@@ -35,18 +29,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     const dispatch = useAppDispatch()
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [updatePlace, { data: saveData, isLoading, isSuccess }] =
-        API.usePlacesPatchItemMutation()
+    const [updatePlace, { data: saveData, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
 
-    const [searchTags, { data: searchResult, isLoading: searchLoading }] =
-        API.useTagsGetSearchMutation()
+    const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
 
     const [editorMode, setEditorMode] = useState<boolean>(false)
     const [editorTags, setEditorTags] = useState<string[]>()
     const [localTags, setLocalTags] = useState<string[]>()
-    const [localContent, setLocalContent] = useState<string | undefined>(
-        content
-    )
+    const [localContent, setLocalContent] = useState<string | undefined>(content)
 
     const handleSetEditorClick = () => {
         if (isAuth) {
@@ -62,7 +52,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     }
 
     const handleSearchTags = (value: string) => {
-        if (value?.length > 0) {
+        if (value.length > 0) {
             searchTags(value)
         }
     }
@@ -78,10 +68,10 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
     useEffect(() => {
         if (isSuccess && editorMode) {
             setEditorMode(false)
-            setLocalContent(saveData?.content)
+            setLocalContent(saveData.content)
 
-            if (saveData?.tags) {
-                setLocalTags(saveData?.tags)
+            if (saveData.tags) {
+                setLocalTags(saveData.tags)
             }
         }
     }, [saveData])
@@ -103,14 +93,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                 isAuth && editorMode ? (
                     <>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSaveEditorClick}
                         >
                             {t('buttonSave')}
                         </Button>
                         <Button
-                            mode={'secondary'}
+                            mode={'link'}
                             disabled={isLoading}
                             onClick={handleSetEditorClick}
                         >
@@ -119,7 +109,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
                     </>
                 ) : (
                     <Button
-                        icon={'Pencil'}
+                        mode={'link'}
                         onClick={handleSetEditorClick}
                     >
                         {t('buttonEdit')}
@@ -157,7 +147,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({
             ) : (
                 !!localTags?.length && (
                     <ul className={styles.tagList}>
-                        {localTags?.map((tag, i) => (
+                        {localTags.map((tag, i) => (
                             <li key={`tag${i}`}>
                                 <Link
                                     href={`/places?tag=${tag}`}

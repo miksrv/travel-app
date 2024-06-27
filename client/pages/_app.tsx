@@ -1,78 +1,93 @@
-import '@/styles/dark.css'
-import '@/styles/globals.sass'
-import '@/styles/light.css'
+import React, { useEffect } from 'react'
+import { Provider } from 'react-redux'
 import dayjs from 'dayjs'
-import 'dayjs/locale/ru'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
-import { appWithTranslation, useTranslation } from 'next-i18next'
-import { ThemeProvider } from 'next-themes'
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
-import React, { useEffect } from 'react'
-import { Provider } from 'react-redux'
+// import { useReportWebVitals } from 'next/web-vitals'
+import { appWithTranslation, useTranslation } from 'next-i18next'
+import { ThemeProvider, useTheme } from 'next-themes'
 
-import { wrapper } from '@/api/store'
-
-import * as LocalStorage from '@/functions/localstorage'
-import { LOCAL_STORAGE } from '@/functions/constants'
+import '@/styles/globals.sass'
+import 'dayjs/locale/ru'
+import '@/styles/dark.css'
+import '@/styles/light.css'
 
 import i18Config from '../next-i18next.config'
+
+import { wrapper } from '@/api/store'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import * as LocalStorage from '@/functions/localstorage'
 
 const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
 
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
     const { i18n } = useTranslation()
+    const { theme } = useTheme()
     const { store } = wrapper.useWrappedStore(pageProps)
 
     useEffect(() => {
-        if (
-            i18n?.language !== locale &&
-            i18Config.i18n.locales.includes(locale) &&
-            router.pathname !== '/404'
-        ) {
+        if (i18n.language !== locale && i18Config.i18n.locales.includes(locale) && router.pathname !== '/404') {
             router.replace(router.asPath, router.asPath, { locale })
         }
     }, [])
 
     dayjs.extend(utc)
     dayjs.extend(relativeTime)
-    dayjs.locale(i18n?.language ?? i18Config.i18n.defaultLocale)
+    dayjs.locale(i18n.language ?? i18Config.i18n.defaultLocale)
+
+    // useReportWebVitals((metric) => {
+    //     console.log(metric)
+    // })
 
     return (
         <ThemeProvider>
             <Head>
                 <meta
-                    name='viewport'
-                    content='width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no'
+                    name={'apple-mobile-web-app-capable'}
+                    content={'yes'}
+                />
+                <meta
+                    name={'apple-mobile-web-app-status-bar-style'}
+                    content={theme === 'dark' ? 'black-translucent' : 'default'}
+                />
+                <meta
+                    name={'theme-color'}
+                    content={theme === 'dark' ? '#1b1b1b' : '#ebedf0'}
+                    media={`(prefers-color-scheme: ${theme === 'dark' ? 'dark' : 'light'})`}
+                />
+                <meta
+                    name={'viewport'}
+                    content={'width=device-width, initial-scale=1, maximum-scale=1, shrink-to-fit=no'}
                 />
                 <link
-                    rel='apple-touch-icon'
-                    sizes='180x180'
-                    href='/apple-touch-icon.png'
+                    rel={'apple-touch-icon'}
+                    sizes={'180x180'}
+                    href={'/apple-touch-icon.png'}
                 />
                 <link
-                    rel='icon'
-                    type='image/png'
-                    sizes='32x32'
-                    href='/favicon-32x32.png'
+                    rel={'icon'}
+                    type={'image/png'}
+                    sizes={'32x32'}
+                    href={'/favicon-32x32.png'}
                 />
                 <link
-                    rel='icon'
-                    type='image/png'
-                    sizes='16x16'
-                    href='/favicon-16x16.png'
+                    rel={'icon'}
+                    type={'image/png'}
+                    sizes={'16x16'}
+                    href={'/favicon-16x16.png'}
                 />
                 <link
-                    rel='icon'
-                    href='/favicon.ico'
-                    type='image/x-icon'
+                    rel={'icon'}
+                    href={'/favicon.ico'}
+                    type={'image/x-icon'}
                 />
                 <link
-                    rel='manifest'
-                    href='/site.webmanifest'
+                    rel={'manifest'}
+                    href={'/site.webmanifest'}
                 />
             </Head>
 

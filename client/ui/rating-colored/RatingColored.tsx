@@ -2,9 +2,9 @@
 
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface RatingColoredProps {
     className?: string
@@ -12,11 +12,7 @@ interface RatingColoredProps {
     children?: React.ReactNode
 }
 
-const RatingColored: React.FC<RatingColoredProps> = ({
-    className,
-    value,
-    children
-}) =>
+const RatingColored: React.FC<RatingColoredProps> = ({ className, value, children }) =>
     value ? (
         <div
             className={cn(className, styles.ratingColored)}
@@ -28,13 +24,8 @@ const RatingColored: React.FC<RatingColoredProps> = ({
         <></>
     )
 
-const interpolateColor = (
-    value: number,
-    startColor: string,
-    endColor: string
-): string => {
-    const rgb = (color: any) =>
-        color.match(/\w\w/g).map((x: any) => parseInt(x, 16))
+const interpolateColor = (value: number, startColor: string, endColor: string): string => {
+    const rgb = (color: any) => color.match(/\w\w/g).map((x: string) => parseInt(x, 16))
 
     const [startR, startG, startB] = rgb(startColor)
     const [endR, endG, endB] = rgb(endColor)

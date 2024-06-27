@@ -1,11 +1,10 @@
-import type { Action, PayloadAction } from '@reduxjs/toolkit'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { encodeQueryData } from '@/functions/helpers'
+import type { Action, PayloadAction } from '@reduxjs/toolkit'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type Maybe<T> = T | void
 
@@ -15,17 +14,12 @@ type APIErrorType = {
     }
 }
 
-export const IMG_HOST =
-    process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
-
+export const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
 export const SITE_LINK = process.env.NEXT_PUBLIC_SITE_LINK
 
-const isHydrateAction = (action: Action): action is PayloadAction<RootState> =>
-    action.type === HYDRATE
+const isHydrateAction = (action: Action): action is PayloadAction<RootState> => action.type === HYDRATE
 
-export const isApiValidationErrors = <T>(
-    response: unknown
-): response is ApiTypes.ApiResponseError<T> =>
+export const isApiValidationErrors = <T>(response: unknown): response is ApiTypes.ApiResponseError<T> =>
     typeof response === 'object' &&
     response != null &&
     'messages' in response &&
@@ -72,21 +66,14 @@ export const API = createApi({
             //         currentCache.items = newItems.items
             //     }
             // },
-            providesTags: (result, error, arg) => [
-                { id: arg?.author ?? arg?.place, type: 'Activity' }
-            ],
+            providesTags: (result, error, arg) => [{ id: arg?.author ?? arg?.place, type: 'Activity' }],
             query: (params) => `activity${encodeQueryData(params)}`
             // Only have one cache entry because the arg always maps to one string
             // serializeQueryArgs: ({ endpointName, queryArgs }) =>
             //     queryArgs?.author ?? queryArgs?.place ?? endpointName
         }),
-        activityGetList: builder.query<
-            ApiTypes.ResponseActivityGetList,
-            Maybe<ApiTypes.RequestActivityGetList>
-        >({
-            providesTags: (result, error, arg) => [
-                { id: arg?.place || arg?.author, type: 'Activity' }
-            ],
+        activityGetList: builder.query<ApiTypes.ResponseActivityGetList, Maybe<ApiTypes.RequestActivityGetList>>({
+            providesTags: (result, error, arg) => [{ id: arg?.place || arg?.author, type: 'Activity' }],
             query: (params) => `activity${encodeQueryData(params)}`
         }),
 
@@ -95,18 +82,11 @@ export const API = createApi({
             providesTags: ['Profile'],
             query: () => 'auth/me'
         }),
-        authLoginService: builder.mutation<
-            ApiTypes.ResponseAuthLogin,
-            ApiTypes.RequestAuthService
-        >({
-            query: ({ service, code }) =>
-                `auth/${service}${code ? `?code=${code}` : ''}`,
+        authLoginService: builder.mutation<ApiTypes.ResponseAuthLogin, ApiTypes.RequestAuthService>({
+            query: ({ service, code }) => `auth/${service}${code ? `?code=${code}` : ''}`,
             transformErrorResponse: (response) => response.data
         }),
-        authPostLogin: builder.mutation<
-            ApiTypes.ResponseAuthLogin,
-            ApiTypes.RequestAuthLogin
-        >({
+        authPostLogin: builder.mutation<ApiTypes.ResponseAuthLogin, ApiTypes.RequestAuthLogin>({
             query: (credentials) => ({
                 body: credentials,
                 method: 'POST',
@@ -114,10 +94,7 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        authPostRegistration: builder.mutation<
-            ApiTypes.ResponseAuthLogin,
-            ApiTypes.RequestAuthRegistration
-        >({
+        authPostRegistration: builder.mutation<ApiTypes.ResponseAuthLogin, ApiTypes.RequestAuthRegistration>({
             query: (credentials) => ({
                 body: credentials,
                 method: 'POST',
@@ -127,19 +104,12 @@ export const API = createApi({
         }),
 
         /* Controller: Bookmarks */
-        bookmarksGetPlace: builder.query<
-            ApiTypes.ResponseBookmarkGetCheck,
-            ApiTypes.RequestBookmarkGetCheck
-        >({
-            providesTags: (res, err, arg) => [
-                { id: arg.placeId, type: 'Bookmarks' }
-            ],
+        bookmarksGetPlace: builder.query<ApiTypes.ResponseBookmarkGetCheck, ApiTypes.RequestBookmarkGetCheck>({
+            providesTags: (res, err, arg) => [{ id: arg.placeId, type: 'Bookmarks' }],
             query: (params) => `bookmarks${encodeQueryData(params)}`
         }),
         bookmarksPutPlace: builder.mutation<void, ApiTypes.RequestBookmarkSet>({
-            invalidatesTags: (res, err, arg) => [
-                { id: arg.placeId, type: 'Bookmarks' }
-            ],
+            invalidatesTags: (res, err, arg) => [{ id: arg.placeId, type: 'Bookmarks' }],
             query: (data) => ({
                 body: data,
                 method: 'PUT',
@@ -149,18 +119,12 @@ export const API = createApi({
         }),
 
         /* Controller: Categories */
-        categoriesGetList: builder.query<
-            ApiTypes.ResponseCategoriesGetList,
-            Maybe<ApiTypes.RequestCategoriesGetList>
-        >({
+        categoriesGetList: builder.query<ApiTypes.ResponseCategoriesGetList, Maybe<ApiTypes.RequestCategoriesGetList>>({
             query: (params) => `categories${encodeQueryData(params)}`
         }),
 
         /* Controller: Comments */
-        commentsGetList: builder.query<
-            ApiTypes.ResponseCommentsGetList,
-            Maybe<ApiTypes.RequestCommentsGetList>
-        >({
+        commentsGetList: builder.query<ApiTypes.ResponseCommentsGetList, Maybe<ApiTypes.RequestCommentsGetList>>({
             providesTags: ['Comments'],
             query: (params) => `comments${encodeQueryData(params)}`
         }),
@@ -180,28 +144,16 @@ export const API = createApi({
         }),
 
         /* Controller: Location */
-        locationGetByType: builder.query<
-            ApiTypes.ResponseLocationGetByType,
-            ApiTypes.RequestLocationGetByType
-        >({
+        locationGetByType: builder.query<ApiTypes.ResponseLocationGetByType, ApiTypes.RequestLocationGetByType>({
             query: (params) => `location/${params.id}?type=${params.type}`
         }),
-        locationGetGeosearch: builder.mutation<
-            ApiTypes.ResponseLocationGetGeoSearch,
-            Maybe<string>
-        >({
+        locationGetGeosearch: builder.mutation<ApiTypes.ResponseLocationGetGeoSearch, Maybe<string>>({
             query: (searchString) => `location/geosearch?text=${searchString}`
         }),
-        locationGetSearch: builder.mutation<
-            ApiTypes.ResponseLocationGetSearch,
-            Maybe<string>
-        >({
+        locationGetSearch: builder.mutation<ApiTypes.ResponseLocationGetSearch, Maybe<string>>({
             query: (searchString) => `location/search?text=${searchString}`
         }),
-        locationPutCoordinates: builder.mutation<
-            void,
-            Maybe<ApiTypes.LatLonCoordinate>
-        >({
+        locationPutCoordinates: builder.mutation<void, Maybe<ApiTypes.LatLonCoordinate>>({
             query: (params) => ({
                 body: params,
                 method: 'PUT',
@@ -221,45 +173,31 @@ export const API = createApi({
             ApiTypes.ResponseNotificationsGet,
             Maybe<ApiTypes.RequestNotificationsGetList>
         >({
-            forceRefetch: ({ currentArg, previousArg }) =>
-                currentArg !== previousArg,
+            forceRefetch: ({ currentArg, previousArg }) => currentArg !== previousArg,
             merge: (currentCache, newItems, { arg }) => {
-                if (
-                    (arg?.offset as number) === 0 &&
-                    newItems?.count === 0 &&
-                    currentCache.items
-                ) {
+                if ((arg?.offset as number) === 0 && newItems.count === 0 && currentCache.items) {
                     currentCache.items.length = 0
                 } else {
-                    currentCache.items?.push(...(newItems?.items || []))
+                    currentCache.items?.push(...(newItems.items ?? []))
                 }
             },
             providesTags: ['Notifications'],
             query: (params) => `notifications/list${encodeQueryData(params)}`,
             serializeQueryArgs: ({ endpointName }) => endpointName
         }),
-        notificationsGetUpdates: builder.query<
-            ApiTypes.ResponseNotificationsGet,
-            void
-        >({
+        notificationsGetUpdates: builder.query<ApiTypes.ResponseNotificationsGet, void>({
             providesTags: ['Notifications'],
             query: () => 'notifications/updates'
         }),
 
         /* Controller: Photos */
-        photoDeleteItem: builder.mutation<
-            ApiTypes.ResponsePhotoDeleteItem,
-            string
-        >({
+        photoDeleteItem: builder.mutation<ApiTypes.ResponsePhotoDeleteItem, string>({
             query: (photoId) => ({
                 method: 'DELETE',
                 url: `photos/${photoId}`
             })
         }),
-        photoPostUpload: builder.mutation<
-            ApiTypes.ResponsePhotoPostUpload,
-            ApiTypes.RequestPhotoPostUpload
-        >({
+        photoPostUpload: builder.mutation<ApiTypes.ResponsePhotoPostUpload, ApiTypes.RequestPhotoPostUpload>({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.place, type: 'Photos' },
                 { id: arg.place, type: 'Activity' },
@@ -272,66 +210,40 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        photoRotateItem: builder.mutation<
-            ApiTypes.ResponsePhotoRotateItem,
-            string
-        >({
+        photoRotateItem: builder.mutation<ApiTypes.ResponsePhotoRotateItem, string>({
             query: (photoId) => ({
                 method: 'PATCH',
                 url: `photos/rotate/${photoId}`
             })
         }),
-        photosGetList: builder.query<
-            ApiTypes.ResponsePhotosGetList,
-            Maybe<ApiTypes.RequestPhotosGetList>
-        >({
-            providesTags: (result, error, arg) => [
-                { id: arg?.place, type: 'Photos' }
-            ],
+        photosGetList: builder.query<ApiTypes.ResponsePhotosGetList, Maybe<ApiTypes.RequestPhotosGetList>>({
+            providesTags: (result, error, arg) => [{ id: arg?.place, type: 'Photos' }],
             query: (params) => `photos${encodeQueryData(params)}`
         }),
 
         /* Controller: Places */
-        placesGetItem: builder.query<
-            ApiTypes.ResponsePlacesGetItem,
-            ApiTypes.RequestPlacesGetItem
-        >({
-            providesTags: (result, error, arg) => [
-                { id: arg.id, type: 'Places' }
-            ],
+        placesGetItem: builder.query<ApiTypes.ResponsePlacesGetItem, ApiTypes.RequestPlacesGetItem>({
+            providesTags: (result, error, arg) => [{ id: arg.id, type: 'Places' }],
             query: (params) =>
                 `places/${params.id}${encodeQueryData({
                     ...params,
                     id: undefined
                 })}`
         }),
-        placesGetList: builder.query<
-            ApiTypes.ResponsePlacesGetList,
-            Maybe<ApiTypes.RequestPlacesGetList>
-        >({
+        placesGetList: builder.query<ApiTypes.ResponsePlacesGetList, Maybe<ApiTypes.RequestPlacesGetList>>({
             providesTags: ['Places'],
             query: (params) => `places${encodeQueryData(params)}`
         }),
-        placesPatchCover: builder.mutation<
-            void,
-            ApiTypes.RequestPlacesPatchCover
-        >({
-            invalidatesTags: (res, err, arg) => [
-                { id: arg.placeId, type: 'Places' },
-                { type: 'Notifications' }
-            ],
+        placesPatchCover: builder.mutation<void, ApiTypes.RequestPlacesPatchCover>({
+            invalidatesTags: (res, err, arg) => [{ id: arg.placeId, type: 'Places' }, { type: 'Notifications' }],
             query: (data) => ({
                 body: data,
                 method: 'PATCH',
                 url: `places/cover/${data.placeId}`
             }),
-            transformErrorResponse: (response) =>
-                (response.data as APIErrorType)?.messages?.error
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
-        placesPatchItem: builder.mutation<
-            ApiTypes.ResponsePlacesPatchItem,
-            ApiTypes.RequestPlacesPostItem
-        >({
+        placesPatchItem: builder.mutation<ApiTypes.ResponsePlacesPatchItem, ApiTypes.RequestPlacesPostItem>({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.id, type: 'Places' },
                 { type: 'Activity' },
@@ -344,15 +256,8 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        placesPostItem: builder.mutation<
-            ApiTypes.ResponsePlacesPostItem,
-            Omit<ApiTypes.RequestPlacesPostItem, 'id'>
-        >({
-            invalidatesTags: [
-                { type: 'Places' },
-                { type: 'Activity' },
-                { type: 'Notifications' }
-            ],
+        placesPostItem: builder.mutation<ApiTypes.ResponsePlacesPostItem, Omit<ApiTypes.RequestPlacesPostItem, 'id'>>({
+            invalidatesTags: [{ type: 'Places' }, { type: 'Activity' }, { type: 'Notifications' }],
             query: (data) => ({
                 body: data,
                 method: 'POST',
@@ -365,10 +270,7 @@ export const API = createApi({
         poiGetItem: builder.mutation<ApiTypes.ResponsePoiItem, string>({
             query: (item) => `poi/${item}`
         }),
-        poiGetList: builder.query<
-            ApiTypes.ResponsePoiPlacesList,
-            Maybe<ApiTypes.RequestPoiList>
-        >({
+        poiGetList: builder.query<ApiTypes.ResponsePoiPlacesList, Maybe<ApiTypes.RequestPoiList>>({
             query: (params) => `poi${encodeQueryData(params)}`
         }),
         poiGetPhotoList: builder.query<
@@ -386,15 +288,8 @@ export const API = createApi({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         }),
-        ratingPutScore: builder.mutation<
-            ApiTypes.ResponseRatingSet,
-            ApiTypes.RequestRatingSet
-        >({
-            invalidatesTags: [
-                { type: 'Rating' },
-                { type: 'Activity' },
-                { type: 'Notifications' }
-            ],
+        ratingPutScore: builder.mutation<ApiTypes.ResponseRatingSet, ApiTypes.RequestRatingSet>({
+            invalidatesTags: [{ type: 'Rating' }, { type: 'Activity' }, { type: 'Notifications' }],
             query: (data) => ({
                 body: data,
                 method: 'PUT',
@@ -412,10 +307,7 @@ export const API = createApi({
         tagsGetList: builder.query<ApiTypes.ResponseTagsGetList, void>({
             query: () => 'tags'
         }),
-        tagsGetSearch: builder.mutation<
-            ApiTypes.ResponseTagsGetSearch,
-            Maybe<string>
-        >({
+        tagsGetSearch: builder.mutation<ApiTypes.ResponseTagsGetSearch, Maybe<string>>({
             query: (searchString) => `tags/search?text=${searchString}`
         }),
 
@@ -424,17 +316,11 @@ export const API = createApi({
             providesTags: ['Users'],
             query: (item) => `users/${item}`
         }),
-        usersGetList: builder.query<
-            ApiTypes.ResponseUsersGetList,
-            Maybe<ApiTypes.RequestUsersGetList>
-        >({
+        usersGetList: builder.query<ApiTypes.ResponseUsersGetList, Maybe<ApiTypes.RequestUsersGetList>>({
             providesTags: ['Users'],
             query: (params) => `users${encodeQueryData(params)}`
         }),
-        usersPatchCropAvatar: builder.mutation<
-            ApiTypes.ResponseUsersCropAvatar,
-            ApiTypes.RequestUsersCropAvatar
-        >({
+        usersPatchCropAvatar: builder.mutation<ApiTypes.ResponseUsersCropAvatar, ApiTypes.RequestUsersCropAvatar>({
             invalidatesTags: () => ['Users', 'Profile'],
             query: (data) => ({
                 body: data,
@@ -444,10 +330,7 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         }),
         usersPatchProfile: builder.mutation<void, ApiTypes.RequestUsersPatch>({
-            invalidatesTags: (res, err, arg) => [
-                { id: arg.id, type: 'Users' },
-                { type: 'Users' }
-            ],
+            invalidatesTags: (res, err, arg) => [{ id: arg.id, type: 'Users' }, { type: 'Users' }],
             query: (data) => ({
                 body: data,
                 method: 'PATCH',
@@ -455,10 +338,7 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        usersPostUploadAvatar: builder.mutation<
-            ApiTypes.ResponseUserUploadAvatar,
-            any
-        >({
+        usersPostUploadAvatar: builder.mutation<ApiTypes.ResponseUserUploadAvatar, any>({
             query: (data) => ({
                 body: data.formData,
                 method: 'POST',
@@ -468,20 +348,12 @@ export const API = createApi({
         }),
 
         /* Controller: Visited */
-        visitedGetUsersList: builder.query<
-            ApiTypes.ResponseVisitedUsersList,
-            string
-        >({
-            providesTags: (result, error, arg) => [
-                { id: arg, type: 'Visited' }
-            ],
+        visitedGetUsersList: builder.query<ApiTypes.ResponseVisitedUsersList, string>({
+            providesTags: (result, error, arg) => [{ id: arg, type: 'Visited' }],
             query: (item) => `visited/${item}`
         }),
         visitedPutPlace: builder.mutation<void, ApiTypes.RequestVisitedSet>({
-            invalidatesTags: (res, err, arg) => [
-                { id: arg.place, type: 'Visited' },
-                { type: 'Notifications' }
-            ],
+            invalidatesTags: (res, err, arg) => [{ id: arg.place, type: 'Visited' }, { type: 'Notifications' }],
             query: (data) => ({
                 body: data,
                 method: 'PUT',

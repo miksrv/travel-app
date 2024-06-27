@@ -1,111 +1,150 @@
 @import ../../../styles/variables
 
 .headerPanel
-  position: absolute
-  top: 0
-  left: 0
-  display: flex
-  width: 100%
-  padding: 15px
-
-.component
-  margin-top: 15px
-  border-radius: var(--border-radius)
-  position: relative
-  box-shadow: var(--container-shadow)
-
-  .image
-    border-top-left-radius: var(--border-radius)
-    border-top-right-radius: var(--border-radius)
-    width: 100%
-    height: 300px
-    background-image: url('/images/no-image.svg')
-    background-position: center
-    background-size: cover
-    overflow: hidden
-
-    @media only screen and (max-width: $mobileMaxWidth)
-      height: 240px
-
-    & > div
-      width: 100%
-      height: 100%
-      background-position: center
-      background-repeat: no-repeat
-      background-size: cover
-      filter: blur(0) brightness(90%)
-      -webkit-filter: blur(0) brightness(90%)
-
-      &:before
-        border-radius: inherit
-        box-shadow: var(--container-shadow)
-        content: ""
-        height: 100%
-        left: 0
-        pointer-events: none
-        position: absolute
-        top: 0
-        width: 100%
-
-    .desktop
-      display: block
-
-    .mobile
-      display: none
-
-    @media only screen and (max-width: $mobileMaxWidth)
-      .desktop
-        display: none
-
-      .mobile
-        display: block
-
-  .topPanel
-    @extend .headerPanel
-    justify-content: space-between
-
-    .backLink
-      border-radius: 50%
-      width: 32px
-      height: 32px
-      background-color: #ffffff
-      transition: opacity .15s ease-out
-      opacity: 0
-
-      svg
-        width: 28px
-        height: 28px
-        fill: #737373
-        position: absolute
-
-      &:hover
-        opacity: .9
-
-  .bottomPanel
-    @extend .headerPanel
-    top: auto
-    bottom: 60px
+    position: absolute
+    top: 0
+    left: 0
     display: flex
-    justify-content: space-between
-    align-items: flex-end
+    width: 100%
+    padding: 15px
 
-    & > div
-      display: flex
+.placeHeader
+    margin-top: 15px
+    border-radius: var(--border-radius)
+    position: relative
+    box-shadow: var(--container-shadow)
 
-  .rating
-    .value
-      font-size: 2em
-      font-weight: 600
-      text-align: center
-      margin-bottom: -5px
-      color: #FFF
+    .image
+        border-top-left-radius: var(--border-radius)
+        border-top-right-radius: var(--border-radius)
+        width: 100%
+        height: 300px
+        background-image: url('/images/no-image.svg')
+        background-position: center
+        background-size: cover
+        overflow: hidden
 
-    .count
-      color: #FFF
-      text-align: center
-      font-size: $fontSizeCaption
-      white-space: nowrap
+        @media only screen and (max-width: $mobileMaxWidth)
+            height: 240px
 
-  &:hover
-    .backLink
-      opacity: .6
+        & > div
+            width: 100%
+            height: 100%
+            background-position: center
+            background-repeat: no-repeat
+            background-size: cover
+            //filter: blur(0) brightness(90%)
+            //-webkit-filter: blur(0) brightness(90%)
+
+            &:before
+                border-radius: inherit
+                box-shadow: var(--container-shadow)
+                content: ""
+                height: 100%
+                left: 0
+                pointer-events: none
+                position: absolute
+                top: 0
+                width: 100%
+
+        .desktop
+            display: block
+
+        .mobile
+            display: none
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            .desktop
+                display: none
+
+            .mobile
+                display: block
+
+    .topPanel
+        @extend .headerPanel
+        justify-content: space-between
+
+        .backLink
+            border-radius: 50%
+            width: 32px
+            height: 32px
+            background-color: var(--modal-background)
+            transition: opacity .15s ease-out
+            opacity: 0
+
+            svg
+                width: 28px
+                height: 28px
+                fill: #737373
+                position: absolute
+
+            &:hover
+                opacity: .9
+
+            @media only screen and (max-width: $mobileMaxWidth)
+                opacity: .9
+
+        .actionButtons
+            display: flex
+            justify-content: space-between
+
+            button
+                margin-left: 10px
+
+        .contextMenu
+            button
+                background-color: var(--button-secondary-background)
+                color: var(--button-secondary-color)
+                border-radius: var(--border-radius)
+                padding: 8px 6px
+                height: 34px
+                width: 38px
+                display: flex
+                align-items: center
+                justify-content: center
+
+            svg
+                width: 22px
+                height: 22px
+                fill: #737373
+
+    .bottomPanel
+        @extend .placeBottomPanel
+
+        h1
+            font-size: 20px
+            text-overflow: ellipsis
+            overflow: hidden
+            color: #FFF
+
+        .address
+            font-size: $fontSizeHeadline
+            opacity: .8
+            color: #FFF
+
+            a
+                color: inherit
+
+        .buttonsPanel
+            display: flex
+
+            button
+                margin-left: 10px
+
+    .rating
+        .value
+            font-size: 2em
+            font-weight: 600
+            text-align: center
+            margin-bottom: -5px
+            color: #FFF
+
+        .count
+            color: #FFF
+            text-align: center
+            font-size: $fontSizeCaption
+            white-space: nowrap
+
+    &:hover
+        .backLink
+            opacity: .6

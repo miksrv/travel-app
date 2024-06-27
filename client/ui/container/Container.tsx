@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
@@ -13,15 +13,7 @@ export interface ContainerProps extends React.HTMLAttributes<HTMLDivElement> {
     footer?: React.ReactNode
 }
 
-const Container: React.FC<ContainerProps> = ({
-    className,
-    title,
-    action,
-    header,
-    children,
-    footer,
-    ...props
-}) => (
+const Container: React.FC<ContainerProps> = ({ className, title, action, header, children, footer, ...props }) => (
     <section
         {...props}
         className={cn(className, styles.container)}

@@ -1,18 +1,15 @@
+import React from 'react'
 import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-
-import { User } from '@/api/types/User'
-
-import UserAvatar from '@/components/user-avatar'
-
-import { levelImage } from '@/functions/userLevels'
 
 import styles from './styles.module.sass'
+
+import { User } from '@/api/types/User'
+import UserAvatar from '@/components/user-avatar'
+import { levelImage } from '@/functions/userLevels'
+import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 
 interface UserMenuProps {
     user?: User
@@ -34,10 +31,10 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
         <div className={styles.userInfo}>
             <div className={styles.userName}>{user?.name}</div>
             <div>
-                [<b>{user?.level?.level}</b>]{' '}
+                [<b>{user?.levelData?.level}</b>]{' '}
                 <Image
                     className={styles.levelImage}
-                    src={levelImage(user?.level?.level)?.src}
+                    src={levelImage(user?.levelData?.level).src}
                     alt={''}
                     width={20}
                     height={20}
@@ -46,15 +43,12 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, translate }) => (
                     href={'/users/levels'}
                     title={''}
                 >
-                    {user?.level?.title}
+                    {user?.levelData?.title}
                 </Link>
             </div>
-            <div>
-                До нового уровня:{' '}
-                {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
-            </div>
+            <div>До нового уровня: {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}</div>
         </div>
-        <ul className={styles.userMenu}>
+        <ul className={'contextListMenu'}>
             <li>
                 <Link
                     href={`/users/${user?.id}`}

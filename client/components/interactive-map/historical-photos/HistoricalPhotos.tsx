@@ -1,15 +1,14 @@
 'use client'
 
-import Leaflet from 'leaflet'
 import React from 'react'
 import { Marker } from 'react-leaflet'
+import Leaflet from 'leaflet'
+
+import styles from './styles.module.sass'
 
 import { APIPastvu } from '@/api/apiPastvu'
 import { Placemark } from '@/api/types'
-
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
-
-import styles from './styles.module.sass'
 
 type HistoricalPhotosProps = {
     position?: MapPositionType
@@ -18,25 +17,21 @@ type HistoricalPhotosProps = {
 
 const IMG_HOST = 'https://pastvu.com/_p'
 
-const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
-    position,
-    onPhotoClick
-}) => {
+const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({ position, onPhotoClick }) => {
     const { data: photosData } = APIPastvu.useNearestGetPhotosQuery(
         {
-            lat: position?.lat!,
-            lon: position?.lon!
+            lat: position?.lat ?? 0,
+            lon: position?.lon ?? 0
         },
-        { skip: !position?.lat || !position?.lon }
+        { skip: !position?.lat || !position.lon }
     )
 
-    const photoUrl = (file: string, full?: boolean) =>
-        `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
+    const photoUrl = (file: string, full?: boolean) => `${IMG_HOST}/${full ? 'a' : 'h'}/${file}`
 
-    return photosData?.result?.photos?.length ? (
-        photosData?.result?.photos?.map((photo, index) => (
+    return photosData?.result.photos.length ? (
+        photosData.result.photos.map((photo, index) => (
             <Marker
-                key={photo?.cid}
+                key={photo.cid}
                 position={[photo.geo[0], photo.geo[1]]}
                 icon={
                     new Leaflet.Icon({
@@ -51,14 +46,12 @@ const HistoricalPhotos: React.FC<HistoricalPhotosProps> = ({
                 eventHandlers={{
                     click: () => {
                         onPhotoClick?.(
-                            photosData?.result?.photos?.map((item) => ({
+                            photosData.result.photos.map((item) => ({
                                 full: photoUrl(item.file, true),
                                 lat: item.geo[0],
                                 lon: item.geo[1],
                                 preview: photoUrl(item.file),
-                                title: `${item.title}${
-                                    item.year ? ` (${item.year})` : ''
-                                }`
+                                title: `${item.title}${item.year ? ` (${item.year})` : ''}`
                             })),
                             index
                         )

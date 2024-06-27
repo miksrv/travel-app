@@ -1,23 +1,19 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button, { ButtonProps } from '@/ui/button'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-
-import styles from './styles.module.sass'
+import Button, { ButtonProps } from '@/ui/button'
 
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({
-    placeId,
-    ...props
-}) => {
+const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation('common', {
         keyPrefix: 'components.bookmarkButton'
@@ -25,19 +21,15 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
 
     const [buttonPushed, setButtonPushed] = useState<boolean>(false)
 
-    const isAuth = useAppSelector((state) => state.auth?.isAuth)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [setBookmark, { isLoading: bookmarkPutLoading, data: result }] =
-        API.useBookmarksPutPlaceMutation()
+    const [setBookmark, { isLoading: bookmarkPutLoading, data: result }] = API.useBookmarksPutPlaceMutation()
 
     const {
         data: bookmarkData,
         isLoading: bookmarksLoading,
         isFetching
-    } = API.useBookmarksGetPlaceQuery(
-        { placeId: placeId! },
-        { skip: !placeId || !isAuth }
-    )
+    } = API.useBookmarksGetPlaceQuery({ placeId: placeId! }, { skip: !placeId || !isAuth })
 
     const loading = bookmarkPutLoading || bookmarksLoading || isFetching
 
@@ -60,9 +52,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({
         dispatch(
             Notify({
                 id: 'bookmarkButton',
-                message: bookmarkData?.result
-                    ? t('bookmarkResultRemove')
-                    : t('bookmarkResultAdd'),
+                message: bookmarkData?.result ? t('bookmarkResultRemove') : t('bookmarkResultAdd'),
                 type: 'success'
             })
         )

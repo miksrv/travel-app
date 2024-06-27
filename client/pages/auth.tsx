@@ -1,22 +1,20 @@
+import React, { useEffect, useState } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import { useSearchParams } from 'next/navigation'
-import React, { useEffect } from 'react'
-
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
-import * as LocalStorage from '@/functions/localstorage'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import * as LocalStorage from '@/functions/localstorage'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 interface AuthPageProps {}
 
@@ -30,6 +28,11 @@ const AuthPage: NextPage<AuthPageProps> = () => {
         keyPrefix: 'pages.auth'
     })
 
+    const service = searchParams.get('service')
+    const code = searchParams.get('code')
+
+    const [isProcessing, setIsProcessing] = useState<boolean>(false)
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [serviceLogin, { data }] = API.useAuthLoginServiceMutation()
@@ -41,7 +44,8 @@ const AuthPage: NextPage<AuthPageProps> = () => {
     })
 
     useEffect(() => {
-        if (data?.auth === true) {
+        if (data?.auth === true && !isProcessing) {
+            setIsProcessing(true)
             dispatch(login(data))
 
             if (returnPath) {
@@ -57,15 +61,15 @@ const AuthPage: NextPage<AuthPageProps> = () => {
     }, [data])
 
     useEffect(() => {
-        const service = searchParams.get('service') as ApiTypes.AuthServiceType
-        const code = searchParams.get('code')
-
         if (code && service) {
-            serviceLogin({ code, service })
+            serviceLogin({
+                code,
+                service: service as ApiTypes.AuthServiceType
+            })
         } else {
             router.push('/')
         }
-    }, [searchParams])
+    }, [])
 
     return (
         <>

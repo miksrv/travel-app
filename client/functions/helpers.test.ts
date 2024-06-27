@@ -91,9 +91,7 @@ describe('helpers', () => {
                 'special key': 'value with spaces'
             }
             const result = helpers.encodeQueryData(data)
-            expect(result).toBe(
-                '?another%26key=value%2Fwith%3Fspecial%23chars&special%20key=value%20with%20spaces'
-            )
+            expect(result).toBe('?another%26key=value%2Fwith%3Fspecial%23chars&special%20key=value%20with%20spaces')
         })
 
         it('ignores keys with undefined or null values', () => {
@@ -191,36 +189,24 @@ describe('helpers', () => {
         })
 
         it('returns true if both arrays contain the same elements in the same order', () => {
-            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'c'])).toBe(
-                true
-            )
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'c'])).toBe(true)
         })
 
         it('returns true if both arrays contain the same elements in different orders', () => {
-            expect(helpers.equalsArrays(['a', 'b', 'c'], ['c', 'b', 'a'])).toBe(
-                true
-            )
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['c', 'b', 'a'])).toBe(true)
         })
 
         it('returns false if arrays contain different elements', () => {
-            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'd'])).toBe(
-                false
-            )
-            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b'])).toBe(
-                false
-            )
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'd'])).toBe(false)
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b'])).toBe(false)
         })
 
         it('returns false if arrays contain the same elements with different lengths', () => {
-            expect(
-                helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'c', 'd'])
-            ).toBe(false)
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'b', 'c', 'd'])).toBe(false)
         })
 
         it('returns false if arrays contain duplicate elements in one array but not the other', () => {
-            expect(
-                helpers.equalsArrays(['a', 'b', 'c'], ['a', 'a', 'b', 'c'])
-            ).toBe(false)
+            expect(helpers.equalsArrays(['a', 'b', 'c'], ['a', 'a', 'b', 'c'])).toBe(false)
         })
 
         it('returns true for arrays with different references but same content', () => {
@@ -232,42 +218,24 @@ describe('helpers', () => {
 
     describe('removeProtocolFromUrl', () => {
         it('removes http protocol from url', () => {
-            expect(helpers.removeProtocolFromUrl('http://example.com')).toBe(
-                'example.com'
-            )
-            expect(
-                helpers.removeProtocolFromUrl('http://www.example.com')
-            ).toBe('www.example.com')
+            expect(helpers.removeProtocolFromUrl('http://example.com')).toBe('example.com')
+            expect(helpers.removeProtocolFromUrl('http://www.example.com')).toBe('www.example.com')
         })
 
         it('removes https protocol from url', () => {
-            expect(helpers.removeProtocolFromUrl('https://example.com')).toBe(
-                'example.com'
-            )
-            expect(
-                helpers.removeProtocolFromUrl('https://www.example.com')
-            ).toBe('www.example.com')
+            expect(helpers.removeProtocolFromUrl('https://example.com')).toBe('example.com')
+            expect(helpers.removeProtocolFromUrl('https://www.example.com')).toBe('www.example.com')
         })
 
         it('does not alter urls without http or https protocol', () => {
-            expect(helpers.removeProtocolFromUrl('ftp://example.com')).toBe(
-                'ftp://example.com'
-            )
-            expect(helpers.removeProtocolFromUrl('www.example.com')).toBe(
-                'www.example.com'
-            )
-            expect(helpers.removeProtocolFromUrl('example.com')).toBe(
-                'example.com'
-            )
+            expect(helpers.removeProtocolFromUrl('ftp://example.com')).toBe('ftp://example.com')
+            expect(helpers.removeProtocolFromUrl('www.example.com')).toBe('www.example.com')
+            expect(helpers.removeProtocolFromUrl('example.com')).toBe('example.com')
         })
 
         it('handles urls with mixed case protocols', () => {
-            expect(helpers.removeProtocolFromUrl('Http://example.com')).toBe(
-                'Http://example.com'
-            )
-            expect(helpers.removeProtocolFromUrl('Https://example.com')).toBe(
-                'Https://example.com'
-            )
+            expect(helpers.removeProtocolFromUrl('Http://example.com')).toBe('Http://example.com')
+            expect(helpers.removeProtocolFromUrl('Https://example.com')).toBe('Https://example.com')
         })
 
         it('does not alter an empty string', () => {
@@ -275,14 +243,8 @@ describe('helpers', () => {
         })
 
         it('removes protocol from urls with paths and queries', () => {
-            expect(
-                helpers.removeProtocolFromUrl(
-                    'https://example.com/path?query=1'
-                )
-            ).toBe('example.com/path?query=1')
-            expect(
-                helpers.removeProtocolFromUrl('http://example.com/path?query=1')
-            ).toBe('example.com/path?query=1')
+            expect(helpers.removeProtocolFromUrl('https://example.com/path?query=1')).toBe('example.com/path?query=1')
+            expect(helpers.removeProtocolFromUrl('http://example.com/path?query=1')).toBe('example.com/path?query=1')
         })
     })
 
@@ -320,7 +282,8 @@ describe('helpers', () => {
         it('formats numbers in quadrillions with "P" suffix', () => {
             expect(helpers.numberFormatter(1e15)).toBe('1P')
             expect(helpers.numberFormatter(2.5e15)).toBe('2.5P')
-            // eslint-disable-next-line no-loss-of-precision
+
+            // eslint-disable-next-line @typescript-eslint/no-loss-of-precision
             expect(helpers.numberFormatter(999999999999999999)).toBe('1E')
         })
 
@@ -383,17 +346,9 @@ describe('helpers', () => {
     describe('isValidJSON', () => {
         it('returns true for valid JSON strings', () => {
             expect(helpers.isValidJSON(null as unknown as string)).toBe(true)
-            expect(
-                helpers.isValidJSON(
-                    '{"name": "John", "age": 30, "city": "New York"}'
-                )
-            ).toBe(true)
-            expect(helpers.isValidJSON('["apple", "banana", "cherry"]')).toBe(
-                true
-            )
-            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]}')).toBe(
-                true
-            )
+            expect(helpers.isValidJSON('{"name": "John", "age": 30, "city": "New York"}')).toBe(true)
+            expect(helpers.isValidJSON('["apple", "banana", "cherry"]')).toBe(true)
+            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]}')).toBe(true)
             expect(helpers.isValidJSON('true')).toBe(true)
             expect(helpers.isValidJSON('null')).toBe(true)
             expect(helpers.isValidJSON('"string"')).toBe(true)
@@ -401,22 +356,12 @@ describe('helpers', () => {
         })
 
         it('returns false for invalid JSON strings', () => {
-            expect(
-                helpers.isValidJSON(
-                    '{"name": "John", "age": 30, "city": "New York"'
-                )
-            ).toBe(false) // missing closing brace
-            expect(helpers.isValidJSON('["apple", "banana", "cherry"')).toBe(
-                false
-            ) // missing closing bracket
-            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]')).toBe(
-                false
-            ) // missing closing brace
+            expect(helpers.isValidJSON('{"name": "John", "age": 30, "city": "New York"')).toBe(false) // missing closing brace
+            expect(helpers.isValidJSON('["apple", "banana", "cherry"')).toBe(false) // missing closing bracket
+            expect(helpers.isValidJSON('{"numbers": [1, 2, 3, 4, 5]')).toBe(false) // missing closing brace
             expect(helpers.isValidJSON('undefined')).toBe(false) // not a valid JSON value
             expect(helpers.isValidJSON('truefalse')).toBe(false) // not a valid JSON value
-            expect(
-                helpers.isValidJSON('{name: "John", age: 30, city: "New York"}')
-            ).toBe(false) // keys must be double-quoted
+            expect(helpers.isValidJSON('{name: "John", age: 30, city: "New York"}')).toBe(false) // keys must be double-quoted
         })
     })
 

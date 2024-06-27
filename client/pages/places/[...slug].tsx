@@ -1,16 +1,14 @@
+import React from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
-import React from 'react'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Photo, Place as PlaceType } from '@/api/types'
-
 import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
-
 import { LOCAL_STORAGE } from '@/functions/constants'
 
 const NEAR_PLACES_COUNT = 10
@@ -32,15 +30,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
     // const [setVisited, { isLoading: visitedPutLoading }] =
     //     API.useVisitedPutPlaceMutation()
 
-    return (
-        <AppLayout>
-            {page === 'edit' && isAuth ? (
-                <Edit {...props} />
-            ) : (
-                <Place {...props} />
-            )}
-        </AppLayout>
-    )
+    return <AppLayout>{page === 'edit' && isAuth ? <Edit {...props} /> : <Place {...props} />}</AppLayout>
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
@@ -57,12 +47,13 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            let lat, lon
+            let lat
+            let lon
 
-            if (cookies?.[LOCAL_STORAGE.LOCATION]) {
+            if (cookies[LOCAL_STORAGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
 
-                if (userLocation?.[0] && userLocation?.[1]) {
+                if (userLocation?.[0] && userLocation[1]) {
                     lat = parseFloat(userLocation[0])
                     lon = parseFloat(userLocation[1])
                 }
@@ -82,16 +73,10 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const { data: ratingData } = await store.dispatch(
-                API.endpoints?.ratingGetList.initiate(id)
-            )
-
-            const { data: photosData } = await store.dispatch(
-                API.endpoints.photosGetList.initiate({ place: id })
-            )
-
+            const { data: ratingData } = await store.dispatch(API.endpoints.ratingGetList.initiate(id))
+            const { data: photosData } = await store.dispatch(API.endpoints.photosGetList.initiate({ place: id }))
             const { data: nearPlaces } = await store.dispatch(
-                API.endpoints?.placesGetList.initiate({
+                API.endpoints.placesGetList.initiate({
                     excludePlaces: [id],
                     lat: placeData?.lat,
                     limit: NEAR_PLACES_COUNT,

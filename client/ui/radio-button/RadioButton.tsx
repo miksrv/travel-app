@@ -1,10 +1,9 @@
 import React from 'react'
 
-import Icon from '@/ui/icon'
+import styles from './styles.module.sass'
 
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Icon from '@/ui/icon'
 
 interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
@@ -13,11 +12,7 @@ interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
 const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
     <div className={styles.radioButton}>
         <div className={cn(styles.formField, props.checked && styles.checked)}>
-            {props.checked ? (
-                <Icon name={'RadioButtonChecked'} />
-            ) : (
-                <Icon name={'RadioButtonUnchecked'} />
-            )}
+            {props.checked ? <Icon name={'RadioButtonChecked'} /> : <Icon name={'RadioButtonUnchecked'} />}
             <input
                 {...props}
                 type={'radio'}

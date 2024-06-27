@@ -1,10 +1,9 @@
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/dist/client/router'
 import React, { useEffect, useState } from 'react'
-
-import Tabs from '@/ui/tabs'
+import { useRouter } from 'next/dist/client/router'
+import { useTranslation } from 'next-i18next'
 
 import { User } from '@/api/types/User'
+import Tabs from '@/ui/tabs'
 
 export enum UserPagesEnum {
     FEED = 'feed',
@@ -29,11 +28,7 @@ const UserTabs: React.FC<UserTabsProps> = ({ user, currentPage }) => {
 
     useEffect(() => {
         if (page) {
-            router.push(
-                `/users/${user?.id}${
-                    page === UserPagesEnum.FEED ? '' : `/${page}`
-                }`
-            )
+            router.push(`/users/${user?.id}${page === UserPagesEnum.FEED ? '' : `/${page}`}`)
         }
     }, [page])
 

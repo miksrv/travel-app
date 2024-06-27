@@ -1,15 +1,14 @@
-import { useTranslation } from 'next-i18next'
+import React from 'react'
 import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useTranslation } from 'next-i18next'
+
+import styles from './styles.module.sass'
 
 import { ApiTypes } from '@/api/types'
-
 import googleLogo from '@/public/images/google-logo.png'
 import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-
-import styles from './styles.module.sass'
 
 const DEFAULT_ZOOM = 17
 
@@ -21,13 +20,7 @@ interface ServiceMapLinkProps {
     image?: StaticImageData
 }
 
-const ServiceMapLink: React.FC<ServiceMapLinkProps> = ({
-    link,
-    image,
-    title,
-    translate,
-    showTitle
-}) => (
+const ServiceMapLink: React.FC<ServiceMapLinkProps> = ({ link, image, title, translate, showTitle }) => (
     <Link
         className={styles.mapLink}
         color={'inherit'}
@@ -88,9 +81,7 @@ const Google: React.FC<MapLinksProps> = (props) => {
             {...props}
             image={googleLogo}
             translate={t('googleMap')}
-            link={`https://maps.google.com/maps?ll=${props?.lat},${
-                props?.lon
-            }&q=${props?.lat},${props?.lon}&z=${
+            link={`https://maps.google.com/maps?ll=${props.lat},${props.lon}&q=${props.lat},${props.lon}&z=${
                 props.zoom ?? DEFAULT_ZOOM
             }&spn=0.1,0.1&t=h&hl=${i18n.language}`}
         />
@@ -108,8 +99,8 @@ const Wikimapia: React.FC<MapLinksProps> = (props) => {
             image={wikimapiaLogo}
             translate={t('wikimapiaMap')}
             link={`https://wikimapia.org/#lang=${i18n.language}&lat=${
-                props?.lat
-            }&lon=${props?.lon}&z=${props.zoom ?? DEFAULT_ZOOM}&m=w`}
+                props.lat
+            }&lon=${props.lon}&z=${props.zoom ?? DEFAULT_ZOOM}&m=w`}
         />
     )
 }

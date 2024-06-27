@@ -1,17 +1,15 @@
-import { useTranslation } from 'next-i18next'
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Icon from '@/ui/icon'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Notification as NotificationType } from '@/api/types/Notification'
-
 import { concatClassNames as cn, formatDate } from '@/functions/helpers'
 import { levelImage } from '@/functions/userLevels'
-
-import styles from './styles.module.sass'
+import Icon from '@/ui/icon'
 
 interface NotificationProps extends NotificationType {
     showDate?: boolean
@@ -19,12 +17,7 @@ interface NotificationProps extends NotificationType {
     onLoad?: (id: string) => void
 }
 
-const Notification: React.FC<NotificationProps> = ({
-    showDate,
-    onClose,
-    onLoad,
-    ...props
-}) => {
+const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, ...props }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.notification'
     })
@@ -34,51 +27,39 @@ const Notification: React.FC<NotificationProps> = ({
     }, [])
 
     return (
-        <div
-            className={cn(
-                styles.notification,
-                styles[props?.type!],
-                !props?.read && styles.unread
-            )}
-        >
+        <div className={cn(styles.notification, styles[props.type!], !props.read && styles.unread)}>
             <div className={cn(styles.before)}>
                 <NotificationIcon {...props} />
             </div>
             <div className={styles.body}>
                 <span className={styles.title}>
-                    {props.type === 'experience'
-                        ? t(props?.activity!)
-                        : t(props?.type!)}
+                    {props.type === 'experience' ? t(props.activity!) : t(props.type!)}
                 </span>
                 <span className={styles.content}>
-                    {props?.message}
+                    {props.message}
                     {props.type === 'experience' ? (
-                        `+${props?.meta?.value} ${t('experience')}`
+                        `+${props.meta?.value} ${t('experience')}`
                     ) : props.type === 'level' ? (
-                        `${props?.meta?.title} (${props?.meta?.level})`
+                        `${props.meta?.title} (${props.meta?.level})`
                     ) : props.type === 'achievements' ? (
                         '' // TODO
                     ) : props.place ? (
                         <Link
-                            href={`/places/${props.place?.id}`}
+                            href={`/places/${props.place.id}`}
                             title={''}
                         >
-                            {props.place?.title}
+                            {props.place.title}
                         </Link>
                     ) : (
                         <></>
                     )}
                 </span>
-                {showDate && (
-                    <div className={styles.datetime}>
-                        {formatDate(props.created?.date, t('dateFormat'))}
-                    </div>
-                )}
+                {showDate && <div className={styles.datetime}>{formatDate(props.created?.date, t('dateFormat'))}</div>}
             </div>
             {onClose && (
                 <button
                     className={styles.closeButton}
-                    onClick={() => onClose?.(props.id)}
+                    onClick={() => onClose(props.id)}
                 >
                     <Icon name={'Close'} />
                 </button>
@@ -87,9 +68,7 @@ const Notification: React.FC<NotificationProps> = ({
     )
 }
 
-const NotificationIcon: React.FC<NotificationType> = ({
-    ...props
-}): React.ReactNode =>
+const NotificationIcon: React.FC<NotificationType> = ({ ...props }): React.ReactNode =>
     props.type === 'experience' ? (
         <Icon name={'DoubleUp'} />
     ) : props.type === 'error' ? (
@@ -98,7 +77,7 @@ const NotificationIcon: React.FC<NotificationType> = ({
         <Icon name={'CheckCircle'} />
     ) : props.type === 'level' ? (
         <Image
-            src={levelImage(props?.meta?.level)?.src}
+            src={levelImage(props.meta?.level).src}
             alt={''}
             width={26}
             height={26}

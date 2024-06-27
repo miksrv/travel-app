@@ -1,8 +1,8 @@
 import React from 'react'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 
 interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
     title?: string
@@ -11,26 +11,14 @@ interface MessageProps extends React.HTMLAttributes<HTMLDivElement> {
     type?: 'negative' | 'positive'
 }
 
-const Message: React.FC<MessageProps> = ({
-    title,
-    text,
-    list,
-    type,
-    ...props
-}) => (
+const Message: React.FC<MessageProps> = ({ title, text, list, type, ...props }) => (
     <section
         {...props}
         className={cn(styles.message, type && styles[type])}
     >
         {title && <p className={styles.title}>{title}</p>}
         {text && <p className={styles.content}>{text}</p>}
-        {list && (
-            <ul>
-                {list?.map((item) =>
-                    item.length ? <li key={`item${item}`}>{item}</li> : ''
-                )}
-            </ul>
-        )}
+        {list && <ul>{list.map((item) => (item.length ? <li key={`item${item}`}>{item}</li> : ''))}</ul>}
     </section>
 )
 

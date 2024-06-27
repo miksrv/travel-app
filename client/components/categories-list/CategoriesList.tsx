@@ -1,15 +1,13 @@
-import { useTranslation } from 'next-i18next'
+import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import React from 'react'
-
-import Container from '@/ui/container'
-
-import { Category } from '@/api/types/Place'
-
-import { categoryImage } from '@/functions/categories'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
+
+import { Category } from '@/api/types/Place'
+import { categoryImage } from '@/functions/categories'
+import Container from '@/ui/container'
 
 interface CategoriesListProps {
     categories?: Category[]
@@ -30,7 +28,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                     <h3 className={styles.header}>
                         <Image
                             className={styles.categoryImage}
-                            src={categoryImage(category.name)?.src}
+                            src={categoryImage(category.name).src}
                             alt={''}
                             width={15}
                             height={18}
@@ -38,23 +36,20 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                         />
                         <Link
                             href={`/places?category=${category.name}`}
-                            title={`${category.title} - ${t(
-                                'allCategoryPlaces'
-                            )}`}
+                            title={`${category.title} - ${t('allCategoryPlaces')}`}
                         >
                             {category.title}
                         </Link>
                     </h3>
                     <div>
-                        <p>{category?.content}</p>
+                        <p>{category.content}</p>
                         <p className={styles.description}>
-                            {t('placesInCategory')}{' '}
-                            <strong>{category?.count ?? 0}</strong>
+                            <div>
+                                {t('placesInCategory')} <strong>{category.count ?? 0}</strong>
+                            </div>
                             <Link
                                 href={`/places?category=${category.name}`}
-                                title={`${category.title} - ${t(
-                                    'allCategoryPlaces'
-                                )}`}
+                                title={`${category.title} - ${t('allCategoryPlaces')}`}
                             >
                                 {t('goToCategory')}
                             </Link>

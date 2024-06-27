@@ -1,12 +1,8 @@
-import { Trans, useTranslation } from 'next-i18next'
-import Image from 'next/image'
 import React, { useCallback, useEffect, useState } from 'react'
+import Image from 'next/image'
+import { Trans, useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
-import ScreenSpinner from '@/ui/screen-spinner'
+import styles from './styles.module.sass'
 
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
@@ -14,8 +10,11 @@ import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
+import Input from '@/ui/input'
+import Message from '@/ui/message'
+import ScreenSpinner from '@/ui/screen-spinner'
 
 interface UserFormProps {
     loading?: boolean
@@ -27,21 +26,15 @@ interface UserFormProps {
 
 type FormDataType = ApiTypes.RequestUsersPatch & { confirmPassword?: string }
 
-const UserForm: React.FC<UserFormProps> = ({
-    loading,
-    values,
-    errors,
-    onSubmit,
-    onCancel
-}) => {
-    const { t } = useTranslation('components.userForm')
+const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, onCancel }) => {
+    const { t } = useTranslation('common', {
+        keyPrefix: 'components.userForm'
+    })
 
-    const userEmail = useAppSelector((state) => state.auth?.user?.email)
+    const userEmail = useAppSelector((state) => state.auth.user?.email)
 
     const [formErrors, setFormErrors] = useState<FormDataType>()
-    const [formData, setFormData] = useState<FormDataType>(
-        mapFormValues(values)
-    )
+    const [formData, setFormData] = useState<FormDataType>(mapFormValues(values))
 
     const disabled =
         JSON.stringify(mapFormValues(values)?.settings) ===
@@ -51,9 +44,7 @@ const UserForm: React.FC<UserFormProps> = ({
         !formData?.newPassword &&
         !formData?.oldPassword
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 
@@ -72,27 +63,28 @@ const UserForm: React.FC<UserFormProps> = ({
     const validateForm = useCallback(() => {
         const errors: FormDataType = {}
 
-        if (!formData?.name) {
+        if (!formData.name) {
             errors.name = t('errorName')
         }
 
-        if (formData?.newPassword && !formData?.oldPassword) {
+        if (formData.newPassword && !formData.oldPassword) {
             errors.oldPassword = t('errorOldPassword')
         }
 
-        if (!formData?.newPassword && formData?.oldPassword) {
+        if (!formData.newPassword && formData.oldPassword) {
             errors.newPassword = t('errorNewPassword')
         }
 
         if (
-            formData?.oldPassword &&
-            formData?.newPassword?.length! > 0 &&
-            formData?.newPassword !== formData?.confirmPassword
+            formData.oldPassword &&
+            formData.newPassword &&
+            formData.newPassword.length > 0 &&
+            formData.newPassword !== formData.confirmPassword
         ) {
             errors.confirmPassword = t('errorConfirmPassword')
         }
 
-        if (formData?.newPassword && formData?.newPassword?.length < 8) {
+        if (formData.newPassword && formData.newPassword.length < 8) {
             errors.newPassword = t('errorPasswordLength')
         }
 
@@ -125,7 +117,7 @@ const UserForm: React.FC<UserFormProps> = ({
         <section className={styles.component}>
             {loading && <ScreenSpinner />}
 
-            {!!Object.values(formErrors || {})?.length && (
+            {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
                     title={t('errorsMessageTitle')}
@@ -143,7 +135,7 @@ const UserForm: React.FC<UserFormProps> = ({
                     label={t('inputNameLabel')}
                     placeholder={t('inputNamePlaceholder')}
                     disabled={loading}
-                    value={formData?.name}
+                    value={formData.name}
                     error={formErrors?.name}
                     onKeyDown={handleKeyPress}
                     onChange={handleChange}
@@ -157,58 +149,18 @@ const UserForm: React.FC<UserFormProps> = ({
                     value={userEmail}
                 />
             </div>
-            <div>
-                <h3 className={styles.header}>{t('titleGeneralSettings')}</h3>
-                <div className={styles.formElement}>
-                    <Input
-                        tabIndex={0}
-                        autoFocus={true}
-                        name={'name'}
-                        label={t('inputNameLabel')}
-                        placeholder={t('inputNamePlaceholder')}
-                        disabled={loading}
-                        value={formData?.name}
-                        error={formErrors?.name}
-                        onKeyDown={handleKeyPress}
-                        onChange={handleChange}
-                    />
-                </div>
 
-                <div className={styles.formElement}>
-                    <Input
-                        name={'website'}
-                        label={t('inputWebsiteLabel')}
-                        placeholder={t('inputWebsitePlaceholder')}
-                        disabled={loading}
-                        value={formData?.website}
-                        error={formErrors?.website}
-                        onKeyDown={handleKeyPress}
-                        onChange={handleChange}
-                    />
-                </div>
-            </div>
-
-            <div className={styles.section}>
-                <h3 className={styles.header}>{t('titleEmailSettings')}</h3>
-                {[
-                    'emailPhoto',
-                    'emailRating',
-                    'emailComment',
-                    'emailEdit',
-                    'emailCover'
-                ].map((setting) => (
-                    <Checkbox
-                        className={styles.settings}
-                        key={setting}
-                        id={setting}
-                        label={t('setting')}
-                        disabled={loading}
-                        onChange={handleChangeCheckbox}
-                        checked={
-                            formData?.settings?.[setting as keyof UserSettings]
-                        }
-                    />
-                ))}
+            <div className={styles.formElement}>
+                <Input
+                    name={'website'}
+                    label={t('inputWebsiteLabel')}
+                    placeholder={t('inputWebsitePlaceholder')}
+                    disabled={loading}
+                    value={formData.website}
+                    error={formErrors?.website}
+                    onKeyDown={handleKeyPress}
+                    onChange={handleChange}
+                />
             </div>
 
             <div className={styles.section}>

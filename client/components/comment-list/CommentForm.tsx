@@ -1,15 +1,13 @@
-import { useTranslation } from 'next-i18next'
 import React, { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Textarea from '@/ui/textarea'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { User } from '@/api/types/User'
-
 import UserAvatar from '@/components/user-avatar'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Textarea from '@/ui/textarea'
 
 interface CommentFormProps {
     placeId: string
@@ -19,13 +17,7 @@ interface CommentFormProps {
     onCommentAdded?: () => void
 }
 
-const CommentForm: React.FC<CommentFormProps> = ({
-    placeId,
-    answerId,
-    isAuth,
-    user,
-    onCommentAdded
-}) => {
+const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, user, onCommentAdded }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.commentList'
     })
@@ -34,10 +26,8 @@ const CommentForm: React.FC<CommentFormProps> = ({
 
     const [submit, { isLoading }] = API.useCommentsPostMutation()
 
-    const handleKeyPress = (
-        event: React.KeyboardEvent<HTMLTextAreaElement>
-    ) => {
-        if (event.key === 'Enter' && comment && comment?.length > 1) {
+    const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+        if (event.key === 'Enter' && comment && comment.length > 1) {
             event.preventDefault()
             handleSubmit()
         }

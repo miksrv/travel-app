@@ -2,17 +2,12 @@
 
 import React, { useEffect } from 'react'
 
-import { API } from '@/api/api'
-import {
-    Notify,
-    deleteNotification,
-    setReadNotification,
-    setUnreadCounter
-} from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-
 import Notification from './Notification'
 import styles from './styles.module.sass'
+
+import { API } from '@/api/api'
+import { deleteNotification, Notify, setReadNotification, setUnreadCounter } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 
 interface SnackbarProps {}
 
@@ -42,7 +37,7 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     return (
         <div className={styles.snackbar}>
-            {notifications?.map((notification) => (
+            {notifications.map((notification) => (
                 <Notification
                     key={notification.id}
                     onClose={handleCloseNotification}

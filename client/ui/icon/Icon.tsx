@@ -21,9 +21,7 @@ const Icon: React.FC<IconProps> = ({ name }) => {
             )
             break
         case 'Menu':
-            iconToRender = (
-                <path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
-            )
+            iconToRender = <path d='M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z' />
             break
         case 'Eye':
             iconToRender = (
@@ -86,29 +84,19 @@ const Icon: React.FC<IconProps> = ({ name }) => {
             )
             break
         case 'Left':
-            iconToRender = (
-                <path d='M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z' />
-            )
+            iconToRender = <path d='M15.41 16.59 10.83 12l4.58-4.59L14 6l-6 6 6 6 1.41-1.41z' />
             break
         case 'LargeLeft':
-            iconToRender = (
-                <path d='M17.51 3.87 15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12z' />
-            )
+            iconToRender = <path d='M17.51 3.87 15.73 2.1 5.84 12l9.9 9.9 1.77-1.77L9.38 12z' />
             break
         case 'Right':
-            iconToRender = (
-                <path d='M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z' />
-            )
+            iconToRender = <path d='M8.59 16.59 13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z' />
             break
         case 'Down':
-            iconToRender = (
-                <path d='M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z' />
-            )
+            iconToRender = <path d='M7.41 8.59 12 13.17l4.59-4.58L18 10l-6 6-6-6z' />
             break
         case 'Up':
-            iconToRender = (
-                <path d='M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z' />
-            )
+            iconToRender = <path d='M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z' />
             break
         case 'DoubleUp':
             iconToRender = (
@@ -154,14 +142,10 @@ const Icon: React.FC<IconProps> = ({ name }) => {
             )
             break
         case 'FullscreenIn':
-            iconToRender = (
-                <path d='M7 14H5v5h5v-2H7zm-2-4h2V7h3V5H5zm12 7h-3v2h5v-5h-2zM14 5v2h3v3h2V5z' />
-            )
+            iconToRender = <path d='M7 14H5v5h5v-2H7zm-2-4h2V7h3V5H5zm12 7h-3v2h5v-5h-2zM14 5v2h3v3h2V5z' />
             break
         case 'FullscreenOut':
-            iconToRender = (
-                <path d='M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z' />
-            )
+            iconToRender = <path d='M5 16h3v3h2v-5H5zm3-8H5v2h5V5H8zm6 11h2v-3h3v-2h-5zm2-11V5h-2v5h5V8z' />
             break
         case 'Layers':
             iconToRender = (

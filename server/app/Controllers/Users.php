@@ -51,7 +51,7 @@ class Users extends ResourceController {
                 'avatar' => $avatar
                     ? PATH_AVATARS . $item->id . '/' . $avatar[0] . '_small.' . $avatar[1]
                     : null,
-                'level'  => [
+                'levelData'  => [
                     'level'      => $level->level,
                     'title'      => $level->title,
                     'experience' => $item->experience,
@@ -118,13 +118,13 @@ class Users extends ResourceController {
 
         $avatar = $usersData->avatar ? explode('.', $usersData->avatar) : null;
 
-        $usersData->level     = $userLevels->getLevelData($usersData);
+        $usersData->levelData = $userLevels->getLevelData($usersData);
         $usersData->statistic = $userLevels->statistic;
         $usersData->avatar    = $usersData->avatar
             ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
             : null;
 
-        unset($usersData->experience);
+        unset($usersData->experience, $usersData->level);
 
         return $this->respond($usersData);
     }

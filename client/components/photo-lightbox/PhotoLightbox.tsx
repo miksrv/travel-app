@@ -1,21 +1,20 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React from 'react'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 import Lightbox, { Slide } from 'yet-another-react-lightbox'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
-import 'yet-another-react-lightbox/plugins/captions.css'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
+
+import 'yet-another-react-lightbox/plugins/captions.css'
 import 'yet-another-react-lightbox/styles.css'
+
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Photo, Placemark } from '@/api/types'
-
 import ImageSlide from '@/components/photo-lightbox/ImageSlide'
 import UserAvatar from '@/components/user-avatar'
-
 import { formatDate } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 interface PhotoLightboxProps {
     photos?: Photo.Photo[] | Placemark.Photo[]
@@ -25,20 +24,13 @@ interface PhotoLightboxProps {
     onChangeIndex?: (index: number) => void
 }
 
-const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
-    photos,
-    photoIndex = 0,
-    showLightbox,
-    onCloseLightBox
-}) => {
+const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, showLightbox, onCloseLightBox }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.photoLightbox'
     })
 
     const imageHost = (link?: string) =>
-        link?.includes('http://') || link?.includes('https://')
-            ? link
-            : `${IMG_HOST}${link}`
+        link?.includes('http://') || link?.includes('https://') ? link : `${IMG_HOST}${link}`
 
     return (
         <Lightbox
@@ -51,33 +43,31 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({
                 (photo) =>
                     ({
                         alt: photo.title,
-                        description: photo?.author && (
+                        description: photo.author && (
                             <UserAvatar
                                 size={'medium'}
                                 showName={true}
-                                user={photo?.author}
+                                user={photo.author}
                                 className={styles.caption}
-                                caption={formatDate(
-                                    photo?.created?.date,
-                                    t('dateFormat')
-                                )}
+                                caption={formatDate(photo.created?.date, t('dateFormat'))}
                             />
                         ),
                         height: (photo as Photo.Photo).height,
                         src: imageHost(photo.full),
-                        title: photo?.placeId ? (
+                        srcSet: [{ src: imageHost(photo.preview), width: 300, height: 200 }],
+                        title: photo.placeId ? (
                             <Link
                                 href={`/places/${photo.placeId}`}
-                                title={photo?.title}
+                                title={photo.title}
                                 className={styles.title}
                             >
-                                {photo?.title}
+                                {photo.title}
                             </Link>
                         ) : (
                             photo.title
                         ),
                         width: (photo as Photo.Photo).width
-                    } as Slide)
+                    }) as Slide
             )}
         />
     )

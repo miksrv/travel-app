@@ -67,4 +67,18 @@
     --color-green: #4bb34b;
     --color-orange: #ea5d2e;
     --color-red: #e64646;
+
+    .leaflet-layer,
+    .leaflet-control-attribution {
+        filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+
+    .leaflet-container, .leaflet-popup-tip {
+        background-color: var(--input-background-color);
+    }
+
+    .map-tiles {
+        filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
+
 }

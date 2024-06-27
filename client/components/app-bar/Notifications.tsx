@@ -1,22 +1,17 @@
-import { useTranslation } from 'next-i18next'
 import React, { useEffect, useRef, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
+import styles from './styles.module.sass'
+
+import { API } from '@/api/api'
+import { deleteAllNotifications, setUnreadCounter } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+import Notification from '@/components/snackbar/Notification'
 import Button from '@/ui/button'
 import Counter from '@/ui/counter'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
-
-import { API } from '@/api/api'
-import {
-    deleteAllNotifications,
-    setUnreadCounter
-} from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-
-import Notification from '@/components/snackbar/Notification'
-
-import styles from './styles.module.sass'
 
 interface NotificationsProps {}
 
@@ -33,8 +28,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
     const [notifyShow, setNotifyShow] = useState<boolean>(false)
     const [notifyPage, setNotifyPage] = useState<number>(1)
 
-    const [clearNotification, { isLoading: loadingClear }] =
-        API.useNotificationsDeleteMutation()
+    const [clearNotification, { isLoading: loadingClear }] = API.useNotificationsDeleteMutation()
 
     const {
         data: notifyData,
@@ -65,9 +59,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
     }
 
     useEffect(() => {
-        const unreadCount = notifyData?.items?.filter(
-            ({ read }) => !read
-        )?.length
+        const unreadCount = notifyData?.items?.filter(({ read }) => !read).length
 
         if (unreadCount) {
             const newUnreadValue = notifyCounter - unreadCount
@@ -78,25 +70,27 @@ const Notifications: React.FC<NotificationsProps> = () => {
     useEffect(() => {
         const onScroll = () => {
             const targetDiv = notifyContainerRef.current
-            if (!targetDiv) return
+            if (!targetDiv) {
+                return
+            }
 
-            const scrolledToBottom =
-                targetDiv.scrollTop + targetDiv.clientHeight >=
-                targetDiv.scrollHeight - 20
+            const scrolledToBottom = targetDiv.scrollTop + targetDiv.clientHeight >= targetDiv.scrollHeight - 20
 
             if (
                 notifyData?.count &&
                 scrolledToBottom &&
                 !notifyFetching &&
-                !!notifyData?.items?.length &&
-                notifyData?.count > notifyData?.items?.length
+                !!notifyData.items?.length &&
+                notifyData.count > notifyData.items.length
             ) {
                 setNotifyPage(notifyPage + 1)
             }
         }
 
         const targetDiv = notifyContainerRef.current
-        if (!targetDiv) return
+        if (!targetDiv) {
+            return
+        }
 
         targetDiv.addEventListener('scroll', onScroll)
 
@@ -129,7 +123,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         className={styles.notificationsContent}
                         ref={notifyContainerRef}
                     >
-                        {notifyData?.items?.map((item) => (
+                        {notifyData.items.map((item) => (
                             <Notification
                                 key={item.id}
                                 showDate={true}
@@ -138,7 +132,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         ))}
                     </div>
                 )}
-                {(notifyLoading || notifyFetching) && (
+                {notifyLoading && (
                     <div className={styles.loader}>
                         <Spinner />
                     </div>
@@ -153,12 +147,8 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         size={'small'}
                         mode={'secondary'}
                         stretched={true}
-                        disabled={
-                            loadingClear ||
-                            notifyFetching ||
-                            !notifyData?.items?.length
-                        }
-                        loading={loadingClear}
+                        disabled={loadingClear || notifyFetching || !notifyData?.items?.length}
+                        loading={loadingClear || (notifyFetching && !!notifyData?.items?.length)}
                         onClick={handleClearNotificationsClick}
                     >
                         {t('clearButton')}

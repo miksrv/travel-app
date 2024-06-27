@@ -1,18 +1,12 @@
-import { Comments } from '@/api/types/Comments'
-
 import { Item } from './Activity'
 import { Notification } from './Notification'
 import { Photo } from './Photo'
-import {
-    Categories,
-    Category,
-    GeoSearchLocation,
-    LocationObject,
-    Place
-} from './Place'
+import { Categories, Category, GeoSearchLocation, LocationObject, Place } from './Place'
 import { Photo as poiPhoto, Place as poiPlace } from './Placemark'
 import { Tag } from './Tag'
 import { LevelData, User } from './User'
+
+import { Comments } from '@/api/types/Comments'
 
 /** General Types **/
 export type LatLonCoordinate = {
@@ -337,17 +331,7 @@ export interface RequestPoiList {
 }
 
 export interface ResponsePoiItem
-    extends Pick<
-        Place,
-        | 'id'
-        | 'rating'
-        | 'title'
-        | 'views'
-        | 'photos'
-        | 'cover'
-        | 'comments'
-        | 'bookmarks'
-    > {}
+    extends Pick<Place, 'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover' | 'comments' | 'bookmarks'> {}
 
 export interface ResponsePoiPlacesList {
     items: poiPlace[]

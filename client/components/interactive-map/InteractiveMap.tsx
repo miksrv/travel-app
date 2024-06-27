@@ -1,43 +1,41 @@
 'use client'
 
+import React, { useEffect, useRef, useState } from 'react'
 import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
-import 'leaflet.heat'
-import 'leaflet/dist/leaflet.css'
 import isEqual from 'lodash-es/isEqual'
 import { useRouter } from 'next/dist/client/router'
-import React, { useEffect, useRef, useState } from 'react'
 
-import Button from '@/ui/button'
-import Spinner from '@/ui/spinner'
+import 'leaflet.heat'
+import 'leaflet/dist/leaflet.css'
 
-import { ApiTypes, Place, Placemark } from '@/api/types'
-
-import { LOCAL_STORAGE } from '@/functions/constants'
-import { round } from '@/functions/helpers'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
-
-import CategoryControl from './CategoryControl'
-import LayerSwitcherControl from './LayerSwitcherControl'
-import MarkerUser from './MarkerUser'
 import ContextMenu from './context-menu/ContextMenu'
 import CoordinatesControl from './coordinates-control/CoordinatesControl'
 import HeatmapLayer from './heatmap-layer/HeatmapLayer'
 import HistoricalPhotos from './historical-photos/HistoricalPhotos'
-import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
 import MarkerPhoto from './marker-photo/MarkerPhoto'
-import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
+import MarkerPhotoCluster from './marker-photo-cluster/MarkerPhotoCluster'
 import MarkerPoint from './marker-point/MarkerPoint'
+import MarkerPointCluster from './marker-point-cluster/MarkerPointCluster'
 import PlaceMark from './place-mark/PlaceMark'
 import SearchControl from './search-control/SearchControl'
+import CategoryControl from './CategoryControl'
+import LayerSwitcherControl from './LayerSwitcherControl'
+import MarkerUser from './MarkerUser'
 import styles from './styles.module.sass'
+
+import { ApiTypes, Place, Placemark } from '@/api/types'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import Button from '@/ui/button'
+import Spinner from '@/ui/spinner'
 
 export const MapAdditionalLayers = {
     Heatmap: 'Heatmap',
     HistoricalPhotos: 'HistoricalPhotos'
 } as const
-export type MapAdditionalLayersType =
-    (typeof MapAdditionalLayers)[keyof typeof MapAdditionalLayers]
+export type MapAdditionalLayersType = (typeof MapAdditionalLayers)[keyof typeof MapAdditionalLayers]
 
 export const MapObjects = {
     Photos: 'Photos',
@@ -119,21 +117,14 @@ const InteractiveMap: React.FC<MapProps> = ({
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
     const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
-    const [additionalLayers, setAdditionalLayers] =
-        useState<MapAdditionalLayersType[]>()
-    const [cursorPosition, setCursorPosition] =
-        useState<ApiTypes.LatLonCoordinate>()
+    const [additionalLayers, setAdditionalLayers] = useState<MapAdditionalLayersType[]>()
+    const [cursorPosition, setCursorPosition] = useState<ApiTypes.LatLonCoordinate>()
 
-    const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(
-        storeMapKey || LOCAL_STORAGE.MAP_CENTER
-    )
+    const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(storeMapKey || LOCAL_STORAGE.MAP_CENTER)
 
     const handleUserPosition = () => {
-        if (userLatLon?.lat && userLatLon?.lon) {
-            mapRef.current?.setView(
-                [userLatLon.lat, userLatLon.lon],
-                DEFAULT_MAP_ZOOM
-            )
+        if (userLatLon?.lat && userLatLon.lon) {
+            mapRef.current?.setView([userLatLon.lat, userLatLon.lon], DEFAULT_MAP_ZOOM)
         }
     }
 
@@ -165,22 +156,17 @@ const InteractiveMap: React.FC<MapProps> = ({
         zoom?: number,
         showPosition?: boolean
     ) => {
-        mapRef.current?.setView(
-            [coordinates.lat, coordinates.lon],
-            zoom ?? DEFAULT_MAP_ZOOM
-        )
+        mapRef.current?.setView([coordinates.lat, coordinates.lon], zoom ?? DEFAULT_MAP_ZOOM)
 
         if (showPosition) {
             await handleSetPlaceMarker(coordinates)
         }
     }
 
-    const handleSetPlaceMarker = async (
-        coords: ApiTypes.LatLonCoordinate | undefined
-    ) => {
+    const handleSetPlaceMarker = async (coords: ApiTypes.LatLonCoordinate | undefined) => {
         setPlaceMark(coords)
 
-        const url = new URL(window?.location?.href)
+        const url = new URL(window.location.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
         const param = coords ? `?m=${coords.lat},${coords.lon}` : ''
 
@@ -202,21 +188,17 @@ const InteractiveMap: React.FC<MapProps> = ({
         } else if (mapElement.webkitRequestFullscreen) {
             // For Safari on iOS devices
             const fullscreenElement =
-                // @ts-ignore
-                document.webkitFullscreenElement ||
-                // @ts-ignore
-                document.webkitCurrentFullScreenElement
+                (document as any).webkitFullscreenElement || (document as any).webkitCurrentFullScreenElement
             if (!fullscreenElement) {
                 await mapElement.webkitRequestFullscreen()
             } else {
-                // @ts-ignore
-                await document.webkitExitFullscreen()
+                await (document as any).webkitExitFullscreen()
             }
         }
     }
 
     useEffect(() => {
-        const url = new URL(window?.location?.href)
+        const url = new URL(window.location.href)
         const match = url.hash.match(/\?m=(-?\d+\.\d+),(-?\d+\.\d+)/)
 
         if (match && !placeMark) {
@@ -234,15 +216,12 @@ const InteractiveMap: React.FC<MapProps> = ({
                 !readyStorage &&
                 !props.center &&
                 storeMapPosition &&
-                coordinates?.lon &&
-                coordinates?.lat &&
-                coordinates?.zoom &&
-                mapRef?.current?.setView
+                coordinates.lon &&
+                coordinates.lat &&
+                coordinates.zoom &&
+                mapRef.current?.setView
             ) {
-                mapRef?.current?.setView(
-                    [coordinates?.lat, coordinates?.lon],
-                    coordinates?.zoom || DEFAULT_MAP_ZOOM
-                )
+                mapRef.current?.setView([coordinates.lat, coordinates.lon], coordinates.zoom || DEFAULT_MAP_ZOOM)
             }
 
             setReadyStorage(true)
@@ -270,24 +249,16 @@ const InteractiveMap: React.FC<MapProps> = ({
                 zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
                 minZoom={6}
                 style={{
-                    cursor: enableCoordsControl
-                        ? 'crosshair'
-                        : props.dragging
-                        ? 'pointer'
-                        : 'default',
+                    cursor: enableCoordsControl ? 'crosshair' : props.dragging ? 'pointer' : 'default',
                     height: '100%',
                     width: '100%'
                 }}
                 attributionControl={false}
                 ref={mapRef}
             >
-                {additionalLayers?.includes(MapAdditionalLayers.Heatmap) && (
-                    <HeatmapLayer />
-                )}
+                {additionalLayers?.includes(MapAdditionalLayers.Heatmap) && <HeatmapLayer />}
 
-                {additionalLayers?.includes(
-                    MapAdditionalLayers.HistoricalPhotos
-                ) && (
+                {additionalLayers?.includes(MapAdditionalLayers.HistoricalPhotos) && (
                     <HistoricalPhotos
                         position={mapPosition}
                         onPhotoClick={onPhotoClick}
@@ -315,17 +286,13 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {mapLayer === MapLayers.GoogleMap && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps'}
-                        url={
-                            'https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}'
-                        }
+                        url={'https://www.google.cn/maps/vt?lyrs=m@189&gl=cn&x={x}&y={y}&z={z}'}
                     />
                 )}
                 {mapLayer === MapLayers.GoogleSat && (
                     <ReactLeaflet.TileLayer
                         attribution={'Google Maps Satellite'}
-                        url={
-                            'https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'
-                        }
+                        url={'https://www.google.cn/maps/vt?lyrs=s@189&gl=cn&x={x}&y={y}&z={z}'}
                     />
                 )}
                 {mapLayer === MapLayers.MapBoxSat && (
@@ -344,15 +311,12 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
 
                 {places?.map((place, i) =>
-                    place?.type === 'cluster' ? (
+                    place.type === 'cluster' ? (
                         <MarkerPointCluster
                             key={`markerPointCluster${i}`}
                             marker={place}
                             onClick={(coords) =>
-                                mapRef.current?.setView(
-                                    [coords.lat, coords.lon],
-                                    (mapPosition?.zoom ?? 16) + 2
-                                )
+                                mapRef.current?.setView([coords.lat, coords.lon], (mapPosition?.zoom ?? 16) + 2)
                             }
                         />
                     ) : (
@@ -364,15 +328,12 @@ const InteractiveMap: React.FC<MapProps> = ({
                 )}
 
                 {photos?.map((photo, i) =>
-                    photo?.type === 'cluster' ? (
+                    photo.type === 'cluster' ? (
                         <MarkerPhotoCluster
                             key={`markerPhotoCluster${i}`}
                             marker={photo}
                             onClick={(coords) =>
-                                mapRef.current?.setView(
-                                    [coords.lat, coords.lon],
-                                    (mapPosition?.zoom ?? 16) + 2
-                                )
+                                mapRef.current?.setView([coords.lat, coords.lon], (mapPosition?.zoom ?? 16) + 2)
                             }
                         />
                     ) : (
@@ -397,11 +358,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {enableFullScreen && (
                         <Button
                             mode={'secondary'}
-                            icon={
-                                document.fullscreenElement
-                                    ? 'FullscreenOut'
-                                    : 'FullscreenIn'
-                            }
+                            icon={document.fullscreenElement ? 'FullscreenOut' : 'FullscreenIn'}
                             onClick={handleToggleFullscreen}
                         />
                     )}
@@ -463,11 +420,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {onChangeBounds && (
                     <MapEvents
                         onChangeBounds={handleChangeBounds}
-                        onMouseMove={
-                            enableCoordsControl && coordinatesOpen
-                                ? setCursorPosition
-                                : undefined
-                        }
+                        onMouseMove={enableCoordsControl && coordinatesOpen ? setCursorPosition : undefined}
                     />
                 )}
             </ReactLeaflet.MapContainer>
@@ -480,10 +433,7 @@ interface MapEventsProps {
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
 }
 
-const MapEvents: React.FC<MapEventsProps> = ({
-    onMouseMove,
-    onChangeBounds
-}) => {
+const MapEvents: React.FC<MapEventsProps> = ({ onMouseMove, onChangeBounds }) => {
     const mapEvents = ReactLeaflet.useMapEvents({
         mousedown: () => {
             mapEvents.closePopup()

@@ -1,5 +1,5 @@
-import { GetServerSidePropsResult, NextPage } from 'next'
 import React from 'react'
+import { GetServerSidePropsResult, NextPage } from 'next'
 
 import { API, SITE_LINK } from '@/api/api'
 import { wrapper } from '@/api/store'
@@ -16,17 +16,9 @@ const SiteMap: NextPage<SiteMapProps> = () => <></>
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<SiteMapProps>> => {
-            const { data } = await store.dispatch(
-                API.endpoints?.sitemapGetList.initiate()
-            )
+            const { data } = await store.dispatch(API.endpoints.sitemapGetList.initiate())
 
-            const staticPages = [
-                'map',
-                'places',
-                'users',
-                'users/levels',
-                'categories'
-            ]
+            const staticPages = ['map', 'places', 'users', 'users/levels', 'categories']
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
@@ -45,12 +37,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let sitemap =
                 '<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'
 
-            const makeUrlNode = (
-                url: string,
-                date: string,
-                freq: 'monthly' | 'daily',
-                priority: string = '1.0'
-            ) => `
+            const makeUrlNode = (url: string, date: string, freq: 'monthly' | 'daily', priority: string = '1.0') => `
             <url>
               <loc>${SITE_LINK}${url}</loc>
               <lastmod>${date}</lastmod>
@@ -60,22 +47,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
           `
 
             // Static RU Locale
-            sitemap += staticPages
-                .map((url) =>
-                    makeUrlNode(url, new Date().toISOString(), 'monthly', '0.8')
-                )
-                .join('')
+            sitemap += staticPages.map((url) => makeUrlNode(url, new Date().toISOString(), 'monthly', '0.8')).join('')
 
             // Static EN Locale
             sitemap += staticPages
-                .map((url) =>
-                    makeUrlNode(
-                        'en/' + url,
-                        new Date().toISOString(),
-                        'monthly',
-                        '0.8'
-                    )
-                )
+                .map((url) => makeUrlNode('en/' + url, new Date().toISOString(), 'monthly', '0.8'))
                 .join('')
 
             // Dynamic RU Locale
@@ -85,9 +61,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             // Dynamic EN Locale
             sitemap += [...placesPages, ...usersPages]
-                .map((page) =>
-                    makeUrlNode('en/' + page.link, page.update, 'daily')
-                )
+                .map((page) => makeUrlNode('en/' + page.link, page.update, 'daily'))
                 .join('')
 
             sitemap += '</urlset>'

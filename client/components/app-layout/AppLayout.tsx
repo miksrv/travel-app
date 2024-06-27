@@ -1,13 +1,12 @@
+import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import NextNProgress from 'nextjs-progressbar'
-import React, { useEffect, useRef, useState } from 'react'
 
-import Dialog from '@/ui/dialog'
-import Icon from '@/ui/icon'
+import Menu from './Menu'
+import styles from './styles.module.sass'
 
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-
 import AppBar from '@/components/app-bar'
 import Footer from '@/components/footer'
 import LanguageSwitcher from '@/components/language-switcher'
@@ -15,11 +14,9 @@ import LoginForm from '@/components/login-form'
 import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
 import ThemeSwitcher from '@/components/theme-switcher'
-
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import Menu from './Menu'
-import styles from './styles.module.sass'
+import Dialog from '@/ui/dialog'
+import Icon from '@/ui/icon'
 
 type AuthFormType = 'login' | 'registration'
 
@@ -29,11 +26,7 @@ interface AppLayoutProps {
     children?: React.ReactNode
 }
 
-const AppLayout: React.FC<AppLayoutProps> = ({
-    className,
-    fullSize,
-    children
-}) => {
+const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.appLayout'
     })
@@ -62,35 +55,35 @@ const AppLayout: React.FC<AppLayoutProps> = ({
     }
 
     const handleScrollToTop = () => {
-        window?.scrollTo(0, 0)
+        window.scrollTo(0, 0)
     }
 
     useEffect(() => {
         const handleScroll = () => {
-            setScrollTopVisible(window?.scrollY > 500)
+            setScrollTopVisible(window.scrollY > 500)
         }
 
         const handleResize = () => {
             if (menuBarRef.current) {
                 const rect = menuBarRef.current.getBoundingClientRect()
 
-                setLeftDistance(rect.left + rect?.width - 5)
+                setLeftDistance(rect.left + rect.width - 5)
             }
         }
 
         handleResize()
 
-        window?.addEventListener('scroll', handleScroll)
-        window?.addEventListener('resize', handleResize)
+        window.addEventListener('scroll', handleScroll)
+        window.addEventListener('resize', handleResize)
 
         return () => {
-            window?.removeEventListener('scroll', handleScroll)
-            window?.removeEventListener('resize', handleResize)
+            window.removeEventListener('scroll', handleScroll)
+            window.removeEventListener('resize', handleResize)
         }
     }, [])
 
     useEffect(() => {
-        if (application?.showOverlay || sidebarOpen) {
+        if (application.showOverlay || sidebarOpen) {
             document.body.style.overflow = 'hidden'
         } else {
             document.body.style.overflow = 'auto'
@@ -99,16 +92,10 @@ const AppLayout: React.FC<AppLayoutProps> = ({
         return () => {
             document.body.style.overflow = 'auto'
         }
-    }, [application?.showOverlay, sidebarOpen])
+    }, [application.showOverlay, sidebarOpen])
 
     return (
-        <div
-            className={cn(
-                className,
-                styles.appLayout,
-                fullSize && styles.fullSize
-            )}
-        >
+        <div className={cn(className, styles.appLayout, fullSize && styles.fullSize)}>
             <NextNProgress
                 color={'#2688eb'}
                 options={{ showSpinner: false }}
@@ -136,9 +123,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 tabIndex={0}
                 className={cn(
                     styles.overlay,
-                    application?.showOverlay || sidebarOpen
-                        ? styles.displayed
-                        : styles.hidden
+                    application.showOverlay || sidebarOpen ? styles.displayed : styles.hidden
                 )}
                 onKeyDown={handleCloseOverlay}
                 onClick={handleCloseOverlay}
@@ -148,16 +133,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 open={application.showAuthDialog}
                 onCloseDialog={handleCloseAuthDialog}
             >
-                {authForm === 'login' && (
-                    <LoginForm
-                        onClickRegistration={() => setAuthForm('registration')}
-                    />
-                )}
-                {authForm === 'registration' && (
-                    <RegistrationForm
-                        onClickLogin={() => setAuthForm('login')}
-                    />
-                )}
+                {authForm === 'login' && <LoginForm onClickRegistration={() => setAuthForm('registration')} />}
+                {authForm === 'registration' && <RegistrationForm onClickLogin={() => setAuthForm('login')} />}
             </Dialog>
 
             <AppBar
@@ -165,16 +142,11 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                 onMenuClick={handleOpenSideBar}
             />
 
-            <aside
-                className={cn(
-                    styles.sidebar,
-                    sidebarOpen ? styles.opened : styles.closed
-                )}
-            >
+            <aside className={cn(styles.sidebar, sidebarOpen ? styles.opened : styles.closed)}>
                 <Menu
                     type={'mobile'}
-                    userId={authSlice?.user?.id}
-                    isAuth={authSlice?.isAuth}
+                    userId={authSlice.user?.id}
+                    isAuth={authSlice.isAuth}
                     onClick={handleCloseOverlay}
                 />
                 <div className={styles.content}>
@@ -194,8 +166,8 @@ const AppLayout: React.FC<AppLayoutProps> = ({
                     <div className={styles.rails}>
                         <Menu
                             type={'desktop'}
-                            userId={authSlice?.user?.id}
-                            isAuth={authSlice?.isAuth}
+                            userId={authSlice.user?.id}
+                            isAuth={authSlice.isAuth}
                         />
                         <div className={styles.switchers}>
                             <ThemeSwitcher />

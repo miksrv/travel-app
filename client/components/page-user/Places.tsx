@@ -1,27 +1,20 @@
-import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import React from 'react'
-
-import Container from '@/ui/container'
-import Pagination from '@/ui/pagination'
 
 import { API, SITE_LINK } from '@/api/api'
-
 import Header from '@/components/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PlacesList from '@/components/places-list'
+import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
+import Container from '@/ui/container'
+import Pagination from '@/ui/pagination'
 
 interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
     type: 'places' | 'bookmarks'
 }
 
-const UserPlaces: React.FC<UserPlacesProps> = ({
-    id,
-    user,
-    currentPage,
-    type
-}) => {
+const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) => {
     const { t, i18n } = useTranslation('common', {
         keyPrefix: 'components.pageUser.places'
     })
@@ -42,9 +35,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({
             <NextSeo
                 title={`${user?.name} - ${title}${pageTitle}`}
                 description={`${user?.name} - ${t('description')}${pageTitle}`}
-                canonical={`${canonicalUrl}users/${id}/${
-                    type === 'places' ? 'places' : 'bookmarks'
-                }`}
+                canonical={`${canonicalUrl}users/${id}/${type === 'places' ? 'places' : 'bookmarks'}`}
             />
 
             <Header

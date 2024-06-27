@@ -1,14 +1,13 @@
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
 import { useTranslation } from 'next-i18next'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
 
+import styles from './styles.module.sass'
+
+import { concatClassNames as cn } from '@/functions/helpers'
 import Chip from '@/ui/chips-select/Chip'
 import Icon from '@/ui/icon'
 import Spinner from '@/ui/spinner'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
 
 interface ChipsSelectProps {
     className?: string
@@ -55,12 +54,12 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     )
 
     const optionInValue = (option?: string): boolean =>
-        !!value?.find((item) => item.toLowerCase() === option?.toLowerCase())
+        !!value?.find((item) => item?.toLowerCase() === option?.toLowerCase())
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter' && search?.length) {
             if (!optionInValue(search)) {
-                onSelect?.([...(value || []), search])
+                onSelect?.([...(value ?? []), search])
             }
 
             setIsOpen(false)
@@ -77,7 +76,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     }
 
     const handleChangeInput = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const value = event.target.value?.trim()
+        const value = event.target.value.trim()
 
         if (value.length > 0) {
             setLocaLoading(true)
@@ -91,22 +90,19 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
 
     const handleSelect = (option: string) => {
         if (!optionInValue(option)) {
-            onSelect?.([...(value || []), option])
+            onSelect?.([...(value ?? []), option])
         }
 
         setSearch(undefined)
         setIsOpen(false)
     }
 
-    const handleClickRemove = (option: string) => {
-        onSelect?.([...(value?.filter((item) => item !== option) || [])])
+    const handleClickRemove = (option: string): void => {
+        onSelect?.([...(value?.filter((item) => item !== option) ?? [])])
     }
 
     const handleClickOutside = (event: MouseEvent) => {
-        if (
-            dropdownRef.current &&
-            !dropdownRef.current.contains(event.target as Node)
-        ) {
+        if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
             setIsOpen(false)
         }
     }
@@ -128,11 +124,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     return (
         <div
             ref={dropdownRef}
-            className={cn(
-                className,
-                styles.chipsSelect,
-                disabled && styles.disabled
-            )}
+            className={cn(className, styles.chipsSelect, disabled && styles.disabled)}
         >
             {label && <label className={styles.label}>{label}</label>}
             <div className={cn(styles.container, isOpen && styles.open)}>
@@ -163,11 +155,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                                 disabled={disabled}
                                 onClick={toggleDropdown}
                             >
-                                {isOpen ? (
-                                    <Icon name={'Up'} />
-                                ) : (
-                                    <Icon name={'Down'} />
-                                )}
+                                {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
                             </button>
                         )}
                     </span>
@@ -177,17 +165,11 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {!options?.length && (
-                            <li className={styles.emptyItem}>
-                                {t('notFound')}
-                            </li>
-                        )}
+                        {!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}
                         {options?.map((option) => (
                             <li
                                 key={option}
-                                className={cn(
-                                    value?.includes(option) && styles.active
-                                )}
+                                className={cn(value?.includes(option) && styles.active)}
                             >
                                 <button onClick={() => handleSelect(option)}>
                                     <span>{option}</span>

@@ -1,75 +1,76 @@
-import { useTranslation } from 'next-i18next'
+import React, { useMemo } from 'react'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import React, { useEffect, useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Badge from '@/ui/badge'
-import { BreadcrumbLink } from '@/ui/breadcrumbs'
-import Button from '@/ui/button'
-import RatingColored from '@/ui/rating-colored'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
+import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
-
 import BookmarkButton from '@/components/bookmark-button'
-import Header from '@/components/header'
-import PlaceCoverEditor from '@/components/place-cover-editor'
-
-import { addDecimalPoint, dateToUnixTime } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Icon from '@/ui/icon'
+import Popout from '@/ui/popout'
 
 interface PlaceHeaderProps {
     place?: Place
-    breadcrumbs?: BreadcrumbLink[]
-    ratingValue?: number
-    ratingCount?: number
+    coverHash?: number
+    onPhotoUploadClick?: (event?: React.MouseEvent) => void
+    onChangePlaceCoverClick?: (event?: React.MouseEvent) => void
 }
 
-const PlaceHeader: React.FC<PlaceHeaderProps> = ({
-    place,
-    breadcrumbs,
-    ratingValue,
-    ratingCount
-}) => {
+type PlaceAddress = {
+    id?: number
+    name?: string
+    type: ApiTypes.LocationTypes
+}
+
+const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUploadClick, onChangePlaceCoverClick }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.placeHeader'
     })
 
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const isAuth = useAppSelector((state) => state.auth?.isAuth)
-    const [coverHash, setCoverHash] = useState<string | number>('')
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
+
+    const placeAddress: PlaceAddress[] = useMemo(() => {
+        const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
+        const address: PlaceAddress[] = []
+
+        addressTypes.forEach((type) => {
+            if (place?.address?.[type]?.id) {
+                address.push({
+                    id: place?.address[type]?.id,
+                    name: place?.address[type]?.title,
+                    type
+                })
+            }
+        })
+
+        return address
+    }, [place?.address])
 
     const handleEditPlaceClick = (event: React.MouseEvent) => {
         if (!isAuth) {
-            event.stopPropagation()
+            event.preventDefault()
             dispatch(openAuthDialog())
         }
     }
 
-    const handleSaveCover = () => {
-        setTimeout(
-            () => setCoverHash(Math.floor(Date.now() / 1000).toString()),
-            400
-        )
-    }
-
     const handleBackLinkClick = async () => {
-        if (document?.referrer) {
+        if (!document.referrer) {
             await router.push('/places')
         } else {
             router.back()
         }
     }
 
-    useEffect(() => {
-        setCoverHash(dateToUnixTime(place?.updated?.date))
-    }, [])
-
     return (
-        <section className={styles.component}>
+        <section className={styles.placeHeader}>
             <div className={styles.image}>
                 {place?.cover && (
                     <>
@@ -97,81 +98,83 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             <div className={styles.topPanel}>
                 <Button
                     className={styles.backLink}
-                    icon={'Left'}
                     onClick={handleBackLinkClick}
+                    icon={'Left'}
                 />
 
-                {(place?.rating || (!!ratingCount && ratingValue)) && (
-                    <RatingColored
-                        className={styles.rating}
-                        value={ratingValue}
-                    >
-                        <div className={styles.value}>
-                            {addDecimalPoint(ratingValue ?? place?.rating)}
-                        </div>
-                        <div className={styles.count}>
-                            {t('ratingCount', { count: ratingCount ?? 0 })}
-                        </div>
-                    </RatingColored>
-                )}
-            </div>
-
-            <div className={styles.bottomPanel}>
-                <div>
-                    {/*<Badge*/}
-                    {/*    icon={'Photo'}*/}
-                    {/*    content={place?.photos || 0}*/}
-                    {/*/>*/}
-
-                    {!!place?.comments && (
-                        <Badge
-                            icon={'Comment'}
-                            content={place.comments}
-                        />
-                    )}
-
-                    {!!place?.bookmarks && (
-                        <Badge
-                            icon={'HeartEmpty'}
-                            content={place.bookmarks}
-                        />
-                    )}
-                </div>
-
-                <div>
+                <div className={styles.actionButtons}>
                     <BookmarkButton
                         size={'medium'}
                         placeId={place?.id}
                     />
+
+                    <Popout
+                        className={styles.contextMenu}
+                        action={<Icon name={'VerticalDots'} />}
+                    >
+                        <ul className={'contextListMenu'}>
+                            <li>
+                                <Link
+                                    href={`/map#${place?.lat},${place?.lon},14`}
+                                    title={t('openPlaceOnMap')}
+                                >
+                                    <Icon name={'Map'} />
+                                    {t('openPlaceOnMap')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={'#'}
+                                    title={t('photoUpload')}
+                                    onClick={onPhotoUploadClick}
+                                >
+                                    <Icon name={'Camera'} />
+                                    {t('photoUpload')}
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={'#'}
+                                    title={''}
+                                    onClick={onChangePlaceCoverClick}
+                                >
+                                    <Icon name={'Photo'} />
+                                    Изменить обложку
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={isAuth ? `/places/${place?.id}/edit` : '#'}
+                                    onClick={handleEditPlaceClick}
+                                    title={t('edit')}
+                                >
+                                    <Icon name={'EditLocation'} />
+                                    {t('edit')}
+                                </Link>
+                            </li>
+                        </ul>
+                    </Popout>
                 </div>
             </div>
 
-            <Header
-                title={place?.title}
-                currentPage={place?.title}
-                attachedBottom={true}
-                links={breadcrumbs}
-                actions={
-                    <>
-                        <PlaceCoverEditor
-                            placeId={place?.id}
-                            onSaveCover={handleSaveCover}
-                        />
+            <div className={styles.bottomPanel}>
+                <h1>{place?.title}</h1>
+                <div className={styles.address}>
+                    {placeAddress.map((address, i) => (
+                        <span key={`address${address.type}`}>
+                            <Link
+                                href={`/places?${address.type}=${address.id}`}
+                                title={`${t('allPlacesAtAddress')} ${address.name}`}
+                            >
+                                {address.name}
+                            </Link>
+                            {placeAddress.length - 1 !== i && ', '}
+                        </span>
+                    ))}
 
-                        <Button
-                            size={'medium'}
-                            icon={'EditLocation'}
-                            mode={'secondary'}
-                            link={
-                                isAuth ? `/places/${place?.id}/edit` : undefined
-                            }
-                            onClick={handleEditPlaceClick}
-                        >
-                            {t('buttonEdit')}
-                        </Button>
-                    </>
-                }
-            />
+                    {place?.address?.street && <>{`, ${place.address.street}`}</>}
+                </div>
+            </div>
         </section>
     )
 }

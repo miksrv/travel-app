@@ -1,18 +1,15 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React from 'react'
 import Markdown from 'react-markdown'
-
-import Button from '@/ui/button'
-
-import { Comments } from '@/api/types/Comments'
-
-import UserAvatar from '@/components/user-avatar'
-
-import { concatClassNames as cn, timeAgo } from '@/functions/helpers'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import CommentForm from './CommentForm'
 import styles from './styles.module.sass'
+
+import { Comments } from '@/api/types/Comments'
+import UserAvatar from '@/components/user-avatar'
+import { concatClassNames as cn, timeAgo } from '@/functions/helpers'
+import Button from '@/ui/button'
 
 interface CommentListItemProps {
     placeId: string
@@ -53,24 +50,16 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
                     </div>
                     <Markdown>{comment.content}</Markdown>
                     <div className={styles.info}>
-                        {timeAgo(comment?.created?.date)}
+                        {timeAgo(comment.created?.date)}
 
                         {isAuth && (
                             <Button
                                 className={styles.answerButton}
-                                onClick={() =>
-                                    onAnswerClick?.(
-                                        formAnswerId !== comment.id
-                                            ? comment.id
-                                            : undefined
-                                    )
-                                }
+                                onClick={() => onAnswerClick?.(formAnswerId !== comment.id ? comment.id : undefined)}
                                 size={'small'}
                                 mode={'link'}
                             >
-                                {formAnswerId === comment.id
-                                    ? t('answerCancel')
-                                    : t('answerAdd')}
+                                {formAnswerId === comment.id ? t('answerCancel') : t('answerAdd')}
                             </Button>
                         )}
                     </div>

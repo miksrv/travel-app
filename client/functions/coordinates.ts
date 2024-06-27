@@ -15,7 +15,11 @@ export const toDegreesMinutesAndSeconds = (coordinate: number): string => {
     return `${degrees}°${minutes}’${seconds}"`
 }
 
-export const convertDMS = (lat: number, lon: number): string => {
+export const convertDMS = (lat?: number, lon?: number): string => {
+    if (!lat || !lon) {
+        return ''
+    }
+
     const latitude = toDegreesMinutesAndSeconds(lat)
     const latitudeCardinal = lat >= 0 ? 'N' : 'S'
 
@@ -70,10 +74,7 @@ export const normalizeInput = (inp: string): string => {
 }
 
 export const isCoordinates = (value: string): boolean => {
-    const coordFieldRe = new RegExp(
-        `^((${reHemisphere})|(${reSignedFractional}))$`,
-        'u'
-    )
+    const coordFieldRe = new RegExp(`^((${reHemisphere})|(${reSignedFractional}))$`, 'u')
     const coordNumbersFieldRe = new RegExp(`^(${reSignedFractional})$`, 'u')
     const fields = normalizeInput(value).split(' ')
     return (
@@ -87,16 +88,12 @@ const getLatitudeLetter = (latIsSouth: boolean) => (latIsSouth ? 'S' : 'N')
 
 const getLongitudeLetter = (lonIsWest: boolean) => (lonIsWest ? 'W' : 'E')
 
-const parseHemispheres = (
-    h1: string,
-    h2: string,
-    h3: string,
-    allowEmpty = false
-) => {
+const parseHemispheres = (h1: string, h2: string, h3: string, allowEmpty = false) => {
     const isLat = (h: string) => h === 'N' || h === 'S'
 
     let swapLatLon = false
-    let hLat, hLon
+    let hLat
+    let hLon
     if (h1 && h2 && !h3) {
         hLat = h1.trim()
         hLon = h2.trim()
@@ -136,12 +133,8 @@ export const CoordinatesD = {
             },
             format: function () {
                 return {
-                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${
-                        this.latDeg
-                    }°`,
-                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${
-                        this.lonDeg
-                    }°`
+                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${this.latDeg}°`,
+                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°`
                 }
             },
             getLatLng: function (): ApiTypes.LatLonCoordinate {
@@ -156,12 +149,7 @@ export const CoordinatesD = {
                 return { lat: lat, lon: lon }
             },
             isValid: function () {
-                return (
-                    this.latDeg >= 0 &&
-                    this.latDeg <= 90 &&
-                    this.lonDeg >= 0 &&
-                    this.lonDeg <= 180
-                )
+                return this.latDeg >= 0 && this.latDeg <= 90 && this.lonDeg >= 0 && this.lonDeg <= 180
             },
             latDeg,
             latIsSouth,
@@ -184,12 +172,7 @@ export const CoordinatesD = {
         if (hemispheres.swapLatLon) {
             ;[d1, d2] = [d2, d1]
         }
-        const coord = this.create(
-            d1,
-            hemispheres.latIsSouth,
-            d2,
-            hemispheres.lonIsWest
-        )
+        const coord = this.create(d1, hemispheres.latIsSouth, d2, hemispheres.lonIsWest)
         if (coord.isValid()) {
             return {
                 coordinates: [coord]
@@ -205,14 +188,7 @@ export const CoordinatesD = {
 }
 
 export const CoordinatesDM = {
-    create(
-        latDeg: any,
-        latMin: any,
-        latIsSouth: any,
-        lonDeg: any,
-        lonMin: any,
-        lonIsWest: any
-    ) {
+    create(latDeg: any, latMin: any, latIsSouth: any, lonDeg: any, lonMin: any, lonIsWest: any) {
         return {
             equalTo: function (other: any) {
                 return (
@@ -226,12 +202,8 @@ export const CoordinatesDM = {
             },
             format: function () {
                 return {
-                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${
-                        this.latDeg
-                    }°${this.latMin}′`,
-                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${
-                        this.lonDeg
-                    }°${this.lonMin}′`
+                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${this.latDeg}°${this.latMin}′`,
+                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°${this.lonMin}′`
                 }
             },
             getLatLng: function (): ApiTypes.LatLonCoordinate {
@@ -293,14 +265,7 @@ export const CoordinatesDM = {
             if (hemispheres.swapLatLon) {
                 ;[d1, m1, d2, m2] = [d2, m2, d1, m1]
             }
-            const coord = CoordinatesDM.create(
-                d1,
-                m1,
-                hemispheres.latIsSouth,
-                d2,
-                m2,
-                hemispheres.lonIsWest
-            )
+            const coord = CoordinatesDM.create(d1, m1, hemispheres.latIsSouth, d2, m2, hemispheres.lonIsWest)
             if (coord.isValid()) {
                 coords.push(coord)
             }
@@ -313,7 +278,7 @@ export const CoordinatesDM = {
     },
 
     regexp: new RegExp(
-        `^(${reHemisphere} )?(${reInteger}) (${reFractional}) (${reHemisphere} )?(${reInteger}) (${reFractional})( ${reHemisphere})?$`, // eslint-disable-line max-len
+        `^(${reHemisphere} )?(${reInteger}) (${reFractional}) (${reHemisphere} )?(${reInteger}) (${reFractional})( ${reHemisphere})?$`,
         'u'
     )
 }
@@ -344,12 +309,8 @@ export const CoordinatesDMS = {
             },
             format: function () {
                 return {
-                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${
-                        this.latDeg
-                    }°${this.latMin}′${this.latSec}″`,
-                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${
-                        this.lonDeg
-                    }°${this.lonMin}′${this.lonSec}″`
+                    latitude: `${getLatitudeLetter(this.latIsSouth)} ${this.latDeg}°${this.latMin}′${this.latSec}″`,
+                    longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°${this.lonMin}′${this.lonSec}″`
                 }
             },
             getLatLng: function (): ApiTypes.LatLonCoordinate {
@@ -377,10 +338,8 @@ export const CoordinatesDMS = {
                     this.lonMin <= 59 &&
                     this.lonSec >= 0 &&
                     this.lonSec < 60 &&
-                    (this.latDeg <= 89 ||
-                        (this.latMin === 0 && this.latSec === 0)) &&
-                    (this.lonDeg <= 179 ||
-                        (this.lonMin === 0 && this.lonSec === 0))
+                    (this.latDeg <= 89 || (this.latMin === 0 && this.latSec === 0)) &&
+                    (this.lonDeg <= 179 || (this.lonMin === 0 && this.lonSec === 0))
                 )
             },
             latDeg,
@@ -399,42 +358,16 @@ export const CoordinatesDMS = {
         if (!m) {
             return { error: true }
         }
-        const [h1, d1Str, m1Str, s1Str, h2, d2Str, m2Str, s2Str, h3] =
-            m.slice(1)
+        const [h1, d1Str, m1Str, s1Str, h2, d2Str, m2Str, s2Str, h3] = m.slice(1)
         const hemispheres = parseHemispheres(h1, h2, h3, true)
         if (hemispheres.error) {
             return { error: true }
         }
-        let [d1, m1, s1, d2, m2, s2] = [
-            d1Str,
-            m1Str,
-            s1Str,
-            d2Str,
-            m2Str,
-            s2Str
-        ].map(parseFloat)
+        let [d1, m1, s1, d2, m2, s2] = [d1Str, m1Str, s1Str, d2Str, m2Str, s2Str].map(parseFloat)
         const coords = []
         if (hemispheres.empty) {
-            const coord1 = CoordinatesDMS.create(
-                d1,
-                m1,
-                s1,
-                false,
-                d2,
-                m2,
-                s2,
-                false
-            )
-            const coord2 = CoordinatesDMS.create(
-                d2,
-                m2,
-                s2,
-                false,
-                d1,
-                m1,
-                s1,
-                false
-            )
+            const coord1 = CoordinatesDMS.create(d1, m1, s1, false, d2, m2, s2, false)
+            const coord2 = CoordinatesDMS.create(d2, m2, s2, false, d1, m1, s1, false)
             if (coord1.isValid()) {
                 coords.push(coord1)
             }
@@ -445,16 +378,7 @@ export const CoordinatesDMS = {
             if (hemispheres.swapLatLon) {
                 ;[d1, m1, s1, d2, m2, s2] = [d2, m2, s2, d1, m1, s1]
             }
-            const coord = CoordinatesDMS.create(
-                d1,
-                m1,
-                s1,
-                hemispheres.latIsSouth,
-                d2,
-                m2,
-                s2,
-                hemispheres.lonIsWest
-            )
+            const coord = CoordinatesDMS.create(d1, m1, s1, hemispheres.latIsSouth, d2, m2, s2, hemispheres.lonIsWest)
             if (coord.isValid()) {
                 coords.push(coord)
             }
@@ -475,10 +399,7 @@ export const CoordinatesDSigned = {
     create(latDegSigned: any, lonDegSigned: any) {
         return {
             equalTo: function (other: any) {
-                return (
-                    this.latDegSigned === other.latDegSigned &&
-                    this.lonDegSigned === other.lonDegSigned
-                )
+                return this.latDegSigned === other.latDegSigned && this.lonDegSigned === other.lonDegSigned
             },
             format: function () {
                 return {

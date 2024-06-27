@@ -1,18 +1,15 @@
-import { useTranslation } from 'next-i18next'
 import React, { useState } from 'react'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
+import CommentListItem from './CommentListItem'
+import styles from './styles.module.sass'
 
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Comments } from '@/api/types/Comments'
-
 import CommentForm from '@/components/comment-list/CommentForm'
-
 import { concatClassNames as cn } from '@/functions/helpers'
-
-import CommentListItem from './CommentListItem'
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
 
 interface CommentListProps {
     placeId: string
@@ -37,10 +34,8 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
 
     const renderComments = (comments: Comments[], answerId?: string) =>
         comments
-            ?.filter((item) =>
-                !answerId ? !item.answerId : item.answerId === answerId
-            )
-            ?.map((item) => (
+            .filter((item) => (!answerId ? !item.answerId : item.answerId === answerId))
+            .map((item) => (
                 <React.Fragment key={item.id}>
                     <CommentListItem
                         placeId={placeId}
@@ -64,18 +59,13 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                     <CommentForm
                         placeId={placeId}
                         isAuth={appAuth.isAuth}
-                        user={appAuth?.user}
+                        user={appAuth.user}
                     />
                 </div>
             )}
 
             {!appAuth.isAuth && (
-                <div
-                    className={cn(
-                        styles.loginContainer,
-                        !!comments?.length && styles.topBorder
-                    )}
-                >
+                <div className={cn(styles.loginContainer, !!comments?.length && styles.topBorder)}>
                     <div>{t('loginForComment')}</div>
                     <Button
                         className={styles.loginButton}

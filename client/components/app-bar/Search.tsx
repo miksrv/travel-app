@@ -1,16 +1,14 @@
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/router'
 import React, { useMemo, useState } from 'react'
+import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next'
 
-import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { ApiTypes } from '@/api/types'
-
-import * as Coordinates from '@/functions/coordinates'
 import { categoryImage } from '@/functions/categories'
-
-import styles from './styles.module.sass'
+import * as Coordinates from '@/functions/coordinates'
+import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
 
 enum DropdownOptionType {
     COORDINATES = 'coordinates',
@@ -33,13 +31,13 @@ const Search: React.FC<SearchProps> = () => {
             limit: 10,
             search: searchString
         },
-        { skip: searchString?.length <= 2 }
+        { skip: searchString.length <= 2 }
     )
 
     const options = useMemo(
         () =>
             data?.items?.map((item) => {
-                let address: string[] = []
+                const address: string[] = []
 
                 if (item.address?.country) {
                     address.push(item.address.country.title)
@@ -80,8 +78,8 @@ const Search: React.FC<SearchProps> = () => {
             ]) {
                 const result = parser.fromString(normalizeCoords)
 
-                if (!result?.error) {
-                    const resultItems = result?.coordinates?.map((it) => {
+                if (!result.error) {
+                    const resultItems = result.coordinates?.map((it) => {
                         const coordStrings = it.format()
                         const latLng = it.getLatLng()
 
@@ -109,9 +107,7 @@ const Search: React.FC<SearchProps> = () => {
     const handleSelectLocation = async (value: DropdownOption) => {
         if (value.type === DropdownOptionType.COORDINATES) {
             const coords = value.value as ApiTypes.LatLonCoordinate
-            await router.push(
-                `/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`
-            )
+            await router.push(`/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`)
         } else {
             await router.push(`/places/${value.value}`)
         }
@@ -123,7 +119,7 @@ const Search: React.FC<SearchProps> = () => {
             placeholder={t(`${TKEY}placeholder`)}
             debounceDelay={300}
             leftIcon={'Search'}
-            hideArrow={!options?.length || !searchString?.length}
+            hideArrow={!options?.length || !searchString.length}
             loading={isFetching}
             options={foundCoords ?? options}
             onSearch={handleSearchLocation}

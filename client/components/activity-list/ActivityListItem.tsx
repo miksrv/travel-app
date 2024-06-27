@@ -1,21 +1,18 @@
-import { useTranslation } from 'next-i18next'
-import Link from 'next/link'
 import React, { useState } from 'react'
 import PhotoAlbum from 'react-photo-album'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
-import Container from '@/ui/container'
-import Icon from '@/ui/icon'
-import ReadMore from '@/ui/read-more'
+import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
-
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
-
 import { concatClassNames as cn, formatDate } from '@/functions/helpers'
-
-import styles from './styles.module.sass'
+import Container from '@/ui/container'
+import Icon from '@/ui/icon'
+import ReadMore from '@/ui/read-more'
 
 interface ActivityListItemProps {
     item: Item
@@ -84,20 +81,15 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                 }
             />
 
-            {(item.type === ActivityTypes.Place ||
-                item.type === ActivityTypes.Edit) &&
-                item.place?.content && (
-                    <ReadMore
-                        className={cn(
-                            styles.content,
-                            !!item.photos?.length && styles.contentGallery
-                        )}
-                        showMoreText={t('readMore')}
-                        showLessText={t('readLess')}
-                    >
-                        {item.place?.content}
-                    </ReadMore>
-                )}
+            {(item.type === ActivityTypes.Place || item.type === ActivityTypes.Edit) && item.place?.content && (
+                <ReadMore
+                    className={cn(styles.content, !!item.photos?.length && styles.contentGallery)}
+                    showMoreText={t('readMore')}
+                    showLessText={t('readLess')}
+                >
+                    {item.place.content}
+                </ReadMore>
+            )}
 
             {!!item.photos?.length && (
                 <>
@@ -105,7 +97,7 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                     <PhotoAlbum
                         layout={'rows'}
                         spacing={5}
-                        photos={item.photos?.map((photo) => ({
+                        photos={item.photos.map((photo) => ({
                             height: photo.height,
                             src: `${IMG_HOST}${photo.preview}`,
                             width: photo.width
@@ -133,10 +125,10 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                     {item.place?.title}
                 </Link>
 
-                {!!item?.views && (
+                {!!item.views && (
                     <div className={styles.viewCounter}>
                         <Icon name={'Eye'} />
-                        {item?.views || 0}
+                        {item.views || 0}
                     </div>
                 )}
             </div>

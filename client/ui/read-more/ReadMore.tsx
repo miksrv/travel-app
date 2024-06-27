@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
 
-import { concatClassNames as cn, truncateText } from '@/functions/helpers'
-
 import styles from './styles.module.sass'
+
+import { concatClassNames as cn, truncateText } from '@/functions/helpers'
 
 interface ReadMoreProps {
     className?: string
@@ -27,7 +27,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({
     }
 
     const toggleButton = () =>
-        children && children?.length > charCount ? (
+        children && children.length > charCount ? (
             <button
                 onClick={toggleReadMore}
                 className={styles.readMoreButton}
@@ -42,10 +42,7 @@ const ReadMore: React.FC<ReadMoreProps> = ({
         <div className={cn(className, styles.readMore)}>
             {!readMore ? (
                 <p>
-                    {truncateText(children, charCount) +
-                        (children && children?.length > charCount
-                            ? '...'
-                            : '')}{' '}
+                    {truncateText(children, charCount) + (children && children.length > charCount ? '...' : '')}{' '}
                     {toggleButton()}
                 </p>
             ) : (

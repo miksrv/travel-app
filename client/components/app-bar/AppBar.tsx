@@ -1,28 +1,24 @@
-import { useTranslation } from 'next-i18next'
-import Image from 'next/image'
-import Link from 'next/link'
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
+import Image from 'next/image'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Icon from '@/ui/icon'
+import Notifications from './Notifications'
+import Search from './Search'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
 import { logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import AppAuthChecker from '@/components/app-auth-checker'
 import UserMenu from '@/components/app-bar/UserMenu'
-
 import { concatClassNames as cn, round } from '@/functions/helpers'
-
 import logo from '@/public/images/geometki.png'
-
-import Notifications from './Notifications'
-import Search from './Search'
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Icon from '@/ui/icon'
 
 interface HeaderProps {
     fullSize?: boolean
@@ -35,9 +31,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
     const geolocation = useGeolocation()
 
     const appAuth = useAppSelector((state) => state.auth)
-    const userLocation = useAppSelector(
-        (state) => state.application.userLocation
-    )
+    const userLocation = useAppSelector((state) => state.application.userLocation)
 
     const [updateLocation] = API.useLocationPutCoordinatesMutation()
 
@@ -51,15 +45,10 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
     }
 
     useEffect(() => {
-        const updateLat = round(geolocation?.latitude, 3)
-        const updateLng = round(geolocation?.longitude, 3)
+        const updateLat = round(geolocation.latitude, 3)
+        const updateLng = round(geolocation.longitude, 3)
 
-        if (
-            updateLat &&
-            updateLng &&
-            updateLat !== userLocation?.lat &&
-            updateLng !== userLocation?.lon
-        ) {
+        if (updateLat && updateLng && updateLat !== userLocation?.lat && updateLng !== userLocation?.lon) {
             const data: ApiTypes.LatLonCoordinate = {
                 lat: updateLat,
                 lon: updateLng

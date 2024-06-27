@@ -6,16 +6,15 @@ import { User } from '@/api/types/User'
 
 // import { formatDateISO } from '@/functions/helpers'
 
-export const PlaceSchema = (place: Place): LocalBusiness => ({
-    // @ts-ignore
+export const PlaceSchema = (place: Place): LocalBusiness | any => ({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     address: {
         '@type': 'PostalAddress',
-        addressCountry: place?.address?.country?.title,
-        addressLocality: place?.address?.locality?.title,
-        addressRegion: place?.address?.region?.title,
-        streetAddress: place?.address?.street
+        addressCountry: place.address?.country?.title,
+        addressLocality: place.address?.locality?.title,
+        addressRegion: place.address?.region?.title,
+        streetAddress: place.address?.street
     },
     // author: {
     //     '@type': 'Person',
@@ -27,25 +26,24 @@ export const PlaceSchema = (place: Place): LocalBusiness => ({
     // },
     // dateModified: formatDateISO(place?.updated?.date),
     // datePublished: formatDateISO(place?.created?.date),
-    description: place?.content,
+    description: place.content,
     geo: {
         '@type': 'GeoCoordinates',
-        latitude: place?.lat,
-        longitude: place?.lon
+        latitude: place.lat,
+        longitude: place.lon
     },
-    image: place?.cover?.full ? `${IMG_HOST}${place?.cover?.full}` : undefined,
+    image: place.cover?.full ? `${IMG_HOST}${place.cover.full}` : undefined,
     interactionStatistic: {
         '@type': 'InteractionCounter',
-        userInteractionCount: place?.views
+        userInteractionCount: place.views
     },
-    name: place?.title
+    name: place.title
 })
 
-export const UserSchema = (user: User): Person => ({
-    // @ts-ignore
+export const UserSchema = (user: User): Person | any => ({
     '@context': 'https://schema.org',
     '@type': 'Person',
-    identifier: user?.id,
-    image: user?.avatar ? `${IMG_HOST}${user.avatar}` : undefined,
-    name: user?.name
+    identifier: user.id,
+    image: user.avatar ? `${IMG_HOST}${user.avatar}` : undefined,
+    name: user.name
 })

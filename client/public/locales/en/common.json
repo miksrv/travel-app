@@ -93,15 +93,16 @@
                 "breadCrumbPlacesLink": "Interesting Places"
             },
             "place": {
-                "siteName": "Geometki",
                 "breadCrumbPlacesLink": "Interesting Places",
-                "allNearPlacesButton": "All places nearby"
+                "allNearPlacesButton": "All places nearby",
+                "photos": "Photos",
+                "uploadPhoto": "Upload photos"
             },
             "placeHeader": {
-                "buttonEdit": "Edit",
-                "ratingCount_one": "{{count}} vote",
-                "ratingCount_other": "{{count}} votes",
-                "km": "km"
+                "edit": "Edit",
+                "photoUpload": "Upload photo",
+                "allPlacesAtAddress": "All place at address",
+                "openPlaceOnMap": "Open on the map"
             },
             "placeInformation": {
                 "author": "Author:",
@@ -113,7 +114,6 @@
                 "distance": "Distance to me:",
                 "km": "km",
                 "address": "Address:",
-                "addressLinkTitle": "Points of Interest::",
                 "dateFormat": "MMMM D, YYYY, h:mm A"
             },
             "placePhotos": {
@@ -121,7 +121,6 @@
                 "buttonUpload": "Upload"
             },
             "socialRating": {
-                "userRating": "Rate this place:",
                 "ratingSuccess": "Thanks for rating the place!"
             },
             "placeDescription": {
@@ -129,7 +128,7 @@
                 "buttonSave": "Save",
                 "buttonCancel": "Cancel",
                 "buttonEdit": "Edit",
-                "emptyContent": "No description",
+                "emptyContent": "Description not added yet",
                 "tagSelectLabel": "Select or add point of interest labels"
             },
             "placeComments": {
@@ -181,12 +180,13 @@
                 "title": "Profile",
                 "photos": "Photos",
                 "places": "Added places",
+                "linkAllPhotos": "All",
                 "buttonShowAllPhotos": "Show all photos",
                 "breadCrumbUsersLink": "Travelers"
             }
         },
         "photoGallery": {
-            "noPhotos": "No photos",
+            "noPhotos": "No photos uploaded yet",
             "linkPhotoTitle": "Photo",
             "acceptConfirmMessage": "Delete photo?",
             "acceptConfirmDelete": "Delete",
@@ -194,7 +194,7 @@
             "actionDelete": "Remove"
         },
         "placeCoverEditor": {
-            "buttonCover": "Cover",
+            "buttonCover": "Replace cover",
             "buttonSave": "Save",
             "selectPhoto": "Select a photo",
             "saveNewCover": "Save the new cover",
@@ -271,7 +271,8 @@
         "placesList": {
             "emptyList": "There are no interesting places matching your request. Try changing your search terms.",
             "placesListItem": {
-                "noData": "Nothing yet"
+                "emptyContent": "Description not added yet",
+                "allPlacesAtAddress": "All place at address"
             }
         },
         "categoriesList": {

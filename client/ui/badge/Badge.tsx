@@ -1,9 +1,9 @@
 import React from 'react'
 
+import styles from './styles.module.sass'
+
 import Icon from '@/ui/icon'
 import { IconTypes } from '@/ui/icon/types'
-
-import styles from './styles.module.sass'
 
 interface BadgeProps {
     icon?: IconTypes

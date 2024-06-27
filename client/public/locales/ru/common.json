@@ -90,18 +90,19 @@
         "pagePlace": {
             "edit": {
                 "pageTitle": "Редактирование",
-                "breadCrumbCurrent": "Редактирование",
                 "breadCrumbPlacesLink": "Интересные места"
             },
             "place": {
                 "breadCrumbPlacesLink": "Интересные места",
-                "allNearPlacesButton": "Все места рядом"
+                "allNearPlacesButton": "Все места рядом",
+                "photos": "Фотографии",
+                "uploadPhoto": "Загрузить фотографии"
             },
             "placeHeader": {
-                "buttonEdit": "Редактировать",
-                "ratingCount_one": "{{count}} голос",
-                "ratingCount_few": "{{count}} голоса",
-                "ratingCount_many": "{{count}} голосов"
+                "edit": "Редактировать",
+                "photoUpload": "Загрузить фото",
+                "allPlacesAtAddress": "Все место по адресу",
+                "openPlaceOnMap": "Открыть на карте"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -114,7 +115,6 @@
                 "km": "км",
                 "editTime": "Отредактировано:",
                 "address": "Адрес:",
-                "addressLinkTitle": "Интересные места:",
                 "dateFormat": "D MMMM YYYY, HH:mm"
             },
             "placePhotos": {
@@ -122,7 +122,6 @@
                 "buttonUpload": "Загрузить"
             },
             "socialRating": {
-                "userRating": "Оцените место:",
                 "ratingSuccess": "Спасибо за оценку места!"
             },
             "placeDescription": {
@@ -130,7 +129,7 @@
                 "buttonSave": "Сохранить",
                 "buttonCancel": "Отмена",
                 "buttonEdit": "Редактировать",
-                "emptyContent": "Нет описания",
+                "emptyContent": "Описание еще не добавлено",
                 "tagSelectLabel": "Выберите или добавьте метки интересного места"
             },
             "placeComments": {
@@ -182,12 +181,13 @@
                 "title": "Профиль",
                 "photos": "Фотографии",
                 "places": "Добавленные места",
+                "linkAllPhotos": "Все",
                 "buttonShowAllPhotos": "Показать все фотографии",
                 "breadCrumbUsersLink": "Путешественники"
             }
         },
         "photoGallery": {
-            "noPhotos": "Нет фотографий",
+            "noPhotos": "Пока нет загруженных фотографий",
             "linkPhotoTitle": "Фото",
             "acceptConfirmMessage": "Удалить фотографию?",
             "acceptConfirmDelete": "Удалить",
@@ -195,7 +195,7 @@
             "actionDelete": "Удалить"
         },
         "placeCoverEditor": {
-            "buttonCover": "Обложка",
+            "buttonCover": "Заменить обложку",
             "buttonSave": "Сохранить",
             "selectPhoto": "Выберите фотографию",
             "saveNewCover": "Сохраните новую обложку",
@@ -272,7 +272,8 @@
         "placesList": {
             "emptyList": "Нет интересных мест по вашему запросу. Попробуйте изменить условия поиска.",
             "placesListItem": {
-                "noData": "Пока ничего нет"
+                "emptyContent": "Описание еще не добавлено",
+                "allPlacesAtAddress": "Все место по адресу"
             }
         },
         "categoriesList": {

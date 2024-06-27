@@ -1,4 +1,5 @@
-import { useTranslation } from 'next-i18next'
+'use client'
+
 import React, { useEffect } from 'react'
 import {
     OKIcon,
@@ -7,46 +8,44 @@ import {
     RedditShareButton,
     TelegramIcon,
     TelegramShareButton,
-    VKIcon,
-    VKShareButton,
     ViberIcon,
     ViberShareButton,
+    VKIcon,
+    VKShareButton,
     WhatsappIcon,
     WhatsappShareButton
 } from 'react-share'
+import { useTranslation } from 'next-i18next'
 
-import Container from '@/ui/container'
-import Rating from '@/ui/rating'
+import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch } from '@/api/store'
-
-import styles from './styles.module.sass'
+import { useAppDispatch, useAppSelector } from '@/api/store'
+import { addDecimalPoint } from '@/functions/helpers'
+import Container from '@/ui/container'
+import Rating from '@/ui/rating'
 
 interface SocialRatingProps {
     placeId?: string
     placeUrl?: string
-    ratingValue?: number | null
 }
 
-const SocialRating: React.FC<SocialRatingProps> = ({
-    placeId,
-    placeUrl,
-    ratingValue
-}) => {
+const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const dispatch = useAppDispatch()
 
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.socialRating'
     })
 
-    const { data: ratingData } = API.useRatingGetListQuery(placeId!, {
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
+
+    const { data: ratingData } = API.useRatingGetListQuery(placeId ?? '', {
+        skip: !placeId,
         refetchOnMountOrArgChange: true
     })
 
-    const [changeRating, { isLoading: ratingLoading, isSuccess }] =
-        API.useRatingPutScoreMutation()
+    const [changeRating, { isLoading: ratingLoading, isSuccess }] = API.useRatingPutScoreMutation()
 
     const handleRatingChange = (value?: number) => {
         if (value && placeId) {
@@ -58,7 +57,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({
     }
 
     useEffect(() => {
-        if (isSuccess && !ratingData?.vote) {
+        if (isSuccess && !ratingData?.vote && !isAuth) {
             dispatch(
                 Notify({
                     id: 'placeRating',
@@ -72,12 +71,18 @@ const SocialRating: React.FC<SocialRatingProps> = ({
     return (
         <Container className={styles.socialRating}>
             <div className={styles.rating}>
-                <div className={styles.ratingCaption}>{t('userRating')}</div>
                 <Rating
-                    value={ratingData?.vote ?? ratingValue ?? undefined}
+                    value={ratingData?.rating}
+                    voted={!!ratingData?.vote}
                     disabled={ratingLoading}
                     onChange={handleRatingChange}
                 />
+
+                {ratingData?.rating ? (
+                    <div className={styles.ratingValue}>{addDecimalPoint(ratingData?.rating)}</div>
+                ) : (
+                    ''
+                )}
             </div>
 
             <div className={styles.share}>

@@ -1,22 +1,20 @@
 'use client'
 
-import { useTranslation } from 'next-i18next'
-import { useRouter } from 'next/dist/client/router'
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { useRouter } from 'next/dist/client/router'
+import { useTranslation } from 'next-i18next'
 
-import Button from '@/ui/button'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
+import styles from './styles.module.sass'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-
 import { validateEmail } from '@/functions/validators'
-
-import styles from './styles.module.sass'
+import Button from '@/ui/button'
+import Input from '@/ui/input'
+import Message from '@/ui/message'
 
 type FormDataType = ApiTypes.RequestAuthRegistration & {
     repeat_password?: string
@@ -26,9 +24,7 @@ interface RegistrationFormProps {
     onClickLogin?: () => void
 }
 
-const RegistrationForm: React.FC<RegistrationFormProps> = ({
-    onClickLogin
-}) => {
+const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.registrationForm'
     })
@@ -39,14 +35,10 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     const [formData, setFormData] = useState<FormDataType>()
     const [formErrors, setFormErrors] = useState<FormDataType>()
 
-    const [registration, { data, error, isLoading }] =
-        API.useAuthPostRegistrationMutation()
+    const [registration, { data, error, isLoading }] = API.useAuthPostRegistrationMutation()
 
     const validationErrors = useMemo(
-        () =>
-            isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error)
-                ? error?.messages
-                : undefined,
+        () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -65,14 +57,11 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
             errors.password = t('errorPassword')
         }
 
-        if (formData?.password && formData?.password?.length < 8) {
+        if (formData?.password && formData.password.length < 8) {
             errors.password = t('errorPasswordLength')
         }
 
-        if (
-            !formData?.repeat_password ||
-            formData?.repeat_password !== formData?.password
-        ) {
+        if (!formData?.repeat_password || formData.repeat_password !== formData.password) {
             errors.repeat_password = t('errorPasswordMismatch')
         }
 
@@ -81,9 +70,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
         return !Object.keys(errors).length
     }, [formData])
 
-    const handleChange = ({
-        target: { name, value }
-    }: React.ChangeEvent<HTMLInputElement>) => {
+    const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
     }
 
@@ -106,14 +93,14 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({
     useEffect(() => {
         if (data?.auth) {
             dispatch(login(data))
-            router.push(`/users/${data?.user?.id}`)
+            router.push(`/users/${data.user?.id}`)
             dispatch(closeAuthDialog())
         }
     }, [data])
 
     return (
         <div className={styles.registrationForm}>
-            {!!Object.values(formErrors || {})?.length && (
+            {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
                     title={t('errorsMessageTitle')}

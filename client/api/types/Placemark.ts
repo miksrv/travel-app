@@ -8,10 +8,7 @@ export type Place = Pick<PlaceType, 'lat' | 'lon'> & {
     category: Categories
 }
 
-export type Photo = Pick<
-    PhotoType,
-    'title' | 'preview' | 'full' | 'placeId' | 'author' | 'created'
-> & {
+export type Photo = Pick<PhotoType, 'title' | 'preview' | 'full' | 'placeId' | 'author' | 'created'> & {
     type?: 'cluster' | 'point'
     count?: number
     lat: number

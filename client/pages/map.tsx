@@ -1,26 +1,23 @@
+import React, { useCallback, useEffect, useState } from 'react'
 import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import { GetServerSidePropsResult, NextPage } from 'next'
+import { useRouter } from 'next/dist/client/router'
+import dynamic from 'next/dynamic'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { useRouter } from 'next/dist/client/router'
-import dynamic from 'next/dynamic'
-import React, { useCallback, useEffect, useState } from 'react'
-
-import Container from '@/ui/container'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Place, Placemark } from '@/api/types'
-
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
 import PhotoLightbox from '@/components/photo-lightbox'
-
 import { round } from '@/functions/helpers'
+import Container from '@/ui/container'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -53,21 +50,19 @@ const MapPage: NextPage<MapPageProps> = () => {
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const { data: poiListData, isFetching: placesLoading } =
-        API.usePoiGetListQuery(
-            {
-                bounds: mapBounds,
-                categories: mapCategories ?? [],
-                zoom: mapZoom
-            },
-            { skip: !mapBounds || mapType !== 'Places' }
-        )
+    const { data: poiListData, isFetching: placesLoading } = API.usePoiGetListQuery(
+        {
+            bounds: mapBounds,
+            categories: mapCategories ?? [],
+            zoom: mapZoom
+        },
+        { skip: !mapBounds || mapType !== 'Places' }
+    )
 
-    const { data: photoListData, isFetching: photosLoading } =
-        API.usePoiGetPhotoListQuery(
-            { bounds: mapBounds, zoom: mapZoom },
-            { skip: !mapBounds || mapType !== 'Photos' }
-        )
+    const { data: photoListData, isFetching: photosLoading } = API.usePoiGetPhotoListQuery(
+        { bounds: mapBounds, zoom: mapZoom },
+        { skip: !mapBounds || mapType !== 'Photos' }
+    )
 
     const handleCloseLightbox = () => {
         setShowLightbox(false)
@@ -79,12 +74,8 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(true)
     }
 
-    const updateUrlCoordinates = async (
-        lat?: number,
-        lon?: number,
-        zoom?: number
-    ) => {
-        const url = new URL(window?.location?.href)
+    const updateUrlCoordinates = async (lat?: number, lon?: number, zoom?: number) => {
+        const url = new URL(window.location.href)
         const hash = url.hash
 
         if (!lat || !lon) {
@@ -129,7 +120,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     }
 
     useEffect(() => {
-        const hash = window?.location?.hash ?? null
+        const hash = window.location.hash ?? null
 
         setCategories(Object.values(Place.Categories))
         setMapCategories(Object.values(Place.Categories))
@@ -179,17 +170,9 @@ const MapPage: NextPage<MapPageProps> = () => {
                 className={'mainHeader'}
                 actions={
                     <>
-                        {t(
-                            `${TKEY}${
-                                mapType === 'Places'
-                                    ? 'pointsCount'
-                                    : 'photosCount'
-                            }`
-                        )}
+                        {t(`${TKEY}${mapType === 'Places' ? 'pointsCount' : 'photosCount'}`)}
                         <strong style={{ marginLeft: '5px' }}>
-                            {(mapType === 'Places'
-                                ? poiListData?.count
-                                : photoListData?.count) ?? 0}
+                            {(mapType === 'Places' ? poiListData?.count : photoListData?.count) ?? 0}
                         </strong>
                     </>
                 }

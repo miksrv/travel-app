@@ -1,72 +1,57 @@
+import React, { useCallback, useMemo, useState } from 'react'
 import debounce from 'lodash-es/debounce'
 import { useTranslation } from 'next-i18next'
-import React, { useCallback, useMemo, useState } from 'react'
-
-import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
-
-import { API } from '@/api/api'
-import { ApiTypes } from '@/api/types'
-
-import * as Coordinates from '@/functions/coordinates'
 
 import styles from './styles.module.sass'
 
+import { API } from '@/api/api'
+import { ApiTypes } from '@/api/types'
+import * as Coordinates from '@/functions/coordinates'
+import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
+
 interface SearchControlProps {
     onClear?: () => void
-    onSelectResult?: (
-        coordinates: ApiTypes.LatLonCoordinate,
-        zoom?: number,
-        showPosition?: boolean
-    ) => void
+    onSelectResult?: (coordinates: ApiTypes.LatLonCoordinate, zoom?: number, showPosition?: boolean) => void
 }
 
-const SearchControl: React.FC<SearchControlProps> = ({
-    onClear,
-    onSelectResult
-}) => {
+const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.interactiveMap.searchControl'
     })
 
     const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
 
-    const [geoSearch, { data, isLoading }] =
-        API.useLocationGetGeosearchMutation()
+    const [geoSearch, { data, isLoading }] = API.useLocationGetGeosearchMutation()
 
     const locationOptions: DropdownOption[] = useMemo(
         () =>
             data?.items?.map((item) => {
-                let address: string[] = []
+                const address: string[] = []
 
-                if (item?.country) {
+                if (item.country) {
                     address.push(item.country)
                 }
 
-                if (item?.region) {
+                if (item.region) {
                     address.push(item.region)
                 }
 
-                if (item?.district) {
+                if (item.district) {
                     address.push(item.district)
                 }
 
-                if (item?.locality) {
+                if (item.locality) {
                     address.push(item.locality)
                 }
 
-                if (item?.street) {
+                if (item.street) {
                     address.push(item.street)
                 }
 
                 return {
                     description: address.join(', '),
-                    key: (item?.lat || 0) + (item?.lon || 0),
-                    title:
-                        item?.locality ??
-                        item?.region ??
-                        item?.district ??
-                        item?.country ??
-                        '',
+                    key: (item.lat || 0) + (item.lon || 0),
+                    title: item.locality ?? item.region ?? item.district ?? item.country ?? '',
                     value: {
                         lat: item.lat,
                         lon: item.lon
@@ -89,8 +74,8 @@ const SearchControl: React.FC<SearchControlProps> = ({
                 ]) {
                     const result = parser.fromString(normalizeCoords)
 
-                    if (!result?.error) {
-                        const resultItems = result?.coordinates?.map((it) => {
+                    if (!result.error) {
+                        const resultItems = result.coordinates?.map((it) => {
                             const coordStrings = it.format()
                             const latLng = it.getLatLng()
 
@@ -133,14 +118,7 @@ const SearchControl: React.FC<SearchControlProps> = ({
             options={foundCoords ?? locationOptions}
             onSearch={handleSearchLocation}
             onClear={onClear}
-            onSelect={(option) =>
-                option?.value &&
-                onSelectResult?.(
-                    option.value,
-                    foundCoords ? 17 : 12,
-                    !!foundCoords
-                )
-            }
+            onSelect={(option) => option?.value && onSelectResult?.(option.value, foundCoords ? 17 : 12, !!foundCoords)}
         />
     )
 }
