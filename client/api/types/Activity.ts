@@ -6,8 +6,8 @@ import { User } from './User'
 import { ApiTypes } from '@/api/types'
 
 export const ActivityTypes = {
-    Comment: 'comment',
-    Cover: 'cover',
+    // Comment: 'comment',
+    // Cover: 'cover',
     Edit: 'edit',
     Photo: 'photo',
     Place: 'place',
