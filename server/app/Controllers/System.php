@@ -1,6 +1,8 @@
 <?php namespace App\Controllers;
 
 use App\Libraries\EmailLibrary;
+use App\Libraries\PlacesContent;
+use App\Models\PlacesModel;
 use App\Models\PlacesTagsModel;
 use App\Models\SendingMail;
 use App\Models\TagsModel;
@@ -74,14 +76,16 @@ class System extends ResourceController {
     public function sendEmail(): void {
         $sendingEmailModel = new SendingMail();
         $sendingEmailData  = $sendingEmailModel
-            ->select('activity.type, sending_mail.*')
+            ->select('activity.type, activity.place_id, sending_mail.*')
             ->join('activity', 'activity.id = sending_mail.activity_id', 'left')
+            ->where('sending_mail.status = "created"')
             ->where('sending_mail.created_at >= DATE_SUB(NOW(), INTERVAL 1 DAY)')
             ->orderBy('created_at', 'DESC')
             ->findAll();
 
         $monthEmailCount = $sendingEmailModel
             ->select('id')
+            ->where('status = "completed"')
             ->where('created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)')
             ->countAllResults();
 
@@ -92,32 +96,76 @@ class System extends ResourceController {
             return;
         }
 
-//        $emailLibrary = new EmailLibrary();
-//
-//        foreach ($sendingEmailData as $item) {
-//            if (empty($item->email)) {
-//                $sendingEmailModel->update($item->id, ['status' => 'rejected']);
-//
-//                continue ;
-//            }
-//
-//            $locale  = $item->locale ?? 'ru';
-//            $subject = isset($item->type) && $item->type
-//                ? lang('SendingMail.emailSubject_' . $item->type , [], $locale)
-//                : $item->subject;
-//
-//            $message = view('email', ['message' => 'Привет, как дела?']);
-//
-//            try {
-//                $emailLibrary->send($item->email, $subject, $message);
-//                $sendingEmailModel->update($item->id, ['status' => 'completed']);
-//            } catch (Exception $e) {
-//                $sendingEmailModel->update($item->id, ['status' => 'error']);
-//            }
-//        }
+        $placeContent = new PlacesContent(350);
+        $emailLibrary = new EmailLibrary();
+        $placesIds    = [];
+        $placesData   = [];
 
-        echo '<pre>';
+        // Collect all places IDs
+        foreach ($sendingEmailData as $item) {
+            if ($item->place_id) {
+                $placesIds[] = $item->place_id;
+            }
+        }
+
+        // If we have collected IDs of places, we will get information about them from the database and download translations
+        if ($placesIds) {
+            $placesModel = new PlacesModel();
+            $placesData  = $placesModel->select('id, photos')->whereIn('id', $placesIds)->findAll();
+            $placeContent->translate($placesIds);
+        }
+
+        foreach ($sendingEmailData as $item) {
+            if (empty($item->email)) {
+                $sendingEmailModel->update($item->id, ['status' => 'rejected']);
+
+                continue ;
+            }
+
+            $locale  = $item->locale ?? 'ru';
+            $message = '';
+            $subject = isset($item->type) && $item->type
+                ? lang('SendingMail.emailSubject_' . $item->type , [], $locale)
+                : $item->subject;
+
+            $findPlace = array_search($item->place_id, array_column($placesData, 'id'));
+
+            if ($findPlace !== false) {
+                $placeId    = $placesData[$findPlace]->id;
+                $placeTitle = $placeContent->title($placeId);
+                $placeCover = $placesData[$findPlace]->photos && file_exists(UPLOAD_PHOTOS . $placeId . '/cover.jpg')
+                    ? PATH_PHOTOS . $placeId . '/cover_preview.jpg'
+                    : null;
+
+                $message .= $placeTitle;
+
+                if ($placeCover) {
+                    $emailLibrary->email->attach($placeCover);
+                    $cid = $emailLibrary->email->setAttachmentCID($placeCover);
+
+                    $message .= '<img src="cid:' . $cid . '" alt="' . $placeTitle . '">';
+                }
+
+                $message = view('email', ['message' => $message]);
+            } else {
+
+                if (empty($item->message)) {
+                    $sendingEmailModel->update($item->id, ['status' => 'rejected']);
+
+                    continue ;
+                }
+
+                $message = view('email', ['message' => $item->message]);
+            }
+
+            try {
+                $emailLibrary->send($item->email, $subject, $message);
+                $sendingEmailModel->update($item->id, ['status' => 'completed']);
+            } catch (Exception $e) {
+                $sendingEmailModel->update($item->id, ['status' => 'error']);
+            }
+        }
+
         var_dump($monthEmailCount);
-        exit();
     }
 }
