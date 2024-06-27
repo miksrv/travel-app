@@ -109,8 +109,10 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
     }))
 
     useEffect(() => {
-        handleCoverDialogClose()
-        onSaveCover?.()
+        if (coverDialogOpen) {
+            handleCoverDialogClose()
+            onSaveCover?.()
+        }
     }, [isSuccess])
 
     useEffect(() => {

@@ -18,7 +18,7 @@ import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 import { PlaceCoverEditorHandle } from '@/components/place-cover-editor/PlaceCoverEditor'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
-import { dateToUnixTime, formatDateUTC } from '@/functions/helpers'
+import { formatDateUTC } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
@@ -35,7 +35,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const placeCoverEditorRef = useRef<PlaceCoverEditorHandle>(null)
     const inputFileRef = useRef<HTMLInputElement>()
 
-    const [coverHash, setCoverHash] = useState<number>(dateToUnixTime(place?.updated?.date))
+    const [coverHash, setCoverHash] = useState<number | undefined>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
 

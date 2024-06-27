@@ -34,12 +34,12 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                             <>
                                 <Image
                                     className={styles.levelImage}
-                                    src={levelImage(user.level?.level).src}
+                                    src={levelImage(user.levelData?.level).src}
                                     alt={''}
                                     width={16}
                                     height={16}
                                 />
-                                {user.level?.level} {t(`${KEY}level`)}
+                                {user.levelData?.level} {t(`${KEY}level`)}
                             </>
                         }
                     />
@@ -50,12 +50,12 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                     </div>
 
                     <div className={styles.level}>
-                        <p>{user.level?.title}</p>
+                        <p>{user.levelData?.title}</p>
                         <Progress
                             className={styles.progress}
                             value={nextLevelPercentage(
-                                user.level?.experience || 0,
-                                user.level?.nextLevel || user.level?.experience || 0
+                                user.levelData?.experience || 0,
+                                user.levelData?.nextLevel || user.levelData?.experience || 0
                             )}
                         />
                     </div>
