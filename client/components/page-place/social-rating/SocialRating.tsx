@@ -21,7 +21,7 @@ import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch } from '@/api/store'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { addDecimalPoint } from '@/functions/helpers'
 import Container from '@/ui/container'
 import Rating from '@/ui/rating'
@@ -37,6 +37,8 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const { t } = useTranslation('common', {
         keyPrefix: 'components.pagePlace.socialRating'
     })
+
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const { data: ratingData } = API.useRatingGetListQuery(placeId ?? '', {
         skip: !placeId,
@@ -55,7 +57,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     }
 
     useEffect(() => {
-        if (isSuccess && !ratingData?.vote) {
+        if (isSuccess && !ratingData?.vote && !isAuth) {
             dispatch(
                 Notify({
                     id: 'placeRating',
