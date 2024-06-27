@@ -72,9 +72,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
     }, [deleteData])
 
     useEffect(() => {
-        if (photos?.length) {
-            setLocalPhotos(photos)
-        }
+        setLocalPhotos(photos ?? [])
     }, [photos])
 
     return (

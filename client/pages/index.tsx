@@ -16,13 +16,14 @@ import type { User } from '@/api/types/User'
 import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import UserGallery from '@/components/page-user/gallery'
+import PhotoGallery from '@/components/photo-gallery'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
+import Container from '@/ui/container'
 
 interface IndexPageProps {
     placesList: Place.Place[]
@@ -146,10 +147,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                 }
             />
 
-            <UserGallery
-                title={t(`${KEY}titleLastPhotos`)}
-                photos={photosList}
-            />
+            <Container title={t(`${KEY}titleLastPhotos`)}>
+                <PhotoGallery photos={photosList} />
+            </Container>
 
             <ActivityList
                 title={t(`${KEY}titleNewsFeed`)}
