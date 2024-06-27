@@ -47,6 +47,14 @@ const App = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider>
             <Head>
                 <meta
+                    name={'apple-mobile-web-app-capable'}
+                    content={'yes'}
+                />
+                <meta
+                    name={'apple-mobile-web-app-status-bar-style'}
+                    content={theme === 'dark' ? 'black-translucent' : 'default'}
+                />
+                <meta
                     name={'theme-color'}
                     content={theme === 'dark' ? '#1b1b1b' : '#ebedf0'}
                     media={`(prefers-color-scheme: ${theme === 'dark' ? 'dark' : 'light'})`}
