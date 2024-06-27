@@ -8,12 +8,13 @@ import type { BreadcrumbList, ProfilePage } from 'schema-dts'
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import type { Item } from '@/api/types/Activity'
 import ActivityList from '@/components/activity-list/ActivityList'
-import UserGallery from '@/components/page-user/gallery'
 import UserHeader from '@/components/page-user/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import PhotoGallery from '@/components/photo-gallery'
 import { formatDateISO } from '@/functions/helpers'
 import type { UserPageProps } from '@/pages/users/[...slug]'
 import Button from '@/ui/button'
+import Container from '@/ui/container'
 
 interface UserProps extends Omit<UserPageProps, 'page'> {}
 
@@ -131,17 +132,17 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
             <UserHeader user={user} />
 
-            <UserGallery
+            <Container
                 title={t('photos')}
-                photos={photosList}
-                hideActions={true}
                 action={
-                    <Link
-                        href={`/users/${id}/photos`}
-                        title={t(`${t('buttonShowAllPhotos')} (${photosCount})`)}
-                    >
-                        {t('linkAllPhotos')}
-                    </Link>
+                    !!photosList?.length && (
+                        <Link
+                            href={`/users/${id}/photos`}
+                            title={t(`${t('buttonShowAllPhotos')} (${photosCount})`)}
+                        >
+                            {t('linkAllPhotos')}
+                        </Link>
+                    )
                 }
                 footer={
                     photosCount > 8 && (
@@ -156,7 +157,12 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         </Button>
                     )
                 }
-            />
+            >
+                <PhotoGallery
+                    photos={photosList}
+                    hideActions={true}
+                />
+            </Container>
 
             <UserTabs
                 user={user}

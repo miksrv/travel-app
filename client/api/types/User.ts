@@ -10,7 +10,7 @@ export type User = {
     website?: string
     role?: 'user' | 'moderator' | 'admin'
     locale?: LocaleType
-    level?: LevelData
+    levelData?: LevelData
     created?: ApiTypes.DateTimeType
     updated?: ApiTypes.DateTimeType
     activity?: ApiTypes.DateTimeType

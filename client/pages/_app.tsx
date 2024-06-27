@@ -48,8 +48,8 @@ const App = ({ Component, pageProps }: AppProps) => {
             <Head>
                 <meta
                     name={'theme-color'}
-                    id={'theme-color'}
                     content={theme === 'dark' ? '#1b1b1b' : '#ebedf0'}
+                    media={`(prefers-color-scheme: ${theme === 'dark' ? 'dark' : 'light'})`}
                 />
                 <meta
                     name={'viewport'}

@@ -3,7 +3,8 @@ const { i18n } = require('./next-i18next.config.js')
 /** @type {import('next').NextConfig} */
 const nextConfig = {
     i18n,
-    reactStrictMode: true,
+    // Authorization does not work in this mode
+    reactStrictMode: false,
     images: {
         // https://nextjs.org/docs/pages/api-reference/components/image
         remotePatterns: [

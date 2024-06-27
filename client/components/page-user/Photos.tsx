@@ -4,8 +4,8 @@ import { NextSeo } from 'next-seo'
 
 import { SITE_LINK } from '@/api/api'
 import Header from '@/components/header'
-import UserGallery from '@/components/page-user/gallery'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import PhotoGallery from '@/components/photo-gallery'
 import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
@@ -50,7 +50,9 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
                 currentPage={UserPagesEnum.PHOTOS}
             />
 
-            <UserGallery photos={photosList} />
+            <Container>
+                <PhotoGallery photos={photosList} />
+            </Container>
 
             <Container className={'pagination'}>
                 <div>

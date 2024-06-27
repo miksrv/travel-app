@@ -7,8 +7,8 @@ class PlaceContent extends Entity {
         'place_id' => 'string',
         'user_id'  => 'string',
         'locale'   => 'string',
-        'title'    => 'title',
-        'content'  => 'content',
+        'title'    => 'string',
+        'content'  => 'string',
         'delta'    => 'integer'
     ];
 }

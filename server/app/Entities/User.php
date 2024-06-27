@@ -11,7 +11,7 @@ class User extends Entity {
         'role'        => 'string',
         'auth_type'   => 'string',
         'locale'      => 'string',
-        'level'       => 'integer|null',
+        'level'       => '?integer',
         'experience'  => 'integer',
         'reputation'  => 'integer',
         'website'     => 'string',

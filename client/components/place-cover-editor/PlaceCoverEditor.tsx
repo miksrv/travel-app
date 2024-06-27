@@ -109,8 +109,10 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
     }))
 
     useEffect(() => {
-        handleCoverDialogClose()
-        onSaveCover?.()
+        if (coverDialogOpen) {
+            handleCoverDialogClose()
+            onSaveCover?.()
+        }
     }, [isSuccess])
 
     useEffect(() => {
@@ -126,82 +128,71 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
     }, [isError, error])
 
     return (
-        <>
-            {/*<Button*/}
-            {/*    size={'medium'}*/}
-            {/*    icon={'Photo'}*/}
-            {/*    mode={'secondary'}*/}
-            {/*    onClick={handleChangeCoverClick}*/}
-            {/*>*/}
-            {/*    {t('buttonCover')}*/}
-            {/*</Button>*/}
-
-            <Dialog
-                contentHeight={'490px'}
-                maxWidth={'700px'}
-                header={!selectedPhotoId ? t('selectPhoto') : t('saveNewCover')}
-                open={coverDialogOpen}
-                showBackLink={!!selectedPhotoId}
-                actions={
-                    selectedPhoto && (
-                        <Button
-                            size={'small'}
-                            mode={'primary'}
-                            onClick={handleSaveCover}
-                            disabled={disabled}
-                        >
-                            {t('buttonSave')}
-                        </Button>
-                    )
-                }
-                onBackClick={() => {
-                    setSelectedPhotoId('')
-                }}
-                onCloseDialog={handleCoverDialogClose}
-            >
-                {!selectedPhotoId ? (
-                    <ul className={styles.coverPhotosList}>
-                        {photosData?.items?.map((photo) => (
-                            <li key={`coverDialog${photo.id}`}>
-                                <Image
-                                    src={`${IMG_HOST}${photo.preview}`}
-                                    alt={''}
-                                    width={200}
-                                    height={150}
-                                    onClick={() => {
-                                        setSelectedPhotoId(photo.id)
-                                    }}
-                                />
-                            </li>
-                        ))}
-                        {!photoLoading && !photosData?.items?.length && (
-                            <div className={styles.noPhotos}>{t('noPhotos')}</div>
-                        )}
-                    </ul>
-                ) : (
-                    <div className={styles.innerContainer}>
-                        <ReactCrop
-                            crop={imageCropData}
-                            aspect={870 / 300}
-                            minWidth={870 / widthRatio}
-                            minHeight={300 / heightRatio}
-                            onChange={(c, p) => setImageCropData(p)}
-                        >
-                            <img
-                                src={`${IMG_HOST}${selectedPhoto?.full}`}
-                                onLoad={handleImageLoad}
+        <Dialog
+            contentHeight={'490px'}
+            maxWidth={'700px'}
+            header={!selectedPhotoId ? t('selectPhoto') : t('saveNewCover')}
+            open={coverDialogOpen}
+            showBackLink={!!selectedPhotoId}
+            actions={
+                selectedPhoto && (
+                    <Button
+                        size={'small'}
+                        mode={'primary'}
+                        onClick={handleSaveCover}
+                        disabled={disabled}
+                    >
+                        {t('buttonSave')}
+                    </Button>
+                )
+            }
+            onBackClick={() => {
+                setSelectedPhotoId('')
+            }}
+            onCloseDialog={handleCoverDialogClose}
+        >
+            {!selectedPhotoId ? (
+                <ul className={styles.coverPhotosList}>
+                    {photosData?.items?.map((photo) => (
+                        <li key={`coverDialog${photo.id}`}>
+                            <Image
+                                src={`${IMG_HOST}${photo.preview}`}
                                 alt={''}
-                                style={{
-                                    height: '100%',
-                                    objectFit: 'cover',
-                                    width: '100%'
+                                width={200}
+                                height={150}
+                                onClick={() => {
+                                    setSelectedPhotoId(photo.id)
                                 }}
                             />
-                        </ReactCrop>
-                    </div>
-                )}
-            </Dialog>
-        </>
+                        </li>
+                    ))}
+                    {!photoLoading && !photosData?.items?.length && (
+                        <div className={styles.noPhotos}>{t('noPhotos')}</div>
+                    )}
+                </ul>
+            ) : (
+                <div className={styles.innerContainer}>
+                    <ReactCrop
+                        crop={imageCropData}
+                        aspect={870 / 300}
+                        minWidth={870 / widthRatio}
+                        minHeight={300 / heightRatio}
+                        onChange={(c, p) => setImageCropData(p)}
+                    >
+                        <img
+                            src={`${IMG_HOST}${selectedPhoto?.full}`}
+                            onLoad={handleImageLoad}
+                            alt={''}
+                            style={{
+                                height: '100%',
+                                objectFit: 'cover',
+                                width: '100%'
+                            }}
+                        />
+                    </ReactCrop>
+                </div>
+            )}
+        </Dialog>
     )
 }
 export default forwardRef(PlaceCoverEditor)

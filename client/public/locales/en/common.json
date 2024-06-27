@@ -128,7 +128,7 @@
                 "buttonSave": "Save",
                 "buttonCancel": "Cancel",
                 "buttonEdit": "Edit",
-                "emptyContent": "No description",
+                "emptyContent": "Description not added yet",
                 "tagSelectLabel": "Select or add point of interest labels"
             },
             "placeComments": {
@@ -186,7 +186,7 @@
             }
         },
         "photoGallery": {
-            "noPhotos": "No photos",
+            "noPhotos": "No photos uploaded yet",
             "linkPhotoTitle": "Photo",
             "acceptConfirmMessage": "Delete photo?",
             "acceptConfirmDelete": "Delete",

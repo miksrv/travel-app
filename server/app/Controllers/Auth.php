@@ -316,7 +316,7 @@ class Auth extends ResourceController {
 
             $userLevel = $levelsLibrary->getLevelData($this->session->user);
 
-            $this->session->user->level = [
+            $this->session->user->levelData = [
                 'level'      => $userLevel->level,
                 'title'      => $userLevel->title,
                 'experience' => $this->session->user->experience,
@@ -326,7 +326,7 @@ class Auth extends ResourceController {
             $response->user  = $this->session->user;
             $response->token = generateAuthToken($this->session->user->email);
 
-            unset($response->user->password, $response->user->auth_type, $response->user->experience);
+            unset($response->user->password, $response->user->level, $response->user->auth_type, $response->user->experience);
         }
 
         return $this->respond($response);

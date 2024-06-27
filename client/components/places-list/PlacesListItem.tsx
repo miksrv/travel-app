@@ -92,7 +92,13 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ place }) => {
                 </div>
             </div>
 
-            <p>{place.content ?? <span className={styles.emptyContent}>{t('emptyContent')}</span>}</p>
+            <p>
+                {place.content?.length ? (
+                    place.content
+                ) : (
+                    <span className={styles.emptyContent}>{t('emptyContent')}</span>
+                )}
+            </p>
         </article>
     )
 }

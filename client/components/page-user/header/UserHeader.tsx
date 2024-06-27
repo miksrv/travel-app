@@ -49,8 +49,8 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     />
                     <Progress
                         value={nextLevelPercentage(
-                            user?.level?.experience || 0,
-                            user?.level?.nextLevel || user?.level?.experience || 0
+                            user?.levelData?.experience || 0,
+                            user?.levelData?.nextLevel || user?.levelData?.experience || 0
                         )}
                     />
                 </div>
@@ -66,10 +66,10 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         <Icon name={'Award'} />
                         <div className={styles.key}>{t('level')}</div>
                         <div className={styles.value}>
-                            [<b>{user?.level?.level}</b>]{' '}
+                            [<b>{user?.levelData?.level}</b>]{' '}
                             <Image
                                 className={styles.levelImage}
-                                src={levelImage(user?.level?.level).src}
+                                src={levelImage(user?.levelData?.level).src}
                                 alt={''}
                                 width={20}
                                 height={20}
@@ -78,7 +78,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                 href={'/users/levels'}
                                 title={''}
                             >
-                                {user?.level?.title}
+                                {user?.levelData?.title}
                             </Link>
                         </div>
                     </li>
@@ -86,7 +86,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         <Icon name={'DoubleUp'} />
                         <div className={styles.key}>{t('experienceForNewLevel')}</div>
                         <div className={styles.value}>
-                            {(user?.level?.nextLevel || 0) - (user?.level?.experience || 0)}
+                            {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}
                         </div>
                     </li>
                     <li>
