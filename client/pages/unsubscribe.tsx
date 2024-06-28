@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import Link from 'next/link'
@@ -9,15 +9,10 @@ import { NextSeo } from 'next-seo'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
-import { login } from '@/api/authSlice'
-import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
+import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import { LOCAL_STORAGE } from '@/functions/constants'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
-import * as LocalStorage from '@/functions/localstorage'
 import Container from '@/ui/container'
 import Message from '@/ui/message'
-import ScreenSpinner from '@/ui/screen-spinner'
 import Spinner from '@/ui/spinner'
 
 interface UnsubscribePageProps {}

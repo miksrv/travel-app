@@ -3,7 +3,6 @@ import { HYDRATE } from 'next-redux-wrapper'
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { encodeQueryData } from '@/functions/helpers'
-import UnsubscribePage from '@/pages/unsubscribe'
 import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
