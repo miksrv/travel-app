@@ -21,7 +21,7 @@ class Mail extends ResourceController {
        $mail = $this->request->getGet('mail', FILTER_SANITIZE_SPECIAL_CHARS);
 
        if (!$mail) {
-           return $this->failValidationErrors('Empty mail parameter');
+           return $this->failValidationErrors(lang('Mail.emptyParameters'));
        }
 
        $sendingEmailModel = new SendingMail();
@@ -31,11 +31,11 @@ class Mail extends ResourceController {
            ->find($mail);
 
        if (!$sendingEmailData) {
-           return $this->failValidationErrors('No mail with this ID was found');
+           return $this->failValidationErrors(lang('Mail.mailWithIdNotFound'));
        }
 
        if (!$sendingEmailData->activity_id) {
-           return $this->failValidationErrors('Тип письма, от которого вы хотите отписаться, не явлется рассылкой. Рассылка вам приходить не будет.');
+           return $this->failValidationErrors(lang('Mail.mailWithIdNotFound'));
        }
 
        $placeModel = new PlacesModel();
@@ -49,9 +49,13 @@ class Mail extends ResourceController {
 
        $userModel->update($placeData->user_id, ['settings' => json_encode((object) $settings), 'updated_at' => $userData->updated_at]);
 
-       return $this->respond('Вы отписались от этого типа рассылки. Пожалуйста, проверте остальные типы подписок в своем личном кабинете.');
+       return $this->respond(lang('Mail.successMessage'));
    }
 
+    /**
+     * @param string $activityType
+     * @return string
+     */
    protected function _mapActivityType(string $activityType): string {
        return match ($activityType) {
            'comment' => 'emailComment',
