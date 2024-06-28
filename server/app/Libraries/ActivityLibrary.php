@@ -1,11 +1,14 @@
 <?php namespace App\Libraries;
 
 use App\Models\ActivityModel;
+use App\Models\SendingMail;
+use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 use Exception;
 use ReflectionException;
 
 const ACTIVITY_FLOOD_MIN = 35;
+const EMAIL_NOTIFY_FLOOD_HOURS = 5;
 
 class ActivityLibrary {
     private string $owner;
@@ -88,6 +91,7 @@ class ActivityLibrary {
             return ;
         }
 
+        $timeNow = new Time('now');
         $model   = new ActivityModel();
         $session = new SessionLibrary();
 
@@ -111,13 +115,8 @@ class ActivityLibrary {
                 ->orderBy('created_at', 'DESC')
                 ->first();
 
-            if ($lastData) {
-                $time = new Time('now');
-                $diff = $time->difference($lastData->created_at);
-
-                if (abs($diff->getMinutes()) <= ACTIVITY_FLOOD_MIN) {
-                    return ;
-                }
+            if ($lastData && abs($timeNow->difference($lastData->created_at)->getMinutes()) <= ACTIVITY_FLOOD_MIN) {
+                return ;
             }
         }
 
@@ -144,6 +143,39 @@ class ActivityLibrary {
         if (isset($this->owner) && $this->owner !== $session->user?->id) {
             $notify = new NotifyLibrary();
             $notify->push($type, $this->owner, $model->getInsertID());
+
+            // Get owner email settings
+            $userModel = new UsersModel();
+            $ownerUser = $userModel->getUserById($this->owner, true);
+            $settings  = $ownerUser->settings;
+
+            /**
+             * Email Notifications
+             */
+            if (($settings->emailPhoto && $type === 'photo')
+                || ($settings->emailComment && $type === 'comment')
+                || ($settings->emailEdit && $type === 'edit')
+                || ($settings->emailRating && $type === 'rating')
+                || ($settings->emailCover && $type === 'cover')
+            ) {
+                /**
+                 * When we send email as notification of any activity on the site, we
+                 * do not fill in subject and message, they are filled in themselves if activity_id is set
+                 */
+                $sendingEmailModel = new SendingMail();
+                $lastSendEmailTime = $sendingEmailModel->checkSendLastEmail($ownerUser->email);
+
+                if ($lastSendEmailTime && abs($timeNow->difference($lastSendEmailTime->created_at)->getHours()) <= EMAIL_NOTIFY_FLOOD_HOURS) {
+                    return ;
+                }
+
+                $email = new \App\Entities\SendingMail();
+                $email->activity_id = $model->getInsertID();
+                $email->email       = $ownerUser->email;
+                $email->locale      = $ownerUser->locale;
+
+                $sendingEmailModel->insert($email);
+            }
         }
     }
 }

@@ -76,16 +76,18 @@ class Users extends ResourceController {
      * @throws Exception
      */
     public function show($id = null): ResponseInterface {
+        $session     = new SessionLibrary();
         $userLevels  = new LevelsLibrary();
         $usersModel  = new UsersModel();
         $placesModel = new PlacesModel();
-        $usersData   = $usersModel->getUserById($id);
+        $usersData   = $usersModel->getUserById($id, $id === $session->user?->id);
 
         if (!$usersData) {
             return $this->failNotFound();
         }
 
         // Calculate new user reputation value
+        // TODO Separate this function to other library
         if ($placesData  = $placesModel->select('id')->where('user_id', $id)->findAll()) {
             $ratingModel = new RatingModel();
             $placesIds   = [];
@@ -119,8 +121,8 @@ class Users extends ResourceController {
         $usersData->levelData = $userLevels->getLevelData($usersData);
         $usersData->statistic = $userLevels->statistic;
         $usersData->avatar    = $usersData->avatar
-                ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
-                : null;
+            ? PATH_AVATARS . $usersData->id . '/' . $avatar[0] . '_medium.' . $avatar[1]
+            : null;
 
         unset($usersData->experience, $usersData->level);
 
@@ -144,7 +146,7 @@ class Users extends ResourceController {
             'name'    => 'if_exist|min_length[6]|max_length[150]|is_unique[users.name]',
             'website' => 'if_exist|max_length[150]|string',
             'oldPassword' => 'if_exist|min_length[8]|max_length[50]',
-            'newPassword' => 'if_exist|min_length[8]|max_length[50]',
+            'newPassword' => 'if_exist|min_length[8]|max_length[50]'
         ];
 
         if (!$this->validateData((array) $input, $rules)) {
@@ -177,6 +179,17 @@ class Users extends ResourceController {
             $updateData['website'] = $input->website;
         }
 
+        if (isset($input->settings)) {
+            $defaultSettings = ['emailComment', 'emailEdit', 'emailPhoto', 'emailRating', 'emailCover'];
+
+            $updateData['settings'] = json_encode((object) array_combine($defaultSettings, array_map(function($setting) use ($input, $session) {
+                $inputValue   = isset($input->settings->$setting) && is_bool($input->settings->$setting) ? $input->settings->$setting : null;
+                $sessionValue = $session->settings->$setting ?? true;
+
+                return $inputValue !== null ? $inputValue : $sessionValue;
+            }, $defaultSettings)));
+        }
+
         if (empty($updateData)) {
             return $this->failValidationErrors(lang('Users.noDataForUpdate'));
         }
@@ -190,7 +203,7 @@ class Users extends ResourceController {
      * @return ResponseInterface
      */
     public function avatar(): ResponseInterface {
-        $session    = new SessionLibrary();
+        $session = new SessionLibrary();
 
         if (!$session->isAuth || !$session->user?->id) {
             return $this->failUnauthorized();

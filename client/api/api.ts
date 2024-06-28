@@ -143,6 +143,12 @@ export const API = createApi({
             query: () => 'levels'
         }),
 
+        /** Controller: Mail **/
+        mailGetUnsubscribe: builder.query<string, Maybe<string>>({
+            query: (mailId) => `mail/unsubscribe?mail=${mailId}`,
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
+        }),
+
         /* Controller: Location */
         locationGetByType: builder.query<ApiTypes.ResponseLocationGetByType, ApiTypes.RequestLocationGetByType>({
             query: (params) => `location/${params.id}?type=${params.type}`

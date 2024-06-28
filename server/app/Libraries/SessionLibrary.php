@@ -13,6 +13,7 @@ class SessionLibrary {
     public float | null $lat = null;
     public float | null $lon = null;
     public User | null $user = null;
+    public object | null $settings = null;
     public bool $isAuth = false;
 
     private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $request;
@@ -41,6 +42,9 @@ class SessionLibrary {
         if ($this->user) {
             $this->isAuth = true;
             $this->model->where('user_id', $this->user->id);
+            $this->settings = $this->user->settings;
+
+            unset($this->user->password, $this->user->settings);
         } else {
             if ($session) {
                 $this->model

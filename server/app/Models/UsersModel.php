@@ -28,6 +28,7 @@ class UsersModel extends MyBaseModel {
         'avatar',
         'website',
         'reputation',
+        'settings',
         'created_at',
         'updated_at',
         'activity_at',
@@ -70,7 +71,7 @@ class UsersModel extends MyBaseModel {
      */
     public function findUserByEmailAddress(string $emailAddress): User | array | null {
         return $this
-            ->select('id, name, avatar, email, password, role, auth_type, level, experience')
+            ->select('id, name, avatar, email, password, auth_type, role, locale, settings, level, experience')
             ->where('email', $emailAddress)
             ->first();
     }
@@ -93,13 +94,30 @@ class UsersModel extends MyBaseModel {
 
     /**
      * @param string $userId
+     * @param bool $settings
      * @return array|object|null
      */
-    public function getUserById(string $userId): array|object|null {
-        return $this
-            ->select('id, name, avatar, created_at as created, role,
-                updated_at as updated, activity_at as activity, level, 
-                auth_type as authType, website, experience, reputation'
+    public function getUserById(string $userId, bool $settings = false): array|object|null {
+        $settings = $settings ? ', settings' : '';
+
+        $data = $this
+            ->select('id, name, email, locale, avatar, created_at as created,
+                updated_at as updated, activity_at as activity, level, role,
+                auth_type as authType, website, experience, reputation' . $settings
             )->find($userId);
+
+        if (!$settings) {
+            return $data;
+        }
+
+        $data->settings = (object) [
+            'emailComment' => $data->settings->emailComment ?? true,
+            'emailEdit'    => $data->settings->emailEdit ?? true,
+            'emailPhoto'   => $data->settings->emailPhoto ?? true,
+            'emailRating'  => $data->settings->emailRating ?? true,
+            'emailCover'   => $data->settings->emailCover ?? true,
+        ];
+
+        return $data;
     }
 }

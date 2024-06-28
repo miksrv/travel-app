@@ -16,6 +16,7 @@ class User extends Entity {
         'reputation'  => 'integer',
         'website'     => 'string',
         'avatar'      => 'string',
+        'settings'    => 'json',
         'activity_at' => 'datetime',
 
         'created'  => 'datetime',

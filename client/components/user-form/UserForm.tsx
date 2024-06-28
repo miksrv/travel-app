@@ -6,10 +6,11 @@ import styles from './styles.module.sass'
 
 import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import { User } from '@/api/types/User'
+import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 import googleLogo from '@/public/images/google-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import Button from '@/ui/button'
+import Checkbox from '@/ui/checkbox'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
@@ -35,13 +36,24 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
     const [formData, setFormData] = useState<FormDataType>(mapFormValues(values))
 
     const disabled =
-        values?.name === formData.name &&
-        values?.website === formData.website &&
-        !formData.newPassword &&
-        !formData.oldPassword
+        JSON.stringify(mapFormValues(values)?.settings) === JSON.stringify(formData.settings) &&
+        values?.name === formData?.name &&
+        values?.website === formData?.website &&
+        !formData?.newPassword &&
+        !formData?.oldPassword
 
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
+    }
+
+    const handleChangeCheckbox = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({
+            ...formData,
+            settings: {
+                ...formData?.settings,
+                [event.target.id as UserSettingEnum]: event.target.checked
+            }
+        })
     }
 
     const validateForm = useCallback(() => {
@@ -109,6 +121,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 />
             )}
 
+            <h3 className={styles.header}>{t('titleGeneralSettings')}</h3>
             <div className={styles.formElement}>
                 <Input
                     tabIndex={0}
@@ -146,74 +159,92 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 />
             </div>
 
-            <h3 className={styles.headerSection}>{'Изменить пароль'}</h3>
-            {values?.authType === 'native' ? (
-                <>
-                    <div className={styles.formElement}>
-                        <Input
-                            name={'oldPassword'}
-                            label={'Текущий пароль'}
-                            type={'password'}
-                            placeholder={'Введите свой текущий пароль на сайте'}
-                            disabled={loading}
-                            value={formData.oldPassword}
-                            error={formErrors?.oldPassword}
-                            onKeyDown={handleKeyPress}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className={styles.formElement}>
-                        <Input
-                            name={'newPassword'}
-                            label={'Новый пароль'}
-                            type={'password'}
-                            placeholder={'Придумайте новый пароль'}
-                            disabled={loading}
-                            value={formData.newPassword}
-                            error={formErrors?.newPassword}
-                            onKeyDown={handleKeyPress}
-                            onChange={handleChange}
-                        />
-                    </div>
-
-                    <div className={styles.formElement}>
-                        <Input
-                            name={'confirmPassword'}
-                            label={'Повторите ввод пароля'}
-                            type={'password'}
-                            placeholder={'Повторите ввод нового пароля'}
-                            disabled={loading}
-                            value={formData.confirmPassword}
-                            error={formErrors?.confirmPassword}
-                            onKeyDown={handleKeyPress}
-                            onChange={handleChange}
-                        />
-                    </div>
-                </>
-            ) : (
-                <div className={styles.authService}>
-                    <Image
-                        src={values?.authType === 'google' ? googleLogo.src : yandexLogo.src}
-                        width={48}
-                        height={48}
-                        alt={''}
+            <div className={styles.section}>
+                <h3 className={styles.header}>{t('titleEmailSettings')}</h3>
+                {['emailPhoto', 'emailRating', 'emailComment', 'emailEdit', 'emailCover'].map((setting) => (
+                    <Checkbox
+                        className={styles.settings}
+                        key={setting}
+                        id={setting}
+                        label={t(setting)}
+                        disabled={loading}
+                        onChange={handleChangeCheckbox}
+                        checked={formData?.settings?.[setting as keyof UserSettings]}
                     />
-                    <p>
-                        <Trans
-                            i18nKey={'components.userForm.loginViaService'}
-                            values={{
-                                service: values?.authType === 'google' ? 'Google' : 'Yandex'
-                            }}
+                ))}
+            </div>
+
+            <div className={styles.section}>
+                <h3 className={styles.header}>{t('titleChangePassword')}</h3>
+                {values?.authType === 'native' ? (
+                    <>
+                        <div className={styles.formElement}>
+                            <Input
+                                name={'oldPassword'}
+                                label={t('currentPassword')}
+                                type={'password'}
+                                placeholder={t('currentPasswordPlaceholder')}
+                                disabled={loading}
+                                value={formData?.oldPassword}
+                                error={formErrors?.oldPassword}
+                                onKeyDown={handleKeyPress}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className={styles.formElement}>
+                            <Input
+                                name={'newPassword'}
+                                label={t('newPassword')}
+                                type={'password'}
+                                placeholder={t('newPasswordPlaceholder')}
+                                disabled={loading}
+                                value={formData?.newPassword}
+                                error={formErrors?.newPassword}
+                                onKeyDown={handleKeyPress}
+                                onChange={handleChange}
+                            />
+                        </div>
+
+                        <div className={styles.formElement}>
+                            <Input
+                                name={'confirmPassword'}
+                                label={t('confirmPassword')}
+                                type={'password'}
+                                placeholder={t('confirmPasswordPlaceholder')}
+                                disabled={loading}
+                                value={formData?.confirmPassword}
+                                error={formErrors?.confirmPassword}
+                                onKeyDown={handleKeyPress}
+                                onChange={handleChange}
+                            />
+                        </div>
+                    </>
+                ) : (
+                    <div className={styles.authService}>
+                        <Image
+                            src={values?.authType === 'google' ? googleLogo.src : yandexLogo.src}
+                            width={48}
+                            height={48}
+                            alt={''}
                         />
-                    </p>
-                </div>
-            )}
+                        <p>
+                            <Trans
+                                i18nKey={'components.userForm.loginViaService'}
+                                values={{
+                                    service: values?.authType === 'google' ? 'Google' : 'Yandex'
+                                }}
+                            />
+                        </p>
+                    </div>
+                )}
+            </div>
 
             <div className={styles.actions}>
                 <Button
                     size={'medium'}
                     mode={'primary'}
+                    loading={loading}
                     disabled={loading || disabled}
                     onClick={handleSubmit}
                 >
@@ -234,10 +265,18 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
 }
 
 const mapFormValues = (values?: FormDataType): FormDataType => ({
-    id: values?.id,
-    name: values?.name,
+    id: values?.id ?? '',
+    name: values?.name ?? '',
     newPassword: '',
     oldPassword: '',
+    settings: {
+        emailComment: values?.settings?.emailComment ?? true,
+        emailCover: values?.settings?.emailCover ?? true,
+        emailEdit: values?.settings?.emailEdit ?? true,
+        emailPhoto: values?.settings?.emailPhoto ?? true,
+        emailPlace: values?.settings?.emailPlace ?? true,
+        emailRating: values?.settings?.emailRating ?? true
+    },
     website: values?.website
 })
 

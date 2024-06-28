@@ -189,7 +189,7 @@ class Photos extends ResourceController {
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
         } else {
-           return  $this->failValidationErrors($photo->getErrorString());
+           return $this->failValidationErrors($photo->getErrorString());
         }
 
         // Update the time and photos count
@@ -198,15 +198,13 @@ class Photos extends ResourceController {
         $photoPath = PATH_PHOTOS . $placesData->id . '/';
 
         return $this->respondCreated((object) [
-            'id'        => $photoId,
-            'full'      => $photoPath . $name . '.' . $ext,
-            'preview'   => $photoPath . $name . '_preview.' . $ext,
-            // 'filename'  => $photo->filename,
-            // 'extension' => $photo->extension,
-            'width'     => $photo->width,
-            'height'    => $photo->height,
-            'title'     => $photo->title_en ?: $photo->title_ru,
-            'placeId'   => $photo->place_id
+            'id'      => $photoId,
+            'full'    => $photoPath . $name . '.' . $ext,
+            'preview' => $photoPath . $name . '_preview.' . $ext,
+            'width'   => $photo->width,
+            'height'  => $photo->height,
+            'title'   => $photo->title_en ?: $photo->title_ru,
+            'placeId' => $photo->place_id
         ]);
     }
 

@@ -28,7 +28,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const router = useRouter()
     const authSlice = useAppSelector((state) => state.auth)
 
-    const { data: userData } = API.useUsersGetItemQuery(authSlice.user?.id || '', {
+    const { data: userData, isFetching } = API.useUsersGetItemQuery(authSlice.user?.id || '', {
+        refetchOnMountOrArgChange: true,
         skip: !authSlice.user?.id
     })
 
@@ -55,6 +56,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 userData?.authType === 'native' && formData?.oldPassword && formData.oldPassword.length > 1
                     ? formData.oldPassword
                     : undefined,
+            settings: formData?.settings,
             website: formData?.website !== userData?.website ? formData?.website : undefined
         })
     }
@@ -105,7 +107,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 {!authSlice.isAuth && <ScreenSpinner />}
 
                 <UserForm
-                    loading={isLoading || isSuccess}
+                    loading={isLoading || isSuccess || isFetching}
                     values={userData}
                     errors={validationErrors}
                     onSubmit={handleSubmit}

@@ -16,6 +16,16 @@ export type User = {
     activity?: ApiTypes.DateTimeType
     authType?: ApiTypes.AuthServiceType
     statistic?: Statistic
+    settings?: UserSettings
+}
+
+export type UserSettings = {
+    emailComment?: boolean
+    emailEdit?: boolean
+    emailPhoto?: boolean
+    emailPlace?: boolean
+    emailRating?: boolean
+    emailCover?: boolean
 }
 
 export type LevelData = {
@@ -33,3 +43,13 @@ export type Statistic = {
     cover: number
     comment: number
 }
+
+export const UserSettingTypes = {
+    Comment: 'comment',
+    Cover: 'cover',
+    Edit: 'edit',
+    Photo: 'photo',
+    Place: 'place',
+    Rating: 'rating'
+} as const
+export type UserSettingEnum = (typeof UserSettingTypes)[keyof typeof UserSettingTypes]

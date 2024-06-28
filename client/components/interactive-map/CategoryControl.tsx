@@ -95,7 +95,6 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
                     <li key={item.name}>
                         <Checkbox
                             id={item.name}
-                            name={item.name}
                             label={
                                 <>
                                     <Image

@@ -369,10 +369,9 @@ export interface ResponseUsersCropAvatar {
     filepath: string
 }
 
-export interface RequestUsersPatch {
+export interface RequestUsersPatch extends Pick<User, 'settings' | 'website'> {
     id?: string
     name?: string
-    website?: string
     oldPassword?: string
     newPassword?: string
 }
