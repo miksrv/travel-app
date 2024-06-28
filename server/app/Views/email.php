@@ -304,7 +304,10 @@
             <div class="content">
 
                 <!-- START CENTERED WHITE CONTAINER -->
-                <span class="preheader">This is preheader text. Some clients will show this text as a preview.</span>
+                <?php if (!empty($preheader)): ?>
+                    <span class="preheader"><?= $preheader ?></span>
+                <?php endif; ?>
+
                 <table role="presentation" border="0" cellpadding="0" cellspacing="0" class="main">
 
                     <!-- START MAIN CONTENT AREA -->
