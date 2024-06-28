@@ -9,7 +9,6 @@ use App\Models\TagsModel;
 use App\Models\UsersModel;
 use CodeIgniter\I18n\Time;
 use CodeIgniter\RESTful\ResourceController;
-use Config\Services;
 use ReflectionException;
 use Exception;
 
@@ -89,6 +88,9 @@ class System extends ResourceController {
             ->where('created_at >= DATE_SUB(NOW(), INTERVAL 1 MONTH)')
             ->countAllResults();
 
+        /**
+         * If you have exceeded the hoster's limits for sending emails, then we will not send anything.
+         */
         if (empty($sendingEmailData)
             || $monthEmailCount >= MONTH_EMAIL_LIMIT
             || count($sendingEmailData) >= DAY_EMAIL_LIMIT)
@@ -115,8 +117,13 @@ class System extends ResourceController {
             $placeContent->translate($placesIds);
         }
 
+        // We begin to sort through all unsent letters
         foreach ($sendingEmailData as $item) {
-            if (empty($item->email)) {
+            /**
+             * If there is no address where to send the letter,
+             * OR if it is NOT a notification and there is no body of the letter, we immediately reject it
+             */
+            if (empty($item->email) || (empty($item->type) && !$item->message)) {
                 $sendingEmailModel->update($item->id, ['status' => 'rejected']);
 
                 continue ;
@@ -130,31 +137,35 @@ class System extends ResourceController {
 
             $findPlace = array_search($item->place_id, array_column($placesData, 'id'));
 
+            /**
+             * If the letter is a notification, then we look for an interesting place by its ID in a previously prepared
+             * We will need the name of the geotag and the cover image
+             */
             if ($findPlace !== false) {
                 $placeId    = $placesData[$findPlace]->id;
                 $placeTitle = $placeContent->title($placeId);
                 $placeCover = $placesData[$findPlace]->photos && file_exists(UPLOAD_PHOTOS . $placeId . '/cover.jpg')
-                    ? PATH_PHOTOS . $placeId . '/cover_preview.jpg'
+                    ? PATH_PHOTOS . $placeId . '/cover.jpg'
                     : null;
 
-                $message .= $placeTitle;
+                $message .= "<h2>{$placeTitle}</h2>";
+                $message .= "<p>{$subject}</p>";
 
                 if ($placeCover) {
                     $emailLibrary->email->attach($placeCover);
                     $cid = $emailLibrary->email->setAttachmentCID($placeCover);
 
-                    $message .= '<img src="cid:' . $cid . '" alt="' . $placeTitle . '">';
+                    $message .= "<p><img src='cid:{$cid}' alt='{$placeTitle}' style='width: 100%'>";
                 }
+                $message .= '<p>' . lang('SendingMail.placeModified' , [], $locale) . '</p>';
+                $message  = view('email', [
+                    'message'     => $message,
+                    'actionText'  => lang('SendingMail.placeOpenText' , [], $locale),
+                    'actionLink'  => 'https://geometki.com/places/' . $placeId,
+                    'unsubscribe' => 'https://geometki.com/unsubscribe?mail=' . $item->id,
+                ]);
 
-                $message = view('email', ['message' => $message]);
             } else {
-
-                if (empty($item->message)) {
-                    $sendingEmailModel->update($item->id, ['status' => 'rejected']);
-
-                    continue ;
-                }
-
                 $message = view('email', ['message' => $item->message]);
             }
 
@@ -162,10 +173,9 @@ class System extends ResourceController {
                 $emailLibrary->send($item->email, $subject, $message);
                 $sendingEmailModel->update($item->id, ['status' => 'completed']);
             } catch (Exception $e) {
+                log_message('error', '{exception}', ['exception' => $e]);
                 $sendingEmailModel->update($item->id, ['status' => 'error']);
             }
         }
-
-        var_dump($monthEmailCount);
     }
 }
