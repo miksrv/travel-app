@@ -45,17 +45,8 @@ $routes->get('comments', 'Comments::list');
 $routes->post('comments', 'Comments::create');
 $routes->options('comments', 'Comments');
 
-//$routes->get('countries', 'Countries::list');
-//$routes->options('countries', 'Countries');
-
-//$routes->get('regions', 'Regions::list');
-//$routes->options('regions', 'Regions');
-
-//$routes->get('districts', 'Districts::list');
-//$routes->options('districts', 'Districts');
-
-//$routes->get('cities', 'Cities::list');
-//$routes->options('cities', 'Cities');
+$routes->get('mail/unsubscribe', 'Mail::unsubscribe');
+$routes->options('mail/(:alphanum)', 'Mail');
 
 $routes->get('categories', 'Categories::list');
 $routes->options('categories', 'Categories');

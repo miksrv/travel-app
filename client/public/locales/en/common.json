@@ -436,6 +436,9 @@
                     "comment": "Writing a comment"
                 }
             }
+        },
+        "unsubscribe": {
+            "title": "Unsubscribe from email notifications"
         }
     },
     "ui": {
