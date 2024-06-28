@@ -45,28 +45,35 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                 title={t('title')}
             />
             <Container style={{ margin: '5% auto', maxWidth: '500px', textAlign: 'center' }}>
-                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Отписка от рассылки</h1>
+                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>{t('title')}</h1>
                 {error && (
                     <Message
                         type={'negative'}
-                        title={'Ошибка'}
+                        title={t('error')}
                         text={error as string}
                     />
                 )}
                 {data && (
                     <Message
                         type={'positive'}
-                        title={'Успешно!'}
+                        title={t('success')}
                         text={data as string}
                     />
                 )}
-                <p>Отписка от рассылки уведомлений по электронной почты.</p>
+                <p>{t('description')}</p>
                 {isLoading && (
                     <div style={{ margin: '40px auto 20px', width: 100 }}>
                         <Spinner />
                     </div>
                 )}
-                {(isSuccess || isError) && <Link href={'/'}>Перейти на главную страницу</Link>}
+                {(isSuccess || isError) && (
+                    <Link
+                        href={'/'}
+                        title={t('linkToMainPage')}
+                    >
+                        {t('linkToMainPage')}
+                    </Link>
+                )}
             </Container>
         </>
     )
