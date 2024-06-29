@@ -1,7 +1,6 @@
 <?php namespace App\Libraries;
 
 use Config\Services;
-use Random\RandomException;
 
 const VK_API_VERSION = '5.199';
 
@@ -42,16 +41,11 @@ class VkClient {
      * @param string $theme
      */
     public function __construct(string $clientId, string $secret, string $redirectUri, string $theme = 'light') {
-        helper('text');
-
-        $this->client = \Config\Services::curlrequest();
-
+        $this->client      = \Config\Services::curlrequest();
         $this->clientId    = $clientId;
         $this->secret      = $secret;
         $this->redirectUri = $redirectUri;
         $this->theme       = $theme === 'light' ? 'light' : 'dark';
-
-        //random_bytes(32)
 
         $this->codeVerifier = rtrim(strtr(base64_encode('mySecretCode'), "+/", "-_"), "=");
     }
@@ -85,9 +79,9 @@ class VkClient {
      * @param $code
      * @param $state
      * @param $device
-     * @return string
+     * @return object|null
      */
-    public function fetchAccessTokenWithAuthCode($code, $state, $device): ?string {
+    public function authUser($code, $state, $device): ?object {
         if (!$code || !$device || $state !== $this->secretState) {
             return null;
         }
@@ -116,7 +110,9 @@ class VkClient {
 
             $response = json_decode($response->getBody());
 
-            return $this->access_token = $response->access_token;
+            $this->access_token = $response->access_token;
+
+            return $this->_fetchUserInfo();
         } catch (\Throwable $e) {
             return null;
         }
@@ -126,7 +122,7 @@ class VkClient {
      * STEP 3: Get user info
      * @return object|null
      */
-    public function fetchUserInfo(): ?object {
+    private function _fetchUserInfo(): ?object {
         if (!$this->access_token) {
             return null;
         }
@@ -138,31 +134,35 @@ class VkClient {
             'client_id'    => $this->clientId
         ];
 
-        $userData = (object) [];
-        $response = $this->client
-            ->setBody(http_build_query($params))
-            ->post('https://id.vk.com/oauth2/user_info');
+        try {
+            $userData = (object)[];
+            $response = $this->client
+                ->setBody(http_build_query($params))
+                ->post('https://id.vk.com/oauth2/user_info');
 
-        if ($response->getStatusCode() !== 200) {
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
+            $data    = json_decode($response->getBody())->user;
+            $profile = $this->_fetchUserProfile($data->user_id);
+
+            $userData->id    = $data->user_id;
+            $userData->name  = $data->first_name . ' ' . $data->last_name;
+            $userData->email = $data->email;
+            $userData->sex   = $data->sex;
+
+            if (!empty($profile)) {
+                $userData->avatar = $profile->photo_400_orig;
+                $userData->name   = $profile->first_name . ' ' . $profile->last_name;
+            }
+
+            $userData->birthday = $data->birthday;
+
+            return $userData;
+        } catch (\Throwable $e) {
             return null;
         }
-
-        $data    = json_decode($response->getBody())->user;
-        $profile = $this->_fetchUserProfile($data->user_id);
-
-        $userData->id    = $data->user_id;
-        $userData->name  = $data->first_name . ' ' . $data->last_name;
-        $userData->email = $data->email;
-        $userData->sex   = $data->sex;
-
-        if (!empty($profile)) {
-            $userData->avatar = $profile->photo_400_orig;
-            $userData->name   = $profile->first_name . ' ' . $profile->last_name;
-        }
-
-        $userData->birthday = $data->birthday;
-
-        return $userData;
     }
 
     /**

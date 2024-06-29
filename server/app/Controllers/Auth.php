@@ -79,39 +79,39 @@ class Auth extends ResourceController {
             return $this->failForbidden('Already authorized');
         }
 
-        $googleClient = new GoogleClient();
-        $googleClient->setClientId(getenv('auth.google.clientID'));
-        $googleClient->setClientSecret(getenv('auth.google.secret'));
-        $googleClient->setRedirectUri(getenv('auth.google.redirect'));
+        $googleClient = new GoogleClient(
+            getenv('auth.google.clientID'),
+            getenv('auth.google.secret'),
+            getenv('auth.google.redirect')
+        );
 
-        $authCode = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
+        $code = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If there is no authorization code, then the user has not yet logged in to Yandex.
-        if (!$authCode) {
+        if (!$code) {
             return $this->respond([
                 'auth'     => false,
                 'redirect' => $googleClient->createAuthUrl(),
             ]);
         }
 
-        $googleClient->fetchAccessTokenWithAuthCode($authCode);
-        $googleUser = $googleClient->fetchUserInfo();
+        $serviceProfile = $googleClient->authUser($code);
 
-        if (!$googleUser || !$googleUser->email) {
-            return $this->failValidationErrors('Google login error');
+        if (empty($serviceProfile->email)) {
+            return $this->failValidationErrors('Ошибка авторизации через гугл - не пришла электронная почта');
         }
 
         // Successful authorization, look for a user with the same email in the database
         $userModel = new UsersModel();
-        $userData  = $userModel->findUserByEmailAddress($googleUser->email);
+        $userData  = $userModel->findUserByEmailAddress($serviceProfile->email);
 
         // If there is no user with this email, then register a new user
         if (!$userData) {
             $user = new User();
-            $user->name      = $googleUser->name;
-            $user->email     = $googleUser->email;
+            $user->name      = $serviceProfile->name;
+            $user->email     = $serviceProfile->email;
             $user->auth_type = AUTH_TYPE_GOOGLE;
-            $user->locale    = $googleUser->locale === 'ru' ? 'ru' : 'en';
+            $user->locale    = $serviceProfile?->locale === 'ru' ? 'ru' : 'en';
             $user->level     = 1;
 
             $userModel->insert($user);
@@ -119,15 +119,15 @@ class Auth extends ResourceController {
             $newUserId = $userModel->getInsertID();
 
             // If a Google user has an avatar, copy it
-            if ($googleUser->picture) {
+            if ($serviceProfile->avatar) {
                 $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
-                $avatar = md5($googleUser->name . AUTH_TYPE_GOOGLE . $googleUser->email) . '.jpg';
+                $avatar = $newUserId . '.jpg';
 
                 if (!is_dir($avatarDirectory)) {
                     mkdir($avatarDirectory,0777, TRUE);
                 }
 
-                file_put_contents($avatarDirectory . $avatar, file_get_contents($googleUser->picture));
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($serviceProfile->avatar));
 
                 $file = new File($avatarDirectory . $avatar);
                 $name = pathinfo($file, PATHINFO_FILENAME);
@@ -176,7 +176,7 @@ class Auth extends ResourceController {
             return $this->failForbidden('Already authorized');
         }
 
-        $vkClient = new VkClient(
+        $serviceClient = new VkClient(
             getenv('auth.vk.clientID'),
             getenv('auth.vk.secret'),
             getenv('auth.vk.redirect'),
@@ -190,26 +190,25 @@ class Auth extends ResourceController {
         if (!$code) {
             return $this->respond([
                 'auth'     => false,
-                'redirect' => $vkClient->createAuthUrl(),
+                'redirect' => $serviceClient->createAuthUrl(),
             ]);
         }
 
-        $vkClient->fetchAccessTokenWithAuthCode($code, $state, $device);
-        $vkUserData = $vkClient->fetchUserInfo();
+        $serviceProfile = $serviceClient->authUser($code, $state, $device);
 
-        if (!$vkUserData || !$vkUserData->email) {
-            return $this->failValidationErrors('Google login error');
+        if (empty($serviceProfile) || empty($serviceProfile->email)) {
+            return $this->failValidationErrors('Ошибка авторизации - не пришли данные пользователя');
         }
 
         // Successful authorization, look for a user with the same email in the database
         $userModel = new UsersModel();
-        $userData = $userModel->findUserByEmailAddress($vkUserData->email);
+        $userData = $userModel->findUserByEmailAddress($serviceProfile->email);
 
         // If there is no user with this email, then register a new user
         if (!$userData) {
             $user = new User();
-            $user->name      = $vkUserData->name;
-            $user->email     = $vkUserData->email;
+            $user->name      = $serviceProfile->name;
+            $user->email     = $serviceProfile->email;
             $user->auth_type = AUTH_TYPE_VK;
 
             $userModel->insert($user);
@@ -217,7 +216,7 @@ class Auth extends ResourceController {
             $newUserId = $userModel->getInsertID();
 
             // If a Google user has an avatar, copy it
-            if ($vkUserData->avatar) {
+            if ($serviceProfile->avatar) {
                 $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
                 $avatar = $newUserId . '.jpg';
 
