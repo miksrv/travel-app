@@ -83,7 +83,7 @@ export const API = createApi({
             query: () => 'auth/me'
         }),
         authLoginService: builder.mutation<ApiTypes.ResponseAuthLogin, ApiTypes.RequestAuthService>({
-            query: ({ service, code }) => `auth/${service}${code ? `?code=${code}` : ''}`,
+            query: ({ service, ...params }) => `auth/${service}${params?.code ? encodeQueryData(params) : ''}`,
             transformErrorResponse: (response) => response.data
         }),
         authPostLogin: builder.mutation<ApiTypes.ResponseAuthLogin, ApiTypes.RequestAuthLogin>({

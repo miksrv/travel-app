@@ -31,7 +31,7 @@ export type PlaceLocationType = {
     type: LocationType
 }
 
-export type AuthServiceType = 'google' | 'yandex' | 'native'
+export type AuthServiceType = 'google' | 'yandex' | 'vk' | 'native'
 
 export type LocaleType = 'en' | 'ru'
 
@@ -77,6 +77,8 @@ export interface RequestAuthLogin {
 export interface RequestAuthService {
     service: AuthServiceType
     code?: string
+    state?: string
+    device_id?: string
 }
 
 export interface ResponseAuthLogin {

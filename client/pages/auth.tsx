@@ -64,7 +64,9 @@ const AuthPage: NextPage<AuthPageProps> = () => {
         if (code && service) {
             serviceLogin({
                 code,
-                service: service as ApiTypes.AuthServiceType
+                service: service as ApiTypes.AuthServiceType,
+                state: searchParams.get('state') ?? undefined,
+                device_id: searchParams.get('device_id') ?? undefined
             })
         } else {
             router.push('/')

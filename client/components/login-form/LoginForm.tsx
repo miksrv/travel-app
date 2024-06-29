@@ -16,6 +16,7 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
 import googleLogo from '@/public/images/google-logo.png'
+import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import Button from '@/ui/button'
 import Input from '@/ui/input'
@@ -161,6 +162,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                         alt={''}
                     />
                     {t('loginYandex')}
+                </Button>
+
+                <Button
+                    stretched={true}
+                    size={'medium'}
+                    mode={'secondary'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('vk')}
+                >
+                    <Image
+                        src={vkLogo.src}
+                        style={{}}
+                        width={20}
+                        height={20}
+                        alt={''}
+                    />
                 </Button>
             </div>
 
