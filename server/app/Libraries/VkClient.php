@@ -87,9 +87,9 @@ class VkClient {
      * @param $device
      * @return string
      */
-    public function fetchAccessTokenWithAuthCode($code, $state, $device): string {
+    public function fetchAccessTokenWithAuthCode($code, $state, $device): ?string {
         if (!$code || !$device || $state !== $this->secretState) {
-            return '';
+            return null;
         }
 
         $request = Services::request();
@@ -105,17 +105,21 @@ class VkClient {
             'ip'            => $request->getIPAddress(),
         ];
 
-        $response = $this->client
-            ->setBody(http_build_query($params))
-            ->post('https://id.vk.com/oauth2/auth');
+        try {
+            $response = $this->client
+                ->setBody(http_build_query($params))
+                ->post('https://id.vk.com/oauth2/auth');
 
-        if ($response->getStatusCode() !== 200) {
-            return '';
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
+            $response = json_decode($response->getBody());
+
+            return $this->access_token = $response->access_token;
+        } catch (\Throwable $e) {
+            return null;
         }
-
-        $response = json_decode($response->getBody());
-
-        return $this->access_token = $response->access_token;
     }
 
     /**

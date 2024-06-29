@@ -195,74 +195,73 @@ class Auth extends ResourceController {
         }
 
         $vkClient->fetchAccessTokenWithAuthCode($code, $state, $device);
-        $userData = $vkClient->fetchUserInfo();
+        $vkUserData = $vkClient->fetchUserInfo();
 
-        if (!$userData || !$userData->email) {
+        if (!$vkUserData || !$vkUserData->email) {
             return $this->failValidationErrors('Google login error');
         }
 
-//        // Successful authorization, look for a user with the same email in the database
-//        $userModel = new UsersModel();
-//        $userData  = $userModel->findUserByEmailAddress($googleUser->email);
-//
-//        // If there is no user with this email, then register a new user
-//        if (!$userData) {
-//            $user = new User();
-//            $user->name      = $googleUser->name;
-//            $user->email     = $googleUser->email;
-//            $user->auth_type = AUTH_TYPE_GOOGLE;
-//            $user->locale    = $googleUser->locale === 'ru' ? 'ru' : 'en';
-//            $user->level     = 1;
-//
-//            $userModel->insert($user);
-//
-//            $newUserId = $userModel->getInsertID();
-//
-//            // If a Google user has an avatar, copy it
-//            if ($googleUser->picture) {
-//                $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
-//                $avatar = md5($googleUser->name . AUTH_TYPE_GOOGLE . $googleUser->email) . '.jpg';
-//
-//                if (!is_dir($avatarDirectory)) {
-//                    mkdir($avatarDirectory,0777, TRUE);
-//                }
-//
-//                file_put_contents($avatarDirectory . $avatar, file_get_contents($googleUser->picture));
-//
-//                $file = new File($avatarDirectory . $avatar);
-//                $name = pathinfo($file, PATHINFO_FILENAME);
-//                $ext  = $file->getExtension();
-//
-//                $image = Services::image('gd'); // imagick
-//                $image->withFile($file->getRealPath())
-//                    ->fit(AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT)
-//                    ->save($avatarDirectory  . $name . '_small.' . $ext);
-//
-//                $image->withFile($file->getRealPath())
-//                    ->fit(AVATAR_MEDIUM_WIDTH, AVATAR_MEDIUM_HEIGHT)
-//                    ->save($avatarDirectory  . $name . '_medium.' . $ext);
-//
-//                $userModel->update($newUserId, ['avatar' => $avatar]);
-//            }
-//
-//            $userData = $user;
-//            $userData->id = $newUserId;
-//        }
-//
-//        // All migrated users will not have an authorization type in the database, so it will be possible to
-//        // either recover the password or log in through Google or another system.
-//        // But if the authorization type is already specified, you should authorize only this way.
-//        if ($userData->auth_type !== null && $userData->auth_type !== AUTH_TYPE_GOOGLE) {
-//            log_message('error', 'The user cannot log in because he has a different type of account authorization');
-//            return $this->failValidationErrors('You have a different authorization type set to Google');
-//        }
-//
-//        if ($userData->auth_type !== AUTH_TYPE_GOOGLE) {
-//            $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_GOOGLE]);
-//        }
-//
-//        $this->session->authorization($userData);
-//
+        // Successful authorization, look for a user with the same email in the database
+        $userModel = new UsersModel();
+        $userData = $userModel->findUserByEmailAddress($vkUserData->email);
+
+        // If there is no user with this email, then register a new user
+        if (!$userData) {
+            $user = new User();
+            $user->name      = $vkUserData->name;
+            $user->email     = $vkUserData->email;
+            $user->auth_type = AUTH_TYPE_VK;
+
+            $userModel->insert($user);
+
+            $newUserId = $userModel->getInsertID();
+
+            // If a Google user has an avatar, copy it
+            if ($vkUserData->avatar) {
+                $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
+                $avatar = $newUserId . '.jpg';
+
+                if (!is_dir($avatarDirectory)) {
+                    mkdir($avatarDirectory,0777, TRUE);
+                }
+
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($vkUserData->avatar));
+
+                $file = new File($avatarDirectory . $avatar);
+                $name = pathinfo($file, PATHINFO_FILENAME);
+                $ext  = $file->getExtension();
+
+                $image = Services::image('gd'); // imagick
+                $image->withFile($file->getRealPath())
+                    ->fit(AVATAR_SMALL_WIDTH, AVATAR_SMALL_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_small.' . $ext);
+
+                $image->withFile($file->getRealPath())
+                    ->fit(AVATAR_MEDIUM_WIDTH, AVATAR_MEDIUM_HEIGHT)
+                    ->save($avatarDirectory  . $name . '_medium.' . $ext);
+
+                $userModel->update($newUserId, ['avatar' => $avatar]);
+            }
+
+            $userData = $user;
+            $userData->id = $newUserId;
+        }
+
+        // All migrated users will not have an authorization type in the database, so it will be possible to
+        // either recover the password or log in through Google or another system.
+        // But if the authorization type is already specified, you should authorize only this way.
+        // TODO Need to change in all places -> !empty($userData->auth_type)
+        if (!empty($userData->auth_type) && $userData->auth_type !== AUTH_TYPE_VK) {
+            log_message('error', 'The user cannot log in because he has a different type of account authorization');
+            return $this->failValidationErrors('You have a different authorization type set to VK');
+        }
+
+        if ($userData->auth_type !== AUTH_TYPE_VK) {
+            $userModel->update($userData->id, ['auth_type' => AUTH_TYPE_VK]);
+        }
+
+        $this->session->authorization($userData);
+
         return $this->responseAuth();
     }
 
