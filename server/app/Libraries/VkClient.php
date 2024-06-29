@@ -3,9 +3,22 @@
 use Config\Services;
 use Random\RandomException;
 
+const VK_API_VERSION = '5.199';
+
 /**
  * @link https://id.vk.com/about/business/go/accounts/
  * @link https://id.vk.com/about/business/go/docs/ru/vkid/latest/vk-id/connection/api-integration/api-description#Poluchenie-cherez-kod-podtverzhdeniya
+ *
+ * Return format:
+ * [
+ *      *int id
+ *      *string name
+ *      *string email
+ *      *int sex (2 - male)
+ *      *int sex (2 - male)
+ *      *string avatar (url link for avatar)
+ *      *string birthday (d.m.Y)
+ * ]
  */
 class VkClient {
     private string $clientId;
@@ -13,7 +26,7 @@ class VkClient {
     private string $redirectUri;
 
     private string $secret;
-    private string $token;
+    private string $access_token;
 
     private string $theme;
 
@@ -26,7 +39,7 @@ class VkClient {
      * @param string $clientId
      * @param string $secret
      * @param string $redirectUri
-     * @throws RandomException
+     * @param string $theme
      */
     public function __construct(string $clientId, string $secret, string $redirectUri, string $theme = 'light') {
         helper('text');
@@ -102,7 +115,7 @@ class VkClient {
 
         $response = json_decode($response->getBody());
 
-        return $this->token = $response->access_token;
+        return $this->access_token = $response->access_token;
     }
 
     /**
@@ -110,17 +123,18 @@ class VkClient {
      * @return object|null
      */
     public function fetchUserInfo(): ?object {
-        if (!$this->token) {
+        if (!$this->access_token) {
             return null;
         }
 
         // TODO: https://dev.vk.com/ru/method/users.get
 
         $params  = [
-            'access_token' => $this->token,
+            'access_token' => $this->access_token,
             'client_id'    => $this->clientId
         ];
 
+        $userData = (object) [];
         $response = $this->client
             ->setBody(http_build_query($params))
             ->post('https://id.vk.com/oauth2/user_info');
@@ -129,6 +143,56 @@ class VkClient {
             return null;
         }
 
-        return json_decode($response->getBody());
+        $data    = json_decode($response->getBody())->user;
+        $profile = $this->_fetchUserProfile($data->user_id);
+
+        $userData->id    = $data->user_id;
+        $userData->name  = $data->first_name . ' ' . $data->last_name;
+        $userData->email = $data->email;
+        $userData->sex   = $data->sex;
+
+        if (!empty($profile)) {
+            $userData->avatar = $profile->photo_400_orig;
+            $userData->name   = $profile->first_name . ' ' . $profile->last_name;
+        }
+
+        $userData->birthday = $data->birthday;
+
+        return $userData;
+    }
+
+    /**
+     * STEP 3 ADDITIONAL: (if you want to get big size user avatar)
+     * Obtaining information about the user's profile, the most important thing is that a large avatar is returned here
+     * @param int $userId
+     * @return object|null
+     */
+    private function _fetchUserProfile(int $userId): ?object {
+        if (!$this->access_token) {
+            return null;
+        }
+
+        $params  = [
+            'user_ids'     => $userId,
+            'fields'       => 'photo_400_orig',
+            'v'            => VK_API_VERSION,
+            'access_token' => $this->access_token,
+        ];
+
+        try {
+            $response = $this->client
+                ->setBody(http_build_query($params))
+                ->post('https://api.vk.com/method/users.get');
+
+            if ($response->getStatusCode() !== 200) {
+                return null;
+            }
+
+            $result = json_decode($response->getBody());
+
+            return $result->response[0];
+        } catch (\Throwable $e) {
+            return null;
+        }
     }
 }

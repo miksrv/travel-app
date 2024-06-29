@@ -195,16 +195,12 @@ class Auth extends ResourceController {
         }
 
         $vkClient->fetchAccessTokenWithAuthCode($code, $state, $device);
-        $vkUser = $vkClient->fetchUserInfo();
+        $userData = $vkClient->fetchUserInfo();
 
-        echo '<pre>';
-        var_dump($vkUser);
-        exit();
+        if (!$userData || !$userData->email) {
+            return $this->failValidationErrors('Google login error');
+        }
 
-//        if (!$googleUser || !$googleUser->email) {
-//            return $this->failValidationErrors('Google login error');
-//        }
-//
 //        // Successful authorization, look for a user with the same email in the database
 //        $userModel = new UsersModel();
 //        $userData  = $userModel->findUserByEmailAddress($googleUser->email);
