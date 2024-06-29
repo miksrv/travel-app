@@ -1,6 +1,5 @@
 <?php
 
-// Users API Controller
 return [
     'passwordComparisonFail' => 'The old password entered is incorrect.',
     'noDataForUpdate'        => 'No data to update.',

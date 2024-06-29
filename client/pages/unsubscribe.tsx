@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
-import Link from 'next/link'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
@@ -11,7 +10,7 @@ import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import Container from '@/ui/container'
+import Button from '@/ui/button'
 import Message from '@/ui/message'
 import Spinner from '@/ui/spinner'
 
@@ -44,30 +43,48 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                 noindex={true}
                 title={t('title')}
             />
-            <Container style={{ margin: '5% auto', maxWidth: '500px', textAlign: 'center' }}>
-                <h1 style={{ textAlign: 'center', marginBottom: 20 }}>Отписка от рассылки</h1>
-                {error && (
-                    <Message
-                        type={'negative'}
-                        title={'Ошибка'}
-                        text={error as string}
-                    />
-                )}
-                {data && (
-                    <Message
-                        type={'positive'}
-                        title={'Успешно!'}
-                        text={data as string}
-                    />
-                )}
-                <p>Отписка от рассылки уведомлений по электронной почты.</p>
-                {isLoading && (
-                    <div style={{ margin: '40px auto 20px', width: 100 }}>
-                        <Spinner />
-                    </div>
-                )}
-                {(isSuccess || isError) && <Link href={'/'}>Перейти на главную страницу</Link>}
-            </Container>
+            <div
+                style={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    height: '100vh',
+                    background: '#ffffff'
+                }}
+            >
+                <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+                    <h1 style={{ textAlign: 'center', marginBottom: 20, fontSize: '20px' }}>{t('title')}</h1>
+                    {error && (
+                        <Message
+                            type={'negative'}
+                            title={t('error')}
+                            text={error as string}
+                        />
+                    )}
+                    {data && (
+                        <Message
+                            type={'positive'}
+                            title={t('success')}
+                            text={data as string}
+                        />
+                    )}
+                    <p style={{ color: '#818c99' }}>{t('description')}</p>
+                    {isLoading && (
+                        <div style={{ margin: '40px auto 20px', width: 100 }}>
+                            <Spinner />
+                        </div>
+                    )}
+                    {(isSuccess || isError) && (
+                        <Button
+                            link={'/'}
+                            size={'medium'}
+                            mode={'primary'}
+                        >
+                            {t('linkToMainPage')}
+                        </Button>
+                    )}
+                </div>
+            </div>
         </>
     )
 }

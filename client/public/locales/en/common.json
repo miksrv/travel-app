@@ -438,7 +438,11 @@
             }
         },
         "unsubscribe": {
-            "title": "Unsubscribe from email notifications"
+            "title": "Unsubscribe from email notifications",
+            "error": "Error",
+            "success": "Successfully",
+            "description": "Unsubscribe from email notifications.",
+            "linkToMainPage": "Go to main page"
         }
     },
     "ui": {

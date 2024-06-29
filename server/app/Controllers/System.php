@@ -160,6 +160,7 @@ class System extends ResourceController {
                 $message .= '<p>' . lang('SendingMail.placeModified' , [], $locale) . '</p>';
                 $message  = view('email', [
                     'message'     => $message,
+                    'preheader'   => lang('SendingMail.placeModified' , [], $locale),
                     'actionText'  => lang('SendingMail.placeOpenText' , [], $locale),
                     'actionLink'  => 'https://geometki.com/places/' . $placeId,
                     'unsubscribe' => 'https://geometki.com/unsubscribe?mail=' . $item->id,
