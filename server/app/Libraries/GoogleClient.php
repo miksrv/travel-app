@@ -22,6 +22,11 @@ class GoogleClient {
 
     private \CodeIgniter\HTTP\CURLRequest $client;
 
+    /**
+     * @param string $clientId
+     * @param string $secret
+     * @param string $redirectUri
+     */
     public function __construct(string $clientId, string $secret, string $redirectUri) {
         $this->client      = \Config\Services::curlrequest();
         $this->clientId    = $clientId;
@@ -101,10 +106,10 @@ class GoogleClient {
 
             $data = json_decode($response->getBody());
 
-            $userData->id     = $data->sub;
-            $userData->name   = $data->name;
-            $userData->email  = $data->email;
-            $userData->avatar = $data->picture;
+            $userData->id     = $data->sub ?? null;
+            $userData->name   = $data->name ?? null;
+            $userData->email  = $data->email ?? null;
+            $userData->avatar = $data->picture ?? null;
             $userData->locale = $data->locale ?? 'ru';
 
             return $userData;

@@ -79,7 +79,7 @@ class Auth extends ResourceController {
             return $this->failForbidden('Already authorized');
         }
 
-        $googleClient = new GoogleClient(
+        $serviceClient = new GoogleClient(
             getenv('auth.google.clientID'),
             getenv('auth.google.secret'),
             getenv('auth.google.redirect')
@@ -91,11 +91,11 @@ class Auth extends ResourceController {
         if (!$code) {
             return $this->respond([
                 'auth'     => false,
-                'redirect' => $googleClient->createAuthUrl(),
+                'redirect' => $serviceClient->createAuthUrl(),
             ]);
         }
 
-        $serviceProfile = $googleClient->authUser($code);
+        $serviceProfile = $serviceClient->authUser($code);
 
         if (empty($serviceProfile->email)) {
             return $this->failValidationErrors('Ошибка авторизации через гугл - не пришла электронная почта');
@@ -224,7 +224,7 @@ class Auth extends ResourceController {
                     mkdir($avatarDirectory,0777, TRUE);
                 }
 
-                file_put_contents($avatarDirectory . $avatar, file_get_contents($vkUserData->avatar));
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($serviceProfile->avatar));
 
                 $file = new File($avatarDirectory . $avatar);
                 $name = pathinfo($file, PATHINFO_FILENAME);
@@ -275,58 +275,53 @@ class Auth extends ResourceController {
             return $this->failForbidden('Already authorized');
         }
 
-        $yandexClient = new YandexClient();
+        $serviceClient = new YandexClient(
+            getenv('auth.yandex.clientID'),
+            getenv('auth.yandex.secret'),
+            getenv('auth.yandex.redirect')
+        );
 
-        $yandexClient->setClientId(getenv('auth.yandex.clientID'));
-        $yandexClient->setClientSecret(getenv('auth.yandex.secret'));
-        $yandexClient->setRedirectUri(getenv('auth.yandex.redirect'));
-
-        $authCode = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
+        $code = $this->request->getGet('code', FILTER_SANITIZE_SPECIAL_CHARS);
 
         // If there is no authorization code, then the user has not yet logged in to Yandex.
-        if (!$authCode) {
+        if (!$code) {
             return $this->respond([
                 'auth'     => false,
-                'redirect' => $yandexClient->createAuthUrl(),
+                'redirect' => $serviceClient->createAuthUrl(),
             ]);
         }
 
-        $yandexClient->fetchAccessTokenWithAuthCode($authCode);
-        $yandexUser  = $yandexClient->fetchUserInfo();
-        $yandexEmail = strtolower($yandexUser->default_email);
+        $serviceProfile = $serviceClient->authUser($code);
 
-        if (!$yandexUser || !$yandexEmail) {
-            return $this->failValidationErrors('Yandex login error');
+        if (empty($serviceProfile) || empty($serviceProfile->email)) {
+            return $this->failValidationErrors('Ошибка авторизации через Яндекс - не пришел email');
         }
 
         // Successful authorization, look for a user with the same email in the database
         $userModel = new UsersModel();
-        $userData  = $userModel->findUserByEmailAddress($yandexEmail);
+        $userData  = $userModel->findUserByEmailAddress($serviceProfile->email);
 
         // If there is no user with this email, then register a new user
         if (!$userData) {
             $user = new User();
-            $user->name      = $yandexUser->real_name;
-            $user->email     = $yandexEmail;
+            $user->name      = $serviceProfile->name;
+            $user->email     = $serviceProfile->email;
             $user->auth_type = AUTH_TYPE_YANDEX;
-            $user->locale    = $this->request->getLocale();
-            $user->level     = 1;
 
             $userModel->insert($user);
 
             $newUserId = $userModel->getInsertID();
 
             // If a Google user has an avatar, copy it
-            if (!$yandexUser->is_avatar_empty && $yandexUser->default_avatar_id) {
+            if ($serviceProfile->avatar) {
                 $avatarDirectory = UPLOAD_AVATARS . '/' . $newUserId . '/';
-                $yandexAvatarUrl = "https://avatars.yandex.net/get-yapic/{$yandexUser->default_avatar_id}/islands-200";
-                $avatar = md5($yandexUser->real_name . AUTH_TYPE_YANDEX . $yandexEmail) . '.jpg';
+                $avatar = $newUserId . '.jpg';
 
                 if (!is_dir($avatarDirectory)) {
                     mkdir($avatarDirectory,0777, TRUE);
                 }
 
-                file_put_contents($avatarDirectory . $avatar, file_get_contents($yandexAvatarUrl));
+                file_put_contents($avatarDirectory . $avatar, file_get_contents($serviceProfile->avatar));
 
                 $file = new File($avatarDirectory . $avatar);
                 $name = pathinfo($file, PATHINFO_FILENAME);

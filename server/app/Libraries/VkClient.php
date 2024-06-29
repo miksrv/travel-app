@@ -13,8 +13,7 @@ const VK_API_VERSION = '5.199';
  *      *int id
  *      *string name
  *      *string email
- *      *int sex (2 - male)
- *      *int sex (2 - male)
+ *      *int sex (male / female)
  *      *string avatar (url link for avatar)
  *      *string birthday (d.m.Y)
  * ]
@@ -147,10 +146,12 @@ class VkClient {
             $data    = json_decode($response->getBody())->user;
             $profile = $this->_fetchUserProfile($data->user_id);
 
-            $userData->id    = $data->user_id;
+            $userData->id    = $data->user_id ?? null;
             $userData->name  = $data->first_name . ' ' . $data->last_name;
-            $userData->email = $data->email;
-            $userData->sex   = $data->sex;
+            $userData->email = $data->email ?? null;
+            $userData->sex   = !empty($data->sex)
+                ? ($data->sex === 2 ? 'male' : 'female')
+                : null;
 
             if (!empty($profile)) {
                 $userData->avatar = $profile->photo_400_orig;
