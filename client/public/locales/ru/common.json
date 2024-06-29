@@ -68,9 +68,7 @@
             "linkRegistrationCaption": "Регистрация",
             "linkRecoveryCaption": "Забыли пароль?",
             "linkRecoveryTitle": "Восстановление пароля",
-            "buttonLogin": "Войти",
-            "loginGoogle": "Войти через Google",
-            "loginYandex": "Войти через Яндекс"
+            "buttonLogin": "Войти"
         },
         "mapLinks": {
             "yandexMap": "на Яндекс картах",

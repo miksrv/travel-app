@@ -72,6 +72,7 @@ $routes->options('users/(:alphanum)', 'Users');
 $routes->get('auth/me', 'Auth::me');
 $routes->get('auth/google', 'Auth::google');
 $routes->get('auth/yandex', 'Auth::yandex');
+$routes->get('auth/vk', 'Auth::vk');
 $routes->post('auth/login', 'Auth::login');
 $routes->post('auth/registration', 'Auth::registration');
 $routes->options('auth/(:alphanum)', 'Auth');

@@ -68,9 +68,7 @@
             "linkRegistrationCaption": "Sign up",
             "linkRecoveryCaption": "Forgot your password?",
             "linkRecoveryTitle": "Recovery",
-            "buttonLogin": "Login",
-            "loginGoogle": "Login with Google",
-            "loginYandex": "Login with Yandex"
+            "buttonLogin": "Login"
         },
         "mapLinks": {
             "yandexMap": "on Yandex maps",

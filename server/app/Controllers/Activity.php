@@ -49,10 +49,12 @@ class Activity extends ResourceController {
         }
 
         // Incrementing view counter
-        $activityModel
-            ->set('views', 'views + 1', false)
-            ->whereIn('id', $activityIds)
-            ->update();
+        if (!empty($activityIds)) {
+            $activityModel
+                ->set('views', 'views + 1', false)
+                ->whereIn('id', $activityIds)
+                ->update();
+        }
 
         return $this->respond(['items' => $response]);
     }

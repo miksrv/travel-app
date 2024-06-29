@@ -132,6 +132,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) 
             <Dialog
                 open={application.showAuthDialog}
                 onCloseDialog={handleCloseAuthDialog}
+                maxWidth={'400px'}
             >
                 {authForm === 'login' && <LoginForm onClickRegistration={() => setAuthForm('registration')} />}
                 {authForm === 'registration' && <RegistrationForm onClickLogin={() => setAuthForm('login')} />}

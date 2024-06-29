@@ -11,6 +11,7 @@ import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import Button from '@/ui/button'
+import Container from '@/ui/container'
 import Message from '@/ui/message'
 import Spinner from '@/ui/spinner'
 
@@ -48,41 +49,42 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    height: '100vh',
-                    background: '#ffffff'
+                    height: '100vh'
                 }}
             >
                 <div style={{ maxWidth: '500px', textAlign: 'center' }}>
-                    <h1 style={{ textAlign: 'center', marginBottom: 20, fontSize: '20px' }}>{t('title')}</h1>
-                    {error && (
-                        <Message
-                            type={'negative'}
-                            title={t('error')}
-                            text={error as string}
-                        />
-                    )}
-                    {data && (
-                        <Message
-                            type={'positive'}
-                            title={t('success')}
-                            text={data as string}
-                        />
-                    )}
-                    <p style={{ color: '#818c99' }}>{t('description')}</p>
-                    {isLoading && (
-                        <div style={{ margin: '40px auto 20px', width: 100 }}>
-                            <Spinner />
-                        </div>
-                    )}
-                    {(isSuccess || isError) && (
-                        <Button
-                            link={'/'}
-                            size={'medium'}
-                            mode={'primary'}
-                        >
-                            {t('linkToMainPage')}
-                        </Button>
-                    )}
+                    <Container>
+                        <h1 style={{ textAlign: 'center', marginBottom: 20, fontSize: '20px' }}>{t('title')}</h1>
+                        {error && (
+                            <Message
+                                type={'negative'}
+                                title={t('error')}
+                                text={error as string}
+                            />
+                        )}
+                        {data && (
+                            <Message
+                                type={'positive'}
+                                title={t('success')}
+                                text={data as string}
+                            />
+                        )}
+                        <p style={{ color: '#818c99' }}>{t('description')}</p>
+                        {isLoading && (
+                            <div style={{ margin: '40px auto 20px', width: 100 }}>
+                                <Spinner />
+                            </div>
+                        )}
+                        {(isSuccess || isError) && (
+                            <Button
+                                link={'/'}
+                                size={'medium'}
+                                mode={'primary'}
+                            >
+                                {t('linkToMainPage')}
+                            </Button>
+                        )}
+                    </Container>
                 </div>
             </div>
         </>

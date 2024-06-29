@@ -135,3 +135,4 @@ const MODIFIER_COMMENT = 5;
 const AUTH_TYPE_NATIVE = 'native';
 const AUTH_TYPE_GOOGLE = 'google';
 const AUTH_TYPE_YANDEX = 'yandex';
+const AUTH_TYPE_VK = 'vk';

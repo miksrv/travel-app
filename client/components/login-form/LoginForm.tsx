@@ -16,6 +16,7 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
 import googleLogo from '@/public/images/google-logo.png'
+import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import Button from '@/ui/button'
 import Input from '@/ui/input'
@@ -131,36 +132,42 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         <div className={styles.loginForm}>
             <div className={styles.loginServiceButtons}>
                 <Button
-                    stretched={true}
-                    size={'medium'}
-                    mode={'secondary'}
+                    mode={'outline'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('vk')}
+                >
+                    <Image
+                        src={vkLogo.src}
+                        width={40}
+                        height={40}
+                        alt={''}
+                    />
+                </Button>
+
+                <Button
+                    mode={'outline'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('google')}
                 >
                     <Image
                         src={googleLogo.src}
-                        style={{}}
-                        width={20}
-                        height={20}
+                        width={40}
+                        height={40}
                         alt={''}
                     />
-                    {t('loginGoogle')}
                 </Button>
 
                 <Button
-                    stretched={true}
-                    size={'medium'}
-                    mode={'secondary'}
+                    mode={'outline'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('yandex')}
                 >
                     <Image
                         src={yandexLogo.src}
-                        width={20}
-                        height={20}
+                        width={40}
+                        height={40}
                         alt={''}
                     />
-                    {t('loginYandex')}
                 </Button>
             </div>
 
