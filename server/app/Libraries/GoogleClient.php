@@ -81,6 +81,7 @@ class GoogleClient {
 
             return $this->_fetchUserInfo();
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }
@@ -114,6 +115,7 @@ class GoogleClient {
 
             return $userData;
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }

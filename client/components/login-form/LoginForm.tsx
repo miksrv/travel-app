@@ -132,50 +132,40 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         <div className={styles.loginForm}>
             <div className={styles.loginServiceButtons}>
                 <Button
-                    stretched={true}
-                    size={'medium'}
-                    mode={'secondary'}
-                    disabled={loadingForm}
-                    onClick={() => handleLoginServiceButton('google')}
-                >
-                    <Image
-                        src={googleLogo.src}
-                        style={{}}
-                        width={20}
-                        height={20}
-                        alt={''}
-                    />
-                    {t('loginGoogle')}
-                </Button>
-
-                <Button
-                    stretched={true}
-                    size={'medium'}
-                    mode={'secondary'}
-                    disabled={loadingForm}
-                    onClick={() => handleLoginServiceButton('yandex')}
-                >
-                    <Image
-                        src={yandexLogo.src}
-                        width={20}
-                        height={20}
-                        alt={''}
-                    />
-                    {t('loginYandex')}
-                </Button>
-
-                <Button
-                    stretched={true}
-                    size={'medium'}
-                    mode={'secondary'}
+                    mode={'outline'}
                     disabled={loadingForm}
                     onClick={() => handleLoginServiceButton('vk')}
                 >
                     <Image
                         src={vkLogo.src}
-                        style={{}}
-                        width={20}
-                        height={20}
+                        width={40}
+                        height={40}
+                        alt={''}
+                    />
+                </Button>
+
+                <Button
+                    mode={'outline'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('google')}
+                >
+                    <Image
+                        src={googleLogo.src}
+                        width={40}
+                        height={40}
+                        alt={''}
+                    />
+                </Button>
+
+                <Button
+                    mode={'outline'}
+                    disabled={loadingForm}
+                    onClick={() => handleLoginServiceButton('yandex')}
+                >
+                    <Image
+                        src={yandexLogo.src}
+                        width={40}
+                        height={40}
                         alt={''}
                     />
                 </Button>

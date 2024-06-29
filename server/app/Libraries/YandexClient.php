@@ -73,6 +73,7 @@ class YandexClient {
 
             return $this->_fetchUserInfo();
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }
@@ -111,6 +112,7 @@ class YandexClient {
 
             return $userData;
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }

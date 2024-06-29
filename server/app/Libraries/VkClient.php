@@ -113,6 +113,7 @@ class VkClient {
 
             return $this->_fetchUserInfo();
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }
@@ -162,6 +163,7 @@ class VkClient {
 
             return $userData;
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }
@@ -197,6 +199,7 @@ class VkClient {
 
             return $result->response[0];
         } catch (\Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
             return null;
         }
     }
