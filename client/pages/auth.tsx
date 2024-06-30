@@ -14,7 +14,10 @@ import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import * as LocalStorage from '@/functions/localstorage'
-import ScreenSpinner from '@/ui/screen-spinner'
+import Button from '@/ui/button'
+import Container from '@/ui/container'
+import Message from '@/ui/message'
+import Spinner from '@/ui/spinner'
 
 interface AuthPageProps {}
 
@@ -35,7 +38,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [serviceLogin, { data }] = API.useAuthLoginServiceMutation()
+    const [serviceLogin, { data, error, isLoading, isError, isSuccess }] = API.useAuthLoginServiceMutation()
 
     useEffect(() => {
         if (isAuth) {
@@ -80,7 +83,34 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                 noindex={true}
                 title={t('title')}
             />
-            <ScreenSpinner text={t('pleaseWait')} />
+            <div className={'centerPageContainer'}>
+                <div className={'wrapper'}>
+                    <Container>
+                        <h1 className={'header'}>{t('title')}</h1>
+                        {error && (
+                            <Message
+                                type={'negative'}
+                                title={'Ошибка'}
+                                text={error as string}
+                            />
+                        )}
+                        {(isLoading || isSuccess) && (
+                            <div className={'loaderWrapper'}>
+                                <Spinner />
+                            </div>
+                        )}
+                        {isError && (
+                            <Button
+                                link={'/'}
+                                size={'medium'}
+                                mode={'primary'}
+                            >
+                                Перейти на главную страницу
+                            </Button>
+                        )}
+                    </Container>
+                </div>
+            </div>
         </>
     )
 }

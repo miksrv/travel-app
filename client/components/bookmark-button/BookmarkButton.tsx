@@ -52,6 +52,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
         dispatch(
             Notify({
                 id: 'bookmarkButton',
+                title: '',
                 message: bookmarkData?.result ? t('bookmarkResultRemove') : t('bookmarkResultAdd'),
                 type: 'success'
             })

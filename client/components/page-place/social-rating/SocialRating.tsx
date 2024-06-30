@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { addDecimalPoint } from '@/functions/helpers'
 import Container from '@/ui/container'
 import Rating from '@/ui/rating'
+import Spinner from '@/ui/spinner'
 
 interface SocialRatingProps {
     placeId?: string
@@ -40,7 +41,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const { data: ratingData } = API.useRatingGetListQuery(placeId ?? '', {
+    const { data: ratingData, isLoading } = API.useRatingGetListQuery(placeId ?? '', {
         skip: !placeId,
         refetchOnMountOrArgChange: true
     })
@@ -61,6 +62,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
             dispatch(
                 Notify({
                     id: 'placeRating',
+                    title: '',
                     message: t('ratingSuccess'),
                     type: 'success'
                 })
@@ -74,15 +76,13 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
                 <Rating
                     value={ratingData?.rating}
                     voted={!!ratingData?.vote}
-                    disabled={ratingLoading}
+                    disabled={ratingLoading || isLoading}
                     onChange={handleRatingChange}
                 />
 
-                {ratingData?.rating ? (
-                    <div className={styles.ratingValue}>{addDecimalPoint(ratingData?.rating)}</div>
-                ) : (
-                    ''
-                )}
+                <div className={styles.ratingValue}>
+                    {isLoading || ratingLoading ? <Spinner /> : addDecimalPoint(ratingData?.rating)}
+                </div>
             </div>
 
             <div className={styles.share}>

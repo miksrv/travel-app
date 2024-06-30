@@ -42,7 +42,6 @@ const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => 
                         <input
                             type={'radio'}
                             value={rating}
-                            checked={value === rating}
                             onChange={() => {
                                 !disabled ? onChange?.(rating) : undefined
                             }}

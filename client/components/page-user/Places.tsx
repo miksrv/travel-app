@@ -65,7 +65,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
                 loading={isLoading}
             />
 
-            <Container className={`pagination${!data?.count && ' hide'}`}>
+            <Container className={`pagination ${!data?.count || data?.count <= PLACES_PER_PAGE ? 'hide' : ''}`}>
                 <div>
                     {t('count')} <strong>{data?.count ?? 0}</strong>
                 </div>
