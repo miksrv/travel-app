@@ -52,7 +52,7 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                     height: '100vh'
                 }}
             >
-                <div style={{ maxWidth: '500px', textAlign: 'center' }}>
+                <div style={{ width: '500px', textAlign: 'center' }}>
                     <Container>
                         <h1 style={{ textAlign: 'center', marginBottom: 20, fontSize: '20px' }}>{t('title')}</h1>
                         {error && (
