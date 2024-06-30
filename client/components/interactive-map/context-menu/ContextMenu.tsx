@@ -53,6 +53,7 @@ const ContextMenu: React.FC = () => {
         dispatch(
             Notify({
                 id: 'copyCoordinates',
+                title: '',
                 message: t('copySuccess'),
                 type: 'success'
             })

@@ -62,6 +62,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
             dispatch(
                 Notify({
                     id: 'placeRating',
+                    title: '',
                     message: t('ratingSuccess'),
                     type: 'success'
                 })

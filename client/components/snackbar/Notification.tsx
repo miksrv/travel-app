@@ -27,13 +27,28 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
     }, [])
 
     return (
-        <div className={cn(styles.notification, styles[props.type!], !props.read && styles.unread)}>
+        <div
+            className={cn(
+                styles.notification,
+                styles[props.type!],
+                !props.read && styles.unread,
+                typeof props.title !== 'undefined' && !props.title?.length ? styles.noTitle : ''
+            )}
+        >
             <div className={cn(styles.before)}>
                 <NotificationIcon {...props} />
             </div>
             <div className={styles.body}>
                 <span className={styles.title}>
-                    {props.type === 'experience' ? t(props.activity!) : t(props.type!)}
+                    {typeof props.title !== 'undefined'
+                        ? props.title
+                        : props.type === 'experience'
+                          ? props.activity
+                              ? t(props.activity)
+                              : ''
+                          : props.type
+                            ? t(props.type)
+                            : ''}
                 </span>
                 <span className={styles.content}>
                     {props.message}
