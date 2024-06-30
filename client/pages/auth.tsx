@@ -83,17 +83,10 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                 noindex={true}
                 title={t('title')}
             />
-            <div
-                style={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    height: '100vh'
-                }}
-            >
-                <div style={{ width: '500px', textAlign: 'center' }}>
+            <div className={'centerPageContainer'}>
+                <div className={'wrapper'}>
                     <Container>
-                        <h1 style={{ textAlign: 'center', marginBottom: 20, fontSize: '20px' }}>{t('title')}</h1>
+                        <h1 className={'header'}>{t('title')}</h1>
                         {error && (
                             <Message
                                 type={'negative'}
@@ -102,7 +95,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                             />
                         )}
                         {(isLoading || isSuccess) && (
-                            <div style={{ margin: '40px auto 20px', width: 100 }}>
+                            <div className={'loaderWrapper'}>
                                 <Spinner />
                             </div>
                         )}
