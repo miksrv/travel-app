@@ -8,6 +8,7 @@ import { useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 import googleLogo from '@/public/images/google-logo.png'
+import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import Button from '@/ui/button'
 import Checkbox from '@/ui/checkbox'
@@ -223,7 +224,13 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 ) : (
                     <div className={styles.authService}>
                         <Image
-                            src={values?.authType === 'google' ? googleLogo.src : yandexLogo.src}
+                            src={
+                                values?.authType === 'google'
+                                    ? googleLogo.src
+                                    : values?.authType === 'vk'
+                                      ? vkLogo.src
+                                      : yandexLogo.src
+                            }
                             width={48}
                             height={48}
                             alt={''}
@@ -231,9 +238,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         <p>
                             <Trans
                                 i18nKey={'components.userForm.loginViaService'}
-                                values={{
-                                    service: values?.authType === 'google' ? 'Google' : 'Yandex'
-                                }}
+                                values={{ service: values?.authType }}
                             />
                         </p>
                     </div>
