@@ -34,7 +34,7 @@ class Auth extends ResourceController {
      */
     public function registration(): ResponseInterface {
         if ($this->session->isAuth) {
-            return $this->failForbidden('Already authorized');
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
 
         $validationRules = [
@@ -78,7 +78,7 @@ class Auth extends ResourceController {
      */
     public function google(): ResponseInterface {
         if ($this->session->isAuth) {
-            return $this->failForbidden('Already authorized');
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
 
         $serviceClient = new GoogleClient(
@@ -111,7 +111,7 @@ class Auth extends ResourceController {
      */
     public function vk(): ResponseInterface {
         if ($this->session->isAuth) {
-            return $this->failForbidden('Already authorized');
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
 
         $serviceClient = new VkClient(
@@ -147,7 +147,7 @@ class Auth extends ResourceController {
      */
     public function yandex(): ResponseInterface {
         if ($this->session->isAuth) {
-            return $this->failForbidden('Already authorized');
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
 
         $serviceClient = new YandexClient(
@@ -174,13 +174,13 @@ class Auth extends ResourceController {
 
 
     /**
-     * Authenticate Existing User
+     * Native authenticate existing user
      * @return ResponseInterface
      * @throws ReflectionException
      */
     public function login(): ResponseInterface {
         if ($this->session->isAuth) {
-            return $this->failForbidden('Already authorized');
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
 
         $rules = [
@@ -190,7 +190,7 @@ class Auth extends ResourceController {
 
         $errors = [
             'password' => [
-                'validateUser' => 'Invalid login credentials provided'
+                'validateUser' => lang('Auth.invalidCredentials')
             ]
         ];
 
@@ -302,7 +302,7 @@ class Auth extends ResourceController {
     protected function _serviceAuth(string $authType, object | null $serviceProfile): ResponseInterface
     {
         if (empty($serviceProfile) || empty($serviceProfile->email)) {
-            return $this->failValidationErrors('Ошибка авторизации через сервис - не пришел email');
+            return $this->failValidationErrors(lang('Auth.authServiceEmptyData'));
         }
 
         // Successful authorization, look for a user with the same email in the database
@@ -360,7 +360,7 @@ class Auth extends ResourceController {
         // either recover the password or log in through Google or another system.
         // But if the authorization type is already specified, you should authorize only this way.
         if ($userData->auth_type !== null && $userData->auth_type !== $authType) {
-            return $this->failValidationErrors('Ранее вы уже авторизовывались через другой сервис (Yandex, Google или VK). Попробуйте авторизоваться еще раз, но выберите другой способ авторизации');
+            return $this->failValidationErrors(lang('Auth.authWrongService'));
         }
 
         if ($userData->auth_type !== $authType) {
