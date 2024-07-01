@@ -97,10 +97,11 @@
                 "uploadPhoto": "Upload photos"
             },
             "placeHeader": {
-                "edit": "Edit",
+                "edit": "Edit place",
                 "photoUpload": "Upload photo",
-                "allPlacesAtAddress": "All place at address",
-                "openPlaceOnMap": "Open on the map"
+                "allPlacesAtAddress": "All places at address",
+                "openPlaceOnMap": "Open on the map",
+                "changeCover": "Change Cover"
             },
             "placeInformation": {
                 "author": "Author:",

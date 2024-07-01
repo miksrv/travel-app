@@ -99,8 +99,9 @@
             "placeHeader": {
                 "edit": "Редактировать",
                 "photoUpload": "Загрузить фото",
-                "allPlacesAtAddress": "Все место по адресу",
-                "openPlaceOnMap": "Открыть на карте"
+                "allPlacesAtAddress": "Все места по адресу",
+                "openPlaceOnMap": "Открыть на карте",
+                "changeCover": "Изменить обложку"
             },
             "placeInformation": {
                 "author": "Автор:",
