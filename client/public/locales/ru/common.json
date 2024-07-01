@@ -99,8 +99,9 @@
             "placeHeader": {
                 "edit": "Редактировать",
                 "photoUpload": "Загрузить фото",
-                "allPlacesAtAddress": "Все место по адресу",
-                "openPlaceOnMap": "Открыть на карте"
+                "allPlacesAtAddress": "Все места по адресу",
+                "openPlaceOnMap": "Открыть на карте",
+                "changeCover": "Изменить обложку"
             },
             "placeInformation": {
                 "author": "Автор:",
@@ -196,8 +197,9 @@
             "buttonCover": "Заменить обложку",
             "buttonSave": "Сохранить",
             "selectPhoto": "Выберите фотографию",
-            "saveNewCover": "Сохраните новую обложку",
-            "noPhotos": "Нет загруженных фотографий"
+            "editing": "Редактирование",
+            "noPhotos": "Нет загруженных фотографий",
+            "loadFirstPhoto": "Сперва загрузите фотографии, после чего сможете отредактировать обложку"
         },
         "placeForm": {
             "errorsMessageTitle": "При добавлении геометки были допущены ошибки",

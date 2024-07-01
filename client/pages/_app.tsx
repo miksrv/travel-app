@@ -26,7 +26,6 @@ const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
     const { i18n } = useTranslation()
-    const { theme } = useTheme()
     const { store } = wrapper.useWrappedStore(pageProps)
 
     useEffect(() => {
@@ -49,15 +48,6 @@ const App = ({ Component, pageProps }: AppProps) => {
                 <meta
                     name={'apple-mobile-web-app-capable'}
                     content={'yes'}
-                />
-                <meta
-                    name={'apple-mobile-web-app-status-bar-style'}
-                    content={theme === 'dark' ? 'black-translucent' : 'default'}
-                />
-                <meta
-                    name={'theme-color'}
-                    content={theme === 'dark' ? '#1b1b1b' : '#ebedf0'}
-                    media={`(prefers-color-scheme: ${theme === 'dark' ? 'dark' : 'light'})`}
                 />
                 <meta
                     name={'viewport'}
@@ -91,6 +81,8 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             </Head>
 
+            <ThemeMeta />
+
             <Provider store={store}>
                 <Component {...pageProps} />
             </Provider>
@@ -103,6 +95,24 @@ const App = ({ Component, pageProps }: AppProps) => {
                 />
             )}
         </ThemeProvider>
+    )
+}
+
+const ThemeMeta: React.FC = () => {
+    const { theme } = useTheme()
+
+    return (
+        <Head>
+            <meta
+                name={'apple-mobile-web-app-status-bar-style'}
+                content={theme === 'dark' ? 'black-translucent' : 'default'}
+            />
+            <meta
+                name={'theme-color'}
+                content={theme === 'dark' ? '#1b1b1b' : '#ebedf0'}
+                media={`(prefers-color-scheme: ${theme === 'dark' ? 'dark' : 'light'})`}
+            />
+        </Head>
     )
 }
 

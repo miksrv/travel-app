@@ -139,7 +139,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     onClick={onChangePlaceCoverClick}
                                 >
                                     <Icon name={'Photo'} />
-                                    Изменить обложку
+                                    {t('changeCover')}
                                 </Link>
                             </li>
                             <li>

@@ -131,7 +131,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
         <Dialog
             contentHeight={'490px'}
             maxWidth={'700px'}
-            header={!selectedPhotoId ? t('selectPhoto') : t('saveNewCover')}
+            header={!selectedPhotoId ? t('selectPhoto') : t('editing')}
             open={coverDialogOpen}
             showBackLink={!!selectedPhotoId}
             actions={
@@ -151,6 +151,13 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
             }}
             onCloseDialog={handleCoverDialogClose}
         >
+            {!photoLoading && !photosData?.items?.length && (
+                <div className={styles.noPhotos}>
+                    {t('noPhotos')}
+                    <br />
+                    {t('loadFirstPhoto')}
+                </div>
+            )}
             {!selectedPhotoId ? (
                 <ul className={styles.coverPhotosList}>
                     {photosData?.items?.map((photo) => (
@@ -166,9 +173,6 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
                             />
                         </li>
                     ))}
-                    {!photoLoading && !photosData?.items?.length && (
-                        <div className={styles.noPhotos}>{t('noPhotos')}</div>
-                    )}
                 </ul>
             ) : (
                 <div className={styles.innerContainer}>
