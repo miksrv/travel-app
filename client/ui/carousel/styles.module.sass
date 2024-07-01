@@ -91,7 +91,7 @@
                 padding-left: var(--slide-spacing)
 
                 @media only screen and (max-width: $mobileMaxWidth)
-                    max-width: 350px
+                    max-width: 500px
 
     .buttonsContainer
         opacity: 0
@@ -102,6 +102,9 @@
         transform: translateY(-50%)
         width: 100%
         transition: opacity .15s
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            opacity: 1
 
         .arrowButton
             z-index: 1
