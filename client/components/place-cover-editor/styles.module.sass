@@ -1,43 +1,42 @@
 @import ../../styles/variables
 
 .innerContainer
-  max-height: 470px
-  height: 470px
-  display: flex
-  justify-content: center
-  align-items: center
-
-  & > div
-    height: 100%
+    max-height: 470px
+    height: 470px
+    display: flex
+    justify-content: center
+    align-items: center
 
     & > div
-      height: 100%
+        height: 100%
 
-.coverPhotosList
-  display: flex
-  flex-wrap: wrap
-  margin: 0 -5px
+        & > div
+            height: 100%
 
-  .noPhotos
+.noPhotos
     text-align: center
-    color: var(--text-color-secondary)
     height: 90%
     width: 100%
     display: flex
     align-items: center
     justify-content: center
 
-  li
-    flex-basis: calc(25%)
-    padding: 4px 4px 0 4px
+.coverPhotosList
+    display: flex
+    flex-wrap: wrap
+    margin: 0 -15px
 
-    &:hover
-      img
-        opacity: .8
+    li
+        flex-basis: calc(25%)
+        padding: 0 2px
 
-    img
-      width: 100%
-      object-fit: cover
-      cursor: pointer
-      border-radius: var(--border-radius)
-      height: auto
+        &:hover
+            img
+                opacity: .8
+
+        img
+            width: 100%
+            object-fit: cover
+            cursor: pointer
+            border-radius: var(--border-radius)
+            height: auto

@@ -196,8 +196,9 @@
             "buttonCover": "Replace cover",
             "buttonSave": "Save",
             "selectPhoto": "Select a photo",
-            "saveNewCover": "Save the new cover",
-            "noPhotos": "No photos uploaded"
+            "editing": "Editing",
+            "noPhotos": "No photos uploaded",
+            "loadFirstPhoto": "First upload your photos, after which you can edit the cover"
         },
         "placeForm": {
             "errorsMessageTitle": "Errors were made when adding a geotag",
