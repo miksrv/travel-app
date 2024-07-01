@@ -53,8 +53,6 @@ class Rating extends ResourceController {
      * @return ResponseInterface
      */
     public function set(): ResponseInterface {
-        exit();
-
         try {
             $input = $this->request->getJSON();
 

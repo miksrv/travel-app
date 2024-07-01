@@ -87,14 +87,14 @@ class Activity extends ResourceController {
                 'placeId'   => $item->place_id
             ] : null;
 
-            // We group activity by photos of one user, uploaded for one place and with a difference of no more than 5 minutes
+            // We group activity by photos of one user, uploaded for one place and with a difference of no more than 60 minutes
             if (
                 $lastGroup &&
 //                $item->type === 'photo' &&
 //                $lastGroup->type === 'photo' &&
                 (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
                 $lastGroup->author->id === $item->user_id &&
-                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 600
+                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 60 * 60
             ) {
                 $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
                 $lastGroup->type     = $item->type;
