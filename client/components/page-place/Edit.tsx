@@ -13,8 +13,6 @@ import Container from '@/ui/container'
 
 interface EditProps extends Omit<PlacePageProps, 'page'> {}
 
-const TKEY = 'components.pagePlace.edit.'
-
 const Edit: React.FC<EditProps> = ({ place }) => {
     const router = useRouter()
     const { t, i18n } = useTranslation()
@@ -75,13 +73,13 @@ const Edit: React.FC<EditProps> = ({ place }) => {
             />
 
             <Header
-                title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
-                currentPage={t(`${TKEY}pageTitle`)}
+                title={`${place?.title} - ${t('editing')}`}
+                currentPage={t('editing')}
                 backLink={`/places/${place?.id}`}
                 links={[
                     {
                         link: '/places/',
-                        text: t(`${TKEY}breadCrumbPlacesLink`)
+                        text: t('geotags')
                     },
                     {
                         link: `/places/${place?.id}`,

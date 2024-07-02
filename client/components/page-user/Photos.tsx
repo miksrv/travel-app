@@ -13,9 +13,7 @@ import Pagination from '@/ui/pagination'
 interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
 
 const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCount, currentPage }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.photos'
-    })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pageTitle = currentPage > 1 ? ` - ${t('page')} ${currentPage}` : ''
@@ -23,20 +21,20 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
     return (
         <>
             <NextSeo
-                title={`${user?.name} - ${t('title')}${pageTitle}`}
-                description={`${user?.name} - ${t('description')}${pageTitle}`}
+                title={`${user?.name} - ${t('photos')}${pageTitle}`}
+                description={`${user?.name} - ${t('all-traveler-photos')}${pageTitle}`}
                 canonical={`${canonicalUrl}users/${id}/photos`}
             />
 
             <Header
-                title={`${user?.name} - ${t('title')}${pageTitle}`}
-                currentPage={t('title')}
+                title={`${user?.name} - ${t('photos')}${pageTitle}`}
+                currentPage={t('photos')}
                 backLink={`/users/${id}`}
                 userData={user}
                 links={[
                     {
                         link: '/users/',
-                        text: t('breadCrumbLink')
+                        text: t('users')
                     },
                     {
                         link: `/users/${id}`,
@@ -56,7 +54,7 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
 
             <Container className={'pagination'}>
                 <div>
-                    {t('photos')} <strong>{photosCount ?? 0}</strong>
+                    {t('photos')}: <strong>{photosCount ?? 0}</strong>
                 </div>
 
                 <Pagination

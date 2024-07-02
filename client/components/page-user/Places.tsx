@@ -15,9 +15,7 @@ interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
 }
 
 const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.places'
-    })
+    const { t, i18n } = useTranslation()
 
     const { data, isLoading } = API.usePlacesGetListQuery({
         author: type === 'places' ? id : undefined,
@@ -34,7 +32,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
         <>
             <NextSeo
                 title={`${user?.name} - ${title}${pageTitle}`}
-                description={`${user?.name} - ${t('description')}${pageTitle}`}
+                description={`${user?.name} - ${t('all-traveler-geotags')}${pageTitle}`}
                 canonical={`${canonicalUrl}users/${id}/${type === 'places' ? 'places' : 'bookmarks'}`}
             />
 
@@ -46,7 +44,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
                 links={[
                     {
                         link: '/users/',
-                        text: t('breadCrumbLink')
+                        text: t('users')
                     },
                     {
                         link: `/users/${id}`,
@@ -67,7 +65,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
 
             <Container className={`pagination ${!data?.count || data?.count <= PLACES_PER_PAGE ? 'hide' : ''}`}>
                 <div>
-                    {t('count')} <strong>{data?.count ?? 0}</strong>
+                    {t('geotags')}: <strong>{data?.count ?? 0}</strong>
                 </div>
 
                 <Pagination

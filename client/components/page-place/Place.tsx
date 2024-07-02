@@ -26,8 +26,6 @@ import Container from '@/ui/container'
 
 interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
-const KEY = 'components.pagePlace.place.'
-
 const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces }) => {
     const dispatch = useAppDispatch()
     const { t, i18n } = useTranslation()
@@ -71,7 +69,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}places`,
-                name: t(`${KEY}breadCrumbPlacesLink`),
+                name: t('geotags'),
                 position: 1
             },
             {
@@ -166,7 +164,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         width: photo.width
                     })),
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                    siteName: t('siteName'),
+                    siteName: t('geotags'),
                     title: place?.title,
                     type: 'http://ogp.me/ns/article#',
                     url: pagePlaceUrl
@@ -191,13 +189,13 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
             />
 
             <Container
-                title={t(`${KEY}photos`)}
+                title={t('photos')}
                 action={
                     <Button
                         mode={'link'}
                         onClick={handleUploadPhotoClick}
                     >
-                        {t(`${KEY}uploadPhoto`)}
+                        {t('upload-photo')}
                     </Button>
                 }
             >
@@ -234,7 +232,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                         style={{ marginTop: '5px' }}
                     >
-                        {t(`${KEY}allNearPlacesButton`)}
+                        {t('all-places-nearby')}
                     </Button>
                 </>
             )}

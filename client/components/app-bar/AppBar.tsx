@@ -86,7 +86,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
 
                     {appAuth.isAuth === false && (
                         <Button
-                            title={t('site-authorization')}
+                            title={t('authorization-on-site')}
                             mode={'secondary'}
                             className={styles.loginButton}
                             onClick={handleLoginClick}

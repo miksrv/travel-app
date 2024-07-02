@@ -19,9 +19,7 @@ import Container from '@/ui/container'
 interface UserProps extends Omit<UserPageProps, 'page'> {}
 
 const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.user'
-    })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
@@ -67,7 +65,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}users`,
-                name: t('breadCrumbUsersLink'),
+                name: t('users'),
                 position: 1
             },
             {
@@ -109,9 +107,9 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
             </Head>
 
             <NextSeo
-                title={`${user?.name} - ${t('title')}`}
+                title={`${user?.name} - ${t('profile')}`}
                 canonical={`${canonicalUrl}users/${user?.id}`}
-                description={`${user?.name} - ${t('description')}`}
+                description={`${user?.name} - ${t('user-profile')}`}
                 openGraph={{
                     images: photosList?.map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
@@ -123,7 +121,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                     profile: {
                         username: user?.name
                     },
-                    siteName: t('siteName'),
+                    siteName: t('geotags'),
                     title: user?.name,
                     type: 'http://ogp.me/ns/profile#',
                     url: `${canonicalUrl}users/${user?.id}`
@@ -138,9 +136,9 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                     !!photosList?.length && (
                         <Link
                             href={`/users/${id}/photos`}
-                            title={t(`${t('buttonShowAllPhotos')} (${photosCount})`)}
+                            title={t(`${t('show-all-photos')} (${photosCount})`)}
                         >
-                            {t('linkAllPhotos')}
+                            {t('all')}
                         </Link>
                     )
                 }
@@ -153,7 +151,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                             link={`/users/${id}/photos`}
                             style={{ marginTop: '15px' }}
                         >
-                            {`${t('buttonShowAllPhotos')} (${photosCount})`}
+                            {`${t('show-all-photos')} (${photosCount})`}
                         </Button>
                     )
                 }
