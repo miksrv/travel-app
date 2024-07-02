@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
-import Image from 'next/image'
-import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import Notifications from './Notifications'
@@ -14,9 +12,9 @@ import { logout } from '@/api/authSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import AppAuthChecker from '@/components/app-auth-checker'
+import Logo from '@/components/app-bar/Logo'
 import UserMenu from '@/components/app-bar/UserMenu'
 import { concatClassNames as cn, round } from '@/functions/helpers'
-import logo from '@/public/images/geometki.png'
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 
@@ -71,18 +69,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
                     <Icon name={'Menu'} />
                 </button>
 
-                <Link
-                    href={'/'}
-                    title={''}
-                    className={styles.logo}
-                >
-                    <Image
-                        src={logo}
-                        alt={''}
-                        width={138}
-                        height={28}
-                    />
-                </Link>
+                <Logo />
 
                 <Search />
 
