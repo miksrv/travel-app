@@ -122,8 +122,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                 ))}
             </Carousel>
 
-            {/*<PlacesList places={placesList} />*/}
-
             <Button
                 size={'medium'}
                 mode={'secondary'}

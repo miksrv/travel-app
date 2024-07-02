@@ -15,9 +15,7 @@ interface PlacesListProps {
 }
 
 const ActivityList: React.FC<PlacesListProps> = ({ activities, loading, title }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.activityList'
-    })
+    const { t } = useTranslation()
 
     return (
         <>
@@ -29,7 +27,9 @@ const ActivityList: React.FC<PlacesListProps> = ({ activities, loading, title })
                 />
             ))}
 
-            {!activities?.length && !loading && <Container className={styles.emptyList}>{t('emptyList')}</Container>}
+            {!activities?.length && !loading && (
+                <Container className={styles.emptyList}>{t('nothing-here-yet')}</Container>
+            )}
 
             {loading && <ActivityListItemLoader />}
         </>

@@ -1,7 +1,7 @@
 import React from 'react'
+import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -11,13 +11,10 @@ import Container from '@/ui/container'
 
 interface CategoriesListProps {
     categories?: Category[]
+    t: TFunction
 }
 
-const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.categoriesList'
-    })
-
+const CategoriesList: React.FC<CategoriesListProps> = ({ categories, t }) => {
     return (
         <Container className={styles.categoriesList}>
             {categories?.map((category) => (
@@ -36,7 +33,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                         />
                         <Link
                             href={`/places?category=${category.name}`}
-                            title={`${category.title} - ${t('allCategoryPlaces')}`}
+                            title={`${category.title} - ${t('all-interesting-places-in-category')}`}
                         >
                             {category.title}
                         </Link>
@@ -45,13 +42,13 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) => {
                         <p>{category.content}</p>
                         <p className={styles.description}>
                             <div>
-                                {t('placesInCategory')} <strong>{category.count ?? 0}</strong>
+                                {t('interesting-places-in-category')}: <strong>{category.count ?? 0}</strong>
                             </div>
                             <Link
                                 href={`/places?category=${category.name}`}
-                                title={`${category.title} - ${t('allCategoryPlaces')}`}
+                                title={`${category.title} - ${t('all-interesting-places-in-category')}`}
                             >
-                                {t('goToCategory')}
+                                {t('go-to-category')}
                             </Link>
                         </p>
                     </div>

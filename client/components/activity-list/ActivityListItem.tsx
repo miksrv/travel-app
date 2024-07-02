@@ -20,9 +20,7 @@ interface ActivityListItemProps {
 }
 
 const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.activityList'
-    })
+    const { t } = useTranslation()
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
@@ -48,14 +46,14 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                 showName={true}
                 caption={
                     <>
-                        {formatDate(item.created?.date, t('dateFormat'))}
+                        {formatDate(item.created?.date, t('date-time-format'))}
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Edit]: t('edit'),
-                                [ActivityTypes.Place]: t('place'),
-                                [ActivityTypes.Photo]: t('photo'),
-                                [ActivityTypes.Rating]: t('rating')
+                                [ActivityTypes.Edit]: t('activity-editing'),
+                                [ActivityTypes.Place]: t('activity-new-geotag'),
+                                [ActivityTypes.Photo]: t('activity-upload-photo'),
+                                [ActivityTypes.Rating]: t('activity-rating')
                             }[item.type]
                         }
                         {/*{item.type === ActivityTypes.Edit &&*/}
@@ -84,8 +82,8 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
             {(item.type === ActivityTypes.Place || item.type === ActivityTypes.Edit) && item.place?.content && (
                 <ReadMore
                     className={cn(styles.content, !!item.photos?.length && styles.contentGallery)}
-                    showMoreText={t('readMore')}
-                    showLessText={t('readLess')}
+                    showMoreText={t('show-more')}
+                    showLessText={t('show-less')}
                 >
                     {item.place.content}
                 </ReadMore>

@@ -349,9 +349,9 @@
     },
     "pages": {
         "index": {
-            "title": "News feed of interesting places",
+            "title": "Geometki",
             "breadCrumbCurrent": "Updated points of interest, active users and latest uploaded photos",
-            "description": "Interesting places and attractions - news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
+            "description": "Geometki: Interesting places and attractions, news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
             "buttonAllPlaces": "All places of interest",
             "titleActiveUsers": "Active Travelers",
             "allActiveUsers": "All",

@@ -16,9 +16,7 @@ import Spinner from '@/ui/spinner'
 interface NotificationsProps {}
 
 const Notifications: React.FC<NotificationsProps> = () => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.appBar.notifications'
-    })
+    const { t } = useTranslation()
     const dispatch = useAppDispatch()
 
     const notifyContainerRef = useRef<HTMLDivElement>(null)
@@ -139,7 +137,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                 )}
                 {!notifyData?.items?.length && !notifyLoading && (
                     <div className={styles.noData}>
-                        <p>{t('noData')}</p>
+                        <p>{t('no-notifications')}</p>
                     </div>
                 )}
                 <div className={styles.notifyFooter}>
@@ -151,7 +149,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         loading={loadingClear || (notifyFetching && !!notifyData?.items?.length)}
                         onClick={handleClearNotificationsClick}
                     >
-                        {t('clearButton')}
+                        {t('clear')}
                     </Button>
                 </div>
             </>

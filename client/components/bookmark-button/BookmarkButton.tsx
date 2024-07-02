@@ -15,9 +15,7 @@ interface BookmarkButtonProps extends ButtonProps {
 
 const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
     const dispatch = useAppDispatch()
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.bookmarkButton'
-    })
+    const { t } = useTranslation()
 
     const [buttonPushed, setButtonPushed] = useState<boolean>(false)
 
@@ -53,7 +51,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
             Notify({
                 id: 'bookmarkButton',
                 title: '',
-                message: bookmarkData?.result ? t('bookmarkResultRemove') : t('bookmarkResultAdd'),
+                message: bookmarkData?.result ? t('geotag-removed-bookmarks') : t('geotag-added-bookmarks'),
                 type: 'success'
             })
         )

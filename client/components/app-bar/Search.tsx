@@ -17,8 +17,6 @@ enum DropdownOptionType {
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const TKEY = 'components.appBar.search.'
-
 const Search: React.FC<SearchProps> = () => {
     const { t } = useTranslation()
     const router = useRouter()
@@ -116,7 +114,7 @@ const Search: React.FC<SearchProps> = () => {
     return (
         <Autocomplete
             className={styles.search}
-            placeholder={t(`${TKEY}placeholder`)}
+            placeholder={t('global-search-placeholder')}
             debounceDelay={300}
             leftIcon={'Search'}
             hideArrow={!options?.length || !searchString.length}

@@ -54,7 +54,10 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
                 currentPage={t(`${TKEY}breadCrumbCurrent`)}
             />
 
-            <CategoriesList categories={categories} />
+            <CategoriesList
+                categories={categories}
+                t={t}
+            />
         </AppLayout>
     )
 }
