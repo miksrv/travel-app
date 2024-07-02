@@ -17,12 +17,10 @@ interface CategoryControlProps {
 }
 
 const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeCategories }) => {
+    const { t } = useTranslation()
+
     const layersContainerRef = useRef<HTMLUListElement>(null)
     const [open, setOpen] = useState<boolean>(false)
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.interactiveMap.categoriesSwitcher'
-    })
 
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
@@ -81,7 +79,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
                 <li className={styles.allCategories}>
                     <Checkbox
                         id={'allCategories'}
-                        label={t('allCategories')}
+                        label={t('all-categories-of-geotags')}
                         checked={categories?.length === Object.values(Categories).length}
                         indeterminate={
                             categories &&

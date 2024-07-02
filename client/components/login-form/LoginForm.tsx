@@ -28,12 +28,9 @@ interface LoginFormProps {
 }
 
 const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLogin }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.loginForm'
-    })
-
     const dispatch = useAppDispatch()
     const router = useRouter()
+    const { t } = useTranslation()
 
     const [, setReturnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
 
@@ -44,10 +41,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
     const [authLoginNative, { data: authData, isLoading: nativeLoading, isSuccess: nativeSuccess, error }] =
         API.useAuthPostLoginMutation()
 
-    const [
-        authLoginService,
-        { data: serviceData, isLoading: serviceLoading, isSuccess: serviceSuccess, isError: serviceError }
-    ] = API.useAuthLoginServiceMutation()
+    const [authLoginService, { data: serviceData, isLoading: serviceLoading, isSuccess: serviceSuccess }] =
+        API.useAuthLoginServiceMutation()
 
     const validationErrors = useMemo(
         () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
@@ -58,15 +53,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         const errors: ApiTypes.RequestAuthLogin = {}
 
         if (!validateEmail(formData?.email)) {
-            errors.email = t('errorEmail')
+            errors.email = t('error-incorrect-email')
         }
 
         if (!formData?.password) {
-            errors.password = t('errorPassword')
+            errors.password = t('error-require-password')
         }
 
         if (formData?.password && formData.password.length < 8) {
-            errors.password = t('errorPasswordLength')
+            errors.password = t('error-password-length')
         }
 
         setFormErrors(errors)
@@ -115,12 +110,6 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
             window.location.href = serviceData.redirect
         }
     }, [serviceData?.redirect])
-
-    useEffect(() => {
-        if (serviceError) {
-            setLocaleError(t('googleError'))
-        }
-    }, [serviceError])
 
     useEffect(() => {
         return () => {
@@ -181,7 +170,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
             {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
-                    title={t('errorsMessageTitle')}
+                    title={t('correct-errors-on-form')}
                     list={Object.values(formErrors || {})}
                 />
             )}
@@ -190,7 +179,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                 <Input
                     tabIndex={0}
                     autoFocus={true}
-                    label={t('inputEmail')}
+                    label={t('input:Email')}
                     name={'email'}
                     error={formErrors?.email}
                     disabled={loadingForm}
@@ -201,7 +190,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('inputPassword')}
+                    label={t('input:Password')}
                     name={'password'}
                     type={'password'}
                     error={formErrors?.password}
@@ -215,10 +204,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                 <div>
                     <Button
                         mode={'link'}
+                        title={t('registration')}
                         disabled={loadingForm}
                         onClick={onClickRegistration}
                     >
-                        {t('linkRegistrationCaption')}
+                        {t('registration')}
                     </Button>
                 </div>
                 <Button
@@ -226,7 +216,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                     disabled={loadingForm}
                     onClick={handleLoginButton}
                 >
-                    {t('buttonLogin')}
+                    {t('sign-in')}
                 </Button>
             </div>
         </div>

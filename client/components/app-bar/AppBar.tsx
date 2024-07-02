@@ -78,9 +78,9 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
 
                     {appAuth.user && (
                         <UserMenu
+                            t={t}
                             user={appAuth.user}
                             onLogout={handleLogout}
-                            translate={t}
                         />
                     )}
 

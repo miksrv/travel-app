@@ -50,10 +50,10 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Edit]: t('activity-editing'),
-                                [ActivityTypes.Place]: t('activity-new-geotag'),
-                                [ActivityTypes.Photo]: t('activity-upload-photo'),
-                                [ActivityTypes.Rating]: t('activity-rating')
+                                [ActivityTypes.Edit]: t('editing'),
+                                [ActivityTypes.Place]: t('new-geotag'),
+                                [ActivityTypes.Photo]: t('uploading-photo'),
+                                [ActivityTypes.Rating]: t('geotag-rating')
                             }[item.type]
                         }
                         {/*{item.type === ActivityTypes.Edit &&*/}

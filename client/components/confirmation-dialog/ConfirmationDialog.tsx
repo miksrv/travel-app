@@ -27,11 +27,10 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
     onAccept,
     onReject
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.confirmationDialog'
-    })
+    const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
+
     const overlay = useAppSelector((state) => state.application.showOverlay)
 
     const handleCoverDialogClose = () => {
@@ -53,7 +52,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
             open={open}
             onCloseDialog={handleCoverDialogClose}
         >
-            <p className={styles.message}>{message ?? t('defaultText')}</p>
+            <p className={styles.message}>{message ?? t('confirmation-dialog-text')}</p>
 
             <div className={styles.bottomActions}>
                 <Button
@@ -61,7 +60,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                     mode={'secondary'}
                     onClick={onReject}
                 >
-                    {rejectText ?? t('defaultRejectButton')}
+                    {rejectText ?? t('confirmation-dialog-reject')}
                 </Button>
 
                 <Button
@@ -70,7 +69,7 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                     mode={'primary'}
                     onClick={onAccept}
                 >
-                    {acceptText ?? t('defaultAcceptButton')}
+                    {acceptText ?? t('confirmation-dialog-accept')}
                 </Button>
             </div>
         </Dialog>

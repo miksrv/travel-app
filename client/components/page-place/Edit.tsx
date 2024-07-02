@@ -16,9 +16,8 @@ interface EditProps extends Omit<PlacePageProps, 'page'> {}
 const TKEY = 'components.pagePlace.edit.'
 
 const Edit: React.FC<EditProps> = ({ place }) => {
-    const { t, i18n } = useTranslation()
-
     const router = useRouter()
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
@@ -70,7 +69,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
             <NextSeo
                 nofollow={true}
                 noindex={true}
-                title={`${place?.title} - ${t(`${TKEY}pageTitle`)}`}
+                title={`${place?.title} - ${t('editing')}`}
                 description={''}
                 canonical={`${canonicalUrl}places/${place?.id}/edit`}
             />

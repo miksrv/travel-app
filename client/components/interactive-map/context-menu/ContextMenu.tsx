@@ -22,11 +22,9 @@ import { useLeafletContext } from '@react-leaflet/core'
 
 const ContextMenu: React.FC = () => {
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.interactiveMap.contextMenu'
-    })
 
     const [, setCoordinates] = useLocalStorage<MapPositionType>(LOCAL_STORAGE.MAP_CENTER)
 
@@ -54,7 +52,7 @@ const ContextMenu: React.FC = () => {
             Notify({
                 id: 'copyCoordinates',
                 title: '',
-                message: t('copySuccess'),
+                message: t('coordinates-copied'),
                 type: 'success'
             })
         )
@@ -137,7 +135,7 @@ const ContextMenu: React.FC = () => {
                         <Button
                             mode={'link'}
                             size={'small'}
-                            title={t('copyToClipboard')}
+                            title={t('copy-to-clipboard')}
                             onClick={handleCopyCoordinates}
                         >
                             {convertDMS(pointCords?.lat, pointCords?.lon)}
@@ -147,7 +145,7 @@ const ContextMenu: React.FC = () => {
                         <li className={styles.divider}>
                             <Link
                                 href={'/places/create'}
-                                title={t('addNewPlace')}
+                                title={t('create-geotag')}
                                 onClick={() => {
                                     setCoordinates({
                                         lat: pointCords?.lat ?? 0,
@@ -156,7 +154,7 @@ const ContextMenu: React.FC = () => {
                                     })
                                 }}
                             >
-                                {t('addNewPlace')}
+                                {t('create-geotag')}
                             </Link>
                         </li>
                     )}

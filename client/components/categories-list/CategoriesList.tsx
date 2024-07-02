@@ -10,52 +10,50 @@ import { categoryImage } from '@/functions/categories'
 import Container from '@/ui/container'
 
 interface CategoriesListProps {
-    categories?: Category[]
     t: TFunction
+    categories?: Category[]
 }
 
-const CategoriesList: React.FC<CategoriesListProps> = ({ categories, t }) => {
-    return (
-        <Container className={styles.categoriesList}>
-            {categories?.map((category) => (
-                <div
-                    key={`category${category.name}`}
-                    className={styles.categoryItem}
-                >
-                    <h3 className={styles.header}>
-                        <Image
-                            className={styles.categoryImage}
-                            src={categoryImage(category.name).src}
-                            alt={''}
-                            width={15}
-                            height={18}
-                            style={{ marginRight: '4px' }}
-                        />
+const CategoriesList: React.FC<CategoriesListProps> = ({ t, categories }) => (
+    <Container className={styles.categoriesList}>
+        {categories?.map((category) => (
+            <div
+                key={`category${category.name}`}
+                className={styles.categoryItem}
+            >
+                <h3 className={styles.header}>
+                    <Image
+                        className={styles.categoryImage}
+                        src={categoryImage(category.name).src}
+                        alt={''}
+                        width={15}
+                        height={18}
+                        style={{ marginRight: '4px' }}
+                    />
+                    <Link
+                        href={`/places?category=${category.name}`}
+                        title={`${category.title} - ${t('all-interesting-places-in-category')}`}
+                    >
+                        {category.title}
+                    </Link>
+                </h3>
+                <div>
+                    <p>{category.content}</p>
+                    <p className={styles.description}>
+                        <div>
+                            {t('interesting-places-in-category')}: <strong>{category.count ?? 0}</strong>
+                        </div>
                         <Link
                             href={`/places?category=${category.name}`}
                             title={`${category.title} - ${t('all-interesting-places-in-category')}`}
                         >
-                            {category.title}
+                            {t('go-to-category')}
                         </Link>
-                    </h3>
-                    <div>
-                        <p>{category.content}</p>
-                        <p className={styles.description}>
-                            <div>
-                                {t('interesting-places-in-category')}: <strong>{category.count ?? 0}</strong>
-                            </div>
-                            <Link
-                                href={`/places?category=${category.name}`}
-                                title={`${category.title} - ${t('all-interesting-places-in-category')}`}
-                            >
-                                {t('go-to-category')}
-                            </Link>
-                        </p>
-                    </div>
+                    </p>
                 </div>
-            ))}
-        </Container>
-    )
-}
+            </div>
+        ))}
+    </Container>
+)
 
 export default CategoriesList

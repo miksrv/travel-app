@@ -18,11 +18,10 @@ interface CommentListProps {
 }
 
 const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.commentList'
-    })
+    const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
+
     const appAuth = useAppSelector((state) => state.auth)
 
     const [answerFormId, setAnswerFormId] = useState<string | undefined>()
@@ -38,6 +37,7 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
             .map((item) => (
                 <React.Fragment key={item.id}>
                     <CommentListItem
+                        t={t}
                         placeId={placeId}
                         isAuth={appAuth.isAuth}
                         isAnswer={!!answerId}
@@ -66,12 +66,12 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
 
             {!appAuth.isAuth && (
                 <div className={cn(styles.loginContainer, !!comments?.length && styles.topBorder)}>
-                    <div>{t('loginForComment')}</div>
+                    <div>{t('login-to-write-comment')}</div>
                     <Button
                         className={styles.loginButton}
                         onClick={handleLoginClick}
                     >
-                        {t('userLogin')}
+                        {t('sign-in')}
                     </Button>
                 </div>
             )}

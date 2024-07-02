@@ -180,7 +180,10 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 onPhotoUploadClick={handleUploadPhotoClick}
             />
 
-            <PlaceInformation place={place} />
+            <PlaceInformation
+                t={t}
+                place={place}
+            />
 
             <SocialRating
                 placeId={place?.id}

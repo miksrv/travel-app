@@ -12,12 +12,12 @@ import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 
 interface UserMenuProps {
+    t: TFunction
     user?: User
     onLogout?: () => void
-    t?: TFunction
 }
 
-const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, t }) => (
+const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
     <Popout
         action={
             <UserAvatar
@@ -52,19 +52,19 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, t }) => (
             <li>
                 <Link
                     href={`/users/${user?.id}`}
-                    title={translate?.('go-to-my-page')}
+                    title={t('go-to-my-page')}
                 >
                     <Icon name={'User'} />
-                    {translate?.('my-page')}
+                    {t('my-page')}
                 </Link>
             </li>
             <li>
                 <Link
                     href={'/users/settings'}
-                    title={translate?.('go-to-settings')}
+                    title={t('go-to-settings')}
                 >
                     <Icon name={'Settings'} />
-                    {translate?.('settings')}
+                    {t('settings')}
                 </Link>
             </li>
             <li>
@@ -77,7 +77,7 @@ const UserMenu: React.FC<UserMenuProps> = ({ user, onLogout, t }) => (
                     }}
                 >
                     <Icon name={'Exit'} />
-                    {translate?.('logout')}
+                    {t('logout')}
                 </Link>
             </li>
         </ul>

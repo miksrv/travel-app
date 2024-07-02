@@ -18,9 +18,7 @@ interface CommentFormProps {
 }
 
 const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, user, onCommentAdded }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.commentList'
-    })
+    const { t } = useTranslation()
 
     const [comment, setComment] = useState<string | undefined>()
 
@@ -60,7 +58,7 @@ const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, us
                 disabled={isLoading}
                 onChange={setComment}
                 onKeyDown={handleKeyPress}
-                placeholder={t('writeComment')}
+                placeholder={t('write-comment')}
             />
 
             <Button

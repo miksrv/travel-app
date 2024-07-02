@@ -34,10 +34,7 @@ interface SocialRatingProps {
 
 const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const dispatch = useAppDispatch()
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.socialRating'
-    })
+    const { t } = useTranslation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -63,7 +60,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
                 Notify({
                     id: 'placeRating',
                     title: '',
-                    message: t('ratingSuccess'),
+                    message: t('thank-you-for-rating'),
                     type: 'success'
                 })
             )
