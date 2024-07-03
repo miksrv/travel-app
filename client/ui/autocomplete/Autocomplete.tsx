@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
 import Image, { StaticImageData } from 'next/image'
-import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -56,10 +55,6 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     onSearch,
     onClear
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'ui.autocomplete'
-    })
-
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocalLoading] = useState<boolean>(false)
@@ -209,7 +204,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}
+                        {/*{!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}*/}
                         {options?.map((option, i) => (
                             <li
                                 key={`option${i}`}

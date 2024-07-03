@@ -20,10 +20,7 @@ interface UnsubscribePageProps {}
 const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'pages.unsubscribe'
-    })
+    const { t } = useTranslation()
 
     const mailId = searchParams.get('mail')
 
@@ -42,12 +39,12 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
             <NextSeo
                 nofollow={true}
                 noindex={true}
-                title={t('title')}
+                title={t('unsubscribe-from-email-notifications')}
             />
             <div className={'centerPageContainer'}>
                 <div className={'wrapper'}>
                     <Container>
-                        <h1 className={'header'}>{t('title')}</h1>
+                        <h1 className={'header'}>{t('unsubscribe-from-email-notifications')}</h1>
                         {error && (
                             <Message
                                 type={'negative'}
@@ -62,7 +59,7 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                                 text={data as string}
                             />
                         )}
-                        <p className={'description'}>{t('description')}</p>
+                        <p className={'description'}>{t('unsubscribe-from-email-notifications-description')}</p>
                         {isLoading && (
                             <div className={'loaderWrapper'}>
                                 <Spinner />
@@ -74,7 +71,7 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                                 size={'medium'}
                                 mode={'primary'}
                             >
-                                {t('linkToMainPage')}
+                                {t('go-to-home-page')}
                             </Button>
                         )}
                     </Container>
@@ -88,7 +85,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<UnsubscribePageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

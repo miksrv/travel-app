@@ -23,14 +23,11 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-const TKEY = 'pages.map.'
-
 interface MapPageProps {}
 
 const MapPage: NextPage<MapPageProps> = () => {
-    const { t, i18n } = useTranslation()
-
     const router = useRouter()
+    const { t, i18n } = useTranslation()
 
     const location = useAppSelector((state) => state.application.userLocation)
 
@@ -144,11 +141,11 @@ const MapPage: NextPage<MapPageProps> = () => {
     return (
         <AppLayout className={'mainLayout'}>
             <NextSeo
-                title={t(`${TKEY}title`)}
-                description={t(`${TKEY}description`)}
+                title={t('map-of-geotags')}
+                description={t('geotags-map-description')}
                 canonical={`${canonicalUrl}map`}
                 openGraph={{
-                    description: t(`${TKEY}description`),
+                    description: t('geotags-map-description'),
                     images: [
                         {
                             height: 1305,
@@ -157,20 +154,20 @@ const MapPage: NextPage<MapPageProps> = () => {
                         }
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                    siteName: t('siteName'),
-                    title: t(`${TKEY}title`),
+                    siteName: t('geotags'),
+                    title: t('map-of-geotags'),
                     type: 'website',
                     url: `${canonicalUrl}map`
                 }}
             />
 
             <Header
-                title={t(`${TKEY}title`)}
-                currentPage={t(`${TKEY}breadCrumbCurrent`)}
+                title={t('map-of-geotags')}
+                currentPage={t('map-of-geotags')}
                 className={'mainHeader'}
                 actions={
                     <>
-                        {t(`${TKEY}${mapType === 'Places' ? 'pointsCount' : 'photosCount'}`)}
+                        {t(mapType === 'Places' ? 'points-on-map' : 'photos-on-map')}
                         <strong style={{ marginLeft: '5px' }}>
                             {(mapType === 'Places' ? poiListData?.count : photoListData?.count) ?? 0}
                         </strong>
@@ -216,7 +213,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<MapPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

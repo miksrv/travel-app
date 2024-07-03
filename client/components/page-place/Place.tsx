@@ -218,6 +218,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                     <Carousel options={{ dragFree: true, loop: true }}>
                         {nearPlaces.map((place) => (
                             <PlacesListItem
+                                t={t}
                                 key={place.id}
                                 place={place}
                             />

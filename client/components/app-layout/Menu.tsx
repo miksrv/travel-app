@@ -60,7 +60,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         {
             icon: 'Place',
             link: '/places',
-            text: t('geotags')
+            text: t('geotags-list')
         },
         {
             icon: 'Category',

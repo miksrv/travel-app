@@ -24,17 +24,14 @@ interface UsersPageProps {
 }
 
 const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPage }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.users'
-    })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
-    const title = useMemo(() => {
-        const titlePage = currentPage && currentPage > 1 ? ` - ${t('titlePage')} ${currentPage}` : ''
-
-        return t('title') + titlePage
-    }, [currentPage, i18n.language])
+    const title = useMemo(
+        () => t('users') + (currentPage && currentPage > 1 ? ` - ${t('page')} ${currentPage}` : ''),
+        [currentPage, i18n.language]
+    )
 
     return (
         <AppLayout>
@@ -49,7 +46,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
 
             <Header
                 title={title}
-                currentPage={t('breadCrumbCurrent')}
+                currentPage={t('users')}
             />
 
             <UsersList
@@ -59,7 +56,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
 
             <Container className={'pagination'}>
                 <div>
-                    {t('usersCount')} <strong>{usersCount}</strong>
+                    {t('users_count')}: <strong>{usersCount}</strong>
                 </div>
                 <Pagination
                     currentPage={currentPage}
@@ -76,9 +73,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<UsersPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const currentPage = parseInt(context.query.page as string, 10) || 1
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))
