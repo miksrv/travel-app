@@ -61,7 +61,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
         const errors: FormDataType = {}
 
         if (!formData.name) {
-            errors.name = t('errorName')
+            errors.name = t('error:name-required')
         }
 
         if (formData.newPassword && !formData.oldPassword) {
@@ -237,7 +237,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         />
                         <p>
                             <Trans
-                                i18nKey={'components.userForm.loginViaService'}
+                                i18nKey={'you-logged-via-service'}
                                 values={{ service: values?.authType }}
                             />
                         </p>

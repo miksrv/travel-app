@@ -21,13 +21,11 @@ interface PhotoGalleryProps {
 }
 
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, uploadingPhotos }) => {
+    const { t } = useTranslation()
+
     const user = useAppSelector((state) => state.auth.user)
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.photoGallery'
-    })
 
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] = API.usePhotoDeleteItemMutation()
-
     const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] = API.usePhotoRotateItemMutation()
 
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
@@ -77,7 +75,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
 
     return (
         <>
-            {!localPhotos.length && !uploadingPhotos?.length && <div className={styles.emptyList}>{t('noPhotos')}</div>}
+            {!localPhotos.length && !uploadingPhotos?.length && (
+                <div className={styles.emptyList}>{t('no-photos-here-yet')}</div>
+            )}
 
             <ul className={styles.photoGallery}>
                 {uploadingPhotos?.map((photo) => (
@@ -111,7 +111,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                         <Link
                             className={styles.link}
                             href={`${IMG_HOST}${photo.full}`}
-                            title={`${photo.title}. ${t('linkPhotoTitle')} ${index + 1}`}
+                            title={`${photo.title}. ${t('photo')} ${index + 1}`}
                             onClick={(event) => {
                                 event.preventDefault()
                                 setLightboxPhotoIndex(index)
@@ -119,7 +119,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                         >
                             <Image
                                 src={`${IMG_HOST}${photo.preview}`}
-                                alt={`${photo.title}. ${t('linkPhotoTitle')} ${index + 1}`}
+                                alt={`${photo.title}. ${t('photo')} ${index + 1}`}
                                 quality={50}
                                 width={206}
                                 height={150}
@@ -137,7 +137,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                                             onClick={() => handleRotateClick(photo.id)}
                                             disabled={!!photoLoadingID}
                                         >
-                                            <Icon name={'Rotate'} /> {t('actionRotate')}
+                                            <Icon name={'Rotate'} /> {t('to-turn')}
                                         </button>
                                     </li>
                                     <li>
@@ -145,7 +145,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                                             onClick={() => handleRemoveClick(photo.id)}
                                             disabled={!!photoLoadingID}
                                         >
-                                            <Icon name={'Close'} /> {t('actionDelete')}
+                                            <Icon name={'Close'} /> {t('delete')}
                                         </button>
                                     </li>
                                 </ul>
@@ -164,8 +164,8 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
 
             <ConfirmationDialog
                 open={!!photoDeleteID}
-                message={t('acceptConfirmMessage')}
-                acceptText={t('acceptConfirmDelete')}
+                message={`${t('delete-photo')}?`}
+                acceptText={t('delete')}
                 onReject={() => {
                     setPhotoDeleteID(undefined)
                     setPhotoLoadingID(undefined)

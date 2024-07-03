@@ -1,57 +1,57 @@
 @import ../../styles/variables
 
 .component
-  position: relative
-
-  .formElement
-    margin-bottom: 10px
-
-    label
-      display: block
-      color: var(--input-label-color)
-      overflow: hidden
-      padding-bottom: 6px
-      padding-top: 2px
-      text-overflow: ellipsis
-      white-space: nowrap
-      font-size: $fontSizeHeadline
-
-  .mapContainer
-    height: 300px
-    margin: 25px 0 10px
     position: relative
 
-    & > div
-      border: var(--input-border)
+    .formElement
+        margin-bottom: 10px
 
-    .categoryImage
-      left: 49.017%
-      top: 43.8%
-      position: absolute
-      z-index: 401
+        label
+            display: block
+            color: var(--input-label-color)
+            overflow: hidden
+            padding-bottom: 6px
+            padding-top: 2px
+            text-overflow: ellipsis
+            white-space: nowrap
+            font-size: $fontSizeHeadline
 
-    .verticalLine
-      position: absolute
-      z-index: 401
-      left: 50%
-      top: 0
-      width: .5px
-      height: 100%
-      background-color: #616161
+    .mapContainer
+        height: 300px
+        margin: 25px 0 10px
+        position: relative
 
-    .horizontalLine
-      z-index: 401
-      position: absolute
-      top: 50%
-      left: 0
-      width: 100%
-      height: .5px
-      background-color: #616161
+        & > div
+            border: var(--input-border)
 
-  .actions
-    margin-top: 20px
-    display: flex
-    flex-direction: row-reverse
+        .categoryImage
+            left: 49.017%
+            top: 43.8%
+            position: absolute
+            z-index: 401
 
-    button
-      margin-left: 15px
+        .verticalLine
+            position: absolute
+            z-index: 401
+            left: 50%
+            top: 0
+            width: .5px
+            height: 100%
+            background-color: #616161
+
+        .horizontalLine
+            z-index: 401
+            position: absolute
+            top: 50%
+            left: 0
+            width: 100%
+            height: .5px
+            background-color: #616161
+
+    .actions
+        margin-top: 20px
+        display: flex
+        flex-direction: row-reverse
+
+        button
+            margin-left: 15px

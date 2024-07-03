@@ -162,7 +162,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                         <span key={`address${address.type}`}>
                             <Link
                                 href={`/places?${address.type}=${address.id}`}
-                                title={`${t('all-places-at-address')} ${address.name}`}
+                                title={`${t('all-geotags-at-address')} ${address.name}`}
                             >
                                 {address.name}
                             </Link>

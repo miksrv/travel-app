@@ -53,15 +53,15 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         const errors: ApiTypes.RequestAuthLogin = {}
 
         if (!validateEmail(formData?.email)) {
-            errors.email = t('error-incorrect-email')
+            errors.email = t('error:email-incorrect')
         }
 
         if (!formData?.password) {
-            errors.password = t('error-require-password')
+            errors.password = t('error:password-required')
         }
 
         if (formData?.password && formData.password.length < 8) {
-            errors.password = t('error-password-length')
+            errors.password = t('error:password-length')
         }
 
         setFormErrors(errors)
@@ -179,7 +179,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                 <Input
                     tabIndex={0}
                     autoFocus={true}
-                    label={t('input:Email')}
+                    label={t('input:email')}
                     name={'email'}
                     error={formErrors?.email}
                     disabled={loadingForm}
@@ -190,7 +190,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('input:Password')}
+                    label={t('input:password')}
                     name={'password'}
                     type={'password'}
                     error={formErrors?.password}

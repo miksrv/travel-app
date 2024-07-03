@@ -35,9 +35,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     onOpenOptions,
     onChangeLocation
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.placeFilterPanel'
-    })
+    const { t } = useTranslation()
 
     const userLocation = useAppSelector((state) => state.application.userLocation)
 
@@ -54,7 +52,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                 .map((sort) => ({
                     disabled: sort === ApiTypes.SortFields.Distance && (!userLocation?.lat || !userLocation.lon),
                     key: sort,
-                    value: t(`sort.${sort}`)
+                    value: t(`sort:${sort}`)
                 })),
         [ApiTypes.SortFields]
     )
@@ -63,7 +61,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         () =>
             Object.values(ApiTypes.SortOrders).map((order) => ({
                 key: order,
-                value: t(`order.${order}`)
+                value: t(`order:${order}`)
             })),
         [ApiTypes.SortOrders]
     )
@@ -84,17 +82,17 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     }
 
     const handleOpenSort = () => {
-        onOpenOptions?.(t('dialogCaptionSort'))
+        onOpenOptions?.(t('sorting'))
         setOpenedOptions('sort')
     }
 
     const handleOpenOrder = () => {
-        onOpenOptions?.(t('dialogCaptionOrder'))
+        onOpenOptions?.(t('order'))
         setOpenedOptions('order')
     }
 
     const handleOpenOptionsCategory = () => {
-        onOpenOptions?.(t('dialogCaptionCategory'))
+        onOpenOptions?.(t('category'))
         setOpenedOptions('category')
     }
 
@@ -179,8 +177,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
             {!openedOptions && (
                 <>
                     <Autocomplete
-                        label={t('autocompleteLocationLabel')}
-                        placeholder={t('autocompleteLocationPlaceholder')}
+                        label={t('filter-by-location')}
+                        placeholder={t('start-typing-caption')}
                         clearable={true}
                         value={location}
                         loading={addressLoading}
@@ -190,14 +188,14 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                     />
 
                     <Dropdown
-                        label={t('dropdownSortLabel')}
+                        label={t('sorting-geotags')}
                         value={selectedSort}
                         onSelect={handleChangeSort}
                         onOpen={handleOpenSort}
                     />
 
                     <Dropdown
-                        label={t('dropdownOrderLabel')}
+                        label={t('sorting-order')}
                         value={selectedOrder}
                         onSelect={handleChangeOrder}
                         onOpen={handleOpenOrder}
@@ -206,8 +204,8 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                     <Dropdown
                         clearable={true}
                         value={selectedCategory}
-                        label={t('dropdownCategoryLabel')}
-                        placeholder={t('dropdownCategoryPlaceholder')}
+                        label={t('filter-by-category')}
+                        placeholder={t('input:category-placeholder')}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
                     />

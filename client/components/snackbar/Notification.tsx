@@ -18,9 +18,7 @@ interface NotificationProps extends NotificationType {
 }
 
 const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, ...props }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.notification'
-    })
+    const { t } = useTranslation()
 
     React.useEffect(() => {
         onLoad?.(props.id)
@@ -44,7 +42,7 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
                         ? props.title
                         : props.type === 'experience'
                           ? props.activity
-                              ? t(props.activity)
+                              ? t(`notification:${props.activity}`)
                               : ''
                           : props.type
                             ? t(props.type)
@@ -53,7 +51,7 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
                 <span className={styles.content}>
                     {props.message}
                     {props.type === 'experience' ? (
-                        `+${props.meta?.value} ${t('experience')}`
+                        `+${props.meta?.value} ${t('notification:experience')}`
                     ) : props.type === 'level' ? (
                         `${props.meta?.title} (${props.meta?.level})`
                     ) : props.type === 'achievements' ? (
@@ -69,7 +67,9 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
                         <></>
                     )}
                 </span>
-                {showDate && <div className={styles.datetime}>{formatDate(props.created?.date, t('dateFormat'))}</div>}
+                {showDate && (
+                    <div className={styles.datetime}>{formatDate(props.created?.date, t('date-time-format'))}</div>
+                )}
             </div>
             {onClose && (
                 <button

@@ -41,7 +41,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ t, place }) => (
                     />
                     <Link
                         href={`/places?category=${place?.category?.name}`}
-                        title={`${place?.category?.title} - ${t('all-places-at-address')}`}
+                        title={`${place?.category?.title} - ${t('all-geotags-at-address')}`}
                     >
                         {place?.category?.title}
                     </Link>

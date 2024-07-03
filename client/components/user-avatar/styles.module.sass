@@ -1,57 +1,57 @@
 @import ../../styles/variables
 
 .userAvatar
-  display: flex
-  align-items: center
-  box-sizing: border-box
-  margin: 0
+    display: flex
+    align-items: center
+    box-sizing: border-box
+    margin: 0
 
-  .avatarLink
-    display: block
-    height: 100%
-    position: relative
+    .avatarLink
+        display: block
+        height: 100%
+        position: relative
 
-    .avatarImage
-      border-radius: 50%
-      object-fit: cover
-      margin-bottom: -5px
-      background-image: url('/images/no-avatar.png')
-      background-position: center
-      background-repeat: no-repeat
-      background-size: contain
+        .avatarImage
+            border-radius: 50%
+            object-fit: cover
+            margin-bottom: -5px
+            background-image: url('/images/no-avatar.png')
+            background-position: center
+            background-repeat: no-repeat
+            background-size: contain
 
-    .avatarBorder
-      border-radius: 50%
-      border: .5px solid rgba(0, 0, 0, 0.08)
-      position: absolute
-      left: 0
-      top: 0
-      height: 100%
-      width: 100%
-      box-sizing: border-box
-      pointer-events: none
-      transform-origin: left top
-      z-index: 10
+        .avatarBorder
+            border-radius: 50%
+            border: .5px solid rgba(0, 0, 0, 0.08)
+            position: absolute
+            left: 0
+            top: 0
+            height: 100%
+            width: 100%
+            box-sizing: border-box
+            pointer-events: none
+            transform-origin: left top
+            z-index: 10
 
-    .online
-      position: absolute
-      bottom: 0
-      right: 0
-      width: 8px
-      height: 8px
-      background: var(--color-green)
-      border-radius: 50%
-      border: 1px solid #FFF
+        .online
+            position: absolute
+            bottom: 0
+            right: 0
+            width: 8px
+            height: 8px
+            background: var(--color-green)
+            border-radius: 50%
+            border: 1px solid #FFF
 
-  .info
-    &.small
-      margin-left: 5px
+    .info
+        &.small
+            margin-left: 5px
 
-    &.medium
-      margin-left: 10px
+        &.medium
+            margin-left: 10px
 
-    .caption
-      color: var(--text-color-secondary)
-      font-size: 12px
-      display: flex
-      align-items: center
+        .caption
+            color: var(--text-color-secondary)
+            font-size: 12px
+            display: flex
+            align-items: center

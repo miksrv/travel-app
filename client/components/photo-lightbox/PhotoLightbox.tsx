@@ -25,9 +25,7 @@ interface PhotoLightboxProps {
 }
 
 const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, showLightbox, onCloseLightBox }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.photoLightbox'
-    })
+    const { t } = useTranslation()
 
     const imageHost = (link?: string) =>
         link?.includes('http://') || link?.includes('https://') ? link : `${IMG_HOST}${link}`
@@ -49,7 +47,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
                                 showName={true}
                                 user={photo.author}
                                 className={styles.caption}
-                                caption={formatDate(photo.created?.date, t('dateFormat'))}
+                                caption={formatDate(photo.created?.date, t('date-time-format'))}
                             />
                         ),
                         height: (photo as Photo.Photo).height,
