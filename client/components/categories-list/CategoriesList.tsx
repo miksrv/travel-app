@@ -32,7 +32,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ t, categories }) => (
                     />
                     <Link
                         href={`/places?category=${category.name}`}
-                        title={`${category.title} - ${t('all-interesting-places-in-category')}`}
+                        title={`${category.title} - ${t('all-geotags-in-category')}`}
                     >
                         {category.title}
                     </Link>
@@ -45,7 +45,7 @@ const CategoriesList: React.FC<CategoriesListProps> = ({ t, categories }) => (
                         </div>
                         <Link
                             href={`/places?category=${category.name}`}
-                            title={`${category.title} - ${t('all-interesting-places-in-category')}`}
+                            title={`${category.title} - ${t('all-geotags-in-category')}`}
                         >
                             {t('go-to-category')}
                         </Link>

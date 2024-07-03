@@ -25,11 +25,8 @@ const AuthPage: NextPage<AuthPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
+    const { t } = useTranslation()
     const [returnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'pages.auth'
-    })
 
     const service = searchParams.get('service')
     const code = searchParams.get('code')
@@ -81,16 +78,16 @@ const AuthPage: NextPage<AuthPageProps> = () => {
             <NextSeo
                 nofollow={true}
                 noindex={true}
-                title={t('title')}
+                title={t('authorization-on-site')}
             />
             <div className={'centerPageContainer'}>
                 <div className={'wrapper'}>
                     <Container>
-                        <h1 className={'header'}>{t('title')}</h1>
+                        <h1 className={'header'}>{t('authorization-on-site')}</h1>
                         {error && (
                             <Message
                                 type={'negative'}
-                                title={'Ошибка'}
+                                title={t('notification:error')}
                                 text={error as string}
                             />
                         )}
@@ -119,7 +116,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<AuthPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

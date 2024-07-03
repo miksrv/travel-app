@@ -55,7 +55,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const page = context.params?.slug?.[1] as UserPagesEnum
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
             const currentPage = parseInt(context.query.page as string, 10) || 1
-
             const translations = await serverSideTranslations(locale)
 
             if (typeof id !== 'string' || (page && !Object.values(UserPagesEnum).includes(page))) {

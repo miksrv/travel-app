@@ -18,11 +18,9 @@ import ScreenSpinner from '@/ui/screen-spinner'
 interface CreatePlacePageProps {}
 
 const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'pages.places.createPlacePage'
-    })
-
     const router = useRouter()
+    const { t } = useTranslation()
+
     const authSlice = useAppSelector((state) => state.auth)
 
     const [clickedButton, setClickedButton] = useState<boolean>(false)
@@ -64,15 +62,15 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
             <NextSeo
                 noindex={true}
                 nofollow={true}
-                title={t('title')}
+                title={t('create-geotag')}
             />
             <Header
-                title={t('title')}
-                currentPage={t('breadCrumbCurrent')}
+                title={t('create-geotag')}
+                currentPage={t('create-geotag')}
                 links={[
                     {
                         link: '/places/',
-                        text: t('breadCrumbPlacesLink')
+                        text: t('geotags')
                     }
                 ]}
             />
@@ -94,7 +92,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

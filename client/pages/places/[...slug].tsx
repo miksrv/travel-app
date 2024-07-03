@@ -27,9 +27,6 @@ export interface PlacePageProps {
 const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    // const [setVisited, { isLoading: visitedPutLoading }] =
-    //     API.useVisitedPutPlaceMutation()
-
     return <AppLayout>{page === 'edit' && isAuth ? <Edit {...props} /> : <Place {...props} />}</AppLayout>
 }
 
@@ -40,7 +37,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const page = context.params?.slug?.[1] as PageType
             const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             if (typeof id !== 'string' || !PAGES.includes(page)) {

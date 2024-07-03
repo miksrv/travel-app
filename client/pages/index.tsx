@@ -31,8 +31,6 @@ interface IndexPageProps {
     photosList: Photo[]
 }
 
-const KEY = 'pages.index.'
-
 const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList }) => {
     const { t, i18n } = useTranslation()
 
@@ -41,9 +39,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
     const [lastDate, setLastDate] = useState<string>()
     const [activityCache, setActivityCache] = useState<Item[]>([])
 
-    const { data, isFetching } = API.useActivityGetInfinityListQuery({
-        date: lastDate
-    })
+    const { data, isFetching } = API.useActivityGetInfinityListQuery({ date: lastDate })
 
     useEffect(() => {
         const onScroll = () => {
@@ -87,11 +83,11 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
             </Head>
 
             <NextSeo
-                title={t(`${KEY}title`)}
-                description={t(`${KEY}description`)}
+                title={t('geotags')}
+                description={t('geotags-description')}
                 canonical={canonicalUrl}
                 openGraph={{
-                    description: t(`${KEY}description`),
+                    description: t('geotags-description'),
                     images: [
                         {
                             height: 1538,
@@ -100,8 +96,8 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                         }
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                    siteName: t('siteName'),
-                    title: t(`${KEY}title`),
+                    siteName: t('geotags'),
+                    title: t('geotags'),
                     type: 'website',
                     url: canonicalUrl
                 }}
@@ -109,13 +105,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
 
             <Header
                 hideHomePage={true}
-                title={t(`${KEY}title`)}
-                currentPage={t(`${KEY}breadCrumbCurrent`)}
+                title={t('geotags')}
+                currentPage={t('updated-geotags-users-photos')}
             />
 
             <Carousel options={{ dragFree: true, loop: true }}>
                 {placesList.map((place) => (
                     <PlacesListItem
+                        t={t}
                         key={place.id}
                         place={place}
                     />
@@ -129,28 +126,29 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                 link={'/places'}
                 style={{ margin: '5px 0' }}
             >
-                {t(`${KEY}buttonAllPlaces`)}
+                {t('all-geotags')}
             </Button>
 
             <UsersList
-                title={t(`${KEY}titleActiveUsers`)}
+                t={t}
+                title={t('active-users')}
                 users={usersList}
                 action={
                     <Link
                         href={'/users'}
-                        title={t(`${KEY}allUsersPlaceholder`)}
+                        title={t('all-users')}
                     >
-                        {t(`${KEY}allActiveUsers`)}
+                        {'all'}
                     </Link>
                 }
             />
 
-            <Container title={t(`${KEY}titleLastPhotos`)}>
+            <Container title={t('last-uploaded-photos')}>
                 <PhotoGallery photos={photosList} />
             </Container>
 
             <ActivityList
-                title={t(`${KEY}titleNewsFeed`)}
+                title={t('news-feed')}
                 activities={activityCache}
                 loading={isFetching}
             />
@@ -163,7 +161,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<IndexPageProps>> => {
             const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             let lat = null

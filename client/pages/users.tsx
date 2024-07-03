@@ -52,7 +52,10 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                 currentPage={t('breadCrumbCurrent')}
             />
 
-            <UsersList users={usersList} />
+            <UsersList
+                t={t}
+                users={usersList}
+            />
 
             <Container className={'pagination'}>
                 <div>
