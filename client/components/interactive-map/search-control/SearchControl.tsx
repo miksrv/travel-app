@@ -15,9 +15,7 @@ interface SearchControlProps {
 }
 
 const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.interactiveMap.searchControl'
-    })
+    const { t } = useTranslation()
 
     const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
 
@@ -80,7 +78,7 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
                             const latLng = it.getLatLng()
 
                             return {
-                                description: 'Координаты',
+                                description: t('coordinates'),
                                 key: coordStrings.latitude,
                                 title: `${coordStrings.latitude} ${coordStrings.longitude}`,
                                 value: {
@@ -110,7 +108,8 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
     return (
         <Autocomplete
             className={styles.searchControl}
-            placeholder={t('placeholder')}
+            notFoundCaption={t('nothing-found')}
+            placeholder={t('search-locality-coordinates')}
             clearable={true}
             debouncing={false}
             value={location}

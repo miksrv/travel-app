@@ -35,21 +35,18 @@ interface PlaceFormProps {
 
 const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors, onSubmit, onCancel }) => {
     const dispatch = useAppDispatch()
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.placeForm'
-    })
+    const { t } = useTranslation()
 
     const location = useAppSelector((state) => state.application.userLocation)
+
     const [mapBounds, setMapBounds] = useState<string>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestPlacesPostItem>()
 
     const { data: poiListData } = API.usePoiGetListQuery({ bounds: mapBounds }, { skip: !mapBounds })
+    const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
-
-    const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
         setFormData({ ...formData, [name]: value })
@@ -85,11 +82,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
         const errors: ApiTypes.RequestPlacesPostItem = {}
 
         if (!formData?.title) {
-            errors.title = t('errorTitle')
+            errors.title = t('error_title-required')
         }
 
         if (!formData?.category) {
-            errors.category = t('errorCategory')
+            errors.category = t('error_category-required')
         }
 
         setFormErrors(errors)
@@ -104,7 +101,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             dispatch(
                 Notify({
                     id: 'placeFormError',
-                    message: t('errorsMessageTitle'),
+                    message: t('correct-errors-on-form'),
                     type: 'error'
                 })
             )
@@ -159,7 +156,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
-                    title={t('errorsMessageTitle')}
+                    title={t('correct-errors-on-form')}
                     list={Object.values(formErrors || {})}
                 />
             )}
@@ -170,8 +167,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     required={true}
                     autoFocus={true}
                     name={'title'}
-                    label={t('inputTitleLabel')}
-                    placeholder={t('inputTitlePlaceholder')}
+                    label={t('input_geotag-label')}
+                    placeholder={t('input_geotag-placeholder')}
                     disabled={loading}
                     value={formData?.title}
                     error={formErrors?.title}
@@ -184,8 +181,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                 <Dropdown
                     required={true}
                     clearable={true}
-                    label={t('inputCategoryLabel')}
-                    placeholder={t('inputCategoryPlaceholder')}
+                    label={t('input_category-label')}
+                    placeholder={t('input_category-placeholder')}
                     disabled={loading}
                     error={formErrors?.category}
                     value={selectedCategory}
@@ -196,8 +193,9 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
             <div className={styles.formElement}>
                 <ChipsSelect
-                    label={t('inputTagsLabel')}
-                    placeholder={t('inputTagsPlaceholder')}
+                    label={t('input_tags-label')}
+                    placeholder={t('input_tags-placeholder')}
+                    notFoundCaption={t('nothing-found')}
                     disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}
@@ -235,7 +233,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             </div>
 
             <div className={styles.formElement}>
-                <label>{t('inputDescriptionLabel')}</label>
+                <label>{t('description')}</label>
                 <ContentEditor
                     value={formData?.content ?? ''}
                     onChange={handleContentChange}
@@ -249,7 +247,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     disabled={loading}
                     onClick={handleSubmit}
                 >
-                    {t('buttonSave')}
+                    {t('save')}
                 </Button>
 
                 <Button
@@ -258,7 +256,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     disabled={loading}
                     onClick={onCancel}
                 >
-                    {t('buttonCancel')}
+                    {t('cancel')}
                 </Button>
             </div>
         </section>

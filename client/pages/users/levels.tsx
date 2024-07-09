@@ -20,39 +20,37 @@ interface LevelsPageProps {
 }
 
 const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.users.levels'
-    })
-
+    const { t, i18n } = useTranslation()
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     return (
         <AppLayout>
             <NextSeo
-                title={t('title')}
+                title={t('user-levels')}
                 canonical={`${canonicalUrl}users/levels`}
-                description={t('description')}
+                description={t('user-levels-description-1')}
             />
             <Header
-                title={t('title')}
-                currentPage={t('title')}
+                title={t('user-levels')}
+                homePageTitle={t('geotags')}
+                currentPage={t('user-levels')}
                 links={[
                     {
                         link: '/users/',
-                        text: t('breadCrumbUsersLink')
+                        text: t('users')
                     }
                 ]}
             />
 
             <Container>
-                <p>{t('descriptionPart1')}</p>
-                <p>{t('descriptionPart2')}</p>
-                <h2 style={{ marginBottom: '5px' }}>{t('awardsSubtitle')}</h2>
+                <p>{t('user-levels-description-1')}</p>
+                <p>{t('user-levels-description-2')}</p>
+                <h2 style={{ marginBottom: '5px' }}>{t('how-much-experience-for-actions')}</h2>
                 <ul className={'normal'}>
                     {levels?.awards &&
                         Object.entries(levels.awards).map(([key, value]) => (
                             <li key={key}>
-                                {t(`awards.${key}`)}
+                                {t(`action_${key}`)}
                                 {': '}
                                 <strong>{`+${value}`}</strong> {t('experience')}
                             </li>
@@ -68,7 +66,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                     >
                         <div>
                             <div className={'levelTitle'}>
-                                {t('level', { level: level.level })}
+                                {t('level_num', { level: level.level })}
                                 <Image
                                     src={levelImage(level.level).src}
                                     alt={''}
@@ -77,7 +75,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                                 />
                                 {level.title}
                             </div>
-                            <div className={'experience'}>{t('needExp', { experience: level.experience })}</div>
+                            <div className={'experience'}>{t('experience_num', { experience: level.experience })}</div>
                         </div>
                         <UserAvatarGroup
                             users={level.users}
@@ -94,7 +92,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<LevelsPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

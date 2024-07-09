@@ -23,9 +23,7 @@ interface UserHeaderProps {
 }
 
 const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.pageUser.userHeader'
-    })
+    const { t } = useTranslation()
 
     const appAuth = useAppSelector((state) => state.auth)
 
@@ -57,14 +55,14 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                 <ul className={styles.information}>
                     <li>
                         <Icon name={'Star'} />
-                        <div className={styles.key}>{t('reputation')}</div>
+                        <div className={styles.key}>{t('reputation')}:</div>
                         <div className={styles.value}>
                             <Reputation value={user?.reputation || 0} />
                         </div>
                     </li>
                     <li>
                         <Icon name={'Award'} />
-                        <div className={styles.key}>{t('level')}</div>
+                        <div className={styles.key}>{t('level')}:</div>
                         <div className={styles.value}>
                             [<b>{user?.levelData?.level}</b>]{' '}
                             <Image
@@ -84,24 +82,24 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     </li>
                     <li>
                         <Icon name={'DoubleUp'} />
-                        <div className={styles.key}>{t('experienceForNewLevel')}</div>
+                        <div className={styles.key}>{t('experience-to-new-level')}:</div>
                         <div className={styles.value}>
                             {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}
                         </div>
                     </li>
                     <li>
                         <Icon name={'Time'} />
-                        <div className={styles.key}>{t('timeRegistration')}</div>
-                        <div className={styles.value}>{formatDate(user?.created?.date, t('dateFormat'))}</div>
+                        <div className={styles.key}>{t('registration')}:</div>
+                        <div className={styles.value}>{formatDate(user?.created?.date, t('date-format'))}</div>
                     </li>
                     <li>
                         <Icon name={'Time'} />
-                        <div className={styles.key}>{t('timeActivity')}</div>
+                        <div className={styles.key}>{t('was-here')}:</div>
                         <div className={styles.value}>
                             {minutesAgo(user?.activity?.date) <= 15 ? (
                                 <span className={styles.online}>
                                     <div className={styles.signOnline}></div>
-                                    {t('userOnline')}
+                                    {t('online')}
                                 </span>
                             ) : (
                                 timeAgo(user?.activity?.date ?? user?.updated?.date)
@@ -110,7 +108,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                     </li>
                     <li>
                         <Icon name={'Link'} />
-                        <div className={styles.key}>{t('website')}</div>
+                        <div className={styles.key}>{t('personal-page')}:</div>
                         <div className={styles.value}>
                             {user?.website ? (
                                 <Link
@@ -122,46 +120,47 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                     {removeProtocolFromUrl(user.website)}
                                 </Link>
                             ) : (
-                                <i>{t('notDefined')}</i>
+                                <i>{t('not-specified')}</i>
                             )}
                         </div>
                     </li>
                 </ul>
                 <ul className={styles.information}>
                     <li>
-                        <div className={styles.key}>{t('placesAdded')}</div>
+                        <div className={styles.key}>{t('added-geotags')}:</div>
                         <div className={styles.value}>{user?.statistic?.place}</div>
                     </li>
                     <li>
-                        <div className={styles.key}>{t('photosUploaded')}</div>
+                        <div className={styles.key}>{t('photos-uploaded')}:</div>
                         <div className={styles.value}>{user?.statistic?.photo}</div>
                     </li>
                     <li>
-                        <div className={styles.key}>{t('ratingsAdded')}</div>
+                        <div className={styles.key}>{t('ratings-added')}:</div>
                         <div className={styles.value}>{user?.statistic?.rating}</div>
                     </li>
                     <li>
-                        <div className={styles.key}>{t('comments')}</div>
+                        <div className={styles.key}>{t('added-comments')}:</div>
                         <div className={styles.value}>{user?.statistic?.comment}</div>
                     </li>
                     <li>
-                        <div className={styles.key}>{t('editions')}</div>
+                        <div className={styles.key}>{t('editions')}:</div>
                         <div className={styles.value}>{user?.statistic?.edit}</div>
                     </li>
                     <li>
-                        <div className={styles.key}>{t('covers')}</div>
+                        <div className={styles.key}>{t('changed-covers')}:</div>
                         <div className={styles.value}>{user?.statistic?.cover}</div>
                     </li>
                 </ul>
             </div>
             <Header
                 title={user?.name}
+                homePageTitle={t('geotags')}
                 currentPage={user?.name}
                 attachedBottom={true}
                 links={[
                     {
                         link: '/users/',
-                        text: t('breadCrumbUsersLink')
+                        text: t('users')
                     }
                 ]}
                 actions={
@@ -176,7 +175,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                 mode={'secondary'}
                                 link={'/users/settings'}
                             >
-                                {t('buttonEdit')}
+                                {t('settings')}
                             </Button>
                         </>
                     )

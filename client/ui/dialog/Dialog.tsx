@@ -1,5 +1,4 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -10,6 +9,7 @@ export interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     header?: string
     contentHeight?: string
     maxWidth?: string
+    backLinkCaption?: string
     showBackLink?: boolean
     actions?: React.ReactNode
     children?: React.ReactNode
@@ -22,6 +22,7 @@ const Dialog: React.FC<DialogProps> = ({
     header,
     contentHeight,
     maxWidth = '500px',
+    backLinkCaption,
     showBackLink,
     actions,
     children,
@@ -29,10 +30,6 @@ const Dialog: React.FC<DialogProps> = ({
     onCloseDialog,
     ...props
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'ui.dialog'
-    })
-
     const dialogRef = useRef<HTMLDialogElement>(null)
     const [dialogStyle, setDialogStyle] = useState({})
 
@@ -99,7 +96,7 @@ const Dialog: React.FC<DialogProps> = ({
                             onClick={onBackClick}
                         >
                             <Icon name={'Left'} />
-                            <div>{t('back')}</div>
+                            <div>{backLinkCaption}</div>
                         </button>
                     )}
                     <h2>{header}</h2>

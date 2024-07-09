@@ -1,15 +1,20 @@
 @import ../../styles/variables
 
-.emptyList
-    text-align: center
-    padding: 20px
-    width: 100%
-    color: var(--text-color-secondary)
+.galleryContainer
+    :global(.emptyList)
+        margin: -15px !important
+
+    & > a
+        margin: 0px -4px
+        display: block
 
 .photoGallery
     display: flex
     flex-wrap: wrap
-    margin: 0 -5px -8px
+    margin: -5px
+
+    &.marginTop
+        margin-top: 5px
 
     .photoItem
         flex-basis: calc(25% - 4px)

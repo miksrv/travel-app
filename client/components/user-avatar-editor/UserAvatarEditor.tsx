@@ -30,21 +30,16 @@ interface UserAvatarProps {
 }
 
 const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.userAvatarEditor'
-    })
-
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
 
     const inputFile = useRef<HTMLInputElement>(null)
     const imageRef = useRef<HTMLImageElement>(null)
 
     const [uploadAvatar, { data: uploadData, isLoading: uploadLoading }] = API.useUsersPostUploadAvatarMutation()
-
     const [cropAvatar, { data: cropData, isLoading: cropLoading, isSuccess }] = API.useUsersPatchCropAvatarMutation()
 
     const [uploadedFile, setUploadedFile] = useState<ApiTypes.ResponseUserUploadAvatar>()
-
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [imageCropData, setImageCropData] = useState<Crop>()
     const [imageSizes, setImageSizes] = useState<ImageSizesType>()
@@ -149,14 +144,15 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 mode={'secondary'}
                 onClick={handleChangeCoverClick}
             >
-                {t('buttonAvatar')}
+                {t('avatar')}
             </Button>
 
             <Dialog
                 contentHeight={'500px'}
                 maxWidth={'700px'}
-                header={!uploadedFile ? t('dialogTitleUpload') : t('dialogTitleSave')}
+                header={!uploadedFile ? t('upload') : t('save')}
                 open={coverDialogOpen}
+                backLinkCaption={t('back')}
                 showBackLink={!!uploadedFile}
                 actions={
                     <Button
@@ -165,7 +161,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                         onClick={handleSaveCover}
                         disabled={disabled}
                     >
-                        {t('buttonSave')}
+                        {t('save')}
                     </Button>
                 }
                 onBackClick={() => {
@@ -193,7 +189,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     disabled={uploadLoading}
                                     onClick={handlePhotoUploadClick}
                                 >
-                                    {t('buttonUpload')}
+                                    {t('upload')}
                                 </Button>
                             </>
                         ) : (

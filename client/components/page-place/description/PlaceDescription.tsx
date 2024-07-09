@@ -22,11 +22,9 @@ interface PlaceDescriptionProps {
 }
 
 const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, tags }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.placeDescription'
-    })
-
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [updatePlace, { data: saveData, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
@@ -88,7 +86,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
     return (
         <Container
             className={styles.placeDescription}
-            title={t('title')}
+            title={t('description')}
             action={
                 isAuth && editorMode ? (
                     <>
@@ -97,14 +95,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                             disabled={isLoading}
                             onClick={handleSaveEditorClick}
                         >
-                            {t('buttonSave')}
+                            {t('save')}
                         </Button>
                         <Button
                             mode={'link'}
                             disabled={isLoading}
                             onClick={handleSetEditorClick}
                         >
-                            {t('buttonCancel')}
+                            {t('cancel')}
                         </Button>
                     </>
                 ) : (
@@ -112,7 +110,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                         mode={'link'}
                         onClick={handleSetEditorClick}
                     >
-                        {t('buttonEdit')}
+                        {t('edit')}
                     </Button>
                 )
             }
@@ -129,14 +127,15 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                     <Markdown>{localContent}</Markdown>
                 </div>
             ) : (
-                <div className={styles.emptyContent}>{t('emptyContent')}</div>
+                <div className={styles.emptyContent}>{t('description-not-added-yet')}</div>
             )}
 
             {isAuth && editorMode ? (
                 <div className={styles.formElement}>
                     <ChipsSelect
-                        label={t('tagSelectLabel')}
-                        placeholder={''}
+                        label={t('select-or-add-geotag-hashtags')}
+                        placeholder={t('input_tags-placeholder')}
+                        notFoundCaption={t('nothing-found')}
                         value={editorTags}
                         loading={searchLoading}
                         options={searchResult?.items}

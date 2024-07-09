@@ -14,9 +14,7 @@ interface PlacesListProps {
 }
 
 const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.placesList'
-    })
+    const { t } = useTranslation()
 
     return (
         <>
@@ -24,6 +22,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
                 <section className={styles.component}>
                     {places.map((place) => (
                         <PlacesListItem
+                            t={t}
                             key={place.id}
                             place={place}
                         />
@@ -41,7 +40,7 @@ const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
                 </section>
             )}
 
-            {!places?.length && !loading && <Container className={styles.emptyList}>{t('emptyList')}</Container>}
+            {!places?.length && !loading && <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>}
         </>
     )
 }

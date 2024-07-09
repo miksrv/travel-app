@@ -1,6 +1,6 @@
 import React from 'react'
+import { TFunction } from 'i18next'
 import Image from 'next/image'
-import { useTranslation } from 'next-i18next'
 
 import { User } from '@/api/types/User'
 import Reputation from '@/components/reputation'
@@ -11,15 +11,12 @@ import Container, { ContainerProps } from '@/ui/container'
 import Progress from '@/ui/progress'
 
 interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
+    t: TFunction
     users?: User[]
 }
 
-const KEY = 'components.userList.'
-
-const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
-    const { t } = useTranslation()
-
-    return users?.length ? (
+const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
+    users?.length ? (
         <Container {...props}>
             {users.map((user) => (
                 <div
@@ -39,13 +36,13 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                                     width={16}
                                     height={16}
                                 />
-                                {user.levelData?.level} {t(`${KEY}level`)}
+                                {user.levelData?.level} {t('level')}
                             </>
                         }
                     />
 
                     <div className={styles.reputation}>
-                        <p>{`${t(`${KEY}reputation`)}: `}</p>
+                        <p>{t('reputation')}: </p>
                         <Reputation value={user.reputation || 0} />
                     </div>
 
@@ -63,8 +60,7 @@ const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
             ))}
         </Container>
     ) : (
-        <Container className={styles.emptyList}>{t(`${KEY}emptyList`)}</Container>
+        <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>
     )
-}
 
 export default UsersList

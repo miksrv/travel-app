@@ -20,12 +20,9 @@ interface SettingsUserPageProps {}
 
 const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const dispatch = useAppDispatch()
-
-    const { t } = useTranslation('common', {
-        keyPrefix: 'pages.users.settings'
-    })
-
     const router = useRouter()
+    const { t } = useTranslation()
+
     const authSlice = useAppSelector((state) => state.auth)
 
     const { data: userData, isFetching } = API.useUsersGetItemQuery(authSlice.user?.id || '', {
@@ -74,7 +71,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
             dispatch(
                 Notify({
                     id: 'userFormSuccess',
-                    message: t('notifySuccess'),
+                    title: '',
+                    message: t('settings-have-been-saved'),
                     type: 'success'
                 })
             )
@@ -86,20 +84,21 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
             <NextSeo
                 noindex={true}
                 nofollow={true}
-                title={t('title')}
+                title={t('settings')}
             />
             <Header
-                title={t('title')}
-                currentPage={t('title')}
+                title={t('settings')}
+                homePageTitle={t('geotags')}
+                currentPage={t('settings')}
                 backLink={`/users/${authSlice.user?.id}`}
                 links={[
                     {
                         link: '/users/',
-                        text: t('breadCrumbUsersLink')
+                        text: t('users')
                     },
                     {
                         link: `/users/${authSlice.user?.id}`,
-                        text: authSlice.user?.name || t('breadCrumbMyPageLink')
+                        text: authSlice.user?.name || t('my-page')
                     }
                 ]}
             />
@@ -122,7 +121,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

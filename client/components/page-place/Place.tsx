@@ -22,11 +22,8 @@ import { formatDateUTC } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
-import Container from '@/ui/container'
 
 interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
-
-const KEY = 'components.pagePlace.place.'
 
 const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces }) => {
     const dispatch = useAppDispatch()
@@ -71,7 +68,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}places`,
-                name: t(`${KEY}breadCrumbPlacesLink`),
+                name: t('geotags'),
                 position: 1
             },
             {
@@ -166,7 +163,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         width: photo.width
                     })),
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                    siteName: t('siteName'),
+                    siteName: t('geotags'),
                     title: place?.title,
                     type: 'http://ogp.me/ns/article#',
                     url: pagePlaceUrl
@@ -180,29 +177,29 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 onPhotoUploadClick={handleUploadPhotoClick}
             />
 
-            <PlaceInformation place={place} />
+            <PlaceInformation
+                t={t}
+                place={place}
+            />
 
             <SocialRating
                 placeId={place?.id}
                 placeUrl={pagePlaceUrl}
             />
 
-            <Container
-                title={t(`${KEY}photos`)}
+            <PhotoGallery
+                title={t('photos')}
+                photos={localPhotos}
+                uploadingPhotos={uploadingPhotos}
                 action={
                     <Button
                         mode={'link'}
                         onClick={handleUploadPhotoClick}
                     >
-                        {t(`${KEY}uploadPhoto`)}
+                        {t('upload-photo')}
                     </Button>
                 }
-            >
-                <PhotoGallery
-                    photos={localPhotos}
-                    uploadingPhotos={uploadingPhotos}
-                />
-            </Container>
+            />
 
             <PlaceDescription
                 placeId={place?.id}
@@ -217,6 +214,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                     <Carousel options={{ dragFree: true, loop: true }}>
                         {nearPlaces.map((place) => (
                             <PlacesListItem
+                                t={t}
                                 key={place.id}
                                 place={place}
                             />
@@ -231,7 +229,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
                         style={{ marginTop: '5px' }}
                     >
-                        {t(`${KEY}allNearPlacesButton`)}
+                        {t('all-places-nearby')}
                     </Button>
                 </>
             )}

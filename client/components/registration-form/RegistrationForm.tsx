@@ -25,12 +25,9 @@ interface RegistrationFormProps {
 }
 
 const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.registrationForm'
-    })
-
-    const router = useRouter()
     const dispatch = useAppDispatch()
+    const router = useRouter()
+    const { t } = useTranslation()
 
     const [formData, setFormData] = useState<FormDataType>()
     const [formErrors, setFormErrors] = useState<FormDataType>()
@@ -46,23 +43,23 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
         const errors: FormDataType = {}
 
         if (!formData?.name) {
-            errors.name = t('errorName')
+            errors.name = t('error_name-required')
         }
 
         if (!validateEmail(formData?.email)) {
-            errors.email = t('errorEmail')
+            errors.email = t('error_email-incorrect')
         }
 
         if (!formData?.password) {
-            errors.password = t('errorPassword')
+            errors.password = t('error_password-required')
         }
 
         if (formData?.password && formData.password.length < 8) {
-            errors.password = t('errorPasswordLength')
+            errors.password = t('error_password-length')
         }
 
         if (!formData?.repeat_password || formData.repeat_password !== formData.password) {
-            errors.repeat_password = t('errorPasswordMismatch')
+            errors.repeat_password = t('error_password-mismatch')
         }
 
         setFormErrors(errors)
@@ -103,7 +100,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
             {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
-                    title={t('errorsMessageTitle')}
+                    title={t('correct-errors-on-form')}
                     list={Object.values(formErrors || {})}
                 />
             )}
@@ -112,7 +109,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
                 <Input
                     tabIndex={0}
                     autoFocus={true}
-                    label={t('inputNameLabel')}
+                    label={t('input_name')}
                     name={'name'}
                     disabled={isLoading}
                     value={formData?.name}
@@ -124,7 +121,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('inputEmailLabel')}
+                    label={t('input_email')}
                     name={'email'}
                     disabled={isLoading}
                     value={formData?.email}
@@ -136,7 +133,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('inputPasswordLabel')}
+                    label={t('input_password')}
                     name={'password'}
                     type={'password'}
                     disabled={isLoading}
@@ -149,7 +146,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('inputPasswordRepeatLabel')}
+                    label={t('input_password-repeat')}
                     name={'repeat_password'}
                     type={'password'}
                     disabled={isLoading}
@@ -166,7 +163,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
                     disabled={isLoading}
                     onClick={handleSubmit}
                 >
-                    {t('buttonRegistration')}
+                    {t('register')}
                 </Button>
 
                 <Button
@@ -174,7 +171,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
                     disabled={isLoading}
                     onClick={onClickLogin}
                 >
-                    {t('buttonCancel')}
+                    {t('cancel')}
                 </Button>
             </div>
         </div>

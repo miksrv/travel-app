@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
-import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -42,10 +41,6 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
     onSelect,
     onOpen
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'ui.dropdown'
-    })
-
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined)
@@ -122,9 +117,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                                 height={26}
                             />
                         )}
-                        {selectedOption?.value ?? (
-                            <span className={styles.placeHolder}>{placeholder ?? t('placeholder')}</span>
-                        )}
+                        {selectedOption?.value ?? <span className={styles.placeHolder}>{placeholder ?? ''}</span>}
                     </span>
                     <span className={styles.arrow}>
                         {clearable && selectedOption?.key && (

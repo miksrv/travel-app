@@ -27,11 +27,9 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
     { placeId, onSaveCover },
     ref
 ) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.placeCoverEditor'
-    })
-
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
+
     const authSlice = useAppSelector((state) => state.auth)
 
     const { data: photosData, isLoading: photoLoading } = API.usePhotosGetListQuery({ place: placeId })
@@ -40,7 +38,6 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
 
     const [heightRatio, setHeightRatio] = useState<number>(1)
     const [widthRatio, setWidthRatio] = useState<number>(1)
-
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [selectedPhotoId, setSelectedPhotoId] = useState<string>('')
     const [imageCropData, setImageCropData] = useState<Crop>()
@@ -131,8 +128,9 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
         <Dialog
             contentHeight={'490px'}
             maxWidth={'700px'}
-            header={!selectedPhotoId ? t('selectPhoto') : t('editing')}
+            header={!selectedPhotoId ? t('select-photo') : t('editing')}
             open={coverDialogOpen}
+            backLinkCaption={t('back')}
             showBackLink={!!selectedPhotoId}
             actions={
                 selectedPhoto && (
@@ -142,7 +140,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
                         onClick={handleSaveCover}
                         disabled={disabled}
                     >
-                        {t('buttonSave')}
+                        {t('save')}
                     </Button>
                 )
             }
@@ -153,9 +151,9 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
         >
             {!photoLoading && !photosData?.items?.length && (
                 <div className={styles.noPhotos}>
-                    {t('noPhotos')}
+                    {t('no-photos-here-yet')}
                     <br />
-                    {t('loadFirstPhoto')}
+                    {t('first-upload-photos-after-edit-cover')}
                 </div>
             )}
             {!selectedPhotoId ? (

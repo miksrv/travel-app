@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
-import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -15,6 +14,7 @@ interface ChipsSelectProps {
     loading?: boolean
     disabled?: boolean
     placeholder?: string
+    notFoundCaption?: string
     label?: string
     value?: string[]
     onSelect?: (options: string[]) => void
@@ -28,14 +28,11 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
     loading,
     value,
     placeholder,
+    notFoundCaption,
     label,
     onSelect,
     onSearch
 }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'ui.chipSelect'
-    })
-
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocaLoading] = useState<boolean>(false)
@@ -141,7 +138,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                         value={search || ''}
                         disabled={disabled}
                         className={styles.searchInput}
-                        placeholder={placeholder ?? t('placeholder')}
+                        placeholder={placeholder ?? ''}
                         onKeyDown={handleKeyPress}
                         onChange={handleChangeInput}
                     />
@@ -165,7 +162,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}
+                        {!options?.length && <li className={styles.emptyItem}>{notFoundCaption}</li>}
                         {options?.map((option) => (
                             <li
                                 key={option}

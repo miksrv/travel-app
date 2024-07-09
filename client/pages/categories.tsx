@@ -17,23 +17,20 @@ interface CategoriesPageProps {
     categories: Category[]
 }
 
-const TKEY = 'pages.categories.'
-
 const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
     const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
-
     const description = useMemo(() => categories.map(({ title }) => title).join(', '), [categories])
 
     return (
         <AppLayout>
             <NextSeo
-                title={t(`${TKEY}title`)}
+                title={t('categories')}
                 canonical={`${canonicalUrl}categories`}
-                description={`${t(`${TKEY}title`)}: ${description}`}
+                description={`${t('categories')}: ${description}`}
                 openGraph={{
-                    description: `${t(`${TKEY}title`)}: ${description}`,
+                    description: `${t('categories')}: ${description}`,
                     images: [
                         {
                             height: 1402,
@@ -42,19 +39,23 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
                         }
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                    siteName: t('siteName'),
-                    title: t(`${TKEY}title`),
+                    siteName: t('geotags'),
+                    title: t('categories'),
                     type: 'website',
                     url: `${canonicalUrl}categories`
                 }}
             />
 
             <Header
-                title={t(`${TKEY}title`)}
-                currentPage={t(`${TKEY}breadCrumbCurrent`)}
+                title={t('categories')}
+                homePageTitle={t('geotags')}
+                currentPage={t('categories')}
             />
 
-            <CategoriesList categories={categories} />
+            <CategoriesList
+                t={t}
+                categories={categories}
+            />
         </AppLayout>
     )
 }
@@ -63,7 +64,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<CategoriesPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

@@ -19,9 +19,7 @@ interface TagsPageProps {
 }
 
 const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.tags'
-    })
+    const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
@@ -56,8 +54,8 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
     return (
         <AppLayout>
             <NextSeo
-                title={t('title')}
-                canonical={`${canonicalUrl}categories`}
+                title={t('hashtags')}
+                canonical={`${canonicalUrl}tags`}
                 description={tagsList
                     ?.map(({ title }) => title)
                     ?.join(',')
@@ -65,22 +63,23 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
             />
 
             <Header
-                title={t('title')}
-                currentPage={t('breadCrumbCurrent')}
+                title={t('hashtags')}
+                homePageTitle={t('geotags')}
+                currentPage={t('hashtags')}
             />
 
             <TagsList
-                title={t('lastUsed')}
+                title={t('last-used')}
                 tags={topUpdatedTags}
             />
 
             <TagsList
-                title={t('mostPopular')}
+                title={t('most-popular')}
                 tags={topPopularTags}
             />
 
             <TagsList
-                title={t('otherHashtags')}
+                title={t('other')}
                 tags={otherTags}
             />
         </AppLayout>
@@ -91,7 +90,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<TagsPageProps>> => {
             const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
-
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

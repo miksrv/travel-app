@@ -29,12 +29,10 @@ type PlaceAddress = {
 }
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUploadClick, onChangePlaceCoverClick }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.pagePlace.placeHeader'
-    })
-
     const router = useRouter()
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const placeAddress: PlaceAddress[] = useMemo(() => {
@@ -116,30 +114,30 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                             <li>
                                 <Link
                                     href={`/map#${place?.lat},${place?.lon},14`}
-                                    title={t('openPlaceOnMap')}
+                                    title={t('open-on-map')}
                                 >
                                     <Icon name={'Map'} />
-                                    {t('openPlaceOnMap')}
+                                    {t('open-on-map')}
                                 </Link>
                             </li>
                             <li>
                                 <Link
                                     href={'#'}
-                                    title={t('photoUpload')}
+                                    title={t('upload-photo')}
                                     onClick={onPhotoUploadClick}
                                 >
                                     <Icon name={'Camera'} />
-                                    {t('photoUpload')}
+                                    {t('upload-photo')}
                                 </Link>
                             </li>
                             <li>
                                 <Link
                                     href={'#'}
-                                    title={''}
+                                    title={t('change-cover')}
                                     onClick={onChangePlaceCoverClick}
                                 >
                                     <Icon name={'Photo'} />
-                                    {t('changeCover')}
+                                    {t('change-cover')}
                                 </Link>
                             </li>
                             <li>
@@ -164,7 +162,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                         <span key={`address${address.type}`}>
                             <Link
                                 href={`/places?${address.type}=${address.id}`}
-                                title={`${t('allPlacesAtAddress')} ${address.name}`}
+                                title={`${t('all-geotags-at-address')} ${address.name}`}
                             >
                                 {address.name}
                             </Link>

@@ -66,12 +66,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     placesCount,
     placesList
 }) => {
-    const { t, i18n } = useTranslation('common', {
-        keyPrefix: 'pages.places.placesPage'
-    })
-
     const router = useRouter()
     const dispatch = useAppDispatch()
+    const { t, i18n } = useTranslation()
 
     const [filterOpenTitle, setFilterOpenTitle] = useState<string>('')
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
@@ -162,11 +159,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
     const title = useMemo(() => {
         const titleTag = tag ? ` #${tag}` : ''
-        const titlePage =
-            initialFilter.page && initialFilter.page > 1 ? ` - ${t('titlePage')} ${initialFilter.page}` : ''
+        const titlePage = initialFilter.page && initialFilter.page > 1 ? ` - ${t('page')} ${initialFilter.page}` : ''
 
         if (!currentCategory && !locationType) {
-            return t('title') + titleTag + titlePage
+            return t('geotags-list') + titleTag + titlePage
         }
 
         const titles = []
@@ -179,7 +175,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             titles.push(currentCategory)
         }
 
-        return `${t('title')}: ${titles.join(', ')}` + titleTag + titlePage
+        return `${t('geotags-list')}: ${titles.join(', ')}` + titleTag + titlePage
     }, [currentCategory, locationData, locationType, i18n.language, initialFilter])
 
     const breadcrumbsLinks = useMemo(() => {
@@ -188,7 +184,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         if (category || locationType || tag || currentPage > 1) {
             breadcrumbs.push({
                 link: '/places',
-                text: t('breadCrumbPlacesLink')
+                text: t('geotags-list')
             })
         }
 
@@ -209,8 +205,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
           : tag
             ? `#${tag}`
             : currentPage > 1
-              ? `${t('titlePage')} ${initialFilter.page}`
-              : t('breadCrumbCurrent')
+              ? `${t('page')} ${initialFilter.page}`
+              : t('geotags-list')
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -299,6 +295,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Header
                 title={title}
+                homePageTitle={t('geotags')}
                 links={breadcrumbsLinks || []}
                 currentPage={breadCrumbCurrent}
                 actions={
@@ -308,7 +305,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                         icon={'Tune'}
                         onClick={handleClickOpenFiltersDialog}
                     >
-                        {t('buttonFilters')}
+                        {t('filters')}
                         {filtersCount > 0 && ` (${filtersCount})`}
                     </Button>
                 }
@@ -318,10 +315,13 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Container className={'pagination'}>
                 <div>
-                    {t('placesCount')} <strong>{placesCount}</strong>
+                    {t('geotags_count')} <strong>{placesCount}</strong>
                 </div>
                 <Pagination
                     currentPage={currentPage}
+                    captionPage={t('page')}
+                    captionNextPage={t('next-page')}
+                    captionPrevPage={t('prev-page')}
                     totalItemsCount={placesCount}
                     perPage={POST_PER_PAGE}
                     urlParam={initialFilter}
@@ -331,8 +331,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Dialog
                 contentHeight={'306px'}
-                header={filterOpenTitle || t('dialogFiltersTitle')}
+                header={filterOpenTitle || t('filters')}
                 open={filtersDialogOpen}
+                backLinkCaption={t('back')}
                 showBackLink={filtersOptionsOpen}
                 onBackClick={handleFiltersBackLink}
                 onCloseDialog={handleFiltersDialogClose}

@@ -24,9 +24,9 @@ interface HeaderProps {
 }
 
 const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
-    const { t } = useTranslation('common', { keyPrefix: 'components.appBar' })
     const dispatch = useAppDispatch()
     const geolocation = useGeolocation()
+    const { t } = useTranslation()
 
     const appAuth = useAppSelector((state) => state.auth)
     const userLocation = useAppSelector((state) => state.application.userLocation)
@@ -78,20 +78,20 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
 
                     {appAuth.user && (
                         <UserMenu
+                            t={t}
                             user={appAuth.user}
                             onLogout={handleLogout}
-                            translate={t}
                         />
                     )}
 
                     {appAuth.isAuth === false && (
                         <Button
-                            title={t('userLoginTitle')}
+                            title={t('authorization-on-site')}
                             mode={'secondary'}
                             className={styles.loginButton}
                             onClick={handleLoginClick}
                         >
-                            {t('userLoginCaption')}
+                            {t('sign-in')}
                         </Button>
                     )}
                 </div>

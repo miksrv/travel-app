@@ -27,10 +27,9 @@ interface AppLayoutProps {
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.appLayout'
-    })
     const dispatch = useAppDispatch()
+    const { t } = useTranslation()
+
     const authSlice = useAppSelector((state) => state.auth)
     const application = useAppSelector((store) => store.application)
 
@@ -114,7 +113,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) 
             >
                 <div className={styles.buttonToTop}>
                     <Icon name={'Up'} />
-                    {t('scrollToTop')}
+                    {t('scroll-to-top')}
                 </div>
             </div>
 

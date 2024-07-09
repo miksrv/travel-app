@@ -17,8 +17,6 @@ enum DropdownOptionType {
 
 interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
 
-const TKEY = 'components.appBar.search.'
-
 const Search: React.FC<SearchProps> = () => {
     const { t } = useTranslation()
     const router = useRouter()
@@ -84,7 +82,7 @@ const Search: React.FC<SearchProps> = () => {
                         const latLng = it.getLatLng()
 
                         return {
-                            description: 'Координаты',
+                            description: t('coordinates'),
                             key: coordStrings.latitude,
                             title: `${coordStrings.latitude} ${coordStrings.longitude}`,
                             type: DropdownOptionType.COORDINATES,
@@ -116,7 +114,8 @@ const Search: React.FC<SearchProps> = () => {
     return (
         <Autocomplete
             className={styles.search}
-            placeholder={t(`${TKEY}placeholder`)}
+            notFoundCaption={t('nothing-found')}
+            placeholder={t('global-search-placeholder')}
             debounceDelay={300}
             leftIcon={'Search'}
             hideArrow={!options?.length || !searchString.length}

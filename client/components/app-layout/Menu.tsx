@@ -24,9 +24,7 @@ interface MenuProps {
 }
 
 const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
-    const { t } = useTranslation('common', {
-        keyPrefix: 'components.appLayout.menu'
-    })
+    const { t } = useTranslation('common')
 
     const dispatch = useAppDispatch()
 
@@ -35,34 +33,34 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             auth: true,
             icon: 'PlusCircle',
             link: '/places/create',
-            text: t('create')
+            text: t('create-geotag')
         },
         {
             auth: true,
             icon: 'User',
             link: userId ? `/users/${userId}` : undefined,
-            text: t('profile')
+            text: t('my-page')
         },
         {
             auth: true,
             icon: 'Photo',
             link: userId ? `/users/${userId}/photos` : undefined,
-            text: t('photos')
+            text: t('my-photos')
         },
         {
             icon: 'Feed',
             link: '/',
-            text: t('feed')
+            text: t('news-feed')
         },
         {
             icon: 'Map',
             link: '/map',
-            text: t('map')
+            text: t('map-of-geotags')
         },
         {
             icon: 'Place',
             link: '/places',
-            text: t('places')
+            text: t('geotags-list')
         },
         {
             icon: 'Category',
@@ -72,7 +70,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
         {
             icon: 'Tag',
             link: '/tags',
-            text: t('tags')
+            text: t('hashtags')
         },
         {
             icon: 'Users',
@@ -80,9 +78,10 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('users')
         },
         {
+            // TODO Add new param - target for link
             icon: 'Telegram',
             link: 'https://t.me/geometki',
-            text: t('telegram')
+            text: t('project-diary')
         }
     ]
 
