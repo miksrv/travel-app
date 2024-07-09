@@ -136,7 +136,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                         href={'/users'}
                         title={t('all-users')}
                     >
-                        {'all'}
+                        {t('all')}
                     </Link>
                 }
             />

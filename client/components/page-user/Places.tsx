@@ -71,6 +71,9 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
 
                 <Pagination
                     currentPage={currentPage}
+                    captionPage={t('page')}
+                    captionNextPage={t('next-page')}
+                    captionPrevPage={t('prev-page')}
                     totalItemsCount={data?.count ?? 0}
                     perPage={PLACES_PER_PAGE}
                     linkPart={`users/${id}/${type}`}

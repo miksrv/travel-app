@@ -58,6 +58,9 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
 
                 <Pagination
                     currentPage={currentPage}
+                    captionPage={t('page')}
+                    captionNextPage={t('next-page')}
+                    captionPrevPage={t('prev-page')}
                     totalItemsCount={photosCount}
                     perPage={PHOTOS_PER_PAGE}
                     linkPart={`users/${id}/photos`}

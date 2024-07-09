@@ -61,6 +61,9 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                 </div>
                 <Pagination
                     currentPage={currentPage}
+                    captionPage={t('page')}
+                    captionNextPage={t('next-page')}
+                    captionPrevPage={t('prev-page')}
                     totalItemsCount={usersCount}
                     perPage={USERS_PER_PAGE}
                     linkPart={'users'}

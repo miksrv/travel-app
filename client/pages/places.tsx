@@ -319,6 +319,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 </div>
                 <Pagination
                     currentPage={currentPage}
+                    captionPage={t('page')}
+                    captionNextPage={t('next-page')}
+                    captionPrevPage={t('prev-page')}
                     totalItemsCount={placesCount}
                     perPage={POST_PER_PAGE}
                     urlParam={initialFilter}
