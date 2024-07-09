@@ -163,6 +163,7 @@ const MapPage: NextPage<MapPageProps> = () => {
 
             <Header
                 title={t('map-of-geotags')}
+                homePageTitle={t('geotags')}
                 currentPage={t('map-of-geotags')}
                 className={'mainHeader'}
                 actions={

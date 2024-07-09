@@ -104,7 +104,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
             />
 
             <Header
-                hideHomePage={true}
                 title={t('geotags')}
                 currentPage={t('updated-geotags-users-photos')}
             />

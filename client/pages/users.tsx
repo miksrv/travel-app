@@ -46,6 +46,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
 
             <Header
                 title={title}
+                homePageTitle={t('geotags')}
                 currentPage={t('users')}
             />
 

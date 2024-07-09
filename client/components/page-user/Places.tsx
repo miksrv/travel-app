@@ -38,6 +38,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
 
             <Header
                 title={`${user?.name} - ${title}${pageTitle}`}
+                homePageTitle={t('geotags')}
                 currentPage={title}
                 backLink={`/users/${id}`}
                 userData={user}

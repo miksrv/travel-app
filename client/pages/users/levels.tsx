@@ -32,6 +32,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
             />
             <Header
                 title={t('user-levels')}
+                homePageTitle={t('geotags')}
                 currentPage={t('user-levels')}
                 links={[
                     {
