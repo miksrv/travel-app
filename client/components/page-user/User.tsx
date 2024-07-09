@@ -14,7 +14,6 @@ import PhotoGallery from '@/components/photo-gallery'
 import { formatDateISO } from '@/functions/helpers'
 import type { UserPageProps } from '@/pages/users/[...slug]'
 import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 interface UserProps extends Omit<UserPageProps, 'page'> {}
 
@@ -130,8 +129,10 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
 
             <UserHeader user={user} />
 
-            <Container
+            <PhotoGallery
                 title={t('photos')}
+                photos={photosList}
+                hideActions={true}
                 action={
                     !!photosList?.length && (
                         <Link
@@ -155,12 +156,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                         </Button>
                     )
                 }
-            >
-                <PhotoGallery
-                    photos={photosList}
-                    hideActions={true}
-                />
-            </Container>
+            />
 
             <UserTabs
                 user={user}

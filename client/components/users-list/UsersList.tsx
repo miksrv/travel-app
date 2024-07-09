@@ -60,7 +60,7 @@ const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
             ))}
         </Container>
     ) : (
-        <Container className={styles.emptyList}>{t('nothing-here-yet')}</Container>
+        <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>
     )
 
 export default UsersList

@@ -3,7 +3,6 @@ import { useTranslation } from 'next-i18next'
 
 import ActivityListItem from './ActivityListItem'
 import ActivityListItemLoader from './ActivityListItemLoader'
-import styles from './styles.module.sass'
 
 import { Item } from '@/api/types/Activity'
 import Container from '@/ui/container'
@@ -27,9 +26,7 @@ const ActivityList: React.FC<PlacesListProps> = ({ activities, loading, title })
                 />
             ))}
 
-            {!activities?.length && !loading && (
-                <Container className={styles.emptyList}>{t('nothing-here-yet')}</Container>
-            )}
+            {!activities?.length && !loading && <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>}
 
             {loading && <ActivityListItemLoader />}
         </>

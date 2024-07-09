@@ -23,7 +23,6 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
-import Container from '@/ui/container'
 
 interface IndexPageProps {
     placesList: Place.Place[]
@@ -142,9 +141,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                 }
             />
 
-            <Container title={t('last-uploaded-photos')}>
-                <PhotoGallery photos={photosList} />
-            </Container>
+            <PhotoGallery
+                title={t('last-uploaded-photos')}
+                photos={photosList}
+            />
 
             <ActivityList
                 title={t('news-feed')}

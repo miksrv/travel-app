@@ -22,7 +22,6 @@ import { formatDateUTC } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
-import Container from '@/ui/container'
 
 interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
 
@@ -188,8 +187,10 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 placeUrl={pagePlaceUrl}
             />
 
-            <Container
+            <PhotoGallery
                 title={t('photos')}
+                photos={localPhotos}
+                uploadingPhotos={uploadingPhotos}
                 action={
                     <Button
                         mode={'link'}
@@ -198,12 +199,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         {t('upload-photo')}
                     </Button>
                 }
-            >
-                <PhotoGallery
-                    photos={localPhotos}
-                    uploadingPhotos={uploadingPhotos}
-                />
-            </Container>
+            />
 
             <PlaceDescription
                 placeId={place?.id}
