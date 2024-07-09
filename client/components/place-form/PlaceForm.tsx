@@ -156,7 +156,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             {!!Object.values(formErrors || {}).length && (
                 <Message
                     type={'negative'}
-                    title={t('Исправьте ошибки на форме')}
+                    title={t('correct-errors-on-form')}
                     list={Object.values(formErrors || {})}
                 />
             )}
@@ -195,6 +195,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                 <ChipsSelect
                     label={t('input:tags-label')}
                     placeholder={t('input:tags-placeholder')}
+                    notFoundCaption={t('nothing-found')}
                     disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}
