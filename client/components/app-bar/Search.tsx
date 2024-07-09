@@ -114,6 +114,7 @@ const Search: React.FC<SearchProps> = () => {
     return (
         <Autocomplete
             className={styles.search}
+            notFoundCaption={t('nothing-found')}
             placeholder={t('global-search-placeholder')}
             debounceDelay={300}
             leftIcon={'Search'}

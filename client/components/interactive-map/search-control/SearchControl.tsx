@@ -108,6 +108,7 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
     return (
         <Autocomplete
             className={styles.searchControl}
+            notFoundCaption={t('nothing-found')}
             placeholder={t('search-locality-coordinates')}
             clearable={true}
             debouncing={false}

@@ -178,6 +178,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                 <>
                     <Autocomplete
                         label={t('filter-by-location')}
+                        notFoundCaption={t('nothing-found')}
                         placeholder={t('start-typing-caption')}
                         clearable={true}
                         value={location}

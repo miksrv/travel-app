@@ -26,6 +26,7 @@ interface DropdownProps<T> {
     hideArrow?: boolean
     debouncing?: boolean
     debounceDelay?: number
+    notFoundCaption?: string
     placeholder?: string
     label?: string
     value?: T
@@ -48,6 +49,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     debounceDelay = 1000,
     value,
     minLength = 3,
+    notFoundCaption,
     placeholder,
     label,
     leftIcon,
@@ -204,7 +206,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                         className={styles.optionsList}
                         onWheelCapture={(e) => e.stopPropagation()}
                     >
-                        {/*{!options?.length && <li className={styles.emptyItem}>{t('notFound')}</li>}*/}
+                        {!options?.length && <li className={styles.emptyItem}>{notFoundCaption ?? 'Nothing found'}</li>}
                         {options?.map((option, i) => (
                             <li
                                 key={`option${i}`}
