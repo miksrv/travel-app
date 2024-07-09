@@ -152,6 +152,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 maxWidth={'700px'}
                 header={!uploadedFile ? t('upload') : t('save')}
                 open={coverDialogOpen}
+                backLinkCaption={t('back')}
                 showBackLink={!!uploadedFile}
                 actions={
                     <Button

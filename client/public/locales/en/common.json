@@ -212,5 +212,6 @@
     "unsubscribe-from-email-notifications-description": "Unsubscribe from email notifications",
     "error": "Error",
     "success": "Successfully",
-    "go-to-home-page": "Go to home page"
+    "go-to-home-page": "Go to home page",
+    "back": "Back"
 }

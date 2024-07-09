@@ -212,5 +212,6 @@
     "unsubscribe-from-email-notifications-description": "Отписка от рассылки уведомлений по электронной почте",
     "error": "Ошибка",
     "success": "Успешно",
-    "go-to-home-page": "Перейти на главную страницу"
+    "go-to-home-page": "Перейти на главную страницу",
+    "back": "Назад"
 }

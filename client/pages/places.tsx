@@ -333,6 +333,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 contentHeight={'306px'}
                 header={filterOpenTitle || t('filters')}
                 open={filtersDialogOpen}
+                backLinkCaption={t('back')}
                 showBackLink={filtersOptionsOpen}
                 onBackClick={handleFiltersBackLink}
                 onCloseDialog={handleFiltersDialogClose}

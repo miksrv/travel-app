@@ -130,6 +130,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
             maxWidth={'700px'}
             header={!selectedPhotoId ? t('select-photo') : t('editing')}
             open={coverDialogOpen}
+            backLinkCaption={t('back')}
             showBackLink={!!selectedPhotoId}
             actions={
                 selectedPhoto && (
