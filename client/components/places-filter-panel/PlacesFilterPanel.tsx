@@ -52,7 +52,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                 .map((sort) => ({
                     disabled: sort === ApiTypes.SortFields.Distance && (!userLocation?.lat || !userLocation.lon),
                     key: sort,
-                    value: t(`sort:${sort}`)
+                    value: t(`sort_${sort}`)
                 })),
         [ApiTypes.SortFields]
     )
@@ -61,7 +61,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         () =>
             Object.values(ApiTypes.SortOrders).map((order) => ({
                 key: order,
-                value: t(`order:${order}`)
+                value: t(`order_${order}`)
             })),
         [ApiTypes.SortOrders]
     )
@@ -206,7 +206,7 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                         clearable={true}
                         value={selectedCategory}
                         label={t('filter-by-category')}
-                        placeholder={t('input:category-placeholder')}
+                        placeholder={t('input_category-placeholder')}
                         onSelect={handleChangeCategory}
                         onOpen={handleOpenOptionsCategory}
                     />

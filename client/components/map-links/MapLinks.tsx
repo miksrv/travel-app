@@ -33,7 +33,7 @@ const Yandex: React.FC<MapLinksProps> = (props) => {
         <ServiceMapLink
             {...props}
             image={yandexLogo}
-            caption={t('map-link-on:Yandex')}
+            caption={t('map-link-on-Yandex')}
             link={`https://yandex.ru/maps/?pt=${props.lon},${props.lat}&spn=0.1,0.1&l=sat,skl&z=${props.zoom ?? DEFAULT_ZOOM}`}
         />
     )
@@ -46,7 +46,7 @@ const Google: React.FC<MapLinksProps> = (props) => {
         <ServiceMapLink
             {...props}
             image={googleLogo}
-            caption={t('map-link-on:Google')}
+            caption={t('map-link-on-Google')}
             link={`https://maps.google.com/maps?ll=${props.lat},${props.lon}&q=${props.lat},${props.lon}&z=${props.zoom ?? DEFAULT_ZOOM}&spn=0.1,0.1&t=h&hl=${i18n.language}`}
         />
     )
@@ -59,7 +59,7 @@ const Wikimapia: React.FC<MapLinksProps> = (props) => {
         <ServiceMapLink
             {...props}
             image={wikimapiaLogo}
-            caption={t('map-link-on:Wikimapia')}
+            caption={t('map-link-on-Wikimapia')}
             link={`https://wikimapia.org/#lang=${i18n.language}&lat=${props.lat}&lon=${props.lon}&z=${props.zoom ?? DEFAULT_ZOOM}&m=w`}
         />
     )

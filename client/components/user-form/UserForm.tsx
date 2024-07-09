@@ -59,15 +59,15 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
         const errors: FormDataType = {}
 
         if (!formData.name) {
-            errors.name = t('error:name-required')
+            errors.name = t('error_name-required')
         }
 
         if (formData.newPassword && !formData.oldPassword) {
-            errors.oldPassword = t('error:old-password-required')
+            errors.oldPassword = t('error_old-password-required')
         }
 
         if (!formData.newPassword && formData.oldPassword) {
-            errors.newPassword = t('error:new-password-required')
+            errors.newPassword = t('error_new-password-required')
         }
 
         if (
@@ -76,11 +76,11 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
             formData.newPassword.length > 0 &&
             formData.newPassword !== formData.confirmPassword
         ) {
-            errors.confirmPassword = t('error:password-mismatch')
+            errors.confirmPassword = t('error_password-mismatch')
         }
 
         if (formData.newPassword && formData.newPassword.length < 8) {
-            errors.newPassword = t('error:password-length')
+            errors.newPassword = t('error_password-length')
         }
 
         setFormErrors(errors)
@@ -127,8 +127,8 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                     required={true}
                     autoFocus={true}
                     name={'name'}
-                    label={t('input:name')}
-                    placeholder={t('input:name-placeholder')}
+                    label={t('input_name')}
+                    placeholder={t('input_name-placeholder')}
                     disabled={loading}
                     value={formData.name}
                     error={formErrors?.name}
@@ -139,7 +139,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('input:email')}
+                    label={t('input_email')}
                     disabled={true}
                     value={userEmail}
                 />
@@ -149,7 +149,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 <Input
                     name={'website'}
                     label={t('personal-page')}
-                    placeholder={t('input:website-placeholder')}
+                    placeholder={t('input_website-placeholder')}
                     disabled={loading}
                     value={formData.website}
                     error={formErrors?.website}
@@ -165,7 +165,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         className={styles.settings}
                         key={setting}
                         id={setting}
-                        label={t(`checkbox:${setting}`)}
+                        label={t(`checkbox_${setting}`)}
                         disabled={loading}
                         onChange={handleChangeCheckbox}
                         checked={formData?.settings?.[setting as keyof UserSettings]}
@@ -180,9 +180,9 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         <div className={styles.formElement}>
                             <Input
                                 name={'oldPassword'}
-                                label={t('input:old-password')}
+                                label={t('input_old-password')}
                                 type={'password'}
-                                placeholder={t('input:old-password-placeholder')}
+                                placeholder={t('input_old-password-placeholder')}
                                 disabled={loading}
                                 value={formData?.oldPassword}
                                 error={formErrors?.oldPassword}
@@ -194,9 +194,9 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         <div className={styles.formElement}>
                             <Input
                                 name={'newPassword'}
-                                label={t('input:new-password')}
+                                label={t('input_new-password')}
                                 type={'password'}
-                                placeholder={t('input:mew-password-placeholder')}
+                                placeholder={t('input_new-password-placeholder')}
                                 disabled={loading}
                                 value={formData?.newPassword}
                                 error={formErrors?.newPassword}
@@ -208,7 +208,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         <div className={styles.formElement}>
                             <Input
                                 name={'confirmPassword'}
-                                label={t('input:password-repeat')}
+                                label={t('input_password-repeat')}
                                 type={'password'}
                                 disabled={loading}
                                 value={formData?.confirmPassword}

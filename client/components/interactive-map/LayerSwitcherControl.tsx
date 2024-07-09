@@ -82,7 +82,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                         <li key={layer}>
                             <RadioButton
                                 id={layer}
-                                label={t(`map-layer:${layer}`)}
+                                label={t(`map-layer_${layer}`)}
                                 checked={currentLayer === layer}
                                 onChange={handleSwitchMapLayer}
                             />
@@ -94,7 +94,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                         <li key={type}>
                             <RadioButton
                                 id={type}
-                                label={t(`map-type:${type}`)}
+                                label={t(`map-type_${type}`)}
                                 checked={currentType === type}
                                 onChange={handleSwitchMapType}
                             />
@@ -106,7 +106,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                         <li key={type}>
                             <Checkbox
                                 id={type}
-                                label={t(`map-type:${type}`)}
+                                label={t(`map-type_${type}`)}
                                 checked={additionalLayers?.includes(type)}
                                 onChange={() =>
                                     onSwitchAdditionalLayers?.(

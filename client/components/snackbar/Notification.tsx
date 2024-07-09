@@ -42,7 +42,7 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
                         ? props.title
                         : props.type === 'experience'
                           ? props.activity
-                              ? t(`notification:${props.activity}`)
+                              ? t(`notification_${props.activity}`)
                               : ''
                           : props.type
                             ? t(props.type)

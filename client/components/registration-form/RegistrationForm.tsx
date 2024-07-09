@@ -43,23 +43,23 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
         const errors: FormDataType = {}
 
         if (!formData?.name) {
-            errors.name = t('error:name-required')
+            errors.name = t('error_name-required')
         }
 
         if (!validateEmail(formData?.email)) {
-            errors.email = t('error:email-incorrect')
+            errors.email = t('error_email-incorrect')
         }
 
         if (!formData?.password) {
-            errors.password = t('error:password-required')
+            errors.password = t('error_password-required')
         }
 
         if (formData?.password && formData.password.length < 8) {
-            errors.password = t('error:password-length')
+            errors.password = t('error_password-length')
         }
 
         if (!formData?.repeat_password || formData.repeat_password !== formData.password) {
-            errors.repeat_password = t('error:password-mismatch')
+            errors.repeat_password = t('error_password-mismatch')
         }
 
         setFormErrors(errors)
@@ -109,7 +109,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
                 <Input
                     tabIndex={0}
                     autoFocus={true}
-                    label={t('input:name')}
+                    label={t('input_name')}
                     name={'name'}
                     disabled={isLoading}
                     value={formData?.name}
@@ -121,7 +121,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('input:email')}
+                    label={t('input_email')}
                     name={'email'}
                     disabled={isLoading}
                     value={formData?.email}
@@ -133,7 +133,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('input:password')}
+                    label={t('input_password')}
                     name={'password'}
                     type={'password'}
                     disabled={isLoading}
@@ -146,7 +146,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
 
             <div className={styles.formElement}>
                 <Input
-                    label={t('input:password-repeat')}
+                    label={t('input_password-repeat')}
                     name={'repeat_password'}
                     type={'password'}
                     disabled={isLoading}

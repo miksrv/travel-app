@@ -82,11 +82,11 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
         const errors: ApiTypes.RequestPlacesPostItem = {}
 
         if (!formData?.title) {
-            errors.title = t('error:title-required')
+            errors.title = t('error_title-required')
         }
 
         if (!formData?.category) {
-            errors.category = t('error:category-required')
+            errors.category = t('error_category-required')
         }
 
         setFormErrors(errors)
@@ -167,8 +167,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     required={true}
                     autoFocus={true}
                     name={'title'}
-                    label={t('input:geotag-label')}
-                    placeholder={t('input:geotag-placeholder')}
+                    label={t('input_geotag-label')}
+                    placeholder={t('input_geotag-placeholder')}
                     disabled={loading}
                     value={formData?.title}
                     error={formErrors?.title}
@@ -181,8 +181,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                 <Dropdown
                     required={true}
                     clearable={true}
-                    label={t('input:category-label')}
-                    placeholder={t('input:category-placeholder')}
+                    label={t('input_category-label')}
+                    placeholder={t('input_category-placeholder')}
                     disabled={loading}
                     error={formErrors?.category}
                     value={selectedCategory}
@@ -193,8 +193,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
             <div className={styles.formElement}>
                 <ChipsSelect
-                    label={t('input:tags-label')}
-                    placeholder={t('input:tags-placeholder')}
+                    label={t('input_tags-label')}
+                    placeholder={t('input_tags-placeholder')}
                     notFoundCaption={t('nothing-found')}
                     disabled={loading}
                     value={formData?.tags}

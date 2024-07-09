@@ -78,7 +78,7 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
                             const latLng = it.getLatLng()
 
                             return {
-                                description: 'Координаты',
+                                description: t('coordinates'),
                                 key: coordStrings.latitude,
                                 title: `${coordStrings.latitude} ${coordStrings.longitude}`,
                                 value: {

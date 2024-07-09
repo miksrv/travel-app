@@ -134,7 +134,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                 <div className={styles.formElement}>
                     <ChipsSelect
                         label={t('select-or-add-geotag-hashtags')}
-                        placeholder={t('input:tags-placeholder')}
+                        placeholder={t('input_tags-placeholder')}
                         notFoundCaption={t('nothing-found')}
                         value={editorTags}
                         loading={searchLoading}

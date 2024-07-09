@@ -50,7 +50,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                     {levels?.awards &&
                         Object.entries(levels.awards).map(([key, value]) => (
                             <li key={key}>
-                                {t(`action:${key}`)}
+                                {t(`action_${key}`)}
                                 {': '}
                                 <strong>{`+${value}`}</strong> {t('experience')}
                             </li>

@@ -82,7 +82,7 @@ const Search: React.FC<SearchProps> = () => {
                         const latLng = it.getLatLng()
 
                         return {
-                            description: 'Координаты',
+                            description: t('coordinates'),
                             key: coordStrings.latitude,
                             title: `${coordStrings.latitude} ${coordStrings.longitude}`,
                             type: DropdownOptionType.COORDINATES,
