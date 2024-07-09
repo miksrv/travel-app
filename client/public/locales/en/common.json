@@ -1,471 +1,213 @@
 {
-    "siteName": "Geometki",
-    "components": {
-        "appBar": {
-            "userProfileCaption": "My page",
-            "userProfileTitle": "Go to my page",
-            "userSettingsCaption": "Settings",
-            "userSettingsTitle": "Go to settings",
-            "userLogout": "Logout",
-            "userLoginCaption": "Sign in",
-            "userLoginTitle": "Authorization on the site",
-            "search": {
-                "placeholder": "Search places, coordinates"
-            },
-            "notifications": {
-                "noData": "No notifications",
-                "clearButton": "Clear"
-            }
-        },
-        "appLayout": {
-            "scrollToTop": "Go up",
-            "menu": {
-                "feed": "News feed",
-                "map": "Map of places",
-                "places": "Interesting places",
-                "create": "Add a place",
-                "categories": "Geotag categories",
-                "tags": "Geotag hashtags",
-                "profile": "Personal page",
-                "photos": "My Photos",
-                "users": "Travelers",
-                "telegram": "Project diary"
-            }
-        },
-        "interactiveMap": {
-            "categoriesSwitcher": {
-                "allCategories": "All categories of geotags"
-            },
-            "contextMenu": {
-                "copyToClipboard": "Copy to clipboard",
-                "copySuccess": "Coordinates copied",
-                "addNewPlace": "Add a geotag"
-            },
-            "layerSwitcher": {
-                "MapBox": "Scheme (MabBox)",
-                "OSM": "Scheme (Street Map)",
-                "OCM": "Scheme (Cycle Map)",
-                "GoogleMap": "Map (Google)",
-                "GoogleSat": "Satellite (Google)",
-                "MapBoxSat": "Satellite (MapBox)",
-                "Photos": "Photos",
-                "Places": "Places",
-                "Heatmap": "Users online",
-                "HistoricalPhotos": "Historical photos"
-            },
-            "searchControl": {
-                "placeholder": "Locality, coordinates"
-            }
-        },
-        "loginForm": {
-            "errorsMessageTitle": "Fix errors",
-            "errorEmail": "The entered email address is not correct",
-            "errorPassword": "User password is required",
-            "errorPasswordLength": "Password must be at least 8 characters long",
-            "serviceAuthError": "Authorization error through the service, please try again",
-            "inputEmail": "Email address",
-            "inputPassword": "Password",
-            "linkRegistrationCaption": "Sign up",
-            "linkRecoveryCaption": "Forgot your password?",
-            "linkRecoveryTitle": "Recovery",
-            "buttonLogin": "Login"
-        },
-        "mapLinks": {
-            "yandexMap": "on Yandex maps",
-            "googleMap": "on Google Maps",
-            "wikimapiaMap": "on the Wikimapia map"
-        },
-        "activityList": {
-            "emptyList": "Nothing here yet",
-            "edit": "Editing",
-            "place": "New geotag",
-            "photo": "Uploading photos",
-            "rating": "Geotag rating",
-            "dateFormat": "MMMM D, YYYY, h:mm A",
-            "readMore": "Show more",
-            "readLess": "Show less"
-        },
-        "pagePlace": {
-            "edit": {
-                "breadCrumbCurrent": "Editing",
-                "breadCrumbPlacesLink": "Interesting Places"
-            },
-            "place": {
-                "breadCrumbPlacesLink": "Interesting Places",
-                "allNearPlacesButton": "All places nearby",
-                "photos": "Photos",
-                "uploadPhoto": "Upload photos"
-            },
-            "placeHeader": {
-                "edit": "Edit place",
-                "photoUpload": "Upload photo",
-                "allPlacesAtAddress": "All places at address",
-                "openPlaceOnMap": "Open on the map",
-                "changeCover": "Change Cover"
-            },
-            "placeInformation": {
-                "author": "Author:",
-                "editors": "Editors:",
-                "category": "Category:",
-                "allCategoryPlaces": "Все интересные места категории",
-                "views": "Views:",
-                "coordinates": "Coordinates:",
-                "distance": "Distance to me:",
-                "km": "km",
-                "address": "Address:",
-                "dateFormat": "MMMM D, YYYY, h:mm A"
-            },
-            "placePhotos": {
-                "title": "Photos",
-                "buttonUpload": "Upload"
-            },
-            "socialRating": {
-                "ratingSuccess": "Thanks for rating the place!"
-            },
-            "placeDescription": {
-                "title": "Description",
-                "buttonSave": "Save",
-                "buttonCancel": "Cancel",
-                "buttonEdit": "Edit",
-                "emptyContent": "Description not added yet",
-                "tagSelectLabel": "Select or add point of interest labels"
-            },
-            "placeComments": {
-                "title": "Comments"
-            }
-        },
-        "pageUser": {
-            "tabs": {
-                "feed": "Activity feed",
-                "places": "Geotags",
-                "bookmarks": "Favorites",
-                "photos": "Photos"
-            },
-            "userHeader": {
-                "reputation": "Reputation:",
-                "level": "Level:",
-                "experienceForNewLevel": "Experience to new level:",
-                "timeRegistration": "Registration:",
-                "timeActivity": "Been here:",
-                "userOnline": "Online",
-                "website": "Personal page:",
-                "notDefined": "Not specified",
-                "placesAdded": "Places:",
-                "photosUploaded": "Photos:",
-                "ratingsAdded": "Ratings:",
-                "editions": "Edits:",
-                "comments": "Comments:",
-                "covers": "Changed covers:",
-                "breadCrumbUsersLink": "Travelers",
-                "buttonEdit": "Settings",
-                "dateFormat": "MMM D, YYYY"
-            },
-            "photos": {
-                "title": "Photos",
-                "description": "All traveler photos",
-                "breadCrumbLink": "Travelers",
-                "photos": "Photos:",
-                "page": "Page"
-            },
-            "places": {
-                "title": "Geotags",
-                "favorites": "Favorites",
-                "description": "All traveler geotags",
-                "breadCrumbLink": "Travelers",
-                "count": "Geotag:",
-                "page": "Page"
-            },
-            "user": {
-                "title": "Profile",
-                "photos": "Photos",
-                "places": "Added places",
-                "linkAllPhotos": "All",
-                "buttonShowAllPhotos": "Show all photos",
-                "breadCrumbUsersLink": "Travelers"
-            }
-        },
-        "photoGallery": {
-            "noPhotos": "No photos uploaded yet",
-            "linkPhotoTitle": "Photo",
-            "acceptConfirmMessage": "Delete photo?",
-            "acceptConfirmDelete": "Delete",
-            "actionRotate": "Rotate",
-            "actionDelete": "Remove"
-        },
-        "placeCoverEditor": {
-            "buttonCover": "Replace cover",
-            "buttonSave": "Save",
-            "selectPhoto": "Select a photo",
-            "editing": "Editing",
-            "noPhotos": "No photos uploaded",
-            "loadFirstPhoto": "First upload your photos, after which you can edit the cover"
-        },
-        "placeForm": {
-            "errorsMessageTitle": "Errors were made when adding a geotag",
-            "errorTitle": "Title is required",
-            "errorCategory": "Select a location category",
-            "inputTitleLabel": "Title of the point of interest",
-            "inputTitlePlaceholder": "Enter the title of the place of interest",
-            "inputCategoryLabel": "Point of Interest Category",
-            "inputCategoryPlaceholder": "Select a category",
-            "inputTagsLabel": "Select or add POI tags",
-            "inputTagsPlaceholder": "Start typing",
-            "inputDescriptionLabel": "Description",
-            "buttonSave": "Save",
-            "buttonCancel": "Cancel"
-        },
-        "userForm": {
-            "errorsMessageTitle": "Correct errors",
-            "inputEmailLabel": "Your email (it cannot be changed)",
-            "inputNameLabel": "Your name on the site",
-            "inputNamePlaceholder": "Inputs your username",
-            "inputWebsiteLabel": "Personal Page",
-            "inputWebsitePlaceholder": "Link to your social network page",
-            "loginViaService": "You are logged in via {{service}}, so there is no need to change your password on the site",
-            "buttonSave": "Save",
-            "buttonCancel": "Cancel",
-            "errorName": "Username is required",
-            "errorNewPassword": "Create a new password",
-            "errorOldPassword": "Please enter your current password",
-            "errorConfirmPassword": "The entered passwords do not match",
-            "errorPasswordLength": "Password must contain at least 8 characters",
-            "titleGeneralSettings": "General settings",
-            "titleEmailSettings": "Sending notifications by email",
-            "emailPhoto": "Uploading a photo",
-            "emailRating": "Rating",
-            "emailComment": "Adding a comment",
-            "emailEdit": "Editing a geotag",
-            "emailCover": "Change the cover",
-            "titleChangePassword": "Change Password",
-            "currentPassword": "Current Password",
-            "currentPasswordPlaceholder": "Enter your current password on the site",
-            "newPassword": "New password",
-            "newPasswordPlaceholder": "Create a new password",
-            "confirmPassword": "Re-enter your password",
-            "confirmPasswordPlaceholder": "Re-enter the new password"
-        },
-        "placeFilterPanel": {
-            "sort": {
-                "views": "Views",
-                "rating": "Rating",
-                "bookmarks": "Bookmarks count",
-                "comments": "Comments count",
-                "created_at": "Date added",
-                "updated_at": "Date of update",
-                "distance": "Distance"
-            },
-            "order": {
-                "ASC": "Ascending",
-                "DESC": "Descending"
-            },
-            "dialogCaptionSort": "Sorting",
-            "dialogCaptionOrder": "Order",
-            "dialogCaptionCategory": "Category",
-            "autocompleteLocationLabel": "Filter by Location",
-            "autocompleteLocationPlaceholder": "Start typing title",
-            "dropdownSortLabel": "Sort places",
-            "dropdownOrderLabel": "Sort Order",
-            "dropdownCategoryLabel": "Filter by Category",
-            "dropdownCategoryPlaceholder": "Select a category"
-        },
-        "placesList": {
-            "emptyList": "There are no interesting places matching your request. Try changing your search terms.",
-            "placesListItem": {
-                "emptyContent": "Description not added yet",
-                "allPlacesAtAddress": "All place at address"
-            }
-        },
-        "categoriesList": {
-            "placesInCategory": "Interesting places in the category:",
-            "allCategoryPlaces": "All interesting places in the category",
-            "goToCategory": "Go to category"
-        },
-        "confirmationDialog": {
-            "defaultText": "Do you confirm this action?",
-            "defaultAcceptButton": "Accept",
-            "defaultRejectButton": "Cancel"
-        },
-        "commentList": {
-            "answerCancel": "cancel",
-            "answerAdd": "answer",
-            "userLogin": "Login",
-            "writeComment": "Write a comment",
-            "loginForComment": "Login to write a comment"
-        },
-        "registrationForm": {
-            "errorsMessageTitle": "Fix errors",
-            "errorName": "Name is required",
-            "errorEmail": "Invalid email address",
-            "errorPassword": "Password is required",
-            "errorPasswordLength": "Password must be at least 8 characters long",
-            "errorPasswordMismatch": "The entered passwords do not match",
-            "inputNameLabel": "User name",
-            "inputEmailLabel": "Email address",
-            "inputPasswordLabel": "Password",
-            "inputPasswordRepeatLabel": "Repeat password",
-            "buttonRegistration": "Register",
-            "buttonCancel": "Cancel"
-        },
-        "userAvatar": {
-            "linkTitle": "User Profile"
-        },
-        "userAvatarGroup": {
-            "totalUsers": "<strong>{{count}}</strong> more travelers"
-        },
-        "userList": {
-            "reputation": "Reputation",
-            "level": "Level",
-            "emptyList": "Something went wrong and there are no users here."
-        },
-        "notification": {
-            "success": "Success",
-            "warning": "Warning",
-            "error": "Error",
-            "level": "New level!",
-            "achievements": "New achievement!",
-            "cover": "Cover changed",
-            "edit": "Place edited",
-            "rating": "New assessment",
-            "comment": "New comment added",
-            "place": "New place added",
-            "photo": "New photo uploaded",
-            "experience": "experience",
-            "dateFormat": "MMMM D, YYYY, h:mm A"
-        },
-        "userAvatarEditor": {
-            "buttonAvatar": "Avatar",
-            "buttonSave": "Save",
-            "buttonUpload": "Upload",
-            "dialogTitleUpload": "Upload new avatar",
-            "dialogTitleSave": "Save dimensions"
-        },
-        "photoLightbox": {
-            "dateFormat": "MMMM D, YYYY, h:mm A"
-        },
-        "bookmarkButton": {
-            "bookmarkResultAdd": "Geomark added to bookmarks",
-            "bookmarkResultRemove": "Geomark removed from bookmarks"
-        }
-    },
-    "pages": {
-        "index": {
-            "title": "Geometki",
-            "breadCrumbCurrent": "Updated points of interest, active users and latest uploaded photos",
-            "description": "Geometki: Interesting places and attractions, news feed of interesting places and attractions, latest uploaded photos of various objects and attractions, active travelers.",
-            "buttonAllPlaces": "All places of interest",
-            "titleActiveUsers": "Active Travelers",
-            "allActiveUsers": "All",
-            "allUsersPlaceholder": "All travelers",
-            "titleLastPhotos": "Last uploaded photos",
-            "titleNewsFeed": "News feed"
-        },
-        "categories": {
-            "title": "Geotag Categories",
-            "breadCrumbCurrent": "Points of Interest Categories"
-        },
-        "tags": {
-            "title": "Geotag hashtags",
-            "breadCrumbCurrent": "Hashtags of interesting places",
-            "lastUsed": "Last Used",
-            "mostPopular": "Most Popular",
-            "otherHashtags": "Other hashtags"
-        },
-        "places": {
-            "createPlacePage": {
-                "title": "Add interesting place",
-                "breadCrumbCurrent": "Add new",
-                "breadCrumbPlacesLink": "Interesting Places"
-            },
-            "placesPage": {
-                "title": "Interesting places",
-                "breadCrumbPlacesLink": "Interesting Places",
-                "breadCrumbCurrent": "Interesting places",
-                "buttonFilters": "Filters",
-                "placesCount": "Places of interest:",
-                "dialogFiltersTitle": "Filters",
-                "titlePage": "Page"
-            }
-        },
-        "map": {
-            "title": "Map of interesting places",
-            "description": "Map of interesting places, attractions, abandoned places, monuments, temples, bunkers, training grounds, bomb shelters, mountain peaks, waterfalls, forests, reservoirs, lakes, rivers, bridges. Coordinates of interesting places, photographs, descriptions, comments from travelers.",
-            "breadCrumbCurrent": "Map of interesting places",
-            "pointsCount": "Points on map:",
-            "photosCount": "Photos on map:",
-            "buttonFilters": "Filters",
-            "dialogFiltersTitle": "Filters",
-            "dropdownCategoryLabel": "Filter by Category",
-            "dropdownCategoryPlaceholder": "Select a category"
-        },
-        "auth": {
-            "title": "Authorization",
-            "pleaseWait": "Please wait..."
-        },
-        "registration": {
-            "title": "Registration"
-        },
-        "users": {
-            "title": "Travelers",
-            "siteName": "Geometki - Interesting Places",
-            "description": "Personal page of the author and traveler of the geometki.com service",
-            "breadCrumbCurrent": "Travelers",
-            "usersCount": "Travelers:",
-            "titlePage": "Page",
-            "settings": {
-                "title": "Settings",
-                "breadCrumbUsersLink": "Travelers",
-                "breadCrumbMyPageLink": "My Page",
-                "notifySuccess": "Settings have been saved"
-            },
-            "levels": {
-                "title": "User levels",
-                "description": "User levels on the geometki.com service",
-                "breadCrumbUsersLink": "Travelers",
-                "descriptionPart1": "Registration on the geometki.com service provides additional features to users, including the ability to add their own geotags, access private places, upload their own photos, edit tags, descriptions and geotag locations, as well as the ability to edit other users' geotags and much more.",
-                "descriptionPart2": "By performing various activities, users earn experience by reaching a certain level of experience, which allows them to advance to new levels. Each new level opens up additional benefits and opportunities for users. The list of privileges available at each level is constantly expanding, providing users with a wider range of functionality.",
-                "awardsSubtitle": "How much experience is given for completing actions",
-                "level": "Level {{level}}",
-                "experience": "experience",
-                "needExp": "Experience required: {{experience}}",
-                "awards": {
-                    "place": "Adding place",
-                    "photo": "Uploading photo",
-                    "rating": "Rating",
-                    "cover": "Cover Edit",
-                    "edit": "Edit description",
-                    "comment": "Writing a comment"
-                }
-            }
-        },
-        "unsubscribe": {
-            "title": "Unsubscribe from email notifications",
-            "error": "Error",
-            "success": "Successfully",
-            "description": "Unsubscribe from email notifications.",
-            "linkToMainPage": "Go to main page"
-        }
-    },
-    "ui": {
-        "autocomplete": {
-            "notFound": "Nothing found yet"
-        },
-        "breadcrumbs": {
-            "homepage": "Home"
-        },
-        "chipSelect": {
-            "placeholder": "Enter a value to search for",
-            "notFound": "Nothing found yet"
-        },
-        "dialog": {
-            "back": "Back"
-        },
-        "dropdown": {
-            "placeholder": "Select an option"
-        },
-        "pagination": {
-            "nextPage": "Next page",
-            "prevPage": "Previous Page",
-            "page": "Page"
-        }
-    }
+    "nothing-here-yet": "There's nothing here yet"
+    "date-time-format": "D MMMM YYYY, HH:mm",
+    "date-format": "D MMMM YYYY",
+    "editing": "Editing",
+    "new-geotag": "New geotag",
+    "uploading-photo": "Uploading photos",
+    "geotag-rating": "Geotag rating",
+    "show-more": "Show more",
+    "show-less": "Show less",
+    "authorization-on-site": "Authorization on site",
+    "sign-in": "Login",
+    "no-notifications": "No notifications",
+    "clear": "Clear",
+    "global-search-placeholder": "Search for places, coordinates",
+    "go-to-my-page": "Go to my page",
+    "my-page": "My page",
+    "my-photos": "My photos",
+    "map-of-geotags": "Map of geotags",
+    "geotags": "Geotags",
+    "geotags-list": "List of geotags",
+    "geotags-description": "Geotags: interesting places and attractions, map of interesting places, coordinates, location, photos, comments and user ratings",
+    "geotags-map-description": "Map of geotags: interesting places and attractions, abandoned places, monuments, temples, bunkers, training grounds, bomb shelters, mountain peaks, waterfalls, forests, reservoirs, lakes, rivers, bridges",
+    "news-feed": "News feed",
+    "go-to-settings": "Go to settings",
+    "settings": "Settings",
+    "logout": "Logout",
+    "scroll-to-top": "To top",
+    "create-geotag": "Create a geotag",
+    "categories": "Geotag Categories",
+    "hashtags": "Features",
+    "users": "Travelers",
+    "project-diary": "Project Diary",
+    "geotag-added-bookmarks": "Geotag added to bookmarks",
+    "geotag-removed-bookmarks": "Geotag removed from bookmarks",
+    "all-geotags-in-category": "All category geotags",
+    "all-geotags": "All geotags",
+    "all-users": "All travelers",
+    "interesting-places-in-category": "Interesting places in category",
+    "go-to-category": "Go to category",
+    "write-comment": "Write a comment",
+    "login-to-write-comment": "Login to write a comment",
+    "comment-answer": "answer",
+    "comment-answer-cancel": "cancel",
+    "confirmation-dialog-text": "Do you confirm this action?",
+    "confirmation-dialog-reject": "Cancel",
+    "confirmation-dialog-accept": "Confirm",
+    "coordinates-copied": "Coordinates copied",
+    "copy-to-clipboard": "Copy to clipboard",
+    "search-locality-coordinates": "Location, coordinates",
+    "all-categories-of-geotags": "All categories of geotags",
+    "map-layer:MapBox": "Scheme (MabBox)",
+    "map-layer:OSM": "Scheme (Street Map)",
+    "map-layer:OCM": "Cycle Map",
+    "map-layer:GoogleMap": "Map (Google)",
+    "map-layer:GoogleSat": "Satellite (Google)",
+    "map-layer:MapBoxSat": "Satellite (MapBox)",
+    "map-type:Photos": "Photos",
+    "map-type:Places": "Places of interest",
+    "map-type:Heatmap": "Users online",
+    "map-type:HistoricalPhotos": "Historical Photos",
+    "error:email-incorrect": "The entered email address is incorrect",
+    "error:name-required": "Name is required",
+    "error:old-password-required": "Please enter your current password",
+    "error:new-password-required": "Create a new password",
+    "error:password-required": "Password is required",
+    "error:password-length": "Password must be at least 8 characters long",
+    "error:password-mismatch": "Passwords do not match",
+    "error:title-required": "Title is required",
+    "error:category-required": "Select a geotag category",
+    "correct-errors-on-form": "Correct errors on the form",
+    "input:email": "Email address",
+    "input:name": "Name",
+    "input:website-placeholder": "Link to your social network page",
+    "input:name-placeholder": "Enter your name",
+    "input:password": "Password",
+    "input:old-password": "Current password",
+    "input:old-password-placeholder": "Enter your current password on the site",
+    "input:new-password": "Create a new password",
+    "input:mew-password-placeholder": "Enter your new password",
+    "input:password-repeat": "Repeat password",
+    "input:description": "Description",
+    "input:geotag-label": "Geotag Label",
+    "input:geotag-placeholder": "Enter a title for the geotag",
+    "input:category-label": "Category",
+    "input:category-placeholder": "Select a category",
+    "input:tags-label": "Select or add geotag features",
+    "input:tags-placeholder": "Start typing",
+    "checkbox:emailPhoto": "Uploading photo",
+    "checkbox:emailRating": "Rating",
+    "checkbox:emailComment": "Adding a comment",
+    "checkbox:emailEdit": "Editing a geotag",
+    "checkbox:emailCover": "Change cover",
+    "registration": "Registration",
+    "map-link-on:Yandex": "on Yandex maps",
+    "map-link-on:Google": "on Google maps",
+    "map-link-on:Wikimapia": "on a Wikimapia map",
+    "comments-title": "Comments",
+    "description": "Description",
+    "save": "Save",
+    "register": "Register",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "description-not-added-yet": "Description has not been added yet",
+    "select-or-add-geotag-hashtags": "Select or add geotag features",
+    "open-on-map": "Open on map",
+    "upload-photo": "Upload photo",
+    "change-cover": "Change cover",
+    "all-geotags-at-address": "All geotags at address",
+    "category": "Category",
+    "author": "Author",
+    "editors": "Editors",
+    "views": "Views",
+    "edited": "Edited",
+    "distance-to-me": "Distance to me",
+    "km": "km",
+    "avatar": "Avatar",
+    "upload": "Upload",
+    "coordinates": "Coordinates",
+    "thank-you-for-rating": "Thank you for your rating",
+    "photos": "Photos",
+    "all-places-nearby": "All places are near",
+    "reputation": "Reputation",
+    "level": "Level",
+    "level_num": "Level {{level}}",
+    "experience-to-new-level": "Experience to a new level",
+    "was-here": "Was here",
+    "online": "Online",
+    "personal-page": "Personal page",
+    "not-specified": "Not specified",
+    "added-geotags": "Geotags",
+    "photos-uploaded": "Photos",
+    "ratings-added": "Ratings",
+    "added-comments": "Comments",
+    "editions": "Editing",
+    "changed-covers": "Changed covers",
+    "activity-feed": "Activity Feed",
+    "favorites": "Favorites",
+    "all-traveler-photos": "All traveler photos",
+    "all-traveler-geotags": "All traveler geotags",
+    "page": "Page",
+    "profile": "Profile",
+    "user-profile": "Traveller Profile",
+    "show-all-photos": "Show all photos",
+    "all": "Everything",
+    "no-photos-here-yet": "There are no photos here yet",
+    "photo": "Photography",
+    "to-turn": "Turn",
+    "delete": "Delete",
+    "delete-photo": "Delete photo",
+    "select-photo": "Select a photo",
+    "first-upload-photos-after-edit-cover": "Upload your photos first, then you can edit the cover",
+    "sort:views": "Views",
+    "sort:rating": "Rating",
+    "sort:bookmarks": "Added to Favorites",
+    "sort:comments": "Number of comments",
+    "sort:created_at": "Date added",
+    "sort:updated_at": "Date updated",
+    "sort:distance": "Distance",
+    "order:ASC": "Ascending",
+    "order:DESC": "Descending",
+    "sorting": "Sorting",
+    "order": "Order",
+    "filter-by-category": "Filter by category",
+    "filter-by-location": "Filter by location",
+    "start-typing-caption": "Start typing the title",
+    "sorting-geotags": "Sorting geotags",
+    "sorting-order": "Sort order",
+    "notification:photo": "New photo uploaded",
+    "notification:place": "New geotag added",
+    "notification:rating": "New rating has been assigned",
+    "notification:edit": "Geotag edited",
+    "notification:cover": "New comment",
+    "notification:comment": "Cover has changed",
+    "notification:experience": "experience",
+    "notification:level": "New level!",
+    "notification:success": "Success",
+    "notification:warning": "Warning",
+    "notification:error": "Error",
+    "more-count-travelers": "More <strong>{{count}}</strong> travelers",
+    "you-logged-via-service": "You are logged in via {{service}}, so there is no need to change your password on the site",
+    "general-settings": "General Settings",
+    "sending-notifications-by-email": "Sending notifications by email",
+    "change-password": "Change password",
+    "user-levels": "Traveller Levels",
+    "user-levels-description-1": "Registration on the geometki.com service provides additional features to users, including the ability to add their own geotags, access private places, upload their own photos, edit geotag tags, descriptions and locations, and the ability to edit geotags other users and much more.",
+    "user-levels-description-2": "Users earn experience by performing various activities, reaching a certain level of experience, which allows them to advance to new levels. Each new level unlocks additional benefits and opportunities for users. List of perks available at each level , is constantly expanding, providing users with a wider range of functionality.",
+    "how-much-experience-for-actions": "How much experience is given for performing actions",
+    "need-experience_num": "Need experience: {{experience}}",
+    "action:place": "Add a geotag",
+    "action:photo": "Upload photo",
+    "action:rating": "Rating",
+    "action:cover": "Edit Cover",
+    "action:edit": "Edit description",
+    "action:comment": "Writing a comment",
+    "settings-have-been-saved": "Settings have been saved",
+    "updated-geotags-users-photos": "Updated geotags, active users and latest uploaded photos",
+    "active-users": "Active travelers",
+    "last-uploaded-photos": "Last uploaded photos",
+    "points-on-map": "Points on the map",
+    "photos-on-map": "Photos on map",
+    "filters": "Filters",
+    "geotags_count": "Geotags",
+    "users_count": "Travelers",
+    "last-used": "Last used",
+    "most-popular": "Most popular",
+    "other": "Other",
+    "unsubscribe-from-email-notifications": "Unsubscribe from email notifications",
+    "unsubscribe-from-email-notifications-description": "Unsubscribe from email notifications",
+    "error": "Error",
+    "success": "Successfully",
+    "go-to-home-page": "Go to home page"
 }
