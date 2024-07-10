@@ -25,7 +25,7 @@ interface PhotoGalleryProps extends ContainerProps {
 const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, uploadingPhotos, ...props }) => {
     const { t } = useTranslation()
 
-    const user = useAppSelector((state) => state.auth.user)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] = API.usePhotoDeleteItemMutation()
     const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] = API.usePhotoRotateItemMutation()
@@ -41,14 +41,14 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
     )
 
     const handleRemoveClick = (photoId: string) => {
-        if (user?.id && !deleteLoading && !hideActions) {
+        if (isAuth && !deleteLoading && !hideActions) {
             setPhotoLoadingID(photoId)
             setPhotoDeleteID(photoId)
         }
     }
 
     const handleRotateClick = (photoId: string) => {
-        if (user?.id && !rotateLoading && !hideActions) {
+        if (isAuth && !rotateLoading && !hideActions) {
             setPhotoLoadingID(photoId)
             rotatePhoto(photoId)
         }
@@ -135,7 +135,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                                 />
                             </Link>
 
-                            {!hideActions && (
+                            {!hideActions && isAuth && (
                                 <Popout
                                     className={styles.actions}
                                     action={<Icon name={'VerticalDots'} />}
