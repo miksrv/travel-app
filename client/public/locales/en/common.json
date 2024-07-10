@@ -213,5 +213,6 @@
     "error": "Error",
     "success": "Successfully",
     "go-to-home-page": "Go to home page",
-    "back": "Back"
+    "back": "Back",
+    "geotag-saved": "Geotag saved"
 }

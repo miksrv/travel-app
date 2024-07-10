@@ -7,6 +7,7 @@ import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
+import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { equalsArrays } from '@/functions/helpers'
 import Button from '@/ui/button'
@@ -67,6 +68,14 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
         if (isSuccess && editorMode) {
             setEditorMode(false)
             setLocalContent(saveData.content)
+
+            dispatch(
+                Notify({
+                    id: 'placeFormSuccess',
+                    message: t('geotag-saved'),
+                    type: 'success'
+                })
+            )
 
             if (saveData.tags) {
                 setLocalTags(saveData.tags)

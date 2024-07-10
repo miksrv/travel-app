@@ -87,7 +87,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                         {error && (
                             <Message
                                 type={'negative'}
-                                title={t('notification:error')}
+                                title={t('notification_error')}
                                 text={error as string}
                             />
                         )}

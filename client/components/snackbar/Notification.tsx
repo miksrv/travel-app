@@ -51,7 +51,7 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
                 <span className={styles.content}>
                     {props.message}
                     {props.type === 'experience' ? (
-                        `+${props.meta?.value} ${t('notification:experience')}`
+                        `+${props.meta?.value} ${t('notification_experience')}`
                     ) : props.type === 'level' ? (
                         `${props.meta?.title} (${props.meta?.level})`
                     ) : props.type === 'achievements' ? (
