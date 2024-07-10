@@ -5,6 +5,7 @@ import { Marker, Popup } from 'react-leaflet'
 import Leaflet from 'leaflet'
 import Image from 'next/image'
 import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
@@ -12,7 +13,7 @@ import { API, IMG_HOST } from '@/api/api'
 import { Placemark } from '@/api/types'
 import BookmarkButton from '@/components/bookmark-button'
 import { categoryImage } from '@/functions/categories'
-import { addDecimalPoint } from '@/functions/helpers'
+import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 import Badge from '@/ui/badge'
 import Skeleton from '@/ui/skeleton'
 
@@ -21,6 +22,8 @@ interface MarkerPointProps {
 }
 
 const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
+    const { t } = useTranslation()
+
     const [getPlaceItem, { isLoading, data: poiData }] = API.usePoiGetItemMutation()
 
     const placeMarkerIcon = new Leaflet.Icon({
@@ -98,6 +101,13 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                                     <Badge
                                         icon={'HeartEmpty'}
                                         content={poiData.bookmarks}
+                                    />
+                                )}
+
+                                {!!poiData?.distance && (
+                                    <Badge
+                                        icon={'Ruler'}
+                                        content={numberFormatter(poiData.distance) + ' ' + t('km')}
                                     />
                                 )}
                             </div>

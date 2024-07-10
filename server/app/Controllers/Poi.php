@@ -3,6 +3,7 @@
 use App\Libraries\Cluster;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
+use App\Libraries\SessionLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
 use App\Models\SessionsModel;
@@ -103,6 +104,7 @@ class Poi extends ResourceController {
      * @return ResponseInterface
      */
     public function show($id = null): ResponseInterface {
+        $sessionLib   = new SessionLibrary();
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
 
@@ -111,11 +113,16 @@ class Poi extends ResourceController {
         }
 
         $placesModel = new PlacesModel();
+        $coordinates = $placesModel->makeDistanceSQL($sessionLib->lat, $sessionLib->lon);
         $placeData   = $placesModel
-            ->select('id, rating, views, photos, photos, comments, bookmarks')
+            ->select('id, rating, views, photos, photos, comments, bookmarks' . $coordinates)
             ->find($id);
 
         $placeData->title = $placeContent->title($id);
+
+        if ($coordinates && !empty($placeData->distance)) {
+            $placeData->distance = round((float) $placeData->distance, 1);
+        }
 
         if ($placeData->photos && file_exists(UPLOAD_PHOTOS . $id . '/cover.jpg')) {
             $placeData->cover = [

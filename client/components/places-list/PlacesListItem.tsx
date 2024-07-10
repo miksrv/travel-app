@@ -56,7 +56,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => (
                     {!!place.distance && (
                         <Badge
                             icon={'Ruler'}
-                            content={numberFormatter(place.distance)}
+                            content={numberFormatter(place.distance) + ' ' + t('km')}
                         />
                     )}
                 </div>
