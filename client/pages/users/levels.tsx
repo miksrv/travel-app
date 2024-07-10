@@ -75,7 +75,9 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                                 />
                                 {level.title}
                             </div>
-                            <div className={'experience'}>{t('experience_num', { experience: level.experience })}</div>
+                            <div className={'experience'}>
+                                {t('need-experience_num', { experience: level.experience })}
+                            </div>
                         </div>
                         <UserAvatarGroup
                             users={level.users}

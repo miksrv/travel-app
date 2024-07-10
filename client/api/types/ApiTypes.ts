@@ -333,7 +333,10 @@ export interface RequestPoiList {
 }
 
 export interface ResponsePoiItem
-    extends Pick<Place, 'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover' | 'comments' | 'bookmarks'> {}
+    extends Pick<
+        Place,
+        'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover' | 'comments' | 'bookmarks' | 'distance'
+    > {}
 
 export interface ResponsePoiPlacesList {
     items: poiPlace[]

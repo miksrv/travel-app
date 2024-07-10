@@ -276,7 +276,7 @@ class Photos extends ResourceController {
         $image = Services::image('gd');
         $name  = pathinfo($file->getRandomName(), PATHINFO_FILENAME);
         $image->withFile($file->getRealPath())
-            ->rotate(90)
+            ->rotate(270)
             ->save($photoDir . $name . '.' . $photoData->extension);
 
         $image->withFile($photoDir . $name . '.' . $photoData->extension)

@@ -60,11 +60,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
     }
 
     const handleBackLinkClick = async () => {
-        if (!document.referrer) {
-            await router.push('/places')
-        } else {
-            router.back()
-        }
+        router.back()
     }
 
     return (

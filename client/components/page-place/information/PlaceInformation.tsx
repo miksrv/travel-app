@@ -13,6 +13,7 @@ import UserAvatarGroup from '@/components/user-avatar-group'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
+import Button from '@/ui/button'
 import Container from '@/ui/container'
 import Icon from '@/ui/icon'
 
@@ -133,6 +134,16 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ t, place }) => (
                     ]}
                 />
             )}
+
+            <Button
+                className={styles.openMapButton}
+                stretched={true}
+                mode={'primary'}
+                link={`/map#${place?.lat},${place?.lon},14`}
+                disabled={!place?.lat || !place?.lon}
+            >
+                {t('open-on-map')}
+            </Button>
         </div>
     </Container>
 )

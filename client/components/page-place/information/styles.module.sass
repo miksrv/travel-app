@@ -48,13 +48,24 @@
         margin-right: 10px
 
     .map
-        border: var(--input-border)
-        border-radius: var(--border-radius)
         width: 40%
         flex-grow: 1
         min-width: 300px
 
+        & > div
+            border: var(--input-border)
+            border-radius: var(--border-radius)
+
         @media only screen and (max-width: $mobileMaxWidth)
-            height: 200px
             width: 100%
             margin-top: 20px
+
+            & > div
+                height: 200px
+
+    .openMapButton
+        display: none
+
+        @media only screen and (max-width: $mobileMaxWidth)
+            margin-top: 10px
+            display: block

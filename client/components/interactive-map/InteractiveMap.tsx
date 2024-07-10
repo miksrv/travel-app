@@ -79,6 +79,7 @@ type MapProps = {
     onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
     onPhotoClick?: (photos: Placemark.Photo[], index?: number) => void
+    onClickCreatePlace?: () => void
 } & MapOptions
 
 const DEFAULT_MAP_ZOOM = 12
@@ -106,6 +107,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     onChangeMapType,
     onChangeBounds,
     onPhotoClick,
+    onClickCreatePlace,
     ...props
 }) => {
     const router = useRouter()
@@ -355,6 +357,14 @@ const InteractiveMap: React.FC<MapProps> = ({
                 {enableContextMenu && <ContextMenu />}
 
                 <div className={styles.leftControls}>
+                    {onClickCreatePlace && (
+                        <Button
+                            mode={'secondary'}
+                            icon={'PlusCircle'}
+                            onClick={onClickCreatePlace}
+                        />
+                    )}
+
                     {enableFullScreen && (
                         <Button
                             mode={'secondary'}

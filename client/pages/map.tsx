@@ -9,8 +9,8 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 
 import { API, SITE_LINK } from '@/api/api'
-import { setLocale } from '@/api/applicationSlice'
-import { useAppSelector, wrapper } from '@/api/store'
+import { openAuthDialog, setLocale } from '@/api/applicationSlice'
+import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
 import { ApiTypes, Place, Placemark } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -27,9 +27,11 @@ interface MapPageProps {}
 
 const MapPage: NextPage<MapPageProps> = () => {
     const router = useRouter()
+    const dispatch = useAppDispatch()
     const { t, i18n } = useTranslation()
 
     const location = useAppSelector((state) => state.application.userLocation)
+    const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [initMapCoords, setInitMapCoords] = useState<LatLngExpression>()
     const [initMapZoom, setInitMapZoom] = useState<number>()
@@ -110,6 +112,14 @@ const MapPage: NextPage<MapPageProps> = () => {
         }, 1000),
         []
     )
+
+    const handleCreatePlace = async () => {
+        if (isAuth) {
+            await router.push('/places/create')
+        } else {
+            dispatch(openAuthDialog())
+        }
+    }
 
     const handleChangeCategories = (categories?: Place.Categories[]) => {
         setCategories(categories)
@@ -201,6 +211,7 @@ const MapPage: NextPage<MapPageProps> = () => {
                     photos={mapType === 'Photos' ? photoListData?.items : []}
                     onPhotoClick={handlePhotoClick}
                     onChangeCategories={handleChangeCategories}
+                    onClickCreatePlace={handleCreatePlace}
                     onChangeMapType={setMapType}
                     onChangeBounds={debounceSetMapBounds}
                     userLatLon={location}
