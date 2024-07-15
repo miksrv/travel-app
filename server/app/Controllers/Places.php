@@ -92,10 +92,7 @@ class Places extends ResourceController {
                 ]);
             }
 
-            $tag = [];
-            foreach ($placesTagsData as $item) {
-                $tag[] = $item->place_id;
-            }
+            $tag = array_column($placesTagsData, 'place_id');
         } else {
             $tag = [];
         }
@@ -156,10 +153,7 @@ class Places extends ResourceController {
         // If a search was enabled, the second argument to the _makeListFilters function will contain the
         // IDs of the places found using the search criteria
         $placesList = $this->_makeListFilters($this->model, $searchPlacesIds)->get()->getResult();
-        $placesIds  = [];
-        foreach ($placesList as $place) {
-            $placesIds[] = $place->id;
-        }
+        $placesIds  = array_column($placesList, 'id');
 
         // We find translations for all objects if no search was used.
         // When searching, we already know translations for all found objects
