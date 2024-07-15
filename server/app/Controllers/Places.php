@@ -440,7 +440,6 @@ class Places extends ResourceController {
             return $this->failValidationErrors(lang('Places.createFailError'));
         }
 
-
         $activity = new ActivityLibrary();
         $activity->place($newPlaceId);
 
@@ -586,22 +585,22 @@ class Places extends ResourceController {
             return $this->failValidationErrors(lang('Places.coverPointNotExist'));
         }
 
-        $photoDir = UPLOAD_PHOTOS . $id . '/';
-        $file = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
+        $photoDir  = UPLOAD_PHOTOS . $id . '/';
+        $imageFile = new File($photoDir . $photoData->filename . '.' . $photoData->extension);
 
-        list($width, $height) = getimagesize($file->getRealPath());
+        list($width, $height) = getimagesize($imageFile->getRealPath());
 
         if ($input->width > $width || $input->height > $height) {
             return $this->failValidationErrors(lang('Places.coverExceedDimensions'));
         }
 
         $image = Services::image('gd'); // imagick
-        $image->withFile($file->getRealPath())
+        $image->withFile($imageFile->getRealPath())
             ->crop($input->width, $input->height, $input->x, $input->y)
             ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT)
             ->save($photoDir . 'cover.jpg');
 
-        $image->withFile($file->getRealPath())
+        $image->withFile($imageFile->getRealPath())
             ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT)
             ->save($photoDir . '/cover_preview.jpg');
 
@@ -695,12 +694,11 @@ class Places extends ResourceController {
         }
 
         foreach ($data as $user) {
-            $avatar = $user->avatar ? explode('.', $user->avatar) : null;
-            $user->avatar = $avatar
-                ? PATH_AVATARS . $user->id . '/' . $avatar[0] . '_small.' . $avatar[1]
+            $avatarPath   = $user->avatar ? explode('.', $user->avatar) : null;
+            $user->avatar = $avatarPath
+                ? PATH_AVATARS . $user->id . '/' . $avatarPath[0] . '_small.' . $avatarPath[1]
                 : null;
         }
-
 
         return $data;
     }
