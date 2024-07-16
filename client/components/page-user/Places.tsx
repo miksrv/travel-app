@@ -26,7 +26,7 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const pageTitle = currentPage > 1 ? ` - ${t('page')} ${currentPage}` : ''
-    const title = type === 'places' ? t('title') : t('favorites')
+    const title = type === 'places' ? t('geotags') : t('favorites')
 
     return (
         <>

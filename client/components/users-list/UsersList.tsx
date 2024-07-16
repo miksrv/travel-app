@@ -41,20 +41,19 @@ const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
                         }
                     />
 
-                    <div className={styles.reputation}>
-                        <p>{t('reputation')}: </p>
+                    <div className={styles.metaContainer}>
                         <Reputation value={user.reputation || 0} />
-                    </div>
 
-                    <div className={styles.level}>
-                        <p>{user.levelData?.title}</p>
-                        <Progress
-                            className={styles.progress}
-                            value={nextLevelPercentage(
-                                user.levelData?.experience || 0,
-                                user.levelData?.nextLevel || user.levelData?.experience || 0
-                            )}
-                        />
+                        <div className={styles.level}>
+                            <p>{user.levelData?.title}</p>
+                            <Progress
+                                className={styles.progress}
+                                value={nextLevelPercentage(
+                                    user.levelData?.experience || 0,
+                                    user.levelData?.nextLevel || user.levelData?.experience || 0
+                                )}
+                            />
+                        </div>
                     </div>
                 </div>
             ))}
