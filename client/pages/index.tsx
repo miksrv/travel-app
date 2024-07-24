@@ -103,7 +103,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
             />
 
             <Header
-                title={t('geotags')}
+                title={t('news-feed')}
                 currentPage={t('updated-geotags-users-photos')}
             />
 
