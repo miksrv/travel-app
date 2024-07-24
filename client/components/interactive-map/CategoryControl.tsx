@@ -39,7 +39,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
 
         onChangeCategories?.(
             !event.target.checked
-                ? categories?.filter((item) => item !== category) ?? []
+                ? (categories?.filter((item) => item !== category) ?? [])
                 : [...(categories ?? []), category]
         )
     }

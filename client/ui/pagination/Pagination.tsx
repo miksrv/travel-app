@@ -119,9 +119,9 @@ const Pagination: React.FC<PaginationProps<any>> = ({
                         }
                         title={
                             page === RIGHT_PAGE
-                                ? captionNextPage ?? 'Next page'
+                                ? (captionNextPage ?? 'Next page')
                                 : page === LEFT_PAGE
-                                  ? captionPrevPage ?? 'Previous page'
+                                  ? (captionPrevPage ?? 'Previous page')
                                   : `${captionPage ?? 'Page'} - ${page}`
                         }
                         key={page}

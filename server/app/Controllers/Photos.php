@@ -8,7 +8,6 @@ use App\Libraries\SessionLibrary;
 use App\Libraries\ActivityLibrary;
 use App\Models\PhotosModel;
 use App\Models\PlacesModel;
-use App\Models\ActivityModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\ResponseInterface;

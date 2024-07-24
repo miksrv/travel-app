@@ -16,7 +16,7 @@ type ApplicationStateProps = {
 
 export const getStorageLocale = (): string | undefined =>
     typeof window !== 'undefined'
-        ? LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ?? i18Config.i18n.defaultLocale
+        ? (LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ?? i18Config.i18n.defaultLocale)
         : i18Config.i18n.defaultLocale
 
 const applicationSlice = createSlice({
