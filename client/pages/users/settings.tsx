@@ -88,7 +88,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
             />
             <Header
                 title={t('settings')}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 currentPage={t('settings')}
                 backLink={`/users/${authSlice.user?.id}`}
                 links={[

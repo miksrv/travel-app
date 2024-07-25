@@ -154,7 +154,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
             </div>
             <Header
                 title={user?.name}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 currentPage={user?.name}
                 attachedBottom={true}
                 links={[
