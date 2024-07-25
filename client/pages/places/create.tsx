@@ -66,7 +66,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
             />
             <Header
                 title={t('create-geotag')}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 currentPage={t('create-geotag')}
                 links={[
                     {

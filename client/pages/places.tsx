@@ -162,7 +162,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         const titlePage = initialFilter.page && initialFilter.page > 1 ? ` - ${t('page')} ${initialFilter.page}` : ''
 
         if (!currentCategory && !locationType) {
-            return t('geotags') + titleTag + titlePage
+            return t('interesting-places') + titleTag + titlePage
         }
 
         const titles = []
@@ -175,7 +175,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             titles.push(currentCategory)
         }
 
-        return `${t('geotags')}: ${titles.join(', ')}` + titleTag + titlePage
+        return `${t('interesting-places')}: ${titles.join(', ')}` + titleTag + titlePage
     }, [currentCategory, locationData, locationType, i18n.language, initialFilter])
 
     const breadcrumbsLinks = useMemo(() => {
@@ -184,7 +184,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         if (category || locationType || tag || currentPage > 1) {
             breadcrumbs.push({
                 link: '/places',
-                text: t('geotags')
+                text: t('interesting-places')
             })
         }
 
@@ -206,7 +206,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             ? `#${tag}`
             : currentPage > 1
               ? `${t('page')} ${initialFilter.page}`
-              : t('geotags-list')
+              : t('interesting-places')
 
     const filtersCount = useMemo(() => {
         let count = 0
@@ -295,7 +295,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Header
                 title={title}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 links={breadcrumbsLinks || []}
                 currentPage={breadCrumbCurrent}
                 actions={

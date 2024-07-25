@@ -28,7 +28,7 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
 
             <Header
                 title={`${user?.name} - ${t('photos')}${pageTitle}`}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 currentPage={t('photos')}
                 backLink={`/users/${id}`}
                 userData={user}

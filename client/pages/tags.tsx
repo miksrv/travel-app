@@ -64,7 +64,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
 
             <Header
                 title={t('hashtags')}
-                homePageTitle={t('geotags')}
+                homePageTitle={t('news-feed')}
                 currentPage={t('hashtags')}
             />
 

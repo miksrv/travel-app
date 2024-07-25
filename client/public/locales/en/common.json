@@ -19,7 +19,6 @@
     "my-photos": "My photos",
     "map-of-geotags": "Map of geotags",
     "geotags": "Geotags",
-    "geotags-list": "List of geotags",
     "geotags-description": "Geotags: interesting places and attractions, map of interesting places, coordinates, location, photos, comments and user ratings",
     "geotags-map-description": "Map of geotags: interesting places and attractions, abandoned places, monuments, temples, bunkers, training grounds, bomb shelters, mountain peaks, waterfalls, forests, reservoirs, lakes, rivers, bridges",
     "news-feed": "News feed",
@@ -214,5 +213,6 @@
     "success": "Successfully",
     "go-to-home-page": "Go to home page",
     "back": "Back",
-    "geotag-saved": "Geotag saved"
+    "geotag-saved": "Geotag saved",
+    "interesting-places": "Interesting places"
 }
