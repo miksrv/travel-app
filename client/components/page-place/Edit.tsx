@@ -74,7 +74,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
             <Header
                 title={`${place?.title} - ${t('editing')}`}
-                homePageTitle={t('news-feed')}
+                homePageTitle={t('geotags')}
                 currentPage={t('editing')}
                 backLink={`/places/${place?.id}`}
                 links={[

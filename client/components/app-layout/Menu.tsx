@@ -30,6 +30,11 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
 
     const menuItems: MenuItemType[] = [
         {
+            icon: 'Feed',
+            link: '/',
+            text: t('geotags')
+        },
+        {
             auth: true,
             icon: 'PlusCircle',
             link: '/places/create',
@@ -46,11 +51,6 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             icon: 'Photo',
             link: userId ? `/users/${userId}/photos` : undefined,
             text: t('my-photos')
-        },
-        {
-            icon: 'Feed',
-            link: '/',
-            text: t('news-feed')
         },
         {
             icon: 'Map',

@@ -295,7 +295,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Header
                 title={title}
-                homePageTitle={t('news-feed')}
+                homePageTitle={t('geotags')}
                 links={breadcrumbsLinks || []}
                 currentPage={breadCrumbCurrent}
                 actions={
