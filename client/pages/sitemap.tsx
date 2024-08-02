@@ -9,7 +9,7 @@ type SitemapDynamicPage = {
     update: string
 }
 
-interface SiteMapProps {}
+type SiteMapProps = object
 
 const SiteMap: NextPage<SiteMapProps> = () => <></>
 

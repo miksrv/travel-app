@@ -13,7 +13,7 @@ import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
 
-interface NotificationsProps {}
+type NotificationsProps = object
 
 const Notifications: React.FC<NotificationsProps> = () => {
     const { t } = useTranslation()

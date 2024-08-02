@@ -11,7 +11,7 @@ import { equalsArrays } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Container from '@/ui/container'
 
-interface EditProps extends Omit<PlacePageProps, 'page'> {}
+type EditProps = Omit<PlacePageProps, 'page'>
 
 const Edit: React.FC<EditProps> = ({ place }) => {
     const router = useRouter()

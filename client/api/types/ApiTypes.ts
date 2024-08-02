@@ -102,7 +102,7 @@ export interface RequestPlacesGetItem {
     lon?: number | null
 }
 
-export interface ResponsePlacesGetItem extends Place {}
+export type ResponsePlacesGetItem = Place
 
 export interface ResponsePlacesGetList {
     items?: Place[]
@@ -179,7 +179,7 @@ export interface RequestPhotosGetList {
     place?: string
 }
 
-export interface ResponsePhotoPostUpload extends Photo {}
+export type ResponsePhotoPostUpload = Photo
 
 export interface RequestPhotoPostUpload {
     formData?: FormData
@@ -188,7 +188,7 @@ export interface RequestPhotoPostUpload {
 }
 
 /* Controller: Location */
-export interface ResponseLocationGetByType extends LocationObject {}
+export type ResponseLocationGetByType = LocationObject
 
 export interface RequestLocationGetByType {
     id?: number | null
@@ -332,11 +332,10 @@ export interface RequestPoiList {
     categories?: Categories[]
 }
 
-export interface ResponsePoiItem
-    extends Pick<
-        Place,
-        'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover' | 'comments' | 'bookmarks' | 'distance'
-    > {}
+export type ResponsePoiItem = Pick<
+    Place,
+    'id' | 'rating' | 'title' | 'views' | 'photos' | 'cover' | 'comments' | 'bookmarks' | 'distance'
+>
 
 export interface ResponsePoiPlacesList {
     items: poiPlace[]
@@ -388,4 +387,4 @@ export interface ResponseUserUploadAvatar {
     height: number
 }
 
-export interface ResponseUsersGetItem extends User {}
+export type ResponseUsersGetItem = User

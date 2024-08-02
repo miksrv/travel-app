@@ -10,7 +10,7 @@ import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
-interface UserPhotosProps extends Omit<UserPageProps, 'page' | 'placesList'> {}
+type UserPhotosProps = Omit<UserPageProps, 'page' | 'placesList'>
 
 const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCount, currentPage }) => {
     const { t, i18n } = useTranslation()

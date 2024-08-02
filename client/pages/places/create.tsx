@@ -15,7 +15,7 @@ import PlaceForm from '@/components/place-form'
 import Container from '@/ui/container'
 import ScreenSpinner from '@/ui/screen-spinner'
 
-interface CreatePlacePageProps {}
+type CreatePlacePageProps = object
 
 const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const router = useRouter()

@@ -15,7 +15,7 @@ enum DropdownOptionType {
     POINT = 'point'
 }
 
-interface SearchProps extends React.InputHTMLAttributes<HTMLInputElement> {}
+type SearchProps = React.InputHTMLAttributes<HTMLInputElement>
 
 const Search: React.FC<SearchProps> = () => {
     const { t } = useTranslation()

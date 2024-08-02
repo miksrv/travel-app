@@ -16,7 +16,7 @@ import UserForm from '@/components/user-form'
 import Container from '@/ui/container'
 import ScreenSpinner from '@/ui/screen-spinner'
 
-interface SettingsUserPageProps {}
+type SettingsUserPageProps = object
 
 const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const dispatch = useAppDispatch()

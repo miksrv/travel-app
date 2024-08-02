@@ -15,7 +15,7 @@ import { formatDateISO } from '@/functions/helpers'
 import type { UserPageProps } from '@/pages/users/[...slug]'
 import Button from '@/ui/button'
 
-interface UserProps extends Omit<UserPageProps, 'page'> {}
+type UserProps = Omit<UserPageProps, 'page'>
 
 const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     const { t, i18n } = useTranslation()
