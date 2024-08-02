@@ -11,7 +11,7 @@ const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
     ssr: false
 })
 
-interface ContentEditorProps extends IMarkdownEditor {}
+type ContentEditorProps = IMarkdownEditor
 
 const ContentEditor: React.FC<ContentEditorProps> = (props) => (
     <div className={styles.contentEditor}>

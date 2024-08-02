@@ -15,7 +15,7 @@ import Container from '@/ui/container'
 import Message from '@/ui/message'
 import Spinner from '@/ui/spinner'
 
-interface UnsubscribePageProps {}
+type UnsubscribePageProps = object
 
 const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
     const router = useRouter()

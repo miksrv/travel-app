@@ -98,7 +98,7 @@ export default [
                     null: 'never'
                 }
             ],
-            'no-duplicate-imports': 'warn',
+            'no-duplicate-imports': 'off',
             'logical-assignment-operators': 'error',
             'no-else-return': 'error',
             // 'no-mixed-operators': 'warn',

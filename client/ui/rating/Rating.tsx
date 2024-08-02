@@ -43,11 +43,13 @@ const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => 
                             type={'radio'}
                             value={rating}
                             onChange={() => {
-                                !disabled ? onChange?.(rating) : undefined
+                                if (!disabled) {
+                                    onChange?.(rating)
+                                }
                             }}
                             onKeyDown={(e) => {
-                                if (e.key === 'Enter' || e.key === ' ') {
-                                    !disabled ? onChange?.(rating) : undefined
+                                if ((e.key === 'Enter' || e.key === ' ') && !disabled) {
+                                    onChange?.(rating)
                                 }
                             }}
                         />

@@ -102,11 +102,12 @@ const ContextMenu: React.FC = () => {
                         y: menuPointYisOverFlow(pointRightClick.y, menuWrapHeight, mapSize.current)
                     })
                 } else {
-                    mapSize.current &&
+                    if (mapSize.current) {
                         setPoint({
                             x: pointRightClick.x,
                             y: menuPointYisOverFlow(pointRightClick.y, menuWrapHeight, mapSize.current)
                         })
+                    }
                 }
 
                 setIsShowMenu(true)

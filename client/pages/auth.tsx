@@ -19,7 +19,7 @@ import Container from '@/ui/container'
 import Message from '@/ui/message'
 import Spinner from '@/ui/spinner'
 
-interface AuthPageProps {}
+type AuthPageProps = object
 
 const AuthPage: NextPage<AuthPageProps> = () => {
     const dispatch = useAppDispatch()

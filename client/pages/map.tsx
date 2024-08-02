@@ -23,7 +23,7 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
 })
 
-interface MapPageProps {}
+type MapPageProps = object
 
 const MapPage: NextPage<MapPageProps> = () => {
     const router = useRouter()

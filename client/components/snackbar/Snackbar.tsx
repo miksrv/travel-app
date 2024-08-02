@@ -9,7 +9,7 @@ import { API } from '@/api/api'
 import { deleteNotification, Notify, setReadNotification, setUnreadCounter } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 
-interface SnackbarProps {}
+type SnackbarProps = object
 
 const Snackbar: React.FC<SnackbarProps> = () => {
     const dispatch = useAppDispatch()
@@ -42,10 +42,11 @@ const Snackbar: React.FC<SnackbarProps> = () => {
                     key={notification.id}
                     onClose={handleCloseNotification}
                     onLoad={(id) => {
-                        !notification.read &&
+                        if (!notification.read) {
                             setTimeout(() => {
                                 dispatch(setReadNotification(id))
                             }, 500)
+                        }
                     }}
                     {...notification}
                 />

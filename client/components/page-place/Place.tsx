@@ -23,7 +23,7 @@ import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
 
-interface PlaceProps extends Omit<PlacePageProps, 'page'> {}
+type PlaceProps = Omit<PlacePageProps, 'page'>
 
 const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces }) => {
     const dispatch = useAppDispatch()
