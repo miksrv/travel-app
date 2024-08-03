@@ -3,6 +3,8 @@ import PhotoAlbum from 'react-photo-album'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
+import 'react-photo-album/rows.css'
+
 import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
