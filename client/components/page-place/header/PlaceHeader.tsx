@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -35,6 +36,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
+    const coverHashString = coverHash || dayjs(place?.updated?.date).unix()
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []
@@ -71,18 +73,14 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                         <div
                             className={styles.desktop}
                             style={{
-                                backgroundImage: `url(${IMG_HOST}${
-                                    place.cover.full
-                                }${coverHash ? `?d=${coverHash}` : ''})`
+                                backgroundImage: `url(${IMG_HOST}${place.cover.full}?d=${coverHashString})`
                             }}
                         />
 
                         <div
                             className={styles.mobile}
                             style={{
-                                backgroundImage: `url(${IMG_HOST}${
-                                    place.cover.preview
-                                }${coverHash ? `?d=${coverHash}` : ''})`
+                                backgroundImage: `url(${IMG_HOST}${place.cover.preview}?d=${coverHashString})`
                             }}
                         />
                     </>
