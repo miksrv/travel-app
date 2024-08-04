@@ -16,8 +16,8 @@ const PhotoUploadSection: React.FC<PhotoGalleryProps> = ({ onClick }) => {
             onClick={onClick}
         >
             <div className={styles.image} />
-            <div>Нажите сюда для загрузки фотографий</div>
-            <div className={styles.hint}>Поддерживаются форматы JPG, JPEG, PNG</div>
+            <div>{t('click-here-upload-photos')}</div>
+            <div className={styles.hint}>{t('supported-formats')} JPG, JPEG, PNG</div>
         </button>
     )
 }

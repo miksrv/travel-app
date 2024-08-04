@@ -2,7 +2,6 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 import { RootState } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import { RequestPhotoRotateItem } from '@/api/types/ApiTypes'
 import { encodeQueryData } from '@/functions/helpers'
 import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'

@@ -8,7 +8,6 @@ import { useTranslation } from 'next-i18next'
 import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
-import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
