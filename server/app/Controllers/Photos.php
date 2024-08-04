@@ -55,37 +55,36 @@ class Photos extends ResourceController {
             ]);
         }
 
-        $result = [];
-
         foreach ($photosData as $photo) {
+            $path  = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
             $title = $locale === 'ru' ?
                 ($photo->title_ru ?: $photo->title_en) :
                 ($photo->title_en ?: $photo->title_ru);
 
-            $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
+            $photo->title   = $title;
+            $photo->placeId = $photo->place_id;
+            $photo->full    = $path . '.' . $photo->extension;
+            $photo->preview = $path . '_preview.' . $photo->extension;
 
-            $avatar   = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
-            $result[] = (object) [
-                'id'      => $photo->id,
-                'full'    => $photoPath . '.' . $photo->extension,
-                'preview' => $photoPath . '_preview.' . $photo->extension,
-                'width'   => $photo->width,
-                'height'  => $photo->height,
-                'title'   => $title,
-                'placeId' => $photo->place_id,
-                'created' => $photo->created_at,
-                'author'  => $photo->user_id ? [
+            if ($photo->user_id) {
+                $userAvatar    = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
+                $photo->author = [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
-                    'avatar' => $avatar
-                        ? PATH_AVATARS . $photo->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    'avatar' => $userAvatar
+                        ? PATH_AVATARS . $photo->user_id . '/' . $userAvatar[0] . '_small.' . $userAvatar[1]
                         : null
-                ] : null
-            ];
+                ];
+            }
+
+            unset(
+                $photo->place_id, $photo->title_ru, $photo->title_en, $photo->extension, $photo->filename,
+                $photo->user_id, $photo->user_avatar, $photo->user_name,
+            );
         }
 
         return $this->respond([
-            'items' => $result,
+            'items' => $photosData,
             'count' => $this->_makeListFilters()->countAllResults()
         ]);
     }
