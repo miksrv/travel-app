@@ -11,12 +11,12 @@ import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes, Place } from '@/api/types'
 import type { Item } from '@/api/types/Activity'
-import type { Photo } from '@/api/types/Photo'
+// import type { Photo } from '@/api/types/Photo'
 import type { User } from '@/api/types/User'
 import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
-import PhotoGallery from '@/components/photo-gallery'
+// import PhotoGallery from '@/components/photo-gallery'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
@@ -27,10 +27,10 @@ import Carousel from '@/ui/carousel'
 interface IndexPageProps {
     placesList: Place.Place[]
     usersList: User[]
-    photosList: Photo[]
+    // photosList: Photo[]
 }
 
-const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList }) => {
+const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
     const { t, i18n } = useTranslation()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
@@ -141,10 +141,10 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, photosList
                 }
             />
 
-            <PhotoGallery
-                title={t('last-uploaded-photos')}
-                photos={photosList}
-            />
+            {/*<PhotoGallery*/}
+            {/*    title={t('last-uploaded-photos')}*/}
+            {/*    photos={photosList}*/}
+            {/*/>*/}
 
             <ActivityList
                 title={t('news-feed')}
@@ -192,18 +192,18 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 })
             )
 
-            const { data: photosList } = await store.dispatch(
-                API.endpoints.photosGetList.initiate({
-                    limit: 8
-                })
-            )
+            // const { data: photosList } = await store.dispatch(
+            //     API.endpoints.photosGetList.initiate({
+            //         limit: 8
+            //     })
+            // )
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 
             return {
                 props: {
                     ...translations,
-                    photosList: photosList?.items || [],
+                    // photosList: photosList?.items || [],
                     placesList: placesList?.items || [],
                     usersList: usersList?.items || []
                 }
