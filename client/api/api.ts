@@ -197,10 +197,10 @@ export const API = createApi({
         }),
 
         /* Controller: Photos */
-        photoDeleteItem: builder.mutation<ApiTypes.ResponsePhotoDeleteItem, string>({
-            query: (photoId) => ({
+        photoDeleteItem: builder.mutation<ApiTypes.ResponsePhotoDeleteItem, ApiTypes.RequestPhotoDeleteItem>({
+            query: (params) => ({
                 method: 'DELETE',
-                url: `photos/${photoId}`
+                url: `photos/${params?.temporary ? 'temporary/' : ''}${params?.id}`
             })
         }),
         photoPostUpload: builder.mutation<ApiTypes.ResponsePhotoPostUpload, ApiTypes.RequestPhotoPostUpload>({
@@ -214,12 +214,12 @@ export const API = createApi({
                 method: 'POST',
                 url: `photos/upload/${data.place}`
             }),
-            transformErrorResponse: (response) => response.data
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
-        photoRotateItem: builder.mutation<ApiTypes.ResponsePhotoRotateItem, string>({
-            query: (photoId) => ({
+        photoRotateItem: builder.mutation<ApiTypes.ResponsePhotoRotateItem, ApiTypes.RequestPhotoRotateItem>({
+            query: (params) => ({
                 method: 'PATCH',
-                url: `photos/rotate/${photoId}`
+                url: `photos/rotate/${params?.temporary ? 'temporary/' : ''}${params?.id}`
             })
         }),
         photosGetList: builder.query<ApiTypes.ResponsePhotosGetList, Maybe<ApiTypes.RequestPhotosGetList>>({

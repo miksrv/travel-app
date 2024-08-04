@@ -10,6 +10,7 @@ import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoLightbox from '@/components/photo-lightbox'
+import PhotoUploadSection from '@/components/photo-upload-section'
 import { concatClassNames as cn } from '@/functions/helpers'
 import Container, { ContainerProps } from '@/ui/container'
 import Icon from '@/ui/icon'
@@ -20,9 +21,18 @@ interface PhotoGalleryProps extends ContainerProps {
     photos?: Photo[]
     hideActions?: boolean
     uploadingPhotos?: string[]
+    onPhotoDelete?: (photos: Photo[]) => void
+    onPhotoUploadClick?: () => void
 }
 
-const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, uploadingPhotos, ...props }) => {
+const PhotoGallery: React.FC<PhotoGalleryProps> = ({
+    photos,
+    hideActions,
+    uploadingPhotos,
+    onPhotoDelete,
+    onPhotoUploadClick,
+    ...props
+}) => {
     const { t } = useTranslation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
@@ -47,10 +57,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
         }
     }
 
-    const handleRotateClick = (photoId: string) => {
+    const handleRotateClick = (photoId: string, temporary?: boolean) => {
         if (isAuth && !rotateLoading && !hideActions) {
             setPhotoLoadingID(photoId)
-            rotatePhoto(photoId)
+            rotatePhoto({ id: photoId, temporary })
         }
     }
 
@@ -58,11 +68,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
      * After rotate photo - add time hash for rotated photo
      */
     useEffect(() => {
+        const randomString = '?d=' + Math.floor(Date.now() / 1000)
+
         setLocalPhotos(
             localPhotos.map((photo) => ({
                 ...photo,
-                full: photo.id === rotateData?.id ? rotateData.full! : photo.full,
-                preview: photo.id === rotateData?.id ? rotateData.preview! : photo.preview
+                full: photo.id === rotateData?.id ? rotateData.full + randomString : photo.full,
+                preview: photo.id === rotateData?.id ? rotateData.preview + randomString : photo.preview
             }))
         )
 
@@ -73,7 +85,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
      *  After deleting a photo, remove it from the local photo list
      */
     React.useEffect(() => {
-        setLocalPhotos(localPhotos.filter(({ id }) => id !== deleteData?.id))
+        const updatedLocalPhotos = localPhotos.filter(({ id }) => id !== deleteData?.id)
+
+        setLocalPhotos(updatedLocalPhotos)
+        onPhotoDelete?.(updatedLocalPhotos)
     }, [deleteData])
 
     useEffect(() => {
@@ -83,12 +98,18 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
     return (
         <Container
             {...props}
-            className={styles.galleryContainer}
+            className={cn(styles.galleryContainer, props.className)}
         >
             {isEmptyPhotoList && <div className={'emptyList'}>{t('no-photos-here-yet')}</div>}
 
             {!isEmptyPhotoList && (
                 <ul className={cn(styles.photoGallery, (!!props?.title || !!props?.action) && styles.marginTop)}>
+                    {onPhotoUploadClick && (
+                        <li className={cn(styles.photoItem, styles.photoUpload)}>
+                            <PhotoUploadSection onClick={onPhotoUploadClick} />
+                        </li>
+                    )}
+
                     {uploadingPhotos?.map((photo) => (
                         <li
                             key={photo}
@@ -143,7 +164,9 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                                     <ul className={styles.actionMenu}>
                                         <li>
                                             <button
-                                                onClick={() => handleRotateClick(photo.id)}
+                                                onClick={() =>
+                                                    handleRotateClick(photo.id, photo?.placeId === 'temporary')
+                                                }
                                                 disabled={!!photoLoadingID}
                                             >
                                                 <Icon name={'Rotate'} /> {t('to-turn')}
@@ -181,8 +204,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({ photos, hideActions, upload
                     setPhotoLoadingID(undefined)
                 }}
                 onAccept={() => {
-                    if (photoDeleteID) {
-                        deletePhoto(photoDeleteID)
+                    const photo = photos?.find(({ id }) => id === photoDeleteID)
+
+                    if (photo) {
+                        deletePhoto({ id: photo?.id, temporary: photo?.placeId === 'temporary' })
                         setPhotoDeleteID(undefined)
                         setPhotoLoadingID(undefined)
                     }

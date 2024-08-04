@@ -245,7 +245,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 fileInputRef={inputFileRef}
                 onSelectFiles={setUploadingPhotos}
                 onUploadPhoto={(photo) => {
-                    setLocalPhotos([...localPhotos, photo])
+                    setLocalPhotos([photo, ...localPhotos])
                 }}
             />
         </>

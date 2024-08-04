@@ -14,6 +14,13 @@ class Photo extends Entity {
         'extension' => 'string',
         'filesize'  => 'integer',
         'width'     => 'integer',
-        'height'    => 'integer'
+        'height'    => 'integer',
+
+        'created' => 'datetime',
+    ];
+
+    protected $datamap = [
+        // property_name => db_column_name
+        'created' => 'created_at'
     ];
 }

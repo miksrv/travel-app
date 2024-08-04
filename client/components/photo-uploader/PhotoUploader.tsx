@@ -1,6 +1,8 @@
 import React, { LegacyRef, MutableRefObject, useEffect, useState } from 'react'
 
 import { API } from '@/api/api'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 
 interface PhotoUploaderProps {
@@ -11,10 +13,13 @@ interface PhotoUploaderProps {
 }
 
 const PhotoUploader: React.FC<PhotoUploaderProps> = ({ placeId, onSelectFiles, onUploadPhoto, fileInputRef }) => {
+    const dispatch = useAppDispatch()
     const [selectedFiles, setSelectedFiles] = useState<File[]>([])
 
-    const [handleUploadPhoto, { data: uploadedPhoto, isLoading: uploadLoading, isError: uploadError }] =
-        API.usePhotoPostUploadMutation()
+    const [
+        handleUploadPhoto,
+        { data: uploadedPhoto, isLoading: uploadLoading, isError: uploadError, error: uploadErrorText }
+    ] = API.usePhotoPostUploadMutation()
 
     const handleSelectedFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
@@ -30,7 +35,18 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ placeId, onSelectFiles, o
      * #TODO:Add notification
      */
     useEffect(() => {
-        setSelectedFiles([])
+        if (selectedFiles && uploadError) {
+            setSelectedFiles([])
+
+            dispatch(
+                Notify({
+                    id: 'uploadPhotoError',
+                    title: '',
+                    message: uploadErrorText as string,
+                    type: 'error'
+                })
+            )
+        }
     }, [uploadError])
 
     /** After successfully uploading each photo:

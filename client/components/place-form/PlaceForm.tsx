@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
@@ -11,6 +11,10 @@ import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
+import { Photo } from '@/api/types/Photo'
+import PhotoGallery from '@/components/photo-gallery'
+import PhotoUploadSection from '@/components/photo-upload-section'
+import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import { categoryImage } from '@/functions/categories'
 import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
@@ -37,11 +41,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
+    const inputFileRef = useRef<HTMLInputElement>()
+
     const location = useAppSelector((state) => state.application.userLocation)
 
     const [mapBounds, setMapBounds] = useState<string>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestPlacesPostItem>()
+    const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
+    const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
 
     const { data: poiListData } = API.usePoiGetListQuery({ bounds: mapBounds }, { skip: !mapBounds })
     const { data: categoryData } = API.useCategoriesGetListQuery()
@@ -96,7 +104,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
     const handleSubmit = () => {
         if (validateForm()) {
-            onSubmit?.(formData)
+            onSubmit?.({
+                ...formData,
+                photos: !placeId && !!localPhotos?.length ? localPhotos?.map(({ id }) => id) : undefined
+            })
         } else {
             dispatch(
                 Notify({
@@ -240,6 +251,24 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                 />
             </div>
 
+            {!placeId && (
+                <div className={styles.formElement}>
+                    {localPhotos?.length ? (
+                        <div className={styles.formElement}>
+                            <PhotoGallery
+                                photos={localPhotos}
+                                className={styles.gallery}
+                                uploadingPhotos={uploadingPhotos}
+                                onPhotoDelete={setLocalPhotos}
+                                onPhotoUploadClick={() => inputFileRef?.current?.click()}
+                            />
+                        </div>
+                    ) : (
+                        <PhotoUploadSection onClick={() => inputFileRef?.current?.click()} />
+                    )}
+                </div>
+            )}
+
             <div className={styles.actions}>
                 <Button
                     size={'medium'}
@@ -259,6 +288,17 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     {t('cancel')}
                 </Button>
             </div>
+
+            {!placeId && (
+                <PhotoUploader
+                    placeId={'temporary'}
+                    fileInputRef={inputFileRef}
+                    onSelectFiles={setUploadingPhotos}
+                    onUploadPhoto={(photo) => {
+                        setLocalPhotos([photo, ...localPhotos])
+                    }}
+                />
+            )}
         </section>
     )
 }

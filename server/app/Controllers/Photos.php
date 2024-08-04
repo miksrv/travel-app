@@ -14,6 +14,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use ReflectionException;
+use Throwable;
 
 /**
  * Available methods:
@@ -54,37 +55,36 @@ class Photos extends ResourceController {
             ]);
         }
 
-        $result = [];
-
         foreach ($photosData as $photo) {
+            $path  = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
             $title = $locale === 'ru' ?
                 ($photo->title_ru ?: $photo->title_en) :
                 ($photo->title_en ?: $photo->title_ru);
 
-            $photoPath = PATH_PHOTOS . $photo->place_id . '/' . $photo->filename;
+            $photo->title   = $title;
+            $photo->placeId = $photo->place_id;
+            $photo->full    = $path . '.' . $photo->extension;
+            $photo->preview = $path . '_preview.' . $photo->extension;
 
-            $avatar   = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
-            $result[] = (object) [
-                'id'      => $photo->id,
-                'full'    => $photoPath . '.' . $photo->extension,
-                'preview' => $photoPath . '_preview.' . $photo->extension,
-                'width'   => $photo->width,
-                'height'  => $photo->height,
-                'title'   => $title,
-                'placeId' => $photo->place_id,
-                'created' => $photo->created_at,
-                'author'  => $photo->user_id ? [
+            if ($photo->user_id) {
+                $userAvatar    = $photo->user_avatar ? explode('.', $photo->user_avatar) : null;
+                $photo->author = [
                     'id'     => $photo->user_id,
                     'name'   => $photo->user_name,
-                    'avatar' => $avatar
-                        ? PATH_AVATARS . $photo->user_id . '/' . $avatar[0] . '_small.' . $avatar[1]
+                    'avatar' => $userAvatar
+                        ? PATH_AVATARS . $photo->user_id . '/' . $userAvatar[0] . '_small.' . $userAvatar[1]
                         : null
-                ] : null
-            ];
+                ];
+            }
+
+            unset(
+                $photo->place_id, $photo->title_ru, $photo->title_en, $photo->extension, $photo->filename,
+                $photo->user_id, $photo->user_avatar, $photo->user_name,
+            );
         }
 
         return $this->respond([
-            'items' => $result,
+            'items' => $photosData,
             'count' => $this->_makeListFilters()->countAllResults()
         ]);
     }
@@ -93,7 +93,6 @@ class Photos extends ResourceController {
      * Uploading a photo by place ID
      * @param null $id
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function upload($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
@@ -114,15 +113,13 @@ class Photos extends ResourceController {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
-//        if (!$this->validate([
-//            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
-//        ])) {
-//            return $this->failValidationErrors($this->validator->getErrors());
-//        }
+        if ($photo->hasMoved()) {
+            return $this->failValidationErrors($photo->getErrorString());
+        }
 
-        if (!$photo->hasMoved()) {
+        try {
             $photoDir = UPLOAD_PHOTOS . $placesData->id . '/';
-            $newName  = $photo->getRandomName();
+            $newName = $photo->getRandomName();
             $photo->move($photoDir, $newName, true);
 
             $file = new File($photoDir . $newName);
@@ -133,8 +130,8 @@ class Photos extends ResourceController {
 
             // Calculating Aspect Ratio
             $orientation = $width > $height ? 'h' : 'v';
-            $width       = $orientation === 'h' ? $width : $height;
-            $height      = $orientation === 'h' ? $height : $width;
+            $width = $orientation === 'h' ? $width : $height;
+            $height = $orientation === 'h' ? $height : $width;
 
             // If the uploaded image dimensions exceed the maximum
             if ($width > PHOTO_MAX_WIDTH || $height > PHOTO_MAX_HEIGHT) {
@@ -170,8 +167,8 @@ class Photos extends ResourceController {
 
             // Save photo to DB
             $photo = new Photo();
-            $photo->lat = $coordinates?->lat ?? $placesData->lat;
-            $photo->lon = $coordinates?->lon ?? $placesData->lon;
+            $photo->lat       = $coordinates?->lat ?? $placesData->lat;
+            $photo->lon       = $coordinates?->lon ?? $placesData->lon;
             $photo->place_id  = $placesData->id;
             $photo->user_id   = $this->session->user?->id;
             $photo->title_en  = $placeContent->title($id);
@@ -187,24 +184,26 @@ class Photos extends ResourceController {
 
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
-        } else {
-           return $this->failValidationErrors($photo->getErrorString());
+
+            // Update the time and photos count
+            $placesModel->update($id, ['photos' => $placesData->photos + 1]);
+
+            $photoPath = PATH_PHOTOS . $placesData->id . '/';
+
+            return $this->respondCreated((object)[
+                'id'      => $photoId,
+                'full'    => $photoPath . $name . '.' . $ext,
+                'preview' => $photoPath . $name . '_preview.' . $ext,
+                'width'   => $photo->width,
+                'height'  => $photo->height,
+                'title'   => $photo->title_en ?: $photo->title_ru,
+                'placeId' => $photo->place_id
+            ]);
+
+        } catch (Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+            return $this->failServerError(lang('Photos.uploadError'));
         }
-
-        // Update the time and photos count
-        $placesModel->update($id, ['photos' => $placesData->photos + 1]);
-
-        $photoPath = PATH_PHOTOS . $placesData->id . '/';
-
-        return $this->respondCreated((object) [
-            'id'      => $photoId,
-            'full'    => $photoPath . $name . '.' . $ext,
-            'preview' => $photoPath . $name . '_preview.' . $ext,
-            'width'   => $photo->width,
-            'height'  => $photo->height,
-            'title'   => $photo->title_en ?: $photo->title_ru,
-            'placeId' => $photo->place_id
-        ]);
     }
 
     /**

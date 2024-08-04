@@ -147,6 +147,7 @@ export interface RequestPlacesPostItem {
     title?: string
     content?: string
     category?: string
+    photos?: string[]
     tags?: string[]
     lat?: number
     lon?: number
@@ -159,6 +160,16 @@ export interface ResponsePlacesPostItem {
 /* Controller: Photos */
 export interface ResponsePhotoDeleteItem {
     id?: string
+}
+
+export interface RequestPhotoDeleteItem {
+    id?: string
+    temporary?: boolean
+}
+
+export interface RequestPhotoRotateItem {
+    id?: string
+    temporary?: boolean
 }
 
 export interface ResponsePhotoRotateItem {

@@ -214,5 +214,7 @@
     "go-to-home-page": "Go to home page",
     "back": "Back",
     "geotag-saved": "Geotag saved",
-    "interesting-places": "Interesting places"
+    "interesting-places": "Interesting places",
+    "click-here-upload-photos": "Click here for upload photos",
+    "supported-formats": "Supported formats"
 }

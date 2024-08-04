@@ -71,7 +71,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                 links={[
                     {
                         link: '/places/',
-                        text: t('geotags')
+                        text: t('interesting-places')
                     }
                 ]}
             />
