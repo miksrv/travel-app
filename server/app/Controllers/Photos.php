@@ -14,6 +14,7 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
 use ReflectionException;
+use Throwable;
 
 /**
  * Available methods:
@@ -93,7 +94,6 @@ class Photos extends ResourceController {
      * Uploading a photo by place ID
      * @param null $id
      * @return ResponseInterface
-     * @throws ReflectionException
      */
     public function upload($id = null): ResponseInterface {
         if (!$this->session->isAuth) {
@@ -120,21 +120,25 @@ class Photos extends ResourceController {
 //            return $this->failValidationErrors($this->validator->getErrors());
 //        }
 
-        if (!$photo->hasMoved()) {
+        if ($photo->hasMoved()) {
+            return $this->failValidationErrors($photo->getErrorString());
+        }
+
+        try {
             $photoDir = UPLOAD_PHOTOS . $placesData->id . '/';
-            $newName  = $photo->getRandomName();
+            $newName = $photo->getRandomName();
             $photo->move($photoDir, $newName, true);
 
             $file = new File($photoDir . $newName);
             $name = pathinfo($file, PATHINFO_FILENAME);
-            $ext  = $file->getExtension();
+            $ext = $file->getExtension();
 
             list($width, $height) = getimagesize($file->getRealPath());
 
             // Calculating Aspect Ratio
             $orientation = $width > $height ? 'h' : 'v';
-            $width       = $orientation === 'h' ? $width : $height;
-            $height      = $orientation === 'h' ? $height : $width;
+            $width = $orientation === 'h' ? $width : $height;
+            $height = $orientation === 'h' ? $height : $width;
 
             // If the uploaded image dimensions exceed the maximum
             if ($width > PHOTO_MAX_WIDTH || $height > PHOTO_MAX_HEIGHT) {
@@ -172,39 +176,41 @@ class Photos extends ResourceController {
             $photo = new Photo();
             $photo->lat = $coordinates?->lat ?? $placesData->lat;
             $photo->lon = $coordinates?->lon ?? $placesData->lon;
-            $photo->place_id  = $placesData->id;
-            $photo->user_id   = $this->session->user?->id;
-            $photo->title_en  = $placeContent->title($id);
-            $photo->title_ru  = $placeContent->title($id);
-            $photo->filename  = $name;
+            $photo->place_id = $placesData->id;
+            $photo->user_id = $this->session->user?->id;
+            $photo->title_en = $placeContent->title($id);
+            $photo->title_ru = $placeContent->title($id);
+            $photo->filename = $name;
             $photo->extension = $ext;
-            $photo->filesize  = $file->getSize();
-            $photo->width     = $width;
-            $photo->height    = $height;
+            $photo->filesize = $file->getSize();
+            $photo->width = $width;
+            $photo->height = $height;
             $photosModel->insert($photo);
 
             $photoId = $photosModel->getInsertID();
 
             $activity = new ActivityLibrary();
             $activity->owner($placesData->user_id)->photo($photoId, $placesData->id);
-        } else {
-           return $this->failValidationErrors($photo->getErrorString());
+
+            // Update the time and photos count
+            $placesModel->update($id, ['photos' => $placesData->photos + 1]);
+
+            $photoPath = PATH_PHOTOS . $placesData->id . '/';
+
+            return $this->respondCreated((object)[
+                'id' => $photoId,
+                'full' => $photoPath . $name . '.' . $ext,
+                'preview' => $photoPath . $name . '_preview.' . $ext,
+                'width' => $photo->width,
+                'height' => $photo->height,
+                'title' => $photo->title_en ?: $photo->title_ru,
+                'placeId' => $photo->place_id
+            ]);
+
+        } catch (Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+            return $this->failServerError(lang('Photos.uploadError'));
         }
-
-        // Update the time and photos count
-        $placesModel->update($id, ['photos' => $placesData->photos + 1]);
-
-        $photoPath = PATH_PHOTOS . $placesData->id . '/';
-
-        return $this->respondCreated((object) [
-            'id'      => $photoId,
-            'full'    => $photoPath . $name . '.' . $ext,
-            'preview' => $photoPath . $name . '_preview.' . $ext,
-            'width'   => $photo->width,
-            'height'  => $photo->height,
-            'title'   => $photo->title_en ?: $photo->title_ru,
-            'placeId' => $photo->place_id
-        ]);
     }
 
     /**

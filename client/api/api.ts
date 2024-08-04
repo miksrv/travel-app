@@ -214,7 +214,7 @@ export const API = createApi({
                 method: 'POST',
                 url: `photos/upload/${data.place}`
             }),
-            transformErrorResponse: (response) => response.data
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
         photoRotateItem: builder.mutation<ApiTypes.ResponsePhotoRotateItem, string>({
             query: (photoId) => ({
