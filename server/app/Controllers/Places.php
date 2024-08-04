@@ -1,5 +1,6 @@
 <?php namespace App\Controllers;
 
+use App\Entities\Photo;
 use App\Entities\Place;
 use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
@@ -370,8 +371,9 @@ class Places extends ResourceController {
             return $this->failUnauthorized();
         }
 
-        $input = $this->request->getJSON();
-        $rules = [
+        $locale = $this->request->getLocale();
+        $input  = $this->request->getJSON();
+        $rules  = [
             'title'    => 'required|min_length[8]|max_length[200]',
             'category' => 'required|is_not_unique[category.name]',
             'lat'      => 'numeric|min_length[3]',
@@ -426,7 +428,7 @@ class Places extends ResourceController {
 
             $content = new \App\Entities\PlaceContent();
             $content->place_id = $newPlaceId;
-            $content->language = 'ru';
+            $content->language = $locale;
             $content->user_id  = $this->session->user?->id;
             $content->title    = $placeTitle;
             $content->content  = $placeContent;
@@ -442,6 +444,10 @@ class Places extends ResourceController {
 
         $activity = new ActivityLibrary();
         $activity->place($newPlaceId);
+
+        if (!empty($input->photos)) {
+            $this->savePhotos($input->photos, $newPlaceId, $place, $content);
+        }
 
         return $this->respondCreated(['id' => $newPlaceId]);
     }
@@ -610,6 +616,84 @@ class Places extends ResourceController {
         $userActivity->owner($placeData->user_id)->cover($id);
 
         return $this->respondUpdated();
+    }
+
+    /**
+     * @throws ReflectionException
+     */
+    protected function savePhotos(array $photos, string $placeId, \App\Entities\Place $place, \App\Entities\PlaceContent $content) {
+        if (empty($photos) || empty($placeId)) {
+            return false;
+        }
+
+        $photoCount = 0;
+
+        if (!is_dir(PATH_PHOTOS . $placeId)) {
+            mkdir(PATH_PHOTOS . $placeId,0777, TRUE);
+        }
+
+        foreach ($photos as $photoFile) {
+            if (!file_exists(UPLOAD_TEMPORARY . $photoFile)) {
+                continue;
+            }
+
+            $file = new File(UPLOAD_TEMPORARY . $photoFile);
+            $name = pathinfo($file, PATHINFO_FILENAME);
+            $ext  = $file->getExtension();
+
+            list($width, $height) = getimagesize($file->getRealPath());
+
+            helper('exif');
+
+            $coordinates = getPhotoLocation($file->getRealPath());
+            $photosModel = new PhotosModel();
+
+            // Save photo to DB
+            $photo = new Photo();
+            $photo->lat       = $coordinates?->lat ?? $place->lat;
+            $photo->lon       = $coordinates?->lon ?? $place->lon;
+            $photo->place_id  = $placeId;
+            $photo->user_id   = $this->session->user?->id;
+            $photo->title_en  = $content->title;
+            $photo->title_ru  = $content->title;
+            $photo->filename  = $name;
+            $photo->extension = $ext;
+            $photo->filesize  = $file->getSize();
+            $photo->width     = $width;
+            $photo->height    = $height;
+            $photosModel->insert($photo);
+
+            $photoId = $photosModel->getInsertID();
+
+            $activity = new ActivityLibrary();
+            $activity->photo($photoId, $placeId);
+
+            $photoPath = PATH_PHOTOS . $placeId . '/';
+
+            // If this first uploaded photo - we automated make place cover image
+            if ($photoCount === 0) {
+                $image = Services::image('gd'); // imagick
+                $image->withFile($file->getRealPath())
+                    ->fit(PLACE_COVER_WIDTH, PLACE_COVER_HEIGHT)
+                    ->save($photoPath . '/cover.jpg');
+
+                $image->withFile($file->getRealPath())
+                    ->fit(PLACE_COVER_PREVIEW_WIDTH, PLACE_COVER_PREVIEW_HEIGHT)
+                    ->save($photoPath . '/cover_preview.jpg');
+            }
+
+            // Move photos
+            $file->move($photoPath);
+
+            $fileName = explode('.', $photoFile);
+            $file     = new File(UPLOAD_TEMPORARY . $fileName[0] . '_preview.' . $fileName[1]);
+            $file->move($photoPath);
+
+            $photoCount++;
+        }
+
+        // Update the time and photos count
+        $this->model->update($placeId, ['photos' => $photoCount]);
     }
 
     /**

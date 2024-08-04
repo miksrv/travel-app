@@ -113,12 +113,6 @@ class Photos extends ResourceController {
             return $this->failValidationErrors('There is no point with this ID');
         }
 
-//        if (!$this->validate([
-//            'image' => 'uploaded[image]|is_image[image]|mime_in[image,image/jpg,image/jpeg,image/gif,image/png,image/webp,image/heic]'
-//        ])) {
-//            return $this->failValidationErrors($this->validator->getErrors());
-//        }
-
         if ($photo->hasMoved()) {
             return $this->failValidationErrors($photo->getErrorString());
         }
@@ -130,7 +124,7 @@ class Photos extends ResourceController {
 
             $file = new File($photoDir . $newName);
             $name = pathinfo($file, PATHINFO_FILENAME);
-            $ext = $file->getExtension();
+            $ext  = $file->getExtension();
 
             list($width, $height) = getimagesize($file->getRealPath());
 
@@ -173,17 +167,17 @@ class Photos extends ResourceController {
 
             // Save photo to DB
             $photo = new Photo();
-            $photo->lat = $coordinates?->lat ?? $placesData->lat;
-            $photo->lon = $coordinates?->lon ?? $placesData->lon;
-            $photo->place_id = $placesData->id;
-            $photo->user_id = $this->session->user?->id;
-            $photo->title_en = $placeContent->title($id);
-            $photo->title_ru = $placeContent->title($id);
-            $photo->filename = $name;
+            $photo->lat       = $coordinates?->lat ?? $placesData->lat;
+            $photo->lon       = $coordinates?->lon ?? $placesData->lon;
+            $photo->place_id  = $placesData->id;
+            $photo->user_id   = $this->session->user?->id;
+            $photo->title_en  = $placeContent->title($id);
+            $photo->title_ru  = $placeContent->title($id);
+            $photo->filename  = $name;
             $photo->extension = $ext;
-            $photo->filesize = $file->getSize();
-            $photo->width = $width;
-            $photo->height = $height;
+            $photo->filesize  = $file->getSize();
+            $photo->width     = $width;
+            $photo->height    = $height;
             $photosModel->insert($photo);
 
             $photoId = $photosModel->getInsertID();
@@ -197,12 +191,12 @@ class Photos extends ResourceController {
             $photoPath = PATH_PHOTOS . $placesData->id . '/';
 
             return $this->respondCreated((object)[
-                'id' => $photoId,
-                'full' => $photoPath . $name . '.' . $ext,
+                'id'      => $photoId,
+                'full'    => $photoPath . $name . '.' . $ext,
                 'preview' => $photoPath . $name . '_preview.' . $ext,
-                'width' => $photo->width,
-                'height' => $photo->height,
-                'title' => $photo->title_en ?: $photo->title_ru,
+                'width'   => $photo->width,
+                'height'  => $photo->height,
+                'title'   => $photo->title_en ?: $photo->title_ru,
                 'placeId' => $photo->place_id
             ]);
 

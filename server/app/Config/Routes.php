@@ -28,12 +28,16 @@ $routes->options('places/(:alphanum)/(:alphanum)', 'Places');
 
 $routes->get('photos', 'Photos::list');
 $routes->post('photos', 'Photos::create');
+$routes->post('photos/upload/temporary', 'PhotosTemporary::upload');
 $routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
+$routes->patch('photos/rotate/temporary/(:any)', 'PhotosTemporary::rotate/$1');
 $routes->patch('photos/rotate/(:alphanum)', 'Photos::rotate/$1');
+$routes->delete('photos/temporary/(:any)', 'PhotosTemporary::delete/$1');
 $routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
 $routes->options('photos', 'Photos');
 $routes->options('photos/(:alphanum)', 'Photos');
-$routes->options('photos/(:alphanum)/(:alphanum)', 'Photos');
+$routes->options('photos/(:alphanum)/(:any)', 'Photos');
+$routes->options('photos/rotate/temporary/(:any)', 'PhotosTemporary');
 
 $routes->get('notifications/updates', 'Notifications::updates');
 $routes->get('notifications/list', 'Notifications::list');
