@@ -1,4 +1,6 @@
-<?php namespace App\Database\Seeds;
+<?php
+
+namespace App\Database\Seeds;
 
 use App\Models\OverpassCategoryModel;
 use CodeIgniter\Database\Seeder;
@@ -105,7 +107,8 @@ class OverpassCategorySeeder extends Seeder
     /**
      * @throws ReflectionException
      */
-    public function run() {
+    public function run(): void
+    {
         $CategoryModel  = new OverpassCategoryModel();
         $tempInsertData = [];
 

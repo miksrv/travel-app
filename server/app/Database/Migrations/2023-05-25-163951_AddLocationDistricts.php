@@ -1,9 +1,12 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class AddLocationDistricts extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'id' => [
                 'type'           => 'INT',
@@ -46,7 +49,8 @@ class AddLocationDistricts extends Migration {
         $this->forge->createTable('location_districts');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('location_districts');
     }
 }

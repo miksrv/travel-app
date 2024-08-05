@@ -38,7 +38,8 @@ class UserLevelsSeeder extends Seeder {
         [30, 30700, 'Global Guide',              'Глобальный гид'],
     ];
 
-    public function run(): void {
+    public function run(): void
+    {
         $userLevelsModel = new UsersLevelsModel();
         $tempInsertData  = [];
 

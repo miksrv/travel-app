@@ -8,16 +8,15 @@ class PhotoEntity extends Entity {
     protected $attributes = [
         'place_id'  => null,
         'user_id'   => null,
-        'lat'       => null,
-        'lon'       => null,
+        'lat'       => 0,
+        'lon'       => 0,
         'title_en'  => null,
         'title_ru'  => null,
         'filename'  => null,
         'extension' => null,
-        'filesize'  => null,
-        'width'     => null,
-        'height'    => null,
-        'created'   => null,
+        'filesize'  => 0,
+        'width'     => 0,
+        'height'    => 0,
     ];
 
     protected $dates = [

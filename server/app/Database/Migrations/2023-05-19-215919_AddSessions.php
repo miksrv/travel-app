@@ -1,9 +1,12 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class AddSessions extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
@@ -42,7 +45,8 @@ class AddSessions extends Migration {
         $this->forge->createTable('sessions');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('sessions');
     }
 }

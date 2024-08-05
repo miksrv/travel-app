@@ -8,7 +8,7 @@ class TagEntity extends Entity {
     protected $attributes = [
         'title_en' => null,
         'title_ru' => null,
-        'count'    => null
+        'count'    => 0
     ];
 
     protected $dates = [

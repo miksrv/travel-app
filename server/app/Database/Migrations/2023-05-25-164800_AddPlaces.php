@@ -1,9 +1,12 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class AddPlaces extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
@@ -105,7 +108,8 @@ class AddPlaces extends Migration {
         $this->forge->createTable('places');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('places');
     }
 }

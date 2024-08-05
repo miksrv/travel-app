@@ -1,9 +1,12 @@
-<?php namespace App\Database\Migrations;
+<?php
+
+namespace App\Database\Migrations;
 
 use CodeIgniter\Database\Migration;
 
 class AddPlacesComments extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
@@ -44,7 +47,8 @@ class AddPlacesComments extends Migration {
         $this->forge->createTable('comments');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('comments');
     }
 }

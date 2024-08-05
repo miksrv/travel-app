@@ -47,7 +47,8 @@ class AddOverpassCategory extends Migration {
         $this->forge->createTable('overpass_category');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('overpass_category');
     }
 }

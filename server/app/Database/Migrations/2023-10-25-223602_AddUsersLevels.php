@@ -5,7 +5,8 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 
 class AddUsersLevels extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'level' => [
                 'type'       => 'SMALLINT',
@@ -34,7 +35,8 @@ class AddUsersLevels extends Migration {
         $this->forge->createTable('users_levels');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('users_levels');
     }
 }

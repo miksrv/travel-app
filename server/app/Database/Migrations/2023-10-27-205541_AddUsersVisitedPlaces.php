@@ -5,7 +5,8 @@ namespace App\Database\Migrations;
 use CodeIgniter\Database\Migration;
 
 class AddUsersVisitedPlaces extends Migration {
-    public function up() {
+    public function up()
+    {
         $this->forge->addField([
             'id' => [
                 'type'       => 'VARCHAR',
@@ -31,7 +32,8 @@ class AddUsersVisitedPlaces extends Migration {
         $this->forge->createTable('users_visited_places');
     }
 
-    public function down() {
+    public function down()
+    {
         $this->forge->dropTable('users_visited_places');
     }
 }
