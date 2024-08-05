@@ -1,5 +1,6 @@
-<?php namespace App\Models;
+<?php
 
+namespace App\Models;
 
 class UsersBookmarksModel extends ApplicationBaseModel {
     protected $table            = 'users_bookmarks';

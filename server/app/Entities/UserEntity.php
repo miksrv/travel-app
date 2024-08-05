@@ -1,8 +1,33 @@
-<?php namespace App\Entities;
+<?php
+
+namespace App\Entities;
 
 use CodeIgniter\Entity\Entity;
 
 class UserEntity extends Entity {
+    protected $attributes = [
+        'id'         => null,
+        'name'       => null,
+        'email'      => null,
+        'password'   => null,
+        'role'       => null,
+        'auth_type'  => null,
+        'locale'     => null,
+        'level'      => null,
+        'experience' => null,
+        'reputation' => null,
+        'website'    => null,
+        'avatar'     => null,
+        'settings'   => null,
+    ];
+
+    protected $dates = [
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'activity_at'
+    ];
+
     protected $casts = [
         'id'          => 'string',
         'name'        => 'string',
