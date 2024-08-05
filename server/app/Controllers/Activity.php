@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\PlacesContent;
 use App\Models\CategoryModel;
@@ -17,7 +19,8 @@ class Activity extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
         $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
         $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
@@ -66,7 +69,8 @@ class Activity extends ResourceController {
      * @param PlacesContent|null $placeContent
      * @return array
      */
-    protected function _groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array {
+    protected function _groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array
+    {
         $categoriesModel = new CategoryModel();
         $categoriesData  = $categoriesModel->findAll();
 

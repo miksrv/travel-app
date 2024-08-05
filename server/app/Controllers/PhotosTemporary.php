@@ -23,7 +23,6 @@ class PhotosTemporary extends ResourceController {
     public function __construct() {
         new LocaleLibrary();
 
-
         $this->session = new SessionLibrary();
     }
 

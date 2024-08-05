@@ -1,4 +1,6 @@
-<?php namespace App\Libraries;
+<?php
+
+namespace App\Libraries;
 
 use App\Models\ActivityModel;
 use App\Models\SendingMail;
@@ -15,7 +17,8 @@ class ActivityLibrary {
 
     protected array $types = ['photo', 'place', 'rating', 'edit', 'cover', 'comment'];
 
-    public function owner(string $userId): static {
+    public function owner(string $userId): static
+    {
         $this->owner = $userId;
 
         return $this;
@@ -26,7 +29,8 @@ class ActivityLibrary {
      * @param $placeId
      * @throws ReflectionException
      */
-    public function photo($photoId, $placeId): void {
+    public function photo($photoId, $placeId): void
+    {
         $this->_add('photo', $photoId, $placeId);
     }
 
@@ -34,21 +38,24 @@ class ActivityLibrary {
      * @param $placeId
      * @throws ReflectionException
      */
-    public function place($placeId): void {
+    public function place($placeId): void
+    {
         $this->_add('place', null, $placeId);
     }
 
     /**
      * @throws ReflectionException
      */
-    public function edit($placeId): void {
+    public function edit($placeId): void
+    {
         $this->_add('edit', null, $placeId);
     }
 
     /**
      * @throws ReflectionException
      */
-    public function cover($placeId): void {
+    public function cover($placeId): void
+    {
         $this->_add('cover', null, $placeId);
     }
 
@@ -57,7 +64,8 @@ class ActivityLibrary {
      * @param $ratingId
      * @throws ReflectionException
      */
-    public function rating($placeId, $ratingId): void {
+    public function rating($placeId, $ratingId): void
+    {
         $this->_add('rating', null, $placeId, $ratingId);
     }
 
@@ -66,7 +74,8 @@ class ActivityLibrary {
      * @param $commentId
      * @throws ReflectionException
      */
-    public function comment($placeId, $commentId): void {
+    public function comment($placeId, $commentId): void
+    {
         $this->_add('comment', null, $placeId, null, $commentId);
     }
 
@@ -85,8 +94,7 @@ class ActivityLibrary {
         string|null $placeId  = null,
         string|null $ratingId = null,
         string|null $commentId = null,
-    ): void
-    {
+    ): void {
         if (!in_array($type, $this->types)) {
             return ;
         }
@@ -120,9 +128,10 @@ class ActivityLibrary {
             }
         }
 
-        $activity = new \App\Entities\Activity();
+        $activity = new \App\Entities\ActivityEntity();
 
         $activity->type       = $type;
+        $activity->views      = 0;
         $activity->session_id = !$session->isAuth ? $session->id : null;
         $activity->user_id    = $session->user?->id ?? null;
         $activity->photo_id   = $photoId;
