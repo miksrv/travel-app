@@ -558,6 +558,35 @@ class Places extends ResourceController {
     }
 
     /**
+     * Delete place by ID (Only for administrator role)
+     * @param $id
+     * @return ResponseInterface
+     */
+    public function delete($id = null): ResponseInterface {
+        if (!$this->session->isAuth && $this->session->user->role !== 'admin') {
+            return $this->failUnauthorized();
+        }
+
+        if (!$this->model->find($id)) {
+            return $this->failNotFound(lang('Places.coverPointNotExist'));
+        }
+
+        helper('filesystem');
+
+        // Remove all photos
+        $photosModel = new PhotosModel();
+        $photosModel->where('place_id', $id)->delete(null, true);
+
+        // Remove all files and place directory
+        delete_files(UPLOAD_PHOTOS . $id, true);
+
+        // Remove place and all DB entitles such as activity, rating, bookmarks etc.
+        $this->model->delete($id, true);
+
+        return $this->respondDeleted();
+    }
+
+    /**
      * @throws ReflectionException
      */
     public function cover($id = null): ResponseInterface {
