@@ -8,10 +8,10 @@ class PlaceContentEntity extends Entity {
     protected $attributes = [
         'place_id' => null,
         'user_id'  => null,
-        'locale'   => null,
+        'locale'   => 'ru',
         'title'    => null,
         'content'  => null,
-        'delta'    => null,
+        'delta'    => 0,
     ];
 
     protected $dates = [

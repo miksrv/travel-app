@@ -423,24 +423,16 @@ class Places extends ResourceController {
             $placeTags->saveTags($input->tags, $newPlaceId);
         }
 
-        try {
-            $placesContentModel = new PlacesContentModel();
+        $placesContentModel = new PlacesContentModel();
 
-            $content = new \App\Entities\PlaceContentEntity();
-            $content->place_id = $newPlaceId;
-            $content->language = $locale;
-            $content->user_id  = $this->session->user?->id;
-            $content->title    = $placeTitle;
-            $content->content  = $placeContent;
+        $content = new \App\Entities\PlaceContentEntity();
+        $content->place_id = $newPlaceId;
+        $content->locale   = $locale;
+        $content->user_id  = $this->session->user?->id;
+        $content->title    = $placeTitle;
+        $content->content  = $placeContent;
 
-            $placesContentModel->insert($content);
-        } catch (Exception $e) {
-            $this->model->delete($newPlaceId);
-
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failValidationErrors(lang('Places.createFailError'));
-        }
+        $placesContentModel->insert($content);
 
         $activity = new ActivityLibrary();
         $activity->place($newPlaceId);

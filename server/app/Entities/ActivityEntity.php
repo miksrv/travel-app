@@ -7,7 +7,7 @@ use CodeIgniter\Entity\Entity;
 class ActivityEntity extends Entity {
     protected $attributes = [
         'type'       => null,
-        'views'      => null,
+        'views'      => 0,
         'session_id' => null,
         'user_id'    => null,
         'photo_id'   => null,

@@ -131,7 +131,6 @@ class ActivityLibrary {
         $activity = new \App\Entities\ActivityEntity();
 
         $activity->type       = $type;
-        $activity->views      = 0;
         $activity->session_id = !$session->isAuth ? $session->id : null;
         $activity->user_id    = $session->user?->id ?? null;
         $activity->photo_id   = $photoId;

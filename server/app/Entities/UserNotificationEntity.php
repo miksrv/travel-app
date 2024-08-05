@@ -7,7 +7,7 @@ use CodeIgniter\Entity\Entity;
 class UserNotificationEntity extends Entity {
     protected $attributes = [
         'type'        => null,
-        'read'        => null,
+        'read'        => false,
         'meta'        => null,
         'user_id'     => null,
         'activity_id' => null,
