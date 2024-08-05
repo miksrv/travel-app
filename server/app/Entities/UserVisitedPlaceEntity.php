@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class UserVisitedPlace extends Entity {
+class UserVisitedPlaceEntity extends Entity {
     protected $casts = [
         'user_id'  => 'string',
         'place_id' => 'integer'

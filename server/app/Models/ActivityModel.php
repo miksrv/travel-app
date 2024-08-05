@@ -2,11 +2,11 @@
 
 namespace App\Models;
 
-class ActivityModel extends MyBaseModel {
+class ActivityModel extends ApplicationBaseModel {
     protected $table            = 'activity';
     protected $primaryKey       = 'id';
-    protected $useAutoIncrement = false;
     protected $returnType       = \App\Entities\ActivityEntity::class;
+    protected $useAutoIncrement = false;
     protected $useSoftDeletes   = true;
 
     // protected array $hiddenFields = ['id'];

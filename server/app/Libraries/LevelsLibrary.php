@@ -1,7 +1,7 @@
 <?php namespace App\Libraries;
 
-use App\Entities\User;
-use App\Entities\UserLevel;
+use App\Entities\UserEntity;
+use App\Entities\UserLevelEntity;
 use App\Models\ActivityModel;
 use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
@@ -30,7 +30,7 @@ class LevelsLibrary {
      * @return $this
      * @throws ReflectionException
      */
-    public function calculate(User $user): static {
+    public function calculate(UserEntity $user): static {
         $activityModel = new ActivityModel();
         $activityData  = $activityModel
             ->select('type')
@@ -142,10 +142,10 @@ class LevelsLibrary {
 
     /**
      * We simply find the current user level in the database and return it, no calculations required
-     * @param User $user
-     * @return UserLevel|null
+     * @param UserEntity $user
+     * @return UserLevelEntity|null
      */
-    public function getLevelData(User $user): ?object {
+    public function getLevelData(UserEntity $user): ?object {
         $request    = Services::request();
         $levelIndex = array_search((int) $user->level, array_column($this->userLevels, 'level'));
 
@@ -168,7 +168,7 @@ class LevelsLibrary {
         return $result;
     }
 
-    protected function getUserLevel(int $experience): UserLevel {
+    protected function getUserLevel(int $experience): UserLevelEntity {
         $request = Services::request();
         $level   = $this->_findUserLevel($experience);
         $locale  = $request->getLocale();
@@ -183,9 +183,9 @@ class LevelsLibrary {
     /**
      * We find the current level by the amount of user experience
      * @param int $experience
-     * @return UserLevel
+     * @return UserLevelEntity
      */
-    protected function _findUserLevel(int $experience): UserLevel {
+    protected function _findUserLevel(int $experience): UserLevelEntity {
         // If the experience is zero, then we immediately return the very first level (they are sorted by experience)
         if ($experience === 0) {
             return $this->userLevels[0];

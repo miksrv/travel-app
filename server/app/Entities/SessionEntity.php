@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Session extends Entity {
+class SessionEntity extends Entity {
     protected $casts = [
         'id'      => 'string',
         'user_id' => 'string',

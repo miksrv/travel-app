@@ -1,13 +1,13 @@
-<?php namespace App\Models;
+<?php
 
-class PhotosModel extends MyBaseModel {
-    protected $table      = 'photos';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class PhotosModel extends ApplicationBaseModel {
+    protected $table            = 'photos';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\PhotoEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType     = \App\Entities\Photo::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['updated_at', 'deleted_at'];
 
@@ -32,13 +32,13 @@ class PhotosModel extends MyBaseModel {
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    protected $validationRules = [];
+    protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -46,14 +46,4 @@ class PhotosModel extends MyBaseModel {
     protected $afterFind      = ['prepareOutput'];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
 }

@@ -178,7 +178,7 @@ class ActivityLibrary {
                     return ;
                 }
 
-                $email = new \App\Entities\SendingMail();
+                $email = new \App\Entities\SendingMailEntity();
                 $email->activity_id = $model->getInsertID();
                 $email->email       = $ownerUser->email;
                 $email->locale      = $ownerUser->locale;

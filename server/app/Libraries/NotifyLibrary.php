@@ -1,6 +1,6 @@
 <?php namespace App\Libraries;
 
-use App\Entities\UserNotification;
+use App\Entities\UserNotificationEntity;
 use App\Models\UsersNotificationsModel;
 use ReflectionException;
 
@@ -21,7 +21,7 @@ class NotifyLibrary {
         array|object|null $value = null
     ): void
     {
-        $notification = new UserNotification();
+        $notification = new UserNotificationEntity();
         $notification->type        = $type;
         $notification->meta        = $value ?? '';
         $notification->user_id     = $userId;

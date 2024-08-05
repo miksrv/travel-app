@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Entities\Photo;
+use App\Entities\PhotoEntity;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
 use CodeIgniter\Files\File;
@@ -78,7 +78,7 @@ class PhotosTemporary extends ResourceController {
                 ->fit(PHOTO_PREVIEW_WIDTH, PHOTO_PREVIEW_HEIGHT)
                 ->save(UPLOAD_TEMPORARY . $name . '_preview.' . $ext);
 
-            $photo = new Photo();
+            $photo = new PhotoEntity();
             $photo->filename  = $name;
             $photo->extension = $ext;
             $photo->width     = $width;

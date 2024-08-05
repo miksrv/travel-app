@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Photo extends Entity {
+class PhotoEntity extends Entity {
     protected $casts = [
         'place_id'  => 'string',
         'user_id'   => 'string',

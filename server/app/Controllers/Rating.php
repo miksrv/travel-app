@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Libraries\SessionLibrary;
@@ -14,7 +16,8 @@ class Rating extends ResourceController {
 
     protected SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->session = new SessionLibrary();
@@ -24,7 +27,8 @@ class Rating extends ResourceController {
      * @param $id
      * @return ResponseInterface
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $ratingModel = new RatingModel();
         $ratingData  = $ratingModel->select('value, session_id, user_id')->where(['place_id' => $id])->findAll();
         $response    = ['rating' => 0, 'count'  => 0];
@@ -52,7 +56,8 @@ class Rating extends ResourceController {
      * Adding a new rating
      * @return ResponseInterface
      */
-    public function set(): ResponseInterface {
+    public function set(): ResponseInterface
+    {
         try {
             $input = $this->request->getJSON();
 
@@ -68,7 +73,7 @@ class Rating extends ResourceController {
             $ratingData  = $ratingModel->where('place_id', $placesData->id)->findAll();
 
             $inputRating  = (int) $input->score;
-            $alreadyVoted = null; // Пользователь меняет свою оценку? Будем тут хранить ID записи рейтинга
+            $alreadyVoted = null; // User changes their rating? We will store the rating record ID here
             $ratingValue  = abs($inputRating);
 
             if (!$placesData) {
@@ -77,7 +82,7 @@ class Rating extends ResourceController {
 
             helper('rating');
 
-            // Рассчитаем новую оценку для места
+            // Let's calculate a new rating for the place
             if ($ratingData) {
                 foreach ($ratingData as $item) {
                     if ($item->session_id === $this->session->id || $item->user_id === $this->session->user?->id) {
@@ -93,11 +98,11 @@ class Rating extends ResourceController {
                     : null;
             }
 
-            // Теперь изменим репутацию автора материала
+            // Now let's change the author's reputation
             $userRating = $usersData->reputation + transformRating($inputRating);
 
-            // Создаем новую модель рейтинга для сохранения
-            $rating = new \App\Entities\Rating();
+            // We are creating a new rating model for saving
+            $rating = new \App\Entities\RatingEntity();
             $rating->place_id   = $input->place;
             $rating->user_id    = $this->session->user?->id ?? null;
             $rating->session_id = $this->session->id;
@@ -106,13 +111,13 @@ class Rating extends ResourceController {
             $usersModel->update($placesData->user_id, ['reputation' => $userRating, 'updated_at' => $usersData->updated_at]);
             $placesModel->update($placesData->id, ['rating' => $ratingValue, 'updated_at' => $placesData->updated_at]);
 
-            // Редактируем оценку пользователя
+            // Editing user rating
             if ($alreadyVoted) {
                 $ratingModel->update($alreadyVoted, ['value' => $inputRating]);
                 return $this->respondUpdated();
             }
 
-            // Добавляем новую оценку (пользователь ни разу не голосовал еще)
+            // Adding a new rating (the user has never voted yet)
             $ratingModel->insert($rating);
 
             /* ACTIVITY */

@@ -1,15 +1,15 @@
-<?php namespace App\Models;
+<?php
 
-class RatingModel extends MyBaseModel {
-    protected $table      = 'rating';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class RatingModel extends ApplicationBaseModel {
+    protected $table            = 'rating';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\RatingEntity::class;
     protected $useAutoIncrement = false;
+    protected $useSoftDeletes   = true;
 
-    protected $returnType     = \App\Entities\Rating::class;
-    protected $useSoftDeletes = true;
-
-    protected array $hiddenFields = [];
+    // protected array $hiddenFields = [];
 
     protected $allowedFields = [
         'place_id',
@@ -31,7 +31,7 @@ class RatingModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -39,14 +39,4 @@ class RatingModel extends MyBaseModel {
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
 }

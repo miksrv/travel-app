@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Place extends Entity {
+class PlaceEntity extends Entity {
     protected $casts = [
         'id'          => 'string',
         'lat'         => 'float',

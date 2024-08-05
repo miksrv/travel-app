@@ -1,12 +1,10 @@
 <?php namespace App\Models;
 
-use App\Entities\UserVisitedPlace;
-
-class UsersVisitedPlacesModel extends MyBaseModel {
+class UsersVisitedPlacesModel extends ApplicationBaseModel {
     protected $table            = 'users_visited_places';
     protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\UserVisitedPlaceEntity::class;
     protected $useAutoIncrement = false;
-    protected $returnType       = UserVisitedPlace::class;
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
@@ -14,15 +12,19 @@ class UsersVisitedPlacesModel extends MyBaseModel {
         'place_id'
     ];
 
-    // Validation
+    protected $useTimestamps = true;
+    protected $dateFormat    = 'datetime';
+    protected $createdField  = 'created_at';
+    protected $updatedField  = 'updated_at';
+    protected $deletedField  = 'deleted_at';
+
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -30,14 +32,4 @@ class UsersVisitedPlacesModel extends MyBaseModel {
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
 }

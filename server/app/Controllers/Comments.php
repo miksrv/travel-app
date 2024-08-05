@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Entities\Comment;
+use App\Entities\CommentEntity;
 use App\Libraries\ActivityLibrary;
 use App\Libraries\SessionLibrary;
 use App\Models\CommentsModel;
@@ -88,7 +88,7 @@ class Comments extends ResourceController {
             return $this->failValidationErrors('Place with this ID does not exist');
         }
 
-        $comment = new Comment();
+        $comment = new CommentEntity();
         $comment->place_id  = $placesData->id;
         $comment->user_id   = $this->session->user->id;
         $comment->answer_id = $input?->answerId ?? null;

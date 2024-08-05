@@ -1,6 +1,6 @@
 <?php namespace App\Libraries;
 
-use App\Entities\User;
+use App\Entities\UserEntity;
 use App\Models\SessionsHistoryModel;
 use App\Models\SessionsModel;
 use App\Models\UsersModel;
@@ -12,7 +12,7 @@ class SessionLibrary {
     public string | null $id = null;
     public float | null $lat = null;
     public float | null $lon = null;
-    public User | null $user = null;
+    public UserEntity | null $user = null;
     public object | null $settings = null;
     public bool $isAuth = false;
 
@@ -67,7 +67,7 @@ class SessionLibrary {
     /**
      * @throws ReflectionException
      */
-    public function authorization(User $user): static {
+    public function authorization(UserEntity $user): static {
         unset($user->auth_type);
 
         $this->user   = $user;
@@ -87,7 +87,7 @@ class SessionLibrary {
         }
 
         if ($this->id) {
-            $updateSession = new \App\Entities\Session();
+            $updateSession = new \App\Entities\SessionEntity();
             $updateSession->updated_at = time();
             $updateSession->user_ip    = $this->ip;
 
@@ -100,7 +100,7 @@ class SessionLibrary {
             return $this;
         }
 
-        $session = new \App\Entities\Session();
+        $session = new \App\Entities\SessionEntity();
         $session->id      = uniqid('s', true);
         $session->user_ip = $this->ip;
         $session->user_id = $this->user ? $this->user->id : null;

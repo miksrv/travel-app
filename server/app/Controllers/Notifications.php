@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
@@ -13,7 +15,8 @@ class Notifications extends ResourceController {
 
     protected $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->session = new SessionLibrary();
         $this->model   = new UsersNotificationsModel();
 
@@ -30,8 +33,8 @@ class Notifications extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function updates(): ResponseInterface {
-        $result = [];
+    public function updates(): ResponseInterface
+    {
         $notifyData  = $this->model
             ->select('users_notifications.*, activity.type as activity_type, activity.place_id')
             ->join('activity', 'activity.id = users_notifications.activity_id', 'left')
@@ -50,7 +53,7 @@ class Notifications extends ResourceController {
 
         if (!$notifyData) {
             return $this->respond([
-                'items' => $result,
+                'items' => [],
                 'count' => $notifyCount
             ]);
         }
@@ -66,7 +69,8 @@ class Notifications extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $limit  = $this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 10;
         $offset = $this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0;
 
@@ -99,7 +103,8 @@ class Notifications extends ResourceController {
      * Delete all notifications for the current user
      * @return ResponseInterface
      */
-    public function clear(): ResponseInterface {
+    public function clear(): ResponseInterface
+    {
         $this->model
             ->where('users_notifications.user_id', $this->session->user->id)
             ->delete();
@@ -118,7 +123,8 @@ class Notifications extends ResourceController {
      * @return array
      * @throws ReflectionException
      */
-    private function _formatNotifyList(array $notifyData): array {
+    private function _formatNotifyList(array $notifyData): array
+    {
         if (empty($notifyData)) {
             return [];
         }

@@ -1,13 +1,13 @@
-<?php namespace App\Models;
+<?php
 
-class LocationCountriesModel extends MyBaseModel {
-    protected $table      = 'location_countries';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class LocationCountriesModel extends ApplicationBaseModel {
+    protected $table            = 'location_countries';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\LocationCountryEntity::class;
     protected $useAutoIncrement = true;
-
-    protected $returnType     = \App\Entities\LocationCountry::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -26,6 +26,7 @@ class LocationCountriesModel extends MyBaseModel {
         'title_en' => 'required|string|max_length[50]',
         'title_ru' => 'required|string|max_length[50]',
     ];
+
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;

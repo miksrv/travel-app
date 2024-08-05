@@ -1,13 +1,13 @@
-<?php namespace App\Models;
+<?php
 
-class LocationDistrictsModel extends MyBaseModel {
-    protected $table      = 'location_districts';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class LocationDistrictsModel extends ApplicationBaseModel {
+    protected $table            = 'location_districts';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\LocationDistrictEntity::class;
     protected $useAutoIncrement = true;
-
-    protected $returnType     = \App\Entities\LocationDistrict::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -28,6 +28,7 @@ class LocationDistrictsModel extends MyBaseModel {
         'title_en' => 'required|string|max_length[100]',
         'title_ru' => 'required|string|max_length[100]'
     ];
+
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;

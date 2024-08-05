@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class Tag extends Entity {
+class TagEntity extends Entity {
     protected $casts = [
         'title_en' => 'string',
         'title_ru' => 'string',

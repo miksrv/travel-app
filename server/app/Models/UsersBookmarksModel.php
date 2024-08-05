@@ -1,7 +1,7 @@
 <?php namespace App\Models;
 
 
-class UsersBookmarksModel extends MyBaseModel {
+class UsersBookmarksModel extends ApplicationBaseModel {
     protected $table            = 'users_bookmarks';
     protected $primaryKey       = 'id';
     protected $useAutoIncrement = false;

@@ -1,13 +1,13 @@
-<?php namespace App\Models;
+<?php
 
-class PlacesModel extends MyBaseModel {
-    protected $table      = 'places';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class PlacesModel extends ApplicationBaseModel {
+    protected $table            = 'places';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\PlaceEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType     = \App\Entities\Place::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['deleted_at'];
 
@@ -52,12 +52,13 @@ class PlacesModel extends MyBaseModel {
         'locality_id' => 'integer|max_length[5]',
         'user_id'     => 'required|string|min_length[3]|max_length[40]',
     ];
+
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -66,17 +67,12 @@ class PlacesModel extends MyBaseModel {
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
     /**
      * @param string $category
      * @return int|string
      */
-    public function getCountPlacesByCategory(string $category): int|string {
+    public function getCountPlacesByCategory(string $category): int|string
+    {
         return $this
             ->select('id')
             ->where('category', $category)
@@ -88,7 +84,8 @@ class PlacesModel extends MyBaseModel {
      * @param float|null $lon
      * @return string
      */
-    public function makeDistanceSQL(float | null $lat, float | null $lon): string {
+    public function makeDistanceSQL(float | null $lat, float | null $lon): string
+    {
         if (!$lat || !$lon) {
             return '';
         }
@@ -101,7 +98,8 @@ class PlacesModel extends MyBaseModel {
      * @param string $distanceSQL
      * @return array|object|null
      */
-    public function getPlaceDataByID(string $id, string $distanceSQL): array|object|null {
+    public function getPlaceDataByID(string $id, string $distanceSQL): array|object|null
+    {
         return $this
             ->select('places.id, places.lat, places.lon, places.views, places.photos, places.rating, places.comments, 
                 places.bookmarks, places.updated_at as updated, places.created_at as created, places.category,

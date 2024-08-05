@@ -162,7 +162,7 @@ class Geocoder {
             return;
         }
 
-        $country = new \App\Entities\LocationCountry();
+        $country = new \App\Entities\LocationCountryEntity();
         $country->title_en = $titleEn;
         $country->title_ru = $titleRu;
 
@@ -201,7 +201,7 @@ class Geocoder {
             return;
         }
 
-        $region = new \App\Entities\LocationRegion();
+        $region = new \App\Entities\LocationRegionEntity();
         $region->country_id = $this->countryId;
         $region->title_en   = $titleEn;
         $region->title_ru   = $titleRu;
@@ -242,7 +242,7 @@ class Geocoder {
             return;
         }
 
-        $district = new \App\Entities\LocationDistrict();
+        $district = new \App\Entities\LocationDistrictEntity();
         $district->country_id = $this->countryId;
         $district->region_id  = $this->regionId;
         $district->title_en   = $titleEn;
@@ -285,7 +285,7 @@ class Geocoder {
             return;
         }
 
-        $locality = new \App\Entities\LocationLocality();
+        $locality = new \App\Entities\LocationLocalityEntity();
         $locality->country_id  = $this->countryId;
         $locality->region_id   = $this->regionId;
         $locality->district_id = $this->districtId;

@@ -4,7 +4,7 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MyBaseModel extends Model {
+class ApplicationBaseModel extends Model {
 
     protected array $hiddenFields = [];
 

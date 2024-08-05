@@ -2,12 +2,12 @@
 
 use CodeIgniter\Entity\Entity;
 
-class UserLevel extends Entity {
+class LocationDistrictEntity extends Entity {
     protected $casts = [
         'id'         => 'integer',
+        'country_id' => 'integer',
+        'region_id'  => 'integer',
         'title_en'   => 'string',
-        'title_ru'   => 'string',
-        'level'      => 'integer',
-        'experience' => 'integer'
+        'title_ru'   => 'string'
     ];
 }

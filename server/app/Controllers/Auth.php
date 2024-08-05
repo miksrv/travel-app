@@ -2,7 +2,7 @@
 
 namespace App\Controllers;
 
-use App\Entities\User;
+use App\Entities\UserEntity;
 use App\Libraries\GoogleClient;
 use App\Libraries\LevelsLibrary;
 use App\Libraries\LocaleLibrary;
@@ -56,7 +56,7 @@ class Auth extends ResourceController {
         helper('auth');
 
         $userModel = new UsersModel();
-        $user      = new User();
+        $user      = new UserEntity();
         $user->name      = $input['name'];
         $user->email     = $input['email'];
         $user->password  = hashUserPassword($input['password']);
@@ -322,7 +322,7 @@ class Auth extends ResourceController {
 
         // If there is no user with this email, then register a new user
         if (empty($userData)) {
-            $createUser = new User();
+            $createUser = new UserEntity();
             $createUser->name      = $serviceProfile->name;
             $createUser->email     = $serviceProfile->email;
             $createUser->auth_type = $authType;

@@ -1,12 +1,12 @@
-<?php namespace App\Models;
+<?php
 
-class PlacesContentModel extends MyBaseModel {
+namespace App\Models;
+
+class PlacesContentModel extends ApplicationBaseModel {
     protected $table            = 'places_content';
     protected $primaryKey       = 'id';
-
+    protected $returnType       = \App\Entities\PlaceContentEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType       = \App\Entities\PlaceContent::class;
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
@@ -31,7 +31,7 @@ class PlacesContentModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -39,14 +39,4 @@ class PlacesContentModel extends MyBaseModel {
     protected $afterFind      = [];
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
-
-    /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
 }

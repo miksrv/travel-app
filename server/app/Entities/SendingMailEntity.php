@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class SendingMail extends Entity {
+class SendingMailEntity extends Entity {
     protected $casts = [
         'user_id'     => 'string',
         'activity_id' => 'string',

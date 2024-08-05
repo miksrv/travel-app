@@ -1,13 +1,13 @@
-<?php namespace App\Models;
+<?php
 
-class LocationRegionsModel extends MyBaseModel {
-    protected $table      = 'location_regions';
-    protected $primaryKey = 'id';
+namespace App\Models;
 
+class LocationRegionsModel extends ApplicationBaseModel {
+    protected $table            = 'location_regions';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\LocationRegionEntity::class;
     protected $useAutoIncrement = true;
-
-    protected $returnType     = \App\Entities\LocationRegion::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['created_at', 'updated_at', 'deleted_at'];
 
@@ -27,6 +27,7 @@ class LocationRegionsModel extends MyBaseModel {
         'title_en' => 'required|string|max_length[100]',
         'title_ru' => 'required|string|max_length[100]',
     ];
+
     protected $validationMessages   = [];
     protected $skipValidation       = true;
     protected $cleanValidationRules = true;

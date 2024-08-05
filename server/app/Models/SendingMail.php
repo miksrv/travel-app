@@ -1,12 +1,14 @@
-<?php namespace App\Models;
+<?php
 
-class SendingMail extends MyBaseModel {
+namespace App\Models;
+
+class SendingMail extends ApplicationBaseModel {
     protected $table            = 'sending_mail';
     protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\SendingMailEntity::class;
     protected $useAutoIncrement = true;
-    protected $returnType       = \App\Entities\SendingMail::class;
     protected $useSoftDeletes   = true;
-    protected $protectFields    = true;
+
     protected $allowedFields    = [
         'activity_id',
         'status',
@@ -17,24 +19,19 @@ class SendingMail extends MyBaseModel {
         'sent_email',
     ];
 
-    protected bool $allowEmptyInserts = false;
-
-    // Dates
-    protected $useTimestamps = false;
+    protected $useTimestamps = true;
     protected $dateFormat    = 'datetime';
     protected $createdField  = 'created_at';
     protected $updatedField  = 'updated_at';
     protected $deletedField  = 'deleted_at';
 
-    // Validation
     protected $validationRules      = [];
     protected $validationMessages   = [];
     protected $skipValidation       = false;
     protected $cleanValidationRules = true;
 
-    // Callbacks
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -44,21 +41,12 @@ class SendingMail extends MyBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
-    /**
      * @param string $email
      * @param bool $activity
      * @return object|array|null
      */
-    public function checkSendLastEmail(string $email, bool $activity = true): object|array|null {
+    public function checkSendLastEmail(string $email, bool $activity = true): object|array|null
+    {
         return $this
             ->select('created_at')
             ->where("email = '{$email}' AND activity_id " . ($activity ? 'IS NOT NULL' : 'IS NULL'))

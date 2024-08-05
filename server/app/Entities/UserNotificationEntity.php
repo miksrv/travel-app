@@ -2,7 +2,7 @@
 
 use CodeIgniter\Entity\Entity;
 
-class UserNotification extends Entity {
+class UserNotificationEntity extends Entity {
     protected $casts = [
         'type'        => 'string',
         'read'        => 'bool',

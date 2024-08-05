@@ -1,12 +1,12 @@
-<?php namespace App\Models;
+<?php
 
-class PlacesTagsModel extends MyBaseModel {
+namespace App\Models;
+
+class PlacesTagsModel extends ApplicationBaseModel {
     protected $table            = 'places_tags';
     protected $primaryKey       = 'id';
-
-    protected $useAutoIncrement = false;
-
     protected $returnType       = 'object';
+    protected $useAutoIncrement = false;
     protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
@@ -26,7 +26,7 @@ class PlacesTagsModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -36,20 +36,11 @@ class PlacesTagsModel extends MyBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
-    /**
      * @param string $placeId
      * @return array
      */
-    public function getPlaceTags(string $placeId): array {
+    public function getPlaceTags(string $placeId): array
+    {
         return $this
             ->select('tags.id as id, count')
             ->join('tags', 'places_tags.tag_id = tags.id', 'left')
@@ -60,7 +51,8 @@ class PlacesTagsModel extends MyBaseModel {
     /**
      * @param string $placeId
      */
-    public function deletePlaceTags(string $placeId): void {
+    public function deleteByPlaceId(string $placeId): void
+    {
         $this->where('place_id', $placeId)->delete();
     }
 
@@ -68,7 +60,8 @@ class PlacesTagsModel extends MyBaseModel {
      * @param string $placeId
      * @return array
      */
-    public function getAllTagsForPlaceById(string $placeId): array {
+    public function getAllByPlaceId(string $placeId): array
+    {
         return $this->join('tags', 'tags.id = places_tags.tag_id')
             ->where('place_id', $placeId)
             ->findAll();
