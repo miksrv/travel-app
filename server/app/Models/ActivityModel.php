@@ -1,12 +1,12 @@
-<?php namespace App\Models;
+<?php
 
-class ActivityModel extends MyBaseModel {
+namespace App\Models;
+
+class ActivityModel extends ApplicationBaseModel {
     protected $table            = 'activity';
     protected $primaryKey       = 'id';
-
+    protected $returnType       = \App\Entities\ActivityEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType       = \App\Entities\Activity::class;
     protected $useSoftDeletes   = true;
 
     // protected array $hiddenFields = ['id'];
@@ -35,7 +35,7 @@ class ActivityModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -45,21 +45,12 @@ class ActivityModel extends MyBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
-    /**
      * @param string $placeId
      * @param string $excludeUserId
      * @return array
      */
-    public function gePlaceEditors(string $placeId, string $excludeUserId): array {
+    public function gePlaceEditors(string $placeId, string $excludeUserId): array
+    {
         return $this
             ->select('users.id as id, users.name, users.avatar')
             ->join('users', 'activity.user_id = users.id', 'left')

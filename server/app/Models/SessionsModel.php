@@ -1,15 +1,15 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
 class SessionsModel extends Model {
-    protected $table      = 'sessions';
-    protected $primaryKey = 'id';
-
+    protected $table            = 'sessions';
+    protected $primaryKey       = 'id';
+    protected $returnType       = \App\Entities\SessionEntity::class;
     protected $useAutoIncrement = true;
-
-    protected $returnType     = \App\Entities\Session::class;
-    protected $useSoftDeletes = false;
+    protected $useSoftDeletes   = false;
 
     protected $allowedFields = [
         'id',

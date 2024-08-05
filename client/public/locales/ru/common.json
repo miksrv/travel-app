@@ -171,8 +171,8 @@
     "notification_place": "Добавлена новая геометка",
     "notification_rating": "Поставлена новая оценка",
     "notification_edit": "Отредактирована геометка",
-    "notification_cover": "Новый комментарий",
-    "notification_comment": "Изменена обложка",
+    "notification_cover": "Изменена обложка",
+    "notification_comment": "Новый комментарий",
     "notification_experience": "опыта",
     "notification_level": "Новый уровень!",
     "notification_success": "Успешно",
@@ -215,5 +215,6 @@
     "geotag-saved": "Геометка сохранена",
     "interesting-places": "Интересные места",
     "click-here-upload-photos": "Нажите сюда для загрузки фотографий",
-    "supported-formats": "Поддерживаются форматы"
+    "supported-formats": "Поддерживаются форматы",
+    "delete-place-confirmation": "При удалении геометки будут удалены все связанные с ней фотографии, комментарии, закладки и т.д. Вы подтверждаете удаление?"
 }

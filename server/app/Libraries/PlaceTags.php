@@ -75,7 +75,7 @@ class PlaceTags {
      */
     protected function _deletePlaceTags(string $placeId): void {
         if ($oldTagsData = $this->placeTagsModel->getPlaceTags($placeId)) {
-            $this->placeTagsModel->deletePlaceTags($placeId);
+            $this->placeTagsModel->deleteByPlaceId($placeId);
 
             foreach ($oldTagsData as $tag) {
                 $this->tagsModel->update(

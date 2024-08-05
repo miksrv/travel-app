@@ -1,8 +1,10 @@
-<?php namespace App\Models;
+<?php
+
+namespace App\Models;
 
 use CodeIgniter\Model;
 
-class MyBaseModel extends Model {
+class ApplicationBaseModel extends Model {
 
     protected array $hiddenFields = [];
 
@@ -10,12 +12,17 @@ class MyBaseModel extends Model {
      * @param array $data
      * @return array|array[]
      */
-    public function prepareOutput(array $data): array {
+    public function prepareOutput(array $data): array
+    {
         // if the hiddenFields array is empty, we just return the original dta
-        if (sizeof($this->hiddenFields) == 0) return $data;
+        if (sizeof($this->hiddenFields) == 0) {
+            return $data;
+        }
 
         // if no data was found we return the original data to ensure the right structure
-        if (!$data['data']) return $data;
+        if (!$data['data']) {
+            return $data;
+        }
 
         $resultData = [];
 
@@ -45,5 +52,16 @@ class MyBaseModel extends Model {
         } else {
             return ['data' => $resultData];
         }
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    protected function generateId(array $data): array
+    {
+        $data['data']['id'] = uniqid();
+
+        return $data;
     }
 }

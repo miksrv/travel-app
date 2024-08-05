@@ -1,6 +1,8 @@
-<?php namespace App\Controllers;
+<?php
 
-use App\Entities\User;
+namespace App\Controllers;
+
+use App\Entities\UserEntity;
 use App\Libraries\GoogleClient;
 use App\Libraries\LevelsLibrary;
 use App\Libraries\LocaleLibrary;
@@ -20,7 +22,8 @@ use ReflectionException;
 class Auth extends ResourceController {
     private SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->session = new SessionLibrary();
@@ -32,7 +35,8 @@ class Auth extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function registration(): ResponseInterface {
+    public function registration(): ResponseInterface
+    {
         if ($this->session->isAuth) {
             return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
@@ -52,7 +56,7 @@ class Auth extends ResourceController {
         helper('auth');
 
         $userModel = new UsersModel();
-        $user      = new User();
+        $user      = new UserEntity();
         $user->name      = $input['name'];
         $user->email     = $input['email'];
         $user->password  = hashUserPassword($input['password']);
@@ -76,7 +80,8 @@ class Auth extends ResourceController {
      * @link https://console.developers.google.com/
      * @throws ReflectionException
      */
-    public function google(): ResponseInterface {
+    public function google(): ResponseInterface
+    {
         if ($this->session->isAuth) {
             return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
@@ -109,7 +114,8 @@ class Auth extends ResourceController {
      * @link https://console.developers.google.com/
      * @throws ReflectionException
      */
-    public function vk(): ResponseInterface {
+    public function vk(): ResponseInterface
+    {
         if ($this->session->isAuth) {
             return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
@@ -145,7 +151,8 @@ class Auth extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function yandex(): ResponseInterface {
+    public function yandex(): ResponseInterface
+    {
         if ($this->session->isAuth) {
             return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
@@ -178,7 +185,8 @@ class Auth extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function login(): ResponseInterface {
+    public function login(): ResponseInterface
+    {
         if ($this->session->isAuth) {
             return $this->failForbidden(lang('Auth.alreadyAuthorized'));
         }
@@ -212,7 +220,8 @@ class Auth extends ResourceController {
     /**
      * @throws Exception
      */
-    public function me(): ResponseInterface {
+    public function me(): ResponseInterface
+    {
         $this->session->update();
 
         $response = (object) [
@@ -251,7 +260,8 @@ class Auth extends ResourceController {
      * @param array $messages
      * @return bool
      */
-    public function validateRequest($input, array $rules, array $messages =[]): bool {
+    public function validateRequest($input, array $rules, array $messages = []): bool
+    {
         $this->validator = Services::Validation()->setRules($rules);
         // If you replace the $rules array with the name of the group
         if (is_string($rules)) {
@@ -280,7 +290,8 @@ class Auth extends ResourceController {
      * @param IncomingRequest $request
      * @return array|bool|float|int|mixed|object|string|null
      */
-    public function getRequestInput(IncomingRequest $request): mixed {
+    public function getRequestInput(IncomingRequest $request): mixed
+    {
         $input = $request->getPost();
 
         if (empty($input)) {
@@ -311,7 +322,7 @@ class Auth extends ResourceController {
 
         // If there is no user with this email, then register a new user
         if (empty($userData)) {
-            $createUser = new User();
+            $createUser = new UserEntity();
             $createUser->name      = $serviceProfile->name;
             $createUser->email     = $serviceProfile->email;
             $createUser->auth_type = $authType;
@@ -375,7 +386,8 @@ class Auth extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    protected function responseAuth(): ResponseInterface {
+    protected function responseAuth(): ResponseInterface
+    {
         return $this->respond([
             'session' => $this->session->id,
             'auth'    => $this->session->isAuth,

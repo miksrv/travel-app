@@ -1,7 +1,7 @@
 <?php namespace App\Controllers;
 
-use App\Entities\Photo;
-use App\Entities\Place;
+use App\Entities\PhotoEntity;
+use App\Entities\PlaceEntity;
 use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlaceTags;
@@ -274,7 +274,7 @@ class Places extends ResourceController {
 
         // Collect tags
         $placesTagsModel = new PlacesTagsModel();
-        $placeData->tags = $placesTagsModel->getAllTagsForPlaceById($id);
+        $placeData->tags = $placesTagsModel->getAllByPlaceId($id);
 
         $avatar = $placeData->user_avatar ? explode('.', $placeData->user_avatar) : null;
         $placeData->editors = $this->_editors($id, $placeData->user_id);
@@ -398,7 +398,7 @@ class Places extends ResourceController {
 
         $placeTags = new PlaceTags();
         $geocoder  = new Geocoder();
-        $place     = new \App\Entities\Place();
+        $place     = new \App\Entities\PlaceEntity();
 
         if (!$geocoder->coordinates($input->lat, $input->lon)) {
             return $this->failValidationErrors(lang('Places.createFailError'));
@@ -423,24 +423,16 @@ class Places extends ResourceController {
             $placeTags->saveTags($input->tags, $newPlaceId);
         }
 
-        try {
-            $placesContentModel = new PlacesContentModel();
+        $placesContentModel = new PlacesContentModel();
 
-            $content = new \App\Entities\PlaceContent();
-            $content->place_id = $newPlaceId;
-            $content->language = $locale;
-            $content->user_id  = $this->session->user?->id;
-            $content->title    = $placeTitle;
-            $content->content  = $placeContent;
+        $content = new \App\Entities\PlaceContentEntity();
+        $content->place_id = $newPlaceId;
+        $content->locale   = $locale;
+        $content->user_id  = $this->session->user?->id;
+        $content->title    = $placeTitle;
+        $content->content  = $placeContent;
 
-            $placesContentModel->insert($content);
-        } catch (Exception $e) {
-            $this->model->delete($newPlaceId);
-
-            log_message('error', '{exception}', ['exception' => $e]);
-
-            return $this->failValidationErrors(lang('Places.createFailError'));
-        }
+        $placesContentModel->insert($content);
 
         $activity = new ActivityLibrary();
         $activity->place($newPlaceId);
@@ -496,7 +488,7 @@ class Places extends ResourceController {
         // Save place content
         if ($updatedContent || $updatedTitle) {
             $contentModel = new PlacesContentModel();
-            $placeEntity  = new \App\Entities\PlaceContent();
+            $placeEntity  = new \App\Entities\PlaceContentEntity();
             $placeEntity->locale   = $locale;
             $placeEntity->place_id = $id;
             $placeEntity->user_id  = $this->session->user?->id;
@@ -528,7 +520,7 @@ class Places extends ResourceController {
         }
 
         // In any case, we update the time when the post was last edited
-        $place = new Place();
+        $place = new PlaceEntity();
         $place->updated_at = time();
 
         $lat = isset($input->lat) ? round($input->lat, 6) : $placeData->lat;
@@ -563,6 +555,35 @@ class Places extends ResourceController {
         }
 
         return $this->respond($return);
+    }
+
+    /**
+     * Delete place by ID (Only for administrator role)
+     * @param $id
+     * @return ResponseInterface
+     */
+    public function delete($id = null): ResponseInterface {
+        if (!$this->session->isAuth && $this->session->user->role !== 'admin') {
+            return $this->failUnauthorized();
+        }
+
+        if (!$this->model->find($id)) {
+            return $this->failNotFound(lang('Places.coverPointNotExist'));
+        }
+
+        helper('filesystem');
+
+        // Remove all photos
+        $photosModel = new PhotosModel();
+        $photosModel->where('place_id', $id)->delete(null, true);
+
+        // Remove all files and place directory
+        delete_files(UPLOAD_PHOTOS . $id, true);
+
+        // Remove place and all DB entitles such as activity, rating, bookmarks etc.
+        $this->model->delete($id, true);
+
+        return $this->respondDeleted();
     }
 
     /**
@@ -621,7 +642,7 @@ class Places extends ResourceController {
     /**
      * @throws ReflectionException
      */
-    protected function savePhotos(array $photos, string $placeId, \App\Entities\Place $place, \App\Entities\PlaceContent $content) {
+    protected function savePhotos(array $photos, string $placeId, \App\Entities\PlaceEntity $place, \App\Entities\PlaceContentEntity $content) {
         if (empty($photos) || empty($placeId)) {
             return false;
         }
@@ -649,7 +670,7 @@ class Places extends ResourceController {
             $photosModel = new PhotosModel();
 
             // Save photo to DB
-            $photo = new Photo();
+            $photo = new PhotoEntity();
             $photo->lat       = $coordinates?->lat ?? $place->lat;
             $photo->lon       = $coordinates?->lon ?? $place->lon;
             $photo->place_id  = $placeId;

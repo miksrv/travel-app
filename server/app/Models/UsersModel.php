@@ -1,18 +1,18 @@
-<?php namespace App\Models;
+<?php
 
-use App\Entities\User;
+namespace App\Models;
+
+use App\Entities\UserEntity;
 use CodeIgniter\I18n\Time;
 use Exception;
 use ReflectionException;
 
-class UsersModel extends MyBaseModel {
-    protected $table      = 'users';
-    protected $primaryKey = 'id';
-
+class UsersModel extends ApplicationBaseModel {
+    protected $table            = 'users';
+    protected $primaryKey       = 'id';
+    protected $returnType       = UserEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType     = User::class;
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes   = true;
 
     protected array $hiddenFields = ['deleted_at'];
 
@@ -46,7 +46,7 @@ class UsersModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -56,20 +56,11 @@ class UsersModel extends MyBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
-    /**
      * @param string $emailAddress
-     * @return User|array|null
+     * @return UserEntity|array|null
      */
-    public function findUserByEmailAddress(string $emailAddress): User | array | null {
+    public function findUserByEmailAddress(string $emailAddress): UserEntity | array | null
+    {
         return $this
             ->select('id, name, avatar, email, password, auth_type, role, locale, settings, level, experience')
             ->where('email', $emailAddress)
@@ -82,10 +73,11 @@ class UsersModel extends MyBaseModel {
      * @throws ReflectionException
      * @throws Exception
      */
-    public function updateUserActivity(string $userId): void {
+    public function updateUserActivity(string $userId): void
+    {
         $userData = $this->select('updated_at')->find($userId);
 
-        $user = new User();
+        $user = new UserEntity();
         $user->updated_at  = $userData->updated_at;
         $user->activity_at = Time::now();
 
@@ -97,7 +89,8 @@ class UsersModel extends MyBaseModel {
      * @param bool $settings
      * @return array|object|null
      */
-    public function getUserById(string $userId, bool $settings = false): array|object|null {
+    public function getUserById(string $userId, bool $settings = false): array|object|null
+    {
         $settings = $settings ? ', settings' : '';
 
         $data = $this

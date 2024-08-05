@@ -1,19 +1,22 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
+import dayjs from 'dayjs'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
+import { API, IMG_HOST } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import BookmarkButton from '@/components/bookmark-button'
+import ConfirmationDialog from '@/components/confirmation-dialog'
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
+import Spinner from '@/ui/spinner'
 
 interface PlaceHeaderProps {
     place?: Place
@@ -34,7 +37,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
     const { t } = useTranslation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
+    const userRole = useAppSelector((state) => state.auth.user?.role)
 
+    const [removePlace, { isLoading: removeLoading, isSuccess: removeSuccess }] = API.usePlaceDeleteMutation()
+
+    const [showRemoveDialog, setShowRemoveDialog] = useState<boolean>(false)
+
+    const coverHashString = coverHash || dayjs(place?.updated?.date).unix()
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []
@@ -59,30 +68,43 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
         }
     }
 
+    const handleRemovePlaceClick = (event: React.MouseEvent) => {
+        event.preventDefault()
+        setShowRemoveDialog(true)
+    }
+
     const handleBackLinkClick = async () => {
         router.back()
     }
 
+    useEffect(() => {
+        if (removeSuccess) {
+            handleBackLinkClick()
+        }
+    }, [removeSuccess])
+
     return (
         <section className={styles.placeHeader}>
+            {removeLoading && (
+                <div className={styles.loader}>
+                    <Spinner />
+                </div>
+            )}
+
             <div className={styles.image}>
                 {place?.cover && (
                     <>
                         <div
                             className={styles.desktop}
                             style={{
-                                backgroundImage: `url(${IMG_HOST}${
-                                    place.cover.full
-                                }${coverHash ? `?d=${coverHash}` : ''})`
+                                backgroundImage: `url(${IMG_HOST}${place.cover.full}?d=${coverHashString})`
                             }}
                         />
 
                         <div
                             className={styles.mobile}
                             style={{
-                                backgroundImage: `url(${IMG_HOST}${
-                                    place.cover.preview
-                                }${coverHash ? `?d=${coverHash}` : ''})`
+                                backgroundImage: `url(${IMG_HOST}${place.cover.preview}?d=${coverHashString})`
                             }}
                         />
                     </>
@@ -146,6 +168,18 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     {t('edit')}
                                 </Link>
                             </li>
+                            {userRole === 'admin' && (
+                                <li>
+                                    <Link
+                                        href={'#'}
+                                        onClick={handleRemovePlaceClick}
+                                        title={t('delete')}
+                                    >
+                                        <Icon name={'Close'} />
+                                        {t('delete')}
+                                    </Link>
+                                </li>
+                            )}
                         </ul>
                     </Popout>
                 </div>
@@ -169,6 +203,22 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                     {place?.address?.street && <>{`, ${place.address.street}`}</>}
                 </div>
             </div>
+
+            <ConfirmationDialog
+                open={showRemoveDialog}
+                message={t('delete-place-confirmation')}
+                acceptText={t('delete')}
+                onReject={() => {
+                    setShowRemoveDialog(false)
+                }}
+                onAccept={() => {
+                    if (place?.id) {
+                        removePlace(place.id)
+                    }
+
+                    setShowRemoveDialog(false)
+                }}
+            />
         </section>
     )
 }

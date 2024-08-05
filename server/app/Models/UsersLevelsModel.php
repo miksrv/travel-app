@@ -1,15 +1,17 @@
-<?php namespace App\Models;
+<?php
 
-class UsersLevelsModel extends MyBaseModel {
-    protected $table      = 'users_levels';
-    protected $primaryKey = 'level';
+namespace App\Models;
 
+use CodeIgniter\Model;
+
+class UsersLevelsModel extends Model {
+    protected $table            = 'users_levels';
+    protected $primaryKey       = 'level';
+    protected $returnType       = \App\Entities\UserLevelEntity::class;
     protected $useAutoIncrement = false;
+    protected $useSoftDeletes   = false;
 
-    protected $returnType     = \App\Entities\UserLevel::class;
-    protected $useSoftDeletes = false;
-
-    protected array $hiddenFields = [];
+    // protected array $hiddenFields = [];
 
     protected $allowedFields = [
         'title_en',
@@ -17,6 +19,12 @@ class UsersLevelsModel extends MyBaseModel {
         'level',
         'experience'
     ];
+
+    // protected $useTimestamps = true;
+    // protected $dateFormat    = 'datetime';
+    // protected $createdField  = 'created_at';
+    // protected $updatedField  = 'updated_at';
+    // protected $deletedField  = 'deleted_at';
 
     protected $validationRules      = [];
     protected $validationMessages   = [];
@@ -29,7 +37,7 @@ class UsersLevelsModel extends MyBaseModel {
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
     protected $beforeFind     = [];
-    protected $afterFind      = ['prepareOutput'];
+    protected $afterFind      = []; // prepareOutput
     protected $beforeDelete   = [];
     protected $afterDelete    = [];
 }

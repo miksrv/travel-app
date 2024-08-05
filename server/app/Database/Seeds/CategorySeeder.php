@@ -1,4 +1,6 @@
-<?php namespace App\Database\Seeds;
+<?php
+
+namespace App\Database\Seeds;
 
 use CodeIgniter\Database\Seeder;
 use App\Models\CategoryModel;
@@ -159,7 +161,8 @@ class CategorySeeder extends Seeder {
     /**
      * @throws ReflectionException
      */
-    public function run(): void {
+    public function run(): void
+    {
         $categoryModel = new CategoryModel();
 
         foreach ($this->insertData as $value) {

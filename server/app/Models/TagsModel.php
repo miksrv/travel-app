@@ -1,12 +1,12 @@
-<?php namespace App\Models;
+<?php
 
-class TagsModel extends MyBaseModel {
+namespace App\Models;
+
+class TagsModel extends ApplicationBaseModel {
     protected $table            = 'tags';
     protected $primaryKey       = 'id';
-
+    protected $returnType       = \App\Entities\TagEntity::class;
     protected $useAutoIncrement = false;
-
-    protected $returnType       = \App\Entities\Tag::class;
     protected $useSoftDeletes   = false;
 
     protected array $hiddenFields = [
@@ -32,7 +32,7 @@ class TagsModel extends MyBaseModel {
     protected $cleanValidationRules = true;
 
     protected $allowCallbacks = true;
-    protected $beforeInsert   = ['beforeInsert'];
+    protected $beforeInsert   = ['generateId'];
     protected $afterInsert    = [];
     protected $beforeUpdate   = [];
     protected $afterUpdate    = [];
@@ -42,20 +42,11 @@ class TagsModel extends MyBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param array $data
-     * @return array
-     */
-    protected function beforeInsert(array $data): array {
-        $data['data']['id'] = uniqid();
-
-        return $data;
-    }
-
-    /**
      * @param string $title
      * @return array|object|null
      */
-    public function getTagsByTitle(string $title): object|array|null {
+    public function getTagsByTitle(string $title): object|array|null
+    {
         return $this
             ->select('id, count')
             ->where('title_ru', $title)

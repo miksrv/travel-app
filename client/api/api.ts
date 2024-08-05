@@ -249,6 +249,12 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
+        placeDelete: builder.mutation<void, string>({
+            query: (id) => ({
+                method: 'DELETE',
+                url: `places/${id}`
+            })
+        }),
         placesPatchItem: builder.mutation<ApiTypes.ResponsePlacesPatchItem, ApiTypes.RequestPlacesPostItem>({
             invalidatesTags: (res, err, arg) => [
                 { id: arg.id, type: 'Places' },

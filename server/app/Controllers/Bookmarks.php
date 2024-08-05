@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\SessionLibrary;
 use App\Models\PlacesModel;
@@ -6,7 +8,6 @@ use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
-use ReflectionException;
 
 class Bookmarks extends ResourceController {
 
@@ -20,7 +21,8 @@ class Bookmarks extends ResourceController {
      * Checks whether this place is already in the user's bookmarks or not
      * @return ResponseInterface
      */
-    public function check(): ResponseInterface {
+    public function check(): ResponseInterface
+    {
         $placeId = $this->request->getGet('placeId', FILTER_SANITIZE_SPECIAL_CHARS);
 
         if (!$this->session->isAuth) {
@@ -44,7 +46,8 @@ class Bookmarks extends ResourceController {
      * Adds an interesting place to the user's bookmarks
      * @return ResponseInterface
      */
-    public function set(): ResponseInterface {
+    public function set(): ResponseInterface
+    {
         $input = $this->request->getJSON();
 
         if (!$this->session->isAuth) {

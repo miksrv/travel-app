@@ -1,6 +1,6 @@
 <?php namespace App\Controllers;
 
-use App\Entities\Photo;
+use App\Entities\PhotoEntity;
 use App\Libraries\LevelsLibrary;
 use App\Libraries\LocaleLibrary;
 use App\Libraries\PlacesContent;
@@ -166,7 +166,7 @@ class Photos extends ResourceController {
             $photosModel = new PhotosModel();
 
             // Save photo to DB
-            $photo = new Photo();
+            $photo = new PhotoEntity();
             $photo->lat       = $coordinates?->lat ?? $placesData->lat;
             $photo->lon       = $coordinates?->lon ?? $placesData->lon;
             $photo->place_id  = $placesData->id;

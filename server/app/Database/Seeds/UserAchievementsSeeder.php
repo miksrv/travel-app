@@ -11,7 +11,8 @@ class UserAchievementsSeeder extends Seeder {
         ['Фотолюбитель', '', 0, 0, 50, 0, 0],
     ];
 
-    public function run(): void {
+    public function run(): void
+    {
         $userAchievementsModel = new UserAchievementsSeeder();
         $tempInsertData = [];
 
