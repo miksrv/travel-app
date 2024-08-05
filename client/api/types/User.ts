@@ -8,7 +8,7 @@ export type User = {
     avatar?: string
     reputation?: number
     website?: string
-    role?: 'user' | 'moderator' | 'admin'
+    role?: UserRoles
     locale?: LocaleType
     levelData?: LevelData
     created?: ApiTypes.DateTimeType
@@ -18,6 +18,8 @@ export type User = {
     statistic?: Statistic
     settings?: UserSettings
 }
+
+export type UserRoles = 'user' | 'moderator' | 'admin'
 
 export type UserSettings = {
     emailComment?: boolean

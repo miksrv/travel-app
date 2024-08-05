@@ -14,6 +14,23 @@
     position: relative
     box-shadow: var(--container-shadow)
 
+    .loader
+        border-radius: var(--border-radius)
+        position: absolute
+        z-index: 2
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        background-color: rgba(0, 0, 0, .6)
+        display: flex
+        justify-content: center
+        align-items: center
+
+        svg
+            width: 32px
+            height: 32px
+
     .image
         border-top-left-radius: var(--border-radius)
         border-top-right-radius: var(--border-radius)
