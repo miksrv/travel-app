@@ -19,9 +19,10 @@ import Skeleton from '@/ui/skeleton'
 
 interface MarkerPointProps {
     place: Placemark.Place
+    keepInView?: boolean
 }
 
-const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
+const MarkerPoint: React.FC<MarkerPointProps> = ({ place, keepInView }) => {
     const { t } = useTranslation()
 
     const [getPlaceItem, { isLoading, data: poiData }] = API.usePoiGetItemMutation()
@@ -50,8 +51,8 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place }) => {
                 <Popup
                     className={styles.markerPointPopup}
                     closeOnEscapeKey={true}
-                    autoPan={false}
-                    keepInView={false}
+                    autoPan={keepInView}
+                    keepInView={keepInView}
                     autoClose={true}
                 >
                     <div className={styles.content}>

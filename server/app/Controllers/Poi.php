@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\Cluster;
 use App\Libraries\LocaleLibrary;
@@ -11,28 +13,33 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
     }
 
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
-        $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
-        $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
-        $bounds = $this->_getBounds();
+        $zoom    = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
+        $author  = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $cluster = $this->request->getGet('cluster', FILTER_VALIDATE_BOOL);
+        $bounds  = $this->_getBounds();
 
         $placesModel = new PlacesModel();
-        $placesData  = $placesModel
-            ->select('id, category, lat, lon')
-            ->where([
+        $placesData  = $placesModel->select('id, category, lat, lon');
+
+        if ($bounds) {
+            $placesData->where([
                 'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
                 'lon <=' => $bounds[2],
                 'lat <=' => $bounds[3],
             ]);
+        }
 
         if (isset($categories)) {
             $placesData->whereIn('category', explode(',', $categories));
@@ -44,11 +51,17 @@ class Poi extends ResourceController {
 
         $placesData  = $placesData->findAll();
         $totalPoints = count($placesData);
-        $clusterData = new Cluster($placesData, $zoom);
+
+        if ($cluster === true) {
+            $clusterData = new Cluster($placesData, $zoom);
+            $resultData  = $clusterData->placeMarks;
+        } else {
+            $resultData  = $placesData;
+        }
 
         return $this->respond([
             'count' => $totalPoints,
-            'items' => $clusterData->placeMarks
+            'items' => $resultData
         ]);
     }
 
@@ -56,27 +69,37 @@ class Poi extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function photos(): ResponseInterface {
-        $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
-        $locale = $this->request->getLocale();
-        $bounds = $this->_getBounds();
+    public function photos(): ResponseInterface
+    {
+        $zoom    = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
+        $locale  = $this->request->getLocale();
+        $cluster = $this->request->getGet('cluster', FILTER_VALIDATE_BOOL);
+        $bounds  = $this->_getBounds();
 
         $photosModel = new PhotosModel();
-        $photosData  = $photosModel
-            ->select('place_id as placeId, lat, lon, filename, extension, title_en, title_ru')
-            ->where([
+        $photosData  = $photosModel->select('place_id as placeId, lat, lon, filename, extension, title_en, title_ru');
+
+        if ($bounds) {
+            $photosData->where([
                 'lon >=' => $bounds[0],
                 'lat >=' => $bounds[1],
                 'lon <=' => $bounds[2],
                 'lat <=' => $bounds[3],
-            ])
-            ->groupBy('photos.lon, photos.lat')
-            ->findAll();
+            ]);
+        }
+
+        $photosData = $photosData->groupBy('photos.lon, photos.lat')->findAll();
 
         $photosCount = count($photosData);
-        $clusterData = new Cluster($photosData, $zoom);
 
-        foreach ($clusterData->placeMarks as $photo) {
+        if ($cluster === true) {
+            $clusterData = new Cluster($photosData, $zoom);
+            $resultData  = $clusterData->placeMarks;
+        } else {
+            $resultData  = $photosData;
+        }
+
+        foreach ($resultData as $photo) {
             if (isset($photo->type) && $photo->type === 'cluster') {
                 continue;
             }
@@ -93,8 +116,8 @@ class Poi extends ResourceController {
         }
 
         return $this->respond([
-            'items' => $clusterData->placeMarks,
-            'count' => $photosCount
+            'count' => $photosCount,
+            'items' => $resultData
         ]);
     }
 
@@ -103,7 +126,8 @@ class Poi extends ResourceController {
      * @param $id
      * @return ResponseInterface
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $sessionLib   = new SessionLibrary();
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
@@ -138,7 +162,8 @@ class Poi extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function users(): ResponseInterface {
+    public function users(): ResponseInterface
+    {
         $sessionsModel = new SessionsModel();
         $sessionsData  = $sessionsModel
             ->select('lat, lon')
@@ -158,15 +183,19 @@ class Poi extends ResourceController {
 
     /**
      * Getting the map boundaries from the GET parameter
-     * @return ResponseInterface|array
+     * @return array|null
      */
-    protected function _getBounds(): ResponseInterface | array {
+    protected function _getBounds(): ?array
+    {
         // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_SPECIAL_CHARS);
-        $bounds = explode(',', $bounds);
+
+        if (empty($bounds) || !$bounds = explode(',', $bounds)) {
+            return null;
+        }
 
         if (count($bounds) !== 4) {
-            return $this->failValidationErrors('Empty map bound parameter');
+            return null;
         }
 
         return $bounds;

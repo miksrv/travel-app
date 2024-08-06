@@ -7,21 +7,18 @@ import { NextSeo } from 'next-seo'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
-import { useAppSelector, wrapper } from '@/api/store'
+import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
 import Container from '@/ui/container'
-import ScreenSpinner from '@/ui/screen-spinner'
 
 type CreatePlacePageProps = object
 
 const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const router = useRouter()
     const { t } = useTranslation()
-
-    const authSlice = useAppSelector((state) => state.auth)
 
     const [clickedButton, setClickedButton] = useState<boolean>(false)
 
@@ -42,12 +39,6 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
             createPlace(formData)
         }
     }
-
-    useEffect(() => {
-        if (!authSlice.isAuth) {
-            router.push('/places')
-        }
-    })
 
     useEffect(() => {
         setClickedButton(false)
@@ -76,8 +67,6 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                 ]}
             />
             <Container>
-                {!authSlice.isAuth && <ScreenSpinner />}
-
                 <PlaceForm
                     loading={isLoading || isSuccess || clickedButton}
                     errors={validationErrors}

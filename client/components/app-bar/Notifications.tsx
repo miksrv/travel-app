@@ -4,7 +4,7 @@ import { useTranslation } from 'next-i18next'
 import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
-import { deleteAllNotifications, setUnreadCounter } from '@/api/notificationSlice'
+import { deleteAllNotifications, Notify, setUnreadCounter } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import Notification from '@/components/snackbar/Notification'
 import Button from '@/ui/button'
@@ -26,7 +26,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
     const [notifyShow, setNotifyShow] = useState<boolean>(false)
     const [notifyPage, setNotifyPage] = useState<number>(1)
 
-    const [clearNotification, { isLoading: loadingClear }] = API.useNotificationsDeleteMutation()
+    const [clearNotification, { isLoading: loadingClear, isSuccess }] = API.useNotificationsDeleteMutation()
 
     const {
         data: notifyData,
@@ -55,6 +55,19 @@ const Notifications: React.FC<NotificationsProps> = () => {
         dispatch(setUnreadCounter(0))
         dispatch(deleteAllNotifications())
     }
+
+    useEffect(() => {
+        if (isSuccess) {
+            dispatch(
+                Notify({
+                    id: 'clearNotification',
+                    title: '',
+                    message: t('notification-list-has-been-cleared'),
+                    type: 'success'
+                })
+            )
+        }
+    }, [isSuccess])
 
     useEffect(() => {
         const unreadCount = notifyData?.items?.filter(({ read }) => !read).length

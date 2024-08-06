@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
@@ -12,11 +13,14 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import BookmarkButton from '@/components/bookmark-button'
-import ConfirmationDialog from '@/components/confirmation-dialog'
 import Button from '@/ui/button'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
+
+const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
+    ssr: false
+})
 
 interface PlaceHeaderProps {
     place?: Place

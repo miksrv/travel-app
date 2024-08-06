@@ -10,7 +10,7 @@ interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
-    <div className={styles.radioButton}>
+    <div className={cn(styles.radioButton, props.disabled && styles.disabled)}>
         <div className={cn(styles.formField, props.checked && styles.checked)}>
             {props.checked ? <Icon name={'RadioButtonChecked'} /> : <Icon name={'RadioButtonUnchecked'} />}
             <input

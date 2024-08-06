@@ -13,6 +13,11 @@
     justify-content: center
     align-items: center
 
+    &.disabled
+        cursor: default
+        opacity: .6
+        pointer-events: none
+
     &:hover
         border-color: var(--input-border-focus-color)
         background-color: var(--button-default-background-hover)

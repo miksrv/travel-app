@@ -66,12 +66,14 @@ type MapProps = {
     layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
+    enableCenterPopup?: boolean
     enableSearch?: boolean
     enableFullScreen?: boolean
     enableCoordsControl?: boolean
     enableCategoryControl?: boolean
     enableLayersSwitcher?: boolean
     enableContextMenu?: boolean
+    hideAdditionalLayers?: boolean
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
@@ -94,12 +96,14 @@ const InteractiveMap: React.FC<MapProps> = ({
     // layer,
     loading,
     storeMapPosition,
+    enableCenterPopup,
     enableSearch,
     enableFullScreen,
     enableCoordsControl,
     enableCategoryControl,
     enableLayersSwitcher,
     enableContextMenu,
+    hideAdditionalLayers,
     storeMapKey,
     fullMapLink,
     userLatLon,
@@ -325,6 +329,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <MarkerPoint
                             key={`markerPoint${i}`}
                             place={place}
+                            keepInView={enableCenterPopup}
                         />
                     )
                 )}
@@ -396,6 +401,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <LayerSwitcherControl
                             currentLayer={mapLayer}
                             currentType={mapType}
+                            hideAdditionalLayers={hideAdditionalLayers}
                             additionalLayers={additionalLayers}
                             onSwitchMapLayer={setMapLayer}
                             onSwitchMapType={handleSwitchMapType}

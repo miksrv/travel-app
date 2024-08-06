@@ -11,6 +11,7 @@ import {
 } from './InteractiveMap'
 import styles from './styles.module.sass'
 
+import { concatClassNames as cn } from '@/functions/helpers'
 import Button from '@/ui/button'
 import Checkbox from '@/ui/checkbox'
 import Container from '@/ui/container'
@@ -19,6 +20,7 @@ import RadioButton from '@/ui/radio-button'
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType
     currentType?: MapObjectsType
+    hideAdditionalLayers?: boolean
     additionalLayers?: MapAdditionalLayersType[]
     onSwitchMapLayer?: (layer: MapLayersType) => void
     onSwitchMapType?: (type: MapObjectsType) => void
@@ -28,6 +30,7 @@ interface LayerSwitcherControlProps {
 const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
     currentLayer,
     currentType,
+    hideAdditionalLayers,
     additionalLayers,
     onSwitchMapLayer,
     onSwitchMapType,
@@ -77,7 +80,7 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
             onWheelCapture={(e) => e.stopPropagation()}
         >
             <div ref={layersContainerRef}>
-                <ul className={styles.mapLayersList}>
+                <ul className={cn(styles.mapLayersList, hideAdditionalLayers && styles.noMarginBottom)}>
                     {Object.values(MapLayers).map((layer) => (
                         <li key={layer}>
                             <RadioButton
@@ -89,36 +92,42 @@ const LayerSwitcherControl: React.FC<LayerSwitcherControlProps> = ({
                         </li>
                     ))}
                 </ul>
-                <ul className={styles.mapPointsTypeList}>
-                    {Object.values(MapObjects).map((type) => (
-                        <li key={type}>
-                            <RadioButton
-                                id={type}
-                                label={t(`map-type_${type}`)}
-                                checked={currentType === type}
-                                onChange={handleSwitchMapType}
-                            />
-                        </li>
-                    ))}
-                </ul>
-                <ul className={styles.mapAdditionalList}>
-                    {Object.values(MapAdditionalLayers).map((type) => (
-                        <li key={type}>
-                            <Checkbox
-                                id={type}
-                                label={t(`map-type_${type}`)}
-                                checked={additionalLayers?.includes(type)}
-                                onChange={() =>
-                                    onSwitchAdditionalLayers?.(
-                                        additionalLayers?.includes(type)
-                                            ? additionalLayers.filter((layer) => layer !== type)
-                                            : [...(additionalLayers || []), type]
-                                    )
-                                }
-                            />
-                        </li>
-                    ))}
-                </ul>
+
+                {!hideAdditionalLayers && (
+                    <ul className={styles.mapPointsTypeList}>
+                        {Object.values(MapObjects).map((type) => (
+                            <li key={type}>
+                                <RadioButton
+                                    id={type}
+                                    label={t(`map-type_${type}`)}
+                                    checked={currentType === type}
+                                    onChange={handleSwitchMapType}
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
+
+                {!hideAdditionalLayers && (
+                    <ul className={styles.mapAdditionalList}>
+                        {Object.values(MapAdditionalLayers).map((type) => (
+                            <li key={type}>
+                                <Checkbox
+                                    id={type}
+                                    label={t(`map-type_${type}`)}
+                                    checked={additionalLayers?.includes(type)}
+                                    onChange={() =>
+                                        onSwitchAdditionalLayers?.(
+                                            additionalLayers?.includes(type)
+                                                ? additionalLayers.filter((layer) => layer !== type)
+                                                : [...(additionalLayers || []), type]
+                                        )
+                                    }
+                                />
+                            </li>
+                        ))}
+                    </ul>
+                )}
             </div>
         </Container>
     )
