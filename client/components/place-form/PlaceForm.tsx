@@ -142,8 +142,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     lon: mapCenter.lng
                 })
             }
-        }, 500),
-        []
+        }, 100),
+        [formData]
     )
 
     useEffect(() => {
@@ -213,8 +213,6 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             </div>
 
             <div className={styles.mapContainer}>
-                <div className={styles.verticalLine} />
-                <div className={styles.horizontalLine} />
                 {selectedCategory && (
                     <Image
                         className={styles.categoryImage}
@@ -244,6 +242,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
             <div className={styles.formElement}>
                 <label>{t('description')}</label>
                 <ContentEditor
+                    disabled={loading}
                     value={formData?.content ?? ''}
                     onChange={handleContentChange}
                 />
@@ -262,7 +261,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                             />
                         </div>
                     ) : (
-                        <PhotoUploadSection onClick={() => inputFileRef?.current?.click()} />
+                        <PhotoUploadSection
+                            disabled={loading}
+                            onClick={() => inputFileRef?.current?.click()}
+                        />
                     )}
                 </div>
             )}

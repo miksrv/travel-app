@@ -3,16 +3,19 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
+import { concatClassNames as cn } from '@/functions/helpers'
+
 interface PhotoGalleryProps {
+    disabled?: boolean
     onClick?: () => void
 }
 
-const PhotoUploadSection: React.FC<PhotoGalleryProps> = ({ onClick }) => {
+const PhotoUploadSection: React.FC<PhotoGalleryProps> = ({ disabled, onClick }) => {
     const { t } = useTranslation()
 
     return (
         <button
-            className={styles.photoUploadSection}
+            className={cn(styles.photoUploadSection, disabled && styles.disabled)}
             onClick={onClick}
         >
             <div className={styles.image} />
