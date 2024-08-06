@@ -25,6 +25,8 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
 
 type MapPageProps = object
 
+const ENABLE_CLUSTERIZATION = false
+
 const MapPage: NextPage<MapPageProps> = () => {
     const router = useRouter()
     const dispatch = useAppDispatch()
@@ -52,7 +54,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     const { data: poiListData, isFetching: placesLoading } = API.usePoiGetListQuery(
         {
             bounds: mapBounds,
-            cluster: false,
+            cluster: ENABLE_CLUSTERIZATION,
             categories: mapCategories ?? [],
             zoom: mapZoom
         },
@@ -60,7 +62,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     )
 
     const { data: photoListData, isFetching: photosLoading } = API.usePoiGetPhotoListQuery(
-        { bounds: mapBounds, zoom: mapZoom },
+        { bounds: mapBounds, zoom: mapZoom, cluster: true },
         { skip: !mapBounds || mapType !== 'Photos' }
     )
 
