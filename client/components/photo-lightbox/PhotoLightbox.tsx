@@ -52,7 +52,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
                         ),
                         height: (photo as Photo.Photo).height,
                         src: imageHost(photo.full),
-                        srcSet: [{ src: imageHost(photo.preview), width: 300, height: 200 }],
+                        // srcSet: [{ src: imageHost(photo.preview), width: 300, height: 200 }],
                         title: photo.placeId ? (
                             <Link
                                 href={`/places/${photo.placeId}`}
