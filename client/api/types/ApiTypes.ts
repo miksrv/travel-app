@@ -340,6 +340,7 @@ export interface RequestActivityGetList {
 export interface RequestPoiList {
     bounds?: string
     zoom?: number
+    cluster?: boolean
     categories?: Categories[]
 }
 

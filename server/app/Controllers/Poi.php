@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\Cluster;
 use App\Libraries\LocaleLibrary;
@@ -11,18 +13,21 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
 class Poi extends ResourceController {
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
     }
 
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $categories = $this->request->getGet('categories', FILTER_SANITIZE_SPECIAL_CHARS);
-        $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
-        $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
-        $bounds = $this->_getBounds();
+        $zoom    = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
+        $author  = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
+        $cluster = $this->request->getGet('cluster', FILTER_VALIDATE_BOOL);
+        $bounds  = $this->_getBounds();
 
         $placesModel = new PlacesModel();
         $placesData  = $placesModel
@@ -44,11 +49,18 @@ class Poi extends ResourceController {
 
         $placesData  = $placesData->findAll();
         $totalPoints = count($placesData);
-        $clusterData = new Cluster($placesData, $zoom);
+
+        if ($cluster === true) {
+            $clusterData = new Cluster($placesData, $zoom);
+            $resultData  = $clusterData->placeMarks;
+        } else {
+            $resultData  = $placesData;
+        }
+
 
         return $this->respond([
             'count' => $totalPoints,
-            'items' => $clusterData->placeMarks
+            'items' => $resultData
         ]);
     }
 
@@ -56,7 +68,8 @@ class Poi extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function photos(): ResponseInterface {
+    public function photos(): ResponseInterface
+    {
         $zoom   = abs($this->request->getGet('zoom', FILTER_SANITIZE_NUMBER_INT) ?? 10);
         $locale = $this->request->getLocale();
         $bounds = $this->_getBounds();
@@ -103,7 +116,8 @@ class Poi extends ResourceController {
      * @param $id
      * @return ResponseInterface
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $sessionLib   = new SessionLibrary();
         $placeContent = new PlacesContent();
         $placeContent->translate([$id]);
@@ -138,7 +152,8 @@ class Poi extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function users(): ResponseInterface {
+    public function users(): ResponseInterface
+    {
         $sessionsModel = new SessionsModel();
         $sessionsData  = $sessionsModel
             ->select('lat, lon')
@@ -160,7 +175,8 @@ class Poi extends ResourceController {
      * Getting the map boundaries from the GET parameter
      * @return ResponseInterface|array
      */
-    protected function _getBounds(): ResponseInterface | array {
+    protected function _getBounds(): ResponseInterface | array
+    {
         // left (lon), top (lat), right (lon), bottom (lat)
         $bounds = $this->request->getGet('bounds', FILTER_SANITIZE_SPECIAL_CHARS);
         $bounds = explode(',', $bounds);

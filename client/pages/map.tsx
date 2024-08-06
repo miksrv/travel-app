@@ -52,6 +52,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     const { data: poiListData, isFetching: placesLoading } = API.usePoiGetListQuery(
         {
             bounds: mapBounds,
+            cluster: false,
             categories: mapCategories ?? [],
             zoom: mapZoom
         },
