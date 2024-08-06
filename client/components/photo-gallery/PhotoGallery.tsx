@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
@@ -8,7 +9,6 @@ import styles from './styles.module.sass'
 import { API, IMG_HOST } from '@/api/api'
 import { useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
-import ConfirmationDialog from '@/components/confirmation-dialog'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PhotoUploadSection from '@/components/photo-upload-section'
 import { concatClassNames as cn } from '@/functions/helpers'
@@ -16,6 +16,10 @@ import Container, { ContainerProps } from '@/ui/container'
 import Icon from '@/ui/icon'
 import Popout from '@/ui/popout'
 import Spinner from '@/ui/spinner'
+
+const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
+    ssr: false
+})
 
 interface PhotoGalleryProps extends ContainerProps {
     photos?: Photo[]

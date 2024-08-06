@@ -6,9 +6,15 @@ import dynamic from 'next/dynamic'
 import styles from './styles.module.sass'
 
 import { concatClassNames as cn } from '@/functions/helpers'
+import Spinner from '@/ui/spinner'
 import { IMarkdownEditor } from '@uiw/react-markdown-editor'
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
+    loading: () => (
+        <div className={styles.loader}>
+            <Spinner />
+        </div>
+    ),
     ssr: false
 })
 
