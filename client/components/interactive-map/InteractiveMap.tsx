@@ -66,6 +66,7 @@ type MapProps = {
     layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
+    enableCenterPopup?: boolean
     enableSearch?: boolean
     enableFullScreen?: boolean
     enableCoordsControl?: boolean
@@ -94,6 +95,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     // layer,
     loading,
     storeMapPosition,
+    enableCenterPopup,
     enableSearch,
     enableFullScreen,
     enableCoordsControl,
@@ -325,6 +327,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <MarkerPoint
                             key={`markerPoint${i}`}
                             place={place}
+                            keepInView={enableCenterPopup}
                         />
                     )
                 )}

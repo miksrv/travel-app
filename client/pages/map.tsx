@@ -25,7 +25,7 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
 
 type MapPageProps = object
 
-const ENABLE_CLUSTERIZATION = false
+const ENABLE_POI_CLUSTERIZATION = false
 
 const MapPage: NextPage<MapPageProps> = () => {
     const router = useRouter()
@@ -53,12 +53,12 @@ const MapPage: NextPage<MapPageProps> = () => {
 
     const { data: poiListData, isFetching: placesLoading } = API.usePoiGetListQuery(
         {
-            bounds: mapBounds,
-            cluster: ENABLE_CLUSTERIZATION,
+            bounds: ENABLE_POI_CLUSTERIZATION ? mapBounds : undefined,
+            cluster: ENABLE_POI_CLUSTERIZATION,
             categories: mapCategories ?? [],
-            zoom: mapZoom
+            zoom: ENABLE_POI_CLUSTERIZATION ? mapZoom : undefined
         },
-        { skip: !mapBounds || mapType !== 'Places' }
+        { skip: (ENABLE_POI_CLUSTERIZATION && !mapBounds) || mapType !== 'Places' }
     )
 
     const { data: photoListData, isFetching: photosLoading } = API.usePoiGetPhotoListQuery(
@@ -203,6 +203,7 @@ const MapPage: NextPage<MapPageProps> = () => {
                     categories={categories}
                     // layer={initMapLayer}
                     storeMapPosition={true}
+                    enableCenterPopup={true}
                     enableSearch={true}
                     enableFullScreen={true}
                     enableCoordsControl={true}
