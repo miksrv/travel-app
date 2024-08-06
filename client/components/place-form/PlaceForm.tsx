@@ -45,13 +45,12 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
     const location = useAppSelector((state) => state.application.userLocation)
 
-    const [mapBounds, setMapBounds] = useState<string>()
     const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
     const [formErrors, setFormErrors] = useState<ApiTypes.RequestPlacesPostItem>()
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
     const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
 
-    const { data: poiListData } = API.usePoiGetListQuery({ bounds: mapBounds }, { skip: !mapBounds })
+    const { data: poiListData } = API.usePoiGetListQuery()
     const { data: categoryData } = API.useCategoriesGetListQuery()
 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
@@ -62,20 +61,6 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
     const handleChangeCategory = (category?: DropdownOption) => {
         setFormData({ ...formData, category: String(category?.key) })
-    }
-
-    const handleMapBounds = (bounds: LatLngBounds) => {
-        const mapCenter = bounds.getCenter()
-
-        if (!placeId || (placeId && (formData?.lat || formData?.lat === 0) && (formData.lon || formData.lon === 0))) {
-            setFormData({
-                ...formData,
-                lat: mapCenter.lat,
-                lon: mapCenter.lng
-            })
-        }
-
-        debounceSetMapBounds(bounds)
     }
 
     const handleSelectTags = (value: string[]) => {
@@ -145,7 +130,18 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
-            setMapBounds(bounds.toBBoxString())
+            const mapCenter = bounds.getCenter()
+
+            if (
+                !placeId ||
+                (placeId && (formData?.lat || formData?.lat === 0) && (formData.lon || formData.lon === 0))
+            ) {
+                setFormData({
+                    ...formData,
+                    lat: mapCenter.lat,
+                    lon: mapCenter.lng
+                })
+            }
         }, 500),
         []
     )
@@ -233,13 +229,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     enableFullScreen={true}
                     enableCoordsControl={true}
                     enableLayersSwitcher={true}
+                    enableCenterPopup={true}
+                    hideAdditionalLayers={true}
                     scrollWheelZoom={!placeId}
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
                     zoom={placeId ? 15 : undefined}
                     center={placeId && formData ? [formData.lat!, formData.lon!] : undefined}
                     userLatLon={location}
-                    onChangeBounds={handleMapBounds}
+                    onChangeBounds={debounceSetMapBounds}
                 />
             </div>
 

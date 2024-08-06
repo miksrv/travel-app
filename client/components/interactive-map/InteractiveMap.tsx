@@ -73,6 +73,7 @@ type MapProps = {
     enableCategoryControl?: boolean
     enableLayersSwitcher?: boolean
     enableContextMenu?: boolean
+    hideAdditionalLayers?: boolean
     storeMapKey?: string
     fullMapLink?: string
     userLatLon?: ApiTypes.LatLonCoordinate
@@ -102,6 +103,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     enableCategoryControl,
     enableLayersSwitcher,
     enableContextMenu,
+    hideAdditionalLayers,
     storeMapKey,
     fullMapLink,
     userLatLon,
@@ -399,6 +401,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                         <LayerSwitcherControl
                             currentLayer={mapLayer}
                             currentType={mapType}
+                            hideAdditionalLayers={hideAdditionalLayers}
                             additionalLayers={additionalLayers}
                             onSwitchMapLayer={setMapLayer}
                             onSwitchMapType={handleSwitchMapType}
