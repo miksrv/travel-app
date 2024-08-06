@@ -216,5 +216,6 @@
     "interesting-places": "Interesting places",
     "click-here-upload-photos": "Click here for upload photos",
     "supported-formats": "Supported formats",
+    "notification-list-cleared": "Notification list cleared",
     "delete-place-confirmation": "Deleting a geotag will delete all photos, comments, bookmarks, etc. associated with it. Do you confirm deletion?"
 }
