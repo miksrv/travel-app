@@ -14,6 +14,13 @@ use ReflectionException;
  * Show all user activity such as places, photos and rating
  */
 class Activity extends ResourceController {
+
+    protected $model;
+
+    function __construct() {
+        $this->model = new ActivityModel();
+    }
+
     /**
      * Show all activities for all users and all places, photos
      * @return ResponseInterface
@@ -22,14 +29,13 @@ class Activity extends ResourceController {
     public function list(): ResponseInterface
     {
         $lastDate = $this->request->getGet('date', FILTER_SANITIZE_SPECIAL_CHARS);
-        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 20);
+        $limit    = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 9);
         $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $author   = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place    = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 
         $placeContent  = new PlacesContent();
-        $activityModel = new ActivityModel();
-        $activityData  = $activityModel->getActivityList($lastDate, $author, $place, min($limit, 40), $offset);
+        $activityData  = $this->model->getActivityList($lastDate, $author, $place, min($limit, 40), $offset);
 
         $placesIds   = [];
         $activityIds = [];
@@ -44,22 +50,53 @@ class Activity extends ResourceController {
 
         $placeContent->translate($placesIds, true);
 
-        $response = $this->_groupSimilarActivities($activityData, $placeContent);
+        // Расширяем данные активностей
+        $activityData = $this->expandActivities($activityData);
 
-        // We remove the last object in the array because it may not be completely grouped
-        if (count($response) >= $limit) {
-            array_pop($response);
+        // Теперь группируем данные
+        $groupedData = $this->groupSimilarActivities($activityData, $placeContent);
+
+        // Удаляем последний объект в массиве, если он может быть не полностью сгруппирован
+        if (count($groupedData) >= $limit) {
+            array_pop($groupedData);
         }
 
-        // Incrementing view counter
+        // Увеличиваем счетчик просмотров
         if (!empty($activityIds)) {
-            $activityModel
+            $this->model
                 ->set('views', 'views + 1', false)
                 ->whereIn('id', $activityIds)
                 ->update();
         }
 
-        return $this->respond(['items' => $response]);
+        return $this->respond(['items' => $groupedData]);
+    }
+
+    private function expandActivities(array $activityData): array
+    {
+        if (count($activityData) === 0) {
+            return $activityData;
+        }
+
+        $lastItem = end($activityData);
+        $nextItem = $this->model->getNextActivityItem($lastItem->id, $lastItem->created_at, $lastItem->user_id, $lastItem->place_id);
+
+        if ($nextItem && $this->shouldGroupActivities($lastItem, $nextItem)) {
+            $activityData[] = $nextItem;
+
+            return $this->expandActivities($activityData);
+        }
+
+        return $activityData;
+    }
+
+    private function shouldGroupActivities($lastItem, $nextItem): bool
+    {
+        return (
+            (!isset($lastItem->place) || $lastItem->place->id === $nextItem->place_id) &&
+            $lastItem->user_id === $nextItem->user_id
+            // (strtotime($lastItem->created) - strtotime($nextItem->created_at)) <= 60 * 60
+        );
     }
 
     /**
@@ -69,7 +106,7 @@ class Activity extends ResourceController {
      * @param PlacesContent|null $placeContent
      * @return array
      */
-    protected function _groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array
+    protected function groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array
     {
         $categoriesModel = new CategoryModel();
         $categoriesData  = $categoriesModel->findAll();
@@ -80,31 +117,38 @@ class Activity extends ResourceController {
             return $groupData;
         }
 
+        $lastGroupIndex = -1;
         foreach ($activityData as $item) {
-            $lastGroup = end($groupData);
+            // $itemCreatedAt = strtotime($item->created_at);
             $photoPath = PATH_PHOTOS . $item->place_id . '/';
             $itemPhoto = $item->type === 'photo' && $item->filename ? [
                 'full'      => $photoPath . $item->filename . '.' . $item->extension,
                 'preview'   => $photoPath . $item->filename . '_preview.' . $item->extension,
-                'width'     => PHOTO_PREVIEW_WIDTH, // (int) $item->width,
-                'height'    => PHOTO_PREVIEW_HEIGHT, // (int) $item->height,
+                'width'     => PHOTO_PREVIEW_WIDTH,
+                'height'    => PHOTO_PREVIEW_HEIGHT,
                 'placeId'   => $item->place_id
             ] : null;
 
-            // We group activity by photos of one user, uploaded for one place and with a difference of no more than 60 minutes
+            // Проверяем, можем ли сгруппировать этот элемент с последней группой
             if (
-                $lastGroup &&
-//                $item->type === 'photo' &&
-//                $lastGroup->type === 'photo' &&
-                (!isset($lastGroup->place) || $lastGroup->place->id === $item->place_id) &&
-                $lastGroup->author->id === $item->user_id &&
-                (strtotime($lastGroup->created) - strtotime($item->created_at)) <= 60 * 60
+                $lastGroupIndex !== -1 &&
+                (!isset($groupData[$lastGroupIndex]->place) || $groupData[$lastGroupIndex]->place->id === $item->place_id) &&
+                $groupData[$lastGroupIndex]->author->id === $item->user_id
+                // ($itemCreatedAt - strtotime($groupData[$lastGroupIndex]->created)) <= 60 * 60
             ) {
-                $lastGroup->created  = $item->created_at; // Every time we update the loading time of the last photo
-                $lastGroup->type     = $item->type;
+                $groupData[$lastGroupIndex]->created = $item->created_at;
+
+                // Определяем тип группы на основе приоритета
+                if ($item->type === 'place') {
+                    $groupData[$lastGroupIndex]->type = 'place';
+                } elseif ($item->type === 'edit' && $groupData[$lastGroupIndex]->type !== 'place') {
+                    $groupData[$lastGroupIndex]->type = 'edit';
+                } elseif ($item->type === 'photo' && $groupData[$lastGroupIndex]->type === 'photo') {
+                    $groupData[$lastGroupIndex]->type = 'photo';
+                }
 
                 if ($itemPhoto) {
-                    $lastGroup->photos[] = $itemPhoto;
+                    $groupData[$lastGroupIndex]->photos[] = $itemPhoto;
                 }
 
                 continue;
@@ -120,16 +164,18 @@ class Activity extends ResourceController {
             if ($placeContent && $categoriesData) {
                 $findCategory = array_search($item->category, array_column($categoriesData, 'name'));
 
-                $currentGroup->place = (object) [
-                    'id'         => $item->place_id,
-                    'title'      => $placeContent->get($item->place_id, 'title', $item->created_at),
-                    'content'    => $placeContent->get($item->place_id, 'content', $item->created_at),
-                    'difference' => (int) $placeContent->get($item->place_id, 'delta', $item->created_at),
-                    'category'   => (object) [
-                        'name'  => $categoriesData[$findCategory]->name,
-                        'title' => $categoriesData[$findCategory]->title,
-                    ]
-                ];
+                if ($findCategory !== false) {
+                    $currentGroup->place = (object) [
+                        'id'         => $item->place_id,
+                        'title'      => $placeContent->get($item->place_id, 'title', $item->created_at),
+                        'content'    => $placeContent->get($item->place_id, 'content', $item->created_at),
+                        'difference' => (int) $placeContent->get($item->place_id, 'delta', $item->created_at),
+                        'category'   => (object) [
+                            'name'  => $categoriesData[$findCategory]->name,
+                            'title' => $categoriesData[$findCategory]->title,
+                        ]
+                    ];
+                }
             }
 
             if ($item->user_id) {
@@ -156,8 +202,10 @@ class Activity extends ResourceController {
             }
 
             $groupData[] = $currentGroup;
+            $lastGroupIndex = array_key_last($groupData);
         }
 
         return array_values($groupData);
     }
+
 }

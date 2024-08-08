@@ -65,11 +65,11 @@ class ActivityModel extends ApplicationBaseModel {
         string $userId = null,
         string $placeId = null,
         int $limit = 20,
-        int $offset = 0,
+        int $offset = 0
     ): array {
         $model = $this->select(
             'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
-                users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
+            users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
             ->join('places', 'activity.place_id = places.id', 'left')
             ->join('photos', 'activity.photo_id = photos.id', 'left')
             ->join('users', 'activity.user_id = users.id', 'left');
@@ -89,5 +89,25 @@ class ActivityModel extends ApplicationBaseModel {
         return $model->whereIn('activity.type', ['photo', 'place', 'edit'])
             ->orderBy('activity.created_at, activity.type', 'DESC')
             ->findAll(min(abs($limit), 100), abs($offset));
+    }
+
+    public function getNextActivityItem(
+        string $activityId,
+        string $createdAt,
+        string $userId,
+        string $placeId
+    ): object|array|null {
+        return $this->select(
+            'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
+                users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
+            ->join('places', 'activity.place_id = places.id', 'left')
+            ->join('photos', 'activity.photo_id = photos.id', 'left')
+            ->join('users', 'activity.user_id = users.id', 'left')
+            ->where('activity.id !=', $activityId)
+            ->where('activity.created_at >', $createdAt)
+            ->where('activity.user_id', $userId)
+            ->where('activity.place_id', $placeId)
+            ->orderBy('activity.created_at', 'ASC')
+            ->first();
     }
 }
