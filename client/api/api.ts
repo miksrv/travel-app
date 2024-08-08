@@ -201,7 +201,8 @@ export const API = createApi({
             query: (params) => ({
                 method: 'DELETE',
                 url: `photos/${params?.temporary ? 'temporary/' : ''}${params?.id}`
-            })
+            }),
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
         photoPostUpload: builder.mutation<ApiTypes.ResponsePhotoPostUpload, ApiTypes.RequestPhotoPostUpload>({
             invalidatesTags: (res, err, arg) => [
@@ -220,7 +221,8 @@ export const API = createApi({
             query: (params) => ({
                 method: 'PATCH',
                 url: `photos/rotate/${params?.temporary ? 'temporary/' : ''}${params?.id}`
-            })
+            }),
+            transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
         photosGetList: builder.query<ApiTypes.ResponsePhotosGetList, Maybe<ApiTypes.RequestPhotosGetList>>({
             providesTags: (result, error, arg) => [{ id: arg?.place, type: 'Photos' }],
