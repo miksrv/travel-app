@@ -9,7 +9,7 @@ import { IMG_HOST } from '@/api/api'
 import { Place } from '@/api/types/Place'
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
-import { addDecimalPoint, dateToUnixTime, numberFormatter } from '@/functions/helpers'
+import { addDecimalPoint, dateToUnixTime, numberFormatter, removeMarkdown } from '@/functions/helpers'
 import Badge from '@/ui/badge'
 
 interface PlacesListItemProps {
@@ -88,7 +88,7 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => (
 
         <p>
             {place.content?.length ? (
-                place.content
+                removeMarkdown(place.content)
             ) : (
                 <span className={styles.emptyContent}>{t('description-not-added-yet')}</span>
             )}

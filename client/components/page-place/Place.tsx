@@ -18,7 +18,7 @@ import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import PlaceCoverEditor from '@/components/place-cover-editor'
 import { PlaceCoverEditorHandle } from '@/components/place-cover-editor/PlaceCoverEditor'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
-import { formatDateUTC } from '@/functions/helpers'
+import { formatDateUTC, removeMarkdown, truncateText } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
@@ -108,7 +108,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
         // },
         // dateModified: formatDateISO(place?.updated?.date),
         // datePublished: formatDateISO(place?.created?.date),
-        description: place?.content,
+        description: removeMarkdown(place?.content),
         geo: {
             '@type': 'GeoCoordinates',
             latitude: place?.lat,
@@ -145,7 +145,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
 
             <NextSeo
                 title={place?.title}
-                description={place?.content?.substring(0, 220)}
+                description={truncateText(removeMarkdown(place?.content), 300)}
                 canonical={pagePlaceUrl}
                 openGraph={{
                     article: {
@@ -155,7 +155,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                         section: place?.category?.name,
                         tags: place?.tags
                     },
-                    description: place?.content?.substring(0, 250),
+                    description: truncateText(removeMarkdown(place?.content), 300),
                     images: photoList?.slice(0, 3).map((photo, index) => ({
                         alt: `${photo.title} (${index + 1})`,
                         height: photo.height,
