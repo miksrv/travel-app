@@ -7,7 +7,8 @@ import { useTranslation } from 'next-i18next'
 import styles from './styles.module.sass'
 
 import { API, IMG_HOST } from '@/api/api'
-import { useAppSelector } from '@/api/store'
+import { Notify } from '@/api/notificationSlice'
+import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PhotoUploadSection from '@/components/photo-upload-section'
@@ -37,12 +38,15 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     onPhotoUploadClick,
     ...props
 }) => {
+    const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const [deletePhoto, { data: deleteData, isLoading: deleteLoading }] = API.usePhotoDeleteItemMutation()
-    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading }] = API.usePhotoRotateItemMutation()
+    const [deletePhoto, { data: deleteData, isLoading: deleteLoading, error: deleteError }] =
+        API.usePhotoDeleteItemMutation()
+    const [rotatePhoto, { data: rotateData, isLoading: rotateLoading, error: rotateError }] =
+        API.usePhotoRotateItemMutation()
 
     const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
     const [photoLoadingID, setPhotoLoadingID] = useState<string>()
@@ -84,6 +88,22 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
         setPhotoLoadingID(undefined)
     }, [rotateData])
+
+    /**
+     * Show errors as notify
+     */
+    useEffect(() => {
+        if (deleteError || rotateError) {
+            dispatch(
+                Notify({
+                    id: 'actionPhotoError',
+                    title: '',
+                    message: (deleteError as string) || (rotateError as string),
+                    type: 'error'
+                })
+            )
+        }
+    }, [deleteError, rotateError])
 
     /**
      *  After deleting a photo, remove it from the local photo list
