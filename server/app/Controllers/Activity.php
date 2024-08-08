@@ -50,18 +50,18 @@ class Activity extends ResourceController {
 
         $placeContent->translate($placesIds, true);
 
-        // Расширяем данные активностей
-        $activityData = $this->expandActivities($activityData);
+        // Add more elements until they can be grouped together.
+        $this->addNextActivityItems($activityData);
 
-        // Теперь группируем данные
+        // Now we group the data
         $groupedData = $this->groupSimilarActivities($activityData, $placeContent);
 
-        // Удаляем последний объект в массиве, если он может быть не полностью сгруппирован
+        // Remove the last object in the array if it may not be fully grouped
         if (count($groupedData) >= $limit) {
             array_pop($groupedData);
         }
 
-        // Увеличиваем счетчик просмотров
+        // Increasing the view counter
         if (!empty($activityIds)) {
             $this->model
                 ->set('views', 'views + 1', false)
@@ -72,24 +72,36 @@ class Activity extends ResourceController {
         return $this->respond(['items' => $groupedData]);
     }
 
-    private function expandActivities(array $activityData): array
+    /**
+     * @param array $activityData
+     * @return void
+     */
+    protected function addNextActivityItems(array &$activityData): void
     {
-        if (count($activityData) === 0) {
-            return $activityData;
-        }
-
         $lastItem = end($activityData);
-        $nextItem = $this->model->getNextActivityItem($lastItem->id, $lastItem->created_at, $lastItem->user_id, $lastItem->place_id);
+        $nextItems = $this->model->getNextActivityItems($lastItem->id, $lastItem->created_at, $lastItem->user_id, $lastItem->place_id);
 
-        if ($nextItem && $this->shouldGroupActivities($lastItem, $nextItem)) {
-            $activityData[] = $nextItem;
-
-            return $this->expandActivities($activityData);
+        if (empty($nextItems)) {
+            return;
         }
 
-        return $activityData;
+        foreach ($nextItems as $nextItem) {
+            if ($this->shouldGroupActivities($lastItem, $nextItem)) {
+                $activityData[] = $nextItem;
+            } else {
+                return;
+            }
+        }
+
+        // Recursively call the function to add the following elements
+        $this->addNextActivityItems($activityData);
     }
 
+    /**
+     * @param $lastItem
+     * @param $nextItem
+     * @return bool
+     */
     private function shouldGroupActivities($lastItem, $nextItem): bool
     {
         return (
@@ -129,16 +141,19 @@ class Activity extends ResourceController {
                 'placeId'   => $item->place_id
             ] : null;
 
-            // Проверяем, можем ли сгруппировать этот элемент с последней группой
+            // Check if we can group this element with the last group
             if (
                 $lastGroupIndex !== -1 &&
                 (!isset($groupData[$lastGroupIndex]->place) || $groupData[$lastGroupIndex]->place->id === $item->place_id) &&
                 $groupData[$lastGroupIndex]->author->id === $item->user_id
                 // ($itemCreatedAt - strtotime($groupData[$lastGroupIndex]->created)) <= 60 * 60
             ) {
-                $groupData[$lastGroupIndex]->created = $item->created_at;
+                // We are updating the group date to an earlier one.
+                if (strtotime($item->created_at) < strtotime($groupData[$lastGroupIndex]->created)) {
+                    $groupData[$lastGroupIndex]->created = $item->created_at;
+                }
 
-                // Определяем тип группы на основе приоритета
+                // Determine the group type based on priority
                 if ($item->type === 'place') {
                     $groupData[$lastGroupIndex]->type = 'place';
                 } elseif ($item->type === 'edit' && $groupData[$lastGroupIndex]->type !== 'place') {
@@ -154,6 +169,7 @@ class Activity extends ResourceController {
                 continue;
             }
 
+            // Create a new group
             $currentGroup = (object) [
                 'type'    => $item->type,
                 'views'   => $item->views,
@@ -201,11 +217,10 @@ class Activity extends ResourceController {
                 ];
             }
 
-            $groupData[] = $currentGroup;
+            $groupData[]    = $currentGroup;
             $lastGroupIndex = array_key_last($groupData);
         }
 
         return array_values($groupData);
     }
-
 }

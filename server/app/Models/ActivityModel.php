@@ -91,23 +91,24 @@ class ActivityModel extends ApplicationBaseModel {
             ->findAll(min(abs($limit), 100), abs($offset));
     }
 
-    public function getNextActivityItem(
+    public function getNextActivityItems(
         string $activityId,
         string $createdAt,
         string $userId,
-        string $placeId
-    ): object|array|null {
+        string $placeId,
+        int $limit = 15
+    ): array {
         return $this->select(
             'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
-                users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
+            users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
             ->join('places', 'activity.place_id = places.id', 'left')
             ->join('photos', 'activity.photo_id = photos.id', 'left')
             ->join('users', 'activity.user_id = users.id', 'left')
             ->where('activity.id !=', $activityId)
-            ->where('activity.created_at >', $createdAt)
+            ->where('activity.created_at >=', $createdAt)
             ->where('activity.user_id', $userId)
             ->where('activity.place_id', $placeId)
             ->orderBy('activity.created_at', 'ASC')
-            ->first();
+            ->findAll($limit);
     }
 }
