@@ -221,7 +221,7 @@ class Photos extends ResourceController {
             return $this->failValidationErrors(lang('Photos.noPhotoFound'));
         }
 
-        if ($photoData->user_id !== $this->session->user?->id) {
+        if ($photoData->user_id !== $this->session->user?->id && $this->session->user->role !== 'admin') {
             return $this->failValidationErrors(lang('Photos.noAccessForDelete'));
         }
 
