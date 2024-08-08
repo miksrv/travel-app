@@ -145,15 +145,15 @@ export const removeMarkdown = (text?: string): string => {
     let cleanedText = text.replace(/(^|\s)(#{1,6})\s+([^\n]+)/g, '$1$3')
     // Remove bold and italic
     cleanedText = cleanedText.replace(/(\*\*|__)(.*?)\1/g, '$2')
-    cleanedText = cleanedText.replace(/(\*|_)(.*?)\1/g, '$2')
+    cleanedText = cleanedText.replace(/(\*\|_)(.*?)\1/g, '$2')
     // Remove strikethrough
     cleanedText = cleanedText.replace(/~~(.*?)~~/g, '$1')
     // Remove inline code
     cleanedText = cleanedText.replace(/`([^`]+)`/g, '$1')
     // Remove links
-    cleanedText = cleanedText.replace(/\[([^\]]+)\]\([^\)]+\)/g, '$1')
+    cleanedText = cleanedText.replace(/\[([^\]]+)\\]\([^\\)]+\)/g, '$1')
     // Remove images
-    cleanedText = cleanedText.replace(/!\[([^\]]*)\]\([^\)]+\)/g, '$1')
+    cleanedText = cleanedText.replace(/!\[([^\]]*)\\]\([^\\)]+\)/g, '$1')
     // Remove blockquotes
     cleanedText = cleanedText.replace(/^\s*>+\s+/gm, '')
     // Remove unordered lists
