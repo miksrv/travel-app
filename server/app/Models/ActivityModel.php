@@ -92,7 +92,7 @@ class ActivityModel extends ApplicationBaseModel {
     }
 
     public function getNextActivityItems(
-        string $activityId,
+        array $activityIds,
         string $createdAt,
         string $userId,
         string $placeId,
@@ -104,7 +104,7 @@ class ActivityModel extends ApplicationBaseModel {
             ->join('places', 'activity.place_id = places.id', 'left')
             ->join('photos', 'activity.photo_id = photos.id', 'left')
             ->join('users', 'activity.user_id = users.id', 'left')
-            ->where('activity.id !=', $activityId)
+            ->whereNotIn('activity.id', $activityIds)
             ->where('activity.created_at >=', $createdAt)
             ->where('activity.user_id', $userId)
             ->where('activity.place_id', $placeId)
