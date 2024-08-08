@@ -100,7 +100,7 @@ class Photos extends ResourceController {
         }
 
         if (!$photo = $this->request->getFile('photo')) {
-            return $this->failValidationErrors('No photo for upload');
+            return $this->failValidationErrors(lang('Photos.'));
         }
 
         $placesModel = new PlacesModel();
@@ -110,7 +110,7 @@ class Photos extends ResourceController {
         $placeContent->translate([$id]);
 
         if (!$placesData || !$placesData->id) {
-            return $this->failValidationErrors('There is no point with this ID');
+            return $this->failValidationErrors(lang('Photo.placeNotFound'));
         }
 
         if ($photo->hasMoved()) {
@@ -218,18 +218,18 @@ class Photos extends ResourceController {
         $photoData   = $photosModel->select('id, user_id, place_id, filename, extension')->find($id);
 
         if (!$photoData) {
-            return $this->failValidationErrors('No photo found with this ID');
+            return $this->failValidationErrors(lang('Photos.noPhotoFound'));
         }
 
-        if ($photoData->user_id !== $this->session->user?->id) {
-            return $this->failValidationErrors('You can not delete this photo');
+        if ($photoData->user_id !== $this->session->user?->id && $this->session->user->role !== 'admin') {
+            return $this->failValidationErrors(lang('Photos.noAccessForDelete'));
         }
 
         $placesModel = new PlacesModel();
         $placesData  = $placesModel->select('id, photos')->find($photoData->place_id);
 
         if (!$photosModel->delete($id, true)) {
-            return $this->failServerError('An error occurred on the server when deleting a photo');
+            return $this->failServerError('Photos.deleteError');
         }
 
         unlink(UPLOAD_PHOTOS . $photoData->place_id . '/' . $photoData->filename . '.' . $photoData->extension);
@@ -266,7 +266,7 @@ class Photos extends ResourceController {
         $photoData   = $photosModel->select('id, place_id, filename, extension, width, height')->find($id);
 
         if (!$photoData) {
-            return $this->failValidationErrors('No photo found with this ID');
+            return $this->failValidationErrors(lang('Photos.noPhotoFound'));
         }
 
         $photoDir = UPLOAD_PHOTOS . $photoData->place_id . '/';
