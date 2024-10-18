@@ -1,13 +1,11 @@
 import React from 'react'
+import { Button, cn, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { User } from '@/api/types/User'
 import UserAvatar from '@/components/user-avatar'
-import { concatClassNames as cn } from '@/functions/helpers'
 import Breadcrumbs, { BreadcrumbsProps } from '@/ui/breadcrumbs'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 interface HeaderProps extends BreadcrumbsProps {
     title?: string
@@ -22,9 +20,10 @@ const Header: React.FC<HeaderProps> = ({ title, backLink, className, attachedBot
     <Container className={cn(className, styles.header, attachedBottom && styles.attachedBottom)}>
         {backLink && (
             <Button
-                className={styles.backLink}
-                icon={'LargeLeft'}
+                mode={'outline'}
+                icon={'KeyboardLeft'}
                 link={backLink}
+                className={styles.backLink}
             />
         )}
         {userData?.id && (

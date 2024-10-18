@@ -1,15 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { Button, Checkbox, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { Categories } from '@/api/types/Place'
 import { categoryImage } from '@/functions/categories'
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
 
 interface CategoryControlProps {
     categories?: Categories[]
@@ -35,7 +33,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
     }
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const category = event.target.name as Categories
+        const category = event.target.id as Categories
 
         onChangeCategories?.(
             !event.target.checked

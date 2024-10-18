@@ -3,6 +3,7 @@ import { TFunction } from 'i18next'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Button, Container, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -13,9 +14,6 @@ import UserAvatarGroup from '@/components/user-avatar-group'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
-import Icon from '@/ui/icon'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -30,7 +28,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ t, place }) => (
     <Container className={styles.component}>
         <ul className={styles.information}>
             <li>
-                <Icon name={'Category'} />
+                <Icon name={'Bookmark'} />
                 <div className={styles.key}>{t('category')}</div>
                 <div className={styles.value}>
                     <Image
