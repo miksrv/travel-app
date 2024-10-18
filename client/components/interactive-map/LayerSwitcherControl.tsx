@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button, Checkbox, cn, Container } from 'simple-react-ui-kit'
 
 import {
     MapAdditionalLayers,
@@ -11,10 +12,6 @@ import {
 } from './InteractiveMap'
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
-import Container from '@/ui/container'
 import RadioButton from '@/ui/radio-button'
 
 interface LayerSwitcherControlProps {
