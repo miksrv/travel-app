@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import Image, { StaticImageData } from 'next/image'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn } from '@/functions/helpers'
 import OptionsList from '@/ui/dropdown/OptionsList'
-import Icon from '@/ui/icon'
 
 export type DropdownOption = {
     key: string | number
@@ -129,7 +128,7 @@ const Dropdown: React.FC<DropdownProps<any>> = ({
                                 <Icon name={'Close'} />
                             </button>
                         )}
-                        {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
+                        {isOpen ? <Icon name={'KeyboardUp'} /> : <Icon name={'KeyboardDown'} />}
                     </span>
                 </button>
                 {isOpen && (
