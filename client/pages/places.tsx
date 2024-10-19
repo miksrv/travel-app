@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import type { BreadcrumbList } from 'schema-dts'
+import { Button, Container } from 'simple-react-ui-kit'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
@@ -20,8 +21,6 @@ import PlacesList from '@/components/places-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
@@ -313,7 +312,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <PlacesList places={placesList} />
 
-            <Container className={'pagination'}>
+            <Container className={'paginationContainer'}>
                 <div>
                     {t('geotags_count')} <strong>{placesCount}</strong>
                 </div>
