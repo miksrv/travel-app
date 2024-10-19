@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -10,9 +11,7 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { equalsArrays } from '@/functions/helpers'
-import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
-import Container from '@/ui/container'
 import ContentEditor from '@/ui/content-editor'
 import ScreenSpinner from '@/ui/screen-spinner'
 
@@ -102,25 +101,22 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
                         <Button
                             mode={'link'}
                             disabled={isLoading}
+                            label={t('save')}
                             onClick={handleSaveEditorClick}
-                        >
-                            {t('save')}
-                        </Button>
+                        />
                         <Button
                             mode={'link'}
                             disabled={isLoading}
+                            label={t('cancel')}
                             onClick={handleSetEditorClick}
-                        >
-                            {t('cancel')}
-                        </Button>
+                        />
                     </>
                 ) : (
                     <Button
                         mode={'link'}
+                        label={t('edit')}
                         onClick={handleSetEditorClick}
-                    >
-                        {t('edit')}
-                    </Button>
+                    />
                 )
             }
         >
