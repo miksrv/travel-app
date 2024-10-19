@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
 import { useTranslation } from 'next-i18next'
+import { Button, cn, Icon } from 'simple-react-ui-kit'
 
 import Notifications from './Notifications'
 import Search from './Search'
@@ -14,9 +15,7 @@ import { ApiTypes } from '@/api/types'
 import AppAuthChecker from '@/components/app-auth-checker'
 import Logo from '@/components/app-bar/Logo'
 import UserMenu from '@/components/app-bar/UserMenu'
-import { concatClassNames as cn, round } from '@/functions/helpers'
-import Button from '@/ui/button'
-import Icon from '@/ui/icon'
+import { round } from '@/functions/helpers'
 
 interface HeaderProps {
     fullSize?: boolean
@@ -90,9 +89,8 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
                             mode={'secondary'}
                             className={styles.loginButton}
                             onClick={handleLoginClick}
-                        >
-                            {t('sign-in')}
-                        </Button>
+                            label={t('sign-in')}
+                        />
                     )}
                 </div>
             </div>

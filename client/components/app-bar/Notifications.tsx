@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button, Popout, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -7,11 +8,7 @@ import { API } from '@/api/api'
 import { deleteAllNotifications, Notify, setUnreadCounter } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import Notification from '@/components/snackbar/Notification'
-import Button from '@/ui/button'
 import Counter from '@/ui/counter'
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-import Spinner from '@/ui/spinner'
 
 type NotificationsProps = object
 
@@ -41,12 +38,6 @@ const Notifications: React.FC<NotificationsProps> = () => {
             skip: !notifyShow
         }
     )
-
-    const handleNotificationsClick = () => {
-        if (!notifyShow) {
-            setNotifyShow(true)
-        }
-    }
 
     const handleClearNotificationsClick = async () => {
         setNotifyPage(1)
@@ -99,6 +90,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
         }
 
         const targetDiv = notifyContainerRef.current
+
         if (!targetDiv) {
             return
         }
@@ -112,20 +104,18 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
     return (
         <Popout
+            icon={'Bell'}
+            mode={'outline'}
+            size={'medium'}
+            className={styles.notifyPopup}
+            onOpenChange={setNotifyShow}
             action={
-                <div
-                    className={styles.notificationsButton}
-                    role={'button'}
-                    tabIndex={0}
-                    onKeyDown={() => {}}
-                    onClick={handleNotificationsClick}
-                >
-                    <Icon name={'Notifications'} />
+                notifyCounter > 0 && (
                     <Counter
                         className={styles.notifyCounter}
                         value={notifyCounter}
                     />
-                </div>
+                )
             }
         >
             <>
@@ -143,27 +133,29 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         ))}
                     </div>
                 )}
+
                 {notifyLoading && (
                     <div className={styles.loader}>
                         <Spinner />
                     </div>
                 )}
+
                 {!notifyData?.items?.length && !notifyLoading && (
                     <div className={styles.noData}>
                         <p>{t('no-notifications')}</p>
                     </div>
                 )}
+
                 <div className={styles.notifyFooter}>
                     <Button
                         size={'small'}
                         mode={'secondary'}
+                        label={t('clear')}
                         stretched={true}
                         disabled={loadingClear || notifyFetching || !notifyData?.items?.length}
                         loading={loadingClear || (notifyFetching && !!notifyData?.items?.length)}
                         onClick={handleClearNotificationsClick}
-                    >
-                        {t('clear')}
-                    </Button>
+                    />
                 </div>
             </>
         </Popout>
