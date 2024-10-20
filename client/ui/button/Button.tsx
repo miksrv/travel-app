@@ -1,12 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import { cn, Icon, IconTypes, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-import Icon from '@/ui/icon'
-import { IconTypes } from '@/ui/icon/types'
-import Spinner from '@/ui/spinner'
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
     className?: string

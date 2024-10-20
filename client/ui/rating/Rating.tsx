@@ -1,11 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-import Icon from '@/ui/icon'
 
 interface RatingProps {
     value?: number
@@ -38,7 +36,7 @@ const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => 
                     }}
                 >
                     <label>
-                        {showFullStar(rating) ? <Icon name={'FilledStar'} /> : <Icon name={'Star'} />}
+                        {showFullStar(rating) ? <Icon name={'StarFilled'} /> : <Icon name={'StarEmpty'} />}
                         <input
                             type={'radio'}
                             value={rating}

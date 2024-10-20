@@ -1,10 +1,9 @@
 'use client'
 
 import React, { useEffect } from 'react'
+import { Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import Spinner from '@/ui/spinner'
 
 interface ScreenSpinnerProps {
     text?: string
