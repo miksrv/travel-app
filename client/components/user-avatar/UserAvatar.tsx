@@ -2,12 +2,13 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { User } from '@/api/types/User'
-import { concatClassNames as cn, minutesAgo } from '@/functions/helpers'
+import { minutesAgo } from '@/functions/helpers'
 import defaultAvatar from '@/public/images/no-avatar.png'
 
 type SizeType = 'small' | 'tiny' | 'medium'

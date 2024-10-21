@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Trans, useTranslation } from 'next-i18next'
+import { Button, Checkbox } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -10,8 +11,6 @@ import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-import Button from '@/ui/button'
-import Checkbox from '@/ui/checkbox'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
@@ -173,94 +172,94 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                 ))}
             </div>
 
-            <div className={styles.section}>
-                <h3 className={styles.header}>{t('change-password')}</h3>
-                {values?.authType === 'native' ? (
-                    <>
-                        <div className={styles.formElement}>
-                            <Input
-                                name={'oldPassword'}
-                                label={t('input_old-password')}
-                                type={'password'}
-                                placeholder={t('input_old-password-placeholder')}
-                                disabled={loading}
-                                value={formData?.oldPassword}
-                                error={formErrors?.oldPassword}
-                                onKeyDown={handleKeyPress}
-                                onChange={handleChange}
-                            />
-                        </div>
+            {!loading && !!values?.authType && (
+                <div className={styles.section}>
+                    <h3 className={styles.header}>{t('change-password')}</h3>
+                    {values?.authType === 'native' ? (
+                        <>
+                            <div className={styles.formElement}>
+                                <Input
+                                    name={'oldPassword'}
+                                    label={t('input_old-password')}
+                                    type={'password'}
+                                    placeholder={t('input_old-password-placeholder')}
+                                    disabled={loading}
+                                    value={formData?.oldPassword}
+                                    error={formErrors?.oldPassword}
+                                    onKeyDown={handleKeyPress}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        <div className={styles.formElement}>
-                            <Input
-                                name={'newPassword'}
-                                label={t('input_new-password')}
-                                type={'password'}
-                                placeholder={t('input_new-password-placeholder')}
-                                disabled={loading}
-                                value={formData?.newPassword}
-                                error={formErrors?.newPassword}
-                                onKeyDown={handleKeyPress}
-                                onChange={handleChange}
-                            />
-                        </div>
+                            <div className={styles.formElement}>
+                                <Input
+                                    name={'newPassword'}
+                                    label={t('input_new-password')}
+                                    type={'password'}
+                                    placeholder={t('input_new-password-placeholder')}
+                                    disabled={loading}
+                                    value={formData?.newPassword}
+                                    error={formErrors?.newPassword}
+                                    onKeyDown={handleKeyPress}
+                                    onChange={handleChange}
+                                />
+                            </div>
 
-                        <div className={styles.formElement}>
-                            <Input
-                                name={'confirmPassword'}
-                                label={t('input_password-repeat')}
-                                type={'password'}
-                                disabled={loading}
-                                value={formData?.confirmPassword}
-                                error={formErrors?.confirmPassword}
-                                onKeyDown={handleKeyPress}
-                                onChange={handleChange}
+                            <div className={styles.formElement}>
+                                <Input
+                                    name={'confirmPassword'}
+                                    label={t('input_password-repeat')}
+                                    type={'password'}
+                                    disabled={loading}
+                                    value={formData?.confirmPassword}
+                                    error={formErrors?.confirmPassword}
+                                    onKeyDown={handleKeyPress}
+                                    onChange={handleChange}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div className={styles.authService}>
+                            <Image
+                                src={
+                                    values?.authType === 'google'
+                                        ? googleLogo.src
+                                        : values?.authType === 'vk'
+                                          ? vkLogo.src
+                                          : yandexLogo.src
+                                }
+                                width={48}
+                                height={48}
+                                alt={''}
                             />
+                            <p>
+                                <Trans
+                                    i18nKey={'you-logged-via-service'}
+                                    values={{ service: values?.authType }}
+                                />
+                            </p>
                         </div>
-                    </>
-                ) : (
-                    <div className={styles.authService}>
-                        <Image
-                            src={
-                                values?.authType === 'google'
-                                    ? googleLogo.src
-                                    : values?.authType === 'vk'
-                                      ? vkLogo.src
-                                      : yandexLogo.src
-                            }
-                            width={48}
-                            height={48}
-                            alt={''}
-                        />
-                        <p>
-                            <Trans
-                                i18nKey={'you-logged-via-service'}
-                                values={{ service: values?.authType }}
-                            />
-                        </p>
-                    </div>
-                )}
-            </div>
+                    )}
+                </div>
+            )}
 
             <div className={styles.actions}>
                 <Button
                     size={'medium'}
                     mode={'primary'}
                     loading={loading}
+                    label={t('save')}
                     disabled={loading || disabled}
                     onClick={handleSubmit}
-                >
-                    {t('save')}
-                </Button>
+                />
 
                 <Button
                     size={'medium'}
                     mode={'secondary'}
+                    label={t('cancel')}
                     disabled={loading}
                     onClick={onCancel}
-                >
-                    {t('cancel')}
-                </Button>
+                />
             </div>
         </section>
     )
