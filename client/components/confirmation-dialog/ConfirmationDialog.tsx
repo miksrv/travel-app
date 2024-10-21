@@ -1,5 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import 'react-image-crop/src/ReactCrop.scss'
 
@@ -7,7 +8,6 @@ import styles from './styles.module.sass'
 
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import Button from '@/ui/button'
 import Dialog, { DialogProps } from '@/ui/dialog'
 
 interface ConfirmationDialogProps extends DialogProps {
@@ -59,18 +59,16 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
                     size={'small'}
                     mode={'secondary'}
                     onClick={onReject}
-                >
-                    {rejectText ?? t('confirmation-dialog-reject')}
-                </Button>
+                    label={rejectText ?? t('confirmation-dialog-reject')}
+                />
 
                 <Button
                     size={'small'}
                     variant={'negative'}
                     mode={'primary'}
                     onClick={onAccept}
-                >
-                    {acceptText ?? t('confirmation-dialog-accept')}
-                </Button>
+                    label={acceptText ?? t('confirmation-dialog-accept')}
+                />
             </div>
         </Dialog>
     )

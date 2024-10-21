@@ -1,12 +1,10 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
+import { cn, Icon, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn } from '@/functions/helpers'
 import Chip from '@/ui/chips-select/Chip'
-import Icon from '@/ui/icon'
-import Spinner from '@/ui/spinner'
 
 interface ChipsSelectProps {
     className?: string
@@ -152,7 +150,7 @@ const ChipsSelect: React.FC<ChipsSelectProps> = ({
                                 disabled={disabled}
                                 onClick={toggleDropdown}
                             >
-                                {isOpen ? <Icon name={'Up'} /> : <Icon name={'Down'} />}
+                                {isOpen ? <Icon name={'KeyboardUp'} /> : <Icon name={'KeyboardDown'} />}
                             </button>
                         )}
                     </span>

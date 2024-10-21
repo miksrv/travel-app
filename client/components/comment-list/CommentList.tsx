@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button, cn } from 'simple-react-ui-kit'
 
 import CommentListItem from './CommentListItem'
 import styles from './styles.module.sass'
@@ -8,8 +9,6 @@ import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Comments } from '@/api/types/Comments'
 import CommentForm from '@/components/comment-list/CommentForm'
-import { concatClassNames as cn } from '@/functions/helpers'
-import Button from '@/ui/button'
 
 interface CommentListProps {
     placeId: string
@@ -69,10 +68,10 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
                     <div>{t('login-to-write-comment')}</div>
                     <Button
                         className={styles.loginButton}
+                        mode={'outline'}
+                        label={t('sign-in')}
                         onClick={handleLoginClick}
-                    >
-                        {t('sign-in')}
-                    </Button>
+                    />
                 </div>
             )}
         </section>

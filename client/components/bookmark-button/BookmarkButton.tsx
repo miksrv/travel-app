@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button, ButtonProps } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -7,7 +8,6 @@ import { API } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import Button, { ButtonProps } from '@/ui/button'
 
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
@@ -60,8 +60,8 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
     return (
         <Button
             {...props}
-            mode={'secondary'}
-            icon={bookmarkData?.result ? 'HeartFull' : 'HeartEmpty'}
+            mode={props?.mode ?? 'secondary'}
+            icon={bookmarkData?.result ? 'HeartFilled' : 'HeartEmpty'}
             className={styles.bookmarkButton}
             disabled={!placeId || loading}
             loading={loading}

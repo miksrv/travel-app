@@ -2,14 +2,13 @@ import React from 'react'
 import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Icon, Popout } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { User } from '@/api/types/User'
 import UserAvatar from '@/components/user-avatar'
 import { levelImage } from '@/functions/userLevels'
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
 
 interface UserMenuProps {
     t: TFunction
@@ -19,6 +18,8 @@ interface UserMenuProps {
 
 const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
     <Popout
+        mode={'outline'}
+        className={styles.userMenuPopout}
         action={
             <UserAvatar
                 size={'medium'}

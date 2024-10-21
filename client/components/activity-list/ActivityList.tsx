@@ -1,11 +1,11 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
+import { Container } from 'simple-react-ui-kit'
 
 import ActivityListItem from './ActivityListItem'
 import ActivityListItemLoader from './ActivityListItemLoader'
 
 import { Item } from '@/api/types/Activity'
-import Container from '@/ui/container'
 
 interface PlacesListProps {
     activities?: Item[]
@@ -26,7 +26,14 @@ const ActivityList: React.FC<PlacesListProps> = ({ activities, loading, title })
                 />
             ))}
 
-            {!activities?.length && !loading && <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>}
+            {!activities?.length && !loading && (
+                <Container
+                    style={{ marginTop: 15 }}
+                    className={'emptyList'}
+                >
+                    {t('nothing-here-yet')}
+                </Container>
+            )}
 
             {loading && <ActivityListItemLoader />}
         </>

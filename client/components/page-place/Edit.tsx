@@ -2,6 +2,7 @@ import React, { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, isApiValidationErrors, SITE_LINK } from '@/api/api'
 import { ApiTypes } from '@/api/types'
@@ -9,7 +10,6 @@ import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
 import { equalsArrays } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
-import Container from '@/ui/container'
 
 type EditProps = Omit<PlacePageProps, 'page'>
 
@@ -89,7 +89,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
                 ]}
             />
 
-            <Container>
+            <Container style={{ marginTop: 15 }}>
                 <PlaceForm
                     placeId={place?.id}
                     values={placeValuesData}

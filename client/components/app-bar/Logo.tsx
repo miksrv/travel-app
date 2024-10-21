@@ -3,10 +3,9 @@
 import React from 'react'
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
 
 const Logo: React.FC = () => {
     const { theme } = useTheme()

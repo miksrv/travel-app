@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
+import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -13,10 +14,6 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { Place } from '@/api/types/Place'
 import BookmarkButton from '@/components/bookmark-button'
-import Button from '@/ui/button'
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-import Spinner from '@/ui/spinner'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
     ssr: false
@@ -119,18 +116,21 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                 <Button
                     className={styles.backLink}
                     onClick={handleBackLinkClick}
-                    icon={'Left'}
+                    icon={'KeyboardLeft'}
                 />
 
                 <div className={styles.actionButtons}>
                     <BookmarkButton
                         size={'medium'}
+                        mode={'secondary'}
                         placeId={place?.id}
                     />
 
                     <Popout
                         className={styles.contextMenu}
-                        action={<Icon name={'VerticalDots'} />}
+                        icon={'VerticalDots'}
+                        size={'medium'}
+                        mode={'secondary'}
                     >
                         <ul className={'contextListMenu'}>
                             <li>

@@ -1,10 +1,8 @@
 import React, { PropsWithChildren, useCallback, useEffect, useState } from 'react'
 import { EmblaCarouselType } from 'embla-carousel'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-import Icon from '@/ui/icon'
 
 type UsePrevNextButtonsType = {
     prevBtnDisabled: boolean
@@ -65,7 +63,7 @@ export const PrevButton: React.FC<PropType> = ({ children, ...restProps }) => (
         {...restProps}
     >
         <span>
-            <Icon name={'Left'} />
+            <Icon name={'KeyboardLeft'} />
             {children}
         </span>
     </button>
@@ -78,7 +76,7 @@ export const NextButton: React.FC<PropType> = ({ children, ...restProps }) => (
         {...restProps}
     >
         <span>
-            <Icon name={'Right'} />
+            <Icon name={'KeyboardRight'} />
             {children}
         </span>
     </button>

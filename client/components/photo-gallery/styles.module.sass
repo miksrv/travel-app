@@ -1,6 +1,8 @@
 @import ../../styles/variables
 
 .galleryContainer
+    margin-top: 15px
+
     :global(.emptyList)
         margin: -15px !important
 
@@ -78,46 +80,18 @@
             opacity: 0
             transition: opacity .3s
 
-            & > div
-                min-width: auto
-                white-space: nowrap
-
-            button
-                border: none
-                cursor: pointer
-                padding: 4px 4px 0 4px
-                border-radius: var(--border-radius)
+            > button
                 background-color: rgba(0, 0, 0, .6)
+                padding: 8px
 
                 svg
                     width: 16px
                     height: 16px
                     fill: #FFFFFF
 
-        .actionMenu
+            > div
+                min-width: auto
+                white-space: nowrap
 
-            button
-                background-color: transparent
-                width: 100%
-                color: var(--text-color-primary)
-                text-align: left
-                opacity: 1
-                padding: 8px 10px
-
-                svg
-                    fill: var(--text-color-primary)
-                    vertical-align: middle
-                    margin-top: -2px
-
-                &:hover
-                    background-color: var(--button-default-background-hover)
-
-            li:first-child
                 button
-                    border-bottom-left-radius: 0
-                    border-bottom-right-radius: 0
-
-            li:last-child
-                button
-                    border-top-left-radius: 0
-                    border-top-right-radius: 0
+                    justify-content: flex-start

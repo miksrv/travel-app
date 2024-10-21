@@ -1,21 +1,19 @@
 import React from 'react'
+import { Icon, IconTypes } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import Icon from '@/ui/icon'
-import { IconTypes } from '@/ui/icon/types'
-
-interface BadgeProps {
+interface PlacePlateProps {
     icon?: IconTypes
     children?: React.ReactNode
     content?: React.ReactNode
 }
 
-const Badge: React.FC<BadgeProps> = ({ icon, children, content }) => (
-    <div className={styles.badge}>
+const PlacePlate: React.FC<PlacePlateProps> = ({ icon, children, content }) => (
+    <div className={styles.placePlate}>
         {icon && <Icon name={icon} />}
         {children || content}
     </div>
 )
 
-export default Badge
+export default PlacePlate

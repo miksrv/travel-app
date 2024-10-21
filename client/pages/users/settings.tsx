@@ -4,6 +4,7 @@ import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -13,7 +14,6 @@ import { ApiTypes } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserForm from '@/components/user-form'
-import Container from '@/ui/container'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 type SettingsUserPageProps = object
@@ -59,10 +59,10 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     }
 
     useEffect(() => {
-        if (!authSlice.isAuth) {
+        if (authSlice.isAuth === false) {
             router.push('/users')
         }
-    })
+    }, [authSlice?.isAuth])
 
     useEffect(() => {
         if (isSuccess) {
@@ -102,7 +102,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                     }
                 ]}
             />
-            <Container>
+            <Container style={{ marginTop: 15 }}>
                 {!authSlice.isAuth && <ScreenSpinner />}
 
                 <UserForm

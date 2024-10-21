@@ -2,11 +2,10 @@
 
 import React from 'react'
 import dynamic from 'next/dynamic'
+import { cn, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn } from '@/functions/helpers'
-import Spinner from '@/ui/spinner'
 import { IMarkdownEditor } from '@uiw/react-markdown-editor'
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {

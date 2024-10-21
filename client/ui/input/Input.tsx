@@ -1,8 +1,7 @@
 import React from 'react'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string

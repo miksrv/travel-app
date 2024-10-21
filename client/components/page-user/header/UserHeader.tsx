@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Button, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -14,8 +15,6 @@ import UserAvatarEditor from '@/components/user-avatar-editor'
 import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import defaultAvatar from '@/public/images/no-avatar.png'
-import Button from '@/ui/button'
-import Icon from '@/ui/icon'
 import Progress from '@/ui/progress'
 
 interface UserHeaderProps {
@@ -54,7 +53,7 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                 </div>
                 <ul className={styles.information}>
                     <li>
-                        <Icon name={'Star'} />
+                        <Icon name={'StarEmpty'} />
                         <div className={styles.key}>{t('reputation')}:</div>
                         <div className={styles.value}>
                             <Reputation value={user?.reputation || 0} />
@@ -173,10 +172,9 @@ const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                 size={'medium'}
                                 icon={'Pencil'}
                                 mode={'secondary'}
+                                label={t('settings')}
                                 link={'/users/settings'}
-                            >
-                                {t('settings')}
-                            </Button>
+                            />
                         </>
                     )
                 }

@@ -5,15 +5,13 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Button, Container, Spinner } from 'simple-react-ui-kit'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 import Message from '@/ui/message'
-import Spinner from '@/ui/spinner'
 
 type UnsubscribePageProps = object
 
@@ -70,9 +68,8 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                                 link={'/'}
                                 size={'medium'}
                                 mode={'primary'}
-                            >
-                                {t('go-to-home-page')}
-                            </Button>
+                                label={t('go-to-home-page')}
+                            />
                         )}
                     </Container>
                 </div>

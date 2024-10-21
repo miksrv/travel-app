@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import type { BreadcrumbList, ProfilePage } from 'schema-dts'
+import { Button } from 'simple-react-ui-kit'
 
 import { API, IMG_HOST, SITE_LINK } from '@/api/api'
 import type { Item } from '@/api/types/Activity'
@@ -13,7 +14,6 @@ import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PhotoGallery from '@/components/photo-gallery'
 import { formatDateISO } from '@/functions/helpers'
 import type { UserPageProps } from '@/pages/users/[...slug]'
-import Button from '@/ui/button'
 
 type UserProps = Omit<UserPageProps, 'page'>
 

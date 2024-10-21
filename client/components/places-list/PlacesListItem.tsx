@@ -10,7 +10,7 @@ import { Place } from '@/api/types/Place'
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, dateToUnixTime, numberFormatter, removeMarkdown } from '@/functions/helpers'
-import Badge from '@/ui/badge'
+import PlacePlate from '@/ui/place-plate'
 
 interface PlacesListItemProps {
     t: TFunction
@@ -47,14 +47,14 @@ const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => (
             <div className={styles.bottomPanel}>
                 <div className={styles.iconsPanel}>
                     {!!place.rating && (
-                        <Badge
-                            icon={'Star'}
+                        <PlacePlate
+                            icon={'StarEmpty'}
                             content={addDecimalPoint(place.rating)}
                         />
                     )}
 
                     {!!place.distance && (
-                        <Badge
+                        <PlacePlate
                             icon={'Ruler'}
                             content={numberFormatter(place.distance) + ' ' + t('km')}
                         />

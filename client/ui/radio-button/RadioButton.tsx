@@ -1,9 +1,7 @@
 import React from 'react'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
-import Icon from '@/ui/icon'
 
 interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string

@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react'
 import Link from 'next/link'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn, encodeQueryData } from '@/functions/helpers'
-import Icon from '@/ui/icon'
+import { encodeQueryData } from '@/functions/helpers'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
@@ -133,9 +133,9 @@ const Pagination: React.FC<PaginationProps<any>> = ({
                         }}
                     >
                         {page === RIGHT_PAGE ? (
-                            <Icon name={'Right'} />
+                            <Icon name={'KeyboardRight'} />
                         ) : page === LEFT_PAGE ? (
-                            <Icon name={'Left'} />
+                            <Icon name={'KeyboardLeft'} />
                         ) : (
                             <>{page}</>
                         )}

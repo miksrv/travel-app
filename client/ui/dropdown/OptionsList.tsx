@@ -1,10 +1,9 @@
 import React from 'react'
 import Image from 'next/image'
+import { cn } from 'simple-react-ui-kit'
 
 import type { DropdownOption } from './Dropdown'
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
 
 interface DropdownProps {
     options?: DropdownOption[]

@@ -4,7 +4,6 @@
     z-index: 450
     color: var(--text-color-primary)
     background-color: var(--container-background)
-    padding: 0 14px
     box-shadow: $boxShadow1
     height: 50px
     position: fixed
@@ -60,6 +59,8 @@
             display: none
 
     @media only screen and (max-width: $mobileMaxWidth)
+        padding: 0 14px
+
         .hamburgerButton
             display: block
 
@@ -70,18 +71,9 @@
         justify-content: center
         padding-left: 10px
 
-        & > div, .loginButton
+        .loginButton
             margin-left: 10px
             white-space: nowrap
-
-        svg
-            margin-top: 5px
-            height: 24px
-            width: 24px
-            fill: var(--icon-color-primary)
-
-            &:hover, &:focus
-                opacity: .7
 
     .userInfo
         padding: 10px
@@ -94,18 +86,26 @@
         .levelImage
             vertical-align: middle
 
-    .notificationsButton
-        position: relative
-        border: none
-        background: transparent
-        padding: 0
-        line-height: 10px
-        cursor: pointer
+    .userMenuPopout
+        margin-left: 10px
 
-        .notifyCounter
-            position: absolute
-            top: -3px
-            right: -3px
+        button
+            padding: 0 !important
+            background: transparent !important
+
+    .notifyPopup
+        svg
+            height: 24px !important
+            width: 24px !important
+            fill: var(--icon-color-primary)
+
+    .notifyCounter
+        width: 20px
+        height: 20px
+        font-size: 10px !important
+        position: absolute
+        top: -3px
+        right: -3px
 
     .notifyFooter
         padding: 4px

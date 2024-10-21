@@ -1,13 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, SITE_LINK } from '@/api/api'
 import Header from '@/components/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PlacesList from '@/components/places-list'
 import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
-import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
@@ -64,7 +64,10 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
                 loading={isLoading}
             />
 
-            <Container className={`pagination ${!data?.count || data?.count <= PLACES_PER_PAGE ? 'hide' : ''}`}>
+            <Container
+                style={{ marginTop: 15 }}
+                className={`paginationContainer ${!data?.count || data?.count <= PLACES_PER_PAGE ? 'hide' : ''}`}
+            >
                 <div>
                     {t('geotags')}: <strong>{data?.count ?? 0}</strong>
                 </div>

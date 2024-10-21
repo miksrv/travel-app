@@ -2,14 +2,14 @@ import React from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { IMG_HOST } from '@/api/api'
 import { Notification as NotificationType } from '@/api/types/Notification'
-import { concatClassNames as cn, formatDate } from '@/functions/helpers'
+import { formatDate } from '@/functions/helpers'
 import { levelImage } from '@/functions/userLevels'
-import Icon from '@/ui/icon'
 
 interface NotificationProps extends NotificationType {
     showDate?: boolean

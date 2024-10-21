@@ -2,9 +2,9 @@ import React from 'react'
 import { NextPage } from 'next'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
+import { Button } from 'simple-react-ui-kit'
 
 import logo from '@/public/images/geometki.svg'
-import Button from '@/ui/button'
 
 type NotFoundProps = object
 
@@ -26,9 +26,8 @@ const NotFound: NextPage<NotFoundProps> = () => (
                 mode={'primary'}
                 size={'medium'}
                 link={'/'}
-            >
-                {'Go back to the main page'}
-            </Button>
+                label={'Go back to the main page'}
+            />
         </div>
     </div>
 )

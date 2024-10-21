@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import Icon from '@/ui/icon'
 
 export interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     open?: boolean
@@ -95,7 +94,7 @@ const Dialog: React.FC<DialogProps> = ({
                             className={styles.backLink}
                             onClick={onBackClick}
                         >
-                            <Icon name={'Left'} />
+                            <Icon name={'KeyboardLeft'} />
                             <div>{backLinkCaption}</div>
                         </button>
                     )}

@@ -16,6 +16,7 @@ import {
     WhatsappShareButton
 } from 'react-share'
 import { useTranslation } from 'next-i18next'
+import { Container, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -23,16 +24,14 @@ import { API } from '@/api/api'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
 import { addDecimalPoint } from '@/functions/helpers'
-import Container from '@/ui/container'
 import Rating from '@/ui/rating'
-import Spinner from '@/ui/spinner'
 
 interface SocialRatingProps {
     placeId?: string
     placeUrl?: string
 }
 
-const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
+const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -68,7 +67,7 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     }, [isSuccess])
 
     return (
-        <Container className={styles.socialRating}>
+        <Container className={styles.shareSocial}>
             <div className={styles.rating}>
                 <Rating
                     value={ratingData?.rating}
@@ -111,4 +110,4 @@ const SocialRating: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     )
 }
 
-export default SocialRating
+export default ShareSocial

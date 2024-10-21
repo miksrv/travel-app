@@ -1,9 +1,7 @@
 import React from 'react'
+import { Container, Skeleton } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import Container from '@/ui/container'
-import Skeleton from '@/ui/skeleton'
 
 const ActivityListItemLoader: React.FC = () => (
     <Container className={styles.activityContainer}>

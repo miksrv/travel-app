@@ -179,7 +179,7 @@ export const API = createApi({
             ApiTypes.ResponseNotificationsGet,
             Maybe<ApiTypes.RequestNotificationsGetList>
         >({
-            forceRefetch: ({ currentArg, previousArg }) => currentArg !== previousArg,
+            forceRefetch: ({ currentArg, previousArg }) => currentArg?.offset !== previousArg?.offset,
             merge: (currentCache, newItems, { arg }) => {
                 if ((arg?.offset as number) === 0 && newItems.count === 0 && currentCache.items) {
                     currentCache.items.length = 0

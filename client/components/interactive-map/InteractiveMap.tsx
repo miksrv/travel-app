@@ -5,6 +5,7 @@ import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import isEqual from 'lodash-es/isEqual'
 import { useRouter } from 'next/dist/client/router'
+import { Button, Spinner } from 'simple-react-ui-kit'
 
 import 'leaflet.heat'
 import 'leaflet/dist/leaflet.css'
@@ -28,8 +29,6 @@ import { ApiTypes, Place, Placemark } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
-import Button from '@/ui/button'
-import Spinner from '@/ui/spinner'
 
 export const MapAdditionalLayers = {
     Heatmap: 'Heatmap',
@@ -381,7 +380,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     {userLatLon && (
                         <Button
                             mode={'secondary'}
-                            icon={'Gps'}
+                            icon={'Position'}
                             onClick={handleUserPosition}
                         />
                     )}

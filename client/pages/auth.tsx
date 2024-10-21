@@ -5,6 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Button, Container, Spinner } from 'simple-react-ui-kit'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -14,10 +15,7 @@ import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import * as LocalStorage from '@/functions/localstorage'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 import Message from '@/ui/message'
-import Spinner from '@/ui/spinner'
 
 type AuthPageProps = object
 
@@ -102,7 +100,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                                 size={'medium'}
                                 mode={'primary'}
                             >
-                                Перейти на главную страницу
+                                {t('go-to-home-page')}
                             </Button>
                         )}
                     </Container>

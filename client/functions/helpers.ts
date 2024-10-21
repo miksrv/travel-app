@@ -92,9 +92,6 @@ export const formatDateUTC = (date?: string | Date): string =>
 export const round = (value?: number, digits: number = 4): number | undefined =>
     value ? Number(value.toFixed(digits)) : undefined
 
-export const concatClassNames = (...args: Array<string | boolean | null | undefined>): string =>
-    args.filter((item) => !!item).join(' ')
-
 export const ratingColor = (value: number): 'green' | 'orange' | 'gray' | 'red' =>
     value <= 1 ? 'red' : value > 1 && value < 3 ? 'orange' : value >= 3 ? 'green' : 'gray'
 

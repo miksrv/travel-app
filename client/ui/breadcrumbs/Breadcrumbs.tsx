@@ -1,9 +1,8 @@
 import React from 'react'
 import Link from 'next/link'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
 
 export type BreadcrumbLink = {
     link: string

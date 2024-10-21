@@ -46,7 +46,7 @@ const App = ({ Component, pageProps }: AppProps) => {
         <ThemeProvider>
             <Head>
                 <meta
-                    name={'apple-mobile-web-app-capable'}
+                    name={'mobile-web-app-capable'}
                     content={'yes'}
                 />
                 <meta

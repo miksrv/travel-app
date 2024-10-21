@@ -3,6 +3,7 @@ import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -12,7 +13,6 @@ import type { User } from '@/api/types/User'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UsersList from '@/components/users-list'
-import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 const USERS_PER_PAGE = 30
@@ -55,7 +55,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                 users={usersList}
             />
 
-            <Container className={'pagination'}>
+            <Container className={'paginationContainer'}>
                 <div>
                     {t('users_count')}: <strong>{usersCount}</strong>
                 </div>

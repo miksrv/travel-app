@@ -1,13 +1,12 @@
 import React from 'react'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Icon, IconTypes } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { openAuthDialog } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
-import Icon from '@/ui/icon'
-import { IconTypes } from '@/ui/icon/types'
 
 export type MenuItemType = {
     icon?: IconTypes
@@ -58,12 +57,12 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('map-of-geotags')
         },
         {
-            icon: 'Place',
+            icon: 'Point',
             link: '/places',
             text: t('interesting-places')
         },
         {
-            icon: 'Category',
+            icon: 'Bookmark',
             link: '/categories',
             text: t('categories')
         },

@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import PhotoAlbum from 'react-photo-album'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { cn, Container, Icon } from 'simple-react-ui-kit'
 
 import 'react-photo-album/rows.css'
 
@@ -11,9 +12,7 @@ import { IMG_HOST } from '@/api/api'
 import { ActivityTypes, Item } from '@/api/types/Activity'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
-import { concatClassNames as cn, formatDate } from '@/functions/helpers'
-import Container from '@/ui/container'
-import Icon from '@/ui/icon'
+import { formatDate } from '@/functions/helpers'
 import ReadMore from '@/ui/read-more'
 
 interface ActivityListItemProps {

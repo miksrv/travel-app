@@ -1,10 +1,10 @@
 import React from 'react'
 import Link from 'next/link'
+import { Container, ContainerProps } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { Tag } from '@/api/types/Tag'
-import Container, { ContainerProps } from '@/ui/container'
 
 interface TagsListProps extends Pick<ContainerProps, 'title'> {
     tags?: Tag[]
