@@ -1,12 +1,12 @@
 import React from 'react'
 import { Trans } from 'next-i18next'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { User } from '@/api/types/User'
 import UserAvatar from '@/components/user-avatar'
 import { UserAvatarProps } from '@/components/user-avatar/UserAvatar'
-import { concatClassNames as cn } from '@/functions/helpers'
 
 interface UserAvatarGroupProps extends Pick<UserAvatarProps, 'size'> {
     users?: User[]

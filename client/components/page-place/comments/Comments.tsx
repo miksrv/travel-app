@@ -1,9 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
+import { Container } from 'simple-react-ui-kit'
 
 import { API } from '@/api/api'
 import CommentList from '@/components/comment-list'
-import Container from '@/ui/container'
 
 interface CommentsProps {
     placeId: string
@@ -17,7 +17,10 @@ const Comments: React.FC<CommentsProps> = ({ placeId }) => {
     })
 
     return (
-        <Container title={t('comments-title')}>
+        <Container
+            style={{ marginTop: 15 }}
+            title={t('comments-title')}
+        >
             <CommentList
                 placeId={placeId}
                 comments={data?.items}

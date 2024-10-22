@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { Point } from 'leaflet'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -16,8 +17,6 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 import { useLeafletContext } from '@react-leaflet/core'
 
 const ContextMenu: React.FC = () => {

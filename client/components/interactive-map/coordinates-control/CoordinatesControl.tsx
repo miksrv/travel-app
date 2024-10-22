@@ -1,12 +1,11 @@
 'use client'
 
 import React, { useState } from 'react'
+import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { ApiTypes } from '@/api/types'
-import Button from '@/ui/button'
-import Container from '@/ui/container'
 
 interface CoordinatesControlProps {
     coordinates?: ApiTypes.LatLonCoordinate

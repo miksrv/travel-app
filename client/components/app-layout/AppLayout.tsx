@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useTranslation } from 'next-i18next'
 import NextNProgress from 'nextjs-progressbar'
+import { cn, Icon } from 'simple-react-ui-kit'
 
 import Menu from './Menu'
 import styles from './styles.module.sass'
@@ -14,9 +15,7 @@ import LoginForm from '@/components/login-form'
 import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
 import ThemeSwitcher from '@/components/theme-switcher'
-import { concatClassNames as cn } from '@/functions/helpers'
 import Dialog from '@/ui/dialog'
-import Icon from '@/ui/icon'
 
 type AuthFormType = 'login' | 'registration'
 
@@ -112,7 +111,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, children }) 
                 onClick={handleScrollToTop}
             >
                 <div className={styles.buttonToTop}>
-                    <Icon name={'Up'} />
+                    <Icon name={'KeyboardUp'} />
                     {t('scroll-to-top')}
                 </div>
             </div>

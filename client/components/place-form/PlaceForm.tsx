@@ -4,6 +4,7 @@ import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -16,7 +17,6 @@ import PhotoGallery from '@/components/photo-gallery'
 import PhotoUploadSection from '@/components/photo-upload-section'
 import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import { categoryImage } from '@/functions/categories'
-import Button from '@/ui/button'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
@@ -273,20 +273,18 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                 <Button
                     size={'medium'}
                     mode={'primary'}
+                    label={t('save')}
                     disabled={loading}
                     onClick={handleSubmit}
-                >
-                    {t('save')}
-                </Button>
+                />
 
                 <Button
                     size={'medium'}
                     mode={'secondary'}
+                    label={t('cancel')}
                     disabled={loading}
                     onClick={onCancel}
-                >
-                    {t('cancel')}
-                </Button>
+                />
             </div>
 
             {!placeId && (

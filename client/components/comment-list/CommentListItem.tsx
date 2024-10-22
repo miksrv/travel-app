@@ -2,14 +2,14 @@ import React from 'react'
 import Markdown from 'react-markdown'
 import { TFunction } from 'i18next'
 import Link from 'next/link'
+import { Button, cn } from 'simple-react-ui-kit'
 
 import CommentForm from './CommentForm'
 import styles from './styles.module.sass'
 
 import { Comments } from '@/api/types/Comments'
 import UserAvatar from '@/components/user-avatar'
-import { concatClassNames as cn, timeAgo } from '@/functions/helpers'
-import Button from '@/ui/button'
+import { timeAgo } from '@/functions/helpers'
 
 interface CommentListItemProps {
     t: TFunction
@@ -51,10 +51,10 @@ const CommentListItem: React.FC<CommentListItemProps> = ({
 
                     {isAuth && (
                         <Button
-                            className={styles.answerButton}
-                            onClick={() => onAnswerClick?.(formAnswerId !== comment.id ? comment.id : undefined)}
                             size={'small'}
                             mode={'link'}
+                            className={styles.answerButton}
+                            onClick={() => onAnswerClick?.(formAnswerId !== comment.id ? comment.id : undefined)}
                         >
                             {formAnswerId === comment.id ? t('comment-answer-cancel') : t('comment-answer')}
                         </Button>

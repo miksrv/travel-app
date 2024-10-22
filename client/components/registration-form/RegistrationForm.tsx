@@ -3,6 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -12,7 +13,6 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { validateEmail } from '@/functions/validators'
-import Button from '@/ui/button'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 
@@ -160,19 +160,17 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
             <div className={styles.actions}>
                 <Button
                     mode={'primary'}
+                    label={t('register')}
                     disabled={isLoading}
                     onClick={handleSubmit}
-                >
-                    {t('register')}
-                </Button>
+                />
 
                 <Button
                     mode={'secondary'}
+                    label={t('cancel')}
                     disabled={isLoading}
                     onClick={onClickLogin}
-                >
-                    {t('cancel')}
-                </Button>
+                />
             </div>
         </div>
     )

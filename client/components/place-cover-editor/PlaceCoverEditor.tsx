@@ -2,6 +2,7 @@ import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } 
 import ReactCrop, { Crop } from 'react-image-crop'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import 'react-image-crop/src/ReactCrop.scss'
 
@@ -11,7 +12,6 @@ import { API, IMG_HOST } from '@/api/api'
 import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/api/store'
-import Button from '@/ui/button'
 import Dialog from '@/ui/dialog'
 
 interface PlaceCoverEditorProps {
@@ -137,11 +137,10 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
                     <Button
                         size={'small'}
                         mode={'primary'}
-                        onClick={handleSaveCover}
+                        label={t('save')}
                         disabled={disabled}
-                    >
-                        {t('save')}
-                    </Button>
+                        onClick={handleSaveCover}
+                    />
                 )
             }
             onBackClick={() => {

@@ -4,6 +4,7 @@ import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, isApiValidationErrors } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -12,7 +13,6 @@ import { ApiTypes } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
-import Container from '@/ui/container'
 
 type CreatePlacePageProps = object
 
@@ -66,7 +66,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
                     }
                 ]}
             />
-            <Container>
+            <Container style={{ marginTop: 15 }}>
                 <PlaceForm
                     loading={isLoading || isSuccess || clickedButton}
                     errors={validationErrors}

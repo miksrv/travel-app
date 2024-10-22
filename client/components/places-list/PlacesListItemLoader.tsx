@@ -1,8 +1,7 @@
 import React from 'react'
+import { Skeleton } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import Skeleton from '@/ui/skeleton'
 
 const PlacesListItemLoader: React.FC = () => (
     <article className={styles.placesListItem}>

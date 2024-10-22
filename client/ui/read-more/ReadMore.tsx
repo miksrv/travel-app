@@ -1,9 +1,10 @@
 import React, { useState } from 'react'
 import Markdown from 'react-markdown'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { concatClassNames as cn, removeMarkdown, truncateText } from '@/functions/helpers'
+import { removeMarkdown, truncateText } from '@/functions/helpers'
 
 interface ReadMoreProps {
     className?: string

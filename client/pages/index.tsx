@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Button } from 'simple-react-ui-kit'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -19,7 +20,6 @@ import PlacesListItem from '@/components/places-list/PlacesListItem'
 import UsersList from '@/components/users-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
-import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
 
 interface IndexPageProps {
@@ -119,10 +119,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
                 mode={'secondary'}
                 stretched={true}
                 link={'/places'}
+                label={t('all-geotags')}
                 style={{ margin: '5px 0' }}
-            >
-                {t('all-geotags')}
-            </Button>
+            />
 
             <UsersList
                 t={t}

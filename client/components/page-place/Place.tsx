@@ -3,6 +3,9 @@ import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
+import { Button } from 'simple-react-ui-kit'
+
+import ShareSocial from './share-social'
 
 import { IMG_HOST, SITE_LINK } from '@/api/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -12,7 +15,6 @@ import Comments from '@/components/page-place/comments'
 import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
 import PlaceInformation from '@/components/page-place/information'
-import SocialRating from '@/components/page-place/social-rating'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import PlaceCoverEditor from '@/components/place-cover-editor'
@@ -20,7 +22,6 @@ import { PlaceCoverEditorHandle } from '@/components/place-cover-editor/PlaceCov
 import PlacesListItem from '@/components/places-list/PlacesListItem'
 import { formatDateUTC, removeMarkdown, truncateText } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
-import Button from '@/ui/button'
 import Carousel from '@/ui/carousel'
 
 type PlaceProps = Omit<PlacePageProps, 'page'>
@@ -182,7 +183,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                 place={place}
             />
 
-            <SocialRating
+            <ShareSocial
                 placeId={place?.id}
                 placeUrl={pagePlaceUrl}
             />

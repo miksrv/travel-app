@@ -1,9 +1,8 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
+import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
-
-import { concatClassNames as cn } from '@/functions/helpers'
 
 interface PhotoGalleryProps {
     disabled?: boolean

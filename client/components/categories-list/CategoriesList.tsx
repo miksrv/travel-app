@@ -2,12 +2,12 @@ import React from 'react'
 import { TFunction } from 'i18next'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { Category } from '@/api/types/Place'
 import { categoryImage } from '@/functions/categories'
-import Container from '@/ui/container'
 
 interface CategoriesListProps {
     t: TFunction

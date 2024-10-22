@@ -1,13 +1,13 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { SITE_LINK } from '@/api/api'
 import Header from '@/components/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PhotoGallery from '@/components/photo-gallery'
 import { PHOTOS_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
-import Container from '@/ui/container'
 import Pagination from '@/ui/pagination'
 
 type UserPhotosProps = Omit<UserPageProps, 'page' | 'placesList'>
@@ -51,7 +51,7 @@ const UserPhotos: React.FC<UserPhotosProps> = ({ id, user, photosList, photosCou
 
             <PhotoGallery photos={photosList} />
 
-            <Container className={'pagination'}>
+            <Container className={'paginationContainer'}>
                 <div>
                     {t('photos')}: <strong>{photosCount ?? 0}</strong>
                 </div>

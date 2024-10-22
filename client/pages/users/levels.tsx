@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, SITE_LINK } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -13,7 +14,6 @@ import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserAvatarGroup from '@/components/user-avatar-group'
 import { levelImage } from '@/functions/userLevels'
-import Container from '@/ui/container'
 
 interface LevelsPageProps {
     levels: ApiTypes.ResponseLevelsGetList | null
@@ -42,7 +42,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                 ]}
             />
 
-            <Container>
+            <Container style={{ marginTop: 15 }}>
                 <p>{t('user-levels-description-1')}</p>
                 <p>{t('user-levels-description-2')}</p>
                 <h2 style={{ marginBottom: '5px' }}>{t('how-much-experience-for-actions')}</h2>
@@ -58,7 +58,10 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
                 </ul>
             </Container>
 
-            <Container className={'levelsPage'}>
+            <Container
+                style={{ marginTop: 15 }}
+                className={'levelsPage'}
+            >
                 {levels?.items?.map((level) => (
                     <div
                         key={`level${level.level}`}

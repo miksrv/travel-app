@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -18,7 +19,6 @@ import { validateEmail } from '@/functions/validators'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-import Button from '@/ui/button'
 import Input from '@/ui/input'
 import Message from '@/ui/message'
 
@@ -201,16 +201,14 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
             </div>
 
             <div className={styles.actions}>
-                <div>
-                    <Button
-                        mode={'link'}
-                        title={t('registration')}
-                        disabled={loadingForm}
-                        onClick={onClickRegistration}
-                    >
-                        {t('registration')}
-                    </Button>
-                </div>
+                <Button
+                    mode={'link'}
+                    title={t('registration')}
+                    disabled={loadingForm}
+                    onClick={onClickRegistration}
+                >
+                    {t('registration')}
+                </Button>
                 <Button
                     mode={'primary'}
                     disabled={loadingForm}

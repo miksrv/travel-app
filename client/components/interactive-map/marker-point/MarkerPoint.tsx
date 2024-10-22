@@ -6,6 +6,7 @@ import Leaflet from 'leaflet'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Skeleton } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -14,8 +15,7 @@ import { Placemark } from '@/api/types'
 import BookmarkButton from '@/components/bookmark-button'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
-import Badge from '@/ui/badge'
-import Skeleton from '@/ui/skeleton'
+import PlacePlate from '@/ui/place-plate'
 
 interface MarkerPointProps {
     place: Placemark.Place
@@ -85,28 +85,28 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place, keepInView }) => {
                         >
                             <div className={styles.iconsPanel}>
                                 {!!poiData?.rating && (
-                                    <Badge
-                                        icon={'Star'}
+                                    <PlacePlate
+                                        icon={'StarEmpty'}
                                         content={addDecimalPoint(poiData.rating)}
                                     />
                                 )}
 
                                 {!!poiData?.comments && (
-                                    <Badge
+                                    <PlacePlate
                                         icon={'Comment'}
                                         content={poiData.comments}
                                     />
                                 )}
 
                                 {!!poiData?.bookmarks && (
-                                    <Badge
+                                    <PlacePlate
                                         icon={'HeartEmpty'}
                                         content={poiData.bookmarks}
                                     />
                                 )}
 
                                 {!!poiData?.distance && (
-                                    <Badge
+                                    <PlacePlate
                                         icon={'Ruler'}
                                         content={numberFormatter(poiData.distance) + ' ' + t('km')}
                                     />

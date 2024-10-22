@@ -7,6 +7,7 @@ import dynamic from 'next/dynamic'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
+import { Container } from 'simple-react-ui-kit'
 
 import { API, SITE_LINK } from '@/api/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
@@ -17,7 +18,6 @@ import Header from '@/components/header'
 import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
 import PhotoLightbox from '@/components/photo-lightbox'
 import { round } from '@/functions/helpers'
-import Container from '@/ui/container'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -196,7 +196,10 @@ const MapPage: NextPage<MapPageProps> = () => {
                 onCloseLightBox={handleCloseLightbox}
             />
 
-            <Container className={'mainContainer'}>
+            <Container
+                style={{ marginTop: 15 }}
+                className={'mainContainer'}
+            >
                 <InteractiveMap
                     center={initMapCoords}
                     zoom={initMapZoom}

@@ -3,6 +3,7 @@ import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
+import { Button, cn, Container, ContainerProps, Popout, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -12,11 +13,6 @@ import { useAppDispatch, useAppSelector } from '@/api/store'
 import { Photo } from '@/api/types/Photo'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PhotoUploadSection from '@/components/photo-upload-section'
-import { concatClassNames as cn } from '@/functions/helpers'
-import Container, { ContainerProps } from '@/ui/container'
-import Icon from '@/ui/icon'
-import Popout from '@/ui/popout'
-import Spinner from '@/ui/spinner'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
     ssr: false
@@ -122,7 +118,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     return (
         <Container
             {...props}
-            className={cn(styles.galleryContainer, props.className)}
+            className={cn(props.className, styles.galleryContainer)}
         >
             {isEmptyPhotoList && <div className={'emptyList'}>{t('no-photos-here-yet')}</div>}
 
@@ -183,26 +179,34 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             {!hideActions && isAuth && (
                                 <Popout
                                     className={styles.actions}
-                                    action={<Icon name={'VerticalDots'} />}
+                                    mode={'outline'}
+                                    size={'small'}
+                                    icon={'VerticalDots'}
                                 >
                                     <ul className={styles.actionMenu}>
                                         <li>
-                                            <button
+                                            <Button
+                                                stretched={true}
+                                                icon={'Rotate'}
+                                                size={'small'}
+                                                mode={'outline'}
+                                                label={t('to-turn')}
+                                                disabled={!!photoLoadingID}
                                                 onClick={() =>
                                                     handleRotateClick(photo.id, photo?.placeId === 'temporary')
                                                 }
-                                                disabled={!!photoLoadingID}
-                                            >
-                                                <Icon name={'Rotate'} /> {t('to-turn')}
-                                            </button>
+                                            />
                                         </li>
                                         <li>
-                                            <button
-                                                onClick={() => handleRemoveClick(photo.id)}
+                                            <Button
+                                                stretched={true}
+                                                icon={'Close'}
+                                                size={'small'}
+                                                mode={'outline'}
+                                                label={t('delete')}
                                                 disabled={!!photoLoadingID}
-                                            >
-                                                <Icon name={'Close'} /> {t('delete')}
-                                            </button>
+                                                onClick={() => handleRemoveClick(photo.id)}
+                                            />
                                         </li>
                                     </ul>
                                 </Popout>

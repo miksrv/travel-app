@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 import { useTranslation } from 'next-i18next'
+import { Button, Spinner } from 'simple-react-ui-kit'
 
 import 'react-image-crop/src/ReactCrop.scss'
 
@@ -10,9 +11,7 @@ import { API, IMG_HOST } from '@/api/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import Button from '@/ui/button'
 import Dialog from '@/ui/dialog'
-import Spinner from '@/ui/spinner'
 
 type ImageSizesType = {
     ratioWidth: number
@@ -142,10 +141,9 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 size={'medium'}
                 icon={'Photo'}
                 mode={'secondary'}
+                label={t('avatar')}
                 onClick={handleChangeCoverClick}
-            >
-                {t('avatar')}
-            </Button>
+            />
 
             <Dialog
                 contentHeight={'500px'}
@@ -158,11 +156,10 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                     <Button
                         size={'small'}
                         mode={'primary'}
+                        label={t('save')}
                         onClick={handleSaveCover}
                         disabled={disabled}
-                    >
-                        {t('save')}
-                    </Button>
+                    />
                 }
                 onBackClick={() => {
                     setUploadedFile(undefined)
@@ -186,11 +183,10 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     icon={'Camera'}
                                     mode={'primary'}
                                     size={'medium'}
+                                    label={t('upload')}
                                     disabled={uploadLoading}
                                     onClick={handlePhotoUploadClick}
-                                >
-                                    {t('upload')}
-                                </Button>
+                                />
                             </>
                         ) : (
                             <ReactCrop

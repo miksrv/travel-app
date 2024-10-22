@@ -1,12 +1,12 @@
 import React, { useState } from 'react'
 import { useTranslation } from 'next-i18next'
+import { Button } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { API } from '@/api/api'
 import { User } from '@/api/types/User'
 import UserAvatar from '@/components/user-avatar'
-import Button from '@/ui/button'
 import Textarea from '@/ui/textarea'
 
 interface CommentFormProps {
@@ -62,11 +62,11 @@ const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, us
             />
 
             <Button
+                icon={'KeyboardRight'}
+                mode={'secondary'}
                 className={styles.submitButton}
                 loading={isLoading}
                 disabled={isLoading || !comment}
-                mode={'secondary'}
-                icon={'Right'}
                 onClick={handleSubmit}
             />
         </div>
