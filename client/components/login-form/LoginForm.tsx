@@ -4,7 +4,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Button } from 'simple-react-ui-kit'
+import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -19,8 +19,6 @@ import { validateEmail } from '@/functions/validators'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
 
 interface LoginFormProps {
     onClickRegistration?: () => void
@@ -162,17 +160,22 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
 
             {localeError && (
                 <Message
-                    type={'negative'}
+                    type={'error'}
                     title={localeError}
                 />
             )}
 
             {!!Object.values(formErrors || {}).length && (
                 <Message
-                    type={'negative'}
+                    type={'error'}
                     title={t('correct-errors-on-form')}
-                    list={Object.values(formErrors || {})}
-                />
+                >
+                    <ul className={'errorMessageList'}>
+                        {Object.values(formErrors || {}).map((item) =>
+                            item.length ? <li key={`item${item}`}>{item}</li> : ''
+                        )}
+                    </ul>
+                </Message>
             )}
 
             <div className={styles.formElement}>
