@@ -5,7 +5,7 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Button, Container, Spinner } from 'simple-react-ui-kit'
+import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -15,7 +15,6 @@ import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import * as LocalStorage from '@/functions/localstorage'
-import Message from '@/ui/message'
 
 type AuthPageProps = object
 
@@ -84,10 +83,11 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                         <h1 className={'header'}>{t('authorization-on-site')}</h1>
                         {error && (
                             <Message
-                                type={'negative'}
+                                type={'error'}
                                 title={t('notification_error')}
-                                text={error as string}
-                            />
+                            >
+                                {error as string}
+                            </Message>
                         )}
                         {(isLoading || isSuccess) && (
                             <div className={'loaderWrapper'}>
