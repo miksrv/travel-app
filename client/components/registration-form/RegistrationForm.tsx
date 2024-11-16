@@ -3,7 +3,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
-import { Button } from 'simple-react-ui-kit'
+import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -13,8 +13,6 @@ import { login } from '@/api/authSlice'
 import { useAppDispatch } from '@/api/store'
 import { ApiTypes } from '@/api/types'
 import { validateEmail } from '@/functions/validators'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
 
 type FormDataType = ApiTypes.RequestAuthRegistration & {
     repeat_password?: string
@@ -99,10 +97,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
         <div className={styles.registrationForm}>
             {!!Object.values(formErrors || {}).length && (
                 <Message
-                    type={'negative'}
+                    type={'error'}
                     title={t('correct-errors-on-form')}
-                    list={Object.values(formErrors || {})}
-                />
+                >
+                    <ul className={'errorMessageList'}>
+                        {Object.values(formErrors || {}).map((item) =>
+                            item.length ? <li key={`item${item}`}>{item}</li> : ''
+                        )}
+                    </ul>
+                </Message>
             )}
 
             <div className={styles.formElement}>

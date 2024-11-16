@@ -5,13 +5,12 @@ import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Button, Container, Spinner } from 'simple-react-ui-kit'
+import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
 
 import { API } from '@/api/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { ApiTypes } from '@/api/types'
-import Message from '@/ui/message'
 
 type UnsubscribePageProps = object
 
@@ -45,17 +44,19 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
                         <h1 className={'header'}>{t('unsubscribe-from-email-notifications')}</h1>
                         {error && (
                             <Message
-                                type={'negative'}
+                                type={'error'}
                                 title={t('error')}
-                                text={error as string}
-                            />
+                            >
+                                {error as string}
+                            </Message>
                         )}
                         {data && (
                             <Message
-                                type={'positive'}
+                                type={'success'}
                                 title={t('success')}
-                                text={data as string}
-                            />
+                            >
+                                {data as string}
+                            </Message>
                         )}
                         <p className={'description'}>{t('unsubscribe-from-email-notifications-description')}</p>
                         {isLoading && (

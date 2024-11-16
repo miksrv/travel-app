@@ -4,7 +4,7 @@ import debounce from 'lodash-es/debounce'
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
-import { Button } from 'simple-react-ui-kit'
+import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -20,8 +20,6 @@ import { categoryImage } from '@/functions/categories'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
@@ -160,12 +158,17 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
         <section className={styles.component}>
             {loading && <ScreenSpinner />}
 
-            {!!Object.values(formErrors || {}).length && (
+            {!!Object.values(formErrors || {})?.length && (
                 <Message
-                    type={'negative'}
+                    type={'error'}
                     title={t('correct-errors-on-form')}
-                    list={Object.values(formErrors || {})}
-                />
+                >
+                    <ul className={'errorMessageList'}>
+                        {Object.values(formErrors || {}).map((item) =>
+                            item.length ? <li key={`item${item}`}>{item}</li> : ''
+                        )}
+                    </ul>
+                </Message>
             )}
 
             <div className={styles.formElement}>

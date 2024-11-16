@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Image from 'next/image'
 import { Trans, useTranslation } from 'next-i18next'
-import { Button, Checkbox } from 'simple-react-ui-kit'
+import { Button, Checkbox, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
@@ -11,8 +11,6 @@ import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-import Input from '@/ui/input'
-import Message from '@/ui/message'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 interface UserFormProps {
@@ -113,10 +111,15 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
 
             {!!Object.values(formErrors || {}).length && (
                 <Message
-                    type={'negative'}
+                    type={'error'}
                     title={t('correct-errors-on-form')}
-                    list={Object.values(formErrors || {})}
-                />
+                >
+                    <ul className={'errorMessageList'}>
+                        {Object.values(formErrors || {}).map((item) =>
+                            item.length ? <li key={`item${item}`}>{item}</li> : ''
+                        )}
+                    </ul>
+                </Message>
             )}
 
             <h3 className={styles.header}>{t('general-settings')}</h3>
