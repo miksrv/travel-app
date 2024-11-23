@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Models\UsersLevelsModel;
@@ -6,15 +8,18 @@ use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Levels extends ResourceController {
-    public function __construct() {
+class Levels extends ResourceController
+{
+    public function __construct()
+    {
         new LocaleLibrary();
     }
 
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $locale = $this->request->getLocale();
         $awards = (object) [
             'place'   => MODIFIER_PLACE,

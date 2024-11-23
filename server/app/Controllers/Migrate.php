@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use CodeIgniter\RESTful\ResourceController;
 use Config\Services;
@@ -7,7 +9,8 @@ define('MAX_PLACES_PER_ITERATION', 50);
 
 set_time_limit(0);
 
-function searchImage($directory) {
+function searchImage($directory)
+{
     // Открываем директорию для чтения
     $dirHandle = opendir($directory);
 
@@ -49,7 +52,8 @@ function searchImage($directory) {
     return false;
 }
 
-class Migrate extends ResourceController {
+class Migrate extends ResourceController
+{
 
     public function fixedCoverSizes(): void {
         searchImage(UPLOAD_PHOTOS);

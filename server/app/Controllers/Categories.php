@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Models\CategoryModel;
@@ -9,11 +11,13 @@ use CodeIgniter\RESTful\ResourceController;
 /**
  * Categories API controller (not use now)
  */
-class Categories extends ResourceController {
+class Categories extends ResourceController
+{
 
     protected $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->model = new CategoryModel();
@@ -22,7 +26,8 @@ class Categories extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $places = $this->request->getGet('places', FILTER_VALIDATE_BOOLEAN) ?? false;
         $locale = $this->request->getLocale();
         $data   = $this->model

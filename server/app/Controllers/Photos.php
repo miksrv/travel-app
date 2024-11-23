@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Entities\PhotoEntity;
 use App\Libraries\LevelsLibrary;
@@ -22,11 +24,13 @@ use Throwable;
  *   - upload($id)
  *   - delete($id)
  */
-class Photos extends ResourceController {
+class Photos extends ResourceController
+{
 
     protected SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->session = new SessionLibrary();
@@ -41,7 +45,8 @@ class Photos extends ResourceController {
      *   - offset (int)
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $locale = $this->request->getLocale();
         $limit  = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40);
         $offset = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
@@ -94,7 +99,8 @@ class Photos extends ResourceController {
      * @param null $id
      * @return ResponseInterface
      */
-    public function upload($id = null): ResponseInterface {
+    public function upload($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -209,7 +215,8 @@ class Photos extends ResourceController {
     /**
      * @throws ReflectionException
      */
-    public function delete($id = null): ResponseInterface {
+    public function delete($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -257,7 +264,8 @@ class Photos extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function rotate($id = null): ResponseInterface {
+    public function rotate($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -302,7 +310,8 @@ class Photos extends ResourceController {
     /**
      * @return PhotosModel
      */
-    protected function _makeListFilters(): PhotosModel {
+    protected function _makeListFilters(): PhotosModel
+    {
         $author = $this->request->getGet('author', FILTER_SANITIZE_SPECIAL_CHARS);
         $place  = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
 

@@ -10,7 +10,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
-class Notifications extends ResourceController {
+class Notifications extends ResourceController
+{
     private SessionLibrary $session;
 
     protected $model;

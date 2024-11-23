@@ -19,7 +19,8 @@ use Config\Services;
 use Exception;
 use ReflectionException;
 
-class Auth extends ResourceController {
+class Auth extends ResourceController
+{
     private SessionLibrary $session;
 
     public function __construct()

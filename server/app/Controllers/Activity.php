@@ -13,11 +13,13 @@ use ReflectionException;
  * User activity controller
  * Show all user activity such as places, photos and rating
  */
-class Activity extends ResourceController {
+class Activity extends ResourceController
+{
 
     protected $model;
 
-    function __construct() {
+    function __construct()
+    {
         $this->model = new ActivityModel();
     }
 

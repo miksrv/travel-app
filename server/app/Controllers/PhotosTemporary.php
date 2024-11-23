@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Entities\PhotoEntity;
 use App\Libraries\LocaleLibrary;
@@ -16,11 +18,13 @@ use Throwable;
  * The controller is used when creating a new geotag, when the geotag has not yet been created,
  * but the user is already uploading photos through the interface
  */
-class PhotosTemporary extends ResourceController {
+class PhotosTemporary extends ResourceController
+{
 
     protected SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->session = new SessionLibrary();
@@ -30,7 +34,8 @@ class PhotosTemporary extends ResourceController {
      * Uploading a temporary photo
      * @return ResponseInterface
      */
-    public function upload(): ResponseInterface {
+    public function upload(): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -103,7 +108,8 @@ class PhotosTemporary extends ResourceController {
      * @param null $id
      * @return ResponseInterface
      */
-    public function delete($id = null): ResponseInterface {
+    public function delete($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -124,7 +130,8 @@ class PhotosTemporary extends ResourceController {
      * @param $id
      * @return ResponseInterface
      */
-    public function rotate($id = null): ResponseInterface {
+    public function rotate($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }

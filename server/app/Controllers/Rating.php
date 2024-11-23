@@ -12,7 +12,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
 
-class Rating extends ResourceController {
+class Rating extends ResourceController
+{
 
     protected SessionLibrary $session;
 

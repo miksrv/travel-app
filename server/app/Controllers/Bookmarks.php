@@ -9,11 +9,13 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use Exception;
 
-class Bookmarks extends ResourceController {
+class Bookmarks extends ResourceController
+{
 
     protected SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->session = new SessionLibrary();
     }
 
