@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .component
     display: flex
@@ -27,7 +27,7 @@
         top: 0
         width: 100%
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         flex-basis: 100%
         max-width: 100%
 
@@ -38,7 +38,7 @@
         background-position: center
         background-size: cover
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             height: 220px
 
         & > a
@@ -70,7 +70,7 @@
             object-fit: cover
             margin-bottom: -5px
 
-            @media only screen and (max-width: $mobileMaxWidth)
+            @media only screen and (max-width: variables.$mobileMaxWidth)
                 height: 220px
 
         .bottomPanel
@@ -97,7 +97,7 @@
                 white-space: nowrap
                 text-overflow: ellipsis
                 overflow: hidden
-                font-size: $fontSizeHeadline
+                font-size: variables.$fontSizeHeadline
                 color: var(--text-color-secondary)
                 opacity: .8
 
@@ -112,7 +112,7 @@
         overflow: hidden
         text-overflow: ellipsis
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             height: 110px
 
     .emptyContent

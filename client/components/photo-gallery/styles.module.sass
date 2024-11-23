@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .galleryContainer
     margin-top: 15px
@@ -28,7 +28,7 @@
         background-position: center
         background-size: cover
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             flex-basis: calc(50% - 4px)
 
         &.photoUpload

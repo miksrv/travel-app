@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .commentList
     .loginButton
@@ -29,7 +29,7 @@
                     margin-bottom: 0
 
                 .info
-                    font-size: $fontSizeHeadline
+                    font-size: variables.$fontSizeHeadline
                     color: var(--text-color-secondary)
                     display: flex
 

@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .snackbar
     position: fixed
@@ -13,7 +13,7 @@
 
     .notification
         border-radius: var(--border-radius)
-        box-shadow: $boxShadow4
+        box-shadow: variables.$boxShadow4
         padding: 8px 12px
 
         &.unread
@@ -74,7 +74,7 @@
                 max-width: 175px
 
         .datetime
-            font-size: $fontSizeCaption
+            font-size: variables.$fontSizeCaption
             color: var(--text-color-secondary)
 
     &.success
