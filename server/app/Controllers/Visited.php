@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\SessionLibrary;
 use App\Models\PlacesModel;
@@ -7,13 +9,14 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
-class Visited extends ResourceController {
-
+class Visited extends ResourceController
+{
     /**
      * @param $id
      * @return ResponseInterface
      */
-    public function place($id = null): ResponseInterface {
+    public function place($id = null): ResponseInterface
+    {
         $visitedModel = new UsersVisitedPlacesModel();
         $visitedData  = $visitedModel
             ->select('users.id, users.name, users.avatar')
@@ -28,7 +31,8 @@ class Visited extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function set(): ResponseInterface {
+    public function set(): ResponseInterface
+    {
         $input   = $this->request->getJSON();
         $session = new SessionLibrary();
 
