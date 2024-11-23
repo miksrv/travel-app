@@ -10,10 +10,13 @@ interface CarouselProps {
     children?: any
 }
 
+// #TODO Remove any type
 const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
-    const [emblaRef, emblaApi] = useEmblaCarousel(options)
+    const [emblaRef, emblaApi] = useEmblaCarousel(options as any)
 
-    const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
+    const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(
+        emblaApi as any
+    )
 
     return (
         <div className={styles.carousel}>
