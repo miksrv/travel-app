@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Entities\CommentEntity;
 use App\Libraries\ActivityLibrary;
@@ -10,13 +12,15 @@ use CodeIgniter\RESTful\ResourceController;
 use Exception;
 use ReflectionException;
 
-class Comments extends ResourceController {
+class Comments extends ResourceController
+{
 
     protected $model;
 
     private SessionLibrary $session;
 
-    public function __construct() {
+    public function __construct()
+    {
         $this->model   = new CommentsModel();
         $this->session = new SessionLibrary();
     }
@@ -25,7 +29,8 @@ class Comments extends ResourceController {
      * @return ResponseInterface
      * @throws Exception
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $place = $this->request->getGet('place', FILTER_SANITIZE_SPECIAL_CHARS);
         $data  = $this->model
             ->select('comments.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar')
@@ -65,7 +70,8 @@ class Comments extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function create(): ResponseInterface {
+    public function create(): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }

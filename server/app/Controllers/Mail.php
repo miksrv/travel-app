@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Models\PlacesModel;
@@ -8,7 +10,8 @@ use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 use ReflectionException;
 
-class Mail extends ResourceController {
+class Mail extends ResourceController
+{
     public function __construct() {
         new LocaleLibrary();
     }
@@ -17,7 +20,8 @@ class Mail extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-   public function unsubscribe(): ResponseInterface {
+   public function unsubscribe(): ResponseInterface
+   {
        $mail = $this->request->getGet('mail', FILTER_SANITIZE_SPECIAL_CHARS);
 
        if (!$mail) {
@@ -56,7 +60,8 @@ class Mail extends ResourceController {
      * @param string $activityType
      * @return string
      */
-   protected function _mapActivityType(string $activityType): string {
+   protected function _mapActivityType(string $activityType): string
+   {
        return match ($activityType) {
            'comment' => 'emailComment',
            'edit'    => 'emailEdit',

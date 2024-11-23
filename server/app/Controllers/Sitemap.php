@@ -1,15 +1,19 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Models\PlacesModel;
 use App\Models\UsersModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Sitemap extends ResourceController {
+class Sitemap extends ResourceController
+{
     /**
      * @return ResponseInterface
      */
-    public function index(): ResponseInterface {
+    public function index(): ResponseInterface
+    {
         $placesModel = new PlacesModel();
         $usersModel  = new UsersModel();
 

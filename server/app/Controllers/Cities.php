@@ -1,14 +1,18 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Models\LocationLocalitiesModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Cities extends ResourceController {
+class Cities extends ResourceController
+{
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $citiesModel = new LocationLocalitiesModel();
         $citiesData  = $citiesModel
             ->select(

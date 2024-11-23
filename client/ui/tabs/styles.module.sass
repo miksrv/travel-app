@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .tabs
     margin-top: 15px
@@ -31,7 +31,7 @@
             margin-right: 10px
             font-weight: 500
 
-            @media only screen and (max-width: $mobileMaxWidth)
+            @media only screen and (max-width: variables.$mobileMaxWidth)
                 min-width: 24px
                 padding: 6px 10px
 

@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Entities\PhotoEntity;
 use App\Entities\PlaceEntity;
@@ -23,14 +25,16 @@ use Config\Services;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
-class Places extends ResourceController {
+class Places extends ResourceController
+{
     protected bool $coordinatesAvailable = false;
 
     protected SessionLibrary $session;
 
     protected $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->model   = new PlacesModel();
@@ -42,7 +46,8 @@ class Places extends ResourceController {
      * @throws \Exception
      * @example GET /places?sort=rating&order=ASC&category=historic&limit=20&offset=1
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $bookmarksUser = $this->request->getGet('bookmarkUser', FILTER_SANITIZE_SPECIAL_CHARS);
         $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
@@ -249,7 +254,8 @@ class Places extends ResourceController {
      * @throws ReflectionException
      * @throws \Exception
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $locale = $this->request->getLocale();
         $lat    = $this->request->getGet('lat', FILTER_VALIDATE_FLOAT);
         $lon    = $this->request->getGet('lon', FILTER_VALIDATE_FLOAT);
@@ -366,7 +372,8 @@ class Places extends ResourceController {
      * @throws ReflectionException
      * @throws Exception
      */
-    public function create(): ResponseInterface {
+    public function create(): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -451,7 +458,8 @@ class Places extends ResourceController {
      * @throws ReflectionException
      * @throws Exception
      */
-    public function update($id = null): ResponseInterface {
+    public function update($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -562,7 +570,8 @@ class Places extends ResourceController {
      * @param $id
      * @return ResponseInterface
      */
-    public function delete($id = null): ResponseInterface {
+    public function delete($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth && $this->session->user->role !== 'admin') {
             return $this->failUnauthorized();
         }
@@ -589,7 +598,8 @@ class Places extends ResourceController {
     /**
      * @throws ReflectionException
      */
-    public function cover($id = null): ResponseInterface {
+    public function cover($id = null): ResponseInterface
+    {
         if (!$this->session->isAuth) {
             return $this->failUnauthorized();
         }
@@ -642,7 +652,8 @@ class Places extends ResourceController {
     /**
      * @throws ReflectionException
      */
-    protected function savePhotos(array $photos, string $placeId, \App\Entities\PlaceEntity $place, \App\Entities\PlaceContentEntity $content) {
+    protected function savePhotos(array $photos, string $placeId, \App\Entities\PlaceEntity $place, \App\Entities\PlaceContentEntity $content)
+    {
         if (empty($photos) || empty($placeId)) {
             return false;
         }
@@ -722,7 +733,8 @@ class Places extends ResourceController {
      * @param array $placeIds
      * @return PlacesModel
      */
-    protected function _makeListFilters(PlacesModel $placesModel, array $placeIds = []): PlacesModel {
+    protected function _makeListFilters(PlacesModel $placesModel, array $placeIds = []): PlacesModel
+    {
         $orderDefault  = 'DESC';
         $sortingFields = ['views', 'rating', 'comments', 'bookmarks', 'category', 'distance', 'created_at', 'updated_at'];
         $orderFields   = ['ASC', 'DESC'];
@@ -790,7 +802,8 @@ class Places extends ResourceController {
      * @param string $excludeUserId
      * @return array
      */
-    protected function _editors(string $placeId, string $excludeUserId): array {
+    protected function _editors(string $placeId, string $excludeUserId): array
+    {
         $model = new ActivityModel();
         $data  = $model->gePlaceEditors($placeId, $excludeUserId);
 

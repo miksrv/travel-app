@@ -1,5 +1,5 @@
-@import ../../styles/variables
-@import ../../styles/animations
+@use '../../styles/variables' as variables
+@use '../../styles/animations'
 
 $sideBarWidth: 220px
 
@@ -73,7 +73,7 @@ $sideBarWidth: 220px
             padding-bottom: 20px
             color: var(--text-color-secondary)
             justify-content: center
-            font-size: $fontSizeHeadline
+            font-size: variables.$fontSizeHeadline
 
             svg
                 width: 24px
@@ -86,7 +86,7 @@ $sideBarWidth: 220px
             .buttonToTop
                 background-color: var(--menu-background-hover)
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             display: none !important
 
     .mainContainer
@@ -121,7 +121,7 @@ $sideBarWidth: 220px
             max-width: calc(var(--width-max) - var(--width-menu))
             margin-bottom: 20px
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             .menubar
                 display: none
 
@@ -138,7 +138,7 @@ $sideBarWidth: 220px
         height: 100%
         width: 100%
         z-index: 500
-        background: $overlayBackground
+        background: variables.$overlayBackground
         transition: opacity 167ms ease-out
 
         &.hidden

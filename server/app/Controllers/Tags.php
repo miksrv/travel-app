@@ -1,15 +1,19 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Models\TagsModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
-class Tags extends ResourceController {
+class Tags extends ResourceController
+{
 
     protected $model;
 
-    public function __construct() {
+    public function __construct()
+    {
         new LocaleLibrary();
 
         $this->model = new TagsModel();
@@ -18,7 +22,8 @@ class Tags extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $locale = $this->request->getLocale();
         $result = $this->model
             ->select('title_ru, title_en, count, updated_at')
@@ -43,7 +48,8 @@ class Tags extends ResourceController {
      * Find max 10 tags by search text
      * @return ResponseInterface
      */
-    public function search(): ResponseInterface {
+    public function search(): ResponseInterface
+    {
         $search = trim($this->request->getGet('text', FILTER_SANITIZE_STRING));
         $locale = $this->request->getLocale();
 

@@ -1,18 +1,18 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .dialog
     position: fixed
     background-color: var(--modal-background)
     border-radius: var(--border-radius)
     border: none
-    box-shadow: $boxShadow5
+    box-shadow: variables.$boxShadow5
     width: 100%
     z-index: 600
     max-height: 80vh
     overflow: hidden
     padding: 0
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         width: 96%
 
     .header
@@ -28,7 +28,7 @@
             display: flex
             align-items: center
             margin-left: 0
-            font-family: var(--font-family), serif
+            font-family: var(--font-family), sans-serif
 
             svg
                 width: 24px

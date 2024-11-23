@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\EmailLibrary;
 use App\Libraries\PlacesContent;
@@ -17,13 +19,15 @@ set_time_limit(0);
 const MONTH_EMAIL_LIMIT = 2000;
 const DAY_EMAIL_LIMIT = 500;
 
-class System extends ResourceController {
+class System extends ResourceController
+{
     /**
      * We recalculate and update the geotag tag usage counter
      * @return void
      * @throws ReflectionException
      */
-    public function calculateTagsCount(): void {
+    public function calculateTagsCount(): void
+    {
         $tagsModel      = new TagsModel();
         $placeTagsModel = new PlacesTagsModel();
         $updatedRows    = 0;
@@ -47,7 +51,8 @@ class System extends ResourceController {
      * @return void
      * @throws ReflectionException
      */
-    public function generateUsersOnline(): void {
+    public function generateUsersOnline(): void
+    {
         $usersModel = new UsersModel();
         $usersData  = $usersModel->select('id, updated_at')->like('email', '%@geometki.com')->findAll();
 
@@ -72,7 +77,8 @@ class System extends ResourceController {
     /**
      * @throws ReflectionException
      */
-    public function sendEmail(): void {
+    public function sendEmail(): void
+    {
         $sendingEmailModel = new SendingMail();
         $sendingEmailData  = $sendingEmailModel
             ->select('activity.type, activity.place_id, sending_mail.*')

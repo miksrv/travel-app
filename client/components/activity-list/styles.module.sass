@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .activityContainer
     padding-bottom: 9px
@@ -29,7 +29,7 @@
 
         .viewCounter
             display: flex
-            font-size: $fontSizeCaption
+            font-size: variables.$fontSizeCaption
             color: var(--text-color-secondary)
             align-items: center
 

@@ -1,16 +1,16 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .readMore
 
-  .readMoreButton
-    font-weight: 600
-    color: var(--button-default-color)
-    border: none
-    background: transparent
-    padding: 0
-    cursor: pointer
-    display: inline-block
-    font-size: $fontSizeParagraph
+    .readMoreButton
+        font-weight: 600
+        color: var(--button-default-color)
+        border: none
+        background: transparent
+        padding: 0
+        cursor: pointer
+        display: inline-block
+        font-size: variables.$fontSizeParagraph
 
-    &:hover
-      opacity: .8
+        &:hover
+            opacity: .8

@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .usersListItem
     display: flex
@@ -23,7 +23,7 @@
     .level
         margin-left: 20px
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             display: none
 
         p

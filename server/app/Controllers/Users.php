@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\LocaleLibrary;
 use App\Libraries\LevelsLibrary;
@@ -13,8 +15,10 @@ use Config\Services;
 use Exception;
 use ReflectionException;
 
-class Users extends ResourceController {
-    public function __construct() {
+class Users extends ResourceController
+{
+    public function __construct()
+    {
         new LocaleLibrary();
     }
 
@@ -22,7 +26,8 @@ class Users extends ResourceController {
      * @return ResponseInterface
      * @throws Exception
      */
-    public function list(): ResponseInterface {
+    public function list(): ResponseInterface
+    {
         $limit  = abs($this->request->getGet('limit', FILTER_SANITIZE_NUMBER_INT) ?? 40);
         $offset = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
 
@@ -75,7 +80,8 @@ class Users extends ResourceController {
      * @throws ReflectionException
      * @throws Exception
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $session     = new SessionLibrary();
         $userLevels  = new LevelsLibrary();
         $usersModel  = new UsersModel();
@@ -134,7 +140,8 @@ class Users extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function update($id = null): ResponseInterface {
+    public function update($id = null): ResponseInterface
+    {
         $session = new SessionLibrary();
 
         if (!$session->isAuth || $session->user?->id !== $id) {
@@ -202,7 +209,8 @@ class Users extends ResourceController {
     /**
      * @return ResponseInterface
      */
-    public function avatar(): ResponseInterface {
+    public function avatar(): ResponseInterface
+    {
         $session = new SessionLibrary();
 
         if (!$session->isAuth || !$session->user?->id) {
@@ -254,7 +262,8 @@ class Users extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function crop(): ResponseInterface {
+    public function crop(): ResponseInterface
+    {
         $session    = new SessionLibrary();
         $usersModel = new UsersModel();
 

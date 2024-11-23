@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 use App\Libraries\Geocoder;
 use App\Libraries\LocaleLibrary;
@@ -12,8 +14,10 @@ use CodeIgniter\RESTful\ResourceController;
 use Geocoder\Exception\Exception;
 use ReflectionException;
 
-class Location extends ResourceController {
-    public function __construct() {
+class Location extends ResourceController
+{
+    public function __construct()
+    {
         new LocaleLibrary();
     }
 
@@ -22,7 +26,8 @@ class Location extends ResourceController {
      * @return ResponseInterface
      * @throws ReflectionException
      */
-    public function coordinates(): ResponseInterface {
+    public function coordinates(): ResponseInterface
+    {
         $input = $this->request->getJSON();
         $lat = (float) $input->lat;
         $lon = (float) $input->lon;
@@ -39,7 +44,8 @@ class Location extends ResourceController {
      * @example http://localhost:8080/location/search?text=Орен
      * @return ResponseInterface
      */
-    public function search(): ResponseInterface {
+    public function search(): ResponseInterface
+    {
         $result = [];
         $text   = $this->request->getGet('text', FILTER_SANITIZE_STRING);
 
@@ -63,7 +69,8 @@ class Location extends ResourceController {
     /**
      * @throws Exception
      */
-    public function geoSearch(): ResponseInterface {
+    public function geoSearch(): ResponseInterface
+    {
         $text = $this->request->getGet('text', FILTER_SANITIZE_STRING);
 
         if (!$text) {
@@ -80,7 +87,8 @@ class Location extends ResourceController {
      * @example http://localhost:8080/location/1?type=district
      * @return ResponseInterface
      */
-    public function show($id = null): ResponseInterface {
+    public function show($id = null): ResponseInterface
+    {
         $location = ['country', 'region', 'district', 'locality'];
         $type     = $this->request->getGet('type', FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -115,7 +123,8 @@ class Location extends ResourceController {
      * @param object|null $data
      * @return ResponseInterface
      */
-    private function _showResult(?object $data): ResponseInterface {
+    private function _showResult(?object $data): ResponseInterface
+    {
         if (!$data) {
             return $this->respond(null);
         }
@@ -134,7 +143,8 @@ class Location extends ResourceController {
      * @param string $text
      * @return mixed
      */
-    private function _searchResult($locationModel, string $text): mixed {
+    private function _searchResult($locationModel, string $text): mixed
+    {
         return $locationModel->like('title_en', $text)->orLike('title_ru', $text)->findAll();
     }
 
@@ -142,7 +152,8 @@ class Location extends ResourceController {
      * @param array $data
      * @return array
      */
-    private function _prepareSearchData(array $data): array {
+    private function _prepareSearchData(array $data): array
+    {
         $result = [];
         $locale = $this->request->getLocale();
 

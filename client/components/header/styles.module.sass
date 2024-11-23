@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .header
     display: flex
@@ -45,7 +45,7 @@
         align-items: center
         margin-left: auto
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             & > div
                 display: none
 
@@ -56,6 +56,6 @@
         button
             margin-left: 10px
 
-            @media only screen and (max-width: $mobileMaxWidth)
+            @media only screen and (max-width: variables.$mobileMaxWidth)
                 svg
                     margin: 0

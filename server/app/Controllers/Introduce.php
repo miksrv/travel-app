@@ -1,4 +1,6 @@
-<?php namespace App\Controllers;
+<?php
+
+namespace App\Controllers;
 
 //use App\Libraries\Geocoder;
 //use App\Libraries\OverpassAPI;
@@ -15,7 +17,8 @@ use ReflectionException;
 
 ignore_user_abort(true);
 
-class Introduce extends ResourceController {
+class Introduce extends ResourceController
+{
     /**
      * The user introduces himself to the service by sending his coordinates.
      * The coordinates are used to search for new places in the area, and the user session is saved in the database.

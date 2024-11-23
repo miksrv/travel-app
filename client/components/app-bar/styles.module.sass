@@ -1,10 +1,10 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .appBar
     z-index: 450
     color: var(--text-color-primary)
     background-color: var(--container-background)
-    box-shadow: $boxShadow1
+    box-shadow: variables.$boxShadow1
     height: 50px
     position: fixed
     width: 100%
@@ -55,10 +55,10 @@
         &.dark
             background-image: url(/images/geometki-dark.png)
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             display: none
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         padding: 0 14px
 
         .hamburgerButton
@@ -77,7 +77,7 @@
 
     .userInfo
         padding: 10px
-        font-size: $fontSizeHeadline
+        font-size: variables.$fontSizeHeadline
         min-width: 220px
 
         .userName
@@ -138,7 +138,7 @@
         padding: 0
         overflow: hidden
         overflow-y: scroll
-        font-size: $fontSizeHeadline
+        font-size: variables.$fontSizeHeadline
 
         & > div
             border-bottom: var(--container-border-separator)
@@ -159,5 +159,5 @@
             box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 -2px 2px rgba(0, 0, 0, 0) !important
             border: none !important
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             flex: 1
