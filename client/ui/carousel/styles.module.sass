@@ -1,4 +1,4 @@
-@import ../../styles/variables
+@use '../../styles/variables' as variables
 
 .theme-light
     --brand-primary: rgb(47, 112, 193)
@@ -90,7 +90,7 @@
                 max-width: 286px
                 padding-left: var(--slide-spacing)
 
-                @media only screen and (max-width: $mobileMaxWidth)
+                @media only screen and (max-width: variables.$mobileMaxWidth)
                     max-width: 500px
 
     .buttonsContainer
@@ -103,7 +103,7 @@
         width: 100%
         transition: opacity .15s
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             opacity: 1
 
         .arrowButton
@@ -120,7 +120,7 @@
             position: absolute
             color: #a6a6a6
 
-            @media only screen and (max-width: $mobileMaxWidth)
+            @media only screen and (max-width: variables.$mobileMaxWidth)
                 min-height: 402px
 
             span
