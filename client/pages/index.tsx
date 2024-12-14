@@ -79,7 +79,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             </Head>
 
             <NextSeo
-                title={t('geotags')}
+                title={t('geotags') + ' - ' + t('interesting-places')}
                 description={t('geotags-description')}
                 canonical={canonicalUrl}
                 openGraph={{
@@ -100,7 +100,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             />
 
             <Header
-                title={t('geotags')}
+                title={t('geotags') + ' - ' + t('interesting-places')}
                 currentPage={t('updated-geotags-users-photos')}
             />
 
@@ -188,7 +188,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
-                    // photosList: photosList?.items || [],
                     placesList: placesList?.items || [],
                     usersList: usersList?.items || []
                 }
