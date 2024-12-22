@@ -32,6 +32,7 @@ const ActivityListItemLoader: React.FC = () => (
                 />
             </div>
         </div>
+
         {Array(5)
             .fill('')
             .map((_, i) => (

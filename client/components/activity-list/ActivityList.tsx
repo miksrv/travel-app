@@ -5,10 +5,10 @@ import { Container } from 'simple-react-ui-kit'
 import ActivityListItem from './ActivityListItem'
 import ActivityListItemLoader from './ActivityListItemLoader'
 
-import { Item } from '@/api/types/Activity'
+import { ApiModel } from '@/api'
 
 interface PlacesListProps {
-    activities?: Item[]
+    activities?: ApiModel.Activity[]
     title?: string
     loading?: boolean
 }

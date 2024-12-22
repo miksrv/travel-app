@@ -8,15 +8,15 @@ import 'react-photo-album/rows.css'
 
 import styles from './styles.module.sass'
 
+import { ApiModel } from '@/api'
 import { IMG_HOST } from '@/api/api'
-import { ActivityTypes, Item } from '@/api/types/Activity'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 import { formatDate } from '@/functions/helpers'
 import ReadMore from '@/ui/read-more'
 
 interface ActivityListItemProps {
-    item: Item
+    item: ApiModel.Activity
     title?: string
 }
 
@@ -51,10 +51,10 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                         {' • '}
                         {
                             {
-                                [ActivityTypes.Edit]: t('editing'),
-                                [ActivityTypes.Place]: t('new-geotag'),
-                                [ActivityTypes.Photo]: t('uploading-photo'),
-                                [ActivityTypes.Rating]: t('geotag-rating')
+                                [ApiModel.ActivityTypes.Edit]: t('editing'),
+                                [ApiModel.ActivityTypes.Place]: t('new-geotag'),
+                                [ApiModel.ActivityTypes.Photo]: t('uploading-photo'),
+                                [ApiModel.ActivityTypes.Rating]: t('geotag-rating')
                             }[item.type]
                         }
                         {/*{item.type === ActivityTypes.Edit &&*/}
@@ -80,15 +80,16 @@ const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title }) => {
                 }
             />
 
-            {(item.type === ActivityTypes.Place || item.type === ActivityTypes.Edit) && item.place?.content && (
-                <ReadMore
-                    className={cn(styles.content, !!item.photos?.length && styles.contentGallery)}
-                    showMoreText={t('show-more')}
-                    showLessText={t('show-less')}
-                >
-                    {item.place.content}
-                </ReadMore>
-            )}
+            {(item.type === ApiModel.ActivityTypes.Place || item.type === ApiModel.ActivityTypes.Edit) &&
+                item.place?.content && (
+                    <ReadMore
+                        className={cn(styles.content, !!item.photos?.length && styles.contentGallery)}
+                        showMoreText={t('show-more')}
+                        showLessText={t('show-less')}
+                    >
+                        {item.place.content}
+                    </ReadMore>
+                )}
 
             {!!item.photos?.length && (
                 <>
