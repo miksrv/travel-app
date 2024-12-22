@@ -1,10 +1,14 @@
-import { User } from './User'
+export interface ListResponse {
+    rating?: number
+    count?: number
+    vote?: number | null
+}
 
-import { ApiTypes } from '@/api/types'
+export interface PutRequest {
+    place: string
+    score: number
+}
 
-export type Rating = {
-    value: number
-    session?: string
-    created?: ApiTypes.DateTimeType
-    author?: User
+export interface PutResponse {
+    rating: number
 }

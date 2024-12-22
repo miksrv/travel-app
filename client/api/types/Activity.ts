@@ -1,26 +1,13 @@
-import { Photo } from './Photo'
-import { Place } from './Place'
-import { Rating } from './Rating'
-import { User } from './User'
+import { ApiModel } from '@/api'
 
-import { ApiTypes } from '@/api/types'
+export interface GetListResponse {
+    items: ApiModel.Activity[]
+}
 
-export const ActivityTypes = {
-    // Comment: 'comment',
-    // Cover: 'cover',
-    Edit: 'edit',
-    Photo: 'photo',
-    Place: 'place',
-    Rating: 'rating'
-} as const
-export type ActivityEnum = (typeof ActivityTypes)[keyof typeof ActivityTypes]
-
-export type Item = {
-    type: ActivityEnum
-    views?: number
-    place?: Place
-    photos?: Photo[]
-    rating?: Rating
-    author?: User
-    created?: ApiTypes.DateTimeType
+export interface GetListRequest {
+    date?: string
+    author?: string
+    place?: string
+    limit?: number
+    offset?: number
 }

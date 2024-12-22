@@ -1,11 +1,17 @@
-import { User } from './User'
+import { ApiModel } from '@/api'
 
-import { ApiTypes } from '@/api/types'
+export interface ListResponse {
+    items?: ApiModel.Comment[]
+    count: number
+}
 
-export type Comments = {
-    id: string
-    content: string
-    author: User
+// TODO change place to placeId
+export interface ListRequest {
+    place?: string
+}
+
+export interface PostRequest {
+    placeId?: string
     answerId?: string
-    created?: ApiTypes.DateTimeType
+    comment?: string
 }
