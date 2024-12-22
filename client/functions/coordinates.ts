@@ -1,4 +1,6 @@
-import { ApiTypes } from '@/api/types'
+// TODO: Refactoring this file, change function() to arrow function
+
+import { ApiType } from '@/api'
 
 const reInteger = '\\d+'
 const reFractional = '\\d+(?:\\.\\d+)?'
@@ -137,7 +139,7 @@ export const CoordinatesD = {
                     longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°`
                 }
             },
-            getLatLng: function (): ApiTypes.LatLonCoordinate {
+            getLatLng: function (): ApiType.Coordinates {
                 let lat = this.latDeg
                 if (this.latIsSouth) {
                     lat = -lat
@@ -206,7 +208,7 @@ export const CoordinatesDM = {
                     longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°${this.lonMin}′`
                 }
             },
-            getLatLng: function (): ApiTypes.LatLonCoordinate {
+            getLatLng: function (): ApiType.Coordinates {
                 let lat = this.latDeg + this.latMin / 60
                 if (this.latIsSouth) {
                     lat = -lat
@@ -313,7 +315,7 @@ export const CoordinatesDMS = {
                     longitude: `${getLongitudeLetter(this.lonIsWest)} ${this.lonDeg}°${this.lonMin}′${this.lonSec}″`
                 }
             },
-            getLatLng: function (): ApiTypes.LatLonCoordinate {
+            getLatLng: function (): ApiType.Coordinates {
                 let lat = this.latDeg + this.latMin / 60 + this.latSec / 3600
                 if (this.latIsSouth) {
                     lat = -lat
@@ -407,7 +409,7 @@ export const CoordinatesDSigned = {
                     longitude: `${this.lonDegSigned}°`
                 }
             },
-            getLatLng: function (): ApiTypes.LatLonCoordinate {
+            getLatLng: function (): ApiType.Coordinates {
                 return { lat: this.latDegSigned, lon: this.lonDegSigned }
             },
             isValid: function () {

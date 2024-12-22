@@ -1,6 +1,6 @@
 import { StaticImageData } from 'next/image'
 
-import { Place } from '@/api/types'
+import { ApiModel } from '@/api'
 import abandoned from '@/public/images/poi/abandoned.png'
 import animals from '@/public/images/poi/animals.png'
 import archeology from '@/public/images/poi/archeology.png'
@@ -25,75 +25,75 @@ import transport from '@/public/images/poi/transport.png'
 import water from '@/public/images/poi/water.png'
 import waterfall from '@/public/images/poi/waterfall.png'
 
-export const categoryImage = (category?: Place.Categories): StaticImageData => {
+export const categoryImage = (category?: ApiModel.Categories): StaticImageData => {
     switch (category) {
-        case Place.Categories.animals:
+        case ApiModel.Categories.animals:
             return animals
 
-        case Place.Categories.death:
+        case ApiModel.Categories.death:
             return death
 
-        case Place.Categories.radiation:
+        case ApiModel.Categories.radiation:
             return radiation
 
-        case Place.Categories.bridge:
+        case ApiModel.Categories.bridge:
             return bridge
 
-        case Place.Categories.military:
+        case ApiModel.Categories.military:
             return military
 
-        case Place.Categories.transport:
+        case ApiModel.Categories.transport:
             return transport
 
-        case Place.Categories.abandoned:
+        case ApiModel.Categories.abandoned:
             return abandoned
 
-        case Place.Categories.mine:
+        case ApiModel.Categories.mine:
             return mine
 
-        case Place.Categories.construction:
+        case ApiModel.Categories.construction:
             return construction
 
-        case Place.Categories.memorial:
+        case ApiModel.Categories.memorial:
             return memorial
 
-        case Place.Categories.monument:
+        case ApiModel.Categories.monument:
             return monument
 
-        case Place.Categories.museum:
+        case ApiModel.Categories.museum:
             return museum
 
-        case Place.Categories.castle:
+        case ApiModel.Categories.castle:
             return castle
 
-        case Place.Categories.manor:
+        case ApiModel.Categories.manor:
             return manor
 
-        case Place.Categories.religious:
+        case ApiModel.Categories.religious:
             return religious
 
-        case Place.Categories.archeology:
+        case ApiModel.Categories.archeology:
             return archeology
 
-        case Place.Categories.cave:
+        case ApiModel.Categories.cave:
             return cave
 
-        case Place.Categories.waterfall:
+        case ApiModel.Categories.waterfall:
             return waterfall
 
-        case Place.Categories.spring:
+        case ApiModel.Categories.spring:
             return spring
 
-        case Place.Categories.nature:
+        case ApiModel.Categories.nature:
             return nature
 
-        case Place.Categories.water:
+        case ApiModel.Categories.water:
             return water
 
-        case Place.Categories.mountain:
+        case ApiModel.Categories.mountain:
             return mountain
 
-        case Place.Categories.camping:
+        case ApiModel.Categories.camping:
             return camping
 
         default:
