@@ -6,13 +6,13 @@ import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
 
+import { ApiModel } from '@/api'
 import { APIPastvu } from '@/api/apiPastvu'
-import { Placemark } from '@/api/types'
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 
 type HistoricalPhotosProps = {
     position?: MapPositionType
-    onPhotoClick?: (photos: Placemark.Photo[], index?: number) => void
+    onPhotoClick?: (photos: ApiModel.PhotoMark[], index?: number) => void
 }
 
 const IMG_HOST = 'https://pastvu.com/_p'

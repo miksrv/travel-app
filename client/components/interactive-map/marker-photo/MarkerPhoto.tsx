@@ -6,12 +6,11 @@ import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { Placemark } from '@/api/types'
+import { ApiModel, IMG_HOST } from '@/api'
 
 type MarkerPhotoProps = {
-    photo: Placemark.Photo
-    onPhotoClick?: (photos?: Placemark.Photo[], index?: number) => void
+    photo: ApiModel.PhotoMark
+    onPhotoClick?: (photos?: ApiModel.PhotoMark[], index?: number) => void
 }
 
 const MarkerPhoto: React.FC<MarkerPhotoProps> = ({ photo, onPhotoClick }) => {

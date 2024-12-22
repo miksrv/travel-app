@@ -5,10 +5,10 @@ import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes } from '@/api/types'
+import { ApiType } from '@/api'
 
 interface CoordinatesControlProps {
-    coordinates?: ApiTypes.LatLonCoordinate
+    coordinates?: ApiType.Coordinates
     onChangeOpen?: (open: boolean) => void
 }
 

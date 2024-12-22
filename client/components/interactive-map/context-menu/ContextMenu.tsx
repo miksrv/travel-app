@@ -8,9 +8,8 @@ import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
+import { ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import { MapPositionType } from '@/components/interactive-map/InteractiveMap'
 import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
 import { LOCAL_STORAGE } from '@/functions/constants'
@@ -32,7 +31,7 @@ const ContextMenu: React.FC = () => {
     const mapSize = useRef<Point>()
     const menuWrapRef = useRef<HTMLDivElement>(null)
 
-    const [pointCords, setPointCords] = useState<ApiTypes.LatLonCoordinate>()
+    const [pointCords, setPointCords] = useState<ApiType.Coordinates>()
     const [isShowMenu, setIsShowMenu] = useState<boolean>(false)
 
     const [point, setPoint] = useState<{

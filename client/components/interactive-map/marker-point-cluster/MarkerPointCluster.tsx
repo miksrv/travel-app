@@ -6,11 +6,11 @@ import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes, Placemark } from '@/api/types'
+import { ApiModel, ApiType } from '@/api'
 
 interface MarkerPointClusterProps {
-    marker: Placemark.Place | Placemark.Photo
-    onClick?: (coords: ApiTypes.LatLonCoordinate) => void
+    marker: ApiModel.PlaceMark | ApiModel.PhotoMark
+    onClick?: (coords: ApiType.Coordinates) => void
 }
 
 const MarkerPointCluster: React.FC<MarkerPointClusterProps> = ({ marker, onClick }) => {

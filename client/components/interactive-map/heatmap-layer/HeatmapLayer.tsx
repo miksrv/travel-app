@@ -4,7 +4,7 @@ import React, { useEffect, useRef } from 'react'
 import * as ReactLeaflet from 'react-leaflet'
 import L from 'leaflet'
 
-import { API } from '@/api/api'
+import { API } from '@/api'
 
 const HeatmapLayer: React.FC = () => {
     const map = ReactLeaflet.useMap()
