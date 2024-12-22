@@ -4,8 +4,7 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
-import { ApiTypes } from '@/api/types'
+import { API, ApiType } from '@/api'
 import { categoryImage } from '@/functions/categories'
 import * as Coordinates from '@/functions/coordinates'
 import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
@@ -104,7 +103,7 @@ const Search: React.FC<SearchProps> = () => {
 
     const handleSelectLocation = async (value: DropdownOption) => {
         if (value.type === DropdownOptionType.COORDINATES) {
-            const coords = value.value as ApiTypes.LatLonCoordinate
+            const coords = value.value as ApiType.Coordinates
             await router.push(`/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`)
         } else {
             await router.push(`/places/${value.value}`)

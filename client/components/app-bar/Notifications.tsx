@@ -4,9 +4,8 @@ import { Button, Popout, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { deleteAllNotifications, Notify, setUnreadCounter } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 import Notification from '@/components/snackbar/Notification'
 import Counter from '@/ui/counter'
 
