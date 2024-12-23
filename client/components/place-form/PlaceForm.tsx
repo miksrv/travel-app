@@ -8,11 +8,8 @@ import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, ApiModel, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Photo } from '@/api/types/Photo'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoUploadSection from '@/components/photo-upload-section'
 import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
@@ -29,9 +26,9 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
 interface PlaceFormProps {
     placeId?: string
     loading?: boolean
-    values?: ApiTypes.RequestPlacesPostItem
-    errors?: ApiTypes.RequestPlacesPostItem
-    onSubmit?: (formData?: ApiTypes.RequestPlacesPostItem) => void
+    values?: ApiType.Places.PostItemRequest
+    errors?: ApiType.Places.PostItemRequest
+    onSubmit?: (formData?: ApiType.Places.PostItemRequest) => void
     onCancel?: () => void
 }
 
@@ -43,10 +40,10 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
 
     const location = useAppSelector((state) => state.application.userLocation)
 
-    const [formData, setFormData] = useState<ApiTypes.RequestPlacesPostItem>()
-    const [formErrors, setFormErrors] = useState<ApiTypes.RequestPlacesPostItem>()
+    const [formData, setFormData] = useState<ApiType.Places.PostItemRequest>()
+    const [formErrors, setFormErrors] = useState<ApiType.Places.PostItemRequest>()
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
-    const [localPhotos, setLocalPhotos] = useState<Photo[]>([])
+    const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>([])
 
     const { data: poiListData } = API.usePoiGetListQuery()
     const { data: categoryData } = API.useCategoriesGetListQuery()
@@ -70,7 +67,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
     }
 
     const validateForm = useCallback(() => {
-        const errors: ApiTypes.RequestPlacesPostItem = {}
+        const errors: ApiType.Places.PostItemRequest = {}
 
         if (!formData?.title) {
             errors.title = t('error_title-required')

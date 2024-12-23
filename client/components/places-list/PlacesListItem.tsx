@@ -5,8 +5,7 @@ import Link from 'next/link'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { Place } from '@/api/types/Place'
+import { ApiModel, IMG_HOST } from '@/api'
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, dateToUnixTime, numberFormatter, removeMarkdown } from '@/functions/helpers'
@@ -14,7 +13,7 @@ import PlacePlate from '@/ui/place-plate'
 
 interface PlacesListItemProps {
     t: TFunction
-    place: Place
+    place: ApiModel.Place
 }
 
 const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => (
