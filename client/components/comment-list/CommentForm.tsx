@@ -4,8 +4,7 @@ import { Button } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
-import { User } from '@/api/types/User'
+import { API, ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import Textarea from '@/ui/textarea'
 
@@ -13,7 +12,7 @@ interface CommentFormProps {
     placeId: string
     answerId?: string
     isAuth?: boolean
-    user?: User
+    user?: ApiModel.User
     onCommentAdded?: () => void
 }
 

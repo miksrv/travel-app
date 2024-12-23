@@ -7,14 +7,14 @@ import { Button, cn } from 'simple-react-ui-kit'
 import CommentForm from './CommentForm'
 import styles from './styles.module.sass'
 
-import { Comments } from '@/api/types/Comments'
+import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import { timeAgo } from '@/functions/helpers'
 
 interface CommentListItemProps {
     t: TFunction
     placeId: string
-    comment: Comments
+    comment: ApiModel.Comment
     isAuth?: boolean
     isAnswer?: boolean
     formAnswerId?: string
