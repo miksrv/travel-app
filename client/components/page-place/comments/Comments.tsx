@@ -2,7 +2,7 @@ import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { Container } from 'simple-react-ui-kit'
 
-import { API } from '@/api/api'
+import { API } from '@/api'
 import CommentList from '@/components/comment-list'
 
 interface CommentsProps {
