@@ -6,12 +6,11 @@ import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { Notification as NotificationType } from '@/api/types/Notification'
+import { ApiModel, IMG_HOST } from '@/api'
 import { formatDate } from '@/functions/helpers'
 import { levelImage } from '@/functions/userLevels'
 
-interface NotificationProps extends NotificationType {
+interface NotificationProps extends ApiModel.Notification {
     showDate?: boolean
     onClose?: (id: string) => void
     onLoad?: (id: string) => void
@@ -83,7 +82,7 @@ const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, 
     )
 }
 
-const NotificationIcon: React.FC<NotificationType> = ({ ...props }): React.ReactNode =>
+const NotificationIcon: React.FC<ApiModel.Notification> = ({ ...props }): React.ReactNode =>
     props.type === 'experience' ? (
         <Icon name={'DoubleUp'} />
     ) : props.type === 'error' ? (
