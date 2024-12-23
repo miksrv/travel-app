@@ -7,12 +7,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Button } from 'simple-react-ui-kit'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes, Place } from '@/api/types'
-import type { Item } from '@/api/types/Activity'
-import type { User } from '@/api/types/User'
 import ActivityList from '@/components/activity-list'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
@@ -23,8 +20,8 @@ import { PlaceSchema, UserSchema } from '@/functions/schema'
 import Carousel from '@/ui/carousel'
 
 interface IndexPageProps {
-    placesList: Place.Place[]
-    usersList: User[]
+    placesList: ApiModel.Place[]
+    usersList: ApiModel.User[]
 }
 
 const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
@@ -33,7 +30,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en' : '')
 
     const [lastDate, setLastDate] = useState<string>()
-    const [activityCache, setActivityCache] = useState<Item[]>([])
+    const [activityCache, setActivityCache] = useState<ApiModel.Activity[]>([])
 
     const { data, isFetching } = API.useActivityGetInfinityListQuery({ date: lastDate })
 
@@ -150,7 +147,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<IndexPageProps>> => {
             const cookies = context.req.cookies
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             let lat = null
@@ -172,8 +169,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     lat,
                     limit: 6,
                     lon,
-                    order: ApiTypes.SortOrders.DESC,
-                    sort: ApiTypes.SortFields.Updated
+                    order: ApiType.SortOrders.DESC,
+                    sort: ApiType.SortFields.Updated
                 })
             )
 

@@ -4,17 +4,15 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Category } from '@/api/types/Place'
 import AppLayout from '@/components/app-layout'
 import CategoriesList from '@/components/categories-list'
 import Header from '@/components/header'
 
 interface CategoriesPageProps {
-    categories: Category[]
+    categories: ApiModel.Category[]
 }
 
 const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
@@ -63,7 +61,7 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<CategoriesPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

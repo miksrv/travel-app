@@ -2,12 +2,9 @@ import React from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { API } from '@/api/api'
+import { API, ApiModel, ApiType } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Photo } from '@/api/types/Photo'
-import { User as UserType } from '@/api/types/User'
 import AppLayout from '@/components/app-layout'
 import UserPhotos from '@/components/page-user/Photos'
 import UserPlaces from '@/components/page-user/Places'
@@ -20,8 +17,8 @@ export const PLACES_PER_PAGE = 21
 export interface UserPageProps {
     id: string
     page?: UserPagesEnum
-    user?: UserType
-    photosList?: Photo[]
+    user?: ApiModel.User
+    photosList?: ApiModel.Photo[]
     photosCount: number
     currentPage: number
 }
@@ -53,7 +50,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<UserPageProps>> => {
             const id = context.params?.slug?.[0]
             const page = context.params?.slug?.[1] as UserPagesEnum
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const translations = await serverSideTranslations(locale)
 

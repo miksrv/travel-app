@@ -6,10 +6,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, ApiType, isApiValidationErrors } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
@@ -25,7 +24,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
     const [createPlace, { data, error, isLoading, isSuccess }] = API.usePlacesPostItemMutation()
 
     const validationErrors = useMemo(
-        () => (isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error) ? error.messages : undefined),
+        () => (isApiValidationErrors<ApiType.Places.PostItemRequest>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -33,7 +32,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
+    const handleSubmit = (formData?: ApiType.Places.PostItemRequest) => {
         if (formData) {
             setClickedButton(true)
             createPlace(formData)
@@ -81,7 +80,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

@@ -4,18 +4,16 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Tag } from '@/api/types/Tag'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import TagsList from '@/components/tags-list'
 import { dateToUnixTime } from '@/functions/helpers'
 
 interface TagsPageProps {
-    tags: Tag[]
+    tags: ApiModel.Tag[]
 }
 
 const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
@@ -89,7 +87,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<TagsPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

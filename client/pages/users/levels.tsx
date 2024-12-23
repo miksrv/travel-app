@@ -6,17 +6,16 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserAvatarGroup from '@/components/user-avatar-group'
 import { levelImage } from '@/functions/userLevels'
 
 interface LevelsPageProps {
-    levels: ApiTypes.ResponseLevelsGetList | null
+    levels: ApiType.Levels.Response | null
 }
 
 const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
@@ -96,7 +95,7 @@ const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<LevelsPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))
