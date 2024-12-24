@@ -1,14 +1,12 @@
 import React, { LegacyRef, MutableRefObject, useEffect, useState } from 'react'
 
-import { API } from '@/api/api'
+import { API, ApiModel, useAppDispatch } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch } from '@/api/store'
-import { Photo } from '@/api/types/Photo'
 
 interface PhotoUploaderProps {
     placeId?: string
     onSelectFiles?: (uploadingPhotosData?: string[]) => void
-    onUploadPhoto?: (photo: Photo) => void
+    onUploadPhoto?: (photo: ApiModel.Photo) => void
     fileInputRef?: MutableRefObject<HTMLInputElement | undefined>
 }
 
