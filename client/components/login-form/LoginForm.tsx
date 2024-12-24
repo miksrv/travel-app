@@ -8,11 +8,9 @@ import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, ApiType, isApiValidationErrors, useAppDispatch } from '@/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
-import { useAppDispatch } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import { validateEmail } from '@/functions/validators'
@@ -33,8 +31,8 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
     const [, setReturnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
 
     const [localeError, setLocaleError] = useState<string>('')
-    const [formData, setFormData] = useState<ApiTypes.RequestAuthLogin>()
-    const [formErrors, setFormErrors] = useState<ApiTypes.RequestAuthLogin>()
+    const [formData, setFormData] = useState<ApiType.Auth.PostLoginNativeRequest>()
+    const [formErrors, setFormErrors] = useState<ApiType.Auth.PostLoginNativeRequest>()
 
     const [authLoginNative, { data: authData, isLoading: nativeLoading, isSuccess: nativeSuccess, error }] =
         API.useAuthPostLoginMutation()
@@ -43,12 +41,12 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         API.useAuthLoginServiceMutation()
 
     const validationErrors = useMemo(
-        () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
+        () => (isApiValidationErrors<ApiType.Auth.PostRegistrationRequest>(error) ? error.messages : undefined),
         [error]
     )
 
     const validateForm = useCallback(() => {
-        const errors: ApiTypes.RequestAuthLogin = {}
+        const errors: ApiType.Auth.PostLoginNativeRequest = {}
 
         if (!validateEmail(formData?.email)) {
             errors.email = t('error_email-incorrect')
@@ -77,7 +75,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         }
     }
 
-    const handleLoginServiceButton = (service: ApiTypes.AuthServiceType) => {
+    const handleLoginServiceButton = (service: ApiType.AuthService) => {
         setReturnPath(router.asPath)
         authLoginService({ service })
     }

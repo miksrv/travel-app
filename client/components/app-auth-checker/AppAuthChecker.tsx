@@ -2,9 +2,8 @@
 
 import React, { useEffect } from 'react'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { login, logout, saveSession } from '@/api/authSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 

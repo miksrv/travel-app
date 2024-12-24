@@ -6,9 +6,7 @@ import { Button, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { useAppSelector } from '@/api/store'
-import { User } from '@/api/types/User'
+import { ApiModel, IMG_HOST, useAppSelector } from '@/api'
 import Header from '@/components/header'
 import Reputation from '@/components/reputation'
 import UserAvatarEditor from '@/components/user-avatar-editor'
@@ -18,7 +16,7 @@ import defaultAvatar from '@/public/images/no-avatar.png'
 import Progress from '@/ui/progress'
 
 interface UserHeaderProps {
-    user?: User
+    user?: ApiModel.User
 }
 
 const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
