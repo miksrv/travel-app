@@ -1,7 +1,6 @@
 import { deleteCookie, setCookie } from 'cookies-next'
 
-import { ApiTypes } from '@/api/types'
-import { User } from '@/api/types/User'
+import { ApiModel, ApiType } from '@/api'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
 import { createSlice, PayloadAction } from '@reduxjs/toolkit'
@@ -10,7 +9,7 @@ type AuthStateProps = {
     isAuth?: boolean
     token?: string
     session?: string
-    user?: User
+    user?: ApiModel.User
 }
 
 export const getStorageToken = (): string =>
@@ -26,7 +25,7 @@ const authSlice = createSlice({
     } as AuthStateProps,
     name: 'auth',
     reducers: {
-        login: (state, { payload }: PayloadAction<ApiTypes.ResponseAuthLogin | undefined>) => {
+        login: (state, { payload }: PayloadAction<ApiType.Auth.LoginResponse | undefined>) => {
             state.token = payload?.token ?? ''
             state.session = payload?.session ?? ''
             state.user = payload?.user ?? undefined

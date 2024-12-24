@@ -4,11 +4,11 @@ import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes } from '@/api/types'
+import { ApiType } from '@/api'
 import userAvatar from '@/public/images/no-avatar.png'
 
 interface MarkerUserProps {
-    coordinates: ApiTypes.LatLonCoordinate
+    coordinates: ApiType.Coordinates
 }
 
 const MarkerUser: React.FC<MarkerUserProps> = ({ coordinates }) => {

@@ -8,8 +8,7 @@ import 'react-photo-album/rows.css'
 
 import styles from './styles.module.sass'
 
-import { ApiModel } from '@/api'
-import { IMG_HOST } from '@/api/api'
+import { ApiModel, IMG_HOST } from '@/api'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 import { formatDate } from '@/functions/helpers'
