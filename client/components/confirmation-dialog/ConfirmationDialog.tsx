@@ -6,8 +6,8 @@ import 'react-image-crop/src/ReactCrop.scss'
 
 import styles from './styles.module.sass'
 
+import { useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 import Dialog, { DialogProps } from '@/ui/dialog'
 
 interface ConfirmationDialogProps extends DialogProps {

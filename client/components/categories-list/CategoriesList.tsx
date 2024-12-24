@@ -6,12 +6,12 @@ import { Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { Category } from '@/api/types/Place'
+import { ApiModel } from '@/api'
 import { categoryImage } from '@/functions/categories'
 
 interface CategoriesListProps {
     t: TFunction
-    categories?: Category[]
+    categories?: ApiModel.Category[]
 }
 
 const CategoriesList: React.FC<CategoriesListProps> = ({ t, categories }) => (

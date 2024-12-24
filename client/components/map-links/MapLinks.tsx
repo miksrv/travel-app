@@ -5,14 +5,14 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes } from '@/api/types'
+import { ApiType } from '@/api'
 import googleLogo from '@/public/images/google-logo.png'
 import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 
 const DEFAULT_ZOOM = 17
 
-interface MapLinksProps extends ApiTypes.LatLonCoordinate {
+interface MapLinksProps extends ApiType.Coordinates {
     zoom?: number
     title?: string
     showTitle?: boolean

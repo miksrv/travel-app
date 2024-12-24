@@ -4,10 +4,10 @@ import { Container, ContainerProps } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { Tag } from '@/api/types/Tag'
+import { ApiModel } from '@/api'
 
 interface TagsListProps extends Pick<ContainerProps, 'title'> {
-    tags?: Tag[]
+    tags?: ApiModel.Tag[]
 }
 
 const TagsList: React.FC<TagsListProps> = ({ tags, ...props }) => (

@@ -4,10 +4,9 @@ import { Button, ButtonProps } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
