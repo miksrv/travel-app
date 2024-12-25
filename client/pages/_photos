@@ -12,7 +12,7 @@
 // import { useCallback, useEffect } from 'react'
 // import React, { useState } from 'react'
 //
-// import { API } from '@/api/api'
+// import { API } from '@/api'
 // import { Photo, Poi } from '@/api/types'
 //
 // import AppLayout from '@/components/app-layout'

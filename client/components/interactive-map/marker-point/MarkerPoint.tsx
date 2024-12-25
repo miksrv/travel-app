@@ -10,15 +10,14 @@ import { Skeleton } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API, IMG_HOST } from '@/api/api'
-import { Placemark } from '@/api/types'
+import { API, ApiModel, IMG_HOST } from '@/api'
 import BookmarkButton from '@/components/bookmark-button'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 import PlacePlate from '@/ui/place-plate'
 
 interface MarkerPointProps {
-    place: Placemark.Place
+    place: ApiModel.PlaceMark
     keepInView?: boolean
 }
 

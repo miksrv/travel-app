@@ -6,8 +6,7 @@ import { NextSeo } from 'next-seo'
 import type { BreadcrumbList, ProfilePage } from 'schema-dts'
 import { Button } from 'simple-react-ui-kit'
 
-import { API, IMG_HOST, SITE_LINK } from '@/api/api'
-import type { Item } from '@/api/types/Activity'
+import { API, ApiModel, IMG_HOST, SITE_LINK } from '@/api'
 import ActivityList from '@/components/activity-list/ActivityList'
 import UserHeader from '@/components/page-user/header'
 import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
@@ -23,7 +22,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     const [lastDate, setLastDate] = useState<string>()
-    const [activityCache, setActivityCache] = useState<Item[]>([])
+    const [activityCache, setActivityCache] = useState<ApiModel.Activity[]>([])
 
     const { data, isFetching } = API.useActivityGetInfinityListQuery({
         author: user?.id,

@@ -25,7 +25,7 @@ import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerUser from './MarkerUser'
 import styles from './styles.module.sass'
 
-import { ApiTypes, Place, Placemark } from '@/api/types'
+import { ApiModel, ApiType } from '@/api'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
@@ -59,9 +59,9 @@ export type MapPositionType = {
 }
 
 type MapProps = {
-    places?: Placemark.Place[]
-    photos?: Placemark.Photo[]
-    categories?: Place.Categories[]
+    places?: ApiModel.PlaceMark[]
+    photos?: ApiModel.PhotoMark[]
+    categories?: ApiModel.Categories[]
     layer?: MapLayersType
     loading?: boolean
     storeMapPosition?: boolean
@@ -75,11 +75,11 @@ type MapProps = {
     hideAdditionalLayers?: boolean
     storeMapKey?: string
     fullMapLink?: string
-    userLatLon?: ApiTypes.LatLonCoordinate
-    onChangeCategories?: (categories?: Place.Categories[]) => void
+    userLatLon?: ApiType.Coordinates
+    onChangeCategories?: (categories?: ApiModel.Categories[]) => void
     onChangeMapType?: (type?: MapObjectsType) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
-    onPhotoClick?: (photos: Placemark.Photo[], index?: number) => void
+    onPhotoClick?: (photos: ApiModel.PhotoMark[], index?: number) => void
     onClickCreatePlace?: () => void
 } & MapOptions
 
@@ -88,6 +88,7 @@ const DEFAULT_MAP_CENTER: LatLngExpression = [51.765445, 55.099745]
 const DEFAULT_MAP_LAYER: MapLayersType = MapLayers.OSM
 const DEFAULT_MAP_TYPE: MapObjectsType = MapObjects.Places
 
+// TODO: Refactor this component
 const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
@@ -118,12 +119,12 @@ const InteractiveMap: React.FC<MapProps> = ({
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
     const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
-    const [placeMark, setPlaceMark] = useState<ApiTypes.LatLonCoordinate>()
+    const [placeMark, setPlaceMark] = useState<ApiType.Coordinates>()
     const [mapPosition, setMapPosition] = useState<MapPositionType>()
     const [mapLayer, setMapLayer] = useState<MapLayersType>(DEFAULT_MAP_LAYER)
     const [mapType, setMapType] = useState<MapObjectsType>(DEFAULT_MAP_TYPE)
     const [additionalLayers, setAdditionalLayers] = useState<MapAdditionalLayersType[]>()
-    const [cursorPosition, setCursorPosition] = useState<ApiTypes.LatLonCoordinate>()
+    const [cursorPosition, setCursorPosition] = useState<ApiType.Coordinates>()
 
     const [coordinates, setCoordinates] = useLocalStorage<MapPositionType>(storeMapKey || LOCAL_STORAGE.MAP_CENTER)
 
@@ -156,11 +157,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         onChangeMapType?.(type)
     }
 
-    const handleSelectSearch = async (
-        coordinates: ApiTypes.LatLonCoordinate,
-        zoom?: number,
-        showPosition?: boolean
-    ) => {
+    const handleSelectSearch = async (coordinates: ApiType.Coordinates, zoom?: number, showPosition?: boolean) => {
         mapRef.current?.setView([coordinates.lat, coordinates.lon], zoom ?? DEFAULT_MAP_ZOOM)
 
         if (showPosition) {
@@ -168,7 +165,7 @@ const InteractiveMap: React.FC<MapProps> = ({
         }
     }
 
-    const handleSetPlaceMarker = async (coords: ApiTypes.LatLonCoordinate | undefined) => {
+    const handleSetPlaceMarker = async (coords: ApiType.Coordinates | undefined) => {
         setPlaceMark(coords)
 
         const url = new URL(window.location.href)
@@ -444,7 +441,7 @@ const InteractiveMap: React.FC<MapProps> = ({
 }
 
 interface MapEventsProps {
-    onMouseMove?: (coordinates: ApiTypes.LatLonCoordinate) => void
+    onMouseMove?: (coordinates: ApiType.Coordinates) => void
     onChangeBounds?: (bounds: LatLngBounds, zoom: number) => void
 }
 

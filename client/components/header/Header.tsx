@@ -3,7 +3,7 @@ import { Button, cn, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { User } from '@/api/types/User'
+import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import Breadcrumbs, { BreadcrumbsProps } from '@/ui/breadcrumbs'
 
@@ -12,7 +12,7 @@ interface HeaderProps extends BreadcrumbsProps {
     backLink?: string
     className?: string
     attachedBottom?: boolean
-    userData?: User
+    userData?: ApiModel.User
     actions?: React.ReactNode
 }
 

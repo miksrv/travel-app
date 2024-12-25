@@ -5,11 +5,11 @@ import { Container } from 'simple-react-ui-kit'
 import PlacesListItem from './PlacesListItem'
 import styles from './styles.module.sass'
 
-import { Place } from '@/api/types/Place'
+import { ApiModel } from '@/api'
 import PlacesListItemLoader from '@/components/places-list/PlacesListItemLoader'
 
 interface PlacesListProps {
-    places?: Place[]
+    places?: ApiModel.Place[]
     loading?: boolean
 }
 

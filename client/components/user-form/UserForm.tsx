@@ -5,9 +5,8 @@ import { Button, Checkbox, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
+import { ApiModel, ApiType } from '@/api'
 import { useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { User, UserSettingEnum, UserSettings } from '@/api/types/User'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
@@ -15,13 +14,13 @@ import ScreenSpinner from '@/ui/screen-spinner'
 
 interface UserFormProps {
     loading?: boolean
-    values?: User
-    errors?: ApiTypes.RequestUsersPatch
-    onSubmit?: (formData?: ApiTypes.RequestUsersPatch) => void
+    values?: ApiModel.User
+    errors?: ApiType.Users.PatchRequest
+    onSubmit?: (formData?: ApiType.Users.PatchRequest) => void
     onCancel?: () => void
 }
 
-type FormDataType = ApiTypes.RequestUsersPatch & { confirmPassword?: string }
+type FormDataType = ApiType.Users.PatchRequest & { confirmPassword?: string }
 
 const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, onCancel }) => {
     const { t } = useTranslation()
@@ -47,7 +46,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
             ...formData,
             settings: {
                 ...formData?.settings,
-                [event.target.id as UserSettingEnum]: event.target.checked
+                [event.target.id as ApiModel.UserSettingEnum]: event.target.checked
             }
         })
     }
@@ -170,7 +169,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                         label={t(`checkbox_${setting}`)}
                         disabled={loading}
                         onChange={handleChangeCheckbox}
-                        checked={formData?.settings?.[setting as keyof UserSettings]}
+                        checked={formData?.settings?.[setting as keyof ApiModel.UserSettings]}
                     />
                 ))}
             </div>

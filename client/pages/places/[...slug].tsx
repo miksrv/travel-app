@@ -2,10 +2,9 @@ import React from 'react'
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 
-import { API } from '@/api/api'
+import { API, ApiModel, ApiType, useAppSelector } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
-import { useAppSelector, wrapper } from '@/api/store'
-import { ApiTypes, Photo, Place as PlaceType } from '@/api/types'
+import { wrapper } from '@/api/store'
 import AppLayout from '@/components/app-layout'
 import Edit from '@/components/page-place/Edit'
 import Place from '@/components/page-place/Place'
@@ -19,9 +18,9 @@ type PageType = (typeof PAGES)[number]
 export interface PlacePageProps {
     page: PageType | null
     ratingCount: number
-    place?: PlaceType.Place
-    photoList?: Photo.Photo[]
-    nearPlaces?: PlaceType.Place[] | null
+    place?: ApiModel.Place
+    photoList?: ApiModel.Photo[]
+    nearPlaces?: ApiModel.Place[] | null
 }
 
 const PlacePage: NextPage<PlacePageProps> = ({ page, ...props }) => {
@@ -36,7 +35,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const id = context.params?.slug?.[0]
             const page = context.params?.slug?.[1] as PageType
             const cookies = context.req.cookies
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             if (typeof id !== 'string' || !PAGES.includes(page)) {
@@ -77,8 +76,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     lat: placeData?.lat,
                     limit: NEAR_PLACES_COUNT,
                     lon: placeData?.lon,
-                    order: ApiTypes.SortOrders.ASC,
-                    sort: ApiTypes.SortFields.Distance
+                    order: ApiType.SortOrders.ASC,
+                    sort: ApiType.SortFields.Distance
                 })
             )
 

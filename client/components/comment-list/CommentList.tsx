@@ -5,14 +5,13 @@ import { Button, cn } from 'simple-react-ui-kit'
 import CommentListItem from './CommentListItem'
 import styles from './styles.module.sass'
 
+import { ApiModel, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Comments } from '@/api/types/Comments'
 import CommentForm from '@/components/comment-list/CommentForm'
 
 interface CommentListProps {
     placeId: string
-    comments?: Comments[]
+    comments?: ApiModel.Comment[]
     loading?: boolean
 }
 
@@ -30,7 +29,7 @@ const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
         dispatch(openAuthDialog())
     }
 
-    const renderComments = (comments: Comments[], answerId?: string) =>
+    const renderComments = (comments: ApiModel.Comment[], answerId?: string) =>
         comments
             .filter((item) => (!answerId ? !item.answerId : item.answerId === answerId))
             .map((item) => (

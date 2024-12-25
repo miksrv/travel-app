@@ -6,11 +6,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, ApiType, isApiValidationErrors, useAppDispatch, useAppSelector } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
+import { wrapper } from '@/api/store'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UserForm from '@/components/user-form'
@@ -33,7 +32,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const [updateProfile, { data, error, isLoading, isSuccess }] = API.useUsersPatchProfileMutation()
 
     const validationErrors = useMemo(
-        () => (isApiValidationErrors<ApiTypes.RequestUsersPatch>(error) ? error.messages : undefined),
+        () => (isApiValidationErrors<ApiType.Users.PatchRequest>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -41,7 +40,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiTypes.RequestUsersPatch) => {
+    const handleSubmit = (formData?: ApiType.Users.PatchRequest) => {
         updateProfile({
             id: authSlice.user?.id,
             name: formData?.name !== userData?.name ? formData?.name : undefined,
@@ -120,7 +119,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

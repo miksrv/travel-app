@@ -20,9 +20,8 @@ import { Container, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 import { addDecimalPoint } from '@/functions/helpers'
 import Rating from '@/ui/rating'
 

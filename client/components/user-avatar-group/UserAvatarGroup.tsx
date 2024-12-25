@@ -4,12 +4,12 @@ import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { User } from '@/api/types/User'
+import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import { UserAvatarProps } from '@/components/user-avatar/UserAvatar'
 
 interface UserAvatarGroupProps extends Pick<UserAvatarProps, 'size'> {
-    users?: User[]
+    users?: ApiModel.User[]
     totalCount?: number
     className?: string
 }

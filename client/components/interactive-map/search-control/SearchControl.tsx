@@ -4,14 +4,13 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
-import { ApiTypes } from '@/api/types'
+import { API, ApiType } from '@/api'
 import * as Coordinates from '@/functions/coordinates'
 import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
 
 interface SearchControlProps {
     onClear?: () => void
-    onSelectResult?: (coordinates: ApiTypes.LatLonCoordinate, zoom?: number, showPosition?: boolean) => void
+    onSelectResult?: (coordinates: ApiType.Coordinates, zoom?: number, showPosition?: boolean) => void
 }
 
 const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
@@ -19,7 +18,7 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
 
     const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
 
-    const [geoSearch, { data, isLoading }] = API.useLocationGetGeosearchMutation()
+    const [geoSearch, { data, isLoading }] = API.useLocationGetGeoSearchMutation()
 
     const locationOptions: DropdownOption[] = useMemo(
         () =>

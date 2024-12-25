@@ -1,6 +1,6 @@
-import { User } from './User'
+import { User } from './user'
 
-import { ApiTypes } from '@/api/types'
+import { DateTime } from '@/api/types'
 
 export type Photo = {
     id: string
@@ -10,7 +10,7 @@ export type Photo = {
     height: number
     title?: string
     author?: User
-    created?: ApiTypes.DateTimeType
+    created?: DateTime
     filesize?: number
     placeId?: string
 }

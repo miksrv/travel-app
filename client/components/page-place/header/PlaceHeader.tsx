@@ -8,11 +8,8 @@ import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API, IMG_HOST } from '@/api/api'
+import { API, ApiModel, ApiType, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
-import { Place } from '@/api/types/Place'
 import BookmarkButton from '@/components/bookmark-button'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
@@ -20,7 +17,7 @@ const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialo
 })
 
 interface PlaceHeaderProps {
-    place?: Place
+    place?: ApiModel.Place
     coverHash?: number
     onPhotoUploadClick?: (event?: React.MouseEvent) => void
     onChangePlaceCoverClick?: (event?: React.MouseEvent) => void
@@ -29,7 +26,7 @@ interface PlaceHeaderProps {
 type PlaceAddress = {
     id?: number
     name?: string
-    type: ApiTypes.LocationTypes
+    type: ApiType.LocationTypes
 }
 
 const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUploadClick, onChangePlaceCoverClick }) => {
@@ -46,7 +43,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
     const coverHashString = coverHash || dayjs(place?.updated?.date).unix()
     const placeAddress: PlaceAddress[] = useMemo(() => {
-        const addressTypes: ApiTypes.LocationTypes[] = ['country', 'region', 'district', 'locality']
+        const addressTypes: ApiType.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []
 
         addressTypes.forEach((type) => {

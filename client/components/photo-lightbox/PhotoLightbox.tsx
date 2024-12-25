@@ -10,14 +10,13 @@ import 'yet-another-react-lightbox/styles.css'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { Photo, Placemark } from '@/api/types'
+import { ApiModel, IMG_HOST } from '@/api'
 import ImageSlide from '@/components/photo-lightbox/ImageSlide'
 import UserAvatar from '@/components/user-avatar'
 import { formatDate } from '@/functions/helpers'
 
 interface PhotoLightboxProps {
-    photos?: Photo.Photo[] | Placemark.Photo[]
+    photos?: ApiModel.Photo[] | ApiModel.PhotoMark[]
     photoIndex?: number
     showLightbox?: boolean
     onCloseLightBox?: () => void
@@ -50,7 +49,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
                                 caption={formatDate(photo.created?.date, t('date-time-format'))}
                             />
                         ),
-                        height: (photo as Photo.Photo).height,
+                        height: (photo as ApiModel.Photo).height,
                         src: imageHost(photo.full),
                         // srcSet: [{ src: imageHost(photo.preview), width: 300, height: 200 }],
                         title: photo.placeId ? (
@@ -64,7 +63,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
                         ) : (
                             photo.title
                         ),
-                        width: (photo as Photo.Photo).width
+                        width: (photo as ApiModel.Photo).width
                     }) as Slide
             )}
         />

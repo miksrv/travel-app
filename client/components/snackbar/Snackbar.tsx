@@ -5,9 +5,8 @@ import React, { useEffect } from 'react'
 import Notification from './Notification'
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { deleteNotification, Notify, setReadNotification, setUnreadCounter } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 
 type SnackbarProps = object
 

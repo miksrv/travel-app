@@ -3,7 +3,7 @@ import { TFunction } from 'i18next'
 import Image from 'next/image'
 import { Container, ContainerProps } from 'simple-react-ui-kit'
 
-import { User } from '@/api/types/User'
+import { ApiModel } from '@/api'
 import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
 import styles from '@/components/users-list/styles.module.sass'
@@ -12,7 +12,7 @@ import Progress from '@/ui/progress'
 
 interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
     t: TFunction
-    users?: User[]
+    users?: ApiModel.User[]
 }
 
 const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>

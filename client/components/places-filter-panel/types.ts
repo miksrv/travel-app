@@ -1,4 +1,4 @@
-import { ApiTypes } from '@/api/types'
+import { ApiType } from '@/api'
 
 export type PlacesFilterType = {
     country?: number
@@ -10,6 +10,6 @@ export type PlacesFilterType = {
     tag?: string
     lat?: number
     lon?: number
-    order?: ApiTypes.SortOrdersType
-    sort?: ApiTypes.SortFieldsType
+    order?: ApiType.SortOrdersType
+    sort?: ApiType.SortFieldsType
 }

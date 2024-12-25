@@ -5,9 +5,8 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
+import { ApiType, useAppDispatch } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
-import { useAppDispatch } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
@@ -21,7 +20,7 @@ const LanguageSwitcher: React.FC = () => {
     const { language: currentLanguage } = i18n
     const { pathname, asPath, query } = router
 
-    const changeLanguage = async (locale: ApiTypes.LocaleType) => {
+    const changeLanguage = async (locale: ApiType.Locale) => {
         if (locale === currentLanguage) {
             return
         }
@@ -36,7 +35,7 @@ const LanguageSwitcher: React.FC = () => {
     }
 
     useEffect(() => {
-        dispatch(setLocale(currentLanguage as ApiTypes.LocaleType))
+        dispatch(setLocale(currentLanguage as ApiType.Locale))
     }, [])
 
     return (

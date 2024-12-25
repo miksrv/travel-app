@@ -6,10 +6,10 @@ import Leaflet from 'leaflet'
 
 import styles from './styles.module.sass'
 
-import { ApiTypes } from '@/api/types'
+import { ApiType } from '@/api'
 import { convertDMS } from '@/functions/coordinates'
 
-interface PlaceMarkProps extends ApiTypes.LatLonCoordinate {
+interface PlaceMarkProps extends ApiType.Coordinates {
     onClick?: () => void
 }
 

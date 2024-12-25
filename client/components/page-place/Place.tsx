@@ -7,10 +7,8 @@ import { Button } from 'simple-react-ui-kit'
 
 import ShareSocial from './share-social'
 
-import { IMG_HOST, SITE_LINK } from '@/api/api'
+import { ApiModel, IMG_HOST, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Photo } from '@/api/types/Photo'
 import Comments from '@/components/page-place/comments'
 import PlaceDescription from '@/components/page-place/description'
 import PlaceHeader from '@/components/page-place/header'
@@ -34,7 +32,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const inputFileRef = useRef<HTMLInputElement>()
 
     const [coverHash, setCoverHash] = useState<number | undefined>()
-    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photoList ?? [])
+    const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)

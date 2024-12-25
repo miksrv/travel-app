@@ -5,13 +5,12 @@ import { Button, Checkbox, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
-import { Categories } from '@/api/types/Place'
+import { API, ApiModel } from '@/api'
 import { categoryImage } from '@/functions/categories'
 
 interface CategoryControlProps {
-    categories?: Categories[]
-    onChangeCategories?: (categories?: Categories[]) => void
+    categories?: ApiModel.Categories[]
+    onChangeCategories?: (categories?: ApiModel.Categories[]) => void
 }
 
 const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeCategories }) => {
@@ -33,7 +32,7 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
     }
 
     const handleChangeCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const category = event.target.id as Categories
+        const category = event.target.id as ApiModel.Categories
 
         onChangeCategories?.(
             !event.target.checked
@@ -43,10 +42,10 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
     }
 
     const handleChangeAllCategories = () => {
-        if (categories?.length === Object.values(Categories).length) {
+        if (categories?.length === Object.values(ApiModel.Categories).length) {
             onChangeCategories?.([])
         } else {
-            onChangeCategories?.(Object.values(Categories))
+            onChangeCategories?.(Object.values(ApiModel.Categories))
         }
     }
 
@@ -78,10 +77,10 @@ const CategoryControl: React.FC<CategoryControlProps> = ({ categories, onChangeC
                     <Checkbox
                         id={'allCategories'}
                         label={t('all-categories-of-geotags')}
-                        checked={categories?.length === Object.values(Categories).length}
+                        checked={categories?.length === Object.values(ApiModel.Categories).length}
                         indeterminate={
                             categories &&
-                            categories.length !== Object.values(Categories).length &&
+                            categories.length !== Object.values(ApiModel.Categories).length &&
                             categories.length > 0
                         }
                         onChange={handleChangeAllCategories}

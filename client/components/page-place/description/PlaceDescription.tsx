@@ -6,10 +6,9 @@ import { Button, Container } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
+import { API, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
 import { equalsArrays } from '@/functions/helpers'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'

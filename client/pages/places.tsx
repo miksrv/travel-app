@@ -8,11 +8,9 @@ import { NextSeo } from 'next-seo'
 import type { BreadcrumbList } from 'schema-dts'
 import { Button, Container } from 'simple-react-ui-kit'
 
-import { API, IMG_HOST, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch } from '@/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch, wrapper } from '@/api/store'
-import { ApiTypes, Place } from '@/api/types'
-import type { Category, LocationObject } from '@/api/types/Place'
+import { wrapper } from '@/api/store'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import PlacesFilterPanel from '@/components/places-filter-panel'
@@ -24,14 +22,22 @@ import { PlaceSchema } from '@/functions/schema'
 import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
-const DEFAULT_SORT = ApiTypes.SortFields.Updated
-const DEFAULT_ORDER = ApiTypes.SortOrders.DESC
+const DEFAULT_SORT = ApiType.SortFields.Updated
+const DEFAULT_ORDER = ApiType.SortOrders.DESC
 const POST_PER_PAGE = 21
 
+// TODO: Refactoring this type (duplicate in components/places-filter-panel/types.ts)
+type PlaceLocationType = {
+    title: string
+    value: number
+    type: ApiType.LocationTypes
+}
+
+// TODO: Rename categoriesData to categoriesList
 interface PlacesPageProps {
-    categoriesData: Category[]
-    locationType: ApiTypes.LocationTypes | null
-    locationData: LocationObject | null
+    categoriesData: ApiModel.Category[]
+    locationType: ApiType.LocationTypes | null
+    locationData: ApiModel.AddressItem | null
     country: number | null
     region: number | null
     district: number | null
@@ -40,11 +46,11 @@ interface PlacesPageProps {
     tag: string | null
     lat: number | null
     lon: number | null
-    sort: ApiTypes.SortFieldsType
-    order: ApiTypes.SortOrdersType
+    sort: ApiType.SortFieldsType
+    order: ApiType.SortOrdersType
     currentPage: number
     placesCount: number
-    placesList: Place.Place[]
+    placesList: ApiModel.Place[]
 }
 
 const PlacesPage: NextPage<PlacesPageProps> = ({
@@ -146,7 +152,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle(filterTitle || '')
     }
 
-    const handleChangeLocation = async (location?: ApiTypes.PlaceLocationType) => {
+    const handleChangeLocation = async (location?: PlaceLocationType) => {
         if (!location) {
             await handleClearLocationFilter()
         } else {
@@ -364,7 +370,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacesPageProps>> => {
             const cookies = context.req.cookies
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
 
             const country = parseInt(context.query.country as string, 10) || null
             const region = parseInt(context.query.region as string, 10) || null
@@ -379,8 +385,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
             let isUserLocation = false
 
             const tag = (context.query.tag as string) || null
-            const sort = (context.query.sort as ApiTypes.SortFieldsType) || DEFAULT_SORT
-            const order = (context.query.order as ApiTypes.SortOrdersType) || DEFAULT_ORDER
+            const sort = (context.query.sort as ApiType.SortFieldsType) || DEFAULT_SORT
+            const order = (context.query.order as ApiType.SortOrdersType) || DEFAULT_ORDER
 
             if (!lat && !lon && cookies[LOCAL_STORAGE.LOCATION]) {
                 const userLocation = cookies[LOCAL_STORAGE.LOCATION]?.split(';')
@@ -395,7 +401,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             const translations = await serverSideTranslations(locale)
 
-            const locationType: ApiTypes.LocationTypes | null =
+            const locationType: ApiType.LocationTypes | null =
                 !country && !region && !district && !locality
                     ? null
                     : country

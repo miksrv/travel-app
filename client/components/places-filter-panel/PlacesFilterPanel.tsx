@@ -3,24 +3,29 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { API } from '@/api/api'
-import { useAppSelector } from '@/api/store'
-import { ApiTypes } from '@/api/types'
+import { API, ApiType, useAppSelector } from '@/api'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import { categoryImage } from '@/functions/categories'
 import Autocomplete from '@/ui/autocomplete'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
+// TODO: Refactoring this type (duplicate with pages/places.tsx)
+type PlaceLocationType = {
+    title: string
+    value: number
+    type: ApiType.LocationTypes
+}
+
 interface PlacesFilterPanelProps {
-    sort?: ApiTypes.SortFieldsType
-    order?: ApiTypes.SortOrdersType
-    location?: ApiTypes.PlaceLocationType
+    sort?: ApiType.SortFieldsType
+    order?: ApiType.SortOrdersType
+    location?: PlaceLocationType
     category?: string | null
     optionsOpen?: boolean
     onChange?: (key: keyof PlacesFilterType, value: string | number | undefined) => void
     onOpenOptions?: (title?: string) => void
-    onChangeLocation?: (option?: ApiTypes.PlaceLocationType) => void
+    onChangeLocation?: (option?: PlaceLocationType) => void
 }
 
 type OpenedOptionsType = 'sort' | 'order' | 'category' | undefined
@@ -47,23 +52,23 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
 
     const sortOptions: DropdownOption[] = useMemo(
         () =>
-            Object.values(ApiTypes.SortFields)
-                .filter((sort) => sort !== ApiTypes.SortFields.Category)
+            Object.values(ApiType.SortFields)
+                .filter((sort) => sort !== ApiType.SortFields.Category)
                 .map((sort) => ({
-                    disabled: sort === ApiTypes.SortFields.Distance && (!userLocation?.lat || !userLocation.lon),
+                    disabled: sort === ApiType.SortFields.Distance && (!userLocation?.lat || !userLocation.lon),
                     key: sort,
                     value: t(`sort_${sort}`)
                 })),
-        [ApiTypes.SortFields]
+        [ApiType.SortFields]
     )
 
     const orderOptions: DropdownOption[] = useMemo(
         () =>
-            Object.values(ApiTypes.SortOrders).map((order) => ({
+            Object.values(ApiType.SortOrders).map((order) => ({
                 key: order,
                 value: t(`order_${order}`)
             })),
-        [ApiTypes.SortOrders]
+        [ApiType.SortOrders]
     )
 
     const handleChangeSort = (value: DropdownOption | undefined) => {
@@ -116,22 +121,22 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         () => [
             ...(addressData?.countries?.map((item) => ({
                 title: item.title,
-                type: ApiTypes.LocationType.Country,
+                type: 'country',
                 value: item.id
             })) || []),
             ...(addressData?.regions?.map((item) => ({
                 title: item.title,
-                type: ApiTypes.LocationType.Region,
+                type: 'region',
                 value: item.id
             })) || []),
             ...(addressData?.districts?.map((item) => ({
                 title: item.title,
-                type: ApiTypes.LocationType.District,
+                type: 'district',
                 value: item.id
             })) || []),
             ...(addressData?.cities?.map((item) => ({
                 title: item.title,
-                type: ApiTypes.LocationType.Locality,
+                type: 'locality',
                 value: item.id
             })) || [])
         ],

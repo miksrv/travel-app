@@ -1,8 +1,8 @@
-import { ApiTypes } from '@/api/types'
+import { DateTime } from '@/api/types'
 
 export type Tag = {
     id?: string
     title: string
-    updated?: ApiTypes.DateTimeType
+    updated?: DateTime
     count?: number
 }

@@ -1,12 +1,10 @@
 import { LocalBusiness, Person } from 'schema-dts'
 
-import { IMG_HOST } from '@/api/api'
-import { Place } from '@/api/types/Place'
-import { User } from '@/api/types/User'
+import { ApiModel, IMG_HOST } from '@/api'
 
 // import { formatDateISO } from '@/functions/helpers'
 
-export const PlaceSchema = (place: Place): LocalBusiness | any => ({
+export const PlaceSchema = (place: ApiModel.Place): LocalBusiness | any => ({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     address: {
@@ -40,7 +38,7 @@ export const PlaceSchema = (place: Place): LocalBusiness | any => ({
     name: place.title
 })
 
-export const UserSchema = (user: User): Person | any => ({
+export const UserSchema = (user: ApiModel.User): Person | any => ({
     '@context': 'https://schema.org',
     '@type': 'Person',
     identifier: user.id,

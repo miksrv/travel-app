@@ -7,7 +7,7 @@ import { Button, Container, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { Place } from '@/api/types/Place'
+import { ApiModel } from '@/api'
 import MapLinks from '@/components/map-links'
 import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
@@ -21,7 +21,7 @@ const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
 
 interface PlaceInformationProps {
     t: TFunction
-    place?: Place
+    place?: ApiModel.Place
 }
 
 const PlaceInformation: React.FC<PlaceInformationProps> = ({ t, place }) => (

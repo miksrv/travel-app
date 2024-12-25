@@ -7,10 +7,8 @@ import 'react-image-crop/src/ReactCrop.scss'
 
 import styles from './styles.module.sass'
 
-import { API, IMG_HOST } from '@/api/api'
+import { API, ApiType, IMG_HOST, useAppDispatch } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import { useAppDispatch } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import Dialog from '@/ui/dialog'
 
 type ImageSizesType = {
@@ -38,7 +36,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
     const [uploadAvatar, { data: uploadData, isLoading: uploadLoading }] = API.useUsersPostUploadAvatarMutation()
     const [cropAvatar, { data: cropData, isLoading: cropLoading, isSuccess }] = API.useUsersPatchCropAvatarMutation()
 
-    const [uploadedFile, setUploadedFile] = useState<ApiTypes.ResponseUserUploadAvatar>()
+    const [uploadedFile, setUploadedFile] = useState<ApiType.Users.UploadAvatarResponse>()
     const [coverDialogOpen, setCoverDialogOpen] = useState<boolean>(false)
     const [imageCropData, setImageCropData] = useState<Crop>()
     const [imageSizes, setImageSizes] = useState<ImageSizesType>()

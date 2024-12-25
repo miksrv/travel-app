@@ -6,13 +6,13 @@ import { Icon, Popout } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { User } from '@/api/types/User'
+import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import { levelImage } from '@/functions/userLevels'
 
 interface UserMenuProps {
     t: TFunction
-    user?: User
+    user?: ApiModel.User
     onLogout?: () => void
 }
 

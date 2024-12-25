@@ -5,11 +5,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import type { ApiTypes } from '@/api/types'
-import type { User } from '@/api/types/User'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import UsersList from '@/components/users-list'
@@ -18,7 +16,7 @@ import Pagination from '@/ui/pagination'
 const USERS_PER_PAGE = 30
 
 interface UsersPageProps {
-    usersList: User[]
+    usersList: ApiModel.User[]
     usersCount: number
     currentPage: number
 }
@@ -76,7 +74,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<UsersPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const currentPage = parseInt(context.query.page as string, 10) || 1
             const translations = await serverSideTranslations(locale)
 

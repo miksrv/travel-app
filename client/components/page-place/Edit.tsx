@@ -4,8 +4,7 @@ import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, isApiValidationErrors, SITE_LINK } from '@/api/api'
-import { ApiTypes } from '@/api/types'
+import { API, ApiType, isApiValidationErrors, SITE_LINK } from '@/api'
 import Header from '@/components/header'
 import PlaceForm from '@/components/place-form'
 import { equalsArrays } from '@/functions/helpers'
@@ -21,7 +20,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     const [updatePlace, { error, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
 
-    const placeValuesData: ApiTypes.RequestPlacesPostItem = useMemo(
+    const placeValuesData: ApiType.Places.PostItemRequest = useMemo(
         () => ({
             category: place?.category?.name,
             content: place?.content,
@@ -34,7 +33,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
     )
 
     const validationErrors = useMemo(
-        () => (isApiValidationErrors<ApiTypes.RequestPlacesPostItem>(error) ? error.messages : undefined),
+        () => (isApiValidationErrors<ApiType.Places.PostItemRequest>(error) ? error.messages : undefined),
         [error]
     )
 
@@ -42,7 +41,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiTypes.RequestPlacesPostItem) => {
+    const handleSubmit = (formData?: ApiType.Places.PostItemRequest) => {
         const title = formData?.title?.trim()
         const content = formData?.content?.trim()
 

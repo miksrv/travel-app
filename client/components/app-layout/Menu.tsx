@@ -5,8 +5,8 @@ import { Icon, IconTypes } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
+import { useAppDispatch } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
-import { useAppDispatch } from '@/api/store'
 
 export type MenuItemType = {
     icon?: IconTypes
@@ -77,7 +77,7 @@ const Menu: React.FC<MenuProps> = ({ type, userId, isAuth, onClick }) => {
             text: t('users')
         },
         {
-            // TODO Add new param - target for link
+            // TODO: Add new param - target for link
             icon: 'Telegram',
             link: 'https://t.me/geometki',
             text: t('project-diary')

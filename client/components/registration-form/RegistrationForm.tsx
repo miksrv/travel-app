@@ -7,14 +7,12 @@ import { Button, Input, Message } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { API, isApiValidationErrors } from '@/api/api'
+import { API, ApiType, isApiValidationErrors, useAppDispatch } from '@/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
-import { useAppDispatch } from '@/api/store'
-import { ApiTypes } from '@/api/types'
 import { validateEmail } from '@/functions/validators'
 
-type FormDataType = ApiTypes.RequestAuthRegistration & {
+type FormDataType = ApiType.Auth.PostRegistrationRequest & {
     repeat_password?: string
 }
 
@@ -33,7 +31,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
     const [registration, { data, error, isLoading }] = API.useAuthPostRegistrationMutation()
 
     const validationErrors = useMemo(
-        () => (isApiValidationErrors<ApiTypes.RequestAuthRegistration>(error) ? error.messages : undefined),
+        () => (isApiValidationErrors<ApiType.Auth.PostRegistrationRequest>(error) ? error.messages : undefined),
         [error]
     )
 

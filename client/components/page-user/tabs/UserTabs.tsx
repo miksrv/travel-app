@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 
-import { User } from '@/api/types/User'
+import { ApiModel } from '@/api'
 import Tabs from '@/ui/tabs'
 
 export enum UserPagesEnum {
@@ -13,7 +13,7 @@ export enum UserPagesEnum {
 }
 
 interface UserTabsProps {
-    user?: User
+    user?: ApiModel.User
     currentPage?: UserPagesEnum
 }
 

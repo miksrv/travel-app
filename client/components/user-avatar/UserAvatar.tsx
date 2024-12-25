@@ -6,8 +6,7 @@ import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-import { IMG_HOST } from '@/api/api'
-import { User } from '@/api/types/User'
+import { ApiModel, IMG_HOST } from '@/api'
 import { minutesAgo } from '@/functions/helpers'
 import defaultAvatar from '@/public/images/no-avatar.png'
 
@@ -15,7 +14,7 @@ type SizeType = 'small' | 'tiny' | 'medium'
 
 export interface UserAvatarProps {
     className?: string
-    user?: User
+    user?: ApiModel.User
     size?: SizeType
     caption?: string | React.ReactNode
     loading?: boolean
@@ -81,6 +80,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
     )
 }
 
+// TODO: Move to separate component
 const AvatarImage: React.FC<UserAvatarProps> = ({ user, size, hideOnlineIcon }) => (
     <>
         <Image

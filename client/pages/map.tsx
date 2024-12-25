@@ -9,10 +9,9 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Container } from 'simple-react-ui-kit'
 
-import { API, SITE_LINK } from '@/api/api'
+import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
-import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
-import { ApiTypes, Place, Placemark } from '@/api/types'
+import { wrapper } from '@/api/store'
 import AppLayout from '@/components/app-layout'
 import Header from '@/components/header'
 import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
@@ -41,10 +40,10 @@ const MapPage: NextPage<MapPageProps> = () => {
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
-    const [photoLightbox, setPhotoLightbox] = useState<Placemark.Photo[]>()
-    const [categories, setCategories] = useState<Place.Categories[]>()
-
-    const [mapCategories, setMapCategories] = useState<Place.Categories[]>()
+    const [photoLightbox, setPhotoLightbox] = useState<ApiModel.PhotoMark[]>()
+    // TODO: Categories and categories? Please refactoring this
+    const [categories, setCategories] = useState<ApiModel.Categories[]>()
+    const [mapCategories, setMapCategories] = useState<ApiModel.Categories[]>()
     const [mapType, setMapType] = useState<MapObjectsType>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [mapZoom, setMapZoom] = useState<number>()
@@ -70,7 +69,7 @@ const MapPage: NextPage<MapPageProps> = () => {
         setShowLightbox(false)
     }
 
-    const handlePhotoClick = (photos: Placemark.Photo[], index?: number) => {
+    const handlePhotoClick = (photos: ApiModel.PhotoMark[], index?: number) => {
         setPhotoLightbox(photos)
         setPhotoIndex(index ?? 0)
         setShowLightbox(true)
@@ -110,7 +109,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     )
 
     const debounceSetMapCategories = useCallback(
-        debounce((categories?: Place.Categories[]) => {
+        debounce((categories?: ApiModel.Categories[]) => {
             setMapCategories(categories)
         }, 1000),
         []
@@ -124,7 +123,7 @@ const MapPage: NextPage<MapPageProps> = () => {
         }
     }
 
-    const handleChangeCategories = (categories?: Place.Categories[]) => {
+    const handleChangeCategories = (categories?: ApiModel.Categories[]) => {
         setCategories(categories)
         debounceSetMapCategories(categories)
     }
@@ -132,8 +131,8 @@ const MapPage: NextPage<MapPageProps> = () => {
     useEffect(() => {
         const hash = window.location.hash ?? null
 
-        setCategories(Object.values(Place.Categories))
-        setMapCategories(Object.values(Place.Categories))
+        setCategories(Object.values(ApiModel.Categories))
+        setMapCategories(Object.values(ApiModel.Categories))
 
         if (hash) {
             const splitCords = hash.replace('#', '').split(',')
@@ -231,7 +230,7 @@ const MapPage: NextPage<MapPageProps> = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<MapPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

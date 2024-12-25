@@ -1,3 +1,5 @@
+// TODO: Rename to utils
+
 import dayjs from 'dayjs'
 
 export const truncateText = (text?: string, maxLength: number = 300) => {

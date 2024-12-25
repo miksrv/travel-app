@@ -7,11 +7,10 @@ import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
 import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
 
-import { API } from '@/api/api'
+import { API, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
-import { useAppDispatch, useAppSelector, wrapper } from '@/api/store'
-import { ApiTypes } from '@/api/types'
+import { wrapper } from '@/api/store'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import * as LocalStorage from '@/functions/localstorage'
@@ -61,7 +60,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
         if (code && service) {
             serviceLogin({
                 code,
-                service: service as ApiTypes.AuthServiceType,
+                service: service as ApiType.AuthService,
                 state: searchParams.get('state') ?? undefined,
                 device_id: searchParams.get('device_id') ?? undefined
             })
@@ -113,7 +112,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<AuthPageProps>> => {
-            const locale = (context.locale ?? 'en') as ApiTypes.LocaleType
+            const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 
             store.dispatch(setLocale(locale))

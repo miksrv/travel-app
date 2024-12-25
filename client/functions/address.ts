@@ -1,13 +1,13 @@
-import { ApiTypes } from '@/api/types'
-import { Location } from '@/api/types/Place'
+import { ApiModel, ApiType } from '@/api'
 
+// TODO: Refactoring this type, duplicated in two files
 type PlaceAddress = {
     id?: number
     name?: string
-    type: ApiTypes.LocationTypes
+    type: ApiType.LocationTypes
 }
 
-export const addressToString = (location?: Location): PlaceAddress[] => {
+export const addressToString = (location?: ApiModel.Address): PlaceAddress[] => {
     const address: PlaceAddress[] = []
 
     if (location?.country?.id) {

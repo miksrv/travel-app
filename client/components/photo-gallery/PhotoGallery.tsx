@@ -7,10 +7,8 @@ import { Button, cn, Container, ContainerProps, Popout, Spinner } from 'simple-r
 
 import styles from './styles.module.sass'
 
-import { API, IMG_HOST } from '@/api/api'
+import { API, ApiModel, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/api/store'
-import { Photo } from '@/api/types/Photo'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PhotoUploadSection from '@/components/photo-upload-section'
 
@@ -19,10 +17,10 @@ const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialo
 })
 
 interface PhotoGalleryProps extends ContainerProps {
-    photos?: Photo[]
+    photos?: ApiModel.Photo[]
     hideActions?: boolean
     uploadingPhotos?: string[]
-    onPhotoDelete?: (photos: Photo[]) => void
+    onPhotoDelete?: (photos: ApiModel.Photo[]) => void
     onPhotoUploadClick?: () => void
 }
 
@@ -44,7 +42,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     const [rotatePhoto, { data: rotateData, isLoading: rotateLoading, error: rotateError }] =
         API.usePhotoRotateItemMutation()
 
-    const [localPhotos, setLocalPhotos] = useState<Photo[]>(photos ?? [])
+    const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photos ?? [])
     const [photoLoadingID, setPhotoLoadingID] = useState<string>()
     const [photoDeleteID, setPhotoDeleteID] = useState<string>()
     const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
