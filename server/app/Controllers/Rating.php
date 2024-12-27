@@ -25,6 +25,52 @@ class Rating extends ResourceController
     }
 
     /**
+     * Retrieves the rating history based on user ID or place ID.
+     * TODO: Add userId implementation
+     * @return ResponseInterface
+     */
+    public function history(): ResponseInterface
+    {
+        $paramUser  = $this->request->getGet('userId', FILTER_SANITIZE_SPECIAL_CHARS);
+        $paramPlace = $this->request->getGet('placeId', FILTER_SANITIZE_SPECIAL_CHARS);
+
+        if ($paramPlace && $paramUser) {
+            return $this->failValidationErrors('Only one parameter is allowed (userId or placeId)');
+        }
+
+        if (!$paramPlace && !$paramUser) {
+            return $this->failValidationErrors('Not enough data to get the rating history');
+        }
+
+        $ratingModel = new RatingModel();
+        $ratingData  = $ratingModel
+            ->select('value, user_id, rating.created_at' . ($paramPlace ? ', users.name, users.avatar' : ''));
+
+        if ($paramUser) {
+            $ratingData->where('user_id', $paramUser);
+        }
+
+        if ($paramPlace) {
+            $ratingData
+                ->join('users', 'rating.user_id = users.id', 'left')
+                ->where('place_id', $paramPlace);
+        }
+
+        $data = $ratingData
+            ->orderBy('rating.created_at', 'DESC')
+            ->findAll();
+
+        foreach ($data as $item) {
+            if (empty($item->user_id)) {
+                unset($item->user_id, $item->name, $item->avatar);
+            }
+        }
+
+        return $this->respond($data);
+    }
+
+    /**
+     * Returns the rating of the place by placeId
      * @param $id
      * @return ResponseInterface
      */
