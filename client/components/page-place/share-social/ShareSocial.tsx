@@ -16,15 +16,13 @@ import {
     WhatsappShareButton
 } from 'react-share'
 import { useTranslation } from 'next-i18next'
-import { Button, Container, Spinner } from 'simple-react-ui-kit'
+import { Container, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import LoginForm from '@/components/login-form'
-import RegistrationForm from '@/components/registration-form'
 import UserAvatar from '@/components/user-avatar'
 import { addDecimalPoint, formatDate } from '@/functions/helpers'
 import Dialog from '@/ui/dialog'

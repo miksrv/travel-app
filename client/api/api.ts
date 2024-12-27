@@ -2,7 +2,6 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiType } from '@/api'
 import { RootState } from '@/api/store'
-import { HistoryResponse } from '@/api/types/rating'
 import { encodeQueryData } from '@/functions/helpers'
 import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
