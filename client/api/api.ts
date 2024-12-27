@@ -2,6 +2,7 @@ import { HYDRATE } from 'next-redux-wrapper'
 
 import { ApiType } from '@/api'
 import { RootState } from '@/api/store'
+import { HistoryResponse } from '@/api/types/rating'
 import { encodeQueryData } from '@/functions/helpers'
 import type { Action, PayloadAction } from '@reduxjs/toolkit'
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
@@ -292,6 +293,10 @@ export const API = createApi({
         ratingGetList: builder.query<ApiType.Rating.ListResponse, string>({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
+        }),
+        ratingGetHistory: builder.query<ApiType.Rating.HistoryResponse, ApiType.Rating.HistoryRequest>({
+            providesTags: ['Rating'],
+            query: (params) => `rating/history${encodeQueryData(params)}`
         }),
         ratingPutScore: builder.mutation<ApiType.Rating.PutResponse, ApiType.Rating.PutRequest>({
             invalidatesTags: [{ type: 'Rating' }, { type: 'Activity' }, { type: 'Notifications' }],

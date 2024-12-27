@@ -61,12 +61,24 @@ class Rating extends ResourceController
             ->findAll();
 
         foreach ($data as $item) {
-            if (empty($item->user_id)) {
-                unset($item->user_id, $item->name, $item->avatar);
+            if (!empty($item->user_id)) {
+                $userAvatar   = $item->avatar ? explode('.', $item->avatar) : null;
+                $item->author = [
+                    'id'     => $item->user_id,
+                    'name'   => $item->name,
+                    'avatar' => $userAvatar
+                        ? PATH_AVATARS . $item->user_id . '/' . $userAvatar[0] . '_small.' . $userAvatar[1]
+                        : null,
+                ];
             }
+
+            unset($item->user_id, $item->name, $item->avatar);
         }
 
-        return $this->respond($data);
+        return $this->respond([
+            'count' => count($data),
+            'items' => $data
+        ]);
     }
 
     /**

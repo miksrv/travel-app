@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
     OKIcon,
     OKShareButton,
@@ -16,13 +16,18 @@ import {
     WhatsappShareButton
 } from 'react-share'
 import { useTranslation } from 'next-i18next'
-import { Container, Spinner } from 'simple-react-ui-kit'
+import { Button, Container, Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
+import { toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { addDecimalPoint } from '@/functions/helpers'
+import LoginForm from '@/components/login-form'
+import RegistrationForm from '@/components/registration-form'
+import UserAvatar from '@/components/user-avatar'
+import { addDecimalPoint, formatDate } from '@/functions/helpers'
+import Dialog from '@/ui/dialog'
 import Rating from '@/ui/rating'
 
 interface SocialRatingProps {
@@ -34,12 +39,22 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
+    const [openRatingHistory, setOpenRatingHistory] = useState<boolean>(false)
+
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const { data: ratingData, isLoading } = API.useRatingGetListQuery(placeId ?? '', {
         skip: !placeId,
         refetchOnMountOrArgChange: true
     })
+
+    const { data: ratingHistoryData, isFetching: loadingRatingHistory } = API.useRatingGetHistoryQuery(
+        { placeId: placeId },
+        {
+            skip: !placeId || !openRatingHistory,
+            refetchOnMountOrArgChange: true
+        }
+    )
 
     const [changeRating, { isLoading: ratingLoading, isSuccess }] = API.useRatingPutScoreMutation()
 
@@ -50,6 +65,11 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
                 score: value
             })
         }
+    }
+
+    const handleToggleRatingHistory = (state: boolean) => {
+        dispatch(toggleOverlay(state))
+        setOpenRatingHistory(state)
     }
 
     useEffect(() => {
@@ -76,7 +96,19 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
                 />
 
                 <div className={styles.ratingValue}>
-                    {isLoading || ratingLoading ? <Spinner /> : addDecimalPoint(ratingData?.rating)}
+                    {isLoading || ratingLoading ? (
+                        <Spinner />
+                    ) : ratingData?.count ? (
+                        <span
+                            role={'button'}
+                            className={styles.ratingHistoryButton}
+                            onClick={() => handleToggleRatingHistory(true)}
+                        >
+                            {addDecimalPoint(ratingData?.rating)}
+                        </span>
+                    ) : (
+                        ''
+                    )}
                 </div>
             </div>
 
@@ -105,6 +137,41 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
                     <RedditIcon size={22} />
                 </RedditShareButton>
             </div>
+
+            <Dialog
+                header={t('rating-history')}
+                open={openRatingHistory}
+                onCloseDialog={() => handleToggleRatingHistory(false)}
+            >
+                {loadingRatingHistory ? (
+                    <div className={styles.ratingHistoryLoading}>
+                        <Spinner />
+                    </div>
+                ) : (
+                    <ul>
+                        {ratingHistoryData?.items?.map((item, i) => (
+                            <li
+                                key={`rating-history-${i}`}
+                                className={styles.ratingHistoryItem}
+                            >
+                                <UserAvatar
+                                    className={styles.avatar}
+                                    user={item?.author}
+                                    disableLink={true}
+                                    size={'medium'}
+                                />
+                                <div>
+                                    <div className={styles.user}>{item?.author?.name || 'Гость'}</div>
+                                    <div>
+                                        {t('rating')}: <b>{item.value}</b>
+                                    </div>
+                                </div>
+                                <div className={styles.date}>{formatDate(item?.created?.date)}</div>
+                            </li>
+                        ))}
+                    </ul>
+                )}
+            </Dialog>
         </Container>
     )
 }

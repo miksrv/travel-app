@@ -26,4 +26,8 @@ class RatingEntity extends Entity {
         'rating'     => 'string',
         'value'      => 'integer'
     ];
+
+    protected $datamap = [
+        'created' => 'created_at'
+    ];
 }
