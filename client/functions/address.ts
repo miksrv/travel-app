@@ -1,19 +1,12 @@
-import { ApiModel, ApiType } from '@/api'
+import { ApiModel } from '@/api'
 
-// TODO: Refactoring this type, duplicated in two files
-type PlaceAddress = {
-    id?: number
-    name?: string
-    type: ApiType.LocationTypes
-}
-
-export const addressToString = (location?: ApiModel.Address): PlaceAddress[] => {
-    const address: PlaceAddress[] = []
+export const addressToString = (location?: ApiModel.Address): ApiModel.AddressItem[] => {
+    const address: ApiModel.AddressItem[] = []
 
     if (location?.country?.id) {
         address.push({
             id: location.country.id,
-            name: location.country.title,
+            name: location.country.name,
             type: 'country'
         })
     }
@@ -21,19 +14,19 @@ export const addressToString = (location?: ApiModel.Address): PlaceAddress[] => 
     if (location?.locality?.id) {
         address.push({
             id: location.locality.id,
-            name: location.locality.title,
+            name: location.locality.name,
             type: 'locality'
         })
     } else if (location?.district?.id) {
         address.push({
             id: location.district.id,
-            name: location.district.title,
+            name: location.district.name,
             type: 'district'
         })
     } else if (location?.region?.id) {
         address.push({
             id: location.region.id,
-            name: location.region.title,
+            name: location.region.name,
             type: 'region'
         })
     }

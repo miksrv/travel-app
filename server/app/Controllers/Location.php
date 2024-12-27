@@ -132,7 +132,7 @@ class Location extends ResourceController
         $result = $data;
         $locale = $this->request->getLocale();
 
-        $result->title = $result->{"title_$locale"};
+        $result->name = $result->{"title_$locale"};
         unset($result->title_en, $result->title_ru);
 
         return $this->respond($result);
@@ -159,7 +159,7 @@ class Location extends ResourceController
 
         if ($data) {
             foreach ($data as $item) {
-                $item->title = $item->{"title_$locale"};
+                $item->name = $item->{"title_$locale"};
                 unset($item->title_en, $item->title_ru);
 
                 $result[] = $item;

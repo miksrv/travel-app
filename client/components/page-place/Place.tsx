@@ -83,9 +83,9 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
         '@type': 'LocalBusiness',
         address: {
             '@type': 'PostalAddress',
-            addressCountry: place?.address?.country?.title,
-            addressLocality: place?.address?.locality?.title,
-            addressRegion: place?.address?.region?.title,
+            addressCountry: place?.address?.country?.name,
+            addressLocality: place?.address?.locality?.name,
+            addressRegion: place?.address?.region?.name,
             streetAddress: place?.address?.street
         },
         aggregateRating: ratingCount

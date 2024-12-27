@@ -138,9 +138,9 @@ class Places extends ResourceController
 
         $this->model
             ->select('places.*, users.id as user_id, users.name as user_name, users.avatar as user_avatar,
-                location_countries.title_en as country_en, location_countries.title_ru as country_ru, 
-                location_regions.title_en as region_en, location_regions.title_ru as region_ru, 
-                location_districts.title_en as district_en, location_districts.title_ru as district_ru, 
+                location_countries.title_en as country_en, location_countries.title_ru as country_ru,
+                location_regions.title_en as region_en, location_regions.title_ru as region_ru,
+                location_districts.title_en as district_en, location_districts.title_ru as district_ru,
                 location_localities.title_en as city_en, location_localities.title_ru as city_ru,
                 category.title_en as category_en, category.title_ru as category_ru' . $coordinates)
             ->join('users', 'places.user_id = users.id', 'left')
@@ -194,29 +194,29 @@ class Places extends ResourceController
 
             if ($place->country_id) {
                 $place->address->country = [
-                    'id'    => (int) $place->country_id,
-                    'title' => $place->{"country_$locale"}
+                    'id'   => (int) $place->country_id,
+                    'name' => $place->{"country_$locale"}
                 ];
             }
 
             if ($place->region_id) {
                 $place->address->region = [
-                    'id'    => (int) $place->region_id,
-                    'title' => $place->{"region_$locale"}
+                    'id'   => (int) $place->region_id,
+                    'name' => $place->{"region_$locale"}
                 ];
             }
 
             if ($place->district_id) {
                 $place->address->district = [
-                    'id'    => (int) $place->district_id,
-                    'title' => $place->{"district_$locale"}
+                    'id'   => (int) $place->district_id,
+                    'name' => $place->{"district_$locale"}
                 ];
             }
 
             if ($place->locality_id) {
                 $place->address->locality = [
-                    'id'    => (int) $place->locality_id,
-                    'title' => $place->{"city_$locale"}
+                    'id'   => (int) $place->locality_id,
+                    'name' => $place->{"city_$locale"}
                 ];
             }
 
@@ -321,8 +321,8 @@ class Places extends ResourceController
         foreach ($locations as $field => $ids) {
             if ($placeData->{$ids[0]}) {
                 $placeData->address->{$field} = [
-                    'id'    => $placeData->{$ids[0]},
-                    'title' => $placeData->{$ids[1] . "_$locale"}
+                    'id'   => $placeData->{$ids[0]},
+                    'name' => $placeData->{$ids[1] . "_$locale"}
                 ];
             }
         }

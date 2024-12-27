@@ -3,29 +3,22 @@ import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 
-import { API, ApiType, useAppSelector } from '@/api'
+import { API, ApiModel, ApiType, useAppSelector } from '@/api'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
 import { categoryImage } from '@/functions/categories'
 import Autocomplete from '@/ui/autocomplete'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
 
-// TODO: Refactoring this type (duplicate with pages/places.tsx)
-type PlaceLocationType = {
-    title: string
-    value: number
-    type: ApiType.LocationTypes
-}
-
 interface PlacesFilterPanelProps {
     sort?: ApiType.SortFieldsType
     order?: ApiType.SortOrdersType
-    location?: PlaceLocationType
+    location?: ApiModel.AddressItem
     category?: string | null
     optionsOpen?: boolean
     onChange?: (key: keyof PlacesFilterType, value: string | number | undefined) => void
     onOpenOptions?: (title?: string) => void
-    onChangeLocation?: (option?: PlaceLocationType) => void
+    onChangeLocation?: (location?: ApiModel.AddressItem) => void
 }
 
 type OpenedOptionsType = 'sort' | 'order' | 'category' | undefined
@@ -120,22 +113,22 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
     const locationOptions = useMemo(
         () => [
             ...(addressData?.countries?.map((item) => ({
-                title: item.title,
+                title: item.name,
                 type: 'country',
                 value: item.id
             })) || []),
             ...(addressData?.regions?.map((item) => ({
-                title: item.title,
+                title: item.name,
                 type: 'region',
                 value: item.id
             })) || []),
             ...(addressData?.districts?.map((item) => ({
-                title: item.title,
+                title: item.name,
                 type: 'district',
                 value: item.id
             })) || []),
             ...(addressData?.cities?.map((item) => ({
-                title: item.title,
+                title: item.name,
                 type: 'locality',
                 value: item.id
             })) || [])
@@ -186,11 +179,25 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
                         notFoundCaption={t('nothing-found')}
                         placeholder={t('start-typing-caption')}
                         clearable={true}
-                        value={location}
+                        value={
+                            location?.id && location?.name
+                                ? { value: location?.id, title: location?.name, type: location?.type }
+                                : undefined
+                        }
                         loading={addressLoading}
                         options={locationOptions}
                         onSearch={handleSearchLocation}
-                        onSelect={onChangeLocation}
+                        onSelect={(option) =>
+                            onChangeLocation?.(
+                                option?.value
+                                    ? {
+                                          id: option?.value,
+                                          name: option?.title,
+                                          type: option?.type
+                                      }
+                                    : undefined
+                            )
+                        }
                     />
 
                     <Dropdown

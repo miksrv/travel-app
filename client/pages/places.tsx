@@ -26,13 +26,6 @@ const DEFAULT_SORT = ApiType.SortFields.Updated
 const DEFAULT_ORDER = ApiType.SortOrders.DESC
 const POST_PER_PAGE = 21
 
-// TODO: Refactoring this type (duplicate in components/places-filter-panel/types.ts)
-type PlaceLocationType = {
-    title: string
-    value: number
-    type: ApiType.LocationTypes
-}
-
 // TODO: Rename categoriesData to categoriesList
 interface PlacesPageProps {
     categoriesData: ApiModel.Category[]
@@ -152,11 +145,11 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle(filterTitle || '')
     }
 
-    const handleChangeLocation = async (location?: PlaceLocationType) => {
+    const handleChangeLocation = async (location?: ApiModel.AddressItem) => {
         if (!location) {
             await handleClearLocationFilter()
         } else {
-            await handleChangeFilter(location.type ?? 'locality', location.value)
+            await handleChangeFilter(location.type ?? 'locality', location.id)
         }
     }
 
@@ -173,7 +166,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         const titles = []
 
         if (locationType) {
-            titles.push(locationData?.title)
+            titles.push(locationData?.name)
         }
 
         if (currentCategory) {
@@ -196,7 +189,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         if (locationType && category) {
             breadcrumbs.push({
                 link: `/places?${locationType}=${locationData?.id}`,
-                text: locationData?.title ?? ''
+                text: locationData?.name ?? ''
             })
         }
 
@@ -206,7 +199,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadCrumbCurrent = category
         ? currentCategory
         : locationType
-          ? locationData?.title
+          ? locationData?.name
           : tag
             ? `#${tag}`
             : currentPage > 1
@@ -351,9 +344,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                     location={
                         locationData && locationType
                             ? {
-                                  title: locationData.title,
-                                  type: locationType,
-                                  value: locationData.id
+                                  id: locationData.id,
+                                  name: locationData.name,
+                                  type: locationType
                               }
                             : undefined
                     }
