@@ -1,6 +1,9 @@
+import { ApiType } from '@/api'
+
 export type AddressItem = {
     id: number
-    title: string
+    name: string
+    type?: ApiType.LocationTypes
 }
 
 export type Address = {

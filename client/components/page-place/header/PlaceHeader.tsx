@@ -50,7 +50,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
             if (place?.address?.[type]?.id) {
                 address.push({
                     id: place?.address[type]?.id,
-                    name: place?.address[type]?.title,
+                    name: place?.address[type]?.name,
                     type
                 })
             }

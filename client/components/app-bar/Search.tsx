@@ -37,19 +37,19 @@ const Search: React.FC<SearchProps> = () => {
                 const address: string[] = []
 
                 if (item.address?.country) {
-                    address.push(item.address.country.title)
+                    address.push(item.address.country.name)
                 }
 
                 if (item.address?.region) {
-                    address.push(item.address.region.title)
+                    address.push(item.address.region.name)
                 }
 
                 if (item.address?.district) {
-                    address.push(item.address.district.title)
+                    address.push(item.address.district.name)
                 }
 
                 if (item.address?.locality) {
-                    address.push(item.address.locality.title)
+                    address.push(item.address.locality.name)
                 }
 
                 return {
