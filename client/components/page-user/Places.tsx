@@ -1,7 +1,9 @@
 import React from 'react'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
+import { Container, Spinner } from 'simple-react-ui-kit'
+
+import styles from './styles.module.sass'
 
 import { API, SITE_LINK } from '@/api'
 import Header from '@/components/header'
@@ -68,8 +70,8 @@ const UserPlaces: React.FC<UserPlacesProps> = ({ id, user, currentPage, type }) 
                 style={{ marginTop: 15 }}
                 className={`paginationContainer ${!data?.count || data?.count <= PLACES_PER_PAGE ? 'hide' : ''}`}
             >
-                <div>
-                    {t('geotags')}: <strong>{data?.count ?? 0}</strong>
+                <div className={styles.countContainer}>
+                    {t('geotags')}: {isLoading ? <Spinner /> : <strong>{data?.count || 0}</strong>}
                 </div>
 
                 <Pagination
