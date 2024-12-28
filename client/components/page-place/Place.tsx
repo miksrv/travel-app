@@ -45,6 +45,11 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     }
 
     const handleEditPlaceCoverClick = () => {
+        if (!isAuth) {
+            dispatch(openAuthDialog())
+            return
+        }
+
         if (placeCoverEditorRef?.current) {
             placeCoverEditorRef.current?.handleChangeCoverClick({} as React.MouseEvent)
         }
