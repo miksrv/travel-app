@@ -1,4 +1,6 @@
-<?php namespace App\Libraries;
+<?php
+
+namespace App\Libraries;
 
 use App\Models\LocationLocalitiesModel;
 use App\Models\LocationCountriesModel;
@@ -15,36 +17,88 @@ use GuzzleHttp\Client;
 use JetBrains\PhpStorm\NoReturn;
 use ReflectionException;
 
-/**
- * @link https://geocoder-php.org/docs/providers/nominatim/
- */
-class Geocoder {
+ /**
+  * Class Geocoder
+  *
+  * This class provides geocoding functionalities using different providers.
+  * It can search for locations based on text or coordinates and retrieve detailed location data.
+  *
+  * @package App\Libraries
+  * @link https://geocoder-php.org/docs/providers/nominatim/
+  */
+class Geocoder{
+    /**
+     * @var int|null $countryId The ID of the country.
+     */
     public ?int $countryId = null;
+
+    /**
+     * @var int|null $regionId The ID of the region.
+     */
     public ?int $regionId = null;
+
+    /**
+     * @var int|null $districtId The ID of the district.
+     */
     public ?int $districtId = null;
+
+    /**
+     * @var int|null $localityId The ID of the locality.
+     */
     public ?int $localityId = null;
 
+    /**
+     * @var string $addressEn The address in English.
+     */
     public string $addressEn = '';
+
+    /**
+     * @var string $addressRu The address in Russian.
+     */
     public string $addressRu = '';
 
+    /**
+     * @var Client $httpClient The HTTP client used for making requests.
+     */
     private Client $httpClient;
+
+    /**
+     * @var \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $requestApi The request API.
+     */
     private \CodeIgniter\HTTP\IncomingRequest|\CodeIgniter\HTTP\CLIRequest $requestApi;
+
+    /**
+     * @var Nominatim|Yandex $provider The geocoding provider.
+     */
     private Nominatim|Yandex $provider;
 
-    public function __construct() {
+    /**
+     * Geocoder constructor.
+     * Initializes the HTTP client and request API, and sets the geocoding provider.
+     */
+    public function __construct()
+    {
         $this->httpClient = new Client();
         $this->requestApi = Services::request();
-        $this->provider   = new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'));
 
-//        $this->provider   = $this->requestApi->getLocale() === 'ru'
-//            ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
-//            : Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
+        // Yandex clien was blocked :(
+        // $this->provider   = new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'));
+        $this->provider   = Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
+
+       // $this->provider   = $this->requestApi->getLocale() === 'ru'
+       //     ? new Yandex($this->httpClient, null, getenv('app.geocoder.yandexKey'))
+       //     : Nominatim::withOpenStreetMapServer($this->httpClient, 'node');
     }
 
     /**
-     * @throws Exception
+     * Searches for locations based on the provided text.
+     *
+     * @param string $text The text to search for locations.
+     * @return array An array of location data including latitude, longitude, locality, country, region, district, and street.
+     * @throws Exception If there is an error during geocoding.
      */
-    public function search($text): array {
+    public function search($text): array
+    {
         $result    = [];
         $geocoder  = new StatefulGeocoder($this->provider, $this->requestApi->getLocale());
         $locations = $geocoder->geocodeQuery(GeocodeQuery::create($text))->all();
@@ -87,14 +141,17 @@ class Geocoder {
     }
 
     /**
-     * @param float $lat
-     * @param float $lng
-     * @param bool $changeProvider
-     * @return bool
-     * @throws Exception
-     * @throws ReflectionException
+     * Retrieves and processes location data based on provided coordinates.
+     *
+     * @param float $lat The latitude of the location.
+     * @param float $lng The longitude of the location.
+     * @param bool $changeProvider Flag to indicate if the provider should be changed in case of failure.
+     * @return bool Returns true if the location data is successfully retrieved and processed, false otherwise.
+     * @throws Exception If there is an error during geocoding.
+     * @throws ReflectionException If there is an error during reflection.
      */
-    public function coordinates(float $lat, float $lng, bool $changeProvider = false): bool {
+    public function coordinates(float $lat, float $lng, bool $changeProvider = false): bool
+    {
         $geocoderEn = new StatefulGeocoder($this->provider, 'en');
         $geocoderRu = new StatefulGeocoder($this->provider, 'ru');
         $locationEn = $geocoderEn->reverseQuery(ReverseQuery::fromCoordinates($lat, $lng))->first();
@@ -138,10 +195,12 @@ class Geocoder {
     }
 
     /**
-     * @param string $titleEn
-     * @param string $titleRu
+     * Retrieves or creates the country ID based on the provided English and Russian titles.
+     *
+     * @param string $titleEn The English title of the country.
+     * @param string $titleRu The Russian title of the country.
      * @return void
-     * @throws ReflectionException
+     * @throws ReflectionException If there is an error during reflection.
      */
     private function _getCountryId(
         string $titleEn,
@@ -172,10 +231,12 @@ class Geocoder {
     }
 
     /**
-     * @param string $titleEn
-     * @param string $titleRu
+     * Retrieves or creates the region ID based on the provided English and Russian titles.
+     *
+     * @param string $titleEn The English title of the region.
+     * @param string $titleRu The Russian title of the region.
      * @return void
-     * @throws ReflectionException
+     * @throws ReflectionException If there is an error during reflection.
      */
     private function _getRegionId(
         string $titleEn,
@@ -212,10 +273,12 @@ class Geocoder {
     }
 
     /**
-     * @param string $titleEn
-     * @param string $titleRu
+     * Retrieves or creates the district ID based on the provided English and Russian titles.
+     *
+     * @param string $titleEn The English title of the district.
+     * @param string $titleRu The Russian title of the district.
      * @return void
-     * @throws ReflectionException
+     * @throws ReflectionException If there is an error during reflection.
      */
     private function _getDistrictId(
         string $titleEn,
@@ -254,10 +317,12 @@ class Geocoder {
     }
 
     /**
-     * @param string|null $titleEn
-     * @param string|null $titleRu
+     * Retrieves or creates the locality ID based on the provided English and Russian titles.
+     *
+     * @param string|null $titleEn The English title of the locality.
+     * @param string|null $titleRu The Russian title of the locality.
      * @return void
-     * @throws ReflectionException
+     * @throws ReflectionException If there is an error during reflection.
      */
     private function _getLocalityId(
         ?string $titleEn,
