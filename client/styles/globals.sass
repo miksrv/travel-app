@@ -1,4 +1,4 @@
-@import variables
+@use 'variables' as variables
 //@import animations
 
 *, ::before, ::after
@@ -28,14 +28,14 @@ body
 
 h1
     margin: 0
-    font-size: $fontSizeTitleH1
+    font-size: variables.$fontSizeTitleH1
     font-weight: 500
     text-align: left
     color: var(--text-color-primary)
 
 h2
     margin: 0
-    font-size: $fontSizeTitleH2
+    font-size: variables.$fontSizeTitleH2
     font-weight: 500
     color: var(--text-color-primary)
 
@@ -45,7 +45,7 @@ h3, h4, h5, h6
     color: var(--text-color-primary)
 
 p
-    font-size: $fontSizeParagraph
+    font-size: variables.$fontSizeParagraph
 
     &:first-of-type
         margin-top: 0
@@ -66,7 +66,7 @@ ul
     &.normal
         margin: 0 0 0 30px
         list-style: disc
-        font-size: $fontSizeParagraph
+        font-size: variables.$fontSizeParagraph
 
 a
     color: var(--link-color)
@@ -152,7 +152,7 @@ a
         justify-content: space-between
         align-items: center
 
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             flex-direction: column
             align-items: flex-start
 
@@ -168,18 +168,18 @@ a
             margin-left: 5px
 
     .experience
-        font-size: $fontSizeCaption
+        font-size: variables.$fontSizeCaption
         margin-bottom: 5px
 
 /* Index (map) page */
 .mainLayout
     & > section > main
-        @media only screen and (max-width: $mobileMaxWidth)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
             padding: 0 !important
             margin-bottom: 0 !important
 
 .mainHeader
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         display: none !important
 
 .mainContainer
@@ -187,7 +187,7 @@ a
     min-height: 300px
     padding: 4px !important
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         height: calc(100vh - 50px)
         margin: 0 !important
         padding: 0 !important
@@ -223,7 +223,7 @@ a
     justify-content: space-between
     align-items: center
 
-    @media only screen and (max-width: $mobileMaxWidth)
+    @media only screen and (max-width: variables.$mobileMaxWidth)
         justify-content: center
 
         &.hide
