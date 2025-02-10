@@ -15,11 +15,15 @@ namespace Config;
  *
  * When working with mime types, please make sure you have the ´fileinfo´
  * extension enabled to reliably detect the media types.
+ *
+ * @immutable
  */
 class Mimes
 {
     /**
      * Map of extensions to mime types.
+     *
+     * @var array<string, list<string>|string>
      */
     public static array $mimes = [
         'hqx' => [
@@ -193,8 +197,6 @@ class Mimes
             'application/x-bmp',
             'application/x-win-bitmap',
         ],
-        'heic' => 'image/heic',
-        'heif' => 'image/heif',
         'gif' => 'image/gif',
         'jpg' => [
             'image/jpeg',
