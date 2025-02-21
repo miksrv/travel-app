@@ -29,4 +29,8 @@ class Services extends BaseService
      *     return new \CodeIgniter\Example();
      * }
      */
+
+    public static function getSecretKey(): bool|array|string {
+        return getenv('auth.token.secret');
+    }
 }
