@@ -95,6 +95,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
                         )}
                         {isError && (
                             <Button
+                                style={{ marginTop: 20 }}
                                 link={'/'}
                                 size={'medium'}
                                 mode={'primary'}
