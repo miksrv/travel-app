@@ -1,4 +1,4 @@
-@import ../../../styles/variables
+@use '../../../styles/variables' as variables
 
 .markerPointPopup
     padding: 10px
@@ -34,7 +34,7 @@
                 display: flex
 
             .title
-                font-size: $fontSizeHeadline
+                font-size: variables.$fontSizeHeadline
                 font-weight: 300
                 white-space: pre
                 text-overflow: ellipsis
