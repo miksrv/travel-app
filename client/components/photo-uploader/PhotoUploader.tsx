@@ -1,4 +1,4 @@
-import React, { LegacyRef, MutableRefObject, useEffect, useState } from 'react'
+import React, { LegacyRef, RefObject, useEffect, useState } from 'react'
 
 import { API, ApiModel, useAppDispatch } from '@/api'
 import { Notify } from '@/api/notificationSlice'
@@ -7,7 +7,7 @@ interface PhotoUploaderProps {
     placeId?: string
     onSelectFiles?: (uploadingPhotosData?: string[]) => void
     onUploadPhoto?: (photo: ApiModel.Photo) => void
-    fileInputRef?: MutableRefObject<HTMLInputElement | undefined>
+    fileInputRef?: RefObject<HTMLInputElement | null>
 }
 
 const PhotoUploader: React.FC<PhotoUploaderProps> = ({ placeId, onSelectFiles, onUploadPhoto, fileInputRef }) => {
