@@ -115,7 +115,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     ...props
 }) => {
     const router = useRouter()
-    const mapRef = useRef<Map | any>()
+    const mapRef = useRef<Map | any>(null)
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
     const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
@@ -301,6 +301,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <ReactLeaflet.TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'
+                        // @ts-ignore
                         accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />
                 )}
