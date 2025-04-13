@@ -140,6 +140,7 @@ export default [
             //     { allowIIFEs: true },
             // ],
             // TODO
+            '@typescript-eslint/ban-ts-comment': 'off',
             '@typescript-eslint/no-explicit-any': 'off',
             'no-constant-condition': 'off',
             '@typescript-eslint/no-unnecessary-condition': 'off',

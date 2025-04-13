@@ -36,7 +36,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
-    const inputFileRef = useRef<HTMLInputElement>()
+    const inputFileRef = useRef<HTMLInputElement>(null)
 
     const location = useAppSelector((state) => state.application.userLocation)
 

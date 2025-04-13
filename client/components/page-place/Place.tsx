@@ -29,7 +29,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
     const { t, i18n } = useTranslation()
 
     const placeCoverEditorRef = useRef<PlaceCoverEditorHandle>(null)
-    const inputFileRef = useRef<HTMLInputElement>()
+    const inputFileRef = useRef<HTMLInputElement>(null)
 
     const [coverHash, setCoverHash] = useState<number | undefined>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photoList ?? [])

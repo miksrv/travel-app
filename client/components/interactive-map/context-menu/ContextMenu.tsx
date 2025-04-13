@@ -28,7 +28,7 @@ const ContextMenu: React.FC = () => {
 
     const getContext = useLeafletContext()
     const mapContext = useRef<ReturnType<typeof useLeafletContext>>(getContext)
-    const mapSize = useRef<Point>()
+    const mapSize = useRef<Point>(null)
     const menuWrapRef = useRef<HTMLDivElement>(null)
 
     const [pointCords, setPointCords] = useState<ApiType.Coordinates>()
