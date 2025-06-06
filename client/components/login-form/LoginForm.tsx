@@ -212,6 +212,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                 </Button>
                 <Button
                     mode={'primary'}
+                    loading={loadingForm}
                     disabled={loadingForm}
                     onClick={handleLoginButton}
                 >
