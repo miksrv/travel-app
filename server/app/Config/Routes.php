@@ -5,112 +5,179 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->cli('system/recalculate_tags_count', 'System::calculateTagsCount'); // php index.php system recalculate_tags_count
-$routes->cli('system/generate_users_online', 'System::generateUsersOnline'); // php index.php system generate_users_online
-$routes->cli('system/send_email', 'System::sendEmail'); // php index.php system send_email
 
-$routes->get('poi', 'Poi::list');
-$routes->get('poi/photos', 'Poi::photos');
-$routes->get('poi/users', 'Poi::users');
-$routes->get('poi/(:alphanum)', 'Poi::show/$1');
-$routes->options('poi', 'Poi');
-$routes->options('poi/(:alphanum)', 'Poi');
+/** System Controller **/
+$routes->group('system', static function ($routes) {
+    $routes->cli('recalculate_tags_count', 'System::calculateTagsCount'); // php index.php system recalculate_tags_count
+    $routes->cli('generate_users_online', 'System::generateUsersOnline'); // php index.php system generate_users_online
+    $routes->cli('send_email', 'System::sendEmail'); // php index.php system send_email
+});
 
-$routes->get('places', 'Places::list');
-$routes->get('places/(:alphanum)', 'Places::show/$1');
-$routes->post('places', 'Places::create');
-$routes->patch('places/cover/(:alphanum)', 'Places::cover/$1');
-$routes->patch('places/(:alphanum)', 'Places::update/$1');
-$routes->delete('places/(:alphanum)', 'Places::delete/$1');
-$routes->options('places', 'Places');
-$routes->options('places/(:alphanum)', 'Places');
-$routes->options('places/(:alphanum)/(:alphanum)', 'Places');
+/** POI Controller **/
+$routes->group('poi', static function ($routes) {
+    $routes->get('/', 'Poi::list');
+    $routes->get('photos', 'Poi::photos');
+    $routes->get('users', 'Poi::users');
+    $routes->get('(:alphanum)', 'Poi::show/$1');
 
-$routes->get('photos', 'Photos::list');
-$routes->post('photos', 'Photos::create');
-$routes->post('photos/upload/temporary', 'PhotosTemporary::upload');
-$routes->post('photos/upload/(:alphanum)', 'Photos::upload/$1');
-$routes->patch('photos/rotate/temporary/(:any)', 'PhotosTemporary::rotate/$1');
-$routes->patch('photos/rotate/(:alphanum)', 'Photos::rotate/$1');
-$routes->delete('photos/temporary/(:any)', 'PhotosTemporary::delete/$1');
-$routes->delete('photos/(:alphanum)', 'Photos::delete/$1');
-$routes->options('photos', 'Photos');
-$routes->options('photos/(:alphanum)', 'Photos');
-$routes->options('photos/(:alphanum)/(:any)', 'Photos');
-$routes->options('photos/rotate/temporary/(:any)', 'PhotosTemporary');
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
 
-$routes->get('notifications/updates', 'Notifications::updates');
-$routes->get('notifications/list', 'Notifications::list');
-$routes->delete('notifications', 'Notifications::clear');
-$routes->options('notifications', 'Notifications');
-$routes->options('notifications/(:alphanum)', 'Notifications');
+/** Places Controller **/
+$routes->group('places', static function ($routes) {
+    $routes->get('/', 'Places::list');
+    $routes->get('(:alphanum)', 'Places::show/$1');
+    $routes->post('/', 'Places::create');
+    $routes->patch('cover/(:alphanum)', 'Places::cover/$1');
+    $routes->patch('(:alphanum)', 'Places::update/$1');
+    $routes->delete('(:alphanum)', 'Places::delete/$1');
 
-$routes->get('comments', 'Comments::list');
-$routes->post('comments', 'Comments::create');
-$routes->options('comments', 'Comments');
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+    $routes->options('(:alphanum)/(:alphanum)', static function () {});
+});
 
-$routes->get('mail/unsubscribe', 'Mail::unsubscribe');
-$routes->options('mail/(:alphanum)', 'Mail');
+/** Photos Controller **/
+$routes->group('photos', static function ($routes) {
+    $routes->get('/', 'Photos::list');
+    $routes->post('/', 'Photos::create');
+    $routes->post('upload/temporary', 'PhotosTemporary::upload');
+    $routes->post('upload/(:alphanum)', 'Photos::upload/$1');
+    $routes->post('upload/(:alphanum)', 'Photos::upload/$1');
+    $routes->patch('rotate/temporary/(:any)', 'PhotosTemporary::rotate/$1');
+    $routes->patch('rotate/(:alphanum)', 'Photos::rotate/$1');
+    $routes->delete('temporary/(:any)', 'PhotosTemporary::delete/$1');
+    $routes->delete('(:alphanum)', 'Photos::delete/$1');
 
-$routes->get('categories', 'Categories::list');
-$routes->options('categories', 'Categories');
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+    $routes->options('(:alphanum)/(:any)', static function () {});
+    $routes->options('rotate/temporary/(:any)', static function () {});
+});
 
-$routes->get('rating/history', 'Rating::history');
-$routes->get('rating/(:alphanum)', 'Rating::show/$1');
-$routes->put('rating', 'Rating::set');
-$routes->options('rating', 'Rating');
-$routes->options('rating/(:alphanum)', 'Rating');
+/** Notifications Controller **/
+$routes->group('notifications', static function ($routes) {
+    $routes->get('updates', 'Notifications::updates');
+    $routes->get('list', 'Notifications::list');
+    $routes->delete('/', 'Notifications::clear');
 
-$routes->get('activity', 'Activity::list');
-$routes->get('activity/(:alphanum)', 'Activity::show/$1');
-$routes->options('activity', 'Activity');
-$routes->options('activity/(:alphanum)', 'Activity');
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
 
-$routes->get('users', 'Users::list');
-$routes->get('users/(:alphanum)', 'Users::show/$1');
-$routes->post('users/avatar', 'Users::avatar');
-$routes->patch('users/crop', 'Users::crop');
-$routes->patch('users/(:alphanum)', 'Users::update/$1');
-$routes->options('users', 'Users');
-$routes->options('users/(:alphanum)', 'Users');
+/** Comments Controller **/
+$routes->group('comments', static function ($routes) {
+    $routes->get('/', 'Comments::list');
+    $routes->post('/', 'Comments::create');
 
-$routes->get('auth/me', 'Auth::me');
-$routes->get('auth/google', 'Auth::google');
-$routes->get('auth/yandex', 'Auth::yandex');
-$routes->get('auth/vk', 'Auth::vk');
-$routes->post('auth/login', 'Auth::login');
-$routes->post('auth/registration', 'Auth::registration');
-$routes->options('auth/(:alphanum)', 'Auth');
+    $routes->options('/', static function () {});
+});
 
-/* Location */
-$routes->get('location/search', 'Location::search');
-$routes->get('location/geosearch', 'Location::geoSearch');
-$routes->get('location/(:num)', 'Location::show/$1');
-$routes->put('location', 'Location::coordinates');
-$routes->options('location', 'Location');
-$routes->options('location/(:any)', 'Location');
+/** Mail Controller **/
+$routes->group('comments', static function ($routes) {
+    $routes->get('unsubscribe', 'Mail::unsubscribe');
 
-/* Levels */
-$routes->get('levels', 'Levels::list');
-$routes->options('levels', 'Levels');
+    $routes->options('(:alphanum)', static function () {});
+});
 
-/* Tags */
-$routes->get('tags', 'Tags::list');
-$routes->get('tags/search', 'Tags::search');
-$routes->options('tags/(:alphanum)', 'Tags');
+/** Categories Controller **/
+$routes->group('categories', static function ($routes) {
+    $routes->get('/', 'Categories::list');
 
-/* Bookmarks */
-$routes->get('bookmarks', 'Bookmarks::check');
-$routes->put('bookmarks', 'Bookmarks::set');
-$routes->options('bookmarks', 'Bookmarks');
-$routes->options('bookmarks/(:alphanum)', 'Bookmarks');
+    $routes->options('/', static function () {});
+});
 
-/* Visited Places */
-$routes->get('visited/(:alphanum)', 'Visited::place/$1');
-$routes->put('visited', 'Visited::set');
-$routes->options('visited', 'Visited');
-$routes->options('visited/(:alphanum)', 'Visited');
+/** Rating Controller **/
+$routes->group('rating', static function ($routes) {
+    $routes->get('history', 'Rating::history');
+    $routes->get('(:alphanum)', 'Rating::show/$1');
+    $routes->put('/', 'Rating::set');
 
-/* Sitemap */
-$routes->get('sitemap', 'Sitemap::index');
-$routes->options('sitemap', 'Sitemap');
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Activity Controller **/
+$routes->group('activity', static function ($routes) {
+    $routes->get('/', 'Activity::list');
+    $routes->get('(:alphanum)', 'Activity::show/$1');
+
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Users Controller **/
+$routes->group('users', static function ($routes) {
+    $routes->get('/', 'Users::list');
+    $routes->get('(:alphanum)', 'Users::show/$1');
+    $routes->post('avatar', 'Users::avatar');
+    $routes->patch('crop', 'Users::crop');
+    $routes->patch('(:alphanum)', 'Users::update/$1');
+
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Auth Controller **/
+$routes->group('auth', static function ($routes) {
+    $routes->get('me', 'Auth::me');
+    $routes->get('google', 'Auth::google');
+    $routes->get('yandex', 'Auth::yandex');
+    $routes->get('vk', 'Auth::vk');
+    $routes->post('login', 'Auth::login');
+    $routes->post('registration', 'Auth::registration');
+
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Location Controller **/
+$routes->group('location', static function ($routes) {
+    $routes->get('search', 'Location::search');
+    $routes->get('geosearch', 'Location::geoSearch');
+    $routes->get('(:num)', 'Location::show/$1');
+    $routes->put('/', 'Location::coordinates');
+
+    $routes->options('/', static function () {});
+    $routes->options('(:any)', static function () {});
+});
+
+/** Levels Controller **/
+$routes->group('levels', static function ($routes) {
+    $routes->get('/', 'Levels::list');
+
+    $routes->options('/', static function () {});
+});
+
+/** Tags Controller **/
+$routes->group('tags', static function ($routes) {
+    $routes->get('/', 'Tags::list');
+    $routes->get('search', 'Tags::search');
+
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Bookmarks Controller **/
+$routes->group('bookmarks', static function ($routes) {
+    $routes->get('/', 'Bookmarks::check');
+    $routes->put('/', 'Bookmarks::set');
+
+    $routes->options('/', 'Bookmarks');
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Visited Controller **/
+$routes->group('visited', static function ($routes) {
+    $routes->get('(:alphanum)', 'Visited::place/$1');
+    $routes->put('/', 'Visited::set');
+
+    $routes->options('/', static function () {});
+    $routes->options('(:alphanum)', static function () {});
+});
+
+/** Sitemap Controller **/
+$routes->group('visited', static function ($routes) {
+    $routes->get('/', 'Sitemap::index');
+
+    $routes->options('/', static function () {});
+});
