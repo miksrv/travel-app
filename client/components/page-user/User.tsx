@@ -149,7 +149,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
                             mode={'secondary'}
                             stretched={true}
                             link={`/users/${id}/photos`}
-                            style={{ marginTop: '15px' }}
+                            style={{ marginTop: '10px' }}
                         >
                             {`${t('show-all-photos')} (${photosCount})`}
                         </Button>
