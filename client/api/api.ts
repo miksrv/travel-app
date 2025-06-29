@@ -371,9 +371,10 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         })
     }),
+
     extractRehydrationInfo(action, { reducerPath }): any {
         if (isHydrateAction(action)) {
-            return action.payload[reducerPath]
+            return action?.payload?.[reducerPath]
         }
     },
     reducerPath: 'api',
