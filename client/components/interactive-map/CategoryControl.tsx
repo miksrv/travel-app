@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Image from 'next/image'
-import { useTranslation } from 'next-i18next'
 import { Button, Checkbox, Container } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel } from '@/api'
 import { categoryImage } from '@/functions/categories'
+
+import styles from './styles.module.sass'
 
 interface CategoryControlProps {
     categories?: ApiModel.Categories[]

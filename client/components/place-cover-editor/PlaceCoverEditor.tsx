@@ -1,17 +1,17 @@
 import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
-import Image from 'next/image'
-import { useTranslation } from 'next-i18next'
 import { Button } from 'simple-react-ui-kit'
 
-import 'react-image-crop/src/ReactCrop.scss'
-
-import styles from './styles.module.sass'
+import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 import { API, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import Dialog from '@/ui/dialog'
+
+import 'react-image-crop/src/ReactCrop.scss'
+import styles from './styles.module.sass'
 
 interface PlaceCoverEditorProps {
     placeId?: string
@@ -61,12 +61,12 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
         setSelectedPhotoId('')
     }
 
-    const handleSaveCover = () => {
+    const handleSaveCover = async () => {
         if (!selectedPhoto?.width || !selectedPhoto.height || disabled) {
             return
         }
 
-        updateCover({
+        await updateCover({
             height: Math.round(selectedPhoto.height * ((imageCropData.height || 0) / 100)),
             photoId: selectedPhotoId!,
             placeId: placeId!,
@@ -113,7 +113,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
 
     useEffect(() => {
         if (error) {
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'placeCoverEditor',
                     message: error as string,

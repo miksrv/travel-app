@@ -1,13 +1,14 @@
 import React, { useMemo, useState } from 'react'
+
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-
-import styles from './styles.module.sass'
 
 import { API, ApiType } from '@/api'
 import { categoryImage } from '@/functions/categories'
 import * as Coordinates from '@/functions/coordinates'
 import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
+
+import styles from './styles.module.sass'
 
 enum DropdownOptionType {
     COORDINATES = 'coordinates',

@@ -1,14 +1,14 @@
 import React from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button } from 'simple-react-ui-kit'
 
-import 'react-image-crop/src/ReactCrop.scss'
-
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import Dialog, { DialogProps } from '@/ui/dialog'
+
+import 'react-image-crop/src/ReactCrop.scss'
+import styles from './styles.module.sass'
 
 interface ConfirmationDialogProps extends DialogProps {
     open?: boolean

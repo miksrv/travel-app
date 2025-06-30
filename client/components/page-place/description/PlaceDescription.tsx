@@ -1,10 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 import { Button, Container } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -13,6 +12,8 @@ import { equalsArrays } from '@/functions/helpers'
 import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import ScreenSpinner from '@/ui/screen-spinner'
+
+import styles from './styles.module.sass'
 
 interface PlaceDescriptionProps {
     placeId?: string
@@ -48,9 +49,9 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
         setEditorTags(value)
     }
 
-    const handleSearchTags = (value: string) => {
+    const handleSearchTags = async (value: string) => {
         if (value.length > 0) {
-            searchTags(value)
+            await searchTags(value)
         }
     }
 
@@ -67,7 +68,7 @@ const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, t
             setEditorMode(false)
             setLocalContent(saveData.content)
 
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'placeFormSuccess',
                     message: t('geotag-saved'),

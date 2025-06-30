@@ -3,9 +3,9 @@
 import React, { useState } from 'react'
 import { Button, Container } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
-
 import { ApiType } from '@/api'
+
+import styles from './styles.module.sass'
 
 interface CoordinatesControlProps {
     coordinates?: ApiType.Coordinates

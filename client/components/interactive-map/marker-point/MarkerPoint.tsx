@@ -3,18 +3,19 @@
 import React from 'react'
 import { Marker, Popup } from 'react-leaflet'
 import Leaflet from 'leaflet'
+import { Skeleton } from 'simple-react-ui-kit'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-import { Skeleton } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiModel, IMG_HOST } from '@/api'
 import BookmarkButton from '@/components/bookmark-button'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
 import PlacePlate from '@/ui/place-plate'
+
+import styles from './styles.module.sass'
 
 interface MarkerPointProps {
     place: ApiModel.PlaceMark
@@ -32,9 +33,9 @@ const MarkerPoint: React.FC<MarkerPointProps> = ({ place, keepInView }) => {
         iconUrl: categoryImage(place.category).src
     })
 
-    const placeClickHandler = () => {
+    const placeClickHandler = async () => {
         if (place.id) {
-            getPlaceItem(place.id!)
+            await getPlaceItem(place.id!)
         }
     }
 

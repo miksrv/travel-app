@@ -24,7 +24,8 @@ const RatingColored: React.FC<RatingColoredProps> = ({ className, value, childre
     )
 
 const interpolateColor = (value: number, startColor: string, endColor: string): string => {
-    const rgb = (color: any) => color.match(/\w\w/g).map((x: string) => parseInt(x, 16))
+    const rgb = (color: string) =>
+        color?.length ? color.match(/\w\w/g)?.map((x: string) => parseInt(x, 16)) || [0, 0, 0] : [0, 0, 0]
 
     const [startR, startG, startB] = rgb(startColor)
     const [endR, endG, endB] = rgb(endColor)

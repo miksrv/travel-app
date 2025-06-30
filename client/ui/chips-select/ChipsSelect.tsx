@@ -2,9 +2,9 @@ import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
 import { cn, Icon, Spinner } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
-
 import Chip from '@/ui/chips-select/Chip'
+
+import styles from './styles.module.sass'
 
 interface ChipsSelectProps {
     className?: string

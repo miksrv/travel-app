@@ -1,14 +1,15 @@
 import React from 'react'
 import { TFunction } from 'i18next'
-import Image from 'next/image'
-import Link from 'next/link'
 import { Icon, Popout } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Image from 'next/image'
+import Link from 'next/link'
 
 import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import { levelImage } from '@/functions/userLevels'
+
+import styles from './styles.module.sass'
 
 interface UserMenuProps {
     t: TFunction

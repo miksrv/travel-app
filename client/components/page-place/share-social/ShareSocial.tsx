@@ -15,10 +15,9 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from 'react-share'
-import { useTranslation } from 'next-i18next'
 import { Container, Spinner } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
@@ -27,6 +26,8 @@ import UserAvatar from '@/components/user-avatar'
 import { addDecimalPoint, formatDate } from '@/functions/helpers'
 import Dialog from '@/ui/dialog'
 import Rating from '@/ui/rating'
+
+import styles from './styles.module.sass'
 
 interface SocialRatingProps {
     placeId?: string
@@ -56,9 +57,9 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
 
     const [changeRating, { isLoading: ratingLoading, isSuccess }] = API.useRatingPutScoreMutation()
 
-    const handleRatingChange = (value?: number) => {
+    const handleRatingChange = async (value?: number) => {
         if (value && placeId) {
-            changeRating({
+            await changeRating({
                 place: placeId,
                 score: value
             })
@@ -72,7 +73,7 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
 
     useEffect(() => {
         if (isSuccess && !ratingData?.vote && !isAuth) {
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'placeRating',
                     title: '',

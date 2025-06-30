@@ -1,11 +1,11 @@
 import React from 'react'
 import { Button, cn, Container } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
-
 import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import Breadcrumbs, { BreadcrumbsProps } from '@/ui/breadcrumbs'
+
+import styles from './styles.module.sass'
 
 interface HeaderProps extends BreadcrumbsProps {
     title?: string

@@ -1,9 +1,8 @@
 import React, { useCallback, useEffect, useState } from 'react'
-import Image from 'next/image'
-import { Trans, useTranslation } from 'next-i18next'
 import { Button, Checkbox, Input, Message } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Image from 'next/image'
+import { Trans, useTranslation } from 'next-i18next'
 
 import { ApiModel, ApiType } from '@/api'
 import { useAppSelector } from '@/api/store'
@@ -11,6 +10,8 @@ import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import ScreenSpinner from '@/ui/screen-spinner'
+
+import styles from './styles.module.sass'
 
 interface UserFormProps {
     loading?: boolean

@@ -36,7 +36,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ placeId, onSelectFiles, o
         if (selectedFiles && uploadError) {
             setSelectedFiles([])
 
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'uploadPhotoError',
                     title: '',
@@ -71,7 +71,7 @@ const PhotoUploader: React.FC<PhotoUploaderProps> = ({ placeId, onSelectFiles, o
 
             formData.append('photo', selectedFiles[0])
 
-            handleUploadPhoto({
+            void handleUploadPhoto({
                 count: selectedFiles.length,
                 formData,
                 place: placeId

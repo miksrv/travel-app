@@ -1,13 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
+import { Container } from 'simple-react-ui-kit'
+
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import dynamic from 'next/dynamic'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'

@@ -1,13 +1,14 @@
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux'
-import { createWrapper, HYDRATE } from 'next-redux-wrapper'
 
-import { API } from './api'
-import { APIPastvu } from './apiPastvu'
+import { createWrapper, HYDRATE } from 'next-redux-wrapper'
+import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
 
 import applicationSlice from '@/api/applicationSlice'
 import authSlice from '@/api/authSlice'
 import notificationSlice from '@/api/notificationSlice'
-import { AnyAction, combineReducers, configureStore } from '@reduxjs/toolkit'
+
+import { API } from './api'
+import { APIPastvu } from './apiPastvu'
 
 // 1. Combine all reducers
 const combinedReducer = combineReducers({

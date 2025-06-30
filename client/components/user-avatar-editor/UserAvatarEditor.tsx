@@ -1,15 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
-import { useTranslation } from 'next-i18next'
 import { Button, Spinner } from 'simple-react-ui-kit'
 
-import 'react-image-crop/src/ReactCrop.scss'
-
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiType, IMG_HOST, useAppDispatch } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import Dialog from '@/ui/dialog'
+
+import 'react-image-crop/src/ReactCrop.scss'
+import styles from './styles.module.sass'
 
 type ImageSizesType = {
     ratioWidth: number
@@ -56,12 +56,12 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         setUploadedFile(undefined)
     }
 
-    const handleSaveCover = () => {
+    const handleSaveCover = async () => {
         if (!imageSizes || !uploadedFile || disabled) {
             return
         }
 
-        cropAvatar({
+        await cropAvatar({
             filename: uploadedFile.filename,
             height: Math.round(imageSizes.realHeight * ((imageCropData.height || 0) / 100)),
             width: Math.round(imageSizes.realWidth * ((imageCropData.width || 0) / 100)),
@@ -74,7 +74,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
         inputFile.current?.click()
     }
 
-    const handleSelectedFilesUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const handleSelectedFilesUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files
 
         if (!files?.[0]) {
@@ -85,7 +85,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
 
         formData.append('avatar', files[0])
 
-        uploadAvatar({ formData })
+        await uploadAvatar({ formData })
     }
 
     // Select a photo to upload

@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button, ButtonProps } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
+
+import styles from './styles.module.sass'
 
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
@@ -30,13 +31,13 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
 
     const loading = bookmarkPutLoading || bookmarksLoading || isFetching
 
-    const handleButtonClick = (event: React.MouseEvent) => {
+    const handleButtonClick = async (event: React.MouseEvent) => {
         event.stopPropagation()
 
         if (!isAuth) {
             dispatch(openAuthDialog())
         } else if (isAuth && placeId) {
-            setBookmark({ placeId })
+            await setBookmark({ placeId })
             setButtonPushed(true)
         }
     }
@@ -46,7 +47,7 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
             return
         }
 
-        dispatch(
+        void dispatch(
             Notify({
                 id: 'bookmarkButton',
                 title: '',

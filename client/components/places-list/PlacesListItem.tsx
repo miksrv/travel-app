@@ -1,15 +1,16 @@
 import React from 'react'
 import { TFunction } from 'i18next'
+
 import Image from 'next/image'
 import Link from 'next/link'
-
-import styles from './styles.module.sass'
 
 import { ApiModel, IMG_HOST } from '@/api'
 import { addressToString } from '@/functions/address'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, dateToUnixTime, numberFormatter, removeMarkdown } from '@/functions/helpers'
 import PlacePlate from '@/ui/place-plate'
+
+import styles from './styles.module.sass'
 
 interface PlacesListItemProps {
     t: TFunction

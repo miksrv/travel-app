@@ -1,8 +1,8 @@
+import { AuthService, DateTime, Locale, UserRole } from '@/api/types'
+
 import { UserLevel } from './userLevel'
 import { UserSettings } from './userSettings'
 import { UserStatistic } from './userStatistic'
-
-import { AuthService, DateTime, Locale, UserRole } from '@/api/types'
 
 export type User = {
     id: string

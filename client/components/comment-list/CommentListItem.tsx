@@ -1,15 +1,17 @@
 import React from 'react'
 import Markdown from 'react-markdown'
 import { TFunction } from 'i18next'
-import Link from 'next/link'
 import { Button, cn } from 'simple-react-ui-kit'
 
-import CommentForm from './CommentForm'
-import styles from './styles.module.sass'
+import Link from 'next/link'
 
 import { ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import { timeAgo } from '@/functions/helpers'
+
+import CommentForm from './CommentForm'
+
+import styles from './styles.module.sass'
 
 interface CommentListItemProps {
     t: TFunction

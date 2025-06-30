@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react'
-import Link from 'next/link'
 import { cn, Icon } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Link from 'next/link'
 
 import { encodeQueryData } from '@/functions/helpers'
+
+import styles from './styles.module.sass'
 
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
@@ -45,7 +46,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
 
     const link = `/${linkPart}`
 
-    const fetchPageNumbers: (string | number)[] = useMemo(() => {
+    const fetchPageNumbers: Array<string | number> = useMemo(() => {
         const totalNumbers = pageNeighbours * 2 + 3
         const totalBlocks = totalNumbers + 2
 

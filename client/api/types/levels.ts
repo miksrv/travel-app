@@ -12,7 +12,7 @@ export interface Response {
     items?: Array<
         ApiModel.UserLevel & {
             count?: number
-            users?: Pick<ApiModel.User, 'id' | 'avatar' | 'name'>[]
+            users?: Array<Pick<ApiModel.User, 'id' | 'avatar' | 'name'>>
         }
     >
 }

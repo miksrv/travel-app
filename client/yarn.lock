@@ -4713,7 +4713,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"embla-carousel@npm:8.6.0":
+"embla-carousel@npm:8.6.0, embla-carousel@npm:^8.6.0":
   version: 8.6.0
   resolution: "embla-carousel@npm:8.6.0"
   checksum: 10c0/f4c598e7be28b70340d31ffd2bebb2472db370b0c81d9b089bf9555cf618695f35dc4a0694565c994c9ab972731123063f945aa09ff485df0df761d79c6a08ef
@@ -5699,6 +5699,7 @@ __metadata:
     "@eslint/compat": "npm:^1.3.1"
     "@eslint/js": "npm:^9.30.0"
     "@next/eslint-plugin-next": "npm:^15.3.4"
+    "@react-leaflet/core": "npm:^3.0.0"
     "@reduxjs/toolkit": "npm:^2.8.2"
     "@testing-library/jest-dom": "npm:^6.6.3"
     "@testing-library/react": "npm:^16.3.0"
@@ -5712,6 +5713,7 @@ __metadata:
     "@uiw/react-markdown-editor": "npm:^6.1.2"
     cookies-next: "npm:^6.0.0"
     dayjs: "npm:^1.11.13"
+    embla-carousel: "npm:^8.6.0"
     embla-carousel-react: "npm:^8.6.0"
     eslint: "npm:^9.30.0"
     eslint-config-prettier: "npm:^10.1.5"

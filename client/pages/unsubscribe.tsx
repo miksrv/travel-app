@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react'
+import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
+
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
 
 import { API, ApiType } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -26,7 +27,7 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
 
     useEffect(() => {
         if (!mailId) {
-            router.push('/')
+            void router.push('/')
         }
     }, [])
 

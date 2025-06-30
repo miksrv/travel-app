@@ -1,12 +1,13 @@
 import React, { useMemo, useState } from 'react'
+import type { BreadcrumbList } from 'schema-dts'
+import { Button, Container } from 'simple-react-ui-kit'
+
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import type { BreadcrumbList } from 'schema-dts'
-import { Button, Container } from 'simple-react-ui-kit'
 
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch } from '@/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
@@ -239,7 +240,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
-            ...(breadcrumbsLinks.map((link, i) => ({
+            ...(breadcrumbsLinks?.map((link, i) => ({
                 '@type': 'ListItem',
                 item: canonicalUrl + link.link,
                 name: link.text,

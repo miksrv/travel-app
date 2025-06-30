@@ -1,8 +1,9 @@
 import React from 'react'
 import { cn, Container, ContainerProps } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
 import TabHeader from './TabHeader'
+
+import styles from './styles.module.sass'
 
 type TabType<T> = {
     label: string
@@ -11,7 +12,7 @@ type TabType<T> = {
 
 interface TabsProps<T> extends ContainerProps {
     children?: React.ReactNode
-    tabs?: TabType<T>[]
+    tabs?: Array<TabType<T>>
     activeTab?: T
     onChangeTab?: (key?: T) => void
 }

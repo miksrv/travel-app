@@ -1,8 +1,9 @@
 import React from 'react'
+import { Button } from 'simple-react-ui-kit'
+
 import { NextPage } from 'next'
 import Image from 'next/image'
 import { NextSeo } from 'next-seo'
-import { Button } from 'simple-react-ui-kit'
 
 import logo from '@/public/images/geometki.svg'
 

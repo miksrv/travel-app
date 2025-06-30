@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Button, cn, Container, ContainerProps, Popout, Spinner } from 'simple-react-ui-kit'
+
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-import { Button, cn, Container, ContainerProps, Popout, Spinner } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiModel, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
 import PhotoLightbox from '@/components/photo-lightbox'
 import PhotoUploadSection from '@/components/photo-upload-section'
+
+import styles from './styles.module.sass'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
     ssr: false
@@ -59,10 +60,10 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         }
     }
 
-    const handleRotateClick = (photoId: string, temporary?: boolean) => {
+    const handleRotateClick = async (photoId: string, temporary?: boolean) => {
         if (isAuth && !rotateLoading && !hideActions) {
             setPhotoLoadingID(photoId)
-            rotatePhoto({ id: photoId, temporary })
+            void rotatePhoto({ id: photoId, temporary })
         }
     }
 
@@ -88,7 +89,7 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
      */
     useEffect(() => {
         if (deleteError || rotateError) {
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'actionPhotoError',
                     title: '',
@@ -229,11 +230,11 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                     setPhotoDeleteID(undefined)
                     setPhotoLoadingID(undefined)
                 }}
-                onAccept={() => {
+                onAccept={async () => {
                     const photo = photos?.find(({ id }) => id === photoDeleteID)
 
                     if (photo) {
-                        deletePhoto({ id: photo?.id, temporary: photo?.placeId === 'temporary' })
+                        await deletePhoto({ id: photo?.id, temporary: photo?.placeId === 'temporary' })
                         setPhotoDeleteID(undefined)
                         setPhotoLoadingID(undefined)
                     }

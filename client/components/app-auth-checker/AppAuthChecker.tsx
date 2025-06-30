@@ -39,7 +39,7 @@ const AppAuthChecker: React.FC = () => {
 
     useEffect(() => {
         if (isAuth !== meData?.auth) {
-            refetch()
+            void refetch()
         }
     }, [isAuth])
 

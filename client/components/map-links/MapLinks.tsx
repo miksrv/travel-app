@@ -1,14 +1,15 @@
 import React from 'react'
+
 import Image, { StaticImageData } from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-
-import styles from './styles.module.sass'
 
 import { ApiType } from '@/api'
 import googleLogo from '@/public/images/google-logo.png'
 import wikimapiaLogo from '@/public/images/wikimapia-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
+
+import styles from './styles.module.sass'
 
 const DEFAULT_ZOOM = 17
 
@@ -94,4 +95,4 @@ const ServiceMapLink: React.FC<ServiceMapLinkProps> = ({ link, image, title, cap
 )
 
 export default MapLinks
-export { Yandex, Google, Wikimapia }
+export { Google, Wikimapia, Yandex }

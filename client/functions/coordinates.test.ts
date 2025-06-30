@@ -2,19 +2,19 @@ import { isCoordinates, normalizeInput, toDegreesMinutesAndSeconds } from '@/fun
 
 describe('toDegreesMinutesAndSeconds', () => {
     it('converts positive coordinate correctly', () => {
-        expect(toDegreesMinutesAndSeconds(37.7749)).toEqual('37°46’29"')
+        expect(toDegreesMinutesAndSeconds(37.7749)).toBe('37°46’29"')
     })
 
     it('converts negative coordinate correctly', () => {
-        expect(toDegreesMinutesAndSeconds(-122.4194)).toEqual('122°25’9"')
+        expect(toDegreesMinutesAndSeconds(-122.4194)).toBe('122°25’9"')
     })
 
     it('handles zero coordinate correctly', () => {
-        expect(toDegreesMinutesAndSeconds(0)).toEqual('0°0’0"')
+        expect(toDegreesMinutesAndSeconds(0)).toBe('0°0’0"')
     })
 
     it('handles non-integer coordinate correctly', () => {
-        expect(toDegreesMinutesAndSeconds(52.52)).toEqual('52°31’12"')
+        expect(toDegreesMinutesAndSeconds(52.52)).toBe('52°31’12"')
     })
 })
 
@@ -22,37 +22,37 @@ describe('normalizeInput', () => {
     it('normalizes input string correctly', () => {
         const input = '⁰ⁱ²³⁴⁵⁶⁷⁸⁹'
         const expectedOutput = '0i23456789'
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 
     it('replaces symbols correctly', () => {
         const input = '!@#$%^&*()_+={}[]|\\:;"\'<>,.?/~`'
         const expectedOutput = ''
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 
     it('handles decimal separator correctly (comma)', () => {
         const input = '1,234.567'
         const expectedOutput = '1 234.567'
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 
     it('handles decimal separator correctly (dot)', () => {
         const input = '1.234,567'
         const expectedOutput = '1.234 567'
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 
     it('replaces dashes correctly', () => {
         const input = '123-456-789'
         const expectedOutput = '123 456 789'
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 
     it('replaces hemisphere markers correctly', () => {
         const input = 'N, S, W, E'
         const expectedOutput = 'N S W E'
-        expect(normalizeInput(input)).toEqual(expectedOutput)
+        expect(normalizeInput(input)).toStrictEqual(expectedOutput)
     })
 })
 

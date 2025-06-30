@@ -1,11 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Head from 'next/head'
-import { useTranslation } from 'next-i18next'
-import { NextSeo } from 'next-seo'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
 import { Button } from 'simple-react-ui-kit'
 
-import ShareSocial from './share-social'
+import Head from 'next/head'
+import { useTranslation } from 'next-i18next'
+import { NextSeo } from 'next-seo'
 
 import { ApiModel, IMG_HOST, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
@@ -21,6 +20,8 @@ import PlacesListItem from '@/components/places-list/PlacesListItem'
 import { formatDateUTC, removeMarkdown, truncateText } from '@/functions/helpers'
 import { PlacePageProps } from '@/pages/places/[...slug]'
 import Carousel from '@/ui/carousel'
+
+import ShareSocial from './share-social'
 
 type PlaceProps = Omit<PlacePageProps, 'page'>
 
@@ -239,7 +240,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
             )}
 
             <PlaceCoverEditor
-                ref={placeCoverEditorRef as any}
+                ref={placeCoverEditorRef}
                 placeId={place?.id}
                 onSaveCover={handleSaveCover}
             />

@@ -1,9 +1,10 @@
 import React, { useMemo } from 'react'
+import { Container } from 'simple-react-ui-kit'
+
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'

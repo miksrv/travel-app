@@ -1,12 +1,14 @@
 import React from 'react'
-import { useTranslation } from 'next-i18next'
 import { Container } from 'simple-react-ui-kit'
 
-import PlacesListItem from './PlacesListItem'
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
 import PlacesListItemLoader from '@/components/places-list/PlacesListItemLoader'
+
+import PlacesListItem from './PlacesListItem'
+
+import styles from './styles.module.sass'
 
 interface PlacesListProps {
     places?: ApiModel.Place[]

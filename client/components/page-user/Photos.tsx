@@ -1,7 +1,8 @@
 import React from 'react'
+import { Container } from 'simple-react-ui-kit'
+
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { SITE_LINK } from '@/api'
 import Header from '@/components/header'

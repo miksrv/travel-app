@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import { useTranslation } from 'next-i18next'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel, ApiType, useAppSelector } from '@/api'
 import { PlacesFilterType } from '@/components/places-filter-panel/types'
@@ -9,6 +8,8 @@ import { categoryImage } from '@/functions/categories'
 import Autocomplete from '@/ui/autocomplete'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import OptionsList from '@/ui/dropdown/OptionsList'
+
+import styles from './styles.module.sass'
 
 interface PlacesFilterPanelProps {
     sort?: ApiType.SortFieldsType
@@ -94,9 +95,9 @@ const PlacesFilterPanel: React.FC<PlacesFilterPanelProps> = ({
         setOpenedOptions('category')
     }
 
-    const handleSearchLocation = (value: string) => {
+    const handleSearchLocation = async (value: string) => {
         if (value.length >= 3) {
-            searchAddress(value)
+            await searchAddress(value)
         }
     }
 

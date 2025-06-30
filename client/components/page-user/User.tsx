@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import type { BreadcrumbList, ProfilePage } from 'schema-dts'
+import { Button } from 'simple-react-ui-kit'
+
 import Head from 'next/head'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import type { BreadcrumbList, ProfilePage } from 'schema-dts'
-import { Button } from 'simple-react-ui-kit'
 
 import { API, ApiModel, IMG_HOST, SITE_LINK } from '@/api'
 import ActivityList from '@/components/activity-list/ActivityList'

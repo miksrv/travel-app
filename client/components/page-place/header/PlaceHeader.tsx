@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
+import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
+
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiModel, ApiType, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import BookmarkButton from '@/components/bookmark-button'
+
+import styles from './styles.module.sass'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
     ssr: false
@@ -77,7 +78,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
     useEffect(() => {
         if (removeSuccess) {
-            handleBackLinkClick()
+            void handleBackLinkClick()
         }
     }, [removeSuccess])
 
@@ -212,9 +213,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                 onReject={() => {
                     setShowRemoveDialog(false)
                 }}
-                onAccept={() => {
+                onAccept={async () => {
                     if (place?.id) {
-                        removePlace(place.id)
+                        void removePlace(place.id)
                     }
 
                     setShowRemoveDialog(false)

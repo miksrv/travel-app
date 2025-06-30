@@ -1,8 +1,9 @@
 import React, { useEffect, useMemo } from 'react'
+import { Container } from 'simple-react-ui-kit'
+
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { API, ApiType, isApiValidationErrors, SITE_LINK } from '@/api'
 import Header from '@/components/header'
@@ -41,11 +42,11 @@ const Edit: React.FC<EditProps> = ({ place }) => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiType.Places.PostItemRequest) => {
+    const handleSubmit = async (formData?: ApiType.Places.PostItemRequest) => {
         const title = formData?.title?.trim()
         const content = formData?.content?.trim()
 
-        updatePlace({
+        await updatePlace({
             ...formData,
             category: formData?.category !== place?.category?.name ? formData?.category : undefined,
             content: content !== place?.content ? content : undefined,
@@ -57,7 +58,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
 
     useEffect(() => {
         if (isSuccess) {
-            router.push(`/places/${place?.id}`)
+            void router.push(`/places/${place?.id}`)
         }
     }, [isSuccess])
 

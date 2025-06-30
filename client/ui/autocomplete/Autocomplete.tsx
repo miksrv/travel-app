@@ -1,7 +1,8 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import debounce from 'lodash-es/debounce'
-import Image, { StaticImageData } from 'next/image'
 import { cn, Icon, IconTypes, Spinner } from 'simple-react-ui-kit'
+
+import Image, { StaticImageData } from 'next/image'
 
 import styles from './styles.module.sass'
 

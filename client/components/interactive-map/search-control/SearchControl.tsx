@@ -1,12 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import debounce from 'lodash-es/debounce'
-import { useTranslation } from 'next-i18next'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiType } from '@/api'
 import * as Coordinates from '@/functions/coordinates'
 import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
+
+import styles from './styles.module.sass'
 
 interface SearchControlProps {
     onClear?: () => void
@@ -58,48 +59,50 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
         [data?.items]
     )
 
-    const handleSearchLocation = (value: string) => {
+    const handleSearchLocation = async (value: string) => {
         const normalizeCoords = Coordinates.normalizeInput(value)
 
-        if (value.length >= 3) {
-            if (Coordinates.isCoordinates(value)) {
-                for (const parser of [
-                    Coordinates.CoordinatesD,
-                    Coordinates.CoordinatesDM,
-                    Coordinates.CoordinatesDMS,
-                    Coordinates.CoordinatesDSigned
-                ]) {
-                    const result = parser.fromString(normalizeCoords)
+        if (value.length <= 3) {
+            return
+        }
 
-                    if (!result.error) {
-                        const resultItems = result.coordinates?.map((it) => {
-                            const coordStrings = it.format()
-                            const latLng = it.getLatLng()
+        if (Coordinates.isCoordinates(value)) {
+            for (const parser of [
+                Coordinates.CoordinatesD,
+                Coordinates.CoordinatesDM,
+                Coordinates.CoordinatesDMS,
+                Coordinates.CoordinatesDSigned
+            ]) {
+                const result = parser.fromString(normalizeCoords)
 
-                            return {
-                                description: t('coordinates'),
-                                key: coordStrings.latitude,
-                                title: `${coordStrings.latitude} ${coordStrings.longitude}`,
-                                value: {
-                                    lat: latLng.lat,
-                                    lon: latLng.lon
-                                }
+                if (!result.error) {
+                    const resultItems = result.coordinates?.map((it) => {
+                        const coordStrings = it.format()
+                        const latLng = it.getLatLng()
+
+                        return {
+                            description: t('coordinates'),
+                            key: coordStrings.latitude,
+                            title: `${coordStrings.latitude} ${coordStrings.longitude}`,
+                            value: {
+                                lat: latLng.lat,
+                                lon: latLng.lon
                             }
-                        })
+                        }
+                    })
 
-                        setFoundCoords(resultItems)
-                    }
+                    setFoundCoords(resultItems)
                 }
-            } else {
-                setFoundCoords(undefined)
-                handleDebouncedSearch(value)
             }
+        } else {
+            setFoundCoords(undefined)
+            await handleDebouncedSearch(value)
         }
     }
 
     const handleDebouncedSearch = useCallback(
-        debounce((value) => {
-            geoSearch(value)
+        debounce(async (value) => {
+            await geoSearch(value)
         }, 1000),
         []
     )

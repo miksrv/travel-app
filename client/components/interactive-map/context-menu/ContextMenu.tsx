@@ -2,11 +2,11 @@
 
 import React, { useEffect, useRef, useState } from 'react'
 import { Point } from 'leaflet'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 import { Button, Container } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
+import { useLeafletContext } from '@react-leaflet/core'
 
 import { ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
@@ -16,7 +16,8 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
-import { useLeafletContext } from '@react-leaflet/core'
+
+import styles from './styles.module.sass'
 
 const ContextMenu: React.FC = () => {
     const dispatch = useAppDispatch()
@@ -42,11 +43,11 @@ const ContextMenu: React.FC = () => {
         y: 0
     })
 
-    const handleCopyCoordinates = () => {
-        navigator.clipboard.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
+    const handleCopyCoordinates = async () => {
+        await navigator.clipboard.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
         setIsShowMenu(false)
 
-        dispatch(
+        await dispatch(
             Notify({
                 id: 'copyCoordinates',
                 title: '',

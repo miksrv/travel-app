@@ -1,9 +1,8 @@
 import React from 'react'
-import { useTranslation } from 'next-i18next'
-import { NextSeo } from 'next-seo'
 import { Container, Spinner } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
+import { NextSeo } from 'next-seo'
 
 import { API, SITE_LINK } from '@/api'
 import Header from '@/components/header'
@@ -11,6 +10,8 @@ import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
 import PlacesList from '@/components/places-list'
 import { PLACES_PER_PAGE, UserPageProps } from '@/pages/users/[...slug]'
 import Pagination from '@/ui/pagination'
+
+import styles from './styles.module.sass'
 
 interface UserPlacesProps extends Omit<UserPageProps, 'page' | 'placesList'> {
     type: 'places' | 'bookmarks'

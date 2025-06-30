@@ -4,11 +4,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import isEqual from 'lodash-es/isEqual'
-import { useRouter } from 'next/dist/client/router'
 import { Button, Spinner } from 'simple-react-ui-kit'
 
-import 'leaflet.heat'
-import 'leaflet/dist/leaflet.css'
+import { useRouter } from 'next/dist/client/router'
+
+import { ApiModel, ApiType } from '@/api'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import ContextMenu from './context-menu/ContextMenu'
 import CoordinatesControl from './coordinates-control/CoordinatesControl'
@@ -23,12 +26,11 @@ import SearchControl from './search-control/SearchControl'
 import CategoryControl from './CategoryControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerUser from './MarkerUser'
-import styles from './styles.module.sass'
 
-import { ApiModel, ApiType } from '@/api'
-import { LOCAL_STORAGE } from '@/functions/constants'
-import { round } from '@/functions/helpers'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import 'leaflet.heat'
+
+import 'leaflet/dist/leaflet.css'
+import styles from './styles.module.sass'
 
 export const MapAdditionalLayers = {
     Heatmap: 'Heatmap',

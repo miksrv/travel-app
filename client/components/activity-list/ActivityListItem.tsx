@@ -1,18 +1,18 @@
 import React, { useState } from 'react'
 import PhotoAlbum from 'react-photo-album'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 import { cn, Container, Icon } from 'simple-react-ui-kit'
 
-import 'react-photo-album/rows.css'
-
-import styles from './styles.module.sass'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST } from '@/api'
 import PhotoLightbox from '@/components/photo-lightbox'
 import UserAvatar from '@/components/user-avatar'
 import { formatDate } from '@/functions/helpers'
 import ReadMore from '@/ui/read-more'
+
+import 'react-photo-album/rows.css'
+import styles from './styles.module.sass'
 
 interface ActivityListItemProps {
     item: ApiModel.Activity

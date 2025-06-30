@@ -1,12 +1,11 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
+import { Button, Input, Message } from 'simple-react-ui-kit'
+
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
-import { Button, Input, Message } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiModel, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
@@ -18,6 +17,8 @@ import ChipsSelect from '@/ui/chips-select'
 import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import ScreenSpinner from '@/ui/screen-spinner'
+
+import styles from './styles.module.sass'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false
@@ -82,14 +83,14 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
         return !Object.keys(errors).length
     }, [formData])
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (validateForm()) {
             onSubmit?.({
                 ...formData,
                 photos: !placeId && !!localPhotos?.length ? localPhotos?.map(({ id }) => id) : undefined
             })
         } else {
-            dispatch(
+            await dispatch(
                 Notify({
                     id: 'placeFormError',
                     message: t('correct-errors-on-form'),
@@ -99,15 +100,15 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
         }
     }
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            handleSubmit()
+            await handleSubmit()
         }
     }
 
-    const handleSearchTags = (value: string) => {
+    const handleSearchTags = async (value: string) => {
         if (value.length > 0) {
-            searchTags(value)
+            await searchTags(value)
         }
     }
 
@@ -161,7 +162,7 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     title={t('correct-errors-on-form')}
                 >
                     <ul className={'errorMessageList'}>
-                        {Object.values(formErrors || {}).map((item) =>
+                        {Object.values(formErrors || {}).map((item: string) =>
                             item.length ? <li key={`item${item}`}>{item}</li> : ''
                         )}
                     </ul>

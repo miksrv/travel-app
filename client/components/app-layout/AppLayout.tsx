@@ -1,10 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'next-i18next'
-import NextNProgress from 'nextjs-progressbar'
 import { cn, Icon } from 'simple-react-ui-kit'
 
-import Menu from './Menu'
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
+import NextNProgress from 'nextjs-progressbar'
 
 import { useAppDispatch, useAppSelector } from '@/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
@@ -16,6 +14,10 @@ import RegistrationForm from '@/components/registration-form'
 import Snackbar from '@/components/snackbar'
 import ThemeSwitcher from '@/components/theme-switcher'
 import Dialog from '@/ui/dialog'
+
+import Menu from './Menu'
+
+import styles from './styles.module.sass'
 
 type AuthFormType = 'login' | 'registration'
 
