@@ -216,7 +216,7 @@ export const API = createApi({
             transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
         photosGetList: builder.query<ApiType.Photos.ListResponse, Maybe<ApiType.Photos.ListRequest>>({
-            providesTags: (result, error, arg) => [{ id: arg?.place, type: 'Photos' }],
+            providesTags: (result, error, arg) => [{ id: arg?.place || arg?.author, type: 'Photos' }],
             query: (params) => `photos${encodeQueryData(params)}`
         }),
 
