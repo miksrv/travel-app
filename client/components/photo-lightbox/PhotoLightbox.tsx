@@ -1,5 +1,6 @@
 import React from 'react'
 import Lightbox, { Slide } from 'yet-another-react-lightbox'
+import { RenderFunction, RenderSlideProps } from 'yet-another-react-lightbox/dist/types'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
@@ -35,7 +36,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
             index={photoIndex}
             plugins={[Captions, Zoom]}
             close={onCloseLightBox}
-            render={{ slide: ImageSlide as any }}
+            render={{ slide: ImageSlide as RenderFunction<RenderSlideProps> }}
             slides={photos?.map(
                 (photo) =>
                     ({

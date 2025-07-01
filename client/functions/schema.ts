@@ -4,7 +4,7 @@ import { ApiModel, IMG_HOST } from '@/api'
 
 // import { formatDateISO } from '@/functions/helpers'
 
-export const PlaceSchema = (place: ApiModel.Place): LocalBusiness | any => ({
+export const PlaceSchema = (place: ApiModel.Place): unknown | LocalBusiness => ({
     '@context': 'https://schema.org',
     '@type': 'LocalBusiness',
     address: {
@@ -38,7 +38,7 @@ export const PlaceSchema = (place: ApiModel.Place): LocalBusiness | any => ({
     name: place.title
 })
 
-export const UserSchema = (user: ApiModel.User): Person | any => ({
+export const UserSchema = (user: ApiModel.User): unknown | Person => ({
     '@context': 'https://schema.org',
     '@type': 'Person',
     identifier: user.id,

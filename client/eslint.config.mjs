@@ -254,7 +254,7 @@ export default defineConfig([
             // ✅ Check for keys in maps
             'react/jsx-key': 'error',
             // ✅ Limit max JSX nesting
-            'react/jsx-max-depth': ['warn', { max: 4 }],
+            'react/jsx-max-depth': ['warn', { max: 5 }],
             // ✅ Ensure readability of JSX elements with multiple props
             'react/jsx-max-props-per-line': [
                 'warn',

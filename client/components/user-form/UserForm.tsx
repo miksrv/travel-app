@@ -115,7 +115,7 @@ const UserForm: React.FC<UserFormProps> = ({ loading, values, errors, onSubmit, 
                     title={t('correct-errors-on-form')}
                 >
                     <ul className={'errorMessageList'}>
-                        {Object.values(formErrors || {}).map((item) =>
+                        {Object.values(formErrors || {}).map((item: string) =>
                             item.length ? <li key={`item${item}`}>{item}</li> : ''
                         )}
                     </ul>

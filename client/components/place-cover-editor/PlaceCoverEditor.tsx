@@ -76,8 +76,8 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
         })
     }
 
-    const handleImageLoad = (e: any) => {
-        const { width, height } = e.currentTarget
+    const handleImageLoad = (event: React.SyntheticEvent<HTMLImageElement>) => {
+        const { width, height } = event.currentTarget
 
         if (!selectedPhoto?.height || !selectedPhoto.width) {
             return
@@ -179,6 +179,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorHandle, P
                         minHeight={300 / heightRatio}
                         onChange={(c, p) => setImageCropData(p)}
                     >
+                        {/* eslint-disable-next-line next/no-img-element */}
                         <img
                             src={`${IMG_HOST}${selectedPhoto?.full}`}
                             onLoad={handleImageLoad}

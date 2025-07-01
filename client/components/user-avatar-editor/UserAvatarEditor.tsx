@@ -201,6 +201,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                 }
                                 onChange={(c, p) => setImageCropData(p)}
                             >
+                                {/* eslint-disable-next-line next/no-img-element */}
                                 <img
                                     ref={imageRef}
                                     src={`${IMG_HOST}${uploadedFile.filepath}`}

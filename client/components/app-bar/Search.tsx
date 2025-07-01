@@ -21,7 +21,7 @@ const Search: React.FC<SearchProps> = () => {
     const { t } = useTranslation()
     const router = useRouter()
 
-    const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
+    const [foundCoords, setFoundCoords] = useState<Array<DropdownOption<ApiType.Coordinates>>>()
     const [searchString, setSearchString] = useState<string>('')
 
     const { data, isFetching } = API.usePlacesGetListQuery(
@@ -102,17 +102,17 @@ const Search: React.FC<SearchProps> = () => {
         }
     }
 
-    const handleSelectLocation = async (value: DropdownOption) => {
-        if (value.type === DropdownOptionType.COORDINATES) {
-            const coords = value.value as ApiType.Coordinates
+    const handleSelectLocation = async (value?: DropdownOption<string | ApiType.Coordinates>) => {
+        if (value?.type === DropdownOptionType.COORDINATES) {
+            const coords = value?.value as ApiType.Coordinates
             await router.push(`/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`)
         } else {
-            await router.push(`/places/${value.value}`)
+            await router.push(`/places/${value?.value as string}`)
         }
     }
 
     return (
-        <Autocomplete
+        <Autocomplete<string | ApiType.Coordinates>
             className={styles.search}
             notFoundCaption={t('nothing-found')}
             placeholder={t('global-search-placeholder')}

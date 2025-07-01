@@ -26,7 +26,7 @@ interface PaginationProps<T> {
     onChangePage?: (page: number) => void
 }
 
-const Pagination: React.FC<PaginationProps<any>> = ({
+const Pagination = <T,>({
     currentPage = 1,
     totalItemsCount = 0,
     linkPart,
@@ -40,7 +40,7 @@ const Pagination: React.FC<PaginationProps<any>> = ({
     perPage = 4,
     neighbours = 2,
     onChangePage
-}) => {
+}: PaginationProps<T>) => {
     const pageNeighbours = Math.max(0, Math.min(neighbours, 2))
     const totalPages = Math.ceil(totalItemsCount / perPage)
 

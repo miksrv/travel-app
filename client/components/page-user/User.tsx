@@ -57,7 +57,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         setLastDate(undefined)
     }, [id])
 
-    const breadCrumbSchema: BreadcrumbList | any = {
+    const breadCrumbSchema: unknown | BreadcrumbList = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -75,7 +75,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         ]
     }
 
-    const userSchema: ProfilePage | any = {
+    const userSchema: unknown | ProfilePage = {
         '@context': 'https://schema.org',
         '@type': 'ProfilePage',
         dateCreated: formatDateISO(user?.created?.date),

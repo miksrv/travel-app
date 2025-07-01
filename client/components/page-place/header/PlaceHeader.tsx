@@ -136,6 +136,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     href={`/map#${place?.lat},${place?.lon},14`}
                                     title={t('open-on-map')}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Map'} />
                                     {t('open-on-map')}
                                 </Link>
@@ -146,6 +147,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     title={t('upload-photo')}
                                     onClick={onPhotoUploadClick}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Camera'} />
                                     {t('upload-photo')}
                                 </Link>
@@ -156,6 +158,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     title={t('change-cover')}
                                     onClick={onChangePlaceCoverClick}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Photo'} />
                                     {t('change-cover')}
                                 </Link>
@@ -166,6 +169,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     onClick={handleEditPlaceClick}
                                     title={t('edit')}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'EditLocation'} />
                                     {t('edit')}
                                 </Link>

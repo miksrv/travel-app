@@ -66,7 +66,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
         }
     }
 
-    const breadCrumbSchema: BreadcrumbList | any = {
+    const breadCrumbSchema: unknown | BreadcrumbList = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -84,7 +84,7 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
         ]
     }
 
-    const placeSchema: LocalBusiness | any = {
+    const placeSchema: unknown | LocalBusiness = {
         '@context': 'https://schema.org',
         '@type': 'LocalBusiness',
         address: {

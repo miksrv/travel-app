@@ -6,9 +6,9 @@ import Image, { StaticImageData } from 'next/image'
 
 import styles from './styles.module.sass'
 
-export type DropdownOption = {
+export type DropdownOption<T> = {
     title: string
-    value: any
+    value: T
     type?: string
     image?: StaticImageData
     description?: string
@@ -16,7 +16,7 @@ export type DropdownOption = {
 
 interface DropdownProps<T> {
     className?: string
-    options?: DropdownOption[]
+    options?: Array<DropdownOption<T>>
     loading?: boolean
     disabled?: boolean
     clearable?: boolean
@@ -29,13 +29,13 @@ interface DropdownProps<T> {
     value?: T
     minLength?: number
     leftIcon?: IconTypes
-    onSelect?: (option: T) => void
+    onSelect?: (option?: DropdownOption<T>) => void
     onSearch?: (value: string) => void
     onClear?: () => void
 }
 
 // TODO: If Enter key press and focus on the input field and options list not empty - select first option
-const Autocomplete: React.FC<DropdownProps<any>> = ({
+const Autocomplete = <T,>({
     className,
     options,
     disabled,
@@ -53,12 +53,12 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
     onSelect,
     onSearch,
     onClear
-}) => {
+}: DropdownProps<T>) => {
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
     const [localLoading, setLocalLoading] = useState<boolean>(false)
     const [isOpen, setIsOpen] = useState<boolean>(false)
-    const [selectedOption, setSelectedOption] = useState<DropdownOption | undefined>(undefined)
+    const [selectedOption, setSelectedOption] = useState<DropdownOption<T> | undefined>(undefined)
 
     const toggleDropdown = () => {
         setIsOpen(!isOpen)
@@ -101,7 +101,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         }
     }
 
-    const handleSelect = (option: DropdownOption | undefined) => {
+    const handleSelect = (option: DropdownOption<T> | undefined) => {
         if (selectedOption?.title !== option?.title) {
             setSelectedOption(option)
             setSearch(option?.title)
@@ -139,8 +139,10 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
         }
 
         if (value) {
-            setSearch(value.title)
-            setSelectedOption(options?.find(({ title }) => value === title) ?? value ?? undefined)
+            const foundOption = options?.find(({ value: v }) => v === value)
+
+            setSearch(foundOption?.title ?? '')
+            setSelectedOption(foundOption)
         }
     }, [value])
 
@@ -166,7 +168,7 @@ const Autocomplete: React.FC<DropdownProps<any>> = ({
                     <input
                         type={'text'}
                         value={search || ''}
-                        defaultValue={selectedOption?.title ?? value?.name}
+                        defaultValue={selectedOption?.title ?? ''}
                         className={styles.searchInput}
                         placeholder={placeholder ?? ''}
                         onMouseMove={(e) => e.stopPropagation()}

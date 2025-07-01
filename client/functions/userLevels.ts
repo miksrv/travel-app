@@ -94,10 +94,7 @@ export const levelImage = (level?: number): StaticImageData => {
         case 30:
             return rank30
 
-        case undefined: {
-            throw new Error('Not implemented yet: undefined case')
-        }
-
+        case undefined:
         default:
             return rank1
     }

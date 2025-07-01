@@ -117,7 +117,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     ...props
 }) => {
     const router = useRouter()
-    const mapRef = useRef<Map | any>(null)
+    const mapRef = useRef<Map>(null)
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
     const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
@@ -180,23 +180,30 @@ const InteractiveMap: React.FC<MapProps> = ({
     }
 
     const handleToggleFullscreen = async () => {
-        const mapElement = mapRef.current.getContainer()
+        const mapElement = mapRef?.current?.getContainer()
 
-        if (mapElement.requestFullscreen) {
+        if (mapElement?.requestFullscreen) {
             // Full screen mode supported
             if (!document.fullscreenElement) {
                 await mapElement.requestFullscreen()
             } else {
                 await document.exitFullscreen()
             }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
         } else if (mapElement.webkitRequestFullscreen) {
             // For Safari on iOS devices
-            const fullscreenElement =
-                (document as any).webkitFullscreenElement || (document as any).webkitCurrentFullScreenElement
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const fullscreenElement = document.webkitFullscreenElement || document.webkitCurrentFullScreenElement
             if (!fullscreenElement) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 await mapElement.webkitRequestFullscreen()
             } else {
-                await (document as any).webkitExitFullscreen()
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await document.webkitExitFullscreen()
             }
         }
     }

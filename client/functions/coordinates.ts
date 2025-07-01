@@ -123,9 +123,11 @@ const parseHemispheres = (h1: string, h2: string, h3: string, allowEmpty = false
 }
 
 export const CoordinatesD = {
-    create(latDeg: any, latIsSouth: any, lonDeg: any, lonIsWest: any) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    create(latDeg: number, latIsSouth: boolean, lonDeg: number, lonIsWest: boolean) {
         return {
-            equalTo: function (other: any) {
+            equalTo: function (other: ReturnType<typeof CoordinatesD.create>) {
                 return (
                     this.latDeg === other.latDeg &&
                     this.latIsSouth === other.latIsSouth &&
@@ -174,7 +176,7 @@ export const CoordinatesD = {
         if (hemispheres.swapLatLon) {
             ;[d1, d2] = [d2, d1]
         }
-        const coord = this.create(d1, hemispheres.latIsSouth, d2, hemispheres.lonIsWest)
+        const coord = this.create(d1, hemispheres.latIsSouth || false, d2, hemispheres.lonIsWest || false)
         if (coord.isValid()) {
             return {
                 coordinates: [coord]
@@ -190,9 +192,11 @@ export const CoordinatesD = {
 }
 
 export const CoordinatesDM = {
-    create(latDeg: any, latMin: any, latIsSouth: any, lonDeg: any, lonMin: any, lonIsWest: any) {
+    create(latDeg: number, latMin: number, latIsSouth: boolean, lonDeg: number, lonMin: number, lonIsWest: boolean) {
         return {
-            equalTo: function (other: any) {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            equalTo: function (other) {
                 return (
                     this.latDeg === other.latDeg &&
                     this.latMin === other.latMin &&
@@ -267,7 +271,14 @@ export const CoordinatesDM = {
             if (hemispheres.swapLatLon) {
                 ;[d1, m1, d2, m2] = [d2, m2, d1, m1]
             }
-            const coord = CoordinatesDM.create(d1, m1, hemispheres.latIsSouth, d2, m2, hemispheres.lonIsWest)
+            const coord = CoordinatesDM.create(
+                d1,
+                m1,
+                hemispheres.latIsSouth || false,
+                d2,
+                m2,
+                hemispheres.lonIsWest || false
+            )
             if (coord.isValid()) {
                 coords.push(coord)
             }
@@ -287,16 +298,18 @@ export const CoordinatesDM = {
 
 export const CoordinatesDMS = {
     create(
-        latDeg: any,
-        latMin: any,
-        latSec: any,
-        latIsSouth: any,
-        lonDeg: any,
-        lonMin: any,
-        lonSec: any,
-        lonIsWest: any
+        latDeg: number,
+        latMin: number,
+        latSec: number,
+        latIsSouth: boolean,
+        lonDeg: number,
+        lonMin: number,
+        lonSec: number,
+        lonIsWest: boolean
     ) {
         return {
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
             equalTo: function (other: any) {
                 return (
                     this.latDeg === other.latDeg &&
@@ -380,7 +393,16 @@ export const CoordinatesDMS = {
             if (hemispheres.swapLatLon) {
                 ;[d1, m1, s1, d2, m2, s2] = [d2, m2, s2, d1, m1, s1]
             }
-            const coord = CoordinatesDMS.create(d1, m1, s1, hemispheres.latIsSouth, d2, m2, s2, hemispheres.lonIsWest)
+            const coord = CoordinatesDMS.create(
+                d1,
+                m1,
+                s1,
+                hemispheres.latIsSouth || false,
+                d2,
+                m2,
+                s2,
+                hemispheres.lonIsWest || false
+            )
             if (coord.isValid()) {
                 coords.push(coord)
             }
@@ -398,9 +420,11 @@ export const CoordinatesDMS = {
 }
 
 export const CoordinatesDSigned = {
-    create(latDegSigned: any, lonDegSigned: any) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    create(latDegSigned: number, lonDegSigned: number) {
         return {
-            equalTo: function (other: any) {
+            equalTo: function (other: ReturnType<typeof CoordinatesDSigned.create>) {
                 return this.latDegSigned === other.latDegSigned && this.lonDegSigned === other.lonDegSigned
             },
             format: function () {

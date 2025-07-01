@@ -236,7 +236,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         setFilterOpenTitle('')
     }
 
-    const breadCrumbSchema: BreadcrumbList | any = {
+    const breadCrumbSchema: unknown | BreadcrumbList = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
