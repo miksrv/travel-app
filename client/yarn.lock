@@ -5619,7 +5619,7 @@ __metadata:
     sass: "npm:^1.89.2"
     schema-dts: "npm:^1.1.5"
     sharp: "npm:^0.34.3"
-    simple-react-ui-kit: "npm:^1.3.8"
+    simple-react-ui-kit: "npm:^1.5.7"
     ts-node: "npm:^10.9.2"
     typescript: "npm:5.8.3"
     typescript-eslint: "npm:^8.37.0"
@@ -10076,14 +10076,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"simple-react-ui-kit@npm:^1.3.8":
-  version: 1.3.8
-  resolution: "simple-react-ui-kit@npm:1.3.8"
+"simple-react-ui-kit@npm:^1.5.7":
+  version: 1.5.7
+  resolution: "simple-react-ui-kit@npm:1.5.7"
   dependencies:
     lodash-es: "npm:^4.17.21"
     react: "npm:^19.1.0"
     react-dom: "npm:^19.1.0"
-  checksum: 10c0/a6f8301daaa4866e29f94b51b2e706d0da7078459c422548fe8112337a01397b9762548417733efcb1e660ddbc1bce594cd4ca164a6ccaf5ded5763d41940295
+  checksum: 10c0/be6b9c7904b5b07920d477a0e48aa1c121ee2e53536a32a432852d8dd71ba610ee13b0044dba8a3aa67ce51dc177b3207391f543554ce194fc65864c4bcc9788
   languageName: node
   linkType: hard
 
