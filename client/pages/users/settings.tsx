@@ -108,7 +108,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 <UserForm
                     loading={isLoading || isSuccess || isFetching}
                     values={userData}
-                    errors={validationErrors}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
                 />

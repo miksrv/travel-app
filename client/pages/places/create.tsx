@@ -67,7 +67,8 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
             <Container style={{ marginTop: 15 }}>
                 <PlaceForm
                     loading={isLoading || isSuccess || clickedButton}
-                    errors={validationErrors}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
                 />

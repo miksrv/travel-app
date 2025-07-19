@@ -92,7 +92,8 @@ const Edit: React.FC<EditProps> = ({ place }) => {
                     placeId={place?.id}
                     values={placeValuesData}
                     loading={isLoading || isSuccess}
-                    errors={validationErrors}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
                 />

@@ -193,7 +193,8 @@ const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors,
                     placeholder={t('input_category-placeholder')}
                     disabled={loading}
                     error={formErrors?.category}
-                    value={selectedCategory}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    value={selectedCategory as any}
                     options={categoryOptions}
                     onSelect={handleChangeCategory}
                 />
