@@ -38,9 +38,7 @@ const Edit: React.FC<EditProps> = ({ place }) => {
         [error]
     )
 
-    const handleCancel = () => {
-        router.back()
-    }
+    const handleCancel = () => router.back()
 
     const handleSubmit = async (formData?: ApiType.Places.PostItemRequest) => {
         const title = formData?.title?.trim()

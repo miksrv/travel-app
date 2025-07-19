@@ -126,9 +126,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
                     <Popout
                         className={styles.contextMenu}
-                        icon={'VerticalDots'}
-                        size={'medium'}
-                        mode={'secondary'}
+                        trigger={
+                            <Button
+                                icon={'VerticalDots'}
+                                size={'medium'}
+                                mode={'secondary'}
+                            />
+                        }
                     >
                         <ul className={'contextListMenu'}>
                             <li>
