@@ -29,9 +29,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
         [error]
     )
 
-    const handleCancel = () => {
-        router.back()
-    }
+    const handleCancel = () => router.back()
 
     const handleSubmit = async (formData?: ApiType.Places.PostItemRequest) => {
         if (formData) {
