@@ -1,11 +1,12 @@
 import { setCookie } from 'cookies-next'
 
-import i18Config from '../next-i18next.config'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 import { ApiType } from '@/api'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import i18Config from '../next-i18next.config'
 
 type ApplicationStateProps = {
     showOverlay?: boolean
@@ -16,7 +17,7 @@ type ApplicationStateProps = {
 
 export const getStorageLocale = (): string | undefined =>
     typeof window !== 'undefined'
-        ? (LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any) ?? i18Config.i18n.defaultLocale)
+        ? (LocalStorage.getItem(LOCAL_STORAGE.LOCALE as 'LOCALE') ?? i18Config.i18n.defaultLocale)
         : i18Config.i18n.defaultLocale
 
 const applicationSlice = createSlice({
@@ -39,7 +40,7 @@ const applicationSlice = createSlice({
             state.locale = payload
         },
         setUserLocation: (state, { payload }: PayloadAction<ApiType.Coordinates>) => {
-            setCookie(LOCAL_STORAGE.LOCATION, `${payload.lat};${payload.lon}`)
+            void setCookie(LOCAL_STORAGE.LOCATION, `${payload.lat};${payload.lon}`)
 
             state.userLocation = payload
         },

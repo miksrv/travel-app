@@ -2,11 +2,12 @@
 
 import React, { useEffect } from 'react'
 
-import Notification from './Notification'
-import styles from './styles.module.sass'
-
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { deleteNotification, Notify, setReadNotification, setUnreadCounter } from '@/api/notificationSlice'
+
+import Notification from './Notification'
+
+import styles from './styles.module.sass'
 
 type SnackbarProps = object
 
@@ -28,10 +29,10 @@ const Snackbar: React.FC<SnackbarProps> = () => {
 
     useEffect(() => {
         data?.items?.forEach((item) => {
-            dispatch(Notify(item))
+            void dispatch(Notify(item))
         })
 
-        dispatch(setUnreadCounter(data?.count ?? 0))
+        void dispatch(setUnreadCounter(data?.count ?? 0))
     }, [data])
 
     return (

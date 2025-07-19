@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo, useState } from 'react'
+import { Container } from 'simple-react-ui-kit'
+
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { API, ApiType, isApiValidationErrors } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -28,14 +29,12 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
         [error]
     )
 
-    const handleCancel = () => {
-        router.back()
-    }
+    const handleCancel = () => router.back()
 
-    const handleSubmit = (formData?: ApiType.Places.PostItemRequest) => {
+    const handleSubmit = async (formData?: ApiType.Places.PostItemRequest) => {
         if (formData) {
             setClickedButton(true)
-            createPlace(formData)
+            await createPlace(formData)
         }
     }
 
@@ -43,7 +42,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
         setClickedButton(false)
 
         if (data?.id && isSuccess) {
-            router.push(`/places/${data.id}`)
+            void router.push(`/places/${data.id}`)
         }
     }, [isSuccess, data])
 
@@ -68,7 +67,8 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
             <Container style={{ marginTop: 15 }}>
                 <PlaceForm
                     loading={isLoading || isSuccess || clickedButton}
-                    errors={validationErrors}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
                 />

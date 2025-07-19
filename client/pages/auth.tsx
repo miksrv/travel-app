@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react'
+import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
+
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useSearchParams } from 'next/navigation'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Button, Container, Message, Spinner } from 'simple-react-ui-kit'
 
 import { API, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -35,7 +36,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
 
     useEffect(() => {
         if (isAuth) {
-            router.push('/')
+            void router.push('/')
         }
     })
 
@@ -47,25 +48,25 @@ const AuthPage: NextPage<AuthPageProps> = () => {
             if (returnPath) {
                 const returnLink = returnPath
 
-                LocalStorage.removeItem(LOCAL_STORAGE.RETURN_PATH as any)
+                LocalStorage.removeItem(LOCAL_STORAGE.RETURN_PATH as 'RETURN_PATH')
 
-                router.push(returnLink)
+                void router.push(returnLink)
             } else {
-                router.push('/')
+                void router.push('/')
             }
         }
     }, [data])
 
     useEffect(() => {
         if (code && service) {
-            serviceLogin({
+            void serviceLogin({
                 code,
                 service: service as ApiType.AuthService,
                 state: searchParams.get('state') ?? undefined,
                 device_id: searchParams.get('device_id') ?? undefined
             })
         } else {
-            router.push('/')
+            void router.push('/')
         }
     }, [])
 

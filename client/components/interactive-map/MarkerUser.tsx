@@ -2,10 +2,10 @@ import React from 'react'
 import { Circle, Marker } from 'react-leaflet'
 import Leaflet from 'leaflet'
 
-import styles from './styles.module.sass'
-
 import { ApiType } from '@/api'
 import userAvatar from '@/public/images/no-avatar.png'
+
+import styles from './styles.module.sass'
 
 interface MarkerUserProps {
     coordinates: ApiType.Coordinates

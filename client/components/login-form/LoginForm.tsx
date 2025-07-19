@@ -1,12 +1,11 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Button, Input, Message } from 'simple-react-ui-kit'
+
 import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Button, Input, Message } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiType, isApiValidationErrors, useAppDispatch } from '@/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
@@ -17,6 +16,8 @@ import { validateEmail } from '@/functions/validators'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
+
+import styles from './styles.module.sass'
 
 interface LoginFormProps {
     onClickRegistration?: () => void
@@ -69,20 +70,20 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleLoginButton = () => {
+    const handleLoginButton = async () => {
         if (validateForm() && formData) {
-            authLoginNative(formData)
+            await authLoginNative(formData)
         }
     }
 
-    const handleLoginServiceButton = (service: ApiType.AuthService) => {
+    const handleLoginServiceButton = async (service: ApiType.AuthService) => {
         setReturnPath(router.asPath)
-        authLoginService({ service })
+        await authLoginService({ service })
     }
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            handleLoginButton()
+            await handleLoginButton()
         }
     }
 
@@ -169,7 +170,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuccessLog
                     title={t('correct-errors-on-form')}
                 >
                     <ul className={'errorMessageList'}>
-                        {Object.values(formErrors || {}).map((item) =>
+                        {Object.values(formErrors || {}).map((item: string) =>
                             item.length ? <li key={`item${item}`}>{item}</li> : ''
                         )}
                     </ul>

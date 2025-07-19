@@ -1,19 +1,20 @@
 import React from 'react'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 import Lightbox, { Slide } from 'yet-another-react-lightbox'
+import { RenderFunction, RenderSlideProps } from 'yet-another-react-lightbox/dist/types'
 import Captions from 'yet-another-react-lightbox/plugins/captions'
 import Zoom from 'yet-another-react-lightbox/plugins/zoom'
 
-import 'yet-another-react-lightbox/plugins/captions.css'
-import 'yet-another-react-lightbox/styles.css'
-
-import styles from './styles.module.sass'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST } from '@/api'
 import ImageSlide from '@/components/photo-lightbox/ImageSlide'
 import UserAvatar from '@/components/user-avatar'
 import { formatDate } from '@/functions/helpers'
+
+import 'yet-another-react-lightbox/plugins/captions.css'
+import 'yet-another-react-lightbox/styles.css'
+import styles from './styles.module.sass'
 
 interface PhotoLightboxProps {
     photos?: ApiModel.Photo[] | ApiModel.PhotoMark[]
@@ -35,7 +36,7 @@ const PhotoLightbox: React.FC<PhotoLightboxProps> = ({ photos, photoIndex = 0, s
             index={photoIndex}
             plugins={[Captions, Zoom]}
             close={onCloseLightBox}
-            render={{ slide: ImageSlide as any }}
+            render={{ slide: ImageSlide as RenderFunction<RenderSlideProps> }}
             slides={photos?.map(
                 (photo) =>
                     ({

@@ -1,5 +1,6 @@
 import React, { useDebugValue, useEffect, useState } from 'react'
 
+import type { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
 
 export const useLocalStorage = <S>(
@@ -11,13 +12,13 @@ export const useLocalStorage = <S>(
     useDebugValue(state)
 
     useEffect(() => {
-        const item = LocalStorage.getItem(key as any)
+        const item = LocalStorage.getItem(key as keyof typeof LOCAL_STORAGE)
         setState((item ?? null) as S)
     }, [])
 
     useEffect(() => {
         if (state) {
-            LocalStorage.setItem(key as any, state as string | number)
+            LocalStorage.setItem(key as keyof typeof LOCAL_STORAGE, state as string | number)
         }
     }, [state])
 

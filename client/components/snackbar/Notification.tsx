@@ -1,14 +1,15 @@
 import React from 'react'
+import { cn, Icon } from 'simple-react-ui-kit'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-import { cn, Icon } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { ApiModel, IMG_HOST } from '@/api'
 import { formatDate } from '@/functions/helpers'
 import { levelImage } from '@/functions/userLevels'
+
+import styles from './styles.module.sass'
 
 interface NotificationProps extends ApiModel.Notification {
     showDate?: boolean

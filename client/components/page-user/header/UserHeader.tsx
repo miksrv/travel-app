@@ -1,10 +1,9 @@
 import React, { useState } from 'react'
+import { Button, Icon } from 'simple-react-ui-kit'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-import { Button, Icon } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { ApiModel, IMG_HOST, useAppSelector } from '@/api'
 import Header from '@/components/header'
@@ -14,6 +13,8 @@ import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo 
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import defaultAvatar from '@/public/images/no-avatar.png'
 import Progress from '@/ui/progress'
+
+import styles from './styles.module.sass'
 
 interface UserHeaderProps {
     user?: ApiModel.User

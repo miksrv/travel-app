@@ -2,7 +2,6 @@
     --letter-spacing: 0.00938em;
     --width-max: 1100px;
     --width-menu: 220px;
-    --modal-background: #ffffff;
     --menu-background-hover: rgba(255, 255, 255, 0.7);
     --icon-color-primary: #99a2ad;
     --icon-color-primary-hover: #939CA9;
@@ -19,11 +18,15 @@
     --link-color: #2688eb;
     --link-color-hover: #2483e4;
     --link-color-active: #237edd;
-    --overlay-background: rgba(242, 243, 252, 0.7);
 
     .leaflet-container {
         background-color: var(--input-background-color);
     }
+
+    /* Element Heights for `size` props */
+    --size-small: 24px;
+    --size-medium: 32px;
+    --size-large: 38px;
 
     /* Primary Colors */
     --color-contrast: #FFF;
@@ -51,14 +54,18 @@
     /* Text and Typography */
     --font-size: 14px;
     --font-size-small: 12px;
-    --font-family: -apple-system, system-ui, 'Helvetica Neue', Roboto, sans-serif;
+    --font-family:
+        -apple-system, BlinkMacSystemFont, 'Segoe UI (Custom)', Roboto, 'Helvetica Neue', 'Open Sans (Custom)',
+        system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
     --text-color-primary: rgba(0, 0, 0, 0.9);
     --text-color-secondary: #818c99;
     --text-color-secondary-hover: #939CA9;
 
     /* Layout and Containers */
-    --body-background: #ebedf0;
     --border-radius: 4px;
+    --body-background: #ebedf0;
+    --modal-background: #ffffff;
+    --overlay-background: rgba(242, 243, 252, 0.7);
     --container-shadow: inset 0 0 0 0.5px rgba(0, 0, 0, 0.12);
     --container-background-color: #fff;
     --container-error-background-color: #FFE9E9;
@@ -99,10 +106,10 @@
     --popout-shadow: 0 0 2px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.08);
 
     /* Table */
-    --table-font-size: var(--font-size-small);
-    --table-header-background: #f2f3f5;
+    --table-header-background: #f9f9fb;
     --table-header-background-hover: rgba(255, 255, 255, 0.1);
     --table-border-color: var(--input-border-color);
+    --table-row-box-shadow: inset 0 -1px var(--input-border-color);
 
     /* Skeleton */
     --skeleton-background-animation: linear-gradient( 90deg, transparent, rgba(0, 0, 0, 0.04), transparent);

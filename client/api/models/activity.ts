@@ -1,9 +1,9 @@
+import { DateTime } from '@/api/types'
+
 import { Photo } from './photo'
 import { Place } from './place'
 import { Rating } from './rating'
 import { User } from './user'
-
-import { DateTime } from '@/api/types'
 
 export type Activity = {
     type: ActivityEnum

@@ -1,5 +1,4 @@
-import type { LOCAL_STORAGE } from '@/functions/constants'
-import { LOCAL_STORAGE_KEY } from '@/functions/constants'
+import { LOCAL_STORAGE, LOCAL_STORAGE_KEY } from '@/functions/constants'
 import { isValidJSON } from '@/functions/helpers'
 
 const _getLocalStorage = (): undefined | typeof LOCAL_STORAGE => {
@@ -18,10 +17,10 @@ export const getItem = (key: keyof typeof LOCAL_STORAGE): string => _getLocalSto
 
 export const setItem = (key: keyof typeof LOCAL_STORAGE, value: string | number | undefined) => {
     const data = _getLocalStorage()
-    const updateData: any | typeof LOCAL_STORAGE = {
+    const updateData = {
         ...data,
         [key]: value
-    }
+    } as typeof LOCAL_STORAGE
 
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(updateData))
 }

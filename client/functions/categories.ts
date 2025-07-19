@@ -96,6 +96,10 @@ export const categoryImage = (category?: ApiModel.Categories): StaticImageData =
         case ApiModel.Categories.camping:
             return camping
 
+        case undefined: {
+            throw new Error('Not implemented yet: undefined case')
+        }
+
         default:
             return nature
     }

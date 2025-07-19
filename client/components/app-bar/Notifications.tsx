@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button, Popout, Spinner } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { deleteAllNotifications, Notify, setUnreadCounter } from '@/api/notificationSlice'
 import Notification from '@/components/snackbar/Notification'
 import Counter from '@/ui/counter'
+
+import styles from './styles.module.sass'
 
 type NotificationsProps = object
 
@@ -48,7 +49,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
     useEffect(() => {
         if (isSuccess) {
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'clearNotification',
                     title: '',
@@ -103,18 +104,21 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
     return (
         <Popout
-            icon={'Bell'}
-            mode={'outline'}
-            size={'medium'}
             className={styles.notifyPopup}
             onOpenChange={setNotifyShow}
-            action={
-                notifyCounter > 0 && (
-                    <Counter
-                        className={styles.notifyCounter}
-                        value={notifyCounter}
-                    />
-                )
+            trigger={
+                <Button
+                    mode={'outline'}
+                    icon={'Bell'}
+                    size={'medium'}
+                >
+                    {notifyCounter > 0 && (
+                        <Counter
+                            className={styles.notifyCounter}
+                            value={notifyCounter}
+                        />
+                    )}
+                </Button>
             }
         >
             <>

@@ -1,6 +1,6 @@
-import { User } from './user'
-
 import { DateTime } from '@/api/types'
+
+import { User } from './user'
 
 export type Rating = {
     value: number

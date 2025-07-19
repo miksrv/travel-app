@@ -1,10 +1,10 @@
 import { HYDRATE } from 'next-redux-wrapper'
+import type { Action, PayloadAction } from '@reduxjs/toolkit'
+import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 import { ApiType } from '@/api'
 import { RootState } from '@/api/store'
 import { encodeQueryData } from '@/functions/helpers'
-import type { Action, PayloadAction } from '@reduxjs/toolkit'
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react'
 
 type Maybe<T> = T | void
 
@@ -136,7 +136,7 @@ export const API = createApi({
 
         /** Controller: Mail **/
         mailGetUnsubscribe: builder.query<string, Maybe<string>>({
-            query: (mailId) => `mail/unsubscribe?mail=${mailId}`,
+            query: (mailId) => `mail/unsubscribe?mail=${mailId || ''}`,
             transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
 
@@ -145,10 +145,10 @@ export const API = createApi({
             query: (params) => `location/${params.id}?type=${params.type}`
         }),
         locationGetGeoSearch: builder.mutation<ApiType.Location.GeoSearchResponse, Maybe<string>>({
-            query: (searchString) => `location/geosearch?text=${searchString}`
+            query: (searchString) => `location/geosearch?text=${searchString || ''}`
         }),
         locationGetSearch: builder.mutation<ApiType.Location.SearchResponse, Maybe<string>>({
-            query: (searchString) => `location/search?text=${searchString}`
+            query: (searchString) => `location/search?text=${searchString || ''}`
         }),
         locationPutCoordinates: builder.mutation<void, Maybe<ApiType.Coordinates>>({
             query: (params) => ({
@@ -216,7 +216,7 @@ export const API = createApi({
             transformErrorResponse: (response) => (response.data as APIErrorType).messages.error
         }),
         photosGetList: builder.query<ApiType.Photos.ListResponse, Maybe<ApiType.Photos.ListRequest>>({
-            providesTags: (result, error, arg) => [{ id: arg?.place, type: 'Photos' }],
+            providesTags: (result, error, arg) => [{ id: arg?.place || arg?.author, type: 'Photos' }],
             query: (params) => `photos${encodeQueryData(params)}`
         }),
 
@@ -317,7 +317,7 @@ export const API = createApi({
             query: () => 'tags'
         }),
         tagsGetSearch: builder.mutation<ApiType.Tags.SearchResponse, Maybe<string>>({
-            query: (searchString) => `tags/search?text=${searchString}`
+            query: (searchString) => `tags/search?text=${searchString || ''}`
         }),
 
         /** Controller: User **/
@@ -347,7 +347,7 @@ export const API = createApi({
             }),
             transformErrorResponse: (response) => response.data
         }),
-        usersPostUploadAvatar: builder.mutation<ApiType.Users.UploadAvatarResponse, any>({
+        usersPostUploadAvatar: builder.mutation<ApiType.Users.UploadAvatarResponse, { formData: FormData }>({
             query: (data) => ({
                 body: data.formData,
                 method: 'POST',
@@ -371,7 +371,7 @@ export const API = createApi({
             transformErrorResponse: (response) => response.data
         })
     }),
-
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     extractRehydrationInfo(action, { reducerPath }): any {
         if (isHydrateAction(action)) {
             return action?.payload?.[reducerPath]

@@ -1,9 +1,10 @@
 import { deleteCookie, setCookie } from 'cookies-next'
 
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+
 import { ApiModel, ApiType } from '@/api'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 type AuthStateProps = {
     isAuth?: boolean
@@ -13,10 +14,10 @@ type AuthStateProps = {
 }
 
 export const getStorageToken = (): string =>
-    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN as any) : ''
+    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_TOKEN as 'AUTH_TOKEN') : ''
 
 export const getStorageSession = (): string | undefined =>
-    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_SESSION as any) : ''
+    typeof window !== 'undefined' ? LocalStorage.getItem(LOCAL_STORAGE.AUTH_SESSION as 'AUTH_SESSION') : ''
 
 const authSlice = createSlice({
     initialState: {
@@ -32,12 +33,12 @@ const authSlice = createSlice({
             state.isAuth = payload?.auth ?? false
 
             if (payload?.auth && !!payload.token) {
-                setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
+                void setCookie(LOCAL_STORAGE.AUTH_TOKEN, true)
 
-                LocalStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN as any, payload.token)
+                LocalStorage.setItem(LOCAL_STORAGE.AUTH_TOKEN as 'AUTH_TOKEN', payload.token)
             } else {
-                deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-                LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as any)
+                void deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
+                LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as 'AUTH_TOKEN')
             }
         },
         logout: (state) => {
@@ -45,8 +46,8 @@ const authSlice = createSlice({
             state.user = undefined
             state.isAuth = false
 
-            deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
-            LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as any)
+            void deleteCookie(LOCAL_STORAGE.AUTH_TOKEN)
+            LocalStorage.removeItem(LOCAL_STORAGE.AUTH_TOKEN as 'AUTH_TOKEN')
         },
         saveSession: (state, { payload }: PayloadAction<string>) => {
             state.session = payload

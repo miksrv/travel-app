@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import type { BreadcrumbList, ProfilePage } from 'schema-dts'
+import { Button } from 'simple-react-ui-kit'
+
 import Head from 'next/head'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 import { NextSeo } from 'next-seo'
-import type { BreadcrumbList, ProfilePage } from 'schema-dts'
-import { Button } from 'simple-react-ui-kit'
 
 import { API, ApiModel, IMG_HOST, SITE_LINK } from '@/api'
 import ActivityList from '@/components/activity-list/ActivityList'
@@ -56,7 +57,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         setLastDate(undefined)
     }, [id])
 
-    const breadCrumbSchema: BreadcrumbList | any = {
+    const breadCrumbSchema: unknown | BreadcrumbList = {
         '@context': 'https://schema.org',
         '@type': 'BreadcrumbList',
         itemListElement: [
@@ -74,7 +75,7 @@ const User: React.FC<UserProps> = ({ id, user, photosList, photosCount }) => {
         ]
     }
 
-    const userSchema: ProfilePage | any = {
+    const userSchema: unknown | ProfilePage = {
         '@context': 'https://schema.org',
         '@type': 'ProfilePage',
         dateCreated: formatDateISO(user?.created?.date),

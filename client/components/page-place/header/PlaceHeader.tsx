@@ -1,16 +1,17 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import dayjs from 'dayjs'
+import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
+
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
-import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { API, ApiModel, ApiType, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import BookmarkButton from '@/components/bookmark-button'
+
+import styles from './styles.module.sass'
 
 const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
     ssr: false
@@ -77,7 +78,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
     useEffect(() => {
         if (removeSuccess) {
-            handleBackLinkClick()
+            void handleBackLinkClick()
         }
     }, [removeSuccess])
 
@@ -125,9 +126,13 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
 
                     <Popout
                         className={styles.contextMenu}
-                        icon={'VerticalDots'}
-                        size={'medium'}
-                        mode={'secondary'}
+                        trigger={
+                            <Button
+                                icon={'VerticalDots'}
+                                size={'medium'}
+                                mode={'secondary'}
+                            />
+                        }
                     >
                         <ul className={'contextListMenu'}>
                             <li>
@@ -135,6 +140,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     href={`/map#${place?.lat},${place?.lon},14`}
                                     title={t('open-on-map')}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Map'} />
                                     {t('open-on-map')}
                                 </Link>
@@ -145,6 +151,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     title={t('upload-photo')}
                                     onClick={onPhotoUploadClick}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Camera'} />
                                     {t('upload-photo')}
                                 </Link>
@@ -155,6 +162,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     title={t('change-cover')}
                                     onClick={onChangePlaceCoverClick}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'Photo'} />
                                     {t('change-cover')}
                                 </Link>
@@ -165,6 +173,7 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                                     onClick={handleEditPlaceClick}
                                     title={t('edit')}
                                 >
+                                    {/* eslint-disable-next-line react/jsx-max-depth */}
                                     <Icon name={'EditLocation'} />
                                     {t('edit')}
                                 </Link>
@@ -212,9 +221,9 @@ const PlaceHeader: React.FC<PlaceHeaderProps> = ({ place, coverHash, onPhotoUplo
                 onReject={() => {
                     setShowRemoveDialog(false)
                 }}
-                onAccept={() => {
+                onAccept={async () => {
                     if (place?.id) {
-                        removePlace(place.id)
+                        void removePlace(place.id)
                     }
 
                     setShowRemoveDialog(false)

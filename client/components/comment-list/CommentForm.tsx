@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel } from '@/api'
 import UserAvatar from '@/components/user-avatar'
 import Textarea from '@/ui/textarea'
+
+import styles from './styles.module.sass'
 
 interface CommentFormProps {
     placeId: string
@@ -23,15 +24,15 @@ const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, us
 
     const [submit, { isLoading }] = API.useCommentsPostMutation()
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
         if (event.key === 'Enter' && comment && comment.length > 1) {
             event.preventDefault()
-            handleSubmit()
+            await handleSubmit()
         }
     }
 
-    const handleSubmit = () => {
-        submit({
+    const handleSubmit = async () => {
+        await submit({
             answerId,
             comment,
             placeId

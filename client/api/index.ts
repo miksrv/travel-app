@@ -6,7 +6,7 @@ import * as ApiType from './types'
 interface ApiResponseError<T> {
     status: number
     error: number
-    messages: Record<keyof T, any>
+    messages: Record<keyof T, string>
 }
 
 export const IMG_HOST = process.env.NEXT_PUBLIC_IMG_HOST || process.env.NEXT_PUBLIC_API_HOST
@@ -16,6 +16,6 @@ export const isApiValidationErrors = <T>(response: unknown): response is ApiResp
     typeof response === 'object' &&
     response != null &&
     'messages' in response &&
-    typeof (response as any).messages === 'object'
+    typeof (response as ApiResponseError<string>).messages === 'object'
 
 export { API, ApiModel, ApiType, useAppDispatch, useAppSelector }

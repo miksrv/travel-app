@@ -16,6 +16,7 @@ export const truncateText = (text?: string, maxLength: number = 300) => {
     return text.slice(0, lastSpaceIndex)
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const encodeQueryData = (data: any): string => {
     if (typeof data === 'undefined' || !data) {
         return ''

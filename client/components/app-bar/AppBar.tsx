@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react'
 import useGeolocation from 'react-hook-geolocation'
-import { useTranslation } from 'next-i18next'
 import { Button, cn, Icon } from 'simple-react-ui-kit'
 
-import Notifications from './Notifications'
-import Search from './Search'
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setUserLocation } from '@/api/applicationSlice'
@@ -14,6 +11,11 @@ import AppAuthChecker from '@/components/app-auth-checker'
 import Logo from '@/components/app-bar/Logo'
 import UserMenu from '@/components/app-bar/UserMenu'
 import { round } from '@/functions/helpers'
+
+import Notifications from './Notifications'
+import Search from './Search'
+
+import styles from './styles.module.sass'
 
 interface HeaderProps {
     fullSize?: boolean
@@ -50,7 +52,7 @@ const AppBar: React.FC<HeaderProps> = ({ fullSize, onMenuClick }) => {
             }
 
             dispatch(setUserLocation(data))
-            updateLocation(data)
+            void updateLocation(data)
         }
     }, [geolocation.latitude, geolocation.longitude])
 

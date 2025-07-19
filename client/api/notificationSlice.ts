@@ -1,5 +1,6 @@
-import { ApiModel } from '@/api'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
+
+import { ApiModel } from '@/api'
 
 type SnackbarStateProps = {
     list: ApiModel.Notification[]

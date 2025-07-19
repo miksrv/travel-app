@@ -1,14 +1,15 @@
 import React from 'react'
+import { cn } from 'simple-react-ui-kit'
+
 import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
-import { cn } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { ApiModel, IMG_HOST } from '@/api'
 import { minutesAgo } from '@/functions/helpers'
 import defaultAvatar from '@/public/images/no-avatar.png'
+
+import styles from './styles.module.sass'
 
 type SizeType = 'small' | 'tiny' | 'medium'
 

@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react'
-import Image, { StaticImageData } from 'next/image'
 import { cn, Icon } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Image, { StaticImageData } from 'next/image'
 
 import OptionsList from '@/ui/dropdown/OptionsList'
+
+import styles from './styles.module.sass'
 
 export type DropdownOption = {
     key: string | number
@@ -27,7 +28,7 @@ interface DropdownProps<T> {
     onOpen?: () => void
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = ({
+const Dropdown: React.FC<DropdownProps<never>> = ({
     className,
     required,
     options,

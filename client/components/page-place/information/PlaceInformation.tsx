@@ -1,11 +1,10 @@
 import React from 'react'
 import { TFunction } from 'i18next'
+import { Button, Container, Icon } from 'simple-react-ui-kit'
+
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Button, Container, Icon } from 'simple-react-ui-kit'
-
-import styles from './styles.module.sass'
 
 import { ApiModel } from '@/api'
 import MapLinks from '@/components/map-links'
@@ -14,6 +13,8 @@ import UserAvatarGroup from '@/components/user-avatar-group'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
+
+import styles from './styles.module.sass'
 
 const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
     ssr: false

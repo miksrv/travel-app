@@ -1,8 +1,8 @@
+import { DateTime } from '@/api/types'
+
 import { Address } from './address'
 import { Category } from './category'
 import { User } from './user'
-
-import { DateTime } from '@/api/types'
 
 export type Place = {
     id: string

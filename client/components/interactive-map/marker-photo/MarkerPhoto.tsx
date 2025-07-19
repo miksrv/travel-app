@@ -4,9 +4,9 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 import Leaflet from 'leaflet'
 
-import styles from './styles.module.sass'
-
 import { ApiModel, IMG_HOST } from '@/api'
+
+import styles from './styles.module.sass'
 
 type MarkerPhotoProps = {
     photo: ApiModel.PhotoMark

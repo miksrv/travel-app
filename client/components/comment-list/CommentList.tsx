@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button, cn } from 'simple-react-ui-kit'
 
-import CommentListItem from './CommentListItem'
-import styles from './styles.module.sass'
+import { useTranslation } from 'next-i18next'
 
 import { ApiModel, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import CommentForm from '@/components/comment-list/CommentForm'
+
+import CommentListItem from './CommentListItem'
+
+import styles from './styles.module.sass'
 
 interface CommentListProps {
     placeId: string

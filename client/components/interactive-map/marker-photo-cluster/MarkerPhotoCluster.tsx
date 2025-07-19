@@ -4,9 +4,9 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 import Leaflet from 'leaflet'
 
-import styles from './styles.module.sass'
-
 import { ApiModel, ApiType, IMG_HOST } from '@/api'
+
+import styles from './styles.module.sass'
 
 interface MarkerPhotoClusterProps {
     marker: ApiModel.PhotoMark

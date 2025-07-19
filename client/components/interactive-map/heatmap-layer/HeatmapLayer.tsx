@@ -14,6 +14,7 @@ const HeatmapLayer: React.FC = () => {
 
     useEffect(() => {
         if (usersData?.items && usersData.items.length > 0 && !heatmapLayerRef.current) {
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             heatmapLayerRef.current = (L as any)
                 .heatLayer(usersData.items, {
                     gradient: { 0.1: '#2688eb', 0.5: '#4bb34b', 1: '#e64646' },

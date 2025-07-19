@@ -1,7 +1,7 @@
+import { ActivityType, DateTime } from '@/api/types'
+
 import { Place } from './place'
 import { UserLevel } from './userLevel'
-
-import { ActivityType, DateTime } from '@/api/types'
 
 export type Notification = {
     id: string

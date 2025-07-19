@@ -1,12 +1,12 @@
 'use client'
 
 import React from 'react'
-import dynamic from 'next/dynamic'
 import { cn, Spinner } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
-
+import dynamic from 'next/dynamic'
 import { IMarkdownEditor } from '@uiw/react-markdown-editor'
+
+import styles from './styles.module.sass'
 
 const MarkdownEditor = dynamic(() => import('@uiw/react-markdown-editor'), {
     loading: () => (

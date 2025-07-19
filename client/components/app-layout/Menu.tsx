@@ -1,12 +1,13 @@
 import React from 'react'
-import Link from 'next/link'
-import { useTranslation } from 'next-i18next'
 import { Icon, IconTypes } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Link from 'next/link'
+import { useTranslation } from 'next-i18next'
 
 import { useAppDispatch } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
+
+import styles from './styles.module.sass'
 
 export type MenuItemType = {
     icon?: IconTypes

@@ -4,11 +4,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import * as ReactLeaflet from 'react-leaflet'
 import { LatLngBounds, LatLngExpression, Map, MapOptions } from 'leaflet'
 import isEqual from 'lodash-es/isEqual'
-import { useRouter } from 'next/dist/client/router'
 import { Button, Spinner } from 'simple-react-ui-kit'
 
-import 'leaflet.heat'
-import 'leaflet/dist/leaflet.css'
+import { useRouter } from 'next/dist/client/router'
+
+import { ApiModel, ApiType } from '@/api'
+import { LOCAL_STORAGE } from '@/functions/constants'
+import { round } from '@/functions/helpers'
+import useLocalStorage from '@/functions/hooks/useLocalStorage'
 
 import ContextMenu from './context-menu/ContextMenu'
 import CoordinatesControl from './coordinates-control/CoordinatesControl'
@@ -23,12 +26,11 @@ import SearchControl from './search-control/SearchControl'
 import CategoryControl from './CategoryControl'
 import LayerSwitcherControl from './LayerSwitcherControl'
 import MarkerUser from './MarkerUser'
-import styles from './styles.module.sass'
 
-import { ApiModel, ApiType } from '@/api'
-import { LOCAL_STORAGE } from '@/functions/constants'
-import { round } from '@/functions/helpers'
-import useLocalStorage from '@/functions/hooks/useLocalStorage'
+import 'leaflet.heat'
+
+import 'leaflet/dist/leaflet.css'
+import styles from './styles.module.sass'
 
 export const MapAdditionalLayers = {
     Heatmap: 'Heatmap',
@@ -115,7 +117,7 @@ const InteractiveMap: React.FC<MapProps> = ({
     ...props
 }) => {
     const router = useRouter()
-    const mapRef = useRef<Map | any>(null)
+    const mapRef = useRef<Map>(null)
 
     const [readyStorage, setReadyStorage] = useState<boolean>(false)
     const [coordinatesOpen, setCoordinatesOpen] = useState<boolean>(false)
@@ -178,23 +180,30 @@ const InteractiveMap: React.FC<MapProps> = ({
     }
 
     const handleToggleFullscreen = async () => {
-        const mapElement = mapRef.current.getContainer()
+        const mapElement = mapRef?.current?.getContainer()
 
-        if (mapElement.requestFullscreen) {
+        if (mapElement?.requestFullscreen) {
             // Full screen mode supported
             if (!document.fullscreenElement) {
                 await mapElement.requestFullscreen()
             } else {
                 await document.exitFullscreen()
             }
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
         } else if (mapElement.webkitRequestFullscreen) {
             // For Safari on iOS devices
-            const fullscreenElement =
-                (document as any).webkitFullscreenElement || (document as any).webkitCurrentFullScreenElement
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore
+            const fullscreenElement = document.webkitFullscreenElement || document.webkitCurrentFullScreenElement
             if (!fullscreenElement) {
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
                 await mapElement.webkitRequestFullscreen()
             } else {
-                await (document as any).webkitExitFullscreen()
+                // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+                // @ts-ignore
+                await document.webkitExitFullscreen()
             }
         }
     }
@@ -301,6 +310,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <ReactLeaflet.TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />

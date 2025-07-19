@@ -3,6 +3,7 @@ import { Provider } from 'react-redux'
 import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import utc from 'dayjs/plugin/utc'
+
 import { AppProps } from 'next/app'
 import { useRouter } from 'next/dist/client/router'
 import Head from 'next/head'
@@ -10,18 +11,19 @@ import Head from 'next/head'
 import { appWithTranslation, useTranslation } from 'next-i18next'
 import { ThemeProvider } from 'next-themes'
 
-import '@/styles/globals.sass'
-import 'dayjs/locale/ru'
-import '@/styles/dark.css'
-import '@/styles/light.css'
-
-import i18Config from '../next-i18next.config'
-
 import { wrapper } from '@/api/store'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import * as LocalStorage from '@/functions/localstorage'
 
-const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as any)
+import i18Config from '../next-i18next.config'
+
+import 'dayjs/locale/ru'
+
+import '@/styles/dark.css'
+import '@/styles/light.css'
+import '@/styles/globals.sass'
+
+const locale = LocalStorage.getItem(LOCAL_STORAGE.LOCALE as 'LOCALE')
 
 const App = ({ Component, pageProps }: AppProps) => {
     const router = useRouter()
@@ -30,7 +32,7 @@ const App = ({ Component, pageProps }: AppProps) => {
 
     useEffect(() => {
         if (i18n.language !== locale && i18Config.i18n.locales.includes(locale) && router.pathname !== '/404') {
-            router.replace(router.asPath, router.asPath, { locale })
+            void router.replace(router.asPath, router.asPath, { locale })
         }
     }, [])
 

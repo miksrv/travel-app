@@ -1,10 +1,11 @@
 import React, { useEffect, useMemo } from 'react'
+import { Container } from 'simple-react-ui-kit'
+
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { NextSeo } from 'next-seo'
-import { Container } from 'simple-react-ui-kit'
 
 import { API, ApiType, isApiValidationErrors, useAppDispatch, useAppSelector } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
@@ -40,8 +41,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
         router.back()
     }
 
-    const handleSubmit = (formData?: ApiType.Users.PatchRequest) => {
-        updateProfile({
+    const handleSubmit = async (formData?: ApiType.Users.PatchRequest) => {
+        await updateProfile({
             id: authSlice.user?.id,
             name: formData?.name !== userData?.name ? formData?.name : undefined,
             newPassword:
@@ -59,15 +60,15 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
     useEffect(() => {
         if (authSlice.isAuth === false) {
-            router.push('/users')
+            void router.push('/users')
         }
     }, [authSlice?.isAuth])
 
     useEffect(() => {
         if (isSuccess) {
-            router.replace(`/users/${authSlice.user?.id}`)
+            void router.replace(`/users/${authSlice.user?.id}`)
 
-            dispatch(
+            void dispatch(
                 Notify({
                     id: 'userFormSuccess',
                     title: '',
@@ -107,7 +108,8 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
                 <UserForm
                     loading={isLoading || isSuccess || isFetching}
                     values={userData}
-                    errors={validationErrors}
+                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                    errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
                 />

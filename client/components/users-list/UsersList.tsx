@@ -1,14 +1,16 @@
 import React from 'react'
 import { TFunction } from 'i18next'
-import Image from 'next/image'
 import { Container, ContainerProps } from 'simple-react-ui-kit'
+
+import Image from 'next/image'
 
 import { ApiModel } from '@/api'
 import Reputation from '@/components/reputation'
 import UserAvatar from '@/components/user-avatar'
-import styles from '@/components/users-list/styles.module.sass'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import Progress from '@/ui/progress'
+
+import styles from '@/components/users-list/styles.module.sass'
 
 interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
     t: TFunction

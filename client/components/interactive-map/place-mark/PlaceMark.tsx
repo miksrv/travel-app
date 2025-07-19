@@ -4,10 +4,10 @@ import React from 'react'
 import { Marker } from 'react-leaflet'
 import Leaflet from 'leaflet'
 
-import styles from './styles.module.sass'
-
 import { ApiType } from '@/api'
 import { convertDMS } from '@/functions/coordinates'
+
+import styles from './styles.module.sass'
 
 interface PlaceMarkProps extends ApiType.Coordinates {
     onClick?: () => void

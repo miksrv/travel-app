@@ -3,20 +3,19 @@ import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 
 import { NextButton, PrevButton, usePrevNextButtons } from './CarouselButtons'
+
 import styles from './styles.module.sass'
 
 interface CarouselProps {
     options?: EmblaOptionsType
-    children?: any
+    children?: React.ReactNode
 }
 
 // #TODO Remove any type
 const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
-    const [emblaRef, emblaApi] = useEmblaCarousel(options as any)
+    const [emblaRef, emblaApi] = useEmblaCarousel(options)
 
-    const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(
-        emblaApi as any
-    )
+    const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
 
     return (
         <div className={styles.carousel}>

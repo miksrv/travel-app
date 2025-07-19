@@ -1,6 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useTranslation } from 'next-i18next'
 import { Button, Checkbox, cn, Container } from 'simple-react-ui-kit'
+
+import { useTranslation } from 'next-i18next'
+
+import RadioButton from '@/ui/radio-button'
 
 import {
     MapAdditionalLayers,
@@ -10,9 +13,8 @@ import {
     MapObjects,
     MapObjectsType
 } from './InteractiveMap'
-import styles from './styles.module.sass'
 
-import RadioButton from '@/ui/radio-button'
+import styles from './styles.module.sass'
 
 interface LayerSwitcherControlProps {
     currentLayer?: MapLayersType

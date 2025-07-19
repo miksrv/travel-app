@@ -1,9 +1,10 @@
 'use client'
 
 import React from 'react'
+import { cn } from 'simple-react-ui-kit'
+
 import Link from 'next/link'
 import { useTheme } from 'next-themes'
-import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 

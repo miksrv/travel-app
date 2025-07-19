@@ -1,16 +1,17 @@
 'use client'
 
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
-import { useRouter } from 'next/dist/client/router'
-import { useTranslation } from 'next-i18next'
 import { Button, Input, Message } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import { useRouter } from 'next/dist/client/router'
+import { useTranslation } from 'next-i18next'
 
 import { API, ApiType, isApiValidationErrors, useAppDispatch } from '@/api'
 import { closeAuthDialog } from '@/api/applicationSlice'
 import { login } from '@/api/authSlice'
 import { validateEmail } from '@/functions/validators'
+
+import styles from './styles.module.sass'
 
 type FormDataType = ApiType.Auth.PostRegistrationRequest & {
     repeat_password?: string
@@ -67,15 +68,15 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         if (validateForm() && formData) {
-            registration(formData)
+            void registration(formData)
         }
     }
 
-    const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
-            handleSubmit()
+            await handleSubmit()
         }
     }
 
@@ -86,7 +87,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
     useEffect(() => {
         if (data?.auth) {
             dispatch(login(data))
-            router.push(`/users/${data.user?.id}`)
+            void router.push(`/users/${data.user?.id}`)
             dispatch(closeAuthDialog())
         }
     }, [data])
@@ -99,7 +100,7 @@ const RegistrationForm: React.FC<RegistrationFormProps> = ({ onClickLogin }) => 
                     title={t('correct-errors-on-form')}
                 >
                     <ul className={'errorMessageList'}>
-                        {Object.values(formErrors || {}).map((item) =>
+                        {Object.values(formErrors || {}).map((item: string) =>
                             item.length ? <li key={`item${item}`}>{item}</li> : ''
                         )}
                     </ul>

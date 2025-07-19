@@ -1,10 +1,11 @@
 import React from 'react'
-import Link from 'next/link'
 import { Container, ContainerProps } from 'simple-react-ui-kit'
 
-import styles from './styles.module.sass'
+import Link from 'next/link'
 
 import { ApiModel } from '@/api'
+
+import styles from './styles.module.sass'
 
 interface TagsListProps extends Pick<ContainerProps, 'title'> {
     tags?: ApiModel.Tag[]

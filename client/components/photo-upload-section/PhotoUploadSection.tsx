@@ -1,6 +1,7 @@
 import React from 'react'
-import { useTranslation } from 'next-i18next'
 import { cn } from 'simple-react-ui-kit'
+
+import { useTranslation } from 'next-i18next'
 
 import styles from './styles.module.sass'
 

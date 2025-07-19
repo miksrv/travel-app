@@ -1,11 +1,12 @@
 import React from 'react'
-import { useTranslation } from 'next-i18next'
 import { Container } from 'simple-react-ui-kit'
+
+import { useTranslation } from 'next-i18next'
+
+import { ApiModel } from '@/api'
 
 import ActivityListItem from './ActivityListItem'
 import ActivityListItemLoader from './ActivityListItemLoader'
-
-import { ApiModel } from '@/api'
 
 interface PlacesListProps {
     activities?: ApiModel.Activity[]
