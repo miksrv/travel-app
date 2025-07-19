@@ -310,6 +310,7 @@ const InteractiveMap: React.FC<MapProps> = ({
                     <ReactLeaflet.TileLayer
                         attribution='&copy; <a href="https://www.mapbox.com">Mapbox</a> '
                         url='https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v11/tiles/{z}/{x}/{y}?access_token={accessToken}'
+                        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
                         // @ts-ignore
                         accessToken={process.env.NEXT_PUBLIC_MAPBOX_TOKEN}
                     />
