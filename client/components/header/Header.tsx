@@ -26,6 +26,7 @@ const Header: React.FC<HeaderProps> = ({ title, backLink, className, attachedBot
                 className={styles.backLink}
             />
         )}
+
         {userData?.id && (
             <UserAvatar
                 className={styles.userAvatar}
@@ -33,10 +34,12 @@ const Header: React.FC<HeaderProps> = ({ title, backLink, className, attachedBot
                 size={'medium'}
             />
         )}
+
         <header>
             <h1>{title}</h1>
             <Breadcrumbs {...props} />
         </header>
+
         {actions && <div className={styles.actions}>{actions}</div>}
     </Container>
 )
