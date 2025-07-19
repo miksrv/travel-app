@@ -28,7 +28,7 @@ interface DropdownProps<T> {
     onOpen?: () => void
 }
 
-const Dropdown: React.FC<DropdownProps<any>> = ({
+const Dropdown: React.FC<DropdownProps<never>> = ({
     className,
     required,
     options,

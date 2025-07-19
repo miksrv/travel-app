@@ -308,8 +308,7 @@ export const CoordinatesDMS = {
         lonIsWest: boolean
     ) {
         return {
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
             equalTo: function (other: any) {
                 return (
                     this.latDeg === other.latDeg &&
