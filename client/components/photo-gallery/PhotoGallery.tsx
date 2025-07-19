@@ -178,9 +178,13 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                             {!hideActions && isAuth && (
                                 <Popout
                                     className={styles.actions}
-                                    mode={'outline'}
-                                    size={'small'}
-                                    icon={'VerticalDots'}
+                                    trigger={
+                                        <Button
+                                            mode={'outline'}
+                                            size={'small'}
+                                            icon={'VerticalDots'}
+                                        />
+                                    }
                                 >
                                     <ul className={styles.actionMenu}>
                                         <li>
