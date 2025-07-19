@@ -17,11 +17,11 @@ interface SearchControlProps {
 const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
     const { t } = useTranslation()
 
-    const [foundCoords, setFoundCoords] = useState<DropdownOption[]>()
+    const [foundCoords, setFoundCoords] = useState<Array<DropdownOption<unknown>>>()
 
     const [geoSearch, { data, isLoading }] = API.useLocationGetGeoSearchMutation()
 
-    const locationOptions: DropdownOption[] = useMemo(
+    const locationOptions: Array<DropdownOption<unknown>> = useMemo(
         () =>
             data?.items?.map((item) => {
                 const address: string[] = []
@@ -119,7 +119,10 @@ const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }
             options={foundCoords ?? locationOptions}
             onSearch={handleSearchLocation}
             onClear={onClear}
-            onSelect={(option) => option?.value && onSelectResult?.(option.value, foundCoords ? 17 : 12, !!foundCoords)}
+            onSelect={(option) =>
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                option?.value && onSelectResult?.(option.value as any, foundCoords ? 17 : 12, !!foundCoords)
+            }
         />
     )
 }
