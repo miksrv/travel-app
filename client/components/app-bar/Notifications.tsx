@@ -104,18 +104,21 @@ const Notifications: React.FC<NotificationsProps> = () => {
 
     return (
         <Popout
-            icon={'Bell'}
-            mode={'outline'}
-            size={'medium'}
             className={styles.notifyPopup}
             onOpenChange={setNotifyShow}
-            action={
-                notifyCounter > 0 && (
-                    <Counter
-                        className={styles.notifyCounter}
-                        value={notifyCounter}
-                    />
-                )
+            trigger={
+                <Button
+                    mode={'outline'}
+                    icon={'Bell'}
+                    size={'medium'}
+                >
+                    {notifyCounter > 0 && (
+                        <Counter
+                            className={styles.notifyCounter}
+                            value={notifyCounter}
+                        />
+                    )}
+                </Button>
             }
         >
             <>

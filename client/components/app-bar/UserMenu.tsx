@@ -19,9 +19,8 @@ interface UserMenuProps {
 
 const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
     <Popout
-        mode={'outline'}
         className={styles.userMenuPopout}
-        action={
+        trigger={
             <UserAvatar
                 size={'medium'}
                 user={user}
