@@ -136,7 +136,7 @@ const PlaceInformation: React.FC<PlaceInformationProps> = ({ t, place }) => (
 
             <Button
                 className={styles.openMapButton}
-                stretched={true}
+                style={{ width: '100%' }}
                 mode={'primary'}
                 link={`/map#${place?.lat},${place?.lon},14`}
                 disabled={!place?.lat || !place?.lon}

@@ -189,12 +189,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                     <ul className={styles.actionMenu}>
                                         <li>
                                             <Button
-                                                stretched={true}
                                                 icon={'Rotate'}
                                                 size={'small'}
                                                 mode={'outline'}
                                                 label={t('to-turn')}
                                                 disabled={!!photoLoadingID}
+                                                style={{ width: '100%' }}
                                                 onClick={() =>
                                                     handleRotateClick(photo.id, photo?.placeId === 'temporary')
                                                 }
@@ -202,12 +202,12 @@ const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                         </li>
                                         <li>
                                             <Button
-                                                stretched={true}
                                                 icon={'Close'}
                                                 size={'small'}
                                                 mode={'outline'}
                                                 label={t('delete')}
                                                 disabled={!!photoLoadingID}
+                                                style={{ width: '100%' }}
                                                 onClick={() => handleRemoveClick(photo.id)}
                                             />
                                         </li>

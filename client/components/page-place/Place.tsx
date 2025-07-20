@@ -229,10 +229,9 @@ const Place: React.FC<PlaceProps> = ({ place, photoList, ratingCount, nearPlaces
                     <Button
                         size={'medium'}
                         mode={'secondary'}
-                        stretched={true}
                         noIndex={true}
                         link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
-                        style={{ marginTop: '5px' }}
+                        style={{ marginTop: '5px', width: '100%' }}
                     >
                         {t('all-places-nearby')}
                     </Button>

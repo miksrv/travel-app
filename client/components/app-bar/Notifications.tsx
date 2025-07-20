@@ -154,7 +154,7 @@ const Notifications: React.FC<NotificationsProps> = () => {
                         size={'small'}
                         mode={'secondary'}
                         label={t('clear')}
-                        stretched={true}
+                        style={{ width: '100%' }}
                         disabled={loadingClear || notifyFetching || !notifyData?.items?.length}
                         loading={loadingClear || (notifyFetching && !!notifyData?.items?.length)}
                         onClick={handleClearNotificationsClick}
