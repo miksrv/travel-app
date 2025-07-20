@@ -115,10 +115,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             <Button
                 size={'medium'}
                 mode={'secondary'}
-                stretched={true}
                 link={'/places'}
                 label={t('all-geotags')}
-                style={{ margin: '5px 0' }}
+                style={{ margin: '5px 0 0', width: '100%' }}
             />
 
             <UsersList

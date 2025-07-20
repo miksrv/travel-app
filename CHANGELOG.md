@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.25
+
+### Patch Changes
+
+- Updated UI Libraries
+- Fixed styles for Buttons as Link
+
 ## 1.4.24
 
 ### Patch Changes
