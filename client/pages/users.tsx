@@ -9,9 +9,7 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import UsersList from '@/components/users-list'
+import { AppLayout, Header, UsersList } from '@/components'
 import Pagination from '@/ui/pagination'
 
 const USERS_PER_PAGE = 30
@@ -49,10 +47,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                 currentPage={t('users')}
             />
 
-            <UsersList
-                t={t}
-                users={usersList}
-            />
+            <UsersList users={usersList} />
 
             <Container className={'paginationContainer'}>
                 <div>

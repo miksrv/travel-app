@@ -11,11 +11,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import ActivityList from '@/components/activity-list'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
+import { ActivityList, AppLayout, Header, UsersList } from '@/components'
 import PlacesListItem from '@/components/places-list/PlacesListItem'
-import UsersList from '@/components/users-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
 import Carousel from '@/ui/carousel'
@@ -121,7 +118,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             />
 
             <UsersList
-                t={t}
                 title={t('active-users')}
                 users={usersList}
                 action={

@@ -8,9 +8,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
+import { AppLayout, Header } from '@/components'
 import CategoriesList from '@/components/categories-list'
-import Header from '@/components/header'
 
 interface CategoriesPageProps {
     categories: ApiModel.Category[]
