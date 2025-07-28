@@ -13,13 +13,10 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
-import PhotoLightbox from '@/components/photo-lightbox'
+import { AppLayout, Header, MapObjectsTypeEnum, PhotoLightbox } from '@/components'
 import { round } from '@/functions/helpers'
 
-const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
+const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
     ssr: false
 })
 
@@ -28,9 +25,9 @@ type MapPageProps = object
 const ENABLE_POI_CLUSTERIZATION = false
 
 const MapPage: NextPage<MapPageProps> = () => {
+    const { t, i18n } = useTranslation()
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const { t, i18n } = useTranslation()
 
     const location = useAppSelector((state) => state.application.userLocation)
     const isAuth = useAppSelector((state) => state.auth.isAuth)
@@ -45,7 +42,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     // TODO: Categories and categories? Please refactoring this
     const [categories, setCategories] = useState<ApiModel.Categories[]>()
     const [mapCategories, setMapCategories] = useState<ApiModel.Categories[]>()
-    const [mapType, setMapType] = useState<MapObjectsType>()
+    const [mapType, setMapType] = useState<MapObjectsTypeEnum>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [mapZoom, setMapZoom] = useState<number>()
 

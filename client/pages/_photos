@@ -15,7 +15,7 @@
 // import { API } from '@/api'
 // import { Photo, Poi } from '@/api/types'
 //
-// import AppLayout from '@/components/app-layout'
+// import { AppLayout } from '@/components'
 // import PhotoGallery from '@/components/photo-gallery'
 // import PhotoLightbox from '@/components/photo-lightbox'
 //

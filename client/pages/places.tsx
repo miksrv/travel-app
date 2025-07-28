@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import type { BreadcrumbList } from 'schema-dts'
-import { Button, Container } from 'simple-react-ui-kit'
+import { Button, Container, Dialog } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -12,15 +12,13 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch } from '@/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
+import { AppLayout, Header } from '@/components'
 import PlacesFilterPanel from '@/components/places-filter-panel'
 import type { PlacesFilterType } from '@/components/places-filter-panel/types'
 import PlacesList from '@/components/places-list'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
-import Dialog from '@/ui/dialog'
 import Pagination from '@/ui/pagination'
 
 const DEFAULT_SORT = ApiType.SortFields.Updated
@@ -330,7 +328,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Dialog
                 contentHeight={'306px'}
-                header={filterOpenTitle || t('filters')}
+                title={filterOpenTitle || t('filters')}
                 open={filtersDialogOpen}
                 backLinkCaption={t('back')}
                 showBackLink={filtersOptionsOpen}
