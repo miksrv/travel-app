@@ -7,7 +7,7 @@ import useClientOnly from '@/functions/hooks/useClientOnly'
 
 import styles from './styles.module.sass'
 
-const ThemeSwitcher: React.FC = () => {
+export const ThemeSwitcher: React.FC = () => {
     const isClient = useClientOnly()
     const { theme, setTheme } = useTheme()
 
@@ -24,5 +24,3 @@ const ThemeSwitcher: React.FC = () => {
         />
     ) : null
 }
-
-export default ThemeSwitcher
