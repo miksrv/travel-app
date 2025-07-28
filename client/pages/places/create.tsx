@@ -10,8 +10,7 @@ import { NextSeo } from 'next-seo'
 import { API, ApiType, isApiValidationErrors } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
+import { AppLayout, Header } from '@/components'
 import PlaceForm from '@/components/place-form'
 
 type CreatePlacePageProps = object
