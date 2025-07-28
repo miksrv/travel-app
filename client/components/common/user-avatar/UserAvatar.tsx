@@ -5,30 +5,17 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
-import { ApiModel, IMG_HOST } from '@/api'
-import { minutesAgo } from '@/functions/helpers'
 import defaultAvatar from '@/public/images/no-avatar.png'
+
+import { AvatarImage } from './AvatarImage'
+import { UserAvatarProps } from './types'
+import { getDimension } from './utils'
 
 import styles from './styles.module.sass'
 
-type SizeType = 'small' | 'tiny' | 'medium'
-
-export interface UserAvatarProps {
-    className?: string
-    user?: ApiModel.User
-    size?: SizeType
-    caption?: string | React.ReactNode
-    loading?: boolean
-    showName?: boolean
-    disableLink?: boolean
-    hideOnlineIcon?: boolean
-}
-
-const getDimension = (size?: SizeType) => (size === 'medium' ? 36 : size === 'tiny' ? 32 : 20)
-
-const UserAvatar: React.FC<UserAvatarProps> = (props) => {
+export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
+    const { t } = useTranslation('components.user-avatar')
     const { className, user, size, caption, showName, disableLink } = props
-    const { t } = useTranslation()
 
     return (
         <div className={cn(styles.userAvatar, className)}>
@@ -47,7 +34,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
                     <Link
                         className={styles.avatarLink}
                         href={`/users/${user.id}`}
-                        title={`${t('user-profile')} ${user.name}`}
+                        title={`${t('user-profile', { defaultValue: 'Профиль путешественника' })} ${user.name}`}
                         style={{
                             height: getDimension(size),
                             width: getDimension(size)
@@ -70,7 +57,7 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
                 <div className={cn(styles.info, size === 'medium' ? styles.medium : styles.small)}>
                     <Link
                         href={`/users/${user.id}`}
-                        title={`${t('user-profile')} ${user.name}`}
+                        title={`${t('user-profile', { defaultValue: 'Профиль путешественника' })} ${user.name}`}
                     >
                         {user.name}
                     </Link>
@@ -80,27 +67,3 @@ const UserAvatar: React.FC<UserAvatarProps> = (props) => {
         </div>
     )
 }
-
-// TODO: Move to separate component
-const AvatarImage: React.FC<UserAvatarProps> = ({ user, size, hideOnlineIcon }) => (
-    <>
-        <Image
-            alt={''}
-            className={styles.avatarImage}
-            src={user?.avatar ? `${IMG_HOST}${user.avatar}` : defaultAvatar.src}
-            width={getDimension(size)}
-            height={getDimension(size)}
-        />
-
-        <div
-            aria-hidden={true}
-            className={styles.avatarBorder}
-        />
-
-        {!hideOnlineIcon && user?.activity?.date && minutesAgo(user.activity.date) <= 15 && (
-            <div className={styles.online} />
-        )}
-    </>
-)
-
-export default UserAvatar
