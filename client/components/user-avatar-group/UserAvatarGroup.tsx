@@ -4,8 +4,8 @@ import { cn } from 'simple-react-ui-kit'
 import { Trans } from 'next-i18next'
 
 import { ApiModel } from '@/api'
-import UserAvatar from '@/components/user-avatar'
-import { UserAvatarProps } from '@/components/user-avatar/UserAvatar'
+
+import { UserAvatar, UserAvatarProps } from '../common/user-avatar'
 
 import styles from './styles.module.sass'
 

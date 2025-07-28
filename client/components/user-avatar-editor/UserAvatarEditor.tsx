@@ -6,6 +6,7 @@ import { useTranslation } from 'next-i18next'
 
 import { API, ApiType, IMG_HOST, useAppDispatch } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
+import PhotoUploadSection from '@/components/photo-upload-section'
 import Dialog from '@/ui/dialog'
 
 import 'react-image-crop/src/ReactCrop.scss'
@@ -152,7 +153,6 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                 showBackLink={!!uploadedFile}
                 actions={
                     <Button
-                        size={'small'}
                         mode={'primary'}
                         label={t('save')}
                         onClick={handleSaveCover}
@@ -177,11 +177,7 @@ const UserAvatarEditor: React.FC<UserAvatarProps> = ({ onSaveAvatar }) => {
                                     onChange={handleSelectedFilesUpload}
                                 />
 
-                                <Button
-                                    icon={'Camera'}
-                                    mode={'primary'}
-                                    size={'medium'}
-                                    label={t('upload')}
+                                <PhotoUploadSection
                                     disabled={uploadLoading}
                                     onClick={handlePhotoUploadClick}
                                 />
