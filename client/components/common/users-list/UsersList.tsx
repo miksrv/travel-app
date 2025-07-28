@@ -1,24 +1,26 @@
 import React from 'react'
-import { TFunction } from 'i18next'
 import { Container, ContainerProps } from 'simple-react-ui-kit'
 
 import Image from 'next/image'
+import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
 import Reputation from '@/components/reputation'
-import UserAvatar from '@/components/user-avatar'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import Progress from '@/ui/progress'
 
-import styles from '@/components/users-list/styles.module.sass'
+import { UserAvatar } from '../user-avatar'
+
+import styles from './styles.module.sass'
 
 interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
-    t: TFunction
     users?: ApiModel.User[]
 }
 
-const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
-    users?.length ? (
+export const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
+    const { t } = useTranslation('components.users-list')
+
+    return users?.length ? (
         <Container
             {...props}
             style={{ marginTop: 15 }}
@@ -41,7 +43,7 @@ const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
                                     width={16}
                                     height={16}
                                 />
-                                {user.levelData?.level} {t('level')}
+                                {user.levelData?.level} {t('level', { defaultValue: 'Уровень' })}
                             </>
                         }
                     />
@@ -64,7 +66,6 @@ const UsersList: React.FC<UsersListProps> = ({ t, users, ...props }) =>
             ))}
         </Container>
     ) : (
-        <Container className={'emptyList'}>{t('nothing-here-yet')}</Container>
+        <Container className={'emptyList'}>{t('nothing-here-yet', { defaultValue: 'Тут пока ничего нет' })}</Container>
     )
-
-export default UsersList
+}
