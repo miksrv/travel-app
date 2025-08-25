@@ -1,11 +1,10 @@
 import React from 'react'
-import { Button } from 'simple-react-ui-kit'
+import { Button, Dialog, DialogProps } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next'
 
 import { useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import Dialog, { DialogProps } from '@/ui/dialog'
 
 import 'react-image-crop/src/ReactCrop.scss'
 import styles from './styles.module.sass'
@@ -56,14 +55,12 @@ const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
 
             <div className={styles.bottomActions}>
                 <Button
-                    size={'small'}
                     mode={'secondary'}
                     onClick={onReject}
                     label={rejectText ?? t('confirmation-dialog-reject')}
                 />
 
                 <Button
-                    size={'small'}
                     variant={'negative'}
                     mode={'primary'}
                     onClick={onAccept}
