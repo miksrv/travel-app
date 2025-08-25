@@ -1,0 +1,35 @@
+.markerPhotoCluster
+    border-radius: var(--border-radius)
+    border: 1px solid #FFF
+    object-fit: cover
+    background-image: url('/images/no-image.svg')
+    background-position: center
+    background-size: cover
+    background-color: var(--input-background-color)
+    width: 32px !important
+    height: 32px !important
+    margin-left: -20px !important
+    margin-top: -28px !important
+    position: relative
+
+    &:hover
+        z-index: 10000 !important
+        box-shadow: 0 0 1px 1px #ffb700
+
+    & > img
+        border-radius: var(--border-radius)
+        width: 100% !important
+        height: 100% !important
+        object-fit: cover
+
+    & > div
+        position: absolute
+        bottom: 0
+        left: 0
+        font-size: 0.7em
+        color: #FFF
+        width: 100%
+        text-align: center
+        background: linear-gradient(to bottom, transparent 0%, rgba(0, 0, 0, 0.7) 100%)
+        border-bottom-right-radius: var(--border-radius)
+        border-bottom-left-radius: var(--border-radius)
