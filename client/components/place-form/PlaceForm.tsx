@@ -9,18 +9,18 @@ import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
+import { ContentEditor } from '@/components'
 import PhotoGallery from '@/components/photo-gallery'
 import PhotoUploadSection from '@/components/photo-upload-section'
 import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
 import { categoryImage } from '@/functions/categories'
 import ChipsSelect from '@/ui/chips-select'
-import ContentEditor from '@/ui/content-editor'
 import Dropdown, { DropdownOption } from '@/ui/dropdown'
 import ScreenSpinner from '@/ui/screen-spinner'
 
 import styles from './styles.module.sass'
 
-const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
+const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
     ssr: false
 })
 

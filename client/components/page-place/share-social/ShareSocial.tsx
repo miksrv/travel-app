@@ -15,17 +15,17 @@ import {
     WhatsappIcon,
     WhatsappShareButton
 } from 'react-share'
-import { Container, Spinner } from 'simple-react-ui-kit'
+import { Container, Dialog, Spinner } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import UserAvatar from '@/components/user-avatar'
 import { addDecimalPoint, formatDate } from '@/functions/helpers'
-import Dialog from '@/ui/dialog'
 import Rating from '@/ui/rating'
+
+import { UserAvatar } from '../../common/user-avatar'
 
 import styles from './styles.module.sass'
 
@@ -138,7 +138,6 @@ const ShareSocial: React.FC<SocialRatingProps> = ({ placeId, placeUrl }) => {
             </div>
 
             <Dialog
-                header={t('rating-history')}
                 open={openRatingHistory}
                 onCloseDialog={() => handleToggleRatingHistory(false)}
             >

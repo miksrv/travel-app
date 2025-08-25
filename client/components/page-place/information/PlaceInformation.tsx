@@ -8,15 +8,16 @@ import Link from 'next/link'
 
 import { ApiModel } from '@/api'
 import MapLinks from '@/components/map-links'
-import UserAvatar from '@/components/user-avatar'
 import UserAvatarGroup from '@/components/user-avatar-group'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
 
+import { UserAvatar } from '../../common/user-avatar'
+
 import styles from './styles.module.sass'
 
-const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
+const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
     ssr: false
 })
 

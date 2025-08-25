@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST, useAppSelector } from '@/api'
-import Header from '@/components/header'
+import { Header } from '@/components'
 import Reputation from '@/components/reputation'
 import UserAvatarEditor from '@/components/user-avatar-editor'
 import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/functions/helpers'
