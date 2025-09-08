@@ -13,19 +13,19 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header, MapObjectsTypeEnum, PhotoLightbox } from '@/components'
+import { AppLayout, Header, MapObjectsTypeEnum, PhotoLightbox } from '@/components/common'
 import { round } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
     ssr: false
 })
 
-type MapPageProps = object
-
+// Experiment to enable/disable POI clusterization on the map
 const ENABLE_POI_CLUSTERIZATION = false
 
-const MapPage: NextPage<MapPageProps> = () => {
+const MapPage: NextPage<object> = () => {
     const { t, i18n } = useTranslation()
+
     const router = useRouter()
     const dispatch = useAppDispatch()
 
@@ -227,7 +227,7 @@ const MapPage: NextPage<MapPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<MapPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

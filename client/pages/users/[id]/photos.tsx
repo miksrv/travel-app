@@ -9,8 +9,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header, PhotoGallery } from '@/components'
-import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import { AppLayout, Header, PhotoGallery } from '@/components/common'
+import { UserPagesEnum, UserTabs } from '@/components/pages/user'
 import Pagination from '@/ui/pagination'
 
 export const PHOTOS_PER_PAGE = 32

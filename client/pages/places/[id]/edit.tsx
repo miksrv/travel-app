@@ -10,8 +10,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, isApiValidationErrors, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import PlaceForm from '@/components/place-form'
+import { AppLayout, Header } from '@/components/common'
+import { PlaceForm } from '@/components/pages/place'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { equalsArrays } from '@/functions/helpers'
 
@@ -21,6 +21,7 @@ interface PlaceEditPageProps {
 
 const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
     const { t, i18n } = useTranslation()
+
     const router = useRouter()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')

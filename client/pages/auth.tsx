@@ -16,13 +16,12 @@ import { LOCAL_STORAGE } from '@/functions/constants'
 import useLocalStorage from '@/functions/hooks/useLocalStorage'
 import * as LocalStorage from '@/functions/localstorage'
 
-type AuthPageProps = object
+const AuthPage: NextPage<object> = () => {
+    const { t } = useTranslation()
 
-const AuthPage: NextPage<AuthPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
     const searchParams = useSearchParams()
-    const { t } = useTranslation()
     const [returnPath] = useLocalStorage<string>(LOCAL_STORAGE.RETURN_PATH)
 
     const service = searchParams.get('service')
@@ -113,7 +112,7 @@ const AuthPage: NextPage<AuthPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<AuthPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

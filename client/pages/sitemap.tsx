@@ -10,13 +10,11 @@ type SitemapDynamicPage = {
     update: string
 }
 
-type SiteMapProps = object
-
-const SiteMap: NextPage<SiteMapProps> = () => <></>
+const SiteMap: NextPage<object> = () => <></>
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<SiteMapProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const { data } = await store.dispatch(API.endpoints.sitemapGetList.initiate())
 
             const staticPages = ['map', 'places', 'users', 'users/levels', 'categories']

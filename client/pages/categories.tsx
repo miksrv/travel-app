@@ -8,8 +8,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import CategoriesList from '@/components/categories-list'
+import { AppLayout, Header } from '@/components/common'
+import { CategoriesList } from '@/components/pages/categories'
 
 interface CategoriesPageProps {
     categories: ApiModel.Category[]
@@ -50,10 +50,7 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
                 currentPage={t('categories')}
             />
 
-            <CategoriesList
-                t={t}
-                categories={categories}
-            />
+            <CategoriesList categories={categories} />
         </AppLayout>
     )
 }

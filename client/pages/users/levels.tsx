@@ -10,8 +10,7 @@ import { NextSeo } from 'next-seo'
 import { API, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import UserAvatarGroup from '@/components/user-avatar-group'
+import { AppLayout, Header, UserAvatarGroup } from '@/components/common'
 import { levelImage } from '@/functions/userLevels'
 
 interface LevelsPageProps {
@@ -20,6 +19,7 @@ interface LevelsPageProps {
 
 const LevelsPage: NextPage<LevelsPageProps> = ({ levels }) => {
     const { t, i18n } = useTranslation()
+
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     return (

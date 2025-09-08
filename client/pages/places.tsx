@@ -12,10 +12,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch } from '@/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import PlacesFilterPanel from '@/components/places-filter-panel'
-import type { PlacesFilterType } from '@/components/places-filter-panel/types'
-import PlacesList from '@/components/places-list'
+import { AppLayout, Header, PlacesList } from '@/components/common'
+import { PlaceFilterPanel, PlacesFilterType } from '@/components/pages/place'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
@@ -63,9 +61,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     placesCount,
     placesList
 }) => {
+    const { t, i18n } = useTranslation()
+
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const { t, i18n } = useTranslation()
 
     const [filterOpenTitle, setFilterOpenTitle] = useState<string>('')
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
@@ -335,7 +334,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 onBackClick={handleFiltersBackLink}
                 onCloseDialog={handleFiltersDialogClose}
             >
-                <PlacesFilterPanel
+                <PlaceFilterPanel
                     sort={sort}
                     order={order}
                     category={category}

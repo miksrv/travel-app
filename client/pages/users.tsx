@@ -9,7 +9,7 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header, UsersList } from '@/components'
+import { AppLayout, Header, UsersList } from '@/components/common'
 import Pagination from '@/ui/pagination'
 
 const USERS_PER_PAGE = 30

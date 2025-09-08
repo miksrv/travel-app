@@ -10,14 +10,13 @@ import { NextSeo } from 'next-seo'
 import { API, ApiType, isApiValidationErrors } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import PlaceForm from '@/components/place-form'
+import { AppLayout, Header } from '@/components/common'
+import { PlaceForm } from '@/components/pages/place'
 
-type CreatePlacePageProps = object
-
-const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
-    const router = useRouter()
+const CreatePlacePage: NextPage<object> = () => {
     const { t } = useTranslation()
+
+    const router = useRouter()
 
     const [clickedButton, setClickedButton] = useState<boolean>(false)
 
@@ -78,7 +77,7 @@ const CreatePlacePage: NextPage<CreatePlacePageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<CreatePlacePageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

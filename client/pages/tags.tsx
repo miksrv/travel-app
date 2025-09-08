@@ -8,8 +8,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import TagsList from '@/components/tags-list'
+import { AppLayout, Header } from '@/components/common'
+import { TagList } from '@/components/pages/tags'
 import { dateToUnixTime } from '@/functions/helpers'
 
 interface TagsPageProps {
@@ -66,17 +66,17 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
                 currentPage={t('hashtags')}
             />
 
-            <TagsList
+            <TagList
                 title={t('last-used')}
                 tags={topUpdatedTags}
             />
 
-            <TagsList
+            <TagList
                 title={t('most-popular')}
                 tags={topPopularTags}
             />
 
-            <TagsList
+            <TagList
                 title={t('other')}
                 tags={otherTags}
             />

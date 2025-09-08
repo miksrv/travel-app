@@ -12,9 +12,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ActivityList, AppLayout, PhotoGallery } from '@/components'
-import UserHeader from '@/components/page-user/header'
-import UserTabs, { UserPagesEnum } from '@/components/page-user/tabs'
+import { ActivityList, AppLayout, PhotoGallery } from '@/components/common'
+import { UserHeader, UserPagesEnum, UserTabs } from '@/components/pages/user'
 import { formatDateISO } from '@/functions/helpers'
 
 interface UserPageProps {

@@ -9,9 +9,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import UserTabs from '@/components/page-user/tabs'
-import PlacesList from '@/components/places-list'
+import { AppLayout, Header, PlacesList } from '@/components/common'
+import { UserPagesEnum, UserTabs } from '@/components/pages/user'
 import Pagination from '@/ui/pagination'
 
 import styles from '@/components/page-user/styles.module.sass'
@@ -65,7 +64,7 @@ const UserPlacesPage: React.FC<UserPlacesPageProps> = ({ id, user, currentPage }
 
             <UserTabs
                 user={user}
-                currentPage={'places'}
+                currentPage={UserPagesEnum.PLACES}
             />
 
             <PlacesList

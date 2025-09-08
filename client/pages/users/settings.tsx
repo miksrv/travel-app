@@ -11,16 +11,15 @@ import { API, ApiType, isApiValidationErrors, useAppDispatch, useAppSelector } f
 import { setLocale } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header } from '@/components'
-import UserForm from '@/components/user-form'
+import { AppLayout, Header } from '@/components/common'
+import { UserForm } from '@/components/pages/user'
 import ScreenSpinner from '@/ui/screen-spinner'
 
-type SettingsUserPageProps = object
+const SettingsUserPage: NextPage<object> = () => {
+    const { t } = useTranslation()
 
-const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
     const dispatch = useAppDispatch()
     const router = useRouter()
-    const { t } = useTranslation()
 
     const authSlice = useAppSelector((state) => state.auth)
 
@@ -119,7 +118,7 @@ const SettingsUserPage: NextPage<SettingsUserPageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<SettingsUserPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

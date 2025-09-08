@@ -11,11 +11,10 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { ActivityList, AppLayout, Header, UsersList } from '@/components'
-import PlacesListItem from '@/components/places-list/PlacesListItem'
+import { ActivityList, AppLayout, Header, PlacesListItem, UsersList } from '@/components/common'
+import { Carousel } from '@/components/ui'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
-import Carousel from '@/ui/carousel'
 
 interface IndexPageProps {
     placesList: ApiModel.Place[]

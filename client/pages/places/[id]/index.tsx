@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { BreadcrumbList, LocalBusiness } from 'schema-dts'
-import { Button } from 'simple-react-ui-kit'
+import { Button, Container } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
 import Head from 'next/head'
@@ -11,20 +11,19 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, PhotoGallery } from '@/components'
-import Comments from '@/components/page-place/comments'
-import PlaceDescription from '@/components/page-place/description'
-import PlaceHeader from '@/components/page-place/header'
-import PlaceInformation from '@/components/page-place/information'
-import PhotoUploader from '@/components/photo-uploader/PhotoUploader'
-import PlaceCoverEditor from '@/components/place-cover-editor'
-import { PlaceCoverEditorHandle } from '@/components/place-cover-editor/PlaceCoverEditor'
-import PlacesListItem from '@/components/places-list/PlacesListItem'
+import { AppLayout, PhotoGallery, PhotoUploader, PlacesListItem } from '@/components/common'
+import {
+    PlaceCommentList,
+    PlaceCoverEditor,
+    PlaceCoverEditorRefProps,
+    PlaceDescription,
+    PlaceHeader,
+    PlaceInformation,
+    PlaceShareButtons
+} from '@/components/pages/place'
+import { Carousel } from '@/components/ui'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { formatDateUTC, removeMarkdown, truncateText } from '@/functions/helpers'
-import Carousel from '@/ui/carousel'
-
-import ShareSocial from './share-social'
 
 const NEAR_PLACES_COUNT = 10
 
@@ -37,9 +36,17 @@ interface PlacePageProps {
 
 const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, nearPlaces }) => {
     const { t, i18n } = useTranslation()
+
     const dispatch = useAppDispatch()
 
-    const placeCoverEditorRef = useRef<PlaceCoverEditorHandle>(null)
+    const { data: commentListData, isLoading: commentListLoading } = API.useCommentsGetListQuery(
+        {
+            place: place?.id
+        },
+        { skip: !place?.id }
+    )
+
+    const placeCoverEditorRef = useRef<PlaceCoverEditorRefProps>(null)
     const inputFileRef = useRef<HTMLInputElement>(null)
 
     const [coverHash, setCoverHash] = useState<number | undefined>()
@@ -192,12 +199,9 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 onPhotoUploadClick={handleUploadPhotoClick}
             />
 
-            <PlaceInformation
-                t={t}
-                place={place}
-            />
+            <PlaceInformation place={place} />
 
-            <ShareSocial
+            <PlaceShareButtons
                 placeId={place?.id}
                 placeUrl={pagePlaceUrl}
             />
@@ -222,7 +226,16 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 tags={place?.tags}
             />
 
-            <Comments placeId={place?.id ?? ''} />
+            <Container
+                style={{ marginTop: 15 }}
+                title={t('comments-title')}
+            >
+                <PlaceCommentList
+                    placeId={place?.id}
+                    comments={commentListData?.items}
+                    loading={commentListLoading}
+                />
+            </Container>
 
             {!!nearPlaces?.length && (
                 <>
