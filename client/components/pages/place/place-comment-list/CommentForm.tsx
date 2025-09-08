@@ -11,7 +11,7 @@ import { UserAvatar } from '../../../common/user-avatar'
 import styles from './styles.module.sass'
 
 interface CommentFormProps {
-    placeId: string
+    placeId?: string
     answerId?: string
     isAuth?: boolean
     user?: ApiModel.User

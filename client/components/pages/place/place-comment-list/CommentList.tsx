@@ -12,7 +12,7 @@ import { CommentListItem } from './CommentListItem'
 import styles from './styles.module.sass'
 
 interface CommentListProps {
-    placeId: string
+    placeId?: string
     comments?: ApiModel.Comment[]
     loading?: boolean
 }

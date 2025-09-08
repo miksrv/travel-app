@@ -16,7 +16,7 @@ import styles from './styles.module.sass'
 
 interface CommentListItemProps {
     t: TFunction
-    placeId: string
+    placeId?: string
     comment: ApiModel.Comment
     isAuth?: boolean
     isAnswer?: boolean
