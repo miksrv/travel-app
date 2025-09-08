@@ -1,0 +1,1 @@
+export { ChipsSelect } from './ChipsSelect'
