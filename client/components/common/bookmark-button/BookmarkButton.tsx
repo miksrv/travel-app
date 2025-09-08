@@ -13,7 +13,7 @@ interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
 }
 
-const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
+export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -69,5 +69,3 @@ const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) =>
         />
     )
 }
-
-export default BookmarkButton
