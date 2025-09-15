@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next'
 
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { deleteAllNotifications, Notify, setUnreadCounter } from '@/api/notificationSlice'
-import Counter from '@/ui/counter'
+import { Counter } from '@/components/ui'
 
 import { Notification } from '../snackbar'
 

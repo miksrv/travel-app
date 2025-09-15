@@ -4,13 +4,13 @@ import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next'
 
 import { API, ApiType } from '@/api'
+import { Autocomplete, AutocompleteOption } from '@/components/ui'
 import { categoryImage } from '@/functions/categories'
 import * as Coordinates from '@/functions/coordinates'
-import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
 
 import styles from './styles.module.sass'
 
-enum DropdownOptionType {
+enum AutocompleteOptionType {
     COORDINATES = 'coordinates',
     POINT = 'point'
 }
@@ -21,7 +21,7 @@ export const Search: React.FC<SearchProps> = () => {
     const { t } = useTranslation('components.app-bar.search')
     const router = useRouter()
 
-    const [foundCoords, setFoundCoords] = useState<Array<DropdownOption<ApiType.Coordinates>>>()
+    const [foundCoords, setFoundCoords] = useState<Array<AutocompleteOption<ApiType.Coordinates>>>()
     const [searchString, setSearchString] = useState<string>('')
 
     const { data, isFetching } = API.usePlacesGetListQuery(
@@ -57,7 +57,7 @@ export const Search: React.FC<SearchProps> = () => {
                     description: address.join(', '),
                     image: categoryImage(item.category?.name),
                     title: item.title,
-                    type: DropdownOptionType.POINT,
+                    type: AutocompleteOptionType.POINT,
                     value: item.id
                 }
             }),
@@ -85,7 +85,7 @@ export const Search: React.FC<SearchProps> = () => {
                             description: t('coordinates', { defaultValue: 'Координаты' }),
                             key: coordStrings.latitude,
                             title: `${coordStrings.latitude as string} ${coordStrings.longitude as string}`,
-                            type: DropdownOptionType.COORDINATES,
+                            type: AutocompleteOptionType.COORDINATES,
                             value: {
                                 lat: latLng.lat,
                                 lon: latLng.lon
@@ -102,8 +102,8 @@ export const Search: React.FC<SearchProps> = () => {
         }
     }
 
-    const handleSelectLocation = async (value?: DropdownOption<string | ApiType.Coordinates>) => {
-        if (value?.type === DropdownOptionType.COORDINATES) {
+    const handleSelectLocation = async (value?: AutocompleteOption<string | ApiType.Coordinates>) => {
+        if (value?.type === AutocompleteOptionType.COORDINATES) {
             const coords = value?.value as ApiType.Coordinates
             await router.push(`/map#${coords.lat},${coords.lon},17?m=${coords.lat},${coords.lon}`)
         } else {
