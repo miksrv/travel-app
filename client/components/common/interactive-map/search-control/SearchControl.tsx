@@ -4,8 +4,8 @@ import debounce from 'lodash-es/debounce'
 import { useTranslation } from 'next-i18next'
 
 import { API, ApiType } from '@/api'
+import { Autocomplete, AutocompleteOption } from '@/components/ui'
 import * as Coordinates from '@/functions/coordinates'
-import Autocomplete, { DropdownOption } from '@/ui/autocomplete'
 
 import styles from './styles.module.sass'
 
@@ -17,11 +17,11 @@ interface SearchControlProps {
 export const SearchControl: React.FC<SearchControlProps> = ({ onClear, onSelectResult }) => {
     const { t } = useTranslation('components.interactive-map.search-control')
 
-    const [foundCoords, setFoundCoords] = useState<Array<DropdownOption<unknown>>>()
+    const [foundCoords, setFoundCoords] = useState<Array<AutocompleteOption<unknown>>>()
 
     const [geoSearch, { data, isLoading }] = API.useLocationGetGeoSearchMutation()
 
-    const locationOptions: Array<DropdownOption<unknown>> = useMemo(
+    const locationOptions: Array<AutocompleteOption<unknown>> = useMemo(
         () =>
             data?.items?.map((item) => {
                 const address: string[] = []
