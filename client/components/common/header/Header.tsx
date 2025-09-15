@@ -2,9 +2,9 @@ import React from 'react'
 import { Button, cn, Container } from 'simple-react-ui-kit'
 
 import { ApiModel } from '@/api'
+import { Breadcrumbs, BreadcrumbsProps } from '@/components/ui'
 
 import { UserAvatar } from '../../common/user-avatar'
-import { Breadcrumbs, BreadcrumbsProps } from '../../ui/breadcrumbs'
 
 import styles from './styles.module.sass'
 
