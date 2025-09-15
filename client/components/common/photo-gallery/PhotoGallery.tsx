@@ -8,12 +8,12 @@ import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel, IMG_HOST, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { PhotoLightbox } from '@/components'
-import PhotoUploadSection from '@/components/photo-upload-section'
+import { PhotoLightbox } from '@/components/common'
+import { ImageUploader } from '@/components/ui'
 
 import styles from './styles.module.sass'
 
-const ConfirmationDialog = dynamic(() => import('@/components/confirmation-dialog'), {
+const ConfirmationDialog = dynamic(() => import('@/components/common/confirmation-dialog/ConfirmationDialog'), {
     ssr: false
 })
 
@@ -129,7 +129,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                 <ul className={cn(styles.photoGallery, (!!props?.title || !!props?.action) && styles.marginTop)}>
                     {onPhotoUploadClick && (
                         <li className={cn(styles.photoItem, styles.photoUpload)}>
-                            <PhotoUploadSection onClick={onPhotoUploadClick} />
+                            <ImageUploader onClick={onPhotoUploadClick} />
                         </li>
                     )}
 
