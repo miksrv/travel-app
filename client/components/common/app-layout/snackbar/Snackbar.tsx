@@ -9,9 +9,7 @@ import { Notification } from './Notification'
 
 import styles from './styles.module.sass'
 
-type SnackbarProps = object
-
-export const Snackbar: React.FC<SnackbarProps> = () => {
+export const Snackbar: React.FC = () => {
     const dispatch = useAppDispatch()
 
     const notifications = useAppSelector((state) => state.notification.list)
