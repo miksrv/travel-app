@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import { Container } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -13,7 +12,7 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import { AppLayout, Header, MapObjectsTypeEnum, PhotoLightbox } from '@/components/common'
+import { AppLayout, MapObjectsTypeEnum, PhotoLightbox } from '@/components/common'
 import { round } from '@/functions/helpers'
 
 const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
@@ -149,7 +148,10 @@ const MapPage: NextPage<object> = () => {
     }, [])
 
     return (
-        <AppLayout className={'mainLayout'}>
+        <AppLayout
+            fullSize={true}
+            className={'mainLayout'}
+        >
             <NextSeo
                 title={t('map-of-interesting-pages')}
                 description={t('geotags-map-description')}
@@ -171,21 +173,6 @@ const MapPage: NextPage<object> = () => {
                 }}
             />
 
-            <Header
-                title={t('map-of-interesting-pages')}
-                homePageTitle={t('geotags')}
-                currentPage={t('map-of-interesting-pages')}
-                className={'mainHeader'}
-                actions={
-                    <>
-                        {t(mapType === 'Places' ? 'points-on-map' : 'photos-on-map')}
-                        <strong style={{ marginLeft: '5px' }}>
-                            {(mapType === 'Places' ? poiListData?.count : photoListData?.count) ?? 0}
-                        </strong>
-                    </>
-                }
-            />
-
             <PhotoLightbox
                 photos={photoLightbox}
                 photoIndex={photoIndex}
@@ -193,10 +180,7 @@ const MapPage: NextPage<object> = () => {
                 onCloseLightBox={handleCloseLightbox}
             />
 
-            <Container
-                style={{ marginTop: 15 }}
-                className={'mainContainer'}
-            >
+            <div style={{ width: '100%', height: 'calc(100vh - 50px)' }}>
                 <InteractiveMap
                     center={initMapCoords}
                     zoom={initMapZoom}
@@ -220,7 +204,7 @@ const MapPage: NextPage<object> = () => {
                     onChangeBounds={debounceSetMapBounds}
                     userLatLon={location}
                 />
-            </Container>
+            </div>
         </AppLayout>
     )
 }

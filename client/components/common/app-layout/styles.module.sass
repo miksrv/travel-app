@@ -1,7 +1,7 @@
 @use '../../../styles/variables' as variables
 @use '../../../styles/animations'
 
-$sideBarWidth: 220px
+$sideBarWidth: 236px
 
 @keyframes animation-sideBar-slideIn
     0%
@@ -96,6 +96,10 @@ $sideBarWidth: 220px
         .mainContainer
             max-width: 100%
 
+        .main
+            max-width: 100%
+            margin-bottom: 0
+
     .overlay
         position: absolute
         min-height: 100vh
@@ -118,7 +122,7 @@ $sideBarWidth: 220px
     .sidebar
         position: fixed
         background-color: var(--modal-background)
-        width: $sideBarWidth
+        width: var(--width-menu)
         height: 100vh
         z-index: 600
         top: 0

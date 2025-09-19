@@ -10,6 +10,7 @@
     position: fixed
     width: 100%
     top: 0
+    padding: 0 10px
 
     .wrapper
         display: flex
@@ -18,10 +19,6 @@
         align-items: center
         width: 100%
         height: 100%
-
-    &.fullSize
-        .wrapper
-            max-width: 100%
 
     .hamburgerButton
         border: none
@@ -43,15 +40,14 @@
             fill: var(--text-color-primary)
 
     .logo
-        width: var(--width-menu)
+        width: calc(var(--width-menu) - 10px)
         display: block
         align-items: center
         background-image: url(/images/geometki-light.png)
         height: 32px
         background-size: contain
         background-repeat: no-repeat
-        margin-left: 6px
-        margin-right: -7px
+        margin-left: 10px
 
         &.dark
             background-image: url(/images/geometki-dark.png)
@@ -61,6 +57,13 @@
 
     @media only screen and (max-width: variables.$mobileMaxWidth)
         padding: 0 14px
+
+        .hamburgerButton
+            display: block
+
+    &.fullSize
+        .wrapper
+            max-width: 100%
 
         .hamburgerButton
             display: block

@@ -159,23 +159,26 @@ export const AppLayout: React.FC<AppLayoutProps> = ({ className, fullSize, child
             </aside>
 
             <section className={styles.mainContainer}>
-                <aside
-                    className={styles.menubar}
-                    ref={menuBarRef}
-                >
-                    <div className={styles.rails}>
-                        <SiteMenu
-                            type={'desktop'}
-                            userId={authSlice.user?.id}
-                            isAuth={authSlice.isAuth}
-                        />
-                        <div className={styles.switchers}>
-                            <ThemeSwitcher />
-                            <LanguageSwitcher />
+                {!fullSize && (
+                    <aside
+                        className={styles.menubar}
+                        ref={menuBarRef}
+                    >
+                        <div className={styles.rails}>
+                            <SiteMenu
+                                type={'desktop'}
+                                userId={authSlice.user?.id}
+                                isAuth={authSlice.isAuth}
+                            />
+                            <div className={styles.switchers}>
+                                <ThemeSwitcher />
+                                <LanguageSwitcher />
+                            </div>
+                            <Footer />
                         </div>
-                        <Footer />
-                    </div>
-                </aside>
+                    </aside>
+                )}
+
                 <main className={styles.main}>{children}</main>
             </section>
 
