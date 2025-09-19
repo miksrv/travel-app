@@ -6,9 +6,8 @@ import { Button, cn } from 'simple-react-ui-kit'
 import Link from 'next/link'
 
 import { ApiModel } from '@/api'
+import { UserAvatar } from '@/components/common'
 import { timeAgo } from '@/functions/helpers'
-
-import { UserAvatar } from '../../../common/user-avatar'
 
 import { CommentForm } from './CommentForm'
 

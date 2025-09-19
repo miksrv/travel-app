@@ -10,7 +10,7 @@ import { useLeafletContext } from '@react-leaflet/core'
 
 import { ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
-import { Google, Wikimapia, Yandex } from '@/components/map-links/MapLinks'
+import { MapLinks } from '@/components/common'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { convertDMS } from '@/functions/coordinates'
 import { round } from '@/functions/helpers'
@@ -167,30 +167,13 @@ export const ContextMenu: React.FC = () => {
                         </li>
                     )}
 
-                    <li>
-                        <Yandex
-                            showTitle={true}
-                            lat={pointCords?.lat ?? 0}
-                            lon={pointCords?.lon ?? 0}
-                            zoom={mapContext.current.map.getZoom()}
-                        />
-                    </li>
-                    <li>
-                        <Google
-                            showTitle={true}
-                            lat={pointCords?.lat ?? 0}
-                            lon={pointCords?.lon ?? 0}
-                            zoom={mapContext.current.map.getZoom()}
-                        />
-                    </li>
-                    <li>
-                        <Wikimapia
-                            showTitle={true}
-                            lat={pointCords?.lat ?? 0}
-                            lon={pointCords?.lon ?? 0}
-                            zoom={mapContext.current.map.getZoom()}
-                        />
-                    </li>
+                    <MapLinks
+                        showTitle={true}
+                        asListItem={true}
+                        lat={pointCords?.lat ?? 0}
+                        lon={pointCords?.lon ?? 0}
+                        zoom={mapContext.current.map.getZoom()}
+                    />
                 </ul>
             </Container>
         </div>

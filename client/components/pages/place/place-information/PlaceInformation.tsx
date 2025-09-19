@@ -7,12 +7,10 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
-import { UserAvatar, UserAvatarGroup } from '@/components/common'
+import { MapLinks, UserAvatar, UserAvatarGroup } from '@/components/common'
 import { categoryImage } from '@/functions/categories'
 import { convertDMS } from '@/functions/coordinates'
 import { formatDate } from '@/functions/helpers'
-
-import { MapLinks } from './MapLinks'
 
 import styles from './styles.module.sass'
 

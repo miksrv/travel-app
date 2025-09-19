@@ -14,18 +14,32 @@ import styles from './styles.module.sass'
 const DEFAULT_ZOOM = 17
 
 interface MapLinksProps extends ApiType.Coordinates {
+    asListItem?: boolean
     zoom?: number
     title?: string
     showTitle?: boolean
 }
 
-export const MapLinks: React.FC<MapLinksProps> = (props) => (
-    <>
-        <Yandex {...props} />
-        <Google {...props} />
-        <Wikimapia {...props} />
-    </>
-)
+export const MapLinks: React.FC<MapLinksProps> = (props) =>
+    props?.asListItem ? (
+        <>
+            <li>
+                <Yandex {...props} />
+            </li>
+            <li>
+                <Google {...props} />
+            </li>
+            <li>
+                <Wikimapia {...props} />
+            </li>
+        </>
+    ) : (
+        <>
+            <Yandex {...props} />
+            <Google {...props} />
+            <Wikimapia {...props} />
+        </>
+    )
 
 const Yandex: React.FC<MapLinksProps> = (props) => {
     const { t } = useTranslation()
