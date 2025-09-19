@@ -4,7 +4,7 @@ import { useRouter } from 'next/dist/client/router'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
-import Tabs from '@/ui/tabs'
+import { Tabs } from '@/components/ui'
 
 export enum UserPagesEnum {
     FEED = 'feed',

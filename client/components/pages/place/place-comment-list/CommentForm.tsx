@@ -4,9 +4,8 @@ import { Button } from 'simple-react-ui-kit'
 import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel } from '@/api'
-import Textarea from '@/ui/textarea'
-
-import { UserAvatar } from '../../../common/user-avatar'
+import { UserAvatar } from '@/components/common'
+import { Textarea } from '@/components/ui'
 
 import styles from './styles.module.sass'
 

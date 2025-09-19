@@ -1,5 +1,5 @@
 export { PlaceCommentList } from './place-comment-list'
-export { PlaceCoverEditor, type PlaceCoverEditorRefProps } from './place-cover-editor'
+export { ForwardedPlaceCoverEditor, type PlaceCoverEditorRefProps } from './place-cover-editor'
 export { PlaceDescription } from './place-description'
 export { PlaceForm } from './place-form'
 export { PlaceHeader } from './place-header'

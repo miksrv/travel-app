@@ -3,13 +3,13 @@ import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface TextareaProps extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
+export interface TextareaProps extends Omit<React.InputHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
     label?: string
     disableAutoresize?: boolean
     onChange?: (value?: string) => void
 }
 
-const Textarea: React.FC<TextareaProps> = ({ label, onChange, disableAutoresize, ...props }) => {
+export const Textarea: React.FC<TextareaProps> = ({ label, onChange, disableAutoresize, ...props }) => {
     const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
     const handleChange = (evt: React.ChangeEvent<HTMLTextAreaElement>): void => {
@@ -36,5 +36,3 @@ const Textarea: React.FC<TextareaProps> = ({ label, onChange, disableAutoresize,
         </div>
     )
 }
-
-export default Textarea

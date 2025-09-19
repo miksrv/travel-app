@@ -10,14 +10,14 @@ type TabType<T> = {
     key: T
 }
 
-interface TabsProps<T> extends ContainerProps {
+export interface TabsProps<T> extends ContainerProps {
     children?: React.ReactNode
     tabs?: Array<TabType<T>>
     activeTab?: T
     onChangeTab?: (key?: T) => void
 }
 
-const Tabs = <T extends string>({ tabs, activeTab, children, onChangeTab, ...props }: TabsProps<T>) => (
+export const Tabs = <T extends string>({ tabs, activeTab, children, onChangeTab, ...props }: TabsProps<T>) => (
     <Container
         {...props}
         className={cn(styles.tabs, !children && styles.noContent)}
@@ -37,5 +37,3 @@ const Tabs = <T extends string>({ tabs, activeTab, children, onChangeTab, ...pro
         {children}
     </Container>
 )
-
-export default Tabs

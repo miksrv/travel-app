@@ -197,4 +197,4 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
     )
 }
 
-export default forwardRef(PlaceCoverEditor)
+export const ForwardedPlaceCoverEditor = forwardRef(PlaceCoverEditor)

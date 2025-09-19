@@ -1,1 +1,1 @@
-export { default, type PlaceCoverEditorRefProps } from './PlaceCoverEditor'
+export { ForwardedPlaceCoverEditor, type PlaceCoverEditorRefProps } from './PlaceCoverEditor'

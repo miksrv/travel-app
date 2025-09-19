@@ -13,8 +13,8 @@ import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { AppLayout, PhotoGallery, PhotoUploader, PlacesListItem } from '@/components/common'
 import {
+    ForwardedPlaceCoverEditor,
     PlaceCommentList,
-    PlaceCoverEditor,
     PlaceCoverEditorRefProps,
     PlaceDescription,
     PlaceHeader,
@@ -261,7 +261,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 </>
             )}
 
-            <PlaceCoverEditor
+            <ForwardedPlaceCoverEditor
                 ref={placeCoverEditorRef}
                 placeId={place?.id}
                 onSaveCover={handleSaveCover}
@@ -282,7 +282,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
         async (context): Promise<GetServerSidePropsResult<PlacePageProps>> => {
-            const id = context.params?.slug?.[0]
+            const id = typeof context.params?.id === 'string' ? context.params.id : undefined
             const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
