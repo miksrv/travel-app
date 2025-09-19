@@ -6,7 +6,7 @@ import { removeMarkdown, truncateText } from '@/functions/helpers'
 
 import styles from './styles.module.sass'
 
-interface ReadMoreProps {
+export interface ReadMoreProps {
     className?: string
     children?: string
     charCount?: number
@@ -14,7 +14,7 @@ interface ReadMoreProps {
     showLessText?: string
 }
 
-const ReadMore: React.FC<ReadMoreProps> = ({
+export const ReadMore: React.FC<ReadMoreProps> = ({
     className,
     children,
     charCount = 300,
@@ -56,5 +56,3 @@ const ReadMore: React.FC<ReadMoreProps> = ({
         </div>
     )
 }
-
-export default ReadMore

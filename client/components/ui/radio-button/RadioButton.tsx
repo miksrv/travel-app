@@ -3,11 +3,11 @@ import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
+export interface RadioButtonProps extends React.InputHTMLAttributes<HTMLInputElement> {
     label?: string
 }
 
-const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
+export const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
     <div className={cn(styles.radioButton, props.disabled && styles.disabled)}>
         <div className={cn(styles.formField, props.checked && styles.checked)}>
             {props.checked ? <Icon name={'RadioButtonChecked'} /> : <Icon name={'RadioButtonUnchecked'} />}
@@ -19,5 +19,3 @@ const RadioButton: React.FC<RadioButtonProps> = ({ label, ...props }) => (
         {label && <label htmlFor={props.id}>{label}</label>}
     </div>
 )
-
-export default RadioButton

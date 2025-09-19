@@ -22,9 +22,8 @@ import { useTranslation } from 'next-i18next'
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { UserAvatar } from '@/components/common'
+import { Rating, UserAvatar } from '@/components/common'
 import { addDecimalPoint, formatDate } from '@/functions/helpers'
-import Rating from '@/ui/rating'
 
 import styles from './styles.module.sass'
 

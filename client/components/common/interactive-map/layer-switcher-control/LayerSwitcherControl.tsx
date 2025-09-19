@@ -3,7 +3,7 @@ import { Button, Checkbox, cn, Container } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next'
 
-import RadioButton from '@/ui/radio-button'
+import { RadioButton } from '@/components/ui'
 
 import { MapAdditionalLayersEnum, MapLayersEnum, MapObjectsTypeEnum } from '../types'
 

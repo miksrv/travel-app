@@ -1,17 +1,16 @@
-'use client'
-
 import React from 'react'
 import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface RatingColoredProps {
+export interface RatingColoredProps {
     className?: string
     value?: number
     children?: React.ReactNode
 }
 
-const RatingColored: React.FC<RatingColoredProps> = ({ className, value, children }) =>
+// @deprecated
+export const RatingColored: React.FC<RatingColoredProps> = ({ className, value, children }) =>
     value ? (
         <div
             className={cn(className, styles.ratingColored)}
@@ -50,5 +49,3 @@ const getColorByValue = (value: number): string => {
 
     return interpolateColor(value - 4, '#9ec528', '#4bb34b')
 }
-
-export default RatingColored

@@ -5,9 +5,8 @@ import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
-import { Reputation } from '@/components/ui'
+import { Progress, Reputation } from '@/components/ui'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
-import Progress from '@/ui/progress'
 
 import { UserAvatar } from '../user-avatar'
 

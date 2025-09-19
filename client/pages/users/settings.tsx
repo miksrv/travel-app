@@ -13,7 +13,7 @@ import { Notify } from '@/api/notificationSlice'
 import { wrapper } from '@/api/store'
 import { AppLayout, Header } from '@/components/common'
 import { UserForm } from '@/components/pages/user'
-import ScreenSpinner from '@/ui/screen-spinner'
+import { ScreenSpinner } from '@/components/ui'
 
 const SettingsUserPage: NextPage<object> = () => {
     const { t } = useTranslation()

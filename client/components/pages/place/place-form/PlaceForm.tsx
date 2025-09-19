@@ -10,9 +10,8 @@ import { useTranslation } from 'next-i18next'
 import { API, ApiModel, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
 import { PhotoGallery, PhotoUploader } from '@/components/common'
-import { ChipsSelect, ContentEditor, Dropdown, DropdownOption, ImageUploader } from '@/components/ui'
+import { ChipsSelect, ContentEditor, Dropdown, DropdownOption, ImageUploader, ScreenSpinner } from '@/components/ui'
 import { categoryImage } from '@/functions/categories'
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import styles from './styles.module.sass'
 

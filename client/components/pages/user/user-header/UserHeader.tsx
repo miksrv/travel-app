@@ -7,11 +7,10 @@ import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST, useAppSelector } from '@/api'
 import { Header } from '@/components/common'
-import { Reputation } from '@/components/ui'
+import { Progress, Reputation } from '@/components/ui'
 import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import defaultAvatar from '@/public/images/no-avatar.png'
-import Progress from '@/ui/progress'
 
 import { UserAvatarEditor } from '../user-avatar-editor'
 

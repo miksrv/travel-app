@@ -3,12 +3,12 @@ import { cn } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface ProgressProps {
+export interface ProgressProps {
     value?: number
     className?: string
 }
 
-const Progress: React.FC<ProgressProps> = ({ value, className }) => (
+export const Progress: React.FC<ProgressProps> = ({ value, className }) => (
     <div className={cn(styles.progress, className)}>
         <div
             className={styles.line}
@@ -16,5 +16,3 @@ const Progress: React.FC<ProgressProps> = ({ value, className }) => (
         />
     </div>
 )
-
-export default Progress

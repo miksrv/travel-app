@@ -10,10 +10,9 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { API, ApiModel, IMG_HOST } from '@/api'
-import { BookmarkButton } from '@/components/common'
+import { BookmarkButton, PlacePlate } from '@/components/common'
 import { categoryImage } from '@/functions/categories'
 import { addDecimalPoint, numberFormatter } from '@/functions/helpers'
-import PlacePlate from '@/ui/place-plate'
 
 import styles from './styles.module.sass'
 

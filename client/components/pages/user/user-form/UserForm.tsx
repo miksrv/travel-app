@@ -6,10 +6,10 @@ import { Trans, useTranslation } from 'next-i18next'
 
 import { ApiModel, ApiType } from '@/api'
 import { useAppSelector } from '@/api/store'
+import { ScreenSpinner } from '@/components/ui'
 import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import styles from './styles.module.sass'
 

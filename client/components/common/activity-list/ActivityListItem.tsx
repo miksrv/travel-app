@@ -6,11 +6,9 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST } from '@/api'
+import { PhotoLightbox, UserAvatar } from '@/components/common'
+import { ReadMore } from '@/components/ui'
 import { formatDate } from '@/functions/helpers'
-import ReadMore from '@/ui/read-more'
-
-import { PhotoLightbox } from '../../common/photo-lightbox'
-import { UserAvatar } from '../../common/user-avatar'
 
 import 'react-photo-album/rows.css'
 import styles from './styles.module.sass'

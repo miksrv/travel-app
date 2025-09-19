@@ -8,9 +8,8 @@ import { useTranslation } from 'next-i18next'
 import { API, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog } from '@/api/applicationSlice'
 import { Notify } from '@/api/notificationSlice'
-import { ChipsSelect, ContentEditor } from '@/components/ui'
+import { ChipsSelect, ContentEditor, ScreenSpinner } from '@/components/ui'
 import { equalsArrays } from '@/functions/helpers'
-import ScreenSpinner from '@/ui/screen-spinner'
 
 import styles from './styles.module.sass'
 

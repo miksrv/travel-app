@@ -1,15 +1,13 @@
-'use client'
-
 import React, { useEffect } from 'react'
 import { Spinner } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface ScreenSpinnerProps {
+export interface ScreenSpinnerProps {
     text?: string
 }
 
-const ScreenSpinner: React.FC<ScreenSpinnerProps> = ({ text }) => {
+export const ScreenSpinner: React.FC<ScreenSpinnerProps> = ({ text }) => {
     useEffect(() => {
         const globalDiv = document.createElement('div')
 
@@ -31,5 +29,3 @@ const ScreenSpinner: React.FC<ScreenSpinnerProps> = ({ text }) => {
         </div>
     )
 }
-
-export default ScreenSpinner

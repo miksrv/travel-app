@@ -1,18 +1,16 @@
-'use client'
-
 import React, { useState } from 'react'
 import { cn, Icon } from 'simple-react-ui-kit'
 
 import styles from './styles.module.sass'
 
-interface RatingProps {
+export interface RatingProps {
     value?: number
     voted?: boolean
     disabled?: boolean
     onChange?: (rating: number) => void
 }
 
-const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => {
+export const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => {
     const [hoverRating, setHoverRating] = useState<number>()
 
     const showFullStar = (rating: number) =>
@@ -57,5 +55,3 @@ const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange }) => 
         </ul>
     )
 }
-
-export default Rating
