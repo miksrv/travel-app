@@ -10,7 +10,7 @@ import styles from './styles.module.sass'
 const LEFT_PAGE = 'LEFT'
 const RIGHT_PAGE = 'RIGHT'
 
-interface PaginationProps<T> {
+export interface PaginationProps<T> {
     currentPage?: number
     totalItemsCount?: number
     linkPart?: string
@@ -26,7 +26,7 @@ interface PaginationProps<T> {
     onChangePage?: (page: number) => void
 }
 
-const Pagination = <T,>({
+export const Pagination = <T,>({
     currentPage = 1,
     totalItemsCount = 0,
     linkPart,
@@ -163,5 +163,3 @@ export const range = (from: number, to: number, step = 1) => {
 
     return range
 }
-
-export default Pagination

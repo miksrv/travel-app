@@ -6,8 +6,7 @@ import { useTranslation } from 'next-i18next'
 
 import { API, ApiType, IMG_HOST, useAppDispatch } from '@/api'
 import { toggleOverlay } from '@/api/applicationSlice'
-import { ImageUploader } from '@/components/ui'
-import Dialog from '@/ui/dialog'
+import { Dialog, ImageUploader } from '@/components/ui'
 
 import 'react-image-crop/src/ReactCrop.scss'
 import styles from './styles.module.sass'

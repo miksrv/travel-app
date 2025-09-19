@@ -14,10 +14,10 @@ import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { AppLayout, Header, PlacesList } from '@/components/common'
 import { PlaceFilterPanel, PlacesFilterType } from '@/components/pages/place'
+import { Pagination } from '@/components/ui'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
-import Pagination from '@/ui/pagination'
 
 const DEFAULT_SORT = ApiType.SortFields.Updated
 const DEFAULT_ORDER = ApiType.SortOrders.DESC

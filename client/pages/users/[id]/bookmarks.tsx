@@ -11,7 +11,7 @@ import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 import { AppLayout, Header, PlacesList } from '@/components/common'
 import { UserPagesEnum, UserTabs } from '@/components/pages/user'
-import Pagination from '@/ui/pagination'
+import { Pagination } from '@/components/ui'
 
 import styles from '@/components/page-user/styles.module.sass'
 

@@ -16,7 +16,7 @@ export interface DialogProps extends React.HTMLAttributes<HTMLDialogElement> {
     onCloseDialog?: () => void
 }
 
-const Dialog: React.FC<DialogProps> = ({
+export const Dialog: React.FC<DialogProps> = ({
     open,
     header,
     contentHeight,
@@ -79,39 +79,37 @@ const Dialog: React.FC<DialogProps> = ({
         }
     }, [open])
 
-    return open ? (
-        <dialog
-            {...props}
-            open={open}
-            ref={dialogRef}
-            className={styles.dialog}
-            style={dialogStyle}
-        >
-            {(header || showBackLink) && (
-                <div className={styles.header}>
-                    {showBackLink && (
-                        <button
-                            className={styles.backLink}
-                            onClick={onBackClick}
-                        >
-                            <Icon name={'KeyboardLeft'} />
-                            <div>{backLinkCaption}</div>
-                        </button>
-                    )}
-                    <h2>{header}</h2>
-                    {actions && <div className={styles.actions}>{actions}</div>}
-                </div>
-            )}
-            <div
-                className={styles.content}
-                style={{ height: contentHeight ? contentHeight : 'auto' }}
+    return (
+        open && (
+            <dialog
+                {...props}
+                open={open}
+                ref={dialogRef}
+                className={styles.dialog}
+                style={dialogStyle}
             >
-                {children}
-            </div>
-        </dialog>
-    ) : (
-        <></>
+                {(header || showBackLink) && (
+                    <div className={styles.header}>
+                        {showBackLink && (
+                            <button
+                                className={styles.backLink}
+                                onClick={onBackClick}
+                            >
+                                <Icon name={'KeyboardLeft'} />
+                                <div>{backLinkCaption}</div>
+                            </button>
+                        )}
+                        <h2>{header}</h2>
+                        {actions && <div className={styles.actions}>{actions}</div>}
+                    </div>
+                )}
+                <div
+                    className={styles.content}
+                    style={{ height: contentHeight ? contentHeight : 'auto' }}
+                >
+                    {children}
+                </div>
+            </dialog>
+        )
     )
 }
-
-export default Dialog
