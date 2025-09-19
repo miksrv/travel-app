@@ -13,7 +13,7 @@ import { AppLayout, Header, PlacesList } from '@/components/common'
 import { UserPagesEnum, UserTabs } from '@/components/pages/user'
 import { Pagination } from '@/components/ui'
 
-import styles from '@/components/page-user/styles.module.sass'
+import styles from '@/components/pages/user/styles.module.sass'
 
 export const PLACES_PER_PAGE = 21
 
