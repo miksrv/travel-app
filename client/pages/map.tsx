@@ -151,7 +151,7 @@ const MapPage: NextPage<object> = () => {
     return (
         <AppLayout className={'mainLayout'}>
             <NextSeo
-                title={t('map-of-geotags')}
+                title={t('map-of-interesting-pages')}
                 description={t('geotags-map-description')}
                 canonical={`${canonicalUrl}map`}
                 openGraph={{
@@ -165,16 +165,16 @@ const MapPage: NextPage<object> = () => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('geotags'),
-                    title: t('map-of-geotags'),
+                    title: t('map-of-interesting-pages'),
                     type: 'website',
                     url: `${canonicalUrl}map`
                 }}
             />
 
             <Header
-                title={t('map-of-geotags')}
+                title={t('map-of-interesting-pages')}
                 homePageTitle={t('geotags')}
-                currentPage={t('map-of-geotags')}
+                currentPage={t('map-of-interesting-pages')}
                 className={'mainHeader'}
                 actions={
                     <>

@@ -40,20 +40,19 @@ export const CategoriesList: React.FC<CategoriesListProps> = ({ categories }) =>
                             {category.title}
                         </Link>
                     </h3>
-                    <div>
-                        <p>{category.content}</p>
-                        <p className={styles.description}>
-                            <div>
-                                {t('interesting-places-in-category')}: <strong>{category.count ?? 0}</strong>
-                            </div>
-                            <Link
-                                href={`/places?category=${category.name}`}
-                                title={`${category.title} - ${t('all-geotags-in-category')}`}
-                            >
-                                {t('go-to-category')}
-                            </Link>
-                        </p>
-                    </div>
+                    <p>{category.content}</p>
+                    <p className={styles.description}>
+                        <span>
+                            {t('interesting-places-in-category', 'Интересных мест в категории')}:{' '}
+                            <strong>{category.count ?? 0}</strong>
+                        </span>
+                        <Link
+                            href={`/places?category=${category.name}`}
+                            title={`${category.title} - ${t('all-geotags-in-category')}`}
+                        >
+                            {t('go-to-category', 'Перейти в категорию')}
+                        </Link>
+                    </p>
                 </div>
             ))}
         </Container>

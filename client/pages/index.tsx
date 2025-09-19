@@ -73,7 +73,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             </Head>
 
             <NextSeo
-                title={t('geotags') + ' - ' + t('interesting-places')}
+                title={t('news-feed') + ' - ' + t('interesting-places')}
                 description={t('geotags-description')}
                 canonical={canonicalUrl}
                 openGraph={{
@@ -87,14 +87,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('geotags'),
-                    title: t('geotags'),
+                    title: t('news-feed'),
                     type: 'website',
                     url: canonicalUrl
                 }}
             />
 
             <Header
-                title={t('geotags') + ' - ' + t('interesting-places')}
+                title={t('news-feed') + ' - ' + t('interesting-places')}
                 currentPage={t('updated-geotags-users-photos')}
             />
 

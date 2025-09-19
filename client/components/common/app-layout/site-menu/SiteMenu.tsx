@@ -24,7 +24,7 @@ interface SiteMenuProps {
 }
 
 export const SiteMenu: React.FC<SiteMenuProps> = ({ type, userId, isAuth, onClick }) => {
-    const { t } = useTranslation('navigation')
+    const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
 
@@ -32,13 +32,23 @@ export const SiteMenu: React.FC<SiteMenuProps> = ({ type, userId, isAuth, onClic
         {
             icon: 'Feed',
             link: '/',
-            text: t('geotags', { defaultValue: 'Геометки' })
+            text: t('news-feed', { defaultValue: 'Новостная лента' })
+        },
+        {
+            icon: 'Map',
+            link: '/map',
+            text: t('map-of-interesting-pages', { defaultValue: 'Карта интересных мест' })
+        },
+        {
+            icon: 'Point',
+            link: '/places',
+            text: t('all-interesting-places', { defaultValue: 'Все интересные места' })
         },
         {
             auth: true,
             icon: 'PlusCircle',
             link: '/places/create',
-            text: t('create-geotag', { defaultValue: 'Добавить геометку' })
+            text: t('add-new-place', { defaultValue: 'Добавить место на карту' })
         },
         {
             auth: true,
@@ -53,34 +63,19 @@ export const SiteMenu: React.FC<SiteMenuProps> = ({ type, userId, isAuth, onClic
             text: t('my-photos', { defaultValue: 'Мои фотографии' })
         },
         {
-            icon: 'Map',
-            link: '/map',
-            text: t('map-of-geotags', { defaultValue: 'Карта геометок' })
-        },
-        {
-            icon: 'Point',
-            link: '/places',
-            text: t('interesting-places', { defaultValue: 'Интересные места' })
-        },
-        {
             icon: 'Bookmark',
             link: '/categories',
-            text: t('categories', { defaultValue: 'Категории' })
+            text: t('categories-places', { defaultValue: 'Категории мест' })
         },
         {
             icon: 'Tag',
             link: '/tags',
-            text: t('hashtags', { defaultValue: 'Хештеги' })
+            text: t('features-of-places', { defaultValue: 'Особенности мест' })
         },
         {
             icon: 'Users',
             link: '/users/',
             text: t('users', { defaultValue: 'Пользователи' })
-        },
-        {
-            icon: 'Telegram',
-            link: 'https://t.me/geometki',
-            text: t('project-diary', { defaultValue: 'Дневник проекта' })
         }
     ]
 

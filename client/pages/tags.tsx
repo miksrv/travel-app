@@ -52,7 +52,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
     return (
         <AppLayout>
             <NextSeo
-                title={t('hashtags')}
+                title={t('features-of-places')}
                 canonical={`${canonicalUrl}tags`}
                 description={tagsList
                     ?.map(({ title }) => title)
@@ -61,9 +61,9 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
             />
 
             <Header
-                title={t('hashtags')}
+                title={t('features-of-places')}
                 homePageTitle={t('geotags')}
-                currentPage={t('hashtags')}
+                currentPage={t('features-of-places')}
             />
 
             <TagList
