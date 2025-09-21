@@ -142,4 +142,11 @@ $sideBarWidth: 236px
 
         .switchers
             display: flex
-            padding-left: 12px
+            padding-left: 8px
+
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            left: -300px
+            width: 300px
+
+            &.closed
+                left: -300px
