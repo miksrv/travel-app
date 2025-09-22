@@ -1,5 +1,15 @@
 # Changelog
 
+## 1.4.26
+
+### Patch Changes
+
+- Improved UI Menu, changed titles
+- Fixed Some UI Component issues
+- Improved UI Map Page
+- Refactoring UI Locales
+- Updated UI Dependencies
+
 ## 1.4.25
 
 ### Patch Changes
