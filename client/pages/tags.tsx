@@ -8,9 +8,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import TagsList from '@/components/tags-list'
+import { AppLayout, Header } from '@/components/common'
+import { TagList } from '@/components/pages/tags'
 import { dateToUnixTime } from '@/functions/helpers'
 
 interface TagsPageProps {
@@ -53,7 +52,7 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
     return (
         <AppLayout>
             <NextSeo
-                title={t('hashtags')}
+                title={t('features-of-places')}
                 canonical={`${canonicalUrl}tags`}
                 description={tagsList
                     ?.map(({ title }) => title)
@@ -62,22 +61,22 @@ const CategoriesPage: NextPage<TagsPageProps> = ({ tags }) => {
             />
 
             <Header
-                title={t('hashtags')}
+                title={t('features-of-places')}
                 homePageTitle={t('geotags')}
-                currentPage={t('hashtags')}
+                currentPage={t('features-of-places')}
             />
 
-            <TagsList
+            <TagList
                 title={t('last-used')}
                 tags={topUpdatedTags}
             />
 
-            <TagsList
+            <TagList
                 title={t('most-popular')}
                 tags={topPopularTags}
             />
 
-            <TagsList
+            <TagList
                 title={t('other')}
                 tags={otherTags}
             />

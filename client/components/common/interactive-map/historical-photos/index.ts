@@ -1,0 +1,1 @@
+export { HistoricalPhotos } from './HistoricalPhotos'

@@ -8,9 +8,8 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import CategoriesList from '@/components/categories-list'
-import Header from '@/components/header'
+import { AppLayout, Header } from '@/components/common'
+import { CategoriesList } from '@/components/pages/categories'
 
 interface CategoriesPageProps {
     categories: ApiModel.Category[]
@@ -25,11 +24,11 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
     return (
         <AppLayout>
             <NextSeo
-                title={t('categories')}
+                title={t('categories-places')}
                 canonical={`${canonicalUrl}categories`}
-                description={`${t('categories')}: ${description}`}
+                description={`${t('categories-places')}: ${description}`}
                 openGraph={{
-                    description: `${t('categories')}: ${description}`,
+                    description: `${t('categories-places')}: ${description}`,
                     images: [
                         {
                             height: 1402,
@@ -39,22 +38,19 @@ const CategoriesPage: NextPage<CategoriesPageProps> = ({ categories }) => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('geotags'),
-                    title: t('categories'),
+                    title: t('categories-places'),
                     type: 'website',
                     url: `${canonicalUrl}categories`
                 }}
             />
 
             <Header
-                title={t('categories')}
+                title={t('categories-places')}
                 homePageTitle={t('geotags')}
-                currentPage={t('categories')}
+                currentPage={t('categories-places')}
             />
 
-            <CategoriesList
-                t={t}
-                categories={categories}
-            />
+            <CategoriesList categories={categories} />
         </AppLayout>
     )
 }

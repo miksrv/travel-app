@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react'
 import type { BreadcrumbList } from 'schema-dts'
-import { Button, Container } from 'simple-react-ui-kit'
+import { Button, Container, Dialog } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -12,16 +12,12 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, IMG_HOST, SITE_LINK, useAppDispatch } from '@/api'
 import { setLocale, toggleOverlay } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import PlacesFilterPanel from '@/components/places-filter-panel'
-import type { PlacesFilterType } from '@/components/places-filter-panel/types'
-import PlacesList from '@/components/places-list'
+import { AppLayout, Header, PlacesList } from '@/components/common'
+import { PlaceFilterPanel, PlacesFilterType } from '@/components/pages/place'
+import { Pagination } from '@/components/ui'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { encodeQueryData } from '@/functions/helpers'
 import { PlaceSchema } from '@/functions/schema'
-import Dialog from '@/ui/dialog'
-import Pagination from '@/ui/pagination'
 
 const DEFAULT_SORT = ApiType.SortFields.Updated
 const DEFAULT_ORDER = ApiType.SortOrders.DESC
@@ -65,9 +61,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     placesCount,
     placesList
 }) => {
+    const { t, i18n } = useTranslation()
+
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const { t, i18n } = useTranslation()
 
     const [filterOpenTitle, setFilterOpenTitle] = useState<string>('')
     const [filtersOptionsOpen, setFiltersOptionsOpen] = useState<boolean>(false)
@@ -330,14 +327,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
             <Dialog
                 contentHeight={'306px'}
-                header={filterOpenTitle || t('filters')}
+                title={filterOpenTitle || t('filters')}
                 open={filtersDialogOpen}
                 backLinkCaption={t('back')}
                 showBackLink={filtersOptionsOpen}
                 onBackClick={handleFiltersBackLink}
                 onCloseDialog={handleFiltersDialogClose}
             >
-                <PlacesFilterPanel
+                <PlaceFilterPanel
                     sort={sort}
                     order={order}
                     category={category}

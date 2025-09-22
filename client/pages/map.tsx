@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { LatLngBounds, LatLngExpression } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import { Container } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
 import { useRouter } from 'next/dist/client/router'
@@ -13,24 +12,21 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK, useAppDispatch, useAppSelector } from '@/api'
 import { openAuthDialog, setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import { MapObjectsType } from '@/components/interactive-map/InteractiveMap'
-import PhotoLightbox from '@/components/photo-lightbox'
+import { AppLayout, MapObjectsTypeEnum, PhotoLightbox } from '@/components/common'
 import { round } from '@/functions/helpers'
 
-const InteractiveMap = dynamic(() => import('@/components/interactive-map'), {
+const InteractiveMap = dynamic(() => import('@/components/common/interactive-map/InteractiveMap'), {
     ssr: false
 })
 
-type MapPageProps = object
-
+// Experiment to enable/disable POI clusterization on the map
 const ENABLE_POI_CLUSTERIZATION = false
 
-const MapPage: NextPage<MapPageProps> = () => {
+const MapPage: NextPage<object> = () => {
+    const { t, i18n } = useTranslation()
+
     const router = useRouter()
     const dispatch = useAppDispatch()
-    const { t, i18n } = useTranslation()
 
     const location = useAppSelector((state) => state.application.userLocation)
     const isAuth = useAppSelector((state) => state.auth.isAuth)
@@ -45,7 +41,7 @@ const MapPage: NextPage<MapPageProps> = () => {
     // TODO: Categories and categories? Please refactoring this
     const [categories, setCategories] = useState<ApiModel.Categories[]>()
     const [mapCategories, setMapCategories] = useState<ApiModel.Categories[]>()
-    const [mapType, setMapType] = useState<MapObjectsType>()
+    const [mapType, setMapType] = useState<MapObjectsTypeEnum>()
     const [mapBounds, setMapBounds] = useState<string>()
     const [mapZoom, setMapZoom] = useState<number>()
 
@@ -152,9 +148,12 @@ const MapPage: NextPage<MapPageProps> = () => {
     }, [])
 
     return (
-        <AppLayout className={'mainLayout'}>
+        <AppLayout
+            fullSize={true}
+            className={'mainLayout'}
+        >
             <NextSeo
-                title={t('map-of-geotags')}
+                title={t('map-of-interesting-pages')}
                 description={t('geotags-map-description')}
                 canonical={`${canonicalUrl}map`}
                 openGraph={{
@@ -168,25 +167,10 @@ const MapPage: NextPage<MapPageProps> = () => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('geotags'),
-                    title: t('map-of-geotags'),
+                    title: t('map-of-interesting-pages'),
                     type: 'website',
                     url: `${canonicalUrl}map`
                 }}
-            />
-
-            <Header
-                title={t('map-of-geotags')}
-                homePageTitle={t('geotags')}
-                currentPage={t('map-of-geotags')}
-                className={'mainHeader'}
-                actions={
-                    <>
-                        {t(mapType === 'Places' ? 'points-on-map' : 'photos-on-map')}
-                        <strong style={{ marginLeft: '5px' }}>
-                            {(mapType === 'Places' ? poiListData?.count : photoListData?.count) ?? 0}
-                        </strong>
-                    </>
-                }
             />
 
             <PhotoLightbox
@@ -196,10 +180,7 @@ const MapPage: NextPage<MapPageProps> = () => {
                 onCloseLightBox={handleCloseLightbox}
             />
 
-            <Container
-                style={{ marginTop: 15 }}
-                className={'mainContainer'}
-            >
+            <div style={{ width: '100%', height: 'calc(100vh - 50px)' }}>
                 <InteractiveMap
                     center={initMapCoords}
                     zoom={initMapZoom}
@@ -223,14 +204,14 @@ const MapPage: NextPage<MapPageProps> = () => {
                     onChangeBounds={debounceSetMapBounds}
                     userLatLon={location}
                 />
-            </Container>
+            </div>
         </AppLayout>
     )
 }
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<MapPageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

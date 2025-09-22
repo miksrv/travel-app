@@ -1,0 +1,1 @@
+export { UserAvatarEditor } from './UserAvatarEditor'

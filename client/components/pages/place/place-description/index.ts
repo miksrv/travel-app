@@ -1,0 +1,1 @@
+export { PlaceDescription } from './PlaceDescription'

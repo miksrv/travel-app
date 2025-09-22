@@ -1,4 +1,9 @@
 {
+    "map-of-interesting-pages": "Map of interesting places",
+    "all-interesting-places": "All interesting places",
+    "add-new-place": "Add new place",
+    "features-of-places": "Features of places",
+    "categories-places": "Categories of places",
     "nothing-here-yet": "There's nothing here yet",
     "nothing-found": "Nothing found",
     "date-time-format": "D MMMM YYYY, HH:mm",
@@ -30,7 +35,6 @@
     "categories": "Geotag Categories",
     "hashtags": "Features",
     "users": "Travelers",
-    "project-diary": "Project Diary",
     "geotag-added-bookmarks": "Geotag added to bookmarks",
     "geotag-removed-bookmarks": "Geotag removed from bookmarks",
     "all-geotags-in-category": "All category geotags",

@@ -7,9 +7,7 @@ import { NextSeo } from 'next-seo'
 
 import logo from '@/public/images/geometki.svg'
 
-type NotFoundProps = object
-
-const NotFound: NextPage<NotFoundProps> = () => (
+const NotFound: NextPage<object> = () => (
     <div className={'page404'}>
         <NextSeo
             nofollow={true}

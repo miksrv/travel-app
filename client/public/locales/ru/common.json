@@ -1,4 +1,9 @@
 {
+    "map-of-interesting-pages": "Карта интересных мест",
+    "all-interesting-places": "Все интересные места",
+    "add-new-place": "Добавить место на карту",
+    "features-of-places": "Особенности мест",
+    "categories-places": "Категории мест",
     "nothing-here-yet": "Тут пока ничего нет",
     "nothing-found": "Ничего не найдено",
     "date-time-format": "D MMMM YYYY, HH:mm",
@@ -30,7 +35,6 @@
     "categories": "Категории",
     "hashtags": "Особенности",
     "users": "Путешественники",
-    "project-diary": "Дневник проекта",
     "geotag-added-bookmarks": "Геометка добавлена в закладки",
     "geotag-removed-bookmarks": "Геометка удалена из закладок",
     "all-geotags-in-category": "Все геометки категории",

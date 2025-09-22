@@ -50,6 +50,7 @@ export default defineConfig([
 
             // NextJS
             '**/next-i18next.config.js',
+            '**/i18next-scanner.config.js',
             '**/next.config.js',
             '**/.next/**',
             '**/next-env.d.ts',

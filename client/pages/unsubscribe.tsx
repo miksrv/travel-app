@@ -12,12 +12,11 @@ import { API, ApiType } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
 
-type UnsubscribePageProps = object
+const UnsubscribePage: NextPage<object> = () => {
+    const { t } = useTranslation()
 
-const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
     const router = useRouter()
     const searchParams = useSearchParams()
-    const { t } = useTranslation()
 
     const mailId = searchParams.get('mail')
 
@@ -81,7 +80,7 @@ const UnsubscribePage: NextPage<UnsubscribePageProps> = () => {
 
 export const getServerSideProps = wrapper.getServerSideProps(
     (store) =>
-        async (context): Promise<GetServerSidePropsResult<UnsubscribePageProps>> => {
+        async (context): Promise<GetServerSidePropsResult<object>> => {
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const translations = await serverSideTranslations(locale)
 

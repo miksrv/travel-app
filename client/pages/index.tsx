@@ -11,14 +11,10 @@ import { NextSeo } from 'next-seo'
 import { API, ApiModel, ApiType, SITE_LINK } from '@/api'
 import { setLocale } from '@/api/applicationSlice'
 import { wrapper } from '@/api/store'
-import ActivityList from '@/components/activity-list'
-import AppLayout from '@/components/app-layout'
-import Header from '@/components/header'
-import PlacesListItem from '@/components/places-list/PlacesListItem'
-import UsersList from '@/components/users-list'
+import { ActivityList, AppLayout, Header, PlacesListItem, UsersList } from '@/components/common'
+import { Carousel } from '@/components/ui'
 import { LOCAL_STORAGE } from '@/functions/constants'
 import { PlaceSchema, UserSchema } from '@/functions/schema'
-import Carousel from '@/ui/carousel'
 
 interface IndexPageProps {
     placesList: ApiModel.Place[]
@@ -77,7 +73,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             </Head>
 
             <NextSeo
-                title={t('geotags') + ' - ' + t('interesting-places')}
+                title={t('news-feed') + ' - ' + t('interesting-places')}
                 description={t('geotags-description')}
                 canonical={canonicalUrl}
                 openGraph={{
@@ -91,14 +87,14 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
                     ],
                     locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
                     siteName: t('geotags'),
-                    title: t('geotags'),
+                    title: t('news-feed'),
                     type: 'website',
                     url: canonicalUrl
                 }}
             />
 
             <Header
-                title={t('geotags') + ' - ' + t('interesting-places')}
+                title={t('news-feed') + ' - ' + t('interesting-places')}
                 currentPage={t('updated-geotags-users-photos')}
             />
 
@@ -121,7 +117,6 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList }) => {
             />
 
             <UsersList
-                t={t}
                 title={t('active-users')}
                 users={usersList}
                 action={
