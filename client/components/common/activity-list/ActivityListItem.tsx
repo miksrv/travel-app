@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST } from '@/api'
-import { PhotoLightbox, UserAvatar } from '@/components/common'
+import { PhotoLightbox, Rating, UserAvatar } from '@/components/common'
 import { ReadMore } from '@/components/ui'
 import { formatDate } from '@/functions/helpers'
 
@@ -49,33 +49,43 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title 
                         {' • '}
                         {
                             {
-                                [ApiModel.ActivityTypes.Edit]: t('editing', { defaultValue: 'Редактирование' }),
-                                [ApiModel.ActivityTypes.Place]: t('new-geotag', { defaultValue: 'Новая геометка' }),
-                                [ApiModel.ActivityTypes.Photo]: t('uploading-photo', { defaultValue: 'Загрузка фото' }),
-                                [ApiModel.ActivityTypes.Rating]: t('geotag-rating', {
-                                    defaultValue: 'Голосование за геометку'
+                                [ApiModel.ActivityTypes.Comment]: t('activity-comment', {
+                                    defaultValue: 'Комментировал(а) интересное место'
+                                }),
+                                [ApiModel.ActivityTypes.Edit]: t('activity-editing', {
+                                    defaultValue: 'Редактировал(а) интересное место'
+                                }),
+                                [ApiModel.ActivityTypes.Place]: t('activity-new-place', {
+                                    defaultValue: 'Добавил(а) новое интересное место'
+                                }),
+                                [ApiModel.ActivityTypes.Photo]: t('activity-uploading-photo', {
+                                    defaultValue: 'Загрузил(а) фотографию к интересному месту'
+                                }),
+                                [ApiModel.ActivityTypes.Rating]: t('activity-rating', {
+                                    defaultValue: 'Оценил(а) интересное место'
                                 })
                             }[item.type]
                         }
-                        {/*{item.type === ActivityTypes.Edit &&*/}
-                        {/*item.place?.difference ? (*/}
-                        {/*    <>*/}
-                        {/*        {' ('}*/}
-                        {/*        <span*/}
-                        {/*            className={*/}
-                        {/*                item.place.difference > 0*/}
-                        {/*                    ? 'green'*/}
-                        {/*                    : 'red'*/}
-                        {/*            }*/}
-                        {/*        >*/}
-                        {/*            {item.place.difference > 0 && '+'}*/}
-                        {/*            {item.place.difference}*/}
-                        {/*        </span>*/}
-                        {/*        {')'}*/}
-                        {/*    </>*/}
-                        {/*) : (*/}
-                        {/*    ''*/}
-                        {/*)}*/}
+                        {item.type === ApiModel.ActivityTypes.Edit && item.place?.difference ? (
+                            <>
+                                {' ('}
+                                <span
+                                    className={
+                                        item.place.difference > 0
+                                            ? styles.green
+                                            : item.place.difference < 0
+                                              ? styles.red
+                                              : ''
+                                    }
+                                >
+                                    {item.place.difference > 0 && '+'}
+                                    {item.place.difference}
+                                </span>
+                                {')'}
+                            </>
+                        ) : (
+                            ''
+                        )}
                     </>
                 }
             />
@@ -90,6 +100,20 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, title 
                         {item.place.content}
                     </ReadMore>
                 )}
+
+            {item.type === ApiModel.ActivityTypes.Comment && item?.comment?.content && (
+                <div className={'placeContent'}>
+                    <blockquote>{item.comment.content}</blockquote>
+                </div>
+            )}
+
+            {item?.rating?.value && (
+                <Rating
+                    value={item?.rating?.value}
+                    voted={true}
+                    disabled={true}
+                />
+            )}
 
             {!!item.photos?.length && (
                 <>
