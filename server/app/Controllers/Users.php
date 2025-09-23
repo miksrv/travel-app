@@ -23,6 +23,7 @@ class Users extends ResourceController
     }
 
     /**
+     * Returns the list of users
      * @return ResponseInterface
      * @throws Exception
      */
