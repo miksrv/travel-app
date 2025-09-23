@@ -13,16 +13,9 @@ import { getDimension } from './utils'
 
 import styles from './styles.module.sass'
 
-export const UserAvatar: React.FC<UserAvatarProps> = ({
-    className,
-    user,
-    size,
-    caption,
-    showName,
-    disableLink,
-    ...props
-}) => {
+export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
     const { t } = useTranslation('components.user-avatar')
+    const { className, user, size, caption, showName, disableLink } = props
 
     return (
         <div className={cn(styles.userAvatar, className)}>
