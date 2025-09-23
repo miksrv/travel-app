@@ -45,9 +45,11 @@ class ActivityModel extends ApplicationBaseModel {
     protected $afterDelete    = [];
 
     /**
-     * @param string $placeId
-     * @param string $excludeUserId
-     * @return array
+     * Get unique editors for a specific place, excluding a specific user.
+     *
+     * @param string $placeId The ID of the place.
+     * @param string $excludeUserId The user ID to exclude from the results.
+     * @return array List of unique editors with their id, name, and avatar.
      */
     public function gePlaceEditors(string $placeId, string $excludeUserId): array
     {
@@ -60,6 +62,16 @@ class ActivityModel extends ApplicationBaseModel {
             ->findAll();
     }
 
+    /**
+     * Get activity list with optional filters and pagination.
+     *
+     * @param string|null $lastDate Filter activities created before this date.
+     * @param string|null $userId Filter activities by user ID.
+     * @param string|null $placeId Filter activities by place ID.
+     * @param int $limit Number of records to return (max 100).
+     * @param int $offset Number of records to skip.
+     * @return array List of activities with related data.
+     */
     public function getActivityList(
         string $lastDate = null,
         string $userId = null,
@@ -69,10 +81,12 @@ class ActivityModel extends ApplicationBaseModel {
     ): array {
         $model = $this->select(
             'activity.*, places.id as place_id, places.category, users.id as user_id, users.name as user_name,
-            users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height')
+            users.avatar as user_avatar, photos.filename, photos.extension, photos.width, photos.height, rating.value, comments.content as comment_text')
             ->join('places', 'activity.place_id = places.id', 'left')
             ->join('photos', 'activity.photo_id = photos.id', 'left')
-            ->join('users', 'activity.user_id = users.id', 'left');
+            ->join('users', 'activity.user_id = users.id', 'left')
+            ->join('rating', 'activity.rating_id = rating.id', 'left')
+            ->join('comments', 'activity.comment_id = comments.id', 'left');
 
         if ($lastDate) {
             $model->where('activity.created_at < ', $lastDate);
@@ -86,11 +100,21 @@ class ActivityModel extends ApplicationBaseModel {
             $model->where('activity.place_id', $placeId);
         }
 
-        return $model->whereIn('activity.type', ['photo', 'place', 'edit'])
+        return $model->whereIn('activity.type', ['photo','place','rating','edit','comment'])
             ->orderBy('activity.created_at, activity.type', 'DESC')
             ->findAll(min(abs($limit), 100), abs($offset));
     }
 
+    /**
+     * Get next activity items for a specific user and place after a given date.
+     *
+     * @param array $activityIds List of activity IDs to exclude.
+     * @param string $createdAt Date to filter activities created after this date.
+     * @param string $userId User ID to filter activities.
+     * @param string $placeId Place ID to filter activities.
+     * @param int $limit Number of records to return (default 15).
+     * @return array List of next activity items with related data.
+     */
     public function getNextActivityItems(
         array $activityIds,
         string $createdAt,
