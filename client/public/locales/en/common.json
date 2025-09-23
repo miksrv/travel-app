@@ -223,5 +223,11 @@
     "supported-formats": "Supported formats",
     "notification-list-cleared": "Notification list cleared",
     "delete-place-confirmation": "Deleting a geotag will delete all photos, comments, bookmarks, etc. associated with it. Do you confirm deletion?",
-    "rating-history": "Rating history"
+    "rating-history": "Rating history",
+    "guest-user": "Guest user",
+    "activity-comment": "Commented on an interesting place",
+    "activity-editing": "Edited an interesting place",
+    "activity-new-place": "Added a new interesting place",
+    "activity-uploading-photo": "Uploaded a photo to an interesting place",
+    "activity-rating": "Rated an interesting place"
 }
