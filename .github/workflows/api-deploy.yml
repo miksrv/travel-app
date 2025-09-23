@@ -51,11 +51,16 @@
 
        - name: Upload Folder
          run: |
-           lftp -e "put -O / .htaccess" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "rm -r app" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "rm -r vendor" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "mirror --parallel=100 -R app" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "mirror --parallel=100 -R vendor" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "mirror --parallel=100 -R public" ${{ secrets.FTP_HOSTNAME }}
-           lftp -e "mirror --parallel=100 -R writable" ${{ secrets.FTP_HOSTNAME }}
+           lftp -c "
+             set ftp:list-options -a;
+             open ${{ secrets.FTP_HOSTNAME }};
+             put -O / .htaccess;
+             rm -r app;
+             rm -r vendor;
+             mirror --parallel=100 -R app /app;
+             mirror --parallel=100 -R vendor /vendor;
+             mirror --parallel=100 -R public /public;
+             mirror --parallel=100 -R writable /writable;
+             bye
+           "
          working-directory: server
