@@ -1,5 +1,6 @@
 import { DateTime } from '@/api/types'
 
+import { Comment } from './comment'
 import { Photo } from './photo'
 import { Place } from './place'
 import { Rating } from './rating'
@@ -12,11 +13,12 @@ export type Activity = {
     photos?: Photo[]
     rating?: Rating
     author?: User
+    comment?: Comment
     created?: DateTime
 }
 
 export const ActivityTypes = {
-    // Comment: 'comment',
+    Comment: 'comment',
     // Cover: 'cover',
     Edit: 'edit',
     Photo: 'photo',

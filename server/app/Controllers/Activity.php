@@ -24,7 +24,8 @@ class Activity extends ResourceController
     }
 
     /**
-     * Show all activities for all users and all places, photos
+     * List user activities
+     * We group similar activities together
      * @return ResponseInterface
      * @throws ReflectionException
      */
@@ -75,8 +76,8 @@ class Activity extends ResourceController
     }
 
     /**
+     * Recursively add next activity items that can be grouped with the last item
      * @param array $activityData
-     * @return void
      */
     protected function addNextActivityItems(array &$activityData): void
     {
@@ -105,8 +106,9 @@ class Activity extends ResourceController
     }
 
     /**
-     * @param $lastItem
-     * @param $nextItem
+     * Determine if two activity items should be grouped together
+     * @param object $lastItem
+     * @param object $nextItem
      * @return bool
      */
     private function shouldGroupActivities($lastItem, $nextItem): bool
@@ -119,11 +121,13 @@ class Activity extends ResourceController
     }
 
     /**
-     * We group similar user activities. For example, uploaded photos of one user
-     * for one place with an interval of 5 minutes - we combine them into one activity
-     * @param array $activityData
-     * @param PlacesContent|null $placeContent
-     * @return array
+     * Group similar activities together
+     * Activities are grouped if they are of the same type, by the same user,
+     * and optionally related to the same place within a certain time frame.
+     *
+     * @param array $activityData List of activity items to be grouped.
+     * @param PlacesContent|null $placeContent Instance of PlacesContent for fetching place details.
+     * @return array List of grouped activity items.
      */
     protected function groupSimilarActivities(array $activityData, PlacesContent $placeContent = null): array
     {
@@ -152,7 +156,7 @@ class Activity extends ResourceController
             if (
                 $lastGroupIndex !== -1 &&
                 (!isset($groupData[$lastGroupIndex]->place) || $groupData[$lastGroupIndex]->place->id === $item->place_id) &&
-                $groupData[$lastGroupIndex]->author->id === $item->user_id
+                isset($groupData[$lastGroupIndex]->author) && $groupData[$lastGroupIndex]->author?->id === $item?->user_id
                 // ($itemCreatedAt - strtotime($groupData[$lastGroupIndex]->created)) <= 60 * 60
             ) {
                 // We are updating the group date to an earlier one.
@@ -221,6 +225,12 @@ class Activity extends ResourceController
             if ($item->type === 'rating') {
                 $currentGroup->rating = (object) [
                     'value' => $item->value
+                ];
+            }
+
+            if ($item->type === 'comment') {
+                $currentGroup->comment = (object) [
+                    'content' => $item->comment_text
                 ];
             }
 

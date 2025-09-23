@@ -13,9 +13,16 @@ import { getDimension } from './utils'
 
 import styles from './styles.module.sass'
 
-export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
+export const UserAvatar: React.FC<UserAvatarProps> = ({
+    className,
+    user,
+    size,
+    caption,
+    showName,
+    disableLink,
+    ...props
+}) => {
     const { t } = useTranslation('components.user-avatar')
-    const { className, user, size, caption, showName, disableLink } = props
 
     return (
         <div className={cn(styles.userAvatar, className)}>
@@ -53,14 +60,18 @@ export const UserAvatar: React.FC<UserAvatarProps> = (props) => {
                 />
             )}
 
-            {showName && user?.id && (
+            {showName && (
                 <div className={cn(styles.info, size === 'medium' ? styles.medium : styles.small)}>
-                    <Link
-                        href={`/users/${user.id}`}
-                        title={`${t('user-profile', { defaultValue: 'Профиль путешественника' })} ${user.name}`}
-                    >
-                        {user.name}
-                    </Link>
+                    {user?.id && user.name ? (
+                        <Link
+                            href={`/users/${user.id}`}
+                            title={`${t('user-profile', { defaultValue: 'Профиль путешественника' })} ${user.name}`}
+                        >
+                            {user.name}
+                        </Link>
+                    ) : (
+                        <span>{t('guest-user', { defaultValue: 'Гость' })}</span>
+                    )}
                     {caption && <div className={styles.caption}>{caption}</div>}
                 </div>
             )}

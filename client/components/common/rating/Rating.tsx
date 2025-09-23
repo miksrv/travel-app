@@ -24,16 +24,20 @@ export const Rating: React.FC<RatingProps> = ({ value, voted, disabled, onChange
                     className={cn(
                         hoverRating && hoverRating >= rating ? styles.hovered : undefined,
                         voted && styles.voted,
-                        hoverRating === rating ? styles.current : undefined
+                        hoverRating === rating && styles.current
                     )}
                     onMouseEnter={() => {
-                        setHoverRating(rating)
+                        if (!disabled) {
+                            setHoverRating(rating)
+                        }
                     }}
                     onMouseLeave={() => {
-                        setHoverRating(undefined)
+                        if (!disabled) {
+                            setHoverRating(undefined)
+                        }
                     }}
                 >
-                    <label>
+                    <label className={cn(disabled && styles.disabled)}>
                         {showFullStar(rating) ? <Icon name={'StarFilled'} /> : <Icon name={'StarEmpty'} />}
                         <input
                             type={'radio'}
