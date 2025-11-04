@@ -1,11 +1,11 @@
 import React from 'react'
-import { Container, ContainerProps } from 'simple-react-ui-kit'
+import { Container, ContainerProps, Progress } from 'simple-react-ui-kit'
 
 import Image from 'next/image'
 import { useTranslation } from 'next-i18next'
 
 import { ApiModel } from '@/api'
-import { Progress, Reputation } from '@/components/ui'
+import { Reputation } from '@/components/ui'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 
 import { UserAvatar } from '../user-avatar'
@@ -54,6 +54,7 @@ export const UsersList: React.FC<UsersListProps> = ({ users, ...props }) => {
                             <p>{user.levelData?.title}</p>
                             <Progress
                                 className={styles.progress}
+                                height={4}
                                 value={nextLevelPercentage(
                                     user.levelData?.experience || 0,
                                     user.levelData?.nextLevel || user.levelData?.experience || 0

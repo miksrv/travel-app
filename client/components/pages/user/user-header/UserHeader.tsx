@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Button, Icon } from 'simple-react-ui-kit'
+import { Button, Icon, Progress } from 'simple-react-ui-kit'
 
 import Image from 'next/image'
 import Link from 'next/link'
@@ -7,7 +7,7 @@ import { useTranslation } from 'next-i18next'
 
 import { ApiModel, IMG_HOST, useAppSelector } from '@/api'
 import { Header } from '@/components/common'
-import { Progress, Reputation } from '@/components/ui'
+import { Reputation } from '@/components/ui'
 import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/functions/helpers'
 import { levelImage, nextLevelPercentage } from '@/functions/userLevels'
 import defaultAvatar from '@/public/images/no-avatar.png'
@@ -44,6 +44,7 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                         }
                     />
                     <Progress
+                        height={4}
                         value={nextLevelPercentage(
                             user?.levelData?.experience || 0,
                             user?.levelData?.nextLevel || user?.levelData?.experience || 0
