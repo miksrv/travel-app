@@ -1,5 +1,16 @@
 # Changelog
 
+## 1.4.27
+
+### Patch Changes
+
+- Updated UI Locales
+- Improved API Activity Controllers
+- Improved UI ActivityListItem
+- Improved UI UserAvatar, Rating and fixed UI styles
+- Improved CI/CD API Deploy
+- Upgraded UI Libraries, updated NextJS from `15` to `16`
+
 ## 1.4.26
 
 ### Patch Changes
