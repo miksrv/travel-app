@@ -183,7 +183,6 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
             <div className={styles.formElement}>
                 <Select<string>
                     required={true}
-                    clearable={true}
                     label={t('input_category-label')}
                     placeholder={t('input_category-placeholder')}
                     disabled={loading}
