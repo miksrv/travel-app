@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import { Button, Input, Message } from 'simple-react-ui-kit'
+import { Button, Input, Message, Select } from 'simple-react-ui-kit'
 
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -10,7 +10,7 @@ import { useTranslation } from 'next-i18next'
 import { API, ApiModel, ApiType, useAppDispatch, useAppSelector } from '@/api'
 import { Notify } from '@/api/notificationSlice'
 import { PhotoGallery, PhotoUploader } from '@/components/common'
-import { ChipsSelect, ContentEditor, Dropdown, DropdownOption, ImageUploader, ScreenSpinner } from '@/components/ui'
+import { ChipsSelect, ContentEditor, ImageUploader, ScreenSpinner } from '@/components/ui'
 import { categoryImage } from '@/functions/categories'
 
 import styles from './styles.module.sass'
@@ -50,8 +50,8 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
         setFormData({ ...formData, [name]: value })
     }
 
-    const handleChangeCategory = (category?: DropdownOption) => {
-        setFormData({ ...formData, category: String(category?.key) })
+    const handleChangeCategory = (category?: string) => {
+        setFormData({ ...formData, category })
     }
 
     const handleSelectTags = (value: string[]) => {
@@ -181,17 +181,16 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
             </div>
 
             <div className={styles.formElement}>
-                <Dropdown
+                <Select<string>
                     required={true}
                     clearable={true}
                     label={t('input_category-label')}
                     placeholder={t('input_category-placeholder')}
                     disabled={loading}
                     error={formErrors?.category}
-                    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                    value={selectedCategory as any}
+                    value={categoryOptions?.find(({ key }) => key === formData?.category)?.key}
                     options={categoryOptions}
-                    onSelect={handleChangeCategory}
+                    onSelect={(option) => handleChangeCategory(option?.[0]?.key)}
                 />
             </div>
 

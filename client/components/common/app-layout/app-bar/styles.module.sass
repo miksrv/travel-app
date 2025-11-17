@@ -74,33 +74,10 @@
         align-items: center
         justify-content: center
         padding-left: 10px
+        gap: 10px
 
         .loginButton
             white-space: nowrap
-
-    .userInfo
-        padding: 10px
-        font-size: variables.$fontSizeHeadline
-        min-width: 220px
-
-        .userName
-            font-weight: 600
-
-        .levelImage
-            vertical-align: middle
-
-    .userMenuPopout
-        margin-left: 10px
-
-        button
-            padding: 0 !important
-            background: transparent !important
-
-    .notifyPopup
-        svg
-            height: 24px !important
-            width: 24px !important
-            fill: var(--icon-color-primary)
 
     .notifyCounter
         width: 20px
@@ -110,30 +87,21 @@
         top: -3px
         right: -3px
 
-    .notifyFooter
-        padding: 4px
+    .search
+        flex: .7
 
-    .noData
-        text-align: center
-        color: var(--text-color-secondary)
-        height: 140px
-        min-width: 260px
-        display: flex
-        align-items: center
-        justify-content: center
+        & > div > div
+            border: none !important
 
-    .loader
-        height: 140px
-        min-width: 260px
-        display: flex
-        align-items: center
-        justify-content: center
+        ul
+            top: 34px !important
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 -2px 2px rgba(0, 0, 0, 0) !important
+            border: none !important
 
-        svg
-            width: 32px
-            height: 32px
-            fill: var(--icon-color-secondary)
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            flex: 1
 
+.notifyPopup
     .notificationsContent
         min-height: 140px
         max-height: 280px
@@ -151,16 +119,43 @@
             &:last-of-type
                 border-bottom: 0
 
-    .search
-        flex: .7
+    .loader
+        height: 140px
+        min-width: 260px
+        display: flex
+        align-items: center
+        justify-content: center
 
-        & > div > div
-            border: none !important
+        svg
+            width: 32px
+            height: 32px
+            fill: var(--icon-color-secondary)
 
-        ul
-            top: 34px !important
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08), 0 -2px 2px rgba(0, 0, 0, 0) !important
-            border: none !important
+    .notifyFooter
+        padding: 4px
 
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            flex: 1
+    .noData
+        text-align: center
+        color: var(--text-color-secondary)
+        height: 140px
+        min-width: 260px
+        display: flex
+        align-items: center
+        justify-content: center
+
+.userMenuPopout
+    .userInfo
+        padding: 10px
+        font-size: variables.$fontSizeHeadline
+        min-width: 220px
+        border-bottom: var(--container-border-separator)
+
+        .userName
+            font-weight: 600
+
+        .levelImage
+            vertical-align: middle
+
+    button
+        padding: 0 !important
+        background: transparent !important

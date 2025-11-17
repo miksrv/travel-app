@@ -105,7 +105,6 @@ export const NotificationList: React.FC = () => {
 
     return (
         <Popout
-            className={styles.notifyPopup}
             onOpenChange={setNotifyShow}
             trigger={
                 <Button
@@ -122,7 +121,7 @@ export const NotificationList: React.FC = () => {
                 </Button>
             }
         >
-            <>
+            <div className={styles.notifyPopup}>
                 {!!notifyData?.items?.length && (
                     <div
                         className={styles.notificationsContent}
@@ -161,7 +160,7 @@ export const NotificationList: React.FC = () => {
                         onClick={handleClearNotificationsClick}
                     />
                 </div>
-            </>
+            </div>
         </Popout>
     )
 }
