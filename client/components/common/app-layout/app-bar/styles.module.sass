@@ -78,24 +78,6 @@
         .loginButton
             white-space: nowrap
 
-    .userInfo
-        padding: 10px
-        font-size: variables.$fontSizeHeadline
-        min-width: 220px
-
-        .userName
-            font-weight: 600
-
-        .levelImage
-            vertical-align: middle
-
-    .userMenuPopout
-        margin-left: 10px
-
-        button
-            padding: 0 !important
-            background: transparent !important
-
     .notifyPopup
         svg
             height: 24px !important
@@ -164,3 +146,20 @@
 
         @media only screen and (max-width: variables.$mobileMaxWidth)
             flex: 1
+
+.userMenuPopout
+    .userInfo
+        padding: 10px
+        font-size: variables.$fontSizeHeadline
+        min-width: 220px
+        border-bottom: var(--container-border-separator)
+
+        .userName
+            font-weight: 600
+
+        .levelImage
+            vertical-align: middle
+
+    button
+        padding: 0 !important
+        background: transparent !important

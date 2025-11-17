@@ -6,9 +6,8 @@ import Image from 'next/image'
 import Link from 'next/link'
 
 import { ApiModel } from '@/api'
+import { UserAvatar } from '@/components/common'
 import { levelImage } from '@/functions/userLevels'
-
-import { UserAvatar } from '../../../common/user-avatar'
 
 import styles from './styles.module.sass'
 
@@ -20,7 +19,6 @@ interface UserMenuProps {
 
 export const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
     <Popout
-        className={styles.userMenuPopout}
         trigger={
             <UserAvatar
                 size={'medium'}
@@ -30,58 +28,60 @@ export const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
             />
         }
     >
-        <div className={styles.userInfo}>
-            <div className={styles.userName}>{user?.name}</div>
-            <div>
-                [<b>{user?.levelData?.level}</b>]{' '}
-                <Image
-                    className={styles.levelImage}
-                    src={levelImage(user?.levelData?.level).src}
-                    alt={''}
-                    width={20}
-                    height={20}
-                />{' '}
-                <Link
-                    href={'/users/levels'}
-                    title={t('app-layout.go-to-levels_title', { defaultValue: 'Перейти к уровням' })}
-                >
-                    {user?.levelData?.title}
-                </Link>
+        <div className={styles.userMenuPopout}>
+            <div className={styles.userInfo}>
+                <div className={styles.userName}>{user?.name}</div>
+                <div>
+                    [<b>{user?.levelData?.level}</b>]{' '}
+                    <Image
+                        className={styles.levelImage}
+                        src={levelImage(user?.levelData?.level).src}
+                        alt={''}
+                        width={20}
+                        height={20}
+                    />{' '}
+                    <Link
+                        href={'/users/levels'}
+                        title={t('app-layout.go-to-levels_title', { defaultValue: 'Перейти к уровням' })}
+                    >
+                        {user?.levelData?.title}
+                    </Link>
+                </div>
+                <div>До нового уровня: {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}</div>
             </div>
-            <div>До нового уровня: {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}</div>
+            <ul className={'contextListMenu'}>
+                <li>
+                    <Link
+                        href={`/users/${user?.id}`}
+                        title={t('app-layout.go-to-my-page_title', { defaultValue: 'Перейти на мою страницу' })}
+                    >
+                        <Icon name={'User'} />
+                        {t('app-layout.my-page', { defaultValue: 'Моя страница' })}
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href={'/users/settings'}
+                        title={t('app-layout.go-to-settings_title', { defaultValue: 'Перейти в настройки' })}
+                    >
+                        <Icon name={'Settings'} />
+                        {t('app-layout.settings', { defaultValue: 'Настройки' })}
+                    </Link>
+                </li>
+                <li>
+                    <Link
+                        href={'/'}
+                        title={t('app-layout.logout', { defaultValue: 'Выйти' })}
+                        onClick={(event) => {
+                            event.preventDefault()
+                            onLogout?.()
+                        }}
+                    >
+                        <Icon name={'Exit'} />
+                        {t('app-layout.logout', { defaultValue: 'Выйти' })}
+                    </Link>
+                </li>
+            </ul>
         </div>
-        <ul className={'contextListMenu'}>
-            <li>
-                <Link
-                    href={`/users/${user?.id}`}
-                    title={t('app-layout.go-to-my-page_title', { defaultValue: 'Перейти на мою страницу' })}
-                >
-                    <Icon name={'User'} />
-                    {t('app-layout.my-page', { defaultValue: 'Моя страница' })}
-                </Link>
-            </li>
-            <li>
-                <Link
-                    href={'/users/settings'}
-                    title={t('app-layout.go-to-settings_title', { defaultValue: 'Перейти в настройки' })}
-                >
-                    <Icon name={'Settings'} />
-                    {t('app-layout.settings', { defaultValue: 'Настройки' })}
-                </Link>
-            </li>
-            <li>
-                <Link
-                    href={'/'}
-                    title={t('app-layout.logout', { defaultValue: 'Выйти' })}
-                    onClick={(event) => {
-                        event.preventDefault()
-                        onLogout?.()
-                    }}
-                >
-                    <Icon name={'Exit'} />
-                    {t('app-layout.logout', { defaultValue: 'Выйти' })}
-                </Link>
-            </li>
-        </ul>
     </Popout>
 )
