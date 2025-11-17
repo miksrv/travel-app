@@ -184,6 +184,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                     className={styles.actions}
                                     trigger={
                                         <Button
+                                            className={styles.actionButton}
                                             mode={'outline'}
                                             size={'small'}
                                             icon={'VerticalDots'}
@@ -193,12 +194,11 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                     <ul className={styles.actionMenu}>
                                         <li>
                                             <Button
+                                                stretched={true}
                                                 icon={'Rotate'}
-                                                size={'small'}
                                                 mode={'outline'}
                                                 label={t('to-turn', { defaultValue: 'Повернуть' })}
                                                 disabled={!!photoLoadingID}
-                                                style={{ width: '100%' }}
                                                 onClick={() =>
                                                     handleRotateClick(photo.id, photo?.placeId === 'temporary')
                                                 }
@@ -206,12 +206,11 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
                                         </li>
                                         <li>
                                             <Button
+                                                stretched={true}
                                                 icon={'Close'}
-                                                size={'small'}
                                                 mode={'outline'}
                                                 label={t('delete', { defaultValue: 'Удалить' })}
                                                 disabled={!!photoLoadingID}
-                                                style={{ width: '100%' }}
                                                 onClick={() => handleRemoveClick(photo.id)}
                                             />
                                         </li>
