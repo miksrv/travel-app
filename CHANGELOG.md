@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.4.28
+
+### Patch Changes
+
+- Updated UI Kit, changed Dropdown to Select UI component
+- Upgraded UI Dependencies
+- Improved Place Form page
+
 ## 1.4.27
 
 ### Patch Changes
