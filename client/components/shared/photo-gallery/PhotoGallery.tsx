@@ -55,6 +55,12 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
     const [photoDeleteID, setPhotoDeleteID] = useState<string>()
     const [lightboxPhotoIndex, setLightboxPhotoIndex] = useState<number>()
 
+    const [isExpanded, setIsExpanded] = useState<boolean>(false)
+
+    const VISIBLE_COUNT = 8
+    const visiblePhotos = localPhotos.slice(0, VISIBLE_COUNT)
+    const hiddenPhotos = localPhotos.slice(VISIBLE_COUNT)
+
     const isEmptyPhotoList = !localPhotos.length && !uploadingPhotos?.length
 
     const handleRemoveClick = (photoId: string) => {
@@ -130,95 +136,191 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
             )}
 
             {!isEmptyPhotoList && (
-                <ul className={cn(styles.photoGallery, (!!props?.title || !!props?.action) && styles.marginTop)}>
-                    {onPhotoUploadClick && (
-                        <li className={cn(styles.photoItem, styles.photoUpload)}>
-                            <ImageUploader onClick={onPhotoUploadClick} />
-                        </li>
-                    )}
+                <>
+                    <ul className={cn(styles.photoGallery, (!!props?.title || !!props?.action) && styles.marginTop)}>
+                        {onPhotoUploadClick && (
+                            <li className={cn(styles.photoItem, styles.photoUpload)}>
+                                <ImageUploader onClick={onPhotoUploadClick} />
+                            </li>
+                        )}
 
-                    {uploadingPhotos?.map((photo) => (
-                        <li
-                            key={photo}
-                            className={styles.photoItem}
-                        >
-                            <div className={styles.loader}>
-                                <Spinner />
-                            </div>
-                            <Image
-                                src={photo}
-                                alt={''}
-                                width={206}
-                                height={150}
-                            />
-                        </li>
-                    ))}
-
-                    {localPhotos.map((photo, index) => (
-                        <li
-                            key={photo.id}
-                            className={styles.photoItem}
-                        >
-                            {photo.id === photoLoadingID && (
+                        {uploadingPhotos?.map((photo) => (
+                            <li
+                                key={photo}
+                                className={styles.photoItem}
+                            >
                                 <div className={styles.loader}>
                                     <Spinner />
                                 </div>
-                            )}
-
-                            <Link
-                                className={styles.link}
-                                href={`${IMG_HOST}${photo.full}`}
-                                title={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${index + 1}`}
-                                onClick={(event) => {
-                                    event.preventDefault()
-                                    setLightboxPhotoIndex(index)
-                                }}
-                            >
                                 <Image
-                                    src={`${IMG_HOST}${photo.preview}`}
-                                    alt={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${index + 1}`}
-                                    quality={50}
+                                    src={photo}
+                                    alt={''}
                                     width={206}
                                     height={150}
-                                    sizes={'206px'}
-                                    style={{ width: '100%', height: '100%' }}
                                 />
-                            </Link>
+                            </li>
+                        ))}
 
-                            {!hideActions && isAuth && (
-                                <Popout
-                                    className={styles.actions}
-                                    closeOnChildrenClick={true}
-                                    trigger={
-                                        <Button
-                                            className={styles.actionButton}
-                                            mode={'secondary'}
-                                            size={'small'}
-                                            icon={'VerticalDots'}
-                                        />
-                                    }
+                        {visiblePhotos.map((photo, index) => (
+                            <li
+                                key={photo.id}
+                                className={styles.photoItem}
+                            >
+                                {photo.id === photoLoadingID && (
+                                    <div className={styles.loader}>
+                                        <Spinner />
+                                    </div>
+                                )}
+
+                                <Link
+                                    className={styles.link}
+                                    href={`${IMG_HOST}${photo.full}`}
+                                    title={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${index + 1}`}
+                                    onClick={(event) => {
+                                        event.preventDefault()
+                                        setLightboxPhotoIndex(index)
+                                    }}
                                 >
-                                    <Button
-                                        icon={'Rotate'}
-                                        mode={'outline'}
-                                        style={{ width: '100%', justifyContent: 'left' }}
-                                        label={t('to-turn', { defaultValue: 'Повернуть' })}
-                                        disabled={!!photoLoadingID}
-                                        onClick={() => handleRotateClick(photo.id, photo?.placeId === 'temporary')}
+                                    <Image
+                                        src={`${IMG_HOST}${photo.preview}`}
+                                        alt={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${index + 1}`}
+                                        quality={50}
+                                        width={206}
+                                        height={150}
+                                        sizes={'206px'}
+                                        style={{ width: '100%', height: '100%' }}
                                     />
-                                    <Button
-                                        icon={'Close'}
-                                        mode={'outline'}
-                                        style={{ width: '100%', justifyContent: 'left' }}
-                                        label={t('delete', { defaultValue: 'Удалить' })}
-                                        disabled={!!photoLoadingID}
-                                        onClick={() => handleRemoveClick(photo.id)}
-                                    />
-                                </Popout>
-                            )}
-                        </li>
-                    ))}
-                </ul>
+                                </Link>
+
+                                {!hideActions && isAuth && (
+                                    <Popout
+                                        className={styles.actions}
+                                        closeOnChildrenClick={true}
+                                        trigger={
+                                            <Button
+                                                className={styles.actionButton}
+                                                mode={'secondary'}
+                                                size={'small'}
+                                                icon={'VerticalDots'}
+                                            />
+                                        }
+                                    >
+                                        <Button
+                                            icon={'Rotate'}
+                                            mode={'outline'}
+                                            style={{ width: '100%', justifyContent: 'left' }}
+                                            label={t('to-turn', { defaultValue: 'Повернуть' })}
+                                            disabled={!!photoLoadingID}
+                                            onClick={() => handleRotateClick(photo.id, photo?.placeId === 'temporary')}
+                                        />
+                                        <Button
+                                            icon={'Close'}
+                                            mode={'outline'}
+                                            style={{ width: '100%', justifyContent: 'left' }}
+                                            label={t('delete', { defaultValue: 'Удалить' })}
+                                            disabled={!!photoLoadingID}
+                                            onClick={() => handleRemoveClick(photo.id)}
+                                        />
+                                    </Popout>
+                                )}
+                            </li>
+                        ))}
+                    </ul>
+
+                    {!!hiddenPhotos.length && (
+                        <>
+                            <div className={cn(styles.collapseWrapper, isExpanded && styles.collapseOpen)}>
+                                <div className={styles.collapseInner}>
+                                    <ul className={styles.photoGallery}>
+                                        {hiddenPhotos.map((photo, index) => (
+                                            <li
+                                                key={photo.id}
+                                                className={styles.photoItem}
+                                            >
+                                                {photo.id === photoLoadingID && (
+                                                    <div className={styles.loader}>
+                                                        <Spinner />
+                                                    </div>
+                                                )}
+
+                                                <Link
+                                                    className={styles.link}
+                                                    href={`${IMG_HOST}${photo.full}`}
+                                                    title={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${VISIBLE_COUNT + index + 1}`}
+                                                    onClick={(event) => {
+                                                        event.preventDefault()
+                                                        setLightboxPhotoIndex(VISIBLE_COUNT + index)
+                                                    }}
+                                                >
+                                                    <Image
+                                                        src={`${IMG_HOST}${photo.preview}`}
+                                                        alt={`${photo.title}. ${t('photo', { defaultValue: 'Фотография' })} ${VISIBLE_COUNT + index + 1}`}
+                                                        quality={50}
+                                                        width={206}
+                                                        height={150}
+                                                        sizes={'206px'}
+                                                        style={{ width: '100%', height: '100%' }}
+                                                    />
+                                                </Link>
+
+                                                {!hideActions && isAuth && (
+                                                    <Popout
+                                                        className={styles.actions}
+                                                        closeOnChildrenClick={true}
+                                                        trigger={
+                                                            <Button
+                                                                className={styles.actionButton}
+                                                                mode={'secondary'}
+                                                                size={'small'}
+                                                                icon={'VerticalDots'}
+                                                            />
+                                                        }
+                                                    >
+                                                        <Button
+                                                            icon={'Rotate'}
+                                                            mode={'outline'}
+                                                            style={{ width: '100%', justifyContent: 'left' }}
+                                                            label={t('to-turn', { defaultValue: 'Повернуть' })}
+                                                            disabled={!!photoLoadingID}
+                                                            onClick={() =>
+                                                                handleRotateClick(
+                                                                    photo.id,
+                                                                    photo?.placeId === 'temporary'
+                                                                )
+                                                            }
+                                                        />
+                                                        <Button
+                                                            icon={'Close'}
+                                                            mode={'outline'}
+                                                            style={{ width: '100%', justifyContent: 'left' }}
+                                                            label={t('delete', { defaultValue: 'Удалить' })}
+                                                            disabled={!!photoLoadingID}
+                                                            onClick={() => handleRemoveClick(photo.id)}
+                                                        />
+                                                    </Popout>
+                                                )}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <Button
+                                mode={'secondary'}
+                                stretched={true}
+                                className={styles.expandButton}
+                                onClick={() => setIsExpanded((prev) => !prev)}
+                            >
+                                {isExpanded
+                                    ? t('collapse-photos', { defaultValue: 'Скрыть' })
+                                    : t('expand-photos', {
+                                          count: hiddenPhotos.length,
+                                          defaultValue: `Ещё фотографии (${hiddenPhotos.length})`
+                                      })}
+                            </Button>
+                        </>
+                    )}
+                </>
             )}
 
             {typeof lightboxPhotoIndex === 'number' && (
