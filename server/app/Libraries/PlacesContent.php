@@ -1,6 +1,7 @@
 <?php namespace App\Libraries;
 
 use App\Models\PlacesContentModel;
+use CodeIgniter\Database\BaseConnection;
 use Config\Services;
 
 /**
@@ -49,17 +50,87 @@ class PlacesContent {
     }
 
     /**
+     * Search places by term using FULLTEXT for longer terms, falling back to
+     * LIKE for short terms where FULLTEXT minimum word length would miss results.
+     *
+     * Results are ranked by a combined score that weights title matches higher
+     * than content matches and boosts popular places (views) and locale affinity.
+     *
      * @param string $term
      * @return void
      */
     public function search(string $term): void {
         $this->search = $term;
 
-        $data = $this->model
-            ->like('title', $term)
-            ->orLike('content', $term)
-            ->orderBy('created_at', 'DESC')
-            ->findAll();
+        if (mb_strlen($term) <= 3) {
+            // FULLTEXT requires at least 3-4 characters depending on ft_min_word_len;
+            // fall back to LIKE for short terms to avoid missing results.
+            $data = $this->model
+                ->like('title', $term)
+                ->orLike('content', $term)
+                ->orderBy('created_at', 'DESC')
+                ->findAll();
+
+            $this->_prepareOutput($data);
+            return;
+        }
+
+        $db     = db_connect();
+        $locale = Services::request()->getLocale();
+
+        // Split into words (≥3 chars), add wildcard to each; prepend exact-phrase
+        // bonus so documents containing the full phrase score higher than those
+        // with only scattered individual words.
+        $words = array_values(array_filter(
+            preg_split('/\s+/u', $term),
+            static fn($w) => mb_strlen($w) >= 3
+        ));
+
+        if (empty($words)) {
+            $booleanQuery = $term . '*';
+        } elseif (count($words) === 1) {
+            $booleanQuery = $words[0] . '*';
+        } else {
+            $booleanQuery = '"' . $term . '" ' . implode('* ', $words) . '*';
+        }
+
+        $sql = "
+            SELECT
+                pc.place_id,
+                pc.title,
+                pc.content,
+                pc.user_id,
+                pc.locale,
+                pc.created_at,
+                pc.updated_at,
+                (
+                    CASE WHEN pc.locale = ? THEN 2 ELSE 1 END
+                    *
+                    (
+                        MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE) * 10 +
+                        MATCH(pc.content) AGAINST (? IN BOOLEAN MODE) * 1
+                    )
+                    *
+                    (1 + LOG(1 + COALESCE(p.views, 0) / 1000))
+                ) AS final_score
+            FROM places_content pc
+            JOIN places p ON p.id = pc.place_id AND p.deleted_at IS NULL
+            WHERE
+                MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE)
+                OR MATCH(pc.content) AGAINST (? IN BOOLEAN MODE)
+            GROUP BY pc.place_id
+            ORDER BY final_score DESC
+        ";
+
+        $result = $db->query($sql, [
+            $locale,
+            $booleanQuery,
+            $booleanQuery,
+            $booleanQuery,
+            $booleanQuery,
+        ]);
+
+        $data = $result->getResult();
 
         $this->_prepareOutput($data);
     }
