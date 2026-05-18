@@ -2,6 +2,7 @@ import { ApiModel } from '@/api'
 
 export interface GetListResponse {
     items: ApiModel.Activity[]
+    has_more?: boolean
 }
 
 export interface GetListRequest {

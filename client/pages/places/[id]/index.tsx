@@ -16,17 +16,20 @@ import { Carousel } from '@/components/ui'
 import { IMG_HOST, SITE_LINK } from '@/config/env'
 import {
     ForwardedPlaceCoverEditor,
+    PlaceActionBar,
+    PlaceActivity,
     PlaceCommentList,
     PlaceCoverEditorRefProps,
     PlaceDescription,
-    PlaceHeader,
-    PlaceInformation,
-    PlaceShareButtons,
+    PlaceHero,
+    PlaceInfoSidebar,
     PlaceVisited
 } from '@/sections/place'
 import { formatDateISO, formatDateUTC, removeMarkdown, truncateText } from '@/utils/helpers'
 import { buildHreflangTags } from '@/utils/seo'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
+
+import styles from './styles.module.sass'
 
 const NEAR_PLACES_COUNT = 10
 
@@ -211,58 +214,69 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 data={placeSchema}
             />
 
-            <PlaceHeader
+            <PlaceHero
                 place={place}
                 coverHash={coverHash}
                 onChangePlaceCoverClick={handleEditPlaceCoverClick}
                 onPhotoUploadClick={handleUploadPhotoClick}
             />
 
-            <PlaceInformation place={place} />
+            <div className={styles.pageLayout}>
+                <div className={styles.mainColumn}>
+                    <PlaceActionBar
+                        placeId={place?.id}
+                        placeUrl={pagePlaceUrl}
+                        bookmarks={place?.bookmarks}
+                        verificationExempt={place?.verificationExempt}
+                    />
 
-            <PlaceShareButtons
-                placeId={place?.id}
-                placeUrl={pagePlaceUrl}
-                verificationExempt={place?.verificationExempt}
-            />
+                    <PlaceDescription
+                        placeId={place?.id}
+                        content={place?.content}
+                        tags={place?.tags}
+                    />
 
-            <PlaceVisited place={place} />
+                    <PhotoGallery
+                        title={t('photos')}
+                        photos={localPhotos}
+                        uploadingPhotos={uploadingPhotos}
+                        action={
+                            <Button
+                                mode={'link'}
+                                onClick={handleUploadPhotoClick}
+                            >
+                                {t('upload-photo')}
+                            </Button>
+                        }
+                    />
 
-            <PhotoGallery
-                title={t('photos')}
-                photos={localPhotos}
-                uploadingPhotos={uploadingPhotos}
-                action={
-                    <Button
-                        mode={'link'}
-                        onClick={handleUploadPhotoClick}
-                    >
-                        {t('upload-photo')}
-                    </Button>
-                }
-            />
+                    <Container title={t('comments-title')}>
+                        <PlaceCommentList
+                            placeId={place?.id}
+                            comments={commentList}
+                        />
+                    </Container>
 
-            <PlaceDescription
-                placeId={place?.id}
-                content={place?.content}
-                tags={place?.tags}
-            />
+                    <PlaceActivity
+                        placeId={place?.id}
+                        hidePlaceName={true}
+                    />
+                </div>
 
-            <Container title={t('comments-title')}>
-                <PlaceCommentList
-                    placeId={place?.id}
-                    comments={commentList}
-                />
-            </Container>
+                <aside className={styles.sidebar}>
+                    <PlaceInfoSidebar place={place} />
+                    <PlaceVisited place={place} />
+                </aside>
+            </div>
 
             {!!nearPlaces?.length && (
-                <>
+                <div className={styles.nearPlaces}>
                     <Carousel options={{ dragFree: true, loop: true }}>
-                        {nearPlaces.map((place) => (
+                        {nearPlaces.map((nearPlace) => (
                             <PlacesListItem
                                 t={t}
-                                key={place.id}
-                                place={place}
+                                key={nearPlace.id}
+                                place={nearPlace}
                             />
                         ))}
                     </Carousel>
@@ -276,7 +290,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                     >
                         {t('all-places-nearby')}
                     </Button>
-                </>
+                </div>
             )}
 
             <ForwardedPlaceCoverEditor
