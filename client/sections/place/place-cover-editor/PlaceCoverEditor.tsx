@@ -43,7 +43,10 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
     const [selectedPhotoId, setSelectedPhotoId] = useState<string>('')
     const [imageCropData, setImageCropData] = useState<Crop>()
 
-    const selectedPhoto = useMemo(() => photosData?.items?.find(({ id }) => id === selectedPhotoId), [selectedPhotoId])
+    const selectedPhoto = useMemo(
+        () => photosData?.items?.find(({ id }) => id === selectedPhotoId),
+        [selectedPhotoId, photosData?.items]
+    )
 
     const disabled = isLoading || !imageCropData?.width || !imageCropData.height
 
@@ -91,7 +94,7 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
         setWidthRatio(ratioW)
         setHeightRatio(ratioH)
 
-        const newHeight = (width / 1024) * 300
+        const newHeight = (width / 1024) * 350
 
         setImageCropData({
             height: (newHeight / height) * 100,
@@ -166,9 +169,9 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
                     <div className={styles.innerContainer}>
                         <ReactCrop
                             crop={imageCropData}
-                            aspect={1024 / 300}
+                            aspect={1024 / 350}
                             minWidth={1024 / widthRatio}
-                            minHeight={300 / heightRatio}
+                            minHeight={350 / heightRatio}
                             onChange={(c, p) => setImageCropData(p)}
                         >
                             {/* eslint-disable-next-line next/no-img-element */}

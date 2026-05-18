@@ -10,13 +10,13 @@ import { Notify } from '@/app/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { getErrorMessage } from '@/utils/api'
 
-import styles from './styles.module.sass'
-
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
+    className?: string
+    hideLabel?: boolean
 }
 
-export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...props }) => {
+export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, className, hideLabel, ...props }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -65,9 +65,10 @@ export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, ...prop
     return (
         <Button
             {...props}
-            mode={props?.mode ?? 'secondary'}
-            icon={bookmarkData?.result ? 'HeartFilled' : 'HeartEmpty'}
-            className={styles.bookmarkButton}
+            mode={bookmarkData?.result ? 'primary' : (props?.mode ?? 'secondary')}
+            icon={'Bookmark'}
+            label={hideLabel ? undefined : bookmarkData?.result ? t('saved') : t('save')}
+            className={className}
             disabled={!placeId || loading}
             loading={loading}
             onClick={handleButtonClick}

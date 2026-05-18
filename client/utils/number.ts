@@ -28,6 +28,16 @@ export const round = (value?: number, digits: number = 4): number | undefined =>
 export const ratingColor = (value: number): 'green' | 'orange' | 'gray' | 'red' =>
     value <= 1 ? 'red' : value > 1 && value < 3 ? 'orange' : value >= 3 ? 'green' : 'gray'
 
+export const formatThousands = (value: number | string | undefined): string => {
+    if (value === undefined || value === '') {
+        return ''
+    }
+    const str = String(value)
+    const [int, dec] = str.split('.')
+    const formatted = int.replace(/\B(?=(\d{3})+(?!\d))/g, ' ')
+    return dec !== undefined ? `${formatted}.${dec}` : formatted
+}
+
 export const addDecimalPoint = (input: number | string | undefined): string => {
     if (!input) {
         return ''

@@ -46,7 +46,7 @@ export const CommentListItem: React.FC<CommentListItemProps> = ({
                     <div className={styles.user}>
                         <Link
                             href={`/users/${comment.author.id}`}
-                            title={''}
+                            title={comment.author.name}
                         >
                             {comment.author.name}
                         </Link>

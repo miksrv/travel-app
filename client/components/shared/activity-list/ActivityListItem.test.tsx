@@ -145,7 +145,7 @@ describe('ActivityListItem', () => {
                     item={{ ...baseActivity, type: 'comment', comment: { id: 'c1', content: 'hello' } }}
                 />
             )
-            expect(screen.getByText('прокомментировал(-а) место')).toBeInTheDocument()
+            expect(screen.getByText('оставил(-а) отзыв на место')).toBeInTheDocument()
         })
     })
 

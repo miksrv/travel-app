@@ -103,12 +103,12 @@ describe('BookmarkButton', () => {
             expect(screen.getByRole('button')).toBeInTheDocument()
         })
 
-        it('renders with HeartEmpty icon when not bookmarked', () => {
+        it('renders with Bookmark icon when not bookmarked', () => {
             renderWithStore(<BookmarkButton placeId={'place-1'} />)
-            expect(screen.getByRole('button')).toHaveAttribute('data-icon', 'HeartEmpty')
+            expect(screen.getByRole('button')).toHaveAttribute('data-icon', 'Bookmark')
         })
 
-        it('renders with HeartFilled icon when bookmarked', () => {
+        it('renders with Bookmark icon when bookmarked', () => {
             jest.mocked(API.useBookmarksGetPlaceQuery).mockReturnValue({
                 data: { result: true },
                 isLoading: false,
@@ -116,7 +116,7 @@ describe('BookmarkButton', () => {
             })
 
             renderWithStore(<BookmarkButton placeId={'place-1'} />)
-            expect(screen.getByRole('button')).toHaveAttribute('data-icon', 'HeartFilled')
+            expect(screen.getByRole('button')).toHaveAttribute('data-icon', 'Bookmark')
         })
 
         it('is disabled when no placeId is provided', () => {

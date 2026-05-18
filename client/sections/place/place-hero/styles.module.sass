@@ -32,10 +32,9 @@
             height: 32px
 
     .image
-        border-top-left-radius: var(--border-radius)
-        border-top-right-radius: var(--border-radius)
+        border-radius: var(--border-radius)
         width: 100%
-        height: 300px
+        height: 350px
         background-image: url('/images/no-image.svg')
         background-position: center
         background-size: cover
@@ -65,42 +64,28 @@
                 top: 0
                 width: 100%
 
-        .desktop
-            display: block
-
-        .mobile
-            display: none
-
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            .desktop
-                display: none
-
-            .mobile
-                display: block
-
     .topPanel
         @extend .headerPanel
         justify-content: space-between
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 100%)
+        border-radius: var(--border-radius) var(--border-radius) 0 0
+        z-index: 1
 
-        .backLink
-            border-radius: 50%
-            width: 32px
-            height: 32px
-            background-color: var(--modal-background) !important
-            transition: opacity .15s ease-out
-            opacity: 0
+        .breadcrumbs
+            align-items: center
+            font-size: var(--font-size-small)
+            color: rgba(255, 255, 255, 0.85)
 
-            svg
-                width: 28px
-                height: 28px
-                fill: #737373
-                position: absolute
+            li
+                font-size: inherit
+                color: inherit
 
-            &:hover
-                opacity: .9
+            a
+                color: inherit
+                text-decoration: none
 
-            @media only screen and (max-width: variables.$mobileMaxWidth)
-                opacity: .9
+                &:hover
+                    color: #fff
 
         .actionButtons
             display: flex
@@ -111,6 +96,19 @@
 
     .bottomPanel
         @extend %placeBottomPanel
+        border-radius: var(--border-radius)
+        display: flex
+        align-items: flex-end
+        justify-content: space-between
+        gap: 10px
+
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            flex-direction: column
+            align-items: flex-start
+
+        .textContent
+            flex: 1
+            min-width: 0
 
         h1
             font-size: 20px
@@ -128,26 +126,11 @@
             a
                 color: inherit
 
-        .buttonsPanel
-            display: flex
+        .bookmarkButton
+            flex-shrink: 0
+            margin: 0 10px 10px
 
-            button
-                margin-left: 10px
+            @media only screen and (max-width: variables.$mobileMaxWidth)
+                margin: 0
 
-    .rating
-        .value
-            font-size: 2em
-            font-weight: 600
-            text-align: center
-            margin-bottom: -5px
-            color: #FFF
 
-        .count
-            color: #FFF
-            text-align: center
-            font-size: variables.$fontSizeCaption
-            white-space: nowrap
-
-    &:hover
-        .backLink
-            opacity: .6

@@ -48,7 +48,8 @@ class Activity extends ResourceController
         $activityData  = $this->model->getActivityList($lastDate, $author, $place, min($limit + 1, 40), $offset);
 
         // Drop the extra lookahead row so we return at most $limit items
-        if (count($activityData) > $limit) {
+        $hasMore = count($activityData) > $limit;
+        if ($hasMore) {
             array_pop($activityData);
         }
 
@@ -77,7 +78,7 @@ class Activity extends ResourceController
             $this->model->incrementViews($activityIds);
         }
 
-        return $this->respond(['items' => $groupedData]);
+        return $this->respond(['items' => $groupedData, 'has_more' => $hasMore]);
     }
 
     /**

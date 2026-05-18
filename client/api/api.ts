@@ -389,10 +389,6 @@ export const API = createApi({
             providesTags: ['Rating'],
             query: (item) => `rating/${item}`
         }),
-        ratingGetHistory: builder.query<ApiType.Rating.HistoryResponse, ApiType.Rating.HistoryRequest>({
-            providesTags: ['Rating'],
-            query: (params) => `rating/history${encodeQueryData(params)}`
-        }),
         ratingPutScore: builder.mutation<ApiType.Rating.PutResponse, ApiType.Rating.PutRequest>({
             invalidatesTags: [{ type: 'Rating' }, { type: 'Activity' }, { type: 'Notifications' }],
             query: (data) => ({

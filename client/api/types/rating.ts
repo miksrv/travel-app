@@ -1,5 +1,3 @@
-import { ApiModel } from '@/api'
-
 export interface ListResponse {
     rating?: number
     count?: number
@@ -13,14 +11,4 @@ export interface PutRequest {
 
 export interface PutResponse {
     rating: number
-}
-
-export interface HistoryRequest {
-    placeId?: string
-    userId?: string
-}
-
-export interface HistoryResponse {
-    count?: number
-    items?: ApiModel.RatingHistory[]
 }

@@ -15,7 +15,6 @@ import styles from './styles.module.sass'
 interface CommentListProps {
     placeId?: string
     comments?: ApiModel.Comment[]
-    loading?: boolean
 }
 
 export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
@@ -80,12 +79,13 @@ export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) =
             {!appAuth.isAuth && (
                 <div className={cn(styles.loginContainer, !!comments?.length && styles.topBorder)}>
                     <div>{t('login-to-write-comment')}</div>
-                    <Button
-                        className={styles.loginButton}
-                        mode={'outline'}
-                        label={t('sign-in')}
-                        onClick={handleLoginClick}
-                    />
+                    <div className={styles.loginAction}>
+                        <Button
+                            mode={'outline'}
+                            label={t('sign-in')}
+                            onClick={handleLoginClick}
+                        />
+                    </div>
                 </div>
             )}
         </section>

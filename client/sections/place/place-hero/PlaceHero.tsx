@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import dayjs from 'dayjs'
 import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
 
 import dynamic from 'next/dynamic'
@@ -12,7 +11,9 @@ import { API, ApiModel, ApiType } from '@/api'
 import { openAuthDialog } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { BookmarkButton } from '@/components/shared'
+import { Breadcrumbs } from '@/components/ui'
 import { IMG_HOST } from '@/config/env'
+import { dateToUnixTime } from '@/utils/helpers'
 
 import styles from './styles.module.sass'
 
@@ -20,7 +21,7 @@ const ConfirmationDialog = dynamic(() => import('@/components/shared/confirmatio
     ssr: false
 })
 
-interface PlaceHeaderProps {
+interface PlaceHeroProps {
     place?: ApiModel.Place
     coverHash?: number
     onPhotoUploadClick?: (event?: React.MouseEvent) => void
@@ -33,7 +34,7 @@ type PlaceAddress = {
     type: ApiType.LocationTypes
 }
 
-export const PlaceHeader: React.FC<PlaceHeaderProps> = ({
+export const PlaceHero: React.FC<PlaceHeroProps> = ({
     place,
     coverHash,
     onPhotoUploadClick,
@@ -50,7 +51,7 @@ export const PlaceHeader: React.FC<PlaceHeaderProps> = ({
 
     const [showRemoveDialog, setShowRemoveDialog] = useState<boolean>(false)
 
-    const coverHashString = coverHash || dayjs(place?.updated?.date).unix()
+    const coverHashString = coverHash || dateToUnixTime(place?.updated?.date)
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiType.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []
@@ -80,13 +81,9 @@ export const PlaceHeader: React.FC<PlaceHeaderProps> = ({
         setShowRemoveDialog(true)
     }
 
-    const handleBackLinkClick = async () => {
-        router.back()
-    }
-
     useEffect(() => {
         if (removeSuccess) {
-            void handleBackLinkClick()
+            void router.push('/places')
         }
     }, [removeSuccess])
 
@@ -112,19 +109,18 @@ export const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
 
             <div className={styles.topPanel}>
-                <Button
-                    className={styles.backLink}
-                    onClick={handleBackLinkClick}
-                    icon={'KeyboardLeft'}
+                <Breadcrumbs
+                    className={styles.breadcrumbs}
+                    homePageTitle={t('geotags')}
+                    links={[
+                        { link: '/places', text: t('interesting-places') },
+                        ...(place?.category
+                            ? [{ link: `/places?category=${place.category.name}`, text: place.category.title ?? '' }]
+                            : [])
+                    ]}
                 />
 
                 <div className={styles.actionButtons}>
-                    <BookmarkButton
-                        size={'medium'}
-                        mode={'secondary'}
-                        placeId={place?.id}
-                    />
-
                     <Popout
                         className={styles.contextMenu}
                         closeOnChildrenClick={true}
@@ -204,22 +200,30 @@ export const PlaceHeader: React.FC<PlaceHeaderProps> = ({
             </div>
 
             <div className={styles.bottomPanel}>
-                <h1>{place?.title}</h1>
-                <div className={styles.address}>
-                    {placeAddress.map((address, i) => (
-                        <span key={`address${address.type}`}>
-                            <Link
-                                href={`/places?${address.type}=${address.id}`}
-                                title={`${t('all-geotags-at-address')} ${address.name}`}
-                            >
-                                {address.name}
-                            </Link>
-                            {placeAddress.length - 1 !== i && ', '}
-                        </span>
-                    ))}
+                <div className={styles.textContent}>
+                    <h1>{place?.title}</h1>
+                    <div className={styles.address}>
+                        {placeAddress.map((address, i) => (
+                            <span key={`address${address.type}`}>
+                                <Link
+                                    href={`/places?${address.type}=${address.id}`}
+                                    title={`${t('all-geotags-at-address')} ${address.name}`}
+                                >
+                                    {address.name}
+                                </Link>
+                                {placeAddress.length - 1 !== i && ', '}
+                            </span>
+                        ))}
 
-                    {place?.address?.street && <>{`, ${place.address.street}`}</>}
+                        {place?.address?.street && <>{`, ${place.address.street}`}</>}
+                    </div>
                 </div>
+
+                <BookmarkButton
+                    size={'medium'}
+                    placeId={place?.id}
+                    className={styles.bookmarkButton}
+                />
             </div>
 
             {showRemoveDialog && (

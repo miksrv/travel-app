@@ -1,0 +1,34 @@
+@use '../../../styles/variables' as variables
+
+.pageLayout
+    display: grid
+    grid-template-columns: 1fr 300px
+    gap: 0 8px
+    align-items: flex-start
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        grid-template-columns: 1fr
+
+.mainColumn
+    min-width: 0
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+.sidebar
+    min-width: 0
+    display: flex
+    flex-direction: column
+    gap: 8px
+    position: sticky
+    top: 60px
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        position: static
+        margin-top: 10px
+
+.nearPlaces
+    display: flex
+    flex-direction: column
+    gap: 8px
+    margin-top: -4px
