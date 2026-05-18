@@ -38,6 +38,16 @@ export const formatThousands = (value: number | string | undefined): string => {
     return dec !== undefined ? `${formatted}.${dec}` : formatted
 }
 
+export const formatCount = (n: number): string => {
+    if (n >= 1_000_000) {
+        return `${(n / 1_000_000).toFixed(1)}M`
+    }
+    if (n >= 1_000) {
+        return `${(n / 1_000).toFixed(1)}K`
+    }
+    return String(n)
+}
+
 export const addDecimalPoint = (input: number | string | undefined): string => {
     if (!input) {
         return ''

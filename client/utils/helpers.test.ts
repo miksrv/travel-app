@@ -307,6 +307,27 @@ describe('helpers', () => {
         })
     })
 
+    describe('formatCount', () => {
+        it('returns the number as string for values below 1000', () => {
+            expect(helpers.formatCount(0)).toBe('0')
+            expect(helpers.formatCount(999)).toBe('999')
+            expect(helpers.formatCount(1)).toBe('1')
+        })
+
+        it('formats numbers in thousands with "K" suffix and one decimal', () => {
+            expect(helpers.formatCount(1000)).toBe('1.0K')
+            expect(helpers.formatCount(1500)).toBe('1.5K')
+            expect(helpers.formatCount(4800)).toBe('4.8K')
+            expect(helpers.formatCount(999999)).toBe('1000.0K')
+        })
+
+        it('formats numbers in millions with "M" suffix and one decimal', () => {
+            expect(helpers.formatCount(1000000)).toBe('1.0M')
+            expect(helpers.formatCount(1200000)).toBe('1.2M')
+            expect(helpers.formatCount(2500000)).toBe('2.5M')
+        })
+    })
+
     describe('ratingColor', () => {
         it('returns "red" for values less than or equal to 1', () => {
             expect(helpers.ratingColor(0)).toBe('red')
