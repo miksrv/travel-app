@@ -1,0 +1,53 @@
+@use '../../../styles/variables' as variables
+
+.actionBar
+    display: flex
+    align-items: center
+    flex-wrap: wrap
+    gap: 15px
+
+    .rating
+        display: flex
+        align-items: center
+
+    .ratingScore
+        color: var(--text-color)
+        font-weight: 700
+        font-size: variables.$fontSizeHeadline
+        margin-right: 6px
+
+    .ratingCount
+        color: var(--text-color-secondary)
+        font-size: variables.$fontSizeHeadline
+        margin-left: 6px
+
+    .bookmarks
+        display: flex
+        align-items: center
+        gap: 4px
+        color: var(--text-color-secondary)
+        font-size: variables.$fontSizeHeadline
+        margin: 0 10px
+
+        svg
+            width: 16px
+            height: 16px
+            fill: var(--text-color-secondary)
+
+    .share
+        margin-left: auto
+        font-size: 0
+
+        @media (max-width: 480px)
+            width: 100%
+            margin-left: 0
+
+        button
+            font-size: 0 !important
+            margin-left: 4px
+
+            &:first-of-type
+                margin-left: 0
+
+            svg
+                border-radius: var(--border-radius)
