@@ -151,10 +151,12 @@ class ActivityLibrary {
         $model->insert($activity);
         $session->update();
 
+        $activityId = $model->getLastGeneratedId();
+
         // If user authorized - add user experience
         if ($session->isAuth && $session->user?->id) {
             $levels = new LevelsLibrary();
-            $levels->push($type, $session->user?->id, $model->getInsertID());
+            $levels->push($type, $session->user?->id, $activityId);
 
             $achievements = new AchievementsLibrary();
             $achievements->check($session->user->id, $type);
@@ -163,7 +165,7 @@ class ActivityLibrary {
         // Send notification to place owner
         if (isset($this->owner) && $this->owner !== $session->user?->id) {
             $notify = new NotifyLibrary();
-            $notify->push($type, $this->owner, $model->getInsertID());
+            $notify->push($type, $this->owner, $activityId);
 
             // Get owner email settings
             $userModel = new UsersModel();
@@ -191,7 +193,7 @@ class ActivityLibrary {
                 }
 
                 $email = new \App\Entities\SendingMailEntity();
-                $email->activity_id = $model->getInsertID();
+                $email->activity_id = $activityId;
                 $email->email       = $ownerUser->email;
                 $email->locale      = $ownerUser->locale;
 
