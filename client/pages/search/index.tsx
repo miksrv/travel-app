@@ -107,6 +107,10 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
     }, [query, offset, userLocation, triggerSearch])
 
     const pageTitle = t('search-page-title', { query: query.q, defaultValue: `Поиск: ${query.q}` })
+    const pageDescription = t('search-page-description', {
+        query: query.q,
+        defaultValue: `Результаты поиска «${query.q}» на Geometki — места, адреса и координаты`
+    })
     const hasResults =
         (mergedData.locations?.count ?? 0) > 0 || mergedData.coordinates != null || (mergedData.places?.count ?? 0) > 0
 
@@ -115,7 +119,7 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
             <Head>
                 {generateNextSeo({
                     title: pageTitle,
-                    description: pageTitle,
+                    description: pageDescription,
                     noindex: true,
                     nofollow: true
                 })}

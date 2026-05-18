@@ -45,5 +45,14 @@ Next.js 16 (Pages Router) with React 19. TypeScript throughout.
 
 **Test pattern for map components**: Mock `react-leaflet`, `leaflet`, and any Leaflet context hooks (`useLeafletContext`, `useMapEvents`, `useMap`). Never use the real Leaflet in tests — it requires a browser DOM that jsdom cannot provide. Temporal dead zone: never reference variables defined outside mock factories *inside* the factory (jest hoists mock calls above variable declarations). Solution: define mock data inside the factory, or use `jest.fn()` and override in `beforeEach`.
 
+**Search feature (added 2026-05-18)**:
+- `api/types/search.ts` — flat exports: `Request`, `Response`, `SuggestResponse`, `Suggestion` (union type)
+- `api/api.ts` — `search` (query, keepUnusedDataFor: 60) and `searchSuggest` (query, keepUnusedDataFor: 30) endpoints
+- `utils/number.ts` + `utils/helpers.ts` — `formatCount(n)` helper (1.0K / 1.0M suffix style)
+- `pages/search/index.tsx` — SSR page; redirects to `/` if `q` is empty; load-more via `useLazySearchQuery`
+- `components/pages/search/` — PlaceSearchCard, LocationItem, CoordinatesItem, SearchFilters, SearchMap (dynamic ssr:false), SearchResults
+- `components/layout/app-bar/Search.tsx` — uses `useSearchSuggestQuery`, navigate to `/search?q=` on Enter via wrapper `onKeyDown`; place suggestion selects and navigates to search page; location/coordinates suggestion navigates to `/map#lat,lon,zoom`
+- Custom `Autocomplete` in `components/ui/autocomplete/` does NOT support `onKeyDown` prop — use a wrapper div with `role="search"` + `onKeyDown` to intercept Enter at the container level
+
 **Why:** Summarises the entire client codebase structure for quick context in future sessions.
 **How to apply:** Use when suggesting refactors, new features, or bug fixes to stay consistent with existing patterns.

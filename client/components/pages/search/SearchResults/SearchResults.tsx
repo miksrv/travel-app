@@ -57,12 +57,6 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, use
         }
     }
 
-    const hasResults = locations.length > 0 || coordinates || places.length > 0
-
-    if (!hasResults) {
-        return null
-    }
-
     return (
         <div className={styles.results}>
             {locations.length > 0 && (

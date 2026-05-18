@@ -7,6 +7,7 @@ Disallow: /places/create
 Disallow: /places/*/edit
 Disallow: /users/settings
 Disallow: /admin
+Disallow: /search
 
 # Yandex: treat geo-filter params as non-significant for deduplication
 User-agent: Yandex
