@@ -1,16 +1,15 @@
 @use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as *
 
 .autocomplete
     display: block
 
     .label
+        +truncate
         display: block
         color: var(--input-label-color)
-        overflow: hidden
         padding-bottom: 4px
         padding-top: 2px
-        text-overflow: ellipsis
-        white-space: nowrap
         font-size: variables.$fontSizeHeadline
 
     .loader
@@ -70,10 +69,8 @@
                 color: var(--text-color-primary)
 
             span
-                overflow: hidden
-                white-space: nowrap
+                +truncate
                 display: block
-                text-overflow: ellipsis
 
                 img
                     width: 18px
@@ -92,11 +89,8 @@
                     fill: var(--icon-color-secondary)
 
             .clear, .toggleButton
-                background: transparent
-                border: none
+                +buttonReset
                 margin: 0
-                padding: 0
-                cursor: pointer
 
                 svg
                     margin-top: 2px
@@ -154,9 +148,7 @@
                         float: left
 
                     .content
-                        text-overflow: ellipsis
-                        overflow: hidden
-                        white-space: nowrap
+                        +truncate
 
                     .description
                         color: var(--text-color-secondary)

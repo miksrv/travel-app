@@ -384,6 +384,16 @@ export const API = createApi({
             query: () => 'poi/users'
         }),
 
+        /** Controller: Search **/
+        search: builder.query<ApiType.Search.Response, ApiType.Search.Request>({
+            query: (params) => ({ params, url: 'search' }),
+            keepUnusedDataFor: 60
+        }),
+        searchSuggest: builder.query<ApiType.Search.SuggestResponse, string>({
+            query: (q) => ({ params: { q }, url: 'search/suggest' }),
+            keepUnusedDataFor: 30
+        }),
+
         /** Controller: Rating **/
         ratingGetList: builder.query<ApiType.Rating.ListResponse, string>({
             providesTags: ['Rating'],

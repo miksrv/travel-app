@@ -22,13 +22,13 @@ jest.mock('next-i18next', () => ({
 
 jest.mock('@/api', () => ({
     API: {
-        useLocationGetGeoSearchMutation: jest.fn().mockReturnValue([jest.fn(), { data: undefined, isLoading: false }]),
-        usePlacesGetListQuery: jest.fn().mockReturnValue({ data: undefined, isFetching: false })
+        useSearchSuggestQuery: jest.fn().mockReturnValue({ data: undefined, isFetching: false })
     },
     ApiType: {}
 }))
 
 jest.mock('@/components/ui', () => ({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     Autocomplete: ({ placeholder, className }: any) => (
         <input
             data-testid={'autocomplete'}
@@ -37,19 +37,6 @@ jest.mock('@/components/ui', () => ({
         />
     ),
     AutocompleteOption: {}
-}))
-
-jest.mock('@/utils/categories', () => ({
-    categoryImage: jest.fn().mockReturnValue({ src: '/category-icon.png' })
-}))
-
-jest.mock('@/utils/coordinates', () => ({
-    normalizeInput: jest.fn().mockReturnValue(''),
-    isCoordinates: jest.fn().mockReturnValue(false),
-    CoordinatesD: { fromString: jest.fn().mockReturnValue({ error: true }) },
-    CoordinatesDM: { fromString: jest.fn().mockReturnValue({ error: true }) },
-    CoordinatesDMS: { fromString: jest.fn().mockReturnValue({ error: true }) },
-    CoordinatesDSigned: { fromString: jest.fn().mockReturnValue({ error: true }) }
 }))
 
 describe('Search', () => {
@@ -61,7 +48,7 @@ describe('Search', () => {
 
         it('renders with the correct placeholder text', () => {
             render(<Search />)
-            expect(screen.getByPlaceholderText('Поиск по сайту')).toBeInTheDocument()
+            expect(screen.getByPlaceholderText('Поиск мест, координат')).toBeInTheDocument()
         })
     })
 })

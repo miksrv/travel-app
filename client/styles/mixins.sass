@@ -1,0 +1,20 @@
+@mixin flexCenter
+    display: flex
+    align-items: center
+    justify-content: center
+
+@mixin flexColumn($gap: 8px)
+    display: flex
+    flex-direction: column
+    gap: $gap
+
+@mixin truncate
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+@mixin buttonReset
+    border: none
+    background: transparent
+    cursor: pointer
+    padding: 0

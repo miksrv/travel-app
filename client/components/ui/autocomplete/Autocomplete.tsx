@@ -32,9 +32,11 @@ interface DropdownProps<T> {
     onSelect?: (option?: AutocompleteOption<T>) => void
     onSearch?: (value: string) => void
     onClear?: () => void
+    onEnterPress?: (value: string) => void
+    inputValue?: string
+    suppressDropdown?: boolean
 }
 
-// TODO: If Enter key press and focus on the input field and options list not empty - select first option
 export const Autocomplete = <T,>({
     className,
     options,
@@ -52,7 +54,10 @@ export const Autocomplete = <T,>({
     leftIcon,
     onSelect,
     onSearch,
-    onClear
+    onClear,
+    onEnterPress,
+    inputValue: externalInputValue,
+    suppressDropdown
 }: DropdownProps<T>) => {
     const dropdownRef = useRef<HTMLDivElement>(null)
     const [search, setSearch] = useState<string>()
@@ -96,7 +101,14 @@ export const Autocomplete = <T,>({
     }
 
     const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-        if (event.key === 'Enter' && options?.length && options.length >= 1 && search !== '') {
+        if (event.key !== 'Enter') {
+            return
+        }
+
+        if (onEnterPress) {
+            event.preventDefault()
+            onEnterPress(search ?? '')
+        } else if (options?.length && search) {
             handleSelect(options[0])
         }
     }
@@ -147,10 +159,22 @@ export const Autocomplete = <T,>({
     }, [value])
 
     useEffect(() => {
-        if (search) {
+        if (search && !suppressDropdown) {
             setIsOpen(true)
         }
     }, [options])
+
+    useEffect(() => {
+        if (suppressDropdown) {
+            setIsOpen(false)
+        }
+    }, [suppressDropdown])
+
+    useEffect(() => {
+        if (externalInputValue !== undefined) {
+            setSearch(externalInputValue)
+        }
+    }, [externalInputValue])
 
     return (
         <div

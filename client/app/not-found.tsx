@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
-import styles from './not-found.module.sass'
+import styles from '@/styles/not-found.module.sass'
 
 export default function NotFound() {
     const router = useRouter()

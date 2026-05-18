@@ -680,12 +680,12 @@ class Places extends ResourceController
      *
      * @throws ReflectionException
      *
-     * @return bool|void False when the photo list is empty; void on success.
+     * @return void
      */
-    protected function savePhotos(array $photos, string $placeId, \App\Entities\PlaceEntity $place, \App\Entities\PlaceContentEntity $content): bool|null
+    protected function savePhotos(array $photos, string $placeId, \App\Entities\PlaceEntity $place, \App\Entities\PlaceContentEntity $content): void
     {
         if (empty($photos) || empty($placeId)) {
-            return false;
+            return;
         }
 
         $photoCount = 0;

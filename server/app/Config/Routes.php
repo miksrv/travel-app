@@ -139,6 +139,15 @@ $routes->group('auth', static function ($routes) {
     $routes->options('(:alphanum)', static function () {});
 });
 
+/** Search Controller **/
+$routes->group('search', static function ($routes) {
+    $routes->get('/', 'Search::index');
+    $routes->get('suggest', 'Search::suggest');
+
+    $routes->options('/', static function () {});
+    $routes->options('suggest', static function () {});
+});
+
 /** Location Controller **/
 $routes->group('location', static function ($routes) {
     $routes->get('search', 'Location::search');

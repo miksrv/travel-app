@@ -1,4 +1,5 @@
 @use 'variables' as variables
+@use 'mixins' as *
 
 *, ::before, ::after
     box-sizing: border-box
@@ -293,10 +294,6 @@ a
     & *
         color: #FFFFFF !important
 
-.react-photo-album
-    border-radius: var(--border-radius)
-    overflow: hidden
-
 /* Errors */
 .errorMessageList
     list-style: disc
@@ -334,28 +331,3 @@ a
 
         &:hover, &.active
             background-color: var(--input-background-color)
-
-/** 404 PAGE **/
-.container404
-    display: flex
-    flex-direction: column
-    align-items: center
-    padding: 30% 20px !important
-    margin-top: 15px
-    min-height: 90vh
-
-.code404
-    display: block
-    font-size: 96px
-    font-weight: 200
-    line-height: 1
-    color: var(--text-color-secondary)
-    letter-spacing: -4px
-    margin: 16px 0 0
-
-.description404
-    color: var(--text-color-secondary)
-    font-size: 0.95em
-    margin: 8px 0 24px
-    max-width: 340px
-    text-align: center

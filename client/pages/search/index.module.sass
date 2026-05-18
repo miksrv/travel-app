@@ -1,0 +1,34 @@
+@use '../../styles/variables' as variables
+
+.noResults
+    text-align: center
+    color: var(--text-color-secondary)
+    font-size: variables.$fontSizeParagraph
+    padding: 40px 16px
+
+.layout
+    display: grid
+    grid-template-columns: 45% 1fr
+    gap: 16px
+    align-items: flex-start
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        grid-template-columns: 1fr
+        grid-template-rows: auto auto
+
+.resultsCol
+    min-width: 0
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        order: 1
+
+.mapCol
+    position: sticky
+    top: 60px
+    height: calc(100vh - 95px)
+    min-height: 400px
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        order: 2
+        position: static
+        height: 350px
