@@ -1,0 +1,78 @@
+@use '../styles/variables' as variables
+
+.page
+    display: flex
+    flex-direction: column
+    align-items: center
+    justify-content: center
+    height: 100dvh
+    overflow: hidden
+    padding: 24px 20px
+    background-color: var(--body-background)
+    text-align: center
+    box-sizing: border-box
+
+.code
+    font-size: clamp(72px, 15vw, 120px)
+    font-weight: 900
+    line-height: 1
+    color: var(--text-color-primary)
+    margin: 0
+    letter-spacing: -4px
+
+.title
+    font-size: clamp(18px, 4vw, 26px)
+    font-weight: 700
+    color: var(--text-color-primary)
+    margin: 6px 0 8px
+
+.description
+    font-size: clamp(12px, 2vw, 14px)
+    color: var(--text-color-secondary)
+    max-width: 500px
+    line-height: 1.55
+    margin: 0
+
+.image
+    display: flex
+    align-items: center
+    justify-content: center
+    padding: 4px 0
+    img
+        width: min(280px, 75vw)
+        height: auto
+        object-fit: contain
+        display: block
+
+.actions
+    display: flex
+    flex-direction: column
+    align-items: center
+    gap: 14px
+    flex-shrink: 0
+
+.backButton
+    display: inline-flex
+    align-items: center
+    gap: 8px
+    padding: 10px 28px
+    background-color: #2688eb
+    color: #fff
+    border: none
+    border-radius: 8px
+    font-size: 15px
+    font-weight: 500
+    cursor: pointer
+    text-decoration: none
+    transition: background-color 0.2s ease
+    &:hover
+        background-color: #1a6fd4
+
+.homeLink
+    font-size: 13px
+    color: var(--text-color-secondary)
+    text-decoration: underline
+    text-underline-offset: 3px
+    cursor: pointer
+    &:hover
+        color: var(--text-color-primary)

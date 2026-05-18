@@ -1,6 +1,8 @@
 {
     "page-not-found": "Page not found",
     "page-not-found-description": "You've gone off the map. The page you're looking for doesn't exist.",
+    "server-error": "Server Error",
+    "server-error-description": "Something went wrong. Try refreshing the page or go back to the home page.",
     "map-of-interesting-pages": "Tourist Map of Russia — Interesting Places and Attractions",
     "all-interesting-places": "All interesting places",
     "add-new-place": "Add new place",
