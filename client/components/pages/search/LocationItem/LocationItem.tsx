@@ -18,7 +18,7 @@ export const LocationItem: React.FC<LocationItemProps> = ({ location, onClick })
     return (
         <div className={styles.locationItem}>
             <span className={styles.icon}>
-                <Icon name={'Point'} />
+                <Icon name={'AddressSign'} />
             </span>
 
             <div className={styles.content}>

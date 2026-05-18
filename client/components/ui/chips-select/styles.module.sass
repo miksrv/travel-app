@@ -1,16 +1,15 @@
 @use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as *
 
 .chipsSelect
     display: block
 
     .label
+        +truncate
         display: block
         color: var(--input-label-color)
-        overflow: hidden
         padding-bottom: 4px
         padding-top: 2px
-        text-overflow: ellipsis
-        white-space: nowrap
         font-size: variables.$fontSizeHeadline
 
     .loader
@@ -65,10 +64,8 @@
                 color: var(--text-color-primary)
 
             span
-                overflow: hidden
-                white-space: nowrap
+                +truncate
                 display: block
-                text-overflow: ellipsis
 
                 img
                     width: 18px
@@ -86,11 +83,8 @@
                     fill: var(--icon-color-secondary)
 
             .clear, .toggleButton
-                background: transparent
-                border: none
+                +buttonReset
                 margin: 0
-                padding: 0
-                cursor: pointer
                 height: 24px
 
             .clear
@@ -181,9 +175,7 @@
         padding-left: 8px
 
     .close
-        border: none
-        background: none
-        cursor: pointer
+        +buttonReset
 
         svg
             width: 16px

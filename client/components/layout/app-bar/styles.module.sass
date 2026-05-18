@@ -1,5 +1,6 @@
 @use '../../../styles/variables' as variables
 @use '../../../styles/animations'
+@use '../../../styles/mixins' as *
 
 .appBar
     z-index: 450
@@ -21,12 +22,9 @@
         height: 100%
 
     .hamburgerButton
-        border: none
-        background: transparent
-        padding: 0
+        +buttonReset
         line-height: 10px
         margin-right: 10px
-        cursor: pointer
         opacity: .7
         transition: opacity .3s
         display: none
@@ -69,10 +67,8 @@
             display: block
 
     .rightSection
+        +flexCenter
         margin-left: auto
-        display: flex
-        align-items: center
-        justify-content: center
         padding-left: 10px
         gap: 10px
 
@@ -124,11 +120,9 @@
                 border-bottom: 0
 
     .loader
+        +flexCenter
         height: 140px
         min-width: 260px
-        display: flex
-        align-items: center
-        justify-content: center
 
         svg
             width: 32px
@@ -139,13 +133,11 @@
         padding: 4px
 
     .noData
+        +flexCenter
         text-align: center
         color: var(--text-color-secondary)
         height: 140px
         min-width: 260px
-        display: flex
-        align-items: center
-        justify-content: center
 
 .userMenuPopout
     .userInfo
