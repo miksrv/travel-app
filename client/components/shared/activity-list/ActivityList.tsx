@@ -10,12 +10,13 @@ import { ActivityListItemLoader } from './ActivityListItemLoader'
 
 import styles from './styles.module.sass'
 
-interface ActivityListProps extends Pick<ContainerProps, 'action'> {
+interface ActivityListProps extends Pick<ContainerProps, 'action' | 'footer'> {
     activities?: ApiModel.Activity[]
     title?: string
     loading?: boolean
     compact?: boolean
     scrollable?: boolean
+    hidePlaceName?: boolean
 }
 
 export const ActivityList: React.FC<ActivityListProps> = ({
@@ -23,8 +24,10 @@ export const ActivityList: React.FC<ActivityListProps> = ({
     loading,
     title,
     action,
+    footer,
     compact,
-    scrollable
+    scrollable,
+    hidePlaceName
 }) => {
     const { t } = useTranslation('components.activity-list')
 
@@ -43,6 +46,7 @@ export const ActivityList: React.FC<ActivityListProps> = ({
                     key={`activity-${index}`}
                     item={item}
                     compact={compact}
+                    hidePlaceName={hidePlaceName}
                 />
             ))}
             {loading && <ActivityListItemLoader />}
@@ -53,6 +57,7 @@ export const ActivityList: React.FC<ActivityListProps> = ({
         <Container
             title={title}
             action={action}
+            footer={footer}
         >
             {scrollable ? <div className={styles.scrollableContent}>{content}</div> : content}
         </Container>

@@ -14,16 +14,17 @@ import styles from './styles.module.sass'
 interface ActivityListItemProps {
     item: ApiModel.Activity
     compact?: boolean
+    hidePlaceName?: boolean
 }
 
-export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compact }) => {
+export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compact, hidePlaceName }) => {
     const { t, i18n } = useTranslation('components.activity-list')
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
     const [photoIndex, setPhotoIndex] = useState<number>()
 
     const actionText = {
-        [ApiModel.ActivityTypes.Comment]: t('activity-comment', { defaultValue: 'прокомментировал(-а) место' }),
+        [ApiModel.ActivityTypes.Comment]: t('activity-comment', { defaultValue: 'оставил(-а) отзыв на место' }),
         [ApiModel.ActivityTypes.Cover]: t('activity-cover', { defaultValue: 'обновил(-а) обложку' }),
         [ApiModel.ActivityTypes.Edit]: t('activity-editing', { defaultValue: 'отредактировал(-а) место' }),
         [ApiModel.ActivityTypes.Place]: t('activity-new-place', { defaultValue: 'добавил(-а) место' }),
@@ -84,15 +85,19 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
         />
     ) : null
 
-    const bottomBar = (
+    const hasBottomBar = !hidePlaceName || (!compact && !!item.views)
+
+    const bottomBar = hasBottomBar ? (
         <div className={styles.bottomBar}>
-            <Link
-                href={`/places/${item.place?.id}`}
-                title={item.place?.title}
-                className={styles.pointLink}
-            >
-                {item.place?.title}
-            </Link>
+            {!hidePlaceName && (
+                <Link
+                    href={`/places/${item.place?.id}`}
+                    title={item.place?.title}
+                    className={styles.pointLink}
+                >
+                    {item.place?.title}
+                </Link>
+            )}
 
             {!compact && !!item.views && (
                 <div className={styles.viewCounter}>
@@ -101,7 +106,7 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
                 </div>
             )}
         </div>
-    )
+    ) : null
 
     if (compact) {
         const showCompactPhotos = hasPhotos || showCoverInGrid
