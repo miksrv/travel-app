@@ -266,7 +266,7 @@ export const InteractiveMap: React.FC<MapProps> = ({
                 {...props}
                 center={props.center ?? DEFAULT_MAP_CENTER}
                 zoom={props.zoom ?? DEFAULT_MAP_ZOOM}
-                minZoom={6}
+                minZoom={props.minZoom ?? 6}
                 style={{
                     cursor: enableCoordsControl ? 'crosshair' : props.dragging ? 'pointer' : 'default',
                     height: '100%',
