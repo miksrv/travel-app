@@ -1,0 +1,162 @@
+@use '../../../styles/variables' as variables
+
+.headerPanel
+    position: absolute
+    top: 0
+    left: 0
+    display: flex
+    width: 100%
+    padding: 15px
+
+.placeHeader
+    margin-top: 15px
+    border-radius: var(--border-radius)
+    position: relative
+    box-shadow: var(--container-shadow)
+
+    .loader
+        border-radius: var(--border-radius)
+        position: absolute
+        z-index: 2
+        left: 0
+        top: 0
+        width: 100%
+        height: 100%
+        background-color: rgba(0, 0, 0, .6)
+        display: flex
+        justify-content: center
+        align-items: center
+
+        svg
+            width: 32px
+            height: 32px
+
+    .image
+        border-radius: var(--border-radius)
+        width: 100%
+        height: 350px
+        background-image: url('/images/no-image.svg')
+        background-position: center
+        background-size: cover
+        overflow: hidden
+        position: relative
+
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            height: 240px
+
+        & > div
+            width: 100%
+            height: 100%
+            background-position: center
+            background-repeat: no-repeat
+            background-size: cover
+            border-top-left-radius: var(--border-radius)
+            border-top-right-radius: var(--border-radius)
+
+            &:before
+                border-radius: inherit
+                box-shadow: var(--container-shadow)
+                content: ""
+                height: 100%
+                left: 0
+                pointer-events: none
+                position: absolute
+                top: 0
+                width: 100%
+
+        .desktop
+            display: block
+
+        .mobile
+            display: none
+
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            .desktop
+                display: none
+
+            .mobile
+                display: block
+
+    .topPanel
+        @extend .headerPanel
+        justify-content: space-between
+        background: linear-gradient(to bottom, rgba(0, 0, 0, 0.45) 0%, transparent 100%)
+        border-radius: var(--border-radius) var(--border-radius) 0 0
+        z-index: 1
+
+        .breadcrumbs
+            align-items: center
+            font-size: var(--font-size-small)
+            color: rgba(255, 255, 255, 0.85)
+
+            li
+                font-size: inherit
+                color: inherit
+
+            a
+                color: inherit
+                text-decoration: none
+
+                &:hover
+                    color: #fff
+
+        .actionButtons
+            display: flex
+            justify-content: space-between
+
+            button
+                margin-left: 10px
+
+    .bottomPanel
+        @extend %placeBottomPanel
+        border-radius: var(--border-radius)
+        display: flex
+        align-items: flex-end
+        justify-content: space-between
+        gap: 10px
+
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            flex-direction: column
+            align-items: flex-start
+
+        .textContent
+            flex: 1
+            min-width: 0
+
+        h1
+            font-size: 20px
+            text-overflow: ellipsis
+            overflow: hidden
+            color: #FFF
+            line-height: 22px
+            margin-bottom: 5px
+
+        .address
+            font-size: variables.$fontSizeHeadline
+            opacity: .8
+            color: #FFF
+
+            a
+                color: inherit
+
+        .bookmarkButton
+            flex-shrink: 0
+            margin: 0 10px 10px
+
+            @media only screen and (max-width: variables.$mobileMaxWidth)
+                margin: 0
+
+    .rating
+        .value
+            font-size: 2em
+            font-weight: 600
+            text-align: center
+            margin-bottom: -5px
+            color: #FFF
+
+        .count
+            color: #FFF
+            text-align: center
+            font-size: variables.$fontSizeCaption
+            white-space: nowrap
+
