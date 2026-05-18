@@ -2,7 +2,6 @@
 
 namespace App\Controllers;
 
-use App\Libraries\AvatarLibrary;
 use App\Libraries\SessionLibrary;
 use App\Libraries\ActivityLibrary;
 use App\Models\PlacesModel;
@@ -15,9 +14,8 @@ use Throwable;
 /**
  * Rating controller
  *
- * Handles place rating submission (1–5 stars), updates the place's aggregate
- * rating and the author's reputation, and exposes the rating history for a
- * place or user.
+ * Handles place rating submission (1–5 stars) and updates the place's aggregate
+ * rating and the author's reputation.
  *
  * @package App\Controllers
  */
@@ -29,63 +27,6 @@ class Rating extends ResourceController
     public function __construct()
     {
         $this->session = new SessionLibrary();
-    }
-
-    /**
-     * Return the rating history for a given place or user.
-     *
-     * GET /rating/history?placeId=:id or ?userId=:id — mutually exclusive params.
-     *
-     * @return ResponseInterface
-     */
-    public function history(): ResponseInterface
-    {
-        $paramUser  = $this->request->getGet('userId', FILTER_SANITIZE_SPECIAL_CHARS);
-        $paramPlace = $this->request->getGet('placeId', FILTER_SANITIZE_SPECIAL_CHARS);
-
-        if ($paramPlace && $paramUser) {
-            return $this->failValidationErrors(lang('Rating.onlyOneParam'));
-        }
-
-        if (!$paramPlace && !$paramUser) {
-            return $this->failValidationErrors(lang('Rating.missingParams'));
-        }
-
-        $ratingModel = new RatingModel();
-        $ratingData  = $ratingModel
-            ->select('value, user_id, rating.created_at' . ($paramPlace ? ', users.name, users.avatar' : ''));
-
-        if ($paramUser) {
-            $ratingData->where('user_id', $paramUser);
-        }
-
-        if ($paramPlace) {
-            $ratingData
-                ->join('users', 'rating.user_id = users.id', 'left')
-                ->where('place_id', $paramPlace);
-        }
-
-        $data = $ratingData
-            ->orderBy('rating.created_at', 'DESC')
-            ->findAll();
-
-        $avatarLibrary = new AvatarLibrary();
-        foreach ($data as $item) {
-            if (!empty($item->user_id)) {
-                $item->author = [
-                    'id'     => $item->user_id,
-                    'name'   => $item->name,
-                    'avatar' => $avatarLibrary->buildPath($item->user_id, $item->avatar, 'small'),
-                ];
-            }
-
-            unset($item->user_id, $item->name, $item->avatar);
-        }
-
-        return $this->respond([
-            'count' => count($data),
-            'items' => $data
-        ]);
     }
 
     /**

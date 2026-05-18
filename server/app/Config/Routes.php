@@ -97,7 +97,6 @@ $routes->group('categories', static function ($routes) {
 
 /** Rating Controller **/
 $routes->group('rating', static function ($routes) {
-    $routes->get('history', 'Rating::history');
     $routes->get('(:alphanum)', 'Rating::show/$1');
     $routes->put('/', 'Rating::set');
 

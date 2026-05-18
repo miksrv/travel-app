@@ -7,6 +7,7 @@ use App\Libraries\AvatarLibrary;
 use App\Libraries\PlaceFormatterLibrary;
 use App\Libraries\PlacesContent;
 use App\Libraries\SessionLibrary;
+use App\Models\ActivityModel;
 use App\Models\PlacesModel;
 use App\Models\UsersVisitedPlacesModel;
 use CodeIgniter\HTTP\ResponseInterface;
@@ -215,6 +216,11 @@ class Visited extends ResourceController
 
             if ($visitedData) {
                 $visitedModel->delete($visitedData->id);
+
+                $activityModel = new ActivityModel();
+                $activityModel
+                    ->where(['user_id' => $this->session->user?->id, 'place_id' => $input->place, 'type' => 'visit'])
+                    ->delete();
 
                 return $this->respond(['visited' => false, 'verified' => false]);
             }
