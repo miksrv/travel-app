@@ -43,7 +43,10 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
     const [selectedPhotoId, setSelectedPhotoId] = useState<string>('')
     const [imageCropData, setImageCropData] = useState<Crop>()
 
-    const selectedPhoto = useMemo(() => photosData?.items?.find(({ id }) => id === selectedPhotoId), [selectedPhotoId])
+    const selectedPhoto = useMemo(
+        () => photosData?.items?.find(({ id }) => id === selectedPhotoId),
+        [selectedPhotoId, photosData?.items]
+    )
 
     const disabled = isLoading || !imageCropData?.width || !imageCropData.height
 

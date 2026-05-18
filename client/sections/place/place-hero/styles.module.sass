@@ -64,19 +64,6 @@
                 top: 0
                 width: 100%
 
-        .desktop
-            display: block
-
-        .mobile
-            display: none
-
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            .desktop
-                display: none
-
-            .mobile
-                display: block
-
     .topPanel
         @extend .headerPanel
         justify-content: space-between
@@ -146,17 +133,4 @@
             @media only screen and (max-width: variables.$mobileMaxWidth)
                 margin: 0
 
-    .rating
-        .value
-            font-size: 2em
-            font-weight: 600
-            text-align: center
-            margin-bottom: -5px
-            color: #FFF
-
-        .count
-            color: #FFF
-            text-align: center
-            font-size: variables.$fontSizeCaption
-            white-space: nowrap
 

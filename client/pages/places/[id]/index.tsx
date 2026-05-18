@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Button, Container } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
+import dynamic from 'next/dynamic'
 import Head from 'next/head'
 import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
@@ -11,25 +12,37 @@ import { generateNextSeo } from 'next-seo/pages'
 import { API, ApiModel, ApiType } from '@/api'
 import { openAuthDialog, setLocale } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/app/store'
-import { AppLayout, PhotoGallery, PhotoUploader, PlacesListItem } from '@/components/shared'
+import { AppLayout, PhotoGallery, PlacesListItem } from '@/components/shared'
 import { Carousel } from '@/components/ui'
 import { IMG_HOST, SITE_LINK } from '@/config/env'
 import {
-    ForwardedPlaceCoverEditor,
     PlaceActionBar,
     PlaceActivity,
     PlaceCommentList,
-    PlaceCoverEditorRefProps,
     PlaceDescription,
     PlaceHero,
     PlaceInfoSidebar,
     PlaceVisited
 } from '@/sections/place'
+import type { PlaceCoverEditorRefProps } from '@/sections/place/place-cover-editor'
 import { formatDateISO, formatDateUTC, removeMarkdown, truncateText } from '@/utils/helpers'
 import { buildHreflangTags } from '@/utils/seo'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
 
 import styles from './styles.module.sass'
+
+const ForwardedPlaceCoverEditor = dynamic(
+    () =>
+        import('@/sections/place/place-cover-editor/PlaceCoverEditor').then((m) => ({
+            default: m.ForwardedPlaceCoverEditor
+        })),
+    { ssr: false }
+)
+
+const PhotoUploader = dynamic(
+    () => import('@/components/shared/photo-uploader/PhotoUploader').then((m) => ({ default: m.PhotoUploader })),
+    { ssr: false }
+)
 
 const NEAR_PLACES_COUNT = 10
 
@@ -114,7 +127,8 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
     const placeSchema = useMemo(
         () => ({
             '@context': 'https://schema.org',
-            '@type': 'LocalBusiness',
+            '@type': 'TouristAttraction',
+            '@id': pagePlaceUrl,
             address: {
                 '@type': 'PostalAddress',
                 addressCountry: place?.address?.country?.name,
@@ -179,13 +193,20 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                             authors: [`${SITE_LINK}users/${place?.author?.id}`],
                             modifiedTime: formatDateUTC(place?.updated?.date),
                             publishedTime: formatDateUTC(place?.created?.date),
-                            section: place?.category?.name,
+                            section: place?.category?.title,
                             tags: place?.tags
                         },
                         description: truncateText(removeMarkdown(place?.content)?.replace(/\n/g, ' '), 155),
                         images: [
                             ...(place?.cover
-                                ? [{ alt: place.title || '', url: `${IMG_HOST}${place.cover.full}` }]
+                                ? [
+                                      {
+                                          alt: place.title || '',
+                                          url: `${IMG_HOST}${place.cover.full}`,
+                                          width: 1024,
+                                          height: 350
+                                      }
+                                  ]
                                 : []),
                             ...(photoList?.slice(0, 3).map((photo, index) => ({
                                 alt: `${photo.title} (${index + 1})`,

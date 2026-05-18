@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useState } from 'react'
-import dayjs from 'dayjs'
 import { Button, Icon, Popout, Spinner } from 'simple-react-ui-kit'
 
 import dynamic from 'next/dynamic'
@@ -14,6 +13,7 @@ import { useAppDispatch, useAppSelector } from '@/app/store'
 import { BookmarkButton } from '@/components/shared'
 import { Breadcrumbs } from '@/components/ui'
 import { IMG_HOST } from '@/config/env'
+import { dateToUnixTime } from '@/utils/helpers'
 
 import styles from './styles.module.sass'
 
@@ -51,7 +51,7 @@ export const PlaceHero: React.FC<PlaceHeroProps> = ({
 
     const [showRemoveDialog, setShowRemoveDialog] = useState<boolean>(false)
 
-    const coverHashString = coverHash || dayjs(place?.updated?.date).unix()
+    const coverHashString = coverHash || dateToUnixTime(place?.updated?.date)
     const placeAddress: PlaceAddress[] = useMemo(() => {
         const addressTypes: ApiType.LocationTypes[] = ['country', 'region', 'district', 'locality']
         const address: PlaceAddress[] = []

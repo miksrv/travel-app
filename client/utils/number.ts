@@ -29,7 +29,7 @@ export const ratingColor = (value: number): 'green' | 'orange' | 'gray' | 'red' 
     value <= 1 ? 'red' : value > 1 && value < 3 ? 'orange' : value >= 3 ? 'green' : 'gray'
 
 export const formatThousands = (value: number | string | undefined): string => {
-    if (value == undefined || value === '') {
+    if (value === undefined || value === '') {
         return ''
     }
     const str = String(value)
