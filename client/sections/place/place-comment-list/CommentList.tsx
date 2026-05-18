@@ -35,7 +35,7 @@ export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) =
         const index: Record<string, ApiModel.Comment[]> = { root: [] }
 
         comments?.forEach((item) => {
-            const key = item.answerId ?? 'root'
+            const key = item.answerId || 'root'
             ;(index[key] ??= []).push(item)
         })
 
