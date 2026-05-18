@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import { Select, SelectOptionType } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next/pages'
 
-import { API, ApiType } from '@/api'
+import { API, ApiModel, ApiType } from '@/api'
+import { categoryImage } from '@/utils/categories'
 
 import styles from './styles.module.sass'
 
@@ -32,13 +33,18 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ query, onChange })
         { key: 'places', value: t('search-filter-type-places', { defaultValue: 'Интересные места' }) }
     ]
 
-    const categoryOptions: Array<SelectOptionType<string>> = [
-        { key: '', value: t('all', { defaultValue: 'Все' }) },
-        ...(categoriesData?.items?.map((cat) => ({
-            key: cat.name as string,
-            value: cat.title
-        })) ?? [])
-    ]
+    const categoryOptions: Array<SelectOptionType<string>> = useMemo(
+        () => [
+            { key: '', value: t('all', { defaultValue: 'Все' }) },
+            ...(categoriesData?.items?.map((cat) => ({
+                // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                image: categoryImage(cat.name as ApiModel.Categories) as any,
+                key: cat.name as string,
+                value: cat.title
+            })) ?? [])
+        ],
+        [categoriesData?.items]
+    )
 
     const sortOptions: Array<SelectOptionType<string>> = [
         { key: 'distance', value: t('search-sort-distance', { defaultValue: 'По расстоянию' }) },

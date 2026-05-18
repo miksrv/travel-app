@@ -43,10 +43,13 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
         setExtraPlaces(undefined)
     }, [router.query.q])
 
+    // type=coordinates relies on the coordinate parser which only runs with type=all on the backend
+    const apiType: ApiType.Search.Request['type'] = query.type === 'coordinates' ? 'all' : query.type
+
     const { data: searchData, isFetching } = API.useSearchQuery(
         {
             q: query.q,
-            type: query.type,
+            type: apiType,
             category: query.category || undefined,
             sort: query.sort,
             order: query.order,
@@ -84,7 +87,7 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
         try {
             const result = await triggerSearch({
                 q: query.q,
-                type: query.type,
+                type: apiType,
                 category: query.category || undefined,
                 sort: query.sort,
                 order: query.order,
@@ -111,8 +114,19 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
         query: query.q,
         defaultValue: `Результаты поиска «${query.q}» на Geometki — места, адреса и координаты`
     })
-    const hasResults =
-        (mergedData.locations?.count ?? 0) > 0 || mergedData.coordinates != null || (mergedData.places?.count ?? 0) > 0
+    const hasResults = (() => {
+        const { locations, coordinates, places } = mergedData
+        if (query.type === 'location') {
+            return (locations?.count ?? 0) > 0
+        }
+        if (query.type === 'coordinates') {
+            return coordinates != null
+        }
+        if (query.type === 'places') {
+            return (places?.count ?? 0) > 0
+        }
+        return (locations?.count ?? 0) > 0 || coordinates != null || (places?.count ?? 0) > 0
+    })()
 
     return (
         <AppLayout>
@@ -154,6 +168,7 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
                         <div className={styles.resultsCol}>
                             <SearchResults
                                 data={mergedData}
+                                type={query.type}
                                 userLat={userLocation?.lat}
                                 userLon={userLocation?.lon}
                                 onLoadMore={() => void handleLoadMore()}

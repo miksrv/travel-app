@@ -15,13 +15,21 @@ const MAX_LOCATIONS_SHOWN = 3
 
 interface SearchResultsProps {
     data: ApiType.Search.Response
+    type?: ApiType.Search.Request['type']
     userLat?: number | null
     userLon?: number | null
     onLoadMore: () => void
     isLoadingMore: boolean
 }
 
-export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, userLon, onLoadMore, isLoadingMore }) => {
+export const SearchResults: React.FC<SearchResultsProps> = ({
+    data,
+    type,
+    userLat,
+    userLon,
+    onLoadMore,
+    isLoadingMore
+}) => {
     const { t } = useTranslation()
     const router = useRouter()
 
@@ -34,6 +42,10 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, use
 
     const visibleLocations = showAllLocations ? locations : locations.slice(0, MAX_LOCATIONS_SHOWN)
     const hiddenLocationsCount = locationsCount - MAX_LOCATIONS_SHOWN
+
+    const showLocations = (!type || type === 'all' || type === 'location') && locations.length > 0
+    const showCoordinates = (!type || type === 'all' || type === 'coordinates') && coordinates != null
+    const showPlaces = (!type || type === 'all' || type === 'places') && places.length > 0
 
     const handleLocationClick = async (location: ApiModel.GeoSearchLocation) => {
         if (location.lat != null && location.lon != null) {
@@ -59,7 +71,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, use
 
     return (
         <div className={styles.results}>
-            {locations.length > 0 && (
+            {showLocations && (
                 <section className={styles.section}>
                     <h2 className={styles.sectionTitle}>{t('search-results-locations', { defaultValue: 'Адреса' })}</h2>
 
@@ -87,7 +99,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, use
                 </section>
             )}
 
-            {coordinates && (
+            {showCoordinates && (
                 <section className={styles.section}>
                     <h2 className={styles.sectionTitle}>
                         {t('search-results-coordinates', { defaultValue: 'Координаты' })}
@@ -102,7 +114,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({ data, userLat, use
                 </section>
             )}
 
-            {places.length > 0 && (
+            {showPlaces && (
                 <section className={styles.section}>
                     <h2 className={styles.sectionTitle}>
                         {t('search-results-places', { defaultValue: 'Интересные места' })}
