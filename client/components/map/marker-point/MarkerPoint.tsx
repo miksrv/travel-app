@@ -86,7 +86,10 @@ export const MarkerPoint: React.FC<MarkerPointProps> = ({ place, keepInView }) =
                         </Link>
 
                         <div className={styles.bookmarkButton}>
-                            <BookmarkButton placeId={poiData?.id} />
+                            <BookmarkButton
+                                placeId={poiData?.id}
+                                hideLabel={true}
+                            />
                         </div>
 
                         <div

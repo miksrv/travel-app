@@ -13,9 +13,10 @@ import { getErrorMessage } from '@/utils/api'
 interface BookmarkButtonProps extends ButtonProps {
     placeId?: string
     className?: string
+    hideLabel?: boolean
 }
 
-export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, className, ...props }) => {
+export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, className, hideLabel, ...props }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -66,7 +67,7 @@ export const BookmarkButton: React.FC<BookmarkButtonProps> = ({ placeId, classNa
             {...props}
             mode={bookmarkData?.result ? 'primary' : (props?.mode ?? 'secondary')}
             icon={'Bookmark'}
-            label={bookmarkData?.result ? t('saved') : t('save')}
+            label={hideLabel ? undefined : bookmarkData?.result ? t('saved') : t('save')}
             className={className}
             disabled={!placeId || loading}
             loading={loading}
