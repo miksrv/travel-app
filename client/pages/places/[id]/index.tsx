@@ -124,11 +124,13 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
     const placeSchema = useMemo(
         () => ({
             '@context': 'https://schema.org',
-            '@type': 'TouristAttraction',
+            '@type': ['TouristAttraction', 'LocalBusiness'],
             '@id': pagePlaceUrl,
             address: {
                 '@type': 'PostalAddress',
-                addressCountry: place?.address?.country?.name,
+                addressCountry: place?.address?.country?.name
+                    ? { '@type': 'Country', name: place.address.country.name }
+                    : undefined,
                 addressLocality: place?.address?.locality?.name,
                 addressRegion: place?.address?.region?.name,
                 streetAddress: place?.address?.street
@@ -137,8 +139,8 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 ? {
                       '@type': 'AggregateRating',
                       bestRating: '5',
-                      ratingCount: ratingCount ?? 0,
-                      ratingValue: place?.rating,
+                      ratingCount: ratingCount,
+                      ratingValue: String(place?.rating),
                       worstRating: '1'
                   }
                 : undefined,
