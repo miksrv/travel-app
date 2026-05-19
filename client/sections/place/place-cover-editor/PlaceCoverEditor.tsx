@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import ReactCrop, { Crop } from 'react-image-crop'
 import { Button, Dialog } from 'simple-react-ui-kit'
 
@@ -6,9 +6,9 @@ import Image from 'next/image'
 import { useTranslation } from 'next-i18next/pages'
 
 import { API } from '@/api'
-import { openAuthDialog, toggleOverlay } from '@/app/applicationSlice'
+import { toggleOverlay } from '@/app/applicationSlice'
 import { Notify } from '@/app/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/app/store'
+import { useAppDispatch } from '@/app/store'
 import { IMG_HOST } from '@/config/env'
 import { getErrorMessage } from '@/utils/api'
 
@@ -17,21 +17,14 @@ import styles from './styles.module.sass'
 
 interface PlaceCoverEditorProps {
     placeId?: string
+    open?: boolean
+    onClose?: () => void
     onSaveCover?: () => void
 }
 
-export interface PlaceCoverEditorRefProps {
-    handleChangeCoverClick: (event: React.MouseEvent) => void
-}
-
-const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps, PlaceCoverEditorProps> = (
-    { placeId, onSaveCover },
-    ref
-) => {
+const PlaceCoverEditor: React.FC<PlaceCoverEditorProps> = ({ placeId, open, onClose, onSaveCover }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
-
-    const authSlice = useAppSelector((state) => state.auth)
 
     const { data: photosData, isLoading: photoLoading } = API.usePhotosGetListQuery({ place: placeId })
 
@@ -50,20 +43,11 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
 
     const disabled = isLoading || !imageCropData?.width || !imageCropData.height
 
-    const handleChangeCoverClick = (event: React.MouseEvent) => {
-        if (!authSlice.isAuth) {
-            event.stopPropagation()
-            dispatch(openAuthDialog())
-        } else {
-            dispatch(toggleOverlay(true))
-            setCoverDialogOpen(true)
-        }
-    }
-
     const handleCoverDialogClose = () => {
         dispatch(toggleOverlay(false))
         setCoverDialogOpen(false)
         setSelectedPhotoId('')
+        onClose?.()
     }
 
     const handleSaveCover = async () => {
@@ -105,9 +89,12 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
         })
     }
 
-    useImperativeHandle(ref, () => ({
-        handleChangeCoverClick
-    }))
+    useEffect(() => {
+        if (open) {
+            dispatch(toggleOverlay(true))
+            setCoverDialogOpen(true)
+        }
+    }, [open])
 
     useEffect(() => {
         if (coverDialogOpen) {
@@ -204,4 +191,4 @@ const PlaceCoverEditor: React.ForwardRefRenderFunction<PlaceCoverEditorRefProps,
     )
 }
 
-export const ForwardedPlaceCoverEditor = forwardRef(PlaceCoverEditor)
+export { PlaceCoverEditor }
