@@ -530,7 +530,7 @@ class Places extends ResourceController
                 $place->country_id  = $geocoder->countryId;
                 $place->region_id   = $geocoder->regionId;
                 $place->district_id = $geocoder->districtId;
-                $place->locality_id = $geocoder->localityId;
+                $place->locality_id = ($geocoder->localityId > 0) ? $geocoder->localityId : null;
                 $hasChanges = true;
             }
 

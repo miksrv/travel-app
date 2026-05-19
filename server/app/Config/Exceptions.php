@@ -31,9 +31,14 @@ class Exceptions extends BaseConfig
      * Any status codes here will NOT be logged if logging is turned on.
      * By default, only 404 (Page Not Found) exceptions are ignored.
      *
+     * 400 is added to suppress CRITICAL noise from CI4's InvalidChars security
+     * filter: bots and crawlers regularly send requests with malformed or
+     * non-URL-encoded Russian text that contains control characters. The filter
+     * correctly rejects these with a 400 response; no server-side action is needed.
+     *
      * @var list<int>
      */
-    public array $ignoreCodes = [404];
+    public array $ignoreCodes = [400, 404];
 
     /**
      * --------------------------------------------------------------------------
