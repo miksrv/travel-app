@@ -24,17 +24,16 @@ import {
     PlaceInfoSidebar,
     PlaceVisited
 } from '@/sections/place'
-import type { PlaceCoverEditorRefProps } from '@/sections/place/place-cover-editor'
 import { formatDateISO, formatDateUTC, removeMarkdown, truncateText } from '@/utils/helpers'
 import { buildHreflangTags } from '@/utils/seo'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
 
 import styles from './styles.module.sass'
 
-const ForwardedPlaceCoverEditor = dynamic(
+const PlaceCoverEditor = dynamic(
     () =>
         import('@/sections/place/place-cover-editor/PlaceCoverEditor').then((m) => ({
-            default: m.ForwardedPlaceCoverEditor
+            default: m.PlaceCoverEditor
         })),
     { ssr: false }
 )
@@ -59,9 +58,9 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
 
     const dispatch = useAppDispatch()
 
-    const placeCoverEditorRef = useRef<PlaceCoverEditorRefProps>(null)
     const inputFileRef = useRef<HTMLInputElement>(null)
 
+    const [coverEditorOpen, setCoverEditorOpen] = useState<boolean>(false)
     const [coverHash, setCoverHash] = useState<number | undefined>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
@@ -81,9 +80,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
             return
         }
 
-        if (placeCoverEditorRef?.current) {
-            placeCoverEditorRef.current?.handleChangeCoverClick({} as React.MouseEvent)
-        }
+        setCoverEditorOpen(true)
     }
 
     const handleUploadPhotoClick = (event: React.MouseEvent | undefined) => {
@@ -314,9 +311,10 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 </div>
             )}
 
-            <ForwardedPlaceCoverEditor
-                ref={placeCoverEditorRef}
+            <PlaceCoverEditor
                 placeId={place?.id}
+                open={coverEditorOpen}
+                onClose={() => setCoverEditorOpen(false)}
                 onSaveCover={handleSaveCover}
             />
 
