@@ -334,21 +334,34 @@ class Geocoder{
         ?string $titleRu,
     ): void
     {
-        if (!$titleEn && !$titleRu) {
+        // Both titles are required by the DB schema (NOT NULL) and model validation.
+        // If either is missing we cannot insert a valid row, so bail out.
+        if (!$titleEn || !$titleRu) {
             return;
         }
 
         $localityModel = new LocationLocalitiesModel();
-        $localityData  = $localityModel
+
+        // Use IS NULL for nullable FK columns; "= NULL" never matches in SQL.
+        $query = $localityModel
             ->select('id')
-            ->where([
-                'country_id'  => $this->countryId,
-                'region_id'   => $this->regionId,
-                'district_id' => $this->districtId,
-                'title_en'    => $titleEn,
-                'title_ru'    => $titleRu
-            ])
-            ->first();
+            ->where('country_id', $this->countryId)
+            ->where('title_en', $titleEn)
+            ->where('title_ru', $titleRu);
+
+        if ($this->regionId !== null) {
+            $query->where('region_id', $this->regionId);
+        } else {
+            $query->whereNull('region_id');
+        }
+
+        if ($this->districtId !== null) {
+            $query->where('district_id', $this->districtId);
+        } else {
+            $query->whereNull('district_id');
+        }
+
+        $localityData = $query->first();
 
         if ($localityData) {
             $this->localityId = $localityData->id;
@@ -364,6 +377,11 @@ class Geocoder{
 
         $localityModel->insert($locality);
 
-        $this->localityId = $localityModel->getInsertID();
+        $insertId = $localityModel->getInsertID();
+
+        // Only assign if the insert actually succeeded (getInsertID returns 0 on failure).
+        if ($insertId > 0) {
+            $this->localityId = $insertId;
+        }
     }
 }
