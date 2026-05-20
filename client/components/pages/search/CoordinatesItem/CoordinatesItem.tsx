@@ -15,7 +15,7 @@ interface CoordinatesItemProps {
 export const CoordinatesItem: React.FC<CoordinatesItemProps> = ({ lat, lon, secondary, onClick }) => (
     <div className={styles.coordinatesItem}>
         <span className={styles.icon}>
-            <Icon name={'Point'} />
+            <Icon name={'Position'} />
         </span>
 
         <div className={styles.content}>

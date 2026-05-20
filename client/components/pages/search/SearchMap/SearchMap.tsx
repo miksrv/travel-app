@@ -3,6 +3,7 @@ import React, { useMemo } from 'react'
 import dynamic from 'next/dynamic'
 
 import { ApiModel, ApiType } from '@/api'
+import { MarkerPinData } from '@/components/map/types'
 
 import { computeMapView } from './utils'
 
@@ -28,6 +29,36 @@ export const SearchMap: React.FC<SearchMapProps> = ({ places, locations, coordin
         [places]
     )
 
+    const pins = useMemo<MarkerPinData[]>(() => {
+        const result: MarkerPinData[] = []
+
+        locations?.forEach((loc) => {
+            if (loc.lat == null || loc.lon == null) {
+                return
+            }
+
+            const parts = [loc.locality, loc.district, loc.region, loc.country].filter(Boolean)
+
+            result.push({
+                lat: loc.lat,
+                lon: loc.lon,
+                type: 'location',
+                label: parts.join(', ') || undefined
+            })
+        })
+
+        if (coordinates) {
+            result.push({
+                lat: coordinates.lat,
+                lon: coordinates.lon,
+                type: 'coordinates',
+                label: coordinates.secondary ?? `${coordinates.lat}, ${coordinates.lon}`
+            })
+        }
+
+        return result
+    }, [locations, coordinates])
+
     const { center, zoom } = useMemo(() => {
         const points = [
             ...(places
@@ -47,6 +78,7 @@ export const SearchMap: React.FC<SearchMapProps> = ({ places, locations, coordin
             zoom={zoom}
             minZoom={2}
             places={placeMarks}
+            pins={pins}
             scrollWheelZoom={true}
             controlsSize={'small'}
         />

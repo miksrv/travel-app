@@ -349,7 +349,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const [{ data: ratingData }, { data: photosData }, { data: commentsData }, { data: nearPlaces }] =
+            const [{ data: ratingData }, { data: photosData }, { data: _commentsData }, { data: nearPlaces }] =
                 await Promise.all([
                     store.dispatch(API.endpoints.ratingGetList.initiate(id)),
                     store.dispatch(API.endpoints.photosGetList.initiate({ place: id })),
