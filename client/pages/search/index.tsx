@@ -14,7 +14,7 @@ import { setLocale } from '@/app/applicationSlice'
 import { useAppSelector, wrapper } from '@/app/store'
 import { SearchFilters, SearchPageQuery } from '@/components/pages/search/SearchFilters'
 import { SearchMap } from '@/components/pages/search/SearchMap'
-import { SearchResults } from '@/components/pages/search/SearchResults'
+import { SearchResults, SearchResultsSkeleton } from '@/components/pages/search/SearchResults'
 import { AppLayout, PageHeader } from '@/components/shared'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
 
@@ -155,6 +155,22 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
             </Container>
 
             <Container>
+                {isFetching && (
+                    <div className={styles.layout}>
+                        <div className={styles.resultsCol}>
+                            <SearchResultsSkeleton type={query.type} />
+                        </div>
+
+                        <div className={styles.mapCol}>
+                            <SearchMap
+                                places={undefined}
+                                locations={undefined}
+                                coordinates={undefined}
+                            />
+                        </div>
+                    </div>
+                )}
+
                 {!hasResults && !isFetching && (
                     <div className={styles.noResults}>
                         <Image
@@ -170,7 +186,7 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
                     </div>
                 )}
 
-                {hasResults && (
+                {hasResults && !isFetching && (
                     <div className={styles.layout}>
                         <div className={styles.resultsCol}>
                             <SearchResults
