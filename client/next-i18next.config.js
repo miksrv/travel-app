@@ -9,11 +9,7 @@ module.exports = {
         defaultLocale: 'ru',
         locales: ['ru', 'en']
     },
-    /** To avoid issues when deploying to some paas (vercel...) */
-    // localePath:
-    //     typeof window === 'undefined'
-    //         ? require('path').resolve('./public/locales')
-    //         : '/locales',
+    localePath: require('path').resolve('./public/locales'),
     reloadOnPrerender: process.env.NODE_ENV === 'development'
     /**
      * @link https://github.com/i18next/next-i18next#6-advanced-configuration
