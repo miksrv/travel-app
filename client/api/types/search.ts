@@ -4,7 +4,7 @@ export interface Request {
     q: string
     type?: 'all' | 'location' | 'coordinates' | 'places'
     category?: string
-    sort?: 'distance' | 'views' | 'rating' | 'created_at'
+    sort?: 'relevance' | 'distance' | 'views' | 'rating' | 'created_at'
     order?: 'asc' | 'desc'
     lat?: number | null
     lon?: number | null

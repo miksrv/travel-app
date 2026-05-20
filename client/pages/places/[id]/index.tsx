@@ -50,10 +50,9 @@ interface PlacePageProps {
     place?: ApiModel.Place
     photoList?: ApiModel.Photo[]
     nearPlaces?: ApiModel.Place[] | null
-    commentList?: ApiModel.Comment[]
 }
 
-const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, nearPlaces, commentList }) => {
+const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, nearPlaces }) => {
     const { t, i18n } = useTranslation()
 
     const dispatch = useAppDispatch()
@@ -271,10 +270,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                     />
 
                     <Container title={t('comments-title')}>
-                        <PlaceCommentList
-                            placeId={place?.id}
-                            comments={commentList}
-                        />
+                        <PlaceCommentList placeId={place?.id} />
                     </Container>
 
                     <PlaceActivity
@@ -353,7 +349,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const [{ data: ratingData }, { data: photosData }, { data: commentsData }, { data: nearPlaces }] =
+            const [{ data: ratingData }, { data: photosData }, { data: _commentsData }, { data: nearPlaces }] =
                 await Promise.all([
                     store.dispatch(API.endpoints.ratingGetList.initiate(id)),
                     store.dispatch(API.endpoints.photosGetList.initiate({ place: id })),
@@ -375,7 +371,6 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
-                    commentList: commentsData?.items,
                     nearPlaces: nearPlaces?.items ?? null,
                     photoList: photosData?.items,
                     place: placeData,

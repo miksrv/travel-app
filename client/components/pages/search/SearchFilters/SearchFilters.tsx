@@ -47,6 +47,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ query, onChange })
     )
 
     const sortOptions: Array<SelectOptionType<string>> = [
+        { key: 'relevance', value: t('search-sort-relevance', { defaultValue: 'По релевантности' }) },
         { key: 'distance', value: t('search-sort-distance', { defaultValue: 'По расстоянию' }) },
         { key: 'views', value: t('search-sort-views', { defaultValue: 'По просмотрам' }) },
         { key: 'rating', value: t('search-sort-rating', { defaultValue: 'По рейтингу' }) },
@@ -79,7 +80,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({ query, onChange })
             <Select<string>
                 placeholder={t('search-filter-sort', { defaultValue: 'Сортировка' })}
                 options={sortOptions}
-                value={query.sort ?? 'views'}
+                value={query.sort ?? 'relevance'}
                 onSelect={(selected) => {
                     if (selected?.[0]) {
                         onChange('sort', selected[0].key)

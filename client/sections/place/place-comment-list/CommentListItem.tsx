@@ -10,30 +10,30 @@ import { ApiModel } from '@/api'
 import { UserAvatar } from '@/components/shared'
 import { timeAgo } from '@/utils/helpers'
 
-import { CommentForm } from './CommentForm'
-
 import styles from './styles.module.sass'
 
 interface CommentListItemProps {
     t: TFunction
-    placeId?: string
     comment: ApiModel.Comment
     isAuth?: boolean
     isAnswer?: boolean
-    formAnswerId?: string
-    onAnswerClick?: (id?: string) => void
+    isReplying?: boolean
+    onAnswerClick?: (replyTo?: { id: string; name: string }) => void
 }
 
 export const CommentListItem: React.FC<CommentListItemProps> = ({
     t,
-    placeId,
     comment,
     isAuth,
     isAnswer,
-    formAnswerId,
+    isReplying,
     onAnswerClick
 }) => {
     const { i18n } = useTranslation()
+
+    const handleReplyClick = () => {
+        onAnswerClick?.(isReplying ? undefined : { id: comment.id, name: comment.author.name })
+    }
 
     return (
         <div className={cn(styles.commentItem, isAnswer && styles.answer)}>
@@ -59,22 +59,13 @@ export const CommentListItem: React.FC<CommentListItemProps> = ({
                             <Button
                                 size={'small'}
                                 mode={'link'}
-                                className={styles.answerButton}
-                                onClick={() => onAnswerClick?.(formAnswerId !== comment.id ? comment.id : undefined)}
+                                className={cn(styles.answerButton, isReplying && styles.answerButtonActive)}
+                                onClick={handleReplyClick}
                             >
-                                {formAnswerId === comment.id ? t('comment-answer-cancel') : t('comment-answer')}
+                                {isReplying ? t('comment-answer-cancel') : t('comment-answer')}
                             </Button>
                         )}
                     </div>
-
-                    {formAnswerId === comment.id && (
-                        <CommentForm
-                            placeId={placeId}
-                            answerId={comment.id}
-                            isAuth={isAuth}
-                            onCommentAdded={() => onAnswerClick?.(undefined)}
-                        />
-                    )}
                 </div>
             </div>
         </div>

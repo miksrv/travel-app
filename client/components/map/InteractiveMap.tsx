@@ -19,11 +19,12 @@ import { LayerSwitcherControl } from './layer-switcher-control'
 import { MapEvents } from './MapEvents'
 import { MarkerPhoto } from './marker-photo'
 import { MarkerPhotoCluster } from './marker-photo-cluster'
+import { MarkerPin } from './marker-pin'
 import { MarkerPoint } from './marker-point'
 import { MarkerPointCluster } from './marker-point-cluster'
 import { MarkerUser } from './marker-user'
 import { PlaceMark } from './place-mark'
-import { MapAdditionalLayersEnum, MapLayersEnum, MapObjectsTypeEnum, MapPositionType } from './types'
+import { MapAdditionalLayersEnum, MapLayersEnum, MapObjectsTypeEnum, MapPositionType, MarkerPinData } from './types'
 import { WikimediaCommons } from './wikimedia-commons'
 import { Wikipedia } from './wikipedia'
 
@@ -33,6 +34,7 @@ import styles from './styles.module.sass'
 type MapProps = {
     places?: ApiModel.PlaceMark[]
     photos?: ApiModel.PhotoMark[]
+    pins?: MarkerPinData[]
     categories?: ApiModel.Categories[]
     layer?: MapLayersEnum
     loading?: boolean
@@ -96,6 +98,7 @@ CursorCoordinatesDisplay.displayName = 'CursorCoordinatesDisplay'
 export const InteractiveMap: React.FC<MapProps> = ({
     places,
     photos,
+    pins,
     categories,
     // layer,
     loading,
@@ -404,6 +407,13 @@ export const InteractiveMap: React.FC<MapProps> = ({
                         />
                     )
                 )}
+
+                {pins?.map((pin, i) => (
+                    <MarkerPin
+                        key={`markerPin${i}`}
+                        pin={pin}
+                    />
+                ))}
 
                 {enableContextMenu && <ContextMenu />}
 

@@ -121,7 +121,8 @@ class Comments extends ResourceController
             $db = \Config\Database::connect();
             $db->transStart();
 
-            $newCommentId = $this->model->insert($comment);
+            $this->model->insert($comment);
+            $newCommentId = $this->model->getLastGeneratedId();
 
             // Update the comments count
             $placesModel->update($placesData->id, [

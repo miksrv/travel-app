@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Button, cn } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next/pages'
 
-import { ApiModel } from '@/api'
+import { API, ApiModel } from '@/api'
 import { openAuthDialog } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 
@@ -14,22 +14,35 @@ import styles from './styles.module.sass'
 
 interface CommentListProps {
     placeId?: string
-    comments?: ApiModel.Comment[]
 }
 
-export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
+export const CommentList: React.FC<CommentListProps> = ({ placeId }) => {
     const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
+    const formRef = useRef<HTMLDivElement>(null)
 
     const appAuth = useAppSelector((state) => state.auth)
 
-    const [answerFormId, setAnswerFormId] = useState<string | undefined>()
+    const [replyTo, setReplyTo] = useState<{ id: string; name: string } | undefined>()
+
+    const { data } = API.useCommentsGetListQuery({ place: placeId }, { skip: !placeId })
+    const comments = data?.items
 
     const handleLoginClick = (event: React.MouseEvent) => {
         event.preventDefault()
         dispatch(openAuthDialog())
     }
+
+    const handleAnswerClick = (reply?: { id: string; name: string }) => {
+        setReplyTo(reply)
+    }
+
+    useEffect(() => {
+        if (replyTo) {
+            formRef.current?.scrollIntoView({ behavior: 'smooth', block: 'nearest' })
+        }
+    }, [replyTo])
 
     const commentsByParent = useMemo(() => {
         const index: Record<string, ApiModel.Comment[]> = { root: [] }
@@ -48,18 +61,17 @@ export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) =
                 <React.Fragment key={item.id}>
                     <CommentListItem
                         t={t}
-                        placeId={placeId}
                         isAuth={appAuth.isAuth}
                         isAnswer={!!answerId}
+                        isReplying={replyTo?.id === item.id}
                         comment={item}
-                        formAnswerId={answerFormId}
-                        onAnswerClick={setAnswerFormId}
+                        onAnswerClick={handleAnswerClick}
                     />
 
                     {renderComments(item.id)}
                 </React.Fragment>
             )),
-        [commentsByParent, t, placeId, appAuth.isAuth, answerFormId]
+        [commentsByParent, t, appAuth.isAuth, replyTo]
     )
 
     return (
@@ -67,11 +79,17 @@ export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) =
             {!!comments?.length && renderComments()}
 
             {appAuth.isAuth && (
-                <div className={styles.formSection}>
+                <div
+                    ref={formRef}
+                    className={styles.formSection}
+                >
                     <CommentForm
                         placeId={placeId}
+                        replyTo={replyTo}
                         isAuth={appAuth.isAuth}
                         user={appAuth.user}
+                        onCommentAdded={() => setReplyTo(undefined)}
+                        onCancelReply={() => setReplyTo(undefined)}
                     />
                 </div>
             )}

@@ -35,6 +35,7 @@
                     font-size: variables.$fontSizeHeadline
                     color: var(--text-color-secondary)
                     display: flex
+                    align-items: center
 
                     .answerButton
                         opacity: 0
@@ -46,10 +47,42 @@
                         background: none
                         transition: opacity .3s
 
+                        &.answerButtonActive
+                            opacity: 1
+                            color: var(--text-color-secondary)
+
     .commentForm
         margin-top: 5px
-        display: flex
-        align-items: flex-start
+
+        .replyingTo
+            display: flex
+            align-items: center
+            justify-content: space-between
+            padding: 4px 6px 4px 10px
+            margin-bottom: 6px
+            border-radius: var(--border-radius)
+            background: var(--input-background-color)
+            font-size: variables.$fontSizeHeadline
+            color: var(--text-color-secondary)
+
+            strong
+                color: var(--text-color-primary)
+
+            .replyingToCancel
+                padding: 0
+                height: 20px
+                min-height: 0
+                width: 20px
+                min-width: 0
+                color: var(--text-color-secondary)
+                background: none
+
+                &:hover
+                    color: var(--text-color-primary)
+
+        .commentFormRow
+            display: flex
+            align-items: flex-start
 
         .userAvatar
             margin-right: 10px

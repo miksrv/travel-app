@@ -29,3 +29,12 @@ export type MapPositionType = {
     lon: number
     zoom?: number
 }
+
+export type MarkerPinType = 'location' | 'coordinates'
+
+export interface MarkerPinData {
+    lat: number
+    lon: number
+    type: MarkerPinType
+    label?: string
+}
