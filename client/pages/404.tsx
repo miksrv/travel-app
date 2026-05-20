@@ -1,0 +1,39 @@
+import React from 'react'
+
+import { GetStaticPropsResult, NextPage } from 'next'
+import Head from 'next/head'
+import { useRouter } from 'next/router'
+import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
+import { generateNextSeo } from 'next-seo/pages'
+
+import { NotFoundPage } from '@/components/shared'
+
+const Error404Page: NextPage = () => {
+    const router = useRouter()
+
+    return (
+        <>
+            <Head>
+                {generateNextSeo({
+                    noindex: true,
+                    nofollow: true,
+                    title: 'Место не найдено'
+                })}
+            </Head>
+
+            <NotFoundPage onBack={() => router.back()} />
+        </>
+    )
+}
+
+export const getStaticProps = async ({ locale }: { locale?: string }): Promise<GetStaticPropsResult<object>> => {
+    const translations = await serverSideTranslations(locale ?? 'ru')
+
+    return {
+        props: {
+            ...translations
+        }
+    }
+}
+
+export default Error404Page
