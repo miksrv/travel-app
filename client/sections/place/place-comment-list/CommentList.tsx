@@ -3,7 +3,7 @@ import { Button, cn } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next/pages'
 
-import { ApiModel } from '@/api'
+import { API, ApiModel } from '@/api'
 import { openAuthDialog } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 
@@ -14,10 +14,9 @@ import styles from './styles.module.sass'
 
 interface CommentListProps {
     placeId?: string
-    comments?: ApiModel.Comment[]
 }
 
-export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) => {
+export const CommentList: React.FC<CommentListProps> = ({ placeId }) => {
     const { t } = useTranslation()
 
     const dispatch = useAppDispatch()
@@ -25,6 +24,9 @@ export const CommentList: React.FC<CommentListProps> = ({ placeId, comments }) =
     const appAuth = useAppSelector((state) => state.auth)
 
     const [answerFormId, setAnswerFormId] = useState<string | undefined>()
+
+    const { data } = API.useCommentsGetListQuery({ place: placeId }, { skip: !placeId })
+    const comments = data?.items
 
     const handleLoginClick = (event: React.MouseEvent) => {
         event.preventDefault()
