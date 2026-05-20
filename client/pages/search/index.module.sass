@@ -1,10 +1,25 @@
 @use '../../styles/variables' as variables
 
 .noResults
-    text-align: center
-    color: var(--text-color-secondary)
-    font-size: variables.$fontSizeParagraph
+    display: flex
+    flex-direction: column
+    align-items: center
     padding: 40px 16px
+    text-align: center
+
+    .noResultsImage
+        width: min(330px, 60vw)
+        height: auto
+
+    .noResultsTitle
+        margin: 16px 0 6px
+        font-size: variables.$fontSizeTitleH2
+        font-weight: 600
+        color: var(--text-color-primary)
+
+    .noResultsDescription
+        margin: 0
+        color: var(--text-color-secondary)
 
 .layout
     display: grid

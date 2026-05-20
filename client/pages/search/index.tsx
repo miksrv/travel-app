@@ -3,6 +3,7 @@ import { Container } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
@@ -155,12 +156,18 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
 
             <Container>
                 {!hasResults && !isFetching && (
-                    <p className={styles.noResults}>
-                        {t('search-no-results', {
-                            query: query.q,
-                            defaultValue: `Ничего не найдено по запросу «${query.q}»`
-                        })}
-                    </p>
+                    <div className={styles.noResults}>
+                        <Image
+                            className={styles.noResultsImage}
+                            src={'/images/no-results.png'}
+                            alt={'Ничего не найдено'}
+                            width={220}
+                            height={220}
+                            priority={false}
+                        />
+                        <p className={styles.noResultsTitle}>{'Ничего не найдено'}</p>
+                        <p className={styles.noResultsDescription}>{'Попробуйте изменить запрос или фильтры'}</p>
+                    </div>
                 )}
 
                 {hasResults && (
