@@ -11,13 +11,21 @@ import styles from './styles.module.sass'
 
 interface CommentFormProps {
     placeId?: string
-    answerId?: string
+    replyTo?: { id: string; name: string }
     isAuth?: boolean
     user?: ApiModel.User
     onCommentAdded?: () => void
+    onCancelReply?: () => void
 }
 
-export const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isAuth, user, onCommentAdded }) => {
+export const CommentForm: React.FC<CommentFormProps> = ({
+    placeId,
+    replyTo,
+    isAuth,
+    user,
+    onCommentAdded,
+    onCancelReply
+}) => {
     const { t } = useTranslation()
 
     const [comment, setComment] = useState<string | undefined>()
@@ -33,7 +41,7 @@ export const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isA
 
     const handleSubmit = async () => {
         await submit({
-            answerId,
+            answerId: replyTo?.id,
             comment,
             placeId
         })
@@ -55,33 +63,52 @@ export const CommentForm: React.FC<CommentFormProps> = ({ placeId, answerId, isA
                 </Message>
             )}
 
-            {user && (
-                <UserAvatar
-                    className={styles.userAvatar}
-                    user={user}
-                    size={'medium'}
-                />
+            {replyTo && (
+                <div className={styles.replyingTo}>
+                    <span>
+                        {t('comment-replying-to')} <strong>{replyTo.name}</strong>
+                    </span>
+                    <Button
+                        size={'small'}
+                        mode={'link'}
+                        icon={'Close'}
+                        className={styles.replyingToCancel}
+                        onClick={onCancelReply}
+                    />
+                </div>
             )}
 
-            <TextArea
-                autoResize={true}
-                rows={1}
-                className={styles.textarea}
-                value={comment}
-                disabled={isLoading}
-                onChange={(e) => setComment(e.target.value)}
-                onKeyDown={handleKeyPress}
-                placeholder={t('write-comment')}
-            />
+            <div className={styles.commentFormRow}>
+                {user && (
+                    <UserAvatar
+                        className={styles.userAvatar}
+                        user={user}
+                        size={'medium'}
+                    />
+                )}
 
-            <Button
-                icon={'KeyboardRight'}
-                mode={'secondary'}
-                className={styles.submitButton}
-                loading={isLoading}
-                disabled={isLoading || !comment}
-                onClick={handleSubmit}
-            />
+                <TextArea
+                    key={replyTo?.id ?? 'root'}
+                    autoFocus={!!replyTo}
+                    autoResize={true}
+                    rows={1}
+                    className={styles.textarea}
+                    value={comment}
+                    disabled={isLoading}
+                    onChange={(e) => setComment(e.target.value)}
+                    onKeyDown={handleKeyPress}
+                    placeholder={t('write-comment')}
+                />
+
+                <Button
+                    icon={'KeyboardRight'}
+                    mode={'secondary'}
+                    className={styles.submitButton}
+                    loading={isLoading}
+                    disabled={isLoading || !comment}
+                    onClick={handleSubmit}
+                />
+            </div>
         </div>
     ) : null
 }
