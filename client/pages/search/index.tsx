@@ -3,6 +3,7 @@ import { Container } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import Head from 'next/head'
+import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
@@ -13,7 +14,7 @@ import { setLocale } from '@/app/applicationSlice'
 import { useAppSelector, wrapper } from '@/app/store'
 import { SearchFilters, SearchPageQuery } from '@/components/pages/search/SearchFilters'
 import { SearchMap } from '@/components/pages/search/SearchMap'
-import { SearchResults } from '@/components/pages/search/SearchResults'
+import { SearchResults, SearchResultsSkeleton } from '@/components/pages/search/SearchResults'
 import { AppLayout, PageHeader } from '@/components/shared'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
 
@@ -154,16 +155,38 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
             </Container>
 
             <Container>
-                {!hasResults && !isFetching && (
-                    <p className={styles.noResults}>
-                        {t('search-no-results', {
-                            query: query.q,
-                            defaultValue: `Ничего не найдено по запросу «${query.q}»`
-                        })}
-                    </p>
+                {isFetching && (
+                    <div className={styles.layout}>
+                        <div className={styles.resultsCol}>
+                            <SearchResultsSkeleton type={query.type} />
+                        </div>
+
+                        <div className={styles.mapCol}>
+                            <SearchMap
+                                places={undefined}
+                                locations={undefined}
+                                coordinates={undefined}
+                            />
+                        </div>
+                    </div>
                 )}
 
-                {hasResults && (
+                {!hasResults && !isFetching && (
+                    <div className={styles.noResults}>
+                        <Image
+                            className={styles.noResultsImage}
+                            src={'/images/no-results.png'}
+                            alt={'Ничего не найдено'}
+                            width={220}
+                            height={220}
+                            priority={false}
+                        />
+                        <p className={styles.noResultsTitle}>{'Ничего не найдено'}</p>
+                        <p className={styles.noResultsDescription}>{'Попробуйте изменить запрос или фильтры'}</p>
+                    </div>
+                )}
+
+                {hasResults && !isFetching && (
                     <div className={styles.layout}>
                         <div className={styles.resultsCol}>
                             <SearchResults
