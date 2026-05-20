@@ -135,7 +135,9 @@ class Activity extends ResourceController
         return (
             $lastItem->user_id === $nextItem->user_id &&
             $lastItem->place_id === $nextItem->place_id &&
-            $timeDiff <= 600
+            $timeDiff <= 600 &&
+            $lastItem->type !== 'comment' &&
+            $nextItem->type !== 'comment'
         );
     }
 
@@ -178,6 +180,8 @@ class Activity extends ResourceController
             // Check if we can group this element with the last group
             if (
                 $lastGroupIndex !== -1 &&
+                $item->type !== 'comment' &&
+                $groupData[$lastGroupIndex]->type !== 'comment' &&
                 (!isset($groupData[$lastGroupIndex]->place) || $groupData[$lastGroupIndex]->place->id === $item->place_id) &&
                 isset($groupData[$lastGroupIndex]->author) && $groupData[$lastGroupIndex]->author?->id === $item?->user_id &&
                 abs($itemCreatedAt - $groupCreatedTs[$lastGroupIndex]) <= 600
