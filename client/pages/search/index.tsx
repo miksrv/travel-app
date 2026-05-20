@@ -199,7 +199,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const q = (context.query.q as string) ?? ''
             const type = (context.query.type as ApiType.Search.Request['type']) ?? 'all'
             const category = (context.query.category as string) ?? ''
-            const sort = (context.query.sort as ApiType.Search.Request['sort']) ?? 'views'
+            const sort = (context.query.sort as ApiType.Search.Request['sort']) ?? 'relevance'
             const order = (context.query.order as ApiType.Search.Request['order']) ?? 'desc'
 
             if (!q.trim()) {

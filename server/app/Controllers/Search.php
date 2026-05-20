@@ -140,7 +140,7 @@ class Search extends ResourceController
                 // Apply explicit sort override when requested
                 $validSorts = ['views', 'rating', 'comments', 'bookmarks', 'distance', 'created_at', 'updated_at'];
                 if (!$sort) {
-                    $sort = ($lat || $this->session->lat) ? 'distance' : 'views';
+                    $sort = ($lat || $this->session->lat) ? 'distance' : 'relevance';
                 }
 
                 if (in_array($sort, $validSorts, true) && in_array(strtoupper($order), ['ASC', 'DESC'], true)) {

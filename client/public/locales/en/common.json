@@ -380,6 +380,7 @@
     "search-filter-type-places": "Interesting places",
     "search-filter-category": "Category",
     "search-filter-sort": "Sort",
+    "search-sort-relevance": "By relevance",
     "search-sort-distance": "By distance",
     "search-sort-views": "By views",
     "search-sort-rating": "By rating",
