@@ -99,6 +99,7 @@ jobs:
           rsync -avz -e ssh client/.next/static vps:/var/www/geometki.com/.next
           rsync -avz -e ssh client/public vps:/var/www/geometki.com
           rsync -avz -e ssh client/ecosystem.config.js vps:/var/www/geometki.com
+          rsync -avz -e ssh client/next-i18next.config.js vps:/var/www/geometki.com
 
       # For the first launch of the application on the server:
       # pm2 start ecosystem.config.js && pm2 save

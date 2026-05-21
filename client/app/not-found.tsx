@@ -1,11 +1,15 @@
-'use client'
+import type { Metadata } from 'next'
 
-import { useRouter } from 'next/navigation'
+import { NotFoundPage } from '@/components/shared/not-found-page'
 
-import { NotFoundPage } from '@/components/shared'
+export const metadata: Metadata = {
+    robots: {
+        follow: false,
+        index: false
+    },
+    title: 'Место не найдено | Геометки'
+}
 
 export default function NotFound() {
-    const router = useRouter()
-
-    return <NotFoundPage onBack={() => router.back()} />
+    return <NotFoundPage />
 }
