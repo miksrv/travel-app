@@ -41,6 +41,12 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
     const [formErrors, setFormErrors] = useState<ApiType.Places.PostItemRequest>()
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>([])
+    const [mapCenter, setMapCenter] = useState<[number, number] | undefined>(() => {
+        if (placeId && values?.lat != null && values?.lon != null) {
+            return [values.lat, values.lon]
+        }
+        return undefined
+    })
 
     const { data: poiListData } = API.usePoiGetListQuery()
     const { data: categoryData } = API.useCategoriesGetListQuery()
@@ -141,6 +147,9 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
     useEffect(() => {
         if (values) {
             setFormData(values)
+            if (placeId && values.lat != null && values.lon != null) {
+                setMapCenter([values.lat, values.lon])
+            }
         }
     }, [placeId])
 
@@ -229,7 +238,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
                     places={poiListData?.items}
                     storeMapPosition={!placeId}
                     zoom={placeId ? 15 : undefined}
-                    center={placeId && formData ? [formData.lat!, formData.lon!] : undefined}
+                    center={mapCenter}
                     userLatLon={location}
                     onChangeBounds={debounceSetMapBounds}
                 />
