@@ -237,7 +237,7 @@
     "settings-have-been-saved": "Настройки сохранены",
     "updated-geotags-users-photos": "Обновленные геометки, активные пользователи и последние загруженные фотографии",
     "active-users": "Активные путешественники",
-"points-on-map": "Точек на карте",
+    "points-on-map": "Точек на карте",
     "photos-on-map": "Фото на карте",
     "filters": "Фильтры",
     "geotags_count": "Геометок",
@@ -384,5 +384,7 @@
     "search-sort-views": "По просмотрам",
     "search-sort-rating": "По рейтингу",
     "search-sort-date": "По дате",
-    "search-no-results": "Ничего не найдено по запросу «{{query}}»"
+    "search-no-results": "Ничего не найдено по запросу «{{query}}»",
+    "unsaved-changes-message": "У вас есть несохранённые изменения. Если вы уйдёте, они будут потеряны.",
+    "leave-without-saving": "Уйти без сохранения"
 }
