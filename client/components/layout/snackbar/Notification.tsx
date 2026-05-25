@@ -59,7 +59,7 @@ export const Notification: React.FC<NotificationProps> = ({ showDate, onClose, o
                     ) : props.place ? (
                         <Link
                             href={`/places/${props.place.id}`}
-                            title={''}
+                            title={props.place.title}
                         >
                             {props.place.title}
                         </Link>
@@ -74,6 +74,7 @@ export const Notification: React.FC<NotificationProps> = ({ showDate, onClose, o
             {onClose && (
                 <button
                     className={styles.closeButton}
+                    aria-label={t('close')}
                     onClick={() => onClose(props.id)}
                 >
                     <Icon name={'Close'} />

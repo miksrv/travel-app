@@ -35,7 +35,7 @@ export const MapHero: React.FC<MapHeroProps> = ({ stats, places }) => {
         <section className={styles.hero}>
             <Image
                 src={'/images/pages/map-hero.jpg'}
-                alt={'map'}
+                alt={''}
                 fill
                 priority
                 className={styles.heroImage}
