@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Container, Message } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
@@ -12,7 +12,9 @@ import { API, ApiModel, ApiType } from '@/api'
 import { setLocale } from '@/app/applicationSlice'
 import { wrapper } from '@/app/store'
 import { AppLayout, PageHeader } from '@/components/shared'
+import { ConfirmationDialog } from '@/components/shared/confirmation-dialog'
 import { SITE_LINK } from '@/config/env'
+import { useConfirmLeave } from '@/hooks/useConfirmLeave'
 import { PlaceForm } from '@/sections/place'
 import { getErrorMessage, isApiValidationErrors } from '@/utils/api'
 import { equalsArrays } from '@/utils/helpers'
@@ -28,6 +30,13 @@ const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
     const router = useRouter()
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
+
+    const [isDirty, setIsDirty] = useState(false)
+    const {
+        isOpen: leaveDialogOpen,
+        handleConfirm: handleLeaveConfirm,
+        handleCancel: handleLeaveCancel
+    } = useConfirmLeave(isDirty)
 
     const [updatePlace, { error, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
 
@@ -68,6 +77,7 @@ const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
 
     useEffect(() => {
         if (isSuccess) {
+            setIsDirty(false)
             void router.push(`/places/${place?.id}`)
         }
     }, [isSuccess])
@@ -112,6 +122,15 @@ const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
                     errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
+                    onDirtyChange={() => setIsDirty(true)}
+                />
+
+                <ConfirmationDialog
+                    open={leaveDialogOpen}
+                    message={t('unsaved-changes-message')}
+                    confirmLabel={t('leave-without-saving')}
+                    onConfirm={handleLeaveConfirm}
+                    onCancel={handleLeaveCancel}
                 />
             </Container>
         </AppLayout>
