@@ -352,13 +352,13 @@ class Geocoder{
         if ($this->regionId !== null) {
             $query->where('region_id', $this->regionId);
         } else {
-            $query->whereNull('region_id');
+            $query->where('region_id IS NULL');
         }
 
         if ($this->districtId !== null) {
             $query->where('district_id', $this->districtId);
         } else {
-            $query->whereNull('district_id');
+            $query->where('district_id IS NULL');
         }
 
         $localityData = $query->first();
