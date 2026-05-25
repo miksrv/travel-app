@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import Markdown from 'react-markdown'
-import { Button, Container } from 'simple-react-ui-kit'
+import debounce from 'lodash-es/debounce'
+import { Button, Container, Select, SelectOptionType } from 'simple-react-ui-kit'
 
 import dynamic from 'next/dynamic'
 import Link from 'next/link'
@@ -10,7 +11,7 @@ import { API } from '@/api'
 import { openAuthDialog } from '@/app/applicationSlice'
 import { Notify } from '@/app/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
-import { ChipsSelect, ScreenSpinner } from '@/components/ui'
+import { ScreenSpinner } from '@/components/ui'
 import { equalsArrays } from '@/utils/helpers'
 
 import styles from './styles.module.sass'
@@ -24,9 +25,10 @@ interface PlaceDescriptionProps {
     placeId?: string
     content?: string
     tags?: string[]
+    onEditorModeChange?: (isOpen: boolean) => void
 }
 
-export const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, tags }) => {
+export const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, content, tags, onEditorModeChange }) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -40,25 +42,56 @@ export const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, con
     const [editorTags, setEditorTags] = useState<string[]>()
     const [localTags, setLocalTags] = useState<string[]>()
     const [localContent, setLocalContent] = useState<string | undefined>(content)
+    const [tagSearch, setTagSearch] = useState('')
 
     const handleSetEditorClick = () => {
         if (isAuth) {
-            setEditorMode(!editorMode)
+            const next = !editorMode
+            setEditorMode(next)
             setEditorTags(localTags)
+            onEditorModeChange?.(next)
         } else {
             dispatch(openAuthDialog())
         }
     }
 
-    const handleSelectTags = (value: string[]) => {
-        setEditorTags(value)
+    const handleSelectTags = (selected?: Array<SelectOptionType<string>>) => {
+        setEditorTags(selected?.map((opt) => opt.key))
     }
 
-    const handleSearchTags = async (value: string) => {
-        if (value.length > 0) {
-            await searchTags(value)
-        }
+    const debouncedSearchTags = useCallback(
+        debounce(async (value: string) => {
+            if (value.length > 0) {
+                await searchTags(value)
+            }
+        }, 500),
+        []
+    )
+
+    const handleSearchTags = (value?: string) => {
+        const text = value ?? ''
+        setTagSearch(text)
+        void debouncedSearchTags(text)
     }
+
+    const tagOptions = useMemo<Array<SelectOptionType<string>>>(() => {
+        const selected = (editorTags ?? []).map((tag) => ({ key: tag, value: tag }))
+        const results = (searchResult?.items ?? []).map((tag) => ({ key: tag, value: tag }))
+        const merged = [...selected]
+        for (const opt of results) {
+            if (!merged.find((m) => m.key === opt.key)) {
+                merged.push(opt)
+            }
+        }
+        return merged
+    }, [editorTags, searchResult?.items])
+
+    const tagsWithCustom = useMemo<Array<SelectOptionType<string>>>(() => {
+        if (!tagSearch || tagOptions.find((opt) => opt.key.toLowerCase() === tagSearch.toLowerCase())) {
+            return tagOptions
+        }
+        return [{ key: tagSearch, value: tagSearch }, ...tagOptions]
+    }, [tagOptions, tagSearch])
 
     const handleSaveEditorClick = async () => {
         await updatePlace({
@@ -71,6 +104,7 @@ export const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, con
     useEffect(() => {
         if (isSuccess && editorMode) {
             setEditorMode(false)
+            onEditorModeChange?.(false)
             setLocalContent(saveData.content)
 
             void dispatch(
@@ -142,13 +176,16 @@ export const PlaceDescription: React.FC<PlaceDescriptionProps> = ({ placeId, con
 
             {isAuth && editorMode ? (
                 <div className={styles.formElement}>
-                    <ChipsSelect
+                    <Select<string>
+                        multiple
+                        searchable
+                        closeOnSelect={false}
                         label={t('select-or-add-geotag-hashtags')}
                         placeholder={t('input_tags-placeholder')}
                         notFoundCaption={t('nothing-found')}
                         value={editorTags}
                         loading={searchLoading}
-                        options={searchResult?.items}
+                        options={tagsWithCustom}
                         onSearch={handleSearchTags}
                         onSelect={handleSelectTags}
                     />
