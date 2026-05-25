@@ -51,5 +51,13 @@ export const useConfirmLeave = (isDirty: boolean) => {
         NProgress.done()
     }, [])
 
-    return { isOpen, handleConfirm, handleCancel }
+    // Call this before a programmatic router.push to bypass the dialog.
+    // Needed because setIsDirty(false) + router.push() race: the React state
+    // update is async, so the handler still sees isDirty=true when the route
+    // event fires.
+    const allowNavigation = useCallback(() => {
+        confirmedRef.current = true
+    }, [])
+
+    return { isOpen, handleConfirm, handleCancel, allowNavigation }
 }
