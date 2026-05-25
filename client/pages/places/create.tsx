@@ -29,7 +29,8 @@ const CreatePlacePage: NextPage<object> = () => {
     const {
         isOpen: leaveDialogOpen,
         handleConfirm: handleLeaveConfirm,
-        handleCancel: handleLeaveCancel
+        handleCancel: handleLeaveCancel,
+        allowNavigation: allowLeaveNavigation
     } = useConfirmLeave(isDirty)
 
     const [createPlace, { data, error, isLoading, isSuccess }] = API.usePlacesPostItemMutation()
@@ -54,6 +55,7 @@ const CreatePlacePage: NextPage<object> = () => {
         setClickedButton(false)
 
         if (data?.id && isSuccess) {
+            allowLeaveNavigation()
             void router.push(`/places/${data.id}`)
         }
     }, [isSuccess, data])

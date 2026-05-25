@@ -35,7 +35,8 @@ const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
     const {
         isOpen: leaveDialogOpen,
         handleConfirm: handleLeaveConfirm,
-        handleCancel: handleLeaveCancel
+        handleCancel: handleLeaveCancel,
+        allowNavigation: allowLeaveNavigation
     } = useConfirmLeave(isDirty)
 
     const [updatePlace, { error, isLoading, isSuccess }] = API.usePlacesPatchItemMutation()
@@ -78,6 +79,7 @@ const PlaceEditPage: NextPage<PlaceEditPageProps> = ({ place }) => {
     useEffect(() => {
         if (isSuccess) {
             setIsDirty(false)
+            allowLeaveNavigation()
             void router.push(`/places/${place?.id}`)
         }
     }, [isSuccess])
