@@ -5,23 +5,17 @@
 
     .menuList
         li
-            button
-                width: 100%
-                justify-content: left
-                padding: 2px 8px
-                min-height: 20px
-                height: 20px
-
             a
                 border-radius: var(--border-radius)
                 padding: 2px 8px
                 display: block
                 width: 100%
-                color: inherit
+                color: var(--link-color)
                 text-decoration: none
                 white-space: nowrap
 
                 &:hover
+                    color: var(--link-color-hover)
                     background-color: var(--body-background)
 
             &.divider
