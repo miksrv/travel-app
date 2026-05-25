@@ -8,11 +8,18 @@ import styles from './styles.module.sass'
 interface ConfirmationDialogProps {
     open: boolean
     message: string
+    confirmLabel?: string
     onConfirm: () => void
     onCancel: () => void
 }
 
-export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, message, onConfirm, onCancel }) => {
+export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({
+    open,
+    message,
+    confirmLabel,
+    onConfirm,
+    onCancel
+}) => {
     const { t } = useTranslation()
 
     return (
@@ -36,7 +43,7 @@ export const ConfirmationDialog: React.FC<ConfirmationDialogProps> = ({ open, me
                     size={'medium'}
                     onClick={onConfirm}
                 >
-                    {t('delete')}
+                    {confirmLabel ?? t('delete')}
                 </Button>
             </div>
         </Dialog>
