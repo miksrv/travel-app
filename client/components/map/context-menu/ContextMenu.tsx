@@ -1,18 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { Point } from 'leaflet'
-import { Button, Container } from 'simple-react-ui-kit'
+import { Container } from 'simple-react-ui-kit'
 
 import Link from 'next/link'
 import { useTranslation } from 'next-i18next/pages'
 import { useLeafletContext } from '@react-leaflet/core'
 
 import { ApiType } from '@/api'
-import { Notify } from '@/app/notificationSlice'
-import { useAppDispatch, useAppSelector } from '@/app/store'
-import { MapLinks } from '@/components/shared'
+import { useAppSelector } from '@/app/store'
+import { CopyCoordinates, MapLinks } from '@/components/shared'
 import { LOCAL_STORAGE } from '@/config/constants'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import { convertDMS } from '@/utils/coordinates'
 import { round } from '@/utils/helpers'
 
 import { MapPositionType } from '../types'
@@ -21,7 +19,6 @@ import styles from './styles.module.sass'
 
 export const ContextMenu: React.FC = () => {
     const { t } = useTranslation('components.interactive-map.context-menu')
-    const dispatch = useAppDispatch()
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -42,22 +39,6 @@ export const ContextMenu: React.FC = () => {
         x: 0,
         y: 0
     })
-
-    const handleCopyCoordinates = async () => {
-        await navigator.clipboard.writeText(`${pointCords?.lat} ${pointCords?.lon}`)
-        setIsShowMenu(false)
-
-        await dispatch(
-            Notify({
-                id: 'copyCoordinates',
-                title: '',
-                message: t('coordinates-copied', {
-                    defaultValue: 'Координаты скопированы в буфер обмена'
-                }),
-                type: 'success'
-            })
-        )
-    }
 
     useEffect(() => {
         if (mapContext.current.map) {
@@ -134,16 +115,11 @@ export const ContextMenu: React.FC = () => {
             <Container className={styles.contextMenu}>
                 <ul className={styles.menuList}>
                     <li className={styles.divider}>
-                        <Button
-                            mode={'link'}
-                            size={'small'}
-                            title={t('copy-to-clipboard', {
-                                defaultValue: 'Скопировать в буфер обмена'
-                            })}
-                            onClick={handleCopyCoordinates}
-                        >
-                            {convertDMS(pointCords?.lat, pointCords?.lon)}
-                        </Button>
+                        <CopyCoordinates
+                            lat={pointCords?.lat ?? 0}
+                            lon={pointCords?.lon ?? 0}
+                            onCopy={() => setIsShowMenu(false)}
+                        />
                     </li>
 
                     {isAuth && (

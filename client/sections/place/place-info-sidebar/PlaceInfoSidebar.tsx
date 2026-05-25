@@ -6,9 +6,8 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next/pages'
 
 import { ApiModel } from '@/api'
-import { MapLinks, UserAvatar, UserAvatarGroup } from '@/components/shared'
+import { CopyCoordinates, MapLinks, UserAvatar, UserAvatarGroup } from '@/components/shared'
 import { CategoryBadge } from '@/components/shared/category-badge'
-import { convertDMS } from '@/utils/coordinates'
 import { formatDate, formatThousands } from '@/utils/helpers'
 
 import styles from './styles.module.sass'
@@ -112,7 +111,12 @@ export const PlaceInfoSidebar: React.FC<PlaceInfoSidebarProps> = ({ place }) => 
                     <Icon name={'Point'} />
                     <div className={styles.info}>
                         <div className={styles.key}>{t('coordinates')}</div>
-                        <div className={styles.value}>{convertDMS(place?.lat || 0, place?.lon || 0)}</div>
+                        <div className={styles.value}>
+                            <CopyCoordinates
+                                lat={place?.lat || 0}
+                                lon={place?.lon || 0}
+                            />
+                        </div>
                     </div>
                 </li>
             </ul>

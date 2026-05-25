@@ -1,7 +1,6 @@
 export { Autocomplete, type AutocompleteOption } from './autocomplete'
 export { Breadcrumbs, type BreadcrumbsProps } from './breadcrumbs'
 export { Carousel } from './carousel'
-export { ChipsSelect } from './chips-select'
 export { ContentEditor } from './content-editor'
 export { Counter } from './counter'
 export { ImageUploader } from './image-uploader'

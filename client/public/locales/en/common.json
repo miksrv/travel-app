@@ -11,6 +11,7 @@
     "categories-places-description": "Explore interesting places in Russia by categories: nature, monuments, abandoned buildings, mountains, waterfalls, caves and more. Find unique geotags near you.",
     "nothing-here-yet": "There's nothing here yet",
     "nothing-found": "Nothing found",
+    "nothing-found-description": "Try changing the query or filters",
     "date-time-format": "D MMMM YYYY, HH:mm",
     "date-format": "D MMMM YYYY",
     "editing": "Editing",
@@ -124,6 +125,7 @@
     "saved": "Saved",
     "register": "Register",
     "cancel": "Cancel",
+    "close": "Close",
     "edit": "Edit",
     "description-not-added-yet": "Description has not been added yet",
     "select-or-add-geotag-hashtags": "Select or add geotag features",
@@ -238,7 +240,7 @@
     "settings-have-been-saved": "Settings have been saved",
     "updated-geotags-users-photos": "Updated geotags, active users and latest uploaded photos",
     "active-users": "Active travelers",
-"points-on-map": "Points on the map",
+    "points-on-map": "Points on the map",
     "photos-on-map": "Photos on map",
     "filters": "Filters",
     "geotags_count": "Geotags",
@@ -385,5 +387,7 @@
     "search-sort-views": "By views",
     "search-sort-rating": "By rating",
     "search-sort-date": "By date",
-    "search-no-results": "Nothing found for «{{query}}»"
+    "search-no-results": "Nothing found for «{{query}}»",
+    "unsaved-changes-message": "You have unsaved changes. If you leave, they will be lost.",
+    "leave-without-saving": "Leave without saving"
 }

@@ -80,6 +80,12 @@ jest.mock('@/utils/helpers', () => ({
 }))
 
 jest.mock('@/components/shared', () => ({
+    CopyCoordinates: ({ lat, lon }: { lat: number; lon: number }) => (
+        <a
+            href={'#'}
+            data-testid={'copy-coordinates'}
+        >{`${lat} ${lon}`}</a>
+    ),
     MapLinks: () => <div data-testid={'map-links'} />
 }))
 
@@ -121,7 +127,7 @@ describe('ContextMenu', () => {
 
     it('renders the copy coordinates button', () => {
         renderWithStore(<ContextMenu />)
-        expect(screen.getByTitle('Скопировать в буфер обмена')).toBeInTheDocument()
+        expect(screen.getByTestId('copy-coordinates')).toBeInTheDocument()
     })
 
     it('renders MapLinks component', () => {

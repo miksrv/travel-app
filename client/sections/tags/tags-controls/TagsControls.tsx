@@ -47,6 +47,7 @@ export const TagsControls: React.FC<TagsControlsProps> = ({ searchQuery, sortMod
                             mode='outline'
                             size='small'
                             icon='Tune'
+                            aria-label={t('sort', { defaultValue: 'Сортировка' })}
                         />
                     }
                 >

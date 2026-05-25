@@ -3037,7 +3037,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/nprogress@npm:^0.2.0":
+"@types/nprogress@npm:^0.2.0, @types/nprogress@npm:^0.2.3":
   version: 0.2.3
   resolution: "@types/nprogress@npm:0.2.3"
   checksum: 10c0/cac0fe73aca79bc1472a1556f56303df72026f2fcd8dbe311fe84b1f46e454b9040c1e69223d94e3bf156a5986382170c52ebda19aa70f555f1b6855d8f744a6
@@ -6037,6 +6037,7 @@ __metadata:
     "@types/leaflet": "npm:^1.9.21"
     "@types/lodash-es": "npm:^4.17.12"
     "@types/node": "npm:20.19.41"
+    "@types/nprogress": "npm:^0.2.3"
     "@types/react": "npm:19.2.14"
     "@types/react-dom": "npm:19.2.3"
     "@typescript-eslint/eslint-plugin": "npm:^8.59.3"
@@ -6071,6 +6072,7 @@ __metadata:
     next-seo: "npm:^7.2.0"
     next-themes: "npm:^0.4.6"
     nextjs-progressbar: "npm:^0.0.16"
+    nprogress: "npm:^0.2.0"
     prettier: "npm:^3.8.3"
     react: "npm:19.2.6"
     react-dom: "npm:19.2.6"

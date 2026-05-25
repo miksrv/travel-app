@@ -3,7 +3,6 @@ import { Container } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import { useRouter } from 'next/router'
 import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
@@ -15,7 +14,7 @@ import { useAppSelector, wrapper } from '@/app/store'
 import { SearchFilters, SearchPageQuery } from '@/components/pages/search/SearchFilters'
 import { SearchMap } from '@/components/pages/search/SearchMap'
 import { SearchResults, SearchResultsSkeleton } from '@/components/pages/search/SearchResults'
-import { AppLayout, PageHeader } from '@/components/shared'
+import { AppLayout, EmptyState, PageHeader } from '@/components/shared'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
 
 import styles from './index.module.sass'
@@ -171,20 +170,7 @@ const SearchPage: NextPage<SearchPageProps> = ({ initialQuery, initialData }) =>
                     </div>
                 )}
 
-                {!hasResults && !isFetching && (
-                    <div className={styles.noResults}>
-                        <Image
-                            className={styles.noResultsImage}
-                            src={'/images/no-results.png'}
-                            alt={'Ничего не найдено'}
-                            width={220}
-                            height={220}
-                            priority={false}
-                        />
-                        <p className={styles.noResultsTitle}>{'Ничего не найдено'}</p>
-                        <p className={styles.noResultsDescription}>{'Попробуйте изменить запрос или фильтры'}</p>
-                    </div>
-                )}
+                {!hasResults && !isFetching && <EmptyState />}
 
                 {hasResults && !isFetching && (
                     <div className={styles.layout}>

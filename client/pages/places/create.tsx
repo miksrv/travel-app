@@ -12,6 +12,8 @@ import { API, ApiType } from '@/api'
 import { setLocale } from '@/app/applicationSlice'
 import { wrapper } from '@/app/store'
 import { AppLayout, PageHeader } from '@/components/shared'
+import { ConfirmationDialog } from '@/components/shared/confirmation-dialog'
+import { useConfirmLeave } from '@/hooks/useConfirmLeave'
 import { PlaceForm } from '@/sections/place'
 import { getErrorMessage, isApiValidationErrors } from '@/utils/api'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
@@ -22,6 +24,13 @@ const CreatePlacePage: NextPage<object> = () => {
     const router = useRouter()
 
     const [clickedButton, setClickedButton] = useState<boolean>(false)
+    const [isDirty, setIsDirty] = useState(false)
+
+    const {
+        isOpen: leaveDialogOpen,
+        handleConfirm: handleLeaveConfirm,
+        handleCancel: handleLeaveCancel
+    } = useConfirmLeave(isDirty)
 
     const [createPlace, { data, error, isLoading, isSuccess }] = API.usePlacesPostItemMutation()
 
@@ -78,6 +87,15 @@ const CreatePlacePage: NextPage<object> = () => {
                     errors={validationErrors as any}
                     onSubmit={handleSubmit}
                     onCancel={handleCancel}
+                    onDirtyChange={() => setIsDirty(true)}
+                />
+
+                <ConfirmationDialog
+                    open={leaveDialogOpen}
+                    message={t('unsaved-changes-message')}
+                    confirmLabel={t('leave-without-saving')}
+                    onConfirm={handleLeaveConfirm}
+                    onCancel={handleLeaveCancel}
                 />
             </Container>
         </AppLayout>

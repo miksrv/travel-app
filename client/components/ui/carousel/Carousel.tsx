@@ -2,6 +2,8 @@ import React from 'react'
 import { EmblaOptionsType } from 'embla-carousel'
 import useEmblaCarousel from 'embla-carousel-react'
 
+import { useTranslation } from 'next-i18next/pages'
+
 import { NextButton, PrevButton, usePrevNextButtons } from './CarouselButtons'
 
 import styles from './styles.module.sass'
@@ -12,6 +14,7 @@ interface CarouselProps {
 }
 
 export const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
+    const { t } = useTranslation()
     const [emblaRef, emblaApi] = useEmblaCarousel(options)
 
     const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
@@ -27,10 +30,12 @@ export const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
 
             <div className={styles.buttonsContainer}>
                 <PrevButton
+                    aria-label={t('prev', { defaultValue: 'Назад' })}
                     onClick={onPrevButtonClick}
                     disabled={prevBtnDisabled}
                 />
                 <NextButton
+                    aria-label={t('next', { defaultValue: 'Вперёд' })}
                     onClick={onNextButtonClick}
                     disabled={nextBtnDisabled}
                 />

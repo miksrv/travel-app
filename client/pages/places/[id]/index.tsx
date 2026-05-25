@@ -13,8 +13,10 @@ import { API, ApiModel, ApiType } from '@/api'
 import { openAuthDialog, setLocale } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/app/store'
 import { AppLayout, PhotoGallery, PlacesListItem } from '@/components/shared'
+import { ConfirmationDialog } from '@/components/shared/confirmation-dialog'
 import { Carousel } from '@/components/ui'
 import { IMG_HOST, SITE_LINK } from '@/config/env'
+import { useConfirmLeave } from '@/hooks/useConfirmLeave'
 import {
     PlaceActionBar,
     PlaceActivity,
@@ -63,6 +65,12 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
     const [coverHash, setCoverHash] = useState<number | undefined>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
+    const [descriptionEditorOpen, setDescriptionEditorOpen] = useState(false)
+    const {
+        isOpen: leaveDialogOpen,
+        handleConfirm: handleLeaveConfirm,
+        handleCancel: handleLeaveCancel
+    } = useConfirmLeave(descriptionEditorOpen)
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -253,6 +261,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                         placeId={place?.id}
                         content={place?.content}
                         tags={place?.tags}
+                        onEditorModeChange={setDescriptionEditorOpen}
                     />
 
                     <PhotoGallery
@@ -323,6 +332,14 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 onUploadPhoto={(photo) => {
                     setLocalPhotos([photo, ...localPhotos])
                 }}
+            />
+
+            <ConfirmationDialog
+                open={leaveDialogOpen}
+                message={t('unsaved-changes-message')}
+                confirmLabel={t('leave-without-saving')}
+                onConfirm={handleLeaveConfirm}
+                onCancel={handleLeaveCancel}
             />
         </AppLayout>
     )
