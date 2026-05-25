@@ -52,11 +52,17 @@ const CreatePlacePage: NextPage<object> = () => {
     }
 
     useEffect(() => {
-        setClickedButton(false)
+        if (error) {
+            setClickedButton(false)
+        }
+    }, [error])
 
+    useEffect(() => {
         if (data?.id && isSuccess) {
             allowLeaveNavigation()
             void router.push(`/places/${data.id}`)
+        } else if (isSuccess) {
+            setClickedButton(false)
         }
     }, [isSuccess, data])
 
