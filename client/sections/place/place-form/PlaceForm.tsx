@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { LatLngBounds } from 'leaflet'
 import debounce from 'lodash-es/debounce'
-import { Button, Input, Message, Select } from 'simple-react-ui-kit'
+import { Button, Input, Message, Select, SelectOptionType } from 'simple-react-ui-kit'
 
 import dynamic from 'next/dynamic'
 import Image from 'next/image'
@@ -11,7 +11,7 @@ import { API, ApiModel, ApiType } from '@/api'
 import { Notify } from '@/app/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { PhotoGallery, PhotoUploader } from '@/components/shared'
-import { ChipsSelect, ContentEditor, ImageUploader, ScreenSpinner } from '@/components/ui'
+import { ContentEditor, ImageUploader, ScreenSpinner } from '@/components/ui'
 import { categoryImage } from '@/utils/categories'
 
 import styles from './styles.module.sass'
@@ -27,9 +27,18 @@ interface PlaceFormProps {
     errors?: ApiType.Places.PostItemRequest
     onSubmit?: (formData?: ApiType.Places.PostItemRequest) => void
     onCancel?: () => void
+    onDirtyChange?: () => void
 }
 
-export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, errors, onSubmit, onCancel }) => {
+export const PlaceForm: React.FC<PlaceFormProps> = ({
+    placeId,
+    loading,
+    values,
+    errors,
+    onSubmit,
+    onCancel,
+    onDirtyChange
+}) => {
     const dispatch = useAppDispatch()
     const { t } = useTranslation()
 
@@ -41,6 +50,7 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
     const [formErrors, setFormErrors] = useState<ApiType.Places.PostItemRequest>()
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>([])
+    const [tagSearch, setTagSearch] = useState('')
     const [mapCenter, setMapCenter] = useState<[number, number] | undefined>(() => {
         if (placeId && values?.lat != null && values?.lon != null) {
             return [values.lat, values.lon]
@@ -54,18 +64,22 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
     const [searchTags, { data: searchResult, isLoading: searchLoading }] = API.useTagsGetSearchMutation()
 
     const handleChange = ({ target: { name, value } }: React.ChangeEvent<HTMLInputElement>) => {
+        onDirtyChange?.()
         setFormData({ ...formData, [name]: value })
     }
 
     const handleChangeCategory = (category?: string) => {
+        onDirtyChange?.()
         setFormData({ ...formData, category })
     }
 
-    const handleSelectTags = (value: string[]) => {
-        setFormData({ ...formData, tags: value })
+    const handleSelectTags = (selected?: Array<SelectOptionType<string>>) => {
+        onDirtyChange?.()
+        setFormData({ ...formData, tags: selected?.map((opt) => opt.key) })
     }
 
     const handleContentChange = (text?: string) => {
+        onDirtyChange?.()
         setFormData({ ...formData, content: text || '' })
     }
 
@@ -108,10 +122,19 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
         }
     }
 
-    const handleSearchTags = async (value: string) => {
-        if (value.length > 0) {
-            await searchTags(value)
-        }
+    const debouncedSearchTags = useCallback(
+        debounce(async (value: string) => {
+            if (value.length > 0) {
+                await searchTags(value)
+            }
+        }, 500),
+        []
+    )
+
+    const handleSearchTags = (value?: string) => {
+        const text = value ?? ''
+        setTagSearch(text)
+        void debouncedSearchTags(text)
     }
 
     const categoryOptions = useMemo(
@@ -125,6 +148,25 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
     )
 
     const selectedCategory = categoryOptions?.find(({ key }) => key === formData?.category)
+
+    const tagOptions = useMemo<Array<SelectOptionType<string>>>(() => {
+        const selected = (formData?.tags ?? []).map((tag) => ({ key: tag, value: tag }))
+        const results = (searchResult?.items ?? []).map((tag) => ({ key: tag, value: tag }))
+        const merged = [...selected]
+        for (const opt of results) {
+            if (!merged.find((m) => m.key === opt.key)) {
+                merged.push(opt)
+            }
+        }
+        return merged
+    }, [formData?.tags, searchResult?.items])
+
+    const tagsWithCustom = useMemo<Array<SelectOptionType<string>>>(() => {
+        if (!tagSearch || tagOptions.find((opt) => opt.key.toLowerCase() === tagSearch.toLowerCase())) {
+            return tagOptions
+        }
+        return [{ key: tagSearch, value: tagSearch }, ...tagOptions]
+    }, [tagOptions, tagSearch])
 
     const debounceSetMapBounds = useCallback(
         debounce((bounds: LatLngBounds) => {
@@ -204,14 +246,17 @@ export const PlaceForm: React.FC<PlaceFormProps> = ({ placeId, loading, values, 
             </div>
 
             <div className={styles.formElement}>
-                <ChipsSelect
+                <Select<string>
+                    multiple
+                    searchable
+                    closeOnSelect={false}
                     label={t('input_tags-label')}
                     placeholder={t('input_tags-placeholder')}
                     notFoundCaption={t('nothing-found')}
                     disabled={loading}
                     value={formData?.tags}
                     loading={searchLoading}
-                    options={searchResult?.items}
+                    options={tagsWithCustom}
                     onSearch={handleSearchTags}
                     onSelect={handleSelectTags}
                 />
