@@ -12,7 +12,7 @@ import { generateNextSeo } from 'next-seo/pages'
 import { API, ApiModel, ApiType } from '@/api'
 import { setLocale } from '@/app/applicationSlice'
 import { wrapper } from '@/app/store'
-import { AppLayout, PageHeader, PlacesList } from '@/components/shared'
+import { AppLayout, EmptyState, PageHeader, PlacesList } from '@/components/shared'
 import { Pagination } from '@/components/ui'
 import { AUTH_COOKIES } from '@/config/constants'
 import { IMG_HOST, SITE_LINK } from '@/config/env'
@@ -280,23 +280,30 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 />
             </Container>
 
-            <PlacesList places={placesList} />
-
-            <Container className={'paginationContainer'}>
-                <div>
-                    {t('geotags_count')} <strong>{placesCount}</strong>
-                </div>
-                <Pagination
-                    currentPage={currentPage}
-                    captionPage={t('page')}
-                    captionNextPage={t('next-page')}
-                    captionPrevPage={t('prev-page')}
-                    totalItemsCount={placesCount}
-                    perPage={POST_PER_PAGE}
-                    urlParam={initialFilter}
-                    linkPart={'places'}
-                />
-            </Container>
+            {placesList?.length ? (
+                <>
+                    <PlacesList places={placesList} />
+                    <Container className={'paginationContainer'}>
+                        <div>
+                            {t('geotags_count')} <strong>{placesCount}</strong>
+                        </div>
+                        <Pagination
+                            currentPage={currentPage}
+                            captionPage={t('page')}
+                            captionNextPage={t('next-page')}
+                            captionPrevPage={t('prev-page')}
+                            totalItemsCount={placesCount}
+                            perPage={POST_PER_PAGE}
+                            urlParam={initialFilter}
+                            linkPart={'places'}
+                        />
+                    </Container>
+                </>
+            ) : (
+                <Container>
+                    <EmptyState />
+                </Container>
+            )}
         </AppLayout>
     )
 }
