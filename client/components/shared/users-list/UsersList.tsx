@@ -74,12 +74,6 @@ export const UsersList: React.FC<UsersListProps> = ({ users, scrollable, compact
                     <Reputation value={user.reputation ?? 0} />
                 </div>
 
-                {/* Mobile: xp + reputation row */}
-                <div className={styles.mobileMetaRow}>
-                    <span className={styles.mobileXp}>{formatThousands(experience)} XP</span>
-                    <Reputation value={user.reputation ?? 0} />
-                </div>
-
                 {/* Stats (hidden in compact) */}
                 {!compact && (
                     <div className={styles.statsCol}>

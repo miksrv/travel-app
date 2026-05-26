@@ -32,8 +32,8 @@
     @media only screen and (max-width: variables.$mobileMaxWidth)
         grid-template-columns: 1fr auto
         grid-template-areas: "user badge" "meta meta" "stats stats"
-        column-gap: 8px
-        row-gap: 8px
+        column-gap: 4px
+        row-gap: 4px
 
 .userCol
     grid-area: user
@@ -86,20 +86,6 @@
     @media only screen and (min-width: #{variables.$mobileMaxWidth + 1})
         display: none
 
-.mobileMetaRow
-    grid-area: meta
-    display: flex
-    align-items: center
-    justify-content: space-between
-    gap: 8px
-
-    @media only screen and (min-width: #{variables.$mobileMaxWidth + 1})
-        display: none
-
-.mobileXp
-    font-size: 14px
-    font-weight: 600
-
 .statsCol
     grid-area: stats
     display: grid
@@ -107,6 +93,7 @@
 
     @media only screen and (max-width: variables.$mobileMaxWidth)
         justify-items: start
+        grid-template-columns: repeat(3, .16fr)
 
 .stat
     display: flex
