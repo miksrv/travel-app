@@ -18,7 +18,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
         async (context): Promise<GetServerSidePropsResult<object>> => {
             const { data } = await store.dispatch(API.endpoints.sitemapGetList.initiate())
 
-            const staticPages = ['map', 'places', 'users', 'users/levels', 'categories', 'tags']
+            const staticPages = ['map', 'places', 'users', 'categories', 'tags']
 
             await Promise.all(store.dispatch(API.util.getRunningQueriesThunk()))
 

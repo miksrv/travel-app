@@ -137,6 +137,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                 />
 
                 <UsersList
+                    compact={true}
                     scrollable={true}
                     title={t('active-users')}
                     users={usersList}
