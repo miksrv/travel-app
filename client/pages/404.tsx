@@ -3,6 +3,7 @@ import React from 'react'
 import { GetStaticPropsResult, NextPage } from 'next'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
+import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { generateNextSeo } from 'next-seo/pages'
 
@@ -10,6 +11,7 @@ import { NotFoundPage } from '@/components/shared'
 
 const Error404Page: NextPage = () => {
     const router = useRouter()
+    const { t } = useTranslation()
 
     return (
         <>
@@ -17,7 +19,7 @@ const Error404Page: NextPage = () => {
                 {generateNextSeo({
                     noindex: true,
                     nofollow: true,
-                    title: 'Место не найдено'
+                    title: t('page-not-found')
                 })}
             </Head>
 

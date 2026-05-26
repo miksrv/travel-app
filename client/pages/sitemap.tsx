@@ -64,7 +64,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
 
             // Static pages don't have a reliable lastmod — use a fixed date so crawlers don't
             // see them as "just updated" on every request, which wastes crawl budget.
-            const STATIC_LASTMOD = '2025-01-01T00:00:00.000Z'
+            const STATIC_LASTMOD = '2026-05-26T00:00:00.000Z'
 
             // Homepage
             sitemap += makeUrlNode('', STATIC_LASTMOD, 'daily', '1.0', makeHreflang('', 'en'))

@@ -187,12 +187,14 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
         setLocalPhotos(photoList ?? [])
     }, [photoList])
 
+    const placeDescription = truncateText(removeMarkdown(place?.content)?.replace(/\n/g, ' '), 155) || place?.title
+
     return (
         <AppLayout>
             <Head>
                 {generateNextSeo({
                     title: place?.title,
-                    description: truncateText(removeMarkdown(place?.content)?.replace(/\n/g, ' '), 155),
+                    description: placeDescription,
                     canonical: pagePlaceUrl,
                     openGraph: {
                         article: {
@@ -202,7 +204,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                             section: place?.category?.title,
                             tags: place?.tags
                         },
-                        description: truncateText(removeMarkdown(place?.content)?.replace(/\n/g, ' '), 155),
+                        description: placeDescription,
                         images: [
                             ...(place?.cover
                                 ? [

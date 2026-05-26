@@ -180,6 +180,7 @@ const MapPage: NextPage<object> = () => {
                         description: t('geotags-map-description'),
                         images: [
                             {
+                                alt: t('map-of-interesting-pages'),
                                 height: 1305,
                                 url: `${SITE_LINK}images/pages/map.jpg`,
                                 width: 1730

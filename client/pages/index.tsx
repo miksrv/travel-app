@@ -46,6 +46,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                         description: t('geotags-description'),
                         images: [
                             {
+                                alt: t('home-seo-title'),
                                 height: 1538,
                                 url: `${SITE_LINK}images/pages/main.jpg`,
                                 width: 1768
