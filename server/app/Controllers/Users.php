@@ -81,6 +81,40 @@ class Users extends ResourceController
             ]);
         }
 
+        // Bulk query: activity stats (photo + place counts) per user
+        $userIds = array_column(array_map(fn($u) => ['id' => $u->id], $usersData), 'id');
+        $db = \Config\Database::connect();
+
+        $activityStats = [];
+        if (!empty($userIds)) {
+            $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+            $activityRows = $db->query(
+                "SELECT user_id,
+                    SUM(CASE WHEN type = 'photo' THEN 1 ELSE 0 END) AS photo,
+                    SUM(CASE WHEN type = 'place' THEN 1 ELSE 0 END) AS `place`
+                 FROM activity
+                 WHERE user_id IN ($placeholders)
+                 GROUP BY user_id",
+                $userIds
+            )->getResultObject();
+            foreach ($activityRows as $row) {
+                $activityStats[$row->user_id] = $row;
+            }
+        }
+
+        // Bulk query: visited counts per user
+        $visitedStats = [];
+        if (!empty($userIds)) {
+            $placeholders = implode(',', array_fill(0, count($userIds), '?'));
+            $visitedRows = $db->query(
+                "SELECT user_id, COUNT(*) AS visited FROM users_visited_places WHERE user_id IN ($placeholders) GROUP BY user_id",
+                $userIds
+            )->getResultObject();
+            foreach ($visitedRows as $row) {
+                $visitedStats[$row->user_id] = (int) $row->visited;
+            }
+        }
+
         $avatarLibrary = new AvatarLibrary();
         foreach ($usersData as $item) {
             $level    = $userLevels->getLevelData($item);
@@ -90,13 +124,17 @@ class Users extends ResourceController
                 'avatar' => $avatarLibrary->buildPath($item->id, $item->avatar, 'small'),
                 'levelData'  => [
                     'level'      => $level->level,
-                    'title'      => $level->title,
                     'experience' => $item->experience,
                     'nextLevel'  => $level->nextLevel,
                 ],
                 'reputation' => $item->reputation,
                 'created'    => $item->created_at,
-                'activity'   => $item->activity_at ? new \DateTime($item->activity_at) : null
+                'activity'   => $item->activity_at ? new \DateTime($item->activity_at) : null,
+                'statistic'  => [
+                    'photo'   => (int) ($activityStats[$item->id]->photo ?? 0),
+                    'place'   => (int) ($activityStats[$item->id]->place ?? 0),
+                    'visited' => $visitedStats[$item->id] ?? 0,
+                ],
             ];
         }
 
