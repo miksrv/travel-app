@@ -1,11 +1,8 @@
 <?php namespace App\Libraries;
 
 use App\Entities\UserEntity;
-use App\Entities\UserLevelEntity;
 use App\Models\ActivityModel;
-use App\Models\UsersLevelsModel;
 use App\Models\UsersModel;
-use Config\Services;
 use ReflectionException;
 
 class LevelsLibrary {
@@ -17,8 +14,7 @@ class LevelsLibrary {
 
 
     public function __construct() {
-        $userLevelsModel  = new UsersLevelsModel();
-        $this->userLevels = $userLevelsModel->orderBy('experience')->findAll();
+        $this->userLevels = array_map(fn($l) => (object) $l, config('Levels')->levels);
     }
 
     /**
@@ -157,10 +153,9 @@ class LevelsLibrary {
     /**
      * We simply find the current user level in the database and return it, no calculations required
      * @param UserEntity $user
-     * @return UserLevelEntity|null
+     * @return object|null
      */
     public function getLevelData(UserEntity $user): ?object {
-        $request    = Services::request();
         $levelIndex = array_search((int) $user->level, array_column($this->userLevels, 'level'));
 
         if ($levelIndex === false) {
@@ -173,33 +168,19 @@ class LevelsLibrary {
 
         $this->userLevels[$levelIndex]->experience = $user->experience;
 
-        $locale = $request->getLocale();
-        $result = clone $this->userLevels[$levelIndex];
-        $result->title = $result->{"title_$locale"};
-
-        unset($result->title_en, $result->title_ru);
-
-        return $result;
+        return clone $this->userLevels[$levelIndex];
     }
 
-    protected function getUserLevel(int $experience): UserLevelEntity {
-        $request = Services::request();
-        $level   = $this->_findUserLevel($experience);
-        $locale  = $request->getLocale();
-        $result  = clone $level;
-        $result->title = $result->{"title_$locale"};
-
-        unset($result->title_en, $result->title_ru);
-
-        return $result;
+    protected function getUserLevel(int $experience): object {
+        return clone $this->_findUserLevel($experience);
     }
 
     /**
      * We find the current level by the amount of user experience
      * @param int $experience
-     * @return UserLevelEntity
+     * @return object
      */
-    protected function _findUserLevel(int $experience): UserLevelEntity {
+    protected function _findUserLevel(int $experience): object {
         // If the experience is zero, then we immediately return the very first level (they are sorted by experience)
         if ($experience === 0) {
             return $this->userLevels[0];
