@@ -15,9 +15,10 @@ interface ActivityListItemProps {
     item: ApiModel.Activity
     compact?: boolean
     hidePlaceName?: boolean
+    hideCover?: boolean
 }
 
-export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compact, hidePlaceName }) => {
+export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compact, hidePlaceName, hideCover }) => {
     const { t, i18n } = useTranslation('components.activity-list')
 
     const [showLightbox, setShowLightbox] = useState<boolean>(false)
@@ -34,7 +35,10 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
     }[item.type]
 
     const coverPreview = item.place?.cover?.preview
-    const showCoverInGrid = !item.photos?.length && item.type !== ApiModel.ActivityTypes.Photo && !!coverPreview
+    const isCoverRelevant =
+        !hideCover || item.type === ApiModel.ActivityTypes.Cover || item.type === ApiModel.ActivityTypes.Photo
+    const showCoverInGrid =
+        isCoverRelevant && !item.photos?.length && item.type !== ApiModel.ActivityTypes.Photo && !!coverPreview
 
     const hasPhotos = !!item.photos?.length
     const extraCount = hasPhotos ? Math.max(0, item.photos!.length - 3) : 0
@@ -61,6 +65,25 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
                         <span className={styles.authorName}>{t('guest-user', { defaultValue: 'Гость' })}</span>
                     )}
                     {actionText && <span className={styles.actionText}>{actionText}</span>}
+                    {item.type === ApiModel.ActivityTypes.Edit && !!item.place?.difference && (
+                        <span
+                            className={cn(
+                                styles.diffBadge,
+                                item.place.difference > 0 ? styles.diffPos : styles.diffNeg
+                            )}
+                            title={t('activity-diff-chars', { defaultValue: 'Изменено символов' })}
+                        >
+                            {item.place.difference > 0 ? `+${item.place.difference}` : item.place.difference}
+                        </span>
+                    )}
+                    {item.type === ApiModel.ActivityTypes.Rating && !!item.rating?.value && (
+                        <Rating
+                            className={styles.ratingInline}
+                            value={item.rating.value}
+                            voted={true}
+                            disabled={true}
+                        />
+                    )}
                 </div>
                 <time
                     className={styles.time}
@@ -75,15 +98,6 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
             </div>
         </div>
     )
-
-    const rating = item.rating?.value ? (
-        <Rating
-            className={styles.rating}
-            value={item.rating.value}
-            voted={true}
-            disabled={true}
-        />
-    ) : null
 
     const hasBottomBar = !hidePlaceName || (!compact && !!item.views)
 
@@ -115,7 +129,6 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
             <div className={cn(styles.activityItem, styles.compact)}>
                 <div className={styles.compactLeft}>
                     {header}
-                    {rating}
                     {bottomBar}
                 </div>
 
@@ -190,8 +203,6 @@ export const ActivityListItem: React.FC<ActivityListItemProps> = ({ item, compac
                     <blockquote>{item.comment.content}</blockquote>
                 </div>
             )}
-
-            {rating}
 
             {hasPhotos && (
                 <>

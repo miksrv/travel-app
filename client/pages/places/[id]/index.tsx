@@ -287,6 +287,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                     <PlaceActivity
                         placeId={place?.id}
                         hidePlaceName={true}
+                        hideCover={true}
                     />
                 </div>
 

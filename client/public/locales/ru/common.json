@@ -263,6 +263,7 @@
     "guest-user": "Гость",
     "activity-comment": "Оставил(-а) отзыв на интересное место",
     "activity-editing": "Редактировал(а) интересное место",
+    "activity-diff-chars": "Изменено символов",
     "activity-new-place": "Добавил(а) новое интересное место",
     "activity-uploading-photo": "Загрузил(а) фотографию к интересному месту",
     "activity-rating": "Оценил(а) интересное место",

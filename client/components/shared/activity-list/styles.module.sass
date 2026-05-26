@@ -31,7 +31,7 @@
     .metaLine
         display: flex
         flex-wrap: wrap
-        align-items: baseline
+        align-items: center
         gap: 4px
         line-height: 1.4
 
@@ -49,6 +49,23 @@
         color: var(--text-color-secondary)
         font-size: variables.$fontSizeCaption
 
+    .diffBadge
+        display: inline-block
+        font-size: 10px
+        font-weight: 600
+        padding: 0 5px
+        border-radius: 10px
+        line-height: 18px
+        flex-shrink: 0
+
+        &.diffPos
+            color: var(--color-green)
+            background: var(--color-green-background)
+
+        &.diffNeg
+            color: var(--color-red)
+            background: var(--color-red-background)
+
     .time
         display: block
         color: var(--text-color-secondary)
@@ -60,8 +77,12 @@
         color: var(--text-color-secondary)
         font-size: variables.$fontSizeCaption
 
-    .rating
-        margin-left: 0
+    .ratingInline
+        svg
+            width: 16px !important
+            height: 16px !important
+        li
+            height: 16px !important
 
     .photosGrid
         display: flex

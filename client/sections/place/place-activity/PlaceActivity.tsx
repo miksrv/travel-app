@@ -11,9 +11,10 @@ const ACTIVITY_LIMIT = 10
 interface PlaceActivityProps {
     placeId?: string
     hidePlaceName?: boolean
+    hideCover?: boolean
 }
 
-export const PlaceActivity: React.FC<PlaceActivityProps> = ({ placeId, hidePlaceName }) => {
+export const PlaceActivity: React.FC<PlaceActivityProps> = ({ placeId, hidePlaceName, hideCover }) => {
     const { t } = useTranslation()
 
     const [offset, setOffset] = useState(0)
@@ -41,6 +42,7 @@ export const PlaceActivity: React.FC<PlaceActivityProps> = ({ placeId, hidePlace
             loading={isLoading}
             compact={true}
             hidePlaceName={hidePlaceName}
+            hideCover={hideCover}
             footer={
                 data?.has_more ? (
                     <Button

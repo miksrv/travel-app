@@ -264,6 +264,7 @@
     "guest-user": "Guest user",
     "activity-comment": "Left a review on an interesting place",
     "activity-editing": "Edited an interesting place",
+    "activity-diff-chars": "Characters changed",
     "activity-new-place": "Added a new interesting place",
     "activity-uploading-photo": "Uploaded a photo to an interesting place",
     "activity-rating": "Rated an interesting place",
