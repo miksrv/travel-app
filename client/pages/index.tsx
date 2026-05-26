@@ -67,7 +67,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                     '@context': 'https://schema.org',
                     '@type': 'Organization',
                     logo: `${SITE_LINK}android-chrome-512x512.png`,
-                    name: 'Geometki',
+                    name: t('geotags'),
                     url: SITE_LINK
                 }}
             />
@@ -76,7 +76,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                 data={{
                     '@context': 'https://schema.org',
                     '@type': 'WebSite',
-                    name: 'Geometki',
+                    name: t('geotags'),
                     url: SITE_LINK,
                     potentialAction: {
                         '@type': 'SearchAction',
