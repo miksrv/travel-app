@@ -5,8 +5,8 @@ import Image from 'next/image'
 
 import { ApiModel } from '@/api'
 import { AchievementIcon } from '@/components/shared/achievement-icon'
+import { LevelBadge } from '@/components/shared/level-badge/LevelBadge'
 import { IMG_HOST } from '@/config/env'
-import { levelImage } from '@/utils/levels'
 
 import styles from './styles.module.sass'
 
@@ -18,11 +18,9 @@ export const NotificationIcon: React.FC<ApiModel.Notification> = ({ ...props }):
     ) : props.type === 'success' ? (
         <Icon name={'CheckCircle'} />
     ) : props.type === 'level' ? (
-        <Image
-            src={levelImage(props.meta?.level).src}
-            alt={''}
-            width={26}
-            height={26}
+        <LevelBadge
+            level={props.meta?.level}
+            size={26}
         />
     ) : props.type === 'achievements' ? (
         <AchievementIcon
