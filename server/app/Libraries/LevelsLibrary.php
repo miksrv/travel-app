@@ -144,7 +144,17 @@ class LevelsLibrary {
             $notify->push('level', $userId, $activity, $calcLevel);
             $userModel->update($userData->id, ['level' => $calcLevel->level, 'experience' => $userData->experience]);
         } else {
-            $notify->push('experience', $userId, $activity, ['value' => $experience]);
+            $levelIndex  = array_search($calcLevel->level, array_column($this->userLevels, 'level'));
+            $nextLevelXp = ($levelIndex !== false && isset($this->userLevels[$levelIndex + 1]))
+                ? $this->userLevels[$levelIndex + 1]->experience
+                : 0;
+
+            $notify->push('experience', $userId, $activity, [
+                'value'      => $experience,
+                'experience' => $userData->experience,
+                'level'      => $calcLevel->level,
+                'nextLevel'  => $nextLevelXp
+            ]);
             $userModel->update($userData->id, ['experience' => $userData->experience]);
         }
     }

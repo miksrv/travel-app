@@ -188,6 +188,7 @@ class Notifications extends ResourceController
                 'meta'     => $meta
             ];
 
+
             if (isset($notify->created_at)) {
                 $tempData['created'] = $notify->created_at;
             }

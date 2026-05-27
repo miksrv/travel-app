@@ -478,6 +478,8 @@ class Places extends ResourceController
             $updatedContent = isset($input->content) ? strip_tags(html_entity_decode($input->content)) : null;
             $updatedTitle   = isset($input->title) ? strip_tags(html_entity_decode($input->title)) : null;
 
+            $shouldRecordActivity = false;
+
             // Save place content
             if ($updatedContent || $updatedTitle) {
                 $contentModel = new PlacesContentModel();
@@ -504,12 +506,12 @@ class Places extends ResourceController
                         $contentModel->update($placeContent->id($id), $placeEntity);
                     } else {
                         $contentModel->insert($placeEntity);
-                        $activity->owner($placeData->user_id)->edit($id);
                     }
                 } else {
                     $contentModel->insert($placeEntity);
-                    $activity->owner($placeData->user_id)->edit($id);
                 }
+
+                $shouldRecordActivity = true;
             }
 
             $place = new PlaceEntity();
@@ -532,12 +534,14 @@ class Places extends ResourceController
                 $place->district_id = $geocoder->districtId;
                 $place->locality_id = ($geocoder->localityId > 0) ? $geocoder->localityId : null;
                 $hasChanges = true;
+                $shouldRecordActivity = true;
             }
 
             // Change category
             if (isset($input->category)) {
                 $place->category = $input->category;
                 $hasChanges = true;
+                $shouldRecordActivity = true;
             }
 
             // update() auto-sets updated_at via useTimestamps; touch() handles the case
@@ -546,6 +550,11 @@ class Places extends ResourceController
                 $this->model->update($id, $place);
             } else {
                 $this->model->touch($id);
+            }
+
+            // Record activity and send notifications once for all edit types
+            if ($shouldRecordActivity) {
+                $activity->owner($placeData->user_id)->edit($id);
             }
 
             $return = ['content' => !empty($updatedContent) ? $updatedContent : $placeContent->content($id)];
