@@ -29,9 +29,13 @@
         grid-template-columns: minmax(190px, 2fr) minmax(150px, 2fr) minmax(80px, 1fr)
         grid-template-areas: "user level reputation"
 
+        @media only screen and (max-width: variables.$mobileMaxWidth)
+            grid-template-columns: 1fr auto
+            grid-template-areas: "user badge"
+
     @media only screen and (max-width: variables.$mobileMaxWidth)
         grid-template-columns: 1fr auto
-        grid-template-areas: "user badge" "meta meta" "stats stats"
+        grid-template-areas: "user badge" "stats stats"
         column-gap: 4px
         row-gap: 4px
 
