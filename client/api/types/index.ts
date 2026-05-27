@@ -39,6 +39,7 @@ export type ActivityType =
     | 'level'
     | 'achievements'
     | 'success'
+    | 'info'
     | 'warning'
     | 'error'
 
