@@ -26,7 +26,8 @@ jest.mock('@/config/env', () => ({
 }))
 
 jest.mock('@/utils/levels', () => ({
-    levelImage: jest.fn().mockReturnValue({ src: '/levels/level-1.png' })
+    levelColor: jest.fn().mockReturnValue('#aabbcc'),
+    levelColors: jest.fn().mockReturnValue({ border: '#334455', fill: '#aabbcc' })
 }))
 
 describe('NotificationIcon', () => {
@@ -70,17 +71,16 @@ describe('NotificationIcon', () => {
     })
 
     describe('level type', () => {
-        it('renders a level image for level type', () => {
+        it('renders a level badge for level type', () => {
             render(
                 <NotificationIcon
                     type={'level'}
                     id={'n1'}
                     read={false}
-                    meta={{ level: 1, value: 0, title: 'Novice' }}
+                    meta={{ level: 5, value: 0, title: 'Explorer' }}
                 />
             )
-            const img = screen.getByRole('presentation')
-            expect(img).toHaveAttribute('src', '/levels/level-1.png')
+            expect(screen.getByText('5')).toBeInTheDocument()
         })
     })
 

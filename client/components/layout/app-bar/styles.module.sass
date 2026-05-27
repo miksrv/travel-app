@@ -109,15 +109,6 @@
         padding: 0
         overflow: hidden
         overflow-y: scroll
-        font-size: variables.$fontSizeHeadline
-
-        & > div
-            border-bottom: var(--container-border-separator)
-            margin-bottom: 0
-            padding: 2px 10px
-
-            &:last-of-type
-                border-bottom: 0
 
     .loader
         +flexCenter
@@ -138,6 +129,62 @@
         color: var(--text-color-secondary)
         height: 140px
         min-width: 260px
+
+.notifyItem
+    display: flex
+    align-items: center
+    gap: 8px
+    padding: 8px 10px
+    border-bottom: var(--container-border-separator)
+    background-color: var(--container-background)
+
+    &:last-of-type
+        border-bottom: none
+
+    &.notifyItemUnread
+        background-color: var(--input-background-color)
+
+.notifyItemIcon
+    flex-shrink: 0
+    display: flex
+    align-items: center
+    margin-top: 2px
+
+    svg
+        width: 18px
+        height: 18px
+        fill: var(--link-color)
+
+.notifyItemBody
+    display: flex
+    flex-direction: column
+    gap: 1px
+    min-width: 0
+    flex: 1
+
+.notifyItemTitle
+    font-weight: 600
+    font-size: 13px
+    color: var(--text-color-primary)
+    white-space: nowrap
+    overflow: hidden
+    text-overflow: ellipsis
+
+.notifyItemContent
+    font-size: 12px
+    color: var(--text-color-secondary)
+
+    a
+        color: var(--link-color)
+        white-space: nowrap
+        overflow: hidden
+        text-overflow: ellipsis
+        display: block
+
+.notifyItemDate
+    font-size: 11px
+    color: var(--text-color-secondary)
+    opacity: 0.7
 
 .userMenuPopout
     .userInfo

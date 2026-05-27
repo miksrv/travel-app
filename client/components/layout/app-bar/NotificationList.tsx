@@ -8,7 +8,7 @@ import { deleteAllNotifications, Notify } from '@/app/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 import { Counter } from '@/components/ui'
 
-import { Notification } from '../snackbar'
+import { NotificationListItem } from './NotificationListItem'
 
 import styles from './styles.module.sass'
 
@@ -133,9 +133,8 @@ export const NotificationList: React.FC = () => {
                         ref={notifyContainerRef}
                     >
                         {notifyData.items.map((item) => (
-                            <Notification
+                            <NotificationListItem
                                 key={item.id}
-                                showDate={true}
                                 {...item}
                             />
                         ))}

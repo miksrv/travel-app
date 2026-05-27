@@ -7,14 +7,14 @@
     display: flex
     flex-direction: column
     user-select: none
-    max-width: 280px
+    max-width: 300px
     width: 100%
     z-index: 505
 
     .notification
         border-radius: var(--border-radius)
         box-shadow: variables.$boxShadow4
-        padding: 8px 12px
+        padding: 10px 6px 10px 12px
 
         &.unread
             transition: transform .32s cubic-bezier(0.4,0,0.2,1)
@@ -23,21 +23,52 @@
 .notification
     background-color: var(--container-background)
     display: flex
-    align-items: center
+    align-items: flex-start
     position: relative
     width: 100%
     margin-bottom: 10px
+    border-top: 3px solid transparent
 
     &.unread
         background-color: var(--input-background-color)
 
-    &.noTitle
-        min-height: 60px
+    &.success
+        border-top-color: var(--color-green)
+
+        .content
+            color: var(--text-color-primary)
+
+    &.error
+        border-top-color: var(--color-red)
+
+        .content
+            color: var(--text-color-primary)
+
+    &.warning
+        border-top-color: var(--color-orange)
+
+        .content
+            color: var(--text-color-primary)
+
+    &.info
+        border-top-color: var(--link-color)
+
+        .content
+            color: var(--text-color-primary)
+
+    &.level,
+    &.experience
+        border-top-color: var(--link-color)
+
+        .content
+            color: var(--text-color-primary)
 
     .before
         margin-right: 9px
+        margin-top: 2px
         display: flex
         align-items: center
+        flex-shrink: 0
 
         .placeImage
             border-radius: var(--border-radius)
@@ -55,7 +86,9 @@
         flex-direction: column
 
         .title
+            font-size: var(--font-size-small)
             color: var(--text-color-primary)
+            font-weight: 500
             display: -webkit-box
             flex: 1
             width: 100%
@@ -64,48 +97,37 @@
             overflow: hidden
 
         .content
-            color: var(--text-color-secondary)
-
             a
                 display: block
                 white-space: pre
                 text-overflow: ellipsis
                 overflow: hidden
-                max-width: 175px
+                max-width: 195px
 
         .datetime
             font-size: variables.$fontSizeCaption
             color: var(--text-color-secondary)
 
-    &.success
-        svg
-            fill: var(--color-green)
-
-    &.warning
-        svg
-            fill: var(--color-orange)
-
-    &.error
-        svg
-            fill: var(--color-red)
-
     .closeButton
-        position: absolute
+        flex-shrink: 0
         border: none
         background: none
-        margin: 0
-        padding: 0
-        right: 2px
-        top: 2px
+        margin: 0 2px 0 6px
+        padding: 4px
         cursor: pointer
+        display: flex
+        align-items: center
+        justify-content: center
+        border-radius: 50%
 
         &:hover
             opacity: .6
 
         svg
-            width: 12px
-            height: 12px
+            width: 16px
+            height: 16px
             fill: var(--icon-color-secondary)
+
 
 @keyframes snackbar-horizontal
     0%
