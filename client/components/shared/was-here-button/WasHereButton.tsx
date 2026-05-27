@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next/pages'
 
 import { API } from '@/api'
 import { openAuthDialog } from '@/app/applicationSlice'
-import { Notify } from '@/app/notificationSlice'
+import { NotifyReplace } from '@/app/notificationSlice'
 import { useAppDispatch, useAppSelector } from '@/app/store'
 
 import styles from './styles.module.sass'
@@ -47,24 +47,24 @@ export const WasHereButton: React.FC<WasHereButtonProps> = ({ placeId, verificat
 
             if (!result.visited) {
                 void dispatch(
-                    Notify({
-                        id: 'visitedRemoved',
+                    NotifyReplace({
+                        id: 'visited',
                         message: t('visited-removed'),
                         type: 'success'
                     })
                 )
             } else if (result.verified) {
                 void dispatch(
-                    Notify({
-                        id: 'visitedConfirmed',
+                    NotifyReplace({
+                        id: 'visited',
                         message: t('visited-confirmed'),
                         type: 'success'
                     })
                 )
             } else {
                 void dispatch(
-                    Notify({
-                        id: 'visitedUnconfirmed',
+                    NotifyReplace({
+                        id: 'visited',
                         message: t('visited-unconfirmed'),
                         type: 'success'
                     })
@@ -137,8 +137,8 @@ export const WasHereButton: React.FC<WasHereButtonProps> = ({ placeId, verificat
         if (!navigator.onLine) {
             savePendingVisit()
             void dispatch(
-                Notify({
-                    id: 'visitedOffline',
+                NotifyReplace({
+                    id: 'visited',
                     message: t('visited-unconfirmed'),
                     type: 'success'
                 })

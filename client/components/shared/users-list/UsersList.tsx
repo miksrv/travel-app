@@ -63,7 +63,7 @@ export const UsersList: React.FC<UsersListProps> = ({ users, scrollable, compact
 
                 {/* Total XP (desktop, hidden in compact) */}
                 {!compact && (
-                    <div classNamДаваe={styles.xpCol}>
+                    <div className={styles.xpCol}>
                         <strong>{formatThousands(experience)}</strong>
                         <span>{t('experience-points', { defaultValue: 'очки опыта' })}</span>
                     </div>
