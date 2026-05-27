@@ -1,5 +1,17 @@
 # Changelog
 
+## 1.8.1
+
+### Patch Changes
+
+- Levels: config-driven color palette replaces image assets — Removed ~70 rank PNG images, the `users_levels` DB table, and the server `Levels` controller/model/seeder. Server now reads level thresholds from a static `Config/Levels.php`; `LevelsLibrary` simplified accordingly. Client drops per-level image imports in favor of a `LEVEL_COLORS` palette in `config/constants.ts` with new `levelColorIndex`/`levelColors`/`levelColor` helpers. New `LevelBadge` and `LevelProgress` components introduced; level display updated in `UserHeader` and `UsersList`. Dedicated user-levels page removed.
+- Notifications: refactor, replace/auto-dismiss, and XP snackbar — Snackbar `Notification` component refactored with improved styles and test coverage. Notification slice now supports replacing an existing notification by key and auto-dismissing after a configurable timeout. XP-gain snackbar triggered on level-up events from the server.
+- Rating: inline spinner and duplicate-vote guard — `PlaceActionBar` renders a small inline `Spinner` inside the score while rating data is loading to prevent layout flicker. The `Rating` control is disabled during loading and after the user has already voted to prevent duplicate submissions.
+- Place form: leave-guard bypass and button-state fix — `useConfirmLeave` hook extended with an `allowNavigation` flag so successful form submission navigates without triggering the unsaved-changes dialog. Button-reset logic on the create page corrected: state is reset only on error, and navigation fires only when a valid `data.id` is returned.
+- Server: geocoder `IS NULL` fix and duplicate-edit guard — `Geocoder` library switched from `whereNull()` to explicit `"column IS NULL"` conditions to avoid query-builder NULL-check incompatibilities. `Places` controller now records an edit activity entry only once per request, preventing duplicate rows.
+- Users list: mobile layout tightened — Removed the duplicated mobile XP/reputation row from `UsersList` and its associated styles. Mobile grid gaps reduced from 8 px to 4 px; stats column updated to a three-column layout. CSS class name reference corrected.
+- SEO / i18n: user profile, sitemap, and site name — Enhanced meta tags and breadcrumb markup on the user profile page. Sitemap timestamps stabilized. Site name sourced from i18n locale keys instead of a hardcoded string.
+
 ## 1.8.0
 
 ### Minor Changes

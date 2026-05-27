@@ -5,9 +5,9 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next/pages'
 
 import { ApiModel } from '@/api'
-import { ActivityType } from '@/api/types'
 import { LevelProgress } from '@/components/shared/level-progress/LevelProgress'
 import { formatDate } from '@/utils/helpers'
+import { getActivityTitle } from '@/utils/notifications'
 
 import { NotificationIcon } from './NotificationIcon'
 
@@ -30,48 +30,20 @@ export const Notification: React.FC<NotificationProps> = ({ showDate, onClose, o
 
     const hideIcon = NO_ICON_TYPES.has(props.type ?? '')
 
-    const getActivityTitle = (type?: ActivityType): string => {
-        switch (type) {
-            case 'photo':
-                return t('notification_photo', { defaultValue: 'Загружена новая фотография' })
-            case 'place':
-                return t('notification_place', { defaultValue: 'Добавлена новая геометка' })
-            case 'rating':
-                return t('notification_rating', { defaultValue: 'Поставлена новая оценка' })
-            case 'edit':
-                return t('notification_edit', { defaultValue: 'Отредактирована геометка' })
-            case 'cover':
-                return t('notification_cover', { defaultValue: 'Изменена обложка' })
-            case 'level':
-                return t('notification_level', { defaultValue: 'Новый уровень!' })
-            case 'achievements':
-                return t('notification_achievements', { defaultValue: 'Новое достижение' })
-            case 'warning':
-                return t('notification_warning', { defaultValue: 'Предупреждение' })
-            case 'error':
-                return t('notification_error', { defaultValue: 'Ошибка' })
-            case undefined:
-            case 'experience':
-            case 'success':
-            default:
-                return ''
-        }
-    }
-
     const resolvedTitle = (() => {
         if (typeof props.title !== 'undefined') {
             return props.title
         }
         if (props.type === 'experience') {
-            const activityLabel = getActivityTitle(props.activity)
+            const activityLabel = getActivityTitle(props.activity, t)
             const xpLabel = props.meta?.value != null ? `+${props.meta.value} XP` : ''
             return [activityLabel, xpLabel].filter(Boolean).join(' ')
         }
         if (props.activity) {
-            return getActivityTitle(props.activity)
+            return getActivityTitle(props.activity, t)
         }
         if (props.type && props.type !== 'success') {
-            return getActivityTitle(props.type)
+            return getActivityTitle(props.type, t)
         }
         return ''
     })()
