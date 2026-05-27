@@ -13,6 +13,8 @@ export type Notification = {
         title?: string
         level?: number
         image?: string
+        experience?: number
+        nextLevel?: number
     }
     activity?: ActivityType
     place?: Pick<Place, 'id' | 'title' | 'cover'>

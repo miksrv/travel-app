@@ -9,6 +9,5 @@ class ManageSeeder extends Seeder {
     {
         $this->call('CategorySeeder');
         $this->call('OverpassCategorySeeder');
-        $this->call('UserLevelsSeeder');
     }
 }

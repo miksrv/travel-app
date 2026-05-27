@@ -25,13 +25,7 @@ jest.mock('simple-react-ui-kit', () => ({
             {children}
         </div>
     ),
-    Progress: ({ value, className }: { value?: number; _height?: number; className?: string }) => (
-        <div
-            data-testid={'progress'}
-            data-value={value}
-            className={className}
-        />
-    )
+    Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
 }))
 
 jest.mock('next/image', () => {
@@ -72,8 +66,21 @@ jest.mock('@/components/ui', () => ({
 }))
 
 jest.mock('@/utils/levels', () => ({
-    levelImage: jest.fn().mockReturnValue({ src: '/levels/1.png' }),
+    levelColor: jest.fn().mockReturnValue('#aabbcc'),
+    levelColors: jest.fn().mockReturnValue({ border: '#334455', fill: '#aabbcc' }),
     nextLevelPercentage: jest.fn().mockReturnValue(50)
+}))
+
+jest.mock('../level-badge/LevelBadge', () => ({
+    LevelBadge: ({ level }: any) => <span data-testid={'level-badge'}>{level}</span>
+}))
+
+jest.mock('../level-progress/LevelProgress', () => ({
+    LevelProgress: ({ levelData }: any) => (
+        <div data-testid={'level-progress'}>
+            <span data-testid={'level-number'}>{levelData?.level}</span>
+        </div>
+    )
 }))
 
 jest.mock('../user-avatar', () => ({
@@ -125,15 +132,15 @@ describe('UsersList', () => {
             expect(screen.getByText('50')).toBeInTheDocument()
         })
 
-        it('renders Progress component for each user', () => {
+        it('renders LevelProgress for each user', () => {
             render(<UsersList users={mockUsers} />)
-            expect(screen.getAllByTestId('progress')).toHaveLength(2)
+            expect(screen.getAllByTestId('level-progress')).toHaveLength(2)
         })
 
-        it('renders level titles', () => {
+        it('renders level numbers', () => {
             render(<UsersList users={mockUsers} />)
-            expect(screen.getByText('Explorer')).toBeInTheDocument()
-            expect(screen.getByText('Traveler')).toBeInTheDocument()
+            expect(screen.getAllByText('3').length).toBeGreaterThan(0)
+            expect(screen.getAllByText('2').length).toBeGreaterThan(0)
         })
     })
 

@@ -25,6 +25,7 @@ This directory documents proposed features for Geometki. The existing system alr
 | [17](./17-personal-fog-of-war-explorer-map.md) | **Personal Fog of War & Explorer Map** | ⏳ Pending | Medium–High | Very High | `sessions_history` coordinates, `user_explored_tiles` (new), Leaflet heatmap layer |
 | [18](./18-visited-places-checkin.md) | **Verified Visit Mechanic ("Я здесь был")** | ✅ Done | Low–Medium | Medium | `users_visited_places`, `places` table, existing visited toggle |
 | [19](./19-admin-sent-emails.md) | **Admin: Sent Emails Dashboard** | ✅ Done | Low | Low | `sending_mail` table, existing mail controller, `SessionLibrary` auth |
+| [22](./22-xp-snackbar-notifications.md) | **XP Snackbar & Notification Groups** | 🔄 In Progress | Low–Medium | High | Existing snackbar, `notificationSlice`, `LevelProgress` component |
 
 ## Recommended Implementation Order
 

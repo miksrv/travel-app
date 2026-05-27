@@ -1,13 +1,14 @@
 import React from 'react'
-import { Container, ContainerProps, Progress } from 'simple-react-ui-kit'
+import { Container, ContainerProps, Icon } from 'simple-react-ui-kit'
 
-import Image from 'next/image'
 import { useTranslation } from 'next-i18next/pages'
 
 import { ApiModel } from '@/api'
 import { Reputation } from '@/components/ui'
-import { levelImage, nextLevelPercentage } from '@/utils/levels'
+import { formatThousands, timeAgo } from '@/utils/helpers'
 
+import { LevelBadge } from '../level-badge/LevelBadge'
+import { LevelProgress } from '../level-progress/LevelProgress'
 import { UserAvatar } from '../user-avatar'
 
 import styles from './styles.module.sass'
@@ -15,10 +16,11 @@ import styles from './styles.module.sass'
 interface UsersListProps extends Pick<ContainerProps, 'title' | 'footer' | 'action'> {
     users?: ApiModel.User[]
     scrollable?: boolean
+    compact?: boolean
 }
 
-export const UsersList: React.FC<UsersListProps> = ({ users, scrollable, ...props }) => {
-    const { t } = useTranslation('components.users-list')
+export const UsersList: React.FC<UsersListProps> = ({ users, scrollable, compact, ...props }) => {
+    const { t, i18n } = useTranslation('components.users-list')
 
     if (!users?.length) {
         return (
@@ -28,46 +30,70 @@ export const UsersList: React.FC<UsersListProps> = ({ users, scrollable, ...prop
         )
     }
 
-    const content = users.map((user) => (
-        <div
-            key={user.id}
-            className={styles.usersListItem}
-        >
-            <UserAvatar
-                showName={true}
-                user={user}
-                size={'medium'}
-                caption={
-                    <>
-                        <Image
-                            className={styles.levelImage}
-                            src={levelImage(user.levelData?.level).src}
-                            alt={''}
-                            width={16}
-                            height={16}
-                        />
-                        {user.levelData?.level} {t('level', { defaultValue: 'Уровень' })}
-                    </>
-                }
-            />
+    const content = users.map((user) => {
+        const experience = user.levelData?.experience ?? 0
 
-            <div className={styles.metaContainer}>
-                <Reputation value={user.reputation || 0} />
-
-                <div className={styles.level}>
-                    <p>{user.levelData?.title}</p>
-                    <Progress
-                        className={styles.progress}
-                        height={4}
-                        value={nextLevelPercentage(
-                            user.levelData?.experience || 0,
-                            user.levelData?.nextLevel || user.levelData?.experience || 0
-                        )}
+        return (
+            <div
+                key={user.id}
+                className={`${styles.usersListItem}${compact ? ` ${styles.compact}` : ''}`}
+            >
+                {/* Avatar + name + activity */}
+                <div className={styles.userCol}>
+                    <UserAvatar
+                        showName={true}
+                        user={user}
+                        size={'medium'}
+                        caption={timeAgo(user.activity?.date, undefined, i18n.language)}
                     />
                 </div>
+
+                {/* Mobile-only: level badge positioned top-right */}
+                <div className={styles.mobileLevelBadge}>
+                    <LevelBadge
+                        level={user.levelData?.level}
+                        size={28}
+                    />
+                </div>
+
+                {/* Desktop: level badge + progress + xp range */}
+                <div className={styles.levelCol}>
+                    <LevelProgress levelData={user.levelData} />
+                </div>
+
+                {/* Total XP (desktop, hidden in compact) */}
+                {!compact && (
+                    <div className={styles.xpCol}>
+                        <strong>{formatThousands(experience)}</strong>
+                        <span>{t('experience-points', { defaultValue: 'очки опыта' })}</span>
+                    </div>
+                )}
+
+                {/* Reputation (desktop) */}
+                <div className={styles.reputationCol}>
+                    <Reputation value={user.reputation ?? 0} />
+                </div>
+
+                {/* Stats (hidden in compact) */}
+                {!compact && (
+                    <div className={styles.statsCol}>
+                        <div className={styles.stat}>
+                            <Icon name={'Camera'} />
+                            {user.statistic?.photo ?? 0}
+                        </div>
+                        <div className={styles.stat}>
+                            <Icon name={'Point'} />
+                            {user.statistic?.place ?? 0}
+                        </div>
+                        <div className={styles.stat}>
+                            <Icon name={'Bookmark'} />
+                            {user.statistic?.visited ?? 0}
+                        </div>
+                    </div>
+                )}
             </div>
-        </div>
-    ))
+        )
+    })
 
     return (
         <Container {...props}>

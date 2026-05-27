@@ -26,7 +26,7 @@ export const CopyCoordinates: React.FC<CopyCoordinatesProps> = ({ lat, lon, onCo
                 id: 'copyCoordinates',
                 message: t('coordinates-copied'),
                 title: '',
-                type: 'success'
+                type: 'info'
             })
         )
     }

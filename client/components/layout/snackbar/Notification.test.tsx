@@ -36,6 +36,15 @@ jest.mock('@/utils/helpers', () => ({
     formatDate: () => '15 January 2024, 10:00'
 }))
 
+jest.mock('@/components/shared/level-progress/LevelProgress', () => ({
+    LevelProgress: ({ levelData }: any) => (
+        <div
+            data-testid={'level-progress'}
+            data-level={levelData?.level}
+        />
+    )
+}))
+
 // Mock NotificationIcon
 jest.mock('./NotificationIcon', () => ({
     NotificationIcon: ({ type }: any) => (
@@ -60,8 +69,28 @@ describe('Notification', () => {
             expect(screen.getByText('Operation completed')).toBeInTheDocument()
         })
 
-        it('renders the NotificationIcon', () => {
+        it('does not render NotificationIcon for success type', () => {
             render(<Notification {...baseNotification} />)
+            expect(screen.queryByTestId('notification-icon')).not.toBeInTheDocument()
+        })
+
+        it('does not render NotificationIcon for experience type', () => {
+            render(
+                <Notification
+                    {...baseNotification}
+                    type={'experience' as const}
+                />
+            )
+            expect(screen.queryByTestId('notification-icon')).not.toBeInTheDocument()
+        })
+
+        it('renders NotificationIcon for achievements type', () => {
+            render(
+                <Notification
+                    {...baseNotification}
+                    type={'achievements' as const}
+                />
+            )
             expect(screen.getByTestId('notification-icon')).toBeInTheDocument()
         })
 
@@ -124,14 +153,26 @@ describe('Notification', () => {
     })
 
     describe('experience type', () => {
-        it('renders experience points for experience notification type', () => {
+        it('renders xp amount in the title for experience notification type', () => {
             const notification = {
                 id: 'exp-1',
                 type: 'experience' as const,
-                meta: { value: 50, level: 3, title: 'Explorer' }
+                activity: 'rating' as const,
+                meta: { value: 50, level: 3 }
             }
             render(<Notification {...notification} />)
-            expect(screen.getByText(/\+50/)).toBeInTheDocument()
+            expect(screen.getByText(/Поставлена новая оценка.*\+50 XP/)).toBeInTheDocument()
+        })
+
+        it('renders LevelProgress when meta has experience and nextLevel', () => {
+            const notification = {
+                id: 'exp-2',
+                type: 'experience' as const,
+                activity: 'place' as const,
+                meta: { value: 5, level: 2, experience: 80, nextLevel: 150 }
+            }
+            render(<Notification {...notification} />)
+            expect(screen.getByTestId('level-progress')).toBeInTheDocument()
         })
     })
 

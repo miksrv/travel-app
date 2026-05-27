@@ -299,7 +299,6 @@ class Auth extends ResourceController
 
             $this->session->user->levelData = [
                 'level'      => $userLevel->level,
-                'title'      => $userLevel->title,
                 'experience' => $this->session->user->experience,
                 'nextLevel'  => $userLevel->nextLevel,
             ];

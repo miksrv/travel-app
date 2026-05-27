@@ -68,8 +68,8 @@ jest.mock('@/components/ui', () => ({
     Counter: ({ value }: { value: number }) => <span data-testid={'counter'}>{value}</span>
 }))
 
-jest.mock('../snackbar', () => ({
-    Notification: ({ message }: { message: string }) => <div data-testid={'notification-item'}>{message}</div>
+jest.mock('./NotificationListItem', () => ({
+    NotificationListItem: ({ message }: { message: string }) => <div data-testid={'notification-item'}>{message}</div>
 }))
 
 jest.mock('@/config/constants', () => ({

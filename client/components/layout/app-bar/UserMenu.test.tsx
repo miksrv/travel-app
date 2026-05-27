@@ -44,11 +44,12 @@ jest.mock('next/link', () => {
 })
 
 jest.mock('@/components/shared', () => ({
+    LevelProgress: ({ levelData }: any) => (
+        <div data-testid={'level-progress'}>
+            <span data-testid={'level-number'}>{levelData?.level}</span>
+        </div>
+    ),
     UserAvatar: ({ user }: any) => <div data-testid={'user-avatar'}>{user?.name}</div>
-}))
-
-jest.mock('@/utils/levels', () => ({
-    levelImage: jest.fn().mockReturnValue({ src: '/levels/1.png' })
 }))
 
 const mockT = (key: string, opts?: Record<string, unknown>) => opts?.defaultValue ?? key
@@ -86,35 +87,15 @@ describe('UserMenu', () => {
             expect(screen.getAllByText('Alice').length).toBeGreaterThan(0)
         })
 
-        it('renders the user level', () => {
+        it('renders the user level via LevelProgress', () => {
             render(
                 <UserMenu
                     t={mockT as any}
                     user={mockUser as any}
                 />
             )
-            expect(screen.getByText(/3/)).toBeInTheDocument()
-        })
-
-        it('renders the level title', () => {
-            render(
-                <UserMenu
-                    t={mockT as any}
-                    user={mockUser as any}
-                />
-            )
-            expect(screen.getByText('Explorer')).toBeInTheDocument()
-        })
-
-        it('renders the "until next level" text', () => {
-            render(
-                <UserMenu
-                    t={mockT as any}
-                    user={mockUser as any}
-                />
-            )
-            // 500 - 300 = 200 points to next level
-            expect(screen.getByText(/200/)).toBeInTheDocument()
+            expect(screen.getByTestId('level-progress')).toBeInTheDocument()
+            expect(screen.getByTestId('level-number')).toHaveTextContent('3')
         })
 
         it('renders the my page link', () => {

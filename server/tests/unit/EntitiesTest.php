@@ -12,7 +12,6 @@ use App\Entities\SessionEntity;
 use App\Entities\TagEntity;
 use App\Entities\UserBookmarkEntity;
 use App\Entities\UserEntity;
-use App\Entities\UserLevelEntity;
 use CodeIgniter\Test\CIUnitTestCase;
 
 /**
@@ -473,37 +472,6 @@ final class EntitiesTest extends CIUnitTestCase
         $this->assertSame('Historic', $category->title_en);
         $this->assertSame('Описание на русском', $category->content_ru);
         $this->assertSame('Description in English', $category->content_en);
-    }
-
-    // =========================================================================
-    // UserLevelEntity
-    // =========================================================================
-
-    public function testUserLevelEntityCanBeInstantiated(): void
-    {
-        $level = new UserLevelEntity();
-
-        $this->assertInstanceOf(UserLevelEntity::class, $level);
-    }
-
-    public function testUserLevelEntityLevelCastToInteger(): void
-    {
-        $level = new UserLevelEntity();
-        $level->fill(['level' => '3', 'experience' => '150']);
-
-        $this->assertIsInt($level->level);
-        $this->assertIsInt($level->experience);
-        $this->assertSame(3, $level->level);
-        $this->assertSame(150, $level->experience);
-    }
-
-    public function testUserLevelEntityIdCastToInteger(): void
-    {
-        $level = new UserLevelEntity();
-        $level->fill(['id' => '2']);
-
-        $this->assertIsInt($level->id);
-        $this->assertSame(2, $level->id);
     }
 
     // =========================================================================

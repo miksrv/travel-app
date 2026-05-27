@@ -202,11 +202,6 @@ export const API = createApi({
             transformErrorResponse: extractErrorData
         }),
 
-        /** Controller: Levels **/
-        levelsGetList: builder.query<ApiType.Levels.Response, void>({
-            query: () => 'levels'
-        }),
-
         /** Controller: Sending Mail **/
         getSendingMailList: builder.query<
             ApiType.SendingMail.SendingMailListResponse,

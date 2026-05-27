@@ -159,13 +159,6 @@ $routes->group('location', static function ($routes) {
     $routes->options('(:any)', static function () {});
 });
 
-/** Levels Controller **/
-$routes->group('levels', static function ($routes) {
-    $routes->get('/', 'Levels::list');
-
-    $routes->options('/', static function () {});
-});
-
 /** SendingMailManage Controller **/
 $routes->group('sending-mail', static function ($routes) {
     $routes->get('manage', 'SendingMailManage::index');

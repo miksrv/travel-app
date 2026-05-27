@@ -2,12 +2,10 @@ import React from 'react'
 import { TFunction } from 'i18next'
 import { Icon, Popout } from 'simple-react-ui-kit'
 
-import Image from 'next/image'
 import Link from 'next/link'
 
 import { ApiModel } from '@/api'
-import { UserAvatar } from '@/components/shared'
-import { levelImage } from '@/utils/levels'
+import { LevelProgress, UserAvatar } from '@/components/shared'
 
 import styles from './styles.module.sass'
 
@@ -31,26 +29,10 @@ export const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
         <div className={styles.userMenuPopout}>
             <div className={styles.userInfo}>
                 <div className={styles.userName}>{user?.name}</div>
-                <div>
-                    [<b>{user?.levelData?.level}</b>]{' '}
-                    <Image
-                        className={styles.levelImage}
-                        src={levelImage(user?.levelData?.level).src}
-                        alt={''}
-                        width={20}
-                        height={20}
-                    />{' '}
-                    <Link
-                        href={'/users/levels'}
-                        title={t('app-layout.go-to-levels_title', { defaultValue: 'Перейти к уровням' })}
-                    >
-                        {user?.levelData?.title}
-                    </Link>
-                </div>
-                <div>
-                    {t('userMenu.untilNextLevel', { defaultValue: 'До нового уровня:' })}{' '}
-                    {(user?.levelData?.nextLevel || 0) - (user?.levelData?.experience || 0)}
-                </div>
+                <LevelProgress
+                    levelData={user?.levelData}
+                    badgeSize={20}
+                />
             </div>
             <ul className={'contextListMenu'}>
                 <li>

@@ -66,15 +66,21 @@ const UserPage: React.FC<UserPageProps> = ({ id, user, photosList, photosCount }
         itemListElement: [
             {
                 '@type': 'ListItem',
+                item: canonicalUrl,
+                name: t('geotags'),
+                position: 1
+            },
+            {
+                '@type': 'ListItem',
                 item: `${canonicalUrl}users`,
                 name: t('users'),
-                position: 1
+                position: 2
             },
             {
                 '@type': 'ListItem',
                 item: `${canonicalUrl}users/${user?.id}`,
                 name: user?.name,
-                position: 2
+                position: 3
             }
         ]
     }

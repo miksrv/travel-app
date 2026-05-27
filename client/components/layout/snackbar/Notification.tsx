@@ -5,7 +5,9 @@ import Link from 'next/link'
 import { useTranslation } from 'next-i18next/pages'
 
 import { ApiModel } from '@/api'
+import { LevelProgress } from '@/components/shared/level-progress/LevelProgress'
 import { formatDate } from '@/utils/helpers'
+import { getActivityTitle } from '@/utils/notifications'
 
 import { NotificationIcon } from './NotificationIcon'
 
@@ -17,6 +19,8 @@ interface NotificationProps extends ApiModel.Notification {
     onLoad?: (id: string) => void
 }
 
+const NO_ICON_TYPES = new Set(['success', 'error', 'warning', 'info', 'level', 'experience'])
+
 export const Notification: React.FC<NotificationProps> = ({ showDate, onClose, onLoad, ...props }) => {
     const { t } = useTranslation()
 
@@ -24,49 +28,65 @@ export const Notification: React.FC<NotificationProps> = ({ showDate, onClose, o
         onLoad?.(props.id)
     }, [])
 
+    const hideIcon = NO_ICON_TYPES.has(props.type ?? '')
+
+    const resolvedTitle = (() => {
+        if (typeof props.title !== 'undefined') {
+            return props.title
+        }
+        if (props.type === 'experience') {
+            const activityLabel = getActivityTitle(props.activity, t)
+            const xpLabel = props.meta?.value != null ? `+${props.meta.value} XP` : ''
+            return [activityLabel, xpLabel].filter(Boolean).join(' ')
+        }
+        if (props.activity) {
+            return getActivityTitle(props.activity, t)
+        }
+        if (props.type && props.type !== 'success') {
+            return getActivityTitle(props.type, t)
+        }
+        return ''
+    })()
+
     return (
-        <div
-            className={cn(
-                styles.notification,
-                styles[props.type!],
-                !props.read && styles.unread,
-                typeof props.title !== 'undefined' && !props.title?.length ? styles.noTitle : ''
+        <div className={cn(styles.notification, styles[props.type!], !props.read && styles.unread)}>
+            {!hideIcon && (
+                <div className={styles.before}>
+                    <NotificationIcon {...props} />
+                </div>
             )}
-        >
-            <div className={styles.before}>
-                <NotificationIcon {...props} />
-            </div>
             <div className={styles.body}>
-                <span className={styles.title}>
-                    {typeof props.title !== 'undefined'
-                        ? props.title
-                        : props.type === 'experience'
-                          ? props.activity
-                              ? t(`notification_${props.activity}`)
-                              : ''
-                          : props.type
-                            ? t(`notification_${props.type}`)
-                            : ''}
-                </span>
-                <span className={styles.content}>
-                    {props.message}
-                    {props.type === 'experience' ? (
-                        `+${props.meta?.value} ${t('notification_experience', { defaultValue: 'опыт' })}`
-                    ) : props.type === 'level' ? (
-                        `${props.meta?.title} (${props.meta?.level})`
-                    ) : props.type === 'achievements' ? (
-                        <span>{props.meta?.title ?? ''}</span>
-                    ) : props.place ? (
-                        <Link
-                            href={`/places/${props.place.id}`}
-                            title={props.place.title}
-                        >
-                            {props.place.title}
-                        </Link>
-                    ) : (
-                        <></>
-                    )}
-                </span>
+                {!!resolvedTitle && <span className={styles.title}>{resolvedTitle}</span>}
+                {props.type === 'experience' && props.meta?.experience != null && props.meta?.nextLevel != null ? (
+                    <LevelProgress
+                        levelData={{
+                            level: props.meta.level,
+                            experience: props.meta.experience,
+                            nextLevel: props.meta.nextLevel
+                        }}
+                        badgeSize={18}
+                    />
+                ) : (
+                    <span className={styles.content}>
+                        {props.message}
+                        {props.type === 'experience' ? (
+                            `+${props.meta?.value} ${t('notification_experience', { defaultValue: 'опыт' })}`
+                        ) : props.type === 'level' ? (
+                            `${props.meta?.title} (${props.meta?.level})`
+                        ) : props.type === 'achievements' ? (
+                            <span>{props.meta?.title ?? ''}</span>
+                        ) : props.place ? (
+                            <Link
+                                href={`/places/${props.place.id}`}
+                                title={props.place.title}
+                            >
+                                {props.place.title}
+                            </Link>
+                        ) : (
+                            <></>
+                        )}
+                    </span>
+                )}
                 {showDate && (
                     <div className={styles.datetime}>{formatDate(props.created?.date, t('date-time-format'))}</div>
                 )}

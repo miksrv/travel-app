@@ -46,6 +46,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                         description: t('geotags-description'),
                         images: [
                             {
+                                alt: t('home-seo-title'),
                                 height: 1538,
                                 url: `${SITE_LINK}images/pages/main.jpg`,
                                 width: 1768
@@ -67,7 +68,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                     '@context': 'https://schema.org',
                     '@type': 'Organization',
                     logo: `${SITE_LINK}android-chrome-512x512.png`,
-                    name: 'Geometki',
+                    name: t('geotags'),
                     url: SITE_LINK
                 }}
             />
@@ -76,7 +77,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                 data={{
                     '@context': 'https://schema.org',
                     '@type': 'WebSite',
-                    name: 'Geometki',
+                    name: t('geotags'),
                     url: SITE_LINK,
                     potentialAction: {
                         '@type': 'SearchAction',
@@ -136,6 +137,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                 />
 
                 <UsersList
+                    compact={true}
                     scrollable={true}
                     title={t('active-users')}
                     users={usersList}

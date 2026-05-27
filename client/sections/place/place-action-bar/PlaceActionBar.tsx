@@ -76,22 +76,24 @@ export const PlaceActionBar: React.FC<PlaceActionBarProps> = ({ placeId, placeUr
             />
 
             <div className={styles.rating}>
-                {isLoading || ratingLoading ? (
-                    <Spinner />
-                ) : (
-                    <>
-                        {!!ratingData?.count && (
-                            <span className={styles.ratingScore}>{addDecimalPoint(ratingData.rating)}</span>
+                {!!ratingData?.count && (
+                    <span className={styles.ratingScore}>
+                        {ratingLoading ? (
+                            <Spinner className={styles.ratingLoader} />
+                        ) : (
+                            addDecimalPoint(ratingData.rating)
                         )}
-                        <Rating
-                            value={ratingData?.rating}
-                            voted={!!ratingData?.vote}
-                            disabled={ratingLoading || isLoading}
-                            onChange={handleRatingChange}
-                        />
-                        {!!ratingData?.count && <span className={styles.ratingCount}>({ratingData.count})</span>}
-                    </>
+                    </span>
                 )}
+
+                <Rating
+                    value={ratingData?.rating}
+                    voted={!!ratingData?.vote}
+                    disabled={ratingLoading || isLoading || !!ratingData?.vote}
+                    onChange={handleRatingChange}
+                />
+
+                {!!ratingData?.count && <span className={styles.ratingCount}>({ratingData.count})</span>}
             </div>
 
             {!!bookmarks && bookmarks > 0 && (

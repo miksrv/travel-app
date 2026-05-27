@@ -7,12 +7,12 @@ import { useTranslation } from 'next-i18next/pages'
 
 import { API, ApiModel } from '@/api'
 import { useAppSelector } from '@/app/store'
-import { AchievementBadge, Header } from '@/components/shared'
+import { AchievementBadge, Header, LevelBadge } from '@/components/shared'
 import { Reputation } from '@/components/ui'
 import { IMG_HOST } from '@/config/env'
 import defaultAvatar from '@/public/images/no-avatar.png'
 import { formatDate, makeActiveLink, minutesAgo, removeProtocolFromUrl, timeAgo } from '@/utils/helpers'
-import { levelImage, nextLevelPercentage } from '@/utils/levels'
+import { nextLevelPercentage } from '@/utils/levels'
 
 import { UserAvatarEditor } from '../user-avatar-editor'
 
@@ -86,20 +86,10 @@ export const UserHeader: React.FC<UserHeaderProps> = ({ user }) => {
                                 <Icon name={'Award'} />
                                 <div className={styles.key}>{t('level')}:</div>
                                 <div className={styles.value}>
-                                    [<b>{user?.levelData?.level}</b>]{' '}
-                                    <Image
-                                        className={styles.levelImage}
-                                        src={levelImage(user?.levelData?.level).src}
-                                        alt={''}
-                                        width={20}
-                                        height={20}
-                                    />{' '}
-                                    <Link
-                                        href={'/users/levels'}
-                                        title={user?.levelData?.title || ''}
-                                    >
-                                        {user?.levelData?.title}
-                                    </Link>
+                                    <LevelBadge
+                                        level={user?.levelData?.level}
+                                        size={20}
+                                    />
                                 </div>
                             </li>
                             <li>

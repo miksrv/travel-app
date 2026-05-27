@@ -17,6 +17,7 @@ interface ActivityListProps extends Pick<ContainerProps, 'action' | 'footer'> {
     compact?: boolean
     scrollable?: boolean
     hidePlaceName?: boolean
+    hideCover?: boolean
 }
 
 export const ActivityList: React.FC<ActivityListProps> = ({
@@ -27,7 +28,8 @@ export const ActivityList: React.FC<ActivityListProps> = ({
     footer,
     compact,
     scrollable,
-    hidePlaceName
+    hidePlaceName,
+    hideCover
 }) => {
     const { t } = useTranslation('components.activity-list')
 
@@ -47,6 +49,7 @@ export const ActivityList: React.FC<ActivityListProps> = ({
                     item={item}
                     compact={compact}
                     hidePlaceName={hidePlaceName}
+                    hideCover={hideCover}
                 />
             ))}
             {loading && <ActivityListItemLoader />}

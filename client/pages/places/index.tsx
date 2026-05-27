@@ -167,6 +167,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         return `${t('interesting-places')}: ${titles.join(', ')}` + titleTag + titlePage
     }, [currentCategory, locationData, locationType, i18n.language, initialFilter])
 
+    const description = useMemo(() => {
+        const base = t('places-seo-description')
+        if (!currentCategory && !locationType && !tag) {
+            return base
+        }
+        return `${title} — ${base}`
+    }, [title, currentCategory, locationType, tag, i18n.language])
+
     const breadcrumbsLinks = useMemo(() => {
         const breadcrumbs = []
 
@@ -229,11 +237,12 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
             <Head>
                 {generateNextSeo({
                     title: title,
-                    description: title,
+                    description: description,
                     canonical: canonicalPage,
                     noindex: isGeoFiltered,
                     nofollow: false,
                     openGraph: {
+                        description: description,
                         images: placesList
                             .filter(({ cover }) => cover?.full)
                             .slice(0, 3)
@@ -242,7 +251,10 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                                 url: `${IMG_HOST}${cover?.full}`
                             })),
                         locale: i18n.language === 'ru' ? 'ru_RU' : 'en_US',
-                        type: 'website'
+                        siteName: t('geotags'),
+                        title: title,
+                        type: 'website',
+                        url: canonicalPage
                     },
                     twitter: { cardType: 'summary_large_image' },
                     additionalLinkTags: buildHreflangTags('places')
@@ -257,6 +269,22 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 scriptKey={'places-list'}
                 data={placesList.map((place) => PlaceSchema(place, SITE_LINK))}
             />
+            {!isGeoFiltered && (category || tag) && (
+                <JsonLdScript
+                    scriptKey={'places-item-list'}
+                    data={{
+                        '@context': 'https://schema.org',
+                        '@type': 'ItemList',
+                        name: title,
+                        url: canonicalPage,
+                        itemListElement: placesList.map((place, index) => ({
+                            '@type': 'ListItem',
+                            position: (currentPage - 1) * POST_PER_PAGE + index + 1,
+                            url: `${SITE_LINK}places/${place.id}`
+                        }))
+                    }}
+                />
+            )}
 
             <PageHeader
                 title={title}

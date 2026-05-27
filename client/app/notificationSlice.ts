@@ -4,9 +4,40 @@ import { ApiModel } from '@/api'
 
 import type { RootState } from './store'
 
-type SnackbarStateProps = {
+const AUTO_DISMISS_MS = 10_000
+
+type NotificationState = {
     list: ApiModel.Notification[]
 }
+
+// Module-level — survives Redux HYDRATE resets that happen on every Next.js page navigation
+const dismissTimers: Record<string, ReturnType<typeof setTimeout>> = {}
+
+export const NotifyReplace = createAsyncThunk(
+    'snackbar/replaceNotification',
+    async (notification: ApiModel.Notification, { dispatch, getState }) => {
+        if (!notification.type && !notification.message) {
+            return
+        }
+
+        dispatch(notificationSlice.actions.replaceNotification(notification))
+
+        if (dismissTimers[notification.id]) {
+            clearTimeout(dismissTimers[notification.id])
+        }
+
+        dismissTimers[notification.id] = setTimeout(() => {
+            const state = getState() as RootState
+            const exists = state.notification.list.some(({ id }) => id === notification.id)
+
+            if (exists) {
+                dispatch(deleteNotification(notification.id))
+            }
+
+            delete dismissTimers[notification.id]
+        }, AUTO_DISMISS_MS)
+    }
+)
 
 export const Notify = createAsyncThunk(
     'snackbar/addNotification',
@@ -24,7 +55,7 @@ export const Notify = createAsyncThunk(
             if (exists) {
                 dispatch(deleteNotification(notification.id))
             }
-        }, 10000)
+        }, AUTO_DISMISS_MS)
 
         return notification
     }
@@ -33,7 +64,7 @@ export const Notify = createAsyncThunk(
 const notificationSlice = createSlice({
     initialState: {
         list: []
-    } as SnackbarStateProps,
+    } as NotificationState,
     name: 'snackbar',
     reducers: {
         addNotification: (state, { payload }: PayloadAction<ApiModel.Notification>) => {
@@ -46,6 +77,9 @@ const notificationSlice = createSlice({
         },
         deleteNotification: (state, { payload }: PayloadAction<string>) => {
             state.list = state.list.filter(({ id }) => id !== payload)
+        },
+        replaceNotification: (state, { payload }: PayloadAction<ApiModel.Notification>) => {
+            state.list = [...state.list.filter(({ id }) => id !== payload.id), { ...payload, read: false }]
         },
         setReadNotification: (state, { payload }: PayloadAction<string>) => {
             const notification = state.list.find(({ id }) => id === payload)
