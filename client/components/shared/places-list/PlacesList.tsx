@@ -21,7 +21,7 @@ export const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
     return (
         <>
             {!!places?.length && (
-                <section className={styles.component}>
+                <section className={styles.placeListContainer}>
                     {places.map((place) => (
                         <PlacesListItem
                             t={t}
@@ -33,7 +33,7 @@ export const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
             )}
 
             {loading && (
-                <section className={styles.component}>
+                <section className={styles.placeListContainer}>
                     {Array(3)
                         .fill('')
                         .map((_, i) => (

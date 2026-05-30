@@ -25,68 +25,30 @@ export const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => {
 
     return (
         <article className={styles.placesListItem}>
-            {/* Full-card photo link — sits behind all overlays */}
-            <Link
-                href={`/places/${place.id}`}
-                title={place.title}
-                className={styles.photoLink}
-            >
-                {place.cover && (
-                    <Image
-                        className={styles.photo}
-                        alt={place.title || ''}
-                        quality={75}
-                        fill
-                        sizes={'(max-width: 768px) 100vw, 33vw'}
-                        src={`${IMG_HOST}${place.cover.preview}?d=${dateToUnixTime(place.updated?.date)}`}
-                    />
-                )}
-            </Link>
+            <div className={styles.photoWrapper}>
+                <Link
+                    href={`/places/${place.id}`}
+                    title={place.title}
+                    className={styles.photoLink}
+                >
+                    {place.cover && (
+                        <Image
+                            className={styles.photo}
+                            alt={place.title || ''}
+                            quality={75}
+                            fill
+                            sizes={'(max-width: 768px) 100vw, 33vw'}
+                            src={`${IMG_HOST}${place.cover.preview}?d=${dateToUnixTime(place.updated?.date)}`}
+                        />
+                    )}
+                </Link>
 
-            {/* Top overlay — author info */}
-            <div className={styles.topOverlay}>
-                <UserAvatar
-                    user={place.author}
-                    size={'tiny'}
-                    showName={true}
-                    hideOnlineIcon={true}
-                    caption={timeAgo(place.updated?.date, undefined, i18n.language)}
-                    className={styles.authorOverlay}
-                />
-            </div>
-
-            {/* Bottom overlay — category, title, address, stats */}
-            <div className={styles.bottomOverlay}>
                 {place.category && (
                     <CategoryBadge
                         category={place.category}
-                        className={styles.categoryBadge}
+                        iconOnly={true}
+                        className={styles.categoryOverlay}
                     />
-                )}
-
-                <h2 className={styles.title}>
-                    <Link
-                        href={`/places/${place.id}`}
-                        title={place.title}
-                    >
-                        {place.title}
-                    </Link>
-                </h2>
-
-                {!!addressToString(place.address)?.length && (
-                    <div className={styles.address}>
-                        {addressToString(place.address)?.map((address, i, array) => (
-                            <span key={`address${address.type}${place.id}`}>
-                                <Link
-                                    href={`/places?${address.type}=${address.id}`}
-                                    title={`${t('all-geotags-at-address')} ${address.name}`}
-                                >
-                                    {address.name}
-                                </Link>
-                                {array.length - 1 !== i && ', '}
-                            </span>
-                        ))}
-                    </div>
                 )}
 
                 <div className={styles.statsRow}>
@@ -117,6 +79,44 @@ export const PlacesListItem: React.FC<PlacesListItemProps> = ({ t, place }) => {
                             {place.photos}
                         </span>
                     )}
+                </div>
+            </div>
+
+            <div className={styles.content}>
+                <h2 className={styles.title}>
+                    <Link
+                        href={`/places/${place.id}`}
+                        title={place.title}
+                    >
+                        {place.title}
+                    </Link>
+                </h2>
+
+                {!!addressToString(place.address)?.length && (
+                    <div className={styles.address}>
+                        {addressToString(place.address)?.map((address, i, array) => (
+                            <span key={`address${address.type}${place.id}`}>
+                                <Link
+                                    href={`/places?${address.type}=${address.id}`}
+                                    title={`${t('all-geotags-at-address')} ${address.name}`}
+                                >
+                                    {address.name}
+                                </Link>
+                                {array.length - 1 !== i && ', '}
+                            </span>
+                        ))}
+                    </div>
+                )}
+
+                <div className={styles.footer}>
+                    <UserAvatar
+                        user={place.author}
+                        size={'tiny'}
+                        showName={true}
+                        hideOnlineIcon={true}
+                        caption={timeAgo(place.updated?.date, undefined, i18n.language)}
+                        className={styles.author}
+                    />
                 </div>
             </div>
         </article>
