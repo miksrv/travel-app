@@ -1,7 +1,8 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import debounce from 'lodash-es/debounce'
-import { Select, SelectOptionType } from 'simple-react-ui-kit'
+import { Button, cn, Input, Select, SelectOptionType } from 'simple-react-ui-kit'
 
+import Image from 'next/image'
 import { useTranslation } from 'next-i18next/pages'
 
 import { API, ApiModel, ApiType } from '@/api'
@@ -16,27 +17,52 @@ interface PlaceFilterPanelProps {
     sort?: ApiType.SortFieldsType
     order?: ApiType.SortOrdersType
     location?: ApiModel.AddressItem
-    category?: string | null
+    /** Selected categories (multi). */
+    categories?: string[]
+    /** Free-text search query (matched against place titles). */
+    search?: string
+    /** When true, the bookmarks-only scope is active. */
+    bookmarksOnly?: boolean
     onChange?: (key: keyof PlacesFilterType, value: string | number | undefined) => void
     onChangeLocation?: (location?: ApiModel.AddressItem) => void
+    onChangeCategories?: (categories: string[]) => void
+    onChangeSearch?: (search: string) => void
+    onChangeBookmarksOnly?: (bookmarksOnly: boolean) => void
+    onResetAll?: () => void
 }
+
+const SEARCH_DEBOUNCE_MS = 400
+const CATEGORIES_DEBOUNCE_MS = 500
 
 export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
     sort,
     order,
     location,
-    category,
+    categories = [],
+    search,
+    bookmarksOnly,
     onChange,
-    onChangeLocation
+    onChangeLocation,
+    onChangeCategories,
+    onChangeSearch,
+    onChangeBookmarksOnly,
+    onResetAll
 }) => {
     const { t } = useTranslation()
 
     const userLocation = useAppSelector((state) => state.application.userLocation)
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
-    const { data: categoryData } = API.useCategoriesGetListQuery()
+    const { data: categoryData } = API.useCategoriesGetListQuery({ places: true, counts: true })
 
     const [searchAddress, { data: addressData, isLoading: addressLoading }] = API.useLocationGetSearchMutation()
+
+    // Local input state lets the user type without re-renders triggering server fetches on each keypress.
+    const [searchInput, setSearchInput] = useState(search ?? '')
+
+    useEffect(() => {
+        setSearchInput(search ?? '')
+    }, [search])
 
     const sortOptions: Array<SelectOptionType<string>> = useMemo(
         () =>
@@ -55,17 +81,6 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
     const orderOptions: Array<SelectOptionType<string>> = useMemo(
         () => Object.values(ApiType.SortOrders).map((o) => ({ key: o, value: t(`order_${o}`) })),
         []
-    )
-
-    const categoryOptions: Array<SelectOptionType<string>> = useMemo(
-        () =>
-            categoryData?.items?.map((item) => ({
-                // eslint-disable-next-line @typescript-eslint/no-explicit-any
-                image: categoryImage(item.name as ApiModel.Categories) as any,
-                key: item.name,
-                value: item.title
-            })) ?? [],
-        [categoryData?.items]
     )
 
     const locationOptions: Array<SelectOptionType<string>> = useMemo(() => {
@@ -94,10 +109,6 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
         onChange?.('order', selected?.[0]?.key)
     }
 
-    const handleChangeCategory = (selected: Array<SelectOptionType<string>> | undefined) => {
-        onChange?.('category', selected?.[0]?.key)
-    }
-
     const handleChangeLocation = (selected: Array<SelectOptionType<string>> | undefined) => {
         const item = selected?.[0]
         if (!item) {
@@ -119,8 +130,148 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
         []
     )
 
+    const emitSearchDebounced = useMemo(
+        () =>
+            debounce((value: string) => {
+                onChangeSearch?.(value.trim())
+            }, SEARCH_DEBOUNCE_MS),
+        [onChangeSearch]
+    )
+
+    useEffect(() => () => emitSearchDebounced.cancel(), [emitSearchDebounced])
+
+    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+        setSearchInput(value)
+        emitSearchDebounced(value)
+    }
+
+    // Buffer rapid category clicks locally; only push the merged result to the parent (and URL) once
+    // the user pauses, so toggling several categories in a row produces one fetch instead of many.
+    const [pendingCategories, setPendingCategories] = useState<string[]>(categories)
+
+    useEffect(() => {
+        setPendingCategories(categories)
+    }, [categories])
+
+    const emitCategoriesDebounced = useMemo(
+        () =>
+            debounce((next: string[]) => {
+                onChangeCategories?.(next)
+            }, CATEGORIES_DEBOUNCE_MS),
+        [onChangeCategories]
+    )
+
+    useEffect(() => () => emitCategoriesDebounced.cancel(), [emitCategoriesDebounced])
+
+    const toggleCategory = (name: string) => {
+        const next = pendingCategories.includes(name)
+            ? pendingCategories.filter((c) => c !== name)
+            : [...pendingCategories, name]
+        setPendingCategories(next)
+        emitCategoriesDebounced(next)
+    }
+
+    const handleResetAll = () => {
+        emitCategoriesDebounced.cancel()
+        setPendingCategories([])
+        onResetAll?.()
+    }
+
+    const totalCount = categoryData?.count
+    const bookmarksCount = categoryData?.bookmarksCount
+
+    const hasActiveFilters = !!(search || bookmarksOnly || pendingCategories.length > 0 || location || sort || order)
+
     return (
         <div className={styles.component}>
+            <Input
+                icon={'Search'}
+                clearable={true}
+                placeholder={t('search-places-placeholder')}
+                value={searchInput}
+                onChange={handleSearchInputChange}
+            />
+
+            {isAuth && (
+                <div
+                    className={styles.scopeToggle}
+                    role={'group'}
+                    aria-label={t('filter-scope')}
+                >
+                    <Button
+                        stretched={true}
+                        mode={!bookmarksOnly ? 'primary' : 'secondary'}
+                        className={styles.scopeButton}
+                        onClick={() => onChangeBookmarksOnly?.(false)}
+                    >
+                        <span className={styles.scopeLabel}>{t('all-places')}</span>
+                        {typeof totalCount === 'number' && (
+                            <span className={cn(styles.scopeCount, !bookmarksOnly && styles.scopeCountActive)}>
+                                {totalCount.toLocaleString()}
+                            </span>
+                        )}
+                    </Button>
+                    <Button
+                        stretched={true}
+                        mode={bookmarksOnly ? 'primary' : 'secondary'}
+                        className={styles.scopeButton}
+                        onClick={() => onChangeBookmarksOnly?.(true)}
+                    >
+                        <span className={styles.scopeLabel}>{t('favorites')}</span>
+                        {typeof bookmarksCount === 'number' && (
+                            <span className={cn(styles.scopeCount, bookmarksOnly && styles.scopeCountActive)}>
+                                {bookmarksCount.toLocaleString()}
+                            </span>
+                        )}
+                    </Button>
+                </div>
+            )}
+
+            <div className={styles.sectionHeader}>
+                <span className={styles.sectionTitle}>{t('filters')}</span>
+                {hasActiveFilters && (
+                    <button
+                        type={'button'}
+                        className={styles.resetButton}
+                        onClick={handleResetAll}
+                    >
+                        {t('reset-all')}
+                    </button>
+                )}
+            </div>
+
+            <div className={styles.categoriesGroup}>
+                <div className={styles.categoriesTitle}>{t('categories')}</div>
+                <ul className={styles.categoryList}>
+                    {categoryData?.items?.map((item) => {
+                        const active = pendingCategories.includes(item.name)
+                        return (
+                            <li key={item.name}>
+                                <button
+                                    type={'button'}
+                                    className={cn(styles.categoryRow, active && styles.categoryRowActive)}
+                                    onClick={() => toggleCategory(item.name)}
+                                    aria-pressed={active}
+                                >
+                                    <Image
+                                        src={categoryImage(item.name as ApiModel.Categories).src}
+                                        width={20}
+                                        height={20}
+                                        alt={''}
+                                        className={styles.categoryIcon}
+                                    />
+                                    <span className={styles.categoryName}>{item.title}</span>
+                                    {typeof item.count === 'number' && (
+                                        <span className={styles.categoryCount}>{item.count.toLocaleString()}</span>
+                                    )}
+                                </button>
+                            </li>
+                        )
+                    })}
+                </ul>
+            </div>
+
             <Select
                 searchable={true}
                 clearable={true}
@@ -148,14 +299,6 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
                     onSelect={handleChangeOrder}
                 />
             )}
-
-            <Select
-                clearable={true}
-                placeholder={t('input_category-placeholder')}
-                options={categoryOptions}
-                value={category ?? undefined}
-                onSelect={handleChangeCategory}
-            />
         </div>
     )
 }
