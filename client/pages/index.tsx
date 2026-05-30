@@ -36,7 +36,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
 
     return (
-        <AppLayout>
+        <AppLayout transparentBar={true}>
             <Head>
                 {generateNextSeo({
                     title: t('home-seo-title'),
@@ -97,10 +97,7 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                 ]}
             />
 
-            <MapHero
-                stats={stats}
-                places={placesList}
-            />
+            <MapHero stats={stats} />
 
             <Carousel options={{ dragFree: true, loop: true }}>
                 {placesList.map((place) => (
