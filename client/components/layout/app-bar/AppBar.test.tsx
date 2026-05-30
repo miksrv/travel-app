@@ -1,10 +1,16 @@
 import React from 'react'
 
-import { fireEvent, screen } from '@testing-library/react'
+import { screen } from '@testing-library/react'
 
 import { makeTestStore, renderWithStore } from '@/__mocks__/commonMocks'
 
 import { AppBar } from './AppBar'
+
+global.ResizeObserver = class ResizeObserver {
+    public observe() {}
+    public unobserve() {}
+    public disconnect() {}
+}
 
 jest.mock('simple-react-ui-kit', () => ({
     cn: (...args: string[]) => args.filter(Boolean).join(' '),
@@ -19,13 +25,23 @@ jest.mock('simple-react-ui-kit', () => ({
             {label}
         </button>
     ),
-    Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />
+    Icon: ({ name }: { name: string }) => <span data-testid={`icon-${name}`} />,
+    Popout: ({ trigger, children }: any) => (
+        <div>
+            {trigger}
+            <div data-testid={'popout-content'}>{children}</div>
+        </div>
+    )
 }))
 
 jest.mock('next-i18next', () => ({
     useTranslation: () => ({
         t: (key: string, opts?: Record<string, unknown>) => opts?.defaultValue ?? key
     })
+}))
+
+jest.mock('next/router', () => ({
+    useRouter: () => ({ pathname: '/' })
 }))
 
 jest.mock('react-hook-geolocation', () => () => ({ latitude: null, longitude: null }))
@@ -49,10 +65,6 @@ jest.mock('../../../next-i18next.config', () => ({
 
 jest.mock('./AppAuthChecker', () => ({
     AppAuthChecker: () => <div data-testid={'app-auth-checker'} />
-}))
-
-jest.mock('./Logo', () => ({
-    Logo: () => <div data-testid={'logo'} />
 }))
 
 jest.mock('./NotificationList', () => ({
@@ -79,9 +91,9 @@ describe('AppBar', () => {
             expect(screen.getByRole('banner')).toBeInTheDocument()
         })
 
-        it('renders the logo', () => {
+        it('renders the logo link', () => {
             renderWithStore(<AppBar />)
-            expect(screen.getByTestId('logo')).toBeInTheDocument()
+            expect(screen.getByTitle('Geometki')).toBeInTheDocument()
         })
 
         it('renders the search', () => {
@@ -94,9 +106,11 @@ describe('AppBar', () => {
             expect(screen.getByTestId('app-auth-checker')).toBeInTheDocument()
         })
 
-        it('renders the hamburger menu button', () => {
+        it('renders nav links', () => {
             renderWithStore(<AppBar />)
-            expect(screen.getByRole('button', { name: 'Toggle Sidebar' })).toBeInTheDocument()
+            expect(screen.getByText('Лента')).toBeInTheDocument()
+            expect(screen.getByText('Карта')).toBeInTheDocument()
+            expect(screen.getByText('Места')).toBeInTheDocument()
         })
     })
 
@@ -141,15 +155,6 @@ describe('AppBar', () => {
             })
             renderWithStore(<AppBar />, { store })
             expect(screen.queryByText('Войти')).not.toBeInTheDocument()
-        })
-    })
-
-    describe('callbacks', () => {
-        it('calls onMenuClick when hamburger button is clicked', () => {
-            const onMenuClick = jest.fn()
-            renderWithStore(<AppBar onMenuClick={onMenuClick} />)
-            fireEvent.click(screen.getByRole('button', { name: 'Toggle Sidebar' }))
-            expect(onMenuClick).toHaveBeenCalledTimes(1)
         })
     })
 

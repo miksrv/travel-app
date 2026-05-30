@@ -5,6 +5,7 @@ import { Icon, Popout } from 'simple-react-ui-kit'
 import Link from 'next/link'
 
 import { ApiModel } from '@/api'
+import { ThemeSwitcher } from '@/components/layout/theme-switcher'
 import { LevelProgress, UserAvatar } from '@/components/shared'
 
 import styles from './styles.module.sass'
@@ -52,6 +53,9 @@ export const UserMenu: React.FC<UserMenuProps> = ({ t, user, onLogout }) => (
                         <Icon name={'Settings'} />
                         {t('app-layout.settings', { defaultValue: 'Настройки' })}
                     </Link>
+                </li>
+                <li className={styles.themeSwitcherItem}>
+                    <ThemeSwitcher />
                 </li>
                 <li>
                     <Link

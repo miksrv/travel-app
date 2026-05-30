@@ -43,6 +43,10 @@ jest.mock('next/link', () => {
     return Link
 })
 
+jest.mock('@/components/layout/theme-switcher', () => ({
+    ThemeSwitcher: () => <div data-testid={'theme-switcher'} />
+}))
+
 jest.mock('@/components/shared', () => ({
     LevelProgress: ({ levelData }: any) => (
         <div data-testid={'level-progress'}>
