@@ -1,4 +1,4 @@
-@use 'variables' as variables
+@use 'mixins' as variables
 @use 'mixins' as *
 
 *, ::before, ::after
@@ -12,7 +12,6 @@ html
 body
     background-color: var(--body-background)
     margin: 0
-    line-height: 1.5
     font-size: var(--font-size)
     letter-spacing: var(--letter-spacing)
     font-family: var(--font-family), sans-serif
@@ -29,14 +28,14 @@ body
 
 h1
     margin: 0
-    font-size: variables.$fontSizeTitleH1
+    font-size: var(--font-size-h1)
     font-weight: 500
     text-align: left
     color: var(--text-color-primary)
 
 h2
     margin: 0
-    font-size: variables.$fontSizeTitleH2
+    font-size: var(--font-size-h2)
     font-weight: 500
     color: var(--text-color-primary)
 
@@ -46,7 +45,7 @@ h3, h4, h5, h6
     color: var(--text-color-primary)
 
 p
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
 
     &:first-of-type
         margin-top: 0
@@ -67,7 +66,7 @@ ul
     &.normal
         margin: 0 0 0 30px
         list-style: disc
-        font-size: variables.$fontSizeParagraph
+        font-size: var(--font-size-paragraph)
 
 a
     color: var(--link-color)
@@ -286,7 +285,7 @@ a
             width: 100%
             padding: 10px 20px
             white-space: nowrap
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
             color: var(--text-color-primary)
             cursor: pointer
             background: transparent
