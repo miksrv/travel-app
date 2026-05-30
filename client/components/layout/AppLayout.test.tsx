@@ -53,24 +53,11 @@ jest.mock('cookies-next', () => ({
 }))
 
 jest.mock('./app-bar', () => ({
-    AppBar: ({ onMenuClick }: any) => (
-        <div data-testid={'app-bar'}>
-            <button
-                data-testid={'menu-button'}
-                onClick={onMenuClick}
-            >
-                Menu
-            </button>
-        </div>
-    )
+    AppBar: () => <div data-testid={'app-bar'} />
 }))
 
-jest.mock('./footer', () => ({
-    Footer: () => <div data-testid={'footer'} />
-}))
-
-jest.mock('./language-switcher', () => ({
-    LanguageSwitcher: () => <div data-testid={'language-switcher'} />
+jest.mock('./bottom-nav', () => ({
+    BottomNav: () => <div data-testid={'bottom-nav'} />
 }))
 
 jest.mock('./login-form', () => ({
@@ -89,16 +76,8 @@ jest.mock('./registration-form', () => ({
     )
 }))
 
-jest.mock('./site-menu', () => ({
-    SiteMenu: () => <div data-testid={'site-menu'} />
-}))
-
 jest.mock('./snackbar', () => ({
     Snackbar: () => <div data-testid={'snackbar'} />
-}))
-
-jest.mock('./theme-switcher', () => ({
-    ThemeSwitcher: () => <div data-testid={'theme-switcher'} />
 }))
 
 const makeStore = (preloadedState?: Record<string, unknown>) =>
@@ -142,19 +121,14 @@ describe('AppLayout', () => {
             expect(screen.getByTestId('page-content')).toBeInTheDocument()
         })
 
-        it('renders the SiteMenu', () => {
+        it('renders BottomNav when fullSize is false', () => {
             renderWithStore(<AppLayout />)
-            expect(screen.getAllByTestId('site-menu').length).toBeGreaterThanOrEqual(1)
+            expect(screen.getByTestId('bottom-nav')).toBeInTheDocument()
         })
 
-        it('renders the ThemeSwitcher', () => {
-            renderWithStore(<AppLayout />)
-            expect(screen.getAllByTestId('theme-switcher').length).toBeGreaterThanOrEqual(1)
-        })
-
-        it('renders the LanguageSwitcher', () => {
-            renderWithStore(<AppLayout />)
-            expect(screen.getAllByTestId('language-switcher').length).toBeGreaterThanOrEqual(1)
+        it('does not render BottomNav when fullSize is true', () => {
+            renderWithStore(<AppLayout fullSize />)
+            expect(screen.queryByTestId('bottom-nav')).not.toBeInTheDocument()
         })
     })
 
@@ -200,22 +174,6 @@ describe('AppLayout', () => {
         it('applies fullSize class to the layout wrapper when fullSize is true', () => {
             const { container } = renderWithStore(<AppLayout fullSize />)
             expect(container.firstChild).toHaveClass('fullSize')
-        })
-
-        it('does not render the desktop menubar aside when fullSize is true', () => {
-            const { container } = renderWithStore(<AppLayout fullSize />)
-            // Desktop menubar is .menubar — it should not exist in fullSize mode
-            expect(container.querySelector('.menubar')).not.toBeInTheDocument()
-        })
-    })
-
-    describe('sidebar', () => {
-        it('opens the sidebar when menu button is clicked', () => {
-            renderWithStore(<AppLayout />)
-            fireEvent.click(screen.getByTestId('menu-button'))
-            // Sidebar aside should have 'opened' class
-            const sidebar = document.querySelector('.sidebar')
-            expect(sidebar).toHaveClass('opened')
         })
     })
 })
