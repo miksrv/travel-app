@@ -1,9 +1,10 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import debounce from 'lodash-es/debounce'
-import { Input, Select, SelectOptionType } from 'simple-react-ui-kit'
+import { cn, Input, Select, SelectOptionType } from 'simple-react-ui-kit'
 
 import { useTranslation } from 'next-i18next/pages'
 
+import { ApiType } from '@/api'
 import { UserSortFields } from '@/api/types/users'
 
 import { UsersFilterType } from './types'
@@ -14,11 +15,30 @@ interface UsersFilterPanelProps {
     search?: string
     sort?: string
     order?: string
+    withAvatar?: boolean
+    withPlaces?: boolean
     onChange?: (key: keyof UsersFilterType, value: string | undefined) => void
+    onResetAll?: () => void
 }
 
-export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({ search, sort, order, onChange }) => {
+const SEARCH_DEBOUNCE_MS = 400
+
+export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({
+    search,
+    sort,
+    order,
+    withAvatar,
+    withPlaces,
+    onChange,
+    onResetAll
+}) => {
     const { t } = useTranslation()
+
+    const [searchInput, setSearchInput] = useState(search ?? '')
+
+    useEffect(() => {
+        setSearchInput(search ?? '')
+    }, [search])
 
     const sortOptions: Array<SelectOptionType<string>> = useMemo(
         () =>
@@ -30,10 +50,11 @@ export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({ search, sort
     )
 
     const orderOptions: Array<SelectOptionType<string>> = useMemo(
-        () => [
-            { key: 'ASC', value: t('order_ASC') },
-            { key: 'DESC', value: t('order_DESC') }
-        ],
+        () =>
+            Object.values(ApiType.SortOrders).map((o) => ({
+                key: o,
+                value: t(`order_${o}`)
+            })),
         [t]
     )
 
@@ -45,22 +66,72 @@ export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({ search, sort
         onChange?.('order', selected?.[0]?.key)
     }
 
-    const handleChangeSearch = useCallback(
-        debounce((value: string) => {
-            onChange?.('search', value || undefined)
-        }, 600),
+    const emitSearchDebounced = useMemo(
+        () =>
+            debounce((value: string) => {
+                onChange?.('search', value.trim() || undefined)
+            }, SEARCH_DEBOUNCE_MS),
         [onChange]
     )
+
+    useEffect(() => () => emitSearchDebounced.cancel(), [emitSearchDebounced])
+
+    const handleSearchInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const value = event.target.value
+        setSearchInput(value)
+        emitSearchDebounced(value)
+    }
+
+    const toggleAvatar = () => onChange?.('withAvatar', withAvatar ? undefined : '1')
+    const toggleWithPlaces = () => onChange?.('withPlaces', withPlaces ? undefined : '1')
+
+    const hasActiveFilters = !!(search || withAvatar || withPlaces || sort || order)
 
     return (
         <div className={styles.component}>
             <Input
+                icon={'Search'}
                 clearable={true}
                 placeholder={t('search-by-name')}
-                defaultValue={search ?? ''}
-                onChange={(e) => handleChangeSearch(e.target.value)}
-                size={'medium'}
+                value={searchInput}
+                onChange={handleSearchInputChange}
             />
+
+            <div className={styles.sectionHeader}>
+                <span className={styles.sectionTitle}>{t('filters')}</span>
+                {hasActiveFilters && (
+                    <button
+                        type={'button'}
+                        className={styles.resetButton}
+                        onClick={() => onResetAll?.()}
+                    >
+                        {t('reset-all')}
+                    </button>
+                )}
+            </div>
+
+            <div
+                className={styles.toggles}
+                role={'group'}
+                aria-label={t('filters')}
+            >
+                <button
+                    type={'button'}
+                    className={cn(styles.toggleRow, withAvatar && styles.toggleRowActive)}
+                    onClick={toggleAvatar}
+                    aria-pressed={!!withAvatar}
+                >
+                    <span className={styles.toggleLabel}>{t('with-avatar')}</span>
+                </button>
+                <button
+                    type={'button'}
+                    className={cn(styles.toggleRow, withPlaces && styles.toggleRowActive)}
+                    onClick={toggleWithPlaces}
+                    aria-pressed={!!withPlaces}
+                >
+                    <span className={styles.toggleLabel}>{t('with-places')}</span>
+                </button>
+            </div>
 
             <Select
                 placeholder={t('sorting')}

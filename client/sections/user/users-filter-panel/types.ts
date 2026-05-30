@@ -3,4 +3,6 @@ export interface UsersFilterType {
     sort?: string
     order?: string
     page?: number
+    withAvatar?: '1'
+    withPlaces?: '1'
 }
