@@ -17,13 +17,14 @@ export interface ListRequest {
     lon?: number | null
     tag?: string | null
     search?: string
+    searchScope?: 'title' | 'all'
     country?: number | null
     region?: number | null
     district?: number | null
     locality?: number | null
     limit?: number
     offset?: number
-    category?: string | null
+    category?: string | string[] | null
     excludePlaces?: string[]
 }
 

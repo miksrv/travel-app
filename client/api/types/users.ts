@@ -17,6 +17,8 @@ export interface ListRequest {
     search?: string
     sort?: UserSortFields
     order?: 'ASC' | 'DESC'
+    withAvatar?: '1'
+    withPlaces?: '1'
 }
 
 export interface ListResponse {
