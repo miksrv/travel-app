@@ -13,23 +13,25 @@ import styles from './styles.module.sass'
 interface CategoryBadgeProps {
     category: ApiModel.Category
     className?: string
+    iconOnly?: boolean
 }
 
-export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category, className }) => {
+export const CategoryBadge: React.FC<CategoryBadgeProps> = ({ category, className, iconOnly }) => {
     const color = CATEGORY_COLORS[category.name] ?? '#6B7280'
 
     return (
         <span
-            className={cn(styles.categoryBadge, className)}
-            style={{ backgroundColor: color + '50' }}
+            className={cn(styles.categoryBadge, iconOnly && styles.iconOnly, className)}
+            style={iconOnly ? undefined : { backgroundColor: color + '50' }}
+            title={iconOnly ? category.title : undefined}
         >
             <Image
                 src={categoryImage(category.name).src}
                 alt={category.title}
-                width={13}
-                height={13}
+                width={iconOnly ? 16 : 13}
+                height={iconOnly ? 16 : 13}
             />
-            {category.title}
+            {!iconOnly && category.title}
         </span>
     )
 }

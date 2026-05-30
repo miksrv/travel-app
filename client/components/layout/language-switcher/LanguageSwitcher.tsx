@@ -1,3 +1,4 @@
+// @deprecated — не используется, заморожено в Phase 8
 import React, { useEffect } from 'react'
 import { setCookie } from 'cookies-next'
 
