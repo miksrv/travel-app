@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .component
     position: relative
@@ -18,7 +18,7 @@
             padding-top: 2px
             text-overflow: ellipsis
             white-space: nowrap
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
 
     .mapContainer
         height: 300px

@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .tagsControls
     padding: 5px 10px !important
@@ -41,7 +41,7 @@
         border: none
         cursor: pointer
         text-align: left
-        font-size: variables.$fontSizeParagraph
+        font-size: var(--font-size-paragraph)
         color: var(--text-color-primary)
         white-space: nowrap
 

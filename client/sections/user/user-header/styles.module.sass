@@ -1,7 +1,6 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .component
-    margin-top: 15px
     border-radius: var(--border-radius)
     background-color: var(--modal-background)
     position: relative
@@ -71,7 +70,7 @@
                 display: flex
                 align-items: flex-start
                 margin-bottom: 10px
-                font-size: variables.$fontSizeHeadline
+                font-size: var(--font-size-headline)
 
                 &:last-of-type
                     margin-bottom: 0

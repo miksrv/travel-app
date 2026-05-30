@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .scrollableContent
     margin-top: 10px
@@ -47,7 +47,7 @@
 
     .actionText
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
 
     .diffBadge
         display: inline-block
@@ -69,13 +69,13 @@
     .time
         display: block
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
         margin-top: 2px
 
     .content
         margin: 6px 0
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
 
     .ratingInline
         svg
@@ -109,7 +109,7 @@
         justify-content: center
         color: #ffffff
         font-weight: 600
-        font-size: variables.$fontSizeParagraph
+        font-size: var(--font-size-paragraph)
         line-height: 1.2
         border-radius: 4px
         pointer-events: none
@@ -142,7 +142,7 @@
 
     .viewCounter
         display: flex
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
         color: var(--text-color-secondary)
         align-items: center
         flex-shrink: 0

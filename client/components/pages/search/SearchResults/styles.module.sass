@@ -1,4 +1,4 @@
-@use '../../../../styles/variables' as variables
+@use '../../../../styles/mixins' as variables
 
 .results
     display: flex
@@ -17,7 +17,7 @@
         border-bottom: none
 
 .sectionTitle
-    font-size: variables.$fontSizeTitleH2
+    font-size: var(--font-size-h2)
     font-weight: 600
     color: var(--text-color-primary)
 

@@ -1,4 +1,4 @@
-@use '../../../../styles/variables' as variables
+@use '../../../../styles/mixins' as variables
 
 .locationItem
     display: flex
@@ -29,7 +29,7 @@
     padding: 0
     cursor: pointer
     text-align: left
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     font-weight: 600
     color: var(--text-color-primary)
     white-space: nowrap
@@ -40,7 +40,7 @@
         color: var(--color-main)
 
 .secondary
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     white-space: nowrap
     overflow: hidden

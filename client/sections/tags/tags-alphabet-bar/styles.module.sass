@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .alphabetBar
     position: sticky
@@ -30,7 +30,7 @@
         border: none
         border-radius: var(--border-radius)
         cursor: pointer
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
         font-weight: 600
         color: var(--color-main)
         transition: background 0.1s

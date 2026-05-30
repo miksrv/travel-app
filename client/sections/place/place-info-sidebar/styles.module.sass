@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .component
     ul
@@ -10,7 +10,7 @@
         display: flex
         align-items: center
         margin-bottom: 10px
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
 
         &:last-of-type
             margin-bottom: 0
@@ -57,7 +57,7 @@
 
         li
             margin-bottom: 8px
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
 
             &:last-of-type
                 margin-bottom: 0

@@ -1,11 +1,11 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .breadcrumbs
     display: flex
     line-height: normal
 
     li
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
         color: var(--text-color-secondary)
 
         &:not(:last-of-type)

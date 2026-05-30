@@ -1,9 +1,9 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .adminTable
     width: 100%
     border-collapse: collapse
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
 
 .adminTableHead
     background: var(--table-header-background)
@@ -13,7 +13,7 @@
         text-align: left
         font-weight: 500
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
         border-bottom: 1px solid var(--table-border-color)
         white-space: nowrap
 
@@ -41,7 +41,7 @@
     gap: 2px
 
 .titleDescription
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     white-space: nowrap
     overflow: hidden
@@ -59,7 +59,7 @@
     padding: 4px 8px
     cursor: pointer
     font-family: var(--font-family), sans-serif
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     display: inline-flex
     align-items: center
     gap: 4px

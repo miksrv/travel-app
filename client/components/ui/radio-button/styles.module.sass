@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .radioButton
     display: flex
@@ -29,5 +29,5 @@
     label
         cursor: pointer
         color: var(--text-color-primary)
-        font-size: variables.$fontSizeParagraph
+        font-size: var(--font-size-paragraph)
         width: 100%

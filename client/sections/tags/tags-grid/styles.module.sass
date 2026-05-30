@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .tagsGrid
     padding: 10px
@@ -43,14 +43,14 @@
             color: var(--color-main)
 
         .tagTitle
-            font-size: variables.$fontSizeParagraph
+            font-size: var(--font-size-paragraph)
             font-weight: 500
             overflow: hidden
             text-overflow: ellipsis
             white-space: nowrap
 
         .tagCount
-            font-size: variables.$fontSizeCaption
+            font-size: var(--font-size-caption)
             color: var(--text-color-secondary)
             flex-shrink: 0
             margin-left: 6px

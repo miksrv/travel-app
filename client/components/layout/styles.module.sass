@@ -1,25 +1,5 @@
-@use '../../styles/variables' as variables
+@use '../../styles/mixins' as variables
 @use '../../styles/animations'
-
-$sideBarWidth: 236px
-
-@keyframes animation-sideBar-slideIn
-    0%
-        left: -$sideBarWidth
-
-    100%
-        left: 0
-
-@keyframes animation-sideBar-slideOut
-    0%
-        left: 0
-
-    100%
-        left: -$sideBarWidth
-
-.noAnimation
-    animation: none !important
-    transition: none !important
 
 .appLayout
     width: 100%
@@ -27,129 +7,134 @@ $sideBarWidth: 236px
     margin: 0 auto
     position: relative
 
-    .scrollArea
+.main
+    max-width: var(--content-max-width)
+    margin: 0 auto
+    padding-top: 66px
+    padding-left: var(--content-padding-desktop)
+    padding-right: var(--content-padding-desktop)
+    padding-bottom: 20px
+    display: flex
+    flex-direction: column
+    gap: 15px
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        padding-top: 58px
+        padding-left: var(--content-padding-mobile)
+        padding-right: var(--content-padding-mobile)
+        padding-bottom: 72px
+
+.fullSize
+    .main
+        max-width: 100%
+        padding: 0
+        margin: 0
+
+// Sidebar layout
+.mobileFilterBar
+    display: flex
+    align-items: center
+    gap: 10px
+
+    @media (min-width: 769px)
         display: none
-        position: absolute
-        top: 0
-        left: 0
-        height: 100%
-        cursor: pointer
 
-        .buttonToTop
-            height: 100%
-            width: 100%
-            max-width: 120px
-            position: fixed
-            z-index: 1
-            display: flex
-            align-items: flex-end
-            transition: background-color 0.5s ease
-            padding-bottom: 20px
-            color: var(--text-color-secondary)
-            justify-content: center
-            font-size: variables.$fontSizeHeadline
+.filterToggle
+    display: inline-flex
+    align-items: center
+    gap: 6px
+    padding: 6px 12px
+    border-radius: var(--border-radius)
+    background: var(--container-background)
+    box-shadow: var(--container-shadow)
+    font-size: var(--font-size)
+    color: var(--text-color-primary)
+    cursor: pointer
+    border: none
 
-            svg
-                width: 24px
-                height: 24px
-                margin-bottom: -2px
-                margin-left: -10px
-                fill: var(--icon-color-secondary)
+    svg
+        width: 16px
+        height: 16px
+        fill: var(--icon-color-primary)
 
-        &:hover
-            .buttonToTop
-                background-color: var(--menu-background-hover)
+.mainRow
+    display: flex
+    flex-direction: column
+    gap: 0
 
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            display: none !important
+    @media (min-width: 769px)
+        flex-direction: row
+        align-items: flex-start
+        gap: 20px
 
-    .mainContainer
-        display: flex
-        max-width: var(--width-max)
-        margin: 0 auto
-        padding-top: 50px
+.sidebar
+    width: 320px
+    flex-shrink: 0
+    position: sticky
+    top: 66px
+    align-self: flex-start
 
-        .menubar
-            width: var(--width-menu)
-            min-width: var(--width-menu)
-
-            .rails
-                position: fixed
-
-            .switchers
-                display: flex
-                padding-left: 12px
-
-        .main
-            width: 100%
-            max-width: calc(var(--width-max) - var(--width-menu))
-            margin-bottom: 20px
-            display: flex
-            flex-direction: column
-            gap: 15px
-
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            .menubar
-                display: none
-
-            .main
-                padding: 0 10px
-
-    &.fullSize
-        .mainContainer
-            max-width: 100%
-
-        .main
-            max-width: 100%
-            margin-bottom: 0
-
-    .overlay
-        position: absolute
-        min-height: 100vh
-        height: 100%
-        width: 100%
-        z-index: 500
-        background: variables.$overlayBackground
-        transition: opacity 167ms ease-out
-
-        &.hidden
-            opacity: 0
-            visibility: hidden
-            //animation: animation-fadeOut .32s ease
-
-        &.displayed
-            opacity: 1
-            visibility: visible
-            //animation: animation-fadeIn .32s ease
-
-    .sidebar
+    @media (max-width: variables.$mobileMaxWidth)
         position: fixed
-        background-color: var(--modal-background)
-        width: var(--width-menu)
-        height: 100vh
-        z-index: 600
-        top: 0
-        left: -$sideBarWidth
-        transition: left 167ms ease-out
+        top: 50px
+        left: 0
+        width: 100vw
+        height: calc(100vh - 50px - 56px)
+        z-index: 400
+        transform: translateX(-100%)
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)
+        overflow-y: auto
+        pointer-events: none
 
-        &.opened
-            left: 0
-            //animation: animation-sideBar-slideIn .32s ease
+.sidebarOpen
+    @media (max-width: variables.$mobileMaxWidth)
+        transform: translateX(0)
+        pointer-events: auto
 
-        &.closed
-            left: -$sideBarWidth
-            //animation: animation-sideBar-slideOut .32s ease
+.sidebarContainer
+    padding: 12px !important
 
-        .content
-            padding: 20px
+    @media (max-width: variables.$mobileMaxWidth)
+        border-radius: 0 !important
+        box-shadow: none !important
+        min-height: 100vh
 
-        .switchers
-            display: flex
-            padding-left: 8px
+.sidebarHeader
+    display: flex
+    align-items: center
+    justify-content: space-between
+    margin-bottom: 10px
 
-        @media only screen and (max-width: variables.$mobileMaxWidth)
-            left: -300px
-            width: 300px
+.sidebarTitle
+    font-size: var(--font-size-caption)
+    font-weight: 600
+    color: var(--text-color-secondary)
+    text-transform: uppercase
+    letter-spacing: 0.04em
 
-            &.closed
-                left: -300px
+.sidebarClose
+    display: none
+    align-items: center
+    justify-content: center
+    border: none
+    background: none
+    cursor: pointer
+    padding: 4px
+    border-radius: var(--border-radius)
+    color: var(--text-color-secondary)
+    margin-left: auto
+
+    @media (max-width: variables.$mobileMaxWidth)
+        display: flex
+
+    svg
+        width: 18px
+        height: 18px
+        fill: var(--icon-color-primary)
+
+.content
+    flex: 1
+    min-width: 0
+    display: flex
+    flex-direction: column
+    gap: 15px

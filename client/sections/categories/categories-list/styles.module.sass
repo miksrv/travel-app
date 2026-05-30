@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 @use '../../../styles/mixins' as *
 
 .categoriesPage
@@ -67,7 +67,7 @@
     padding: 3px 9px
     border-radius: 6px
     background: #fff
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 600
     color: #1b1b1b
     margin-top: -15px
@@ -82,7 +82,7 @@
     gap: 6px
 
 .topCardTitle
-    font-size: variables.$fontSizeTitleH2
+    font-size: var(--font-size-h2)
     font-weight: 700
     color: #fff
     text-decoration: none
@@ -93,7 +93,7 @@
 
 .topCardDescription
     margin: 0
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: rgba(255,255,255,0.82)
     display: -webkit-box
     -webkit-line-clamp: 2
@@ -105,7 +105,7 @@
     align-items: center
     padding: 5px 12px
     border-radius: var(--border-radius)
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 600
     color: #fff
     text-decoration: none
@@ -152,7 +152,7 @@
         opacity: 0.9
 
 .categoryTitle
-    font-size: variables.$fontSizeHeadline
+    font-size: var(--font-size-headline)
     font-weight: 600
     color: var(--text-color-primary)
     text-decoration: none
@@ -163,7 +163,7 @@
 
 .categoryDescription
     margin: 0
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     display: -webkit-box
     -webkit-line-clamp: 3
@@ -176,7 +176,7 @@
     align-items: center
     padding: 4px 10px
     border-radius: var(--border-radius)
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 600
     color: #fff
     text-decoration: none

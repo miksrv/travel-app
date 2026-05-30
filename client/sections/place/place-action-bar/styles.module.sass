@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .actionBar
     display: flex
@@ -13,7 +13,7 @@
     .ratingScore
         color: var(--text-color)
         font-weight: 700
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
         margin-right: 6px
 
         .ratingLoader
@@ -24,7 +24,7 @@
 
     .ratingCount
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
         margin-left: 6px
 
     .bookmarks
@@ -32,7 +32,7 @@
         align-items: center
         gap: 4px
         color: var(--text-color-secondary)
-        font-size: variables.$fontSizeHeadline
+        font-size: var(--font-size-headline)
         margin: 0 10px
 
         svg

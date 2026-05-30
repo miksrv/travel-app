@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .dialog
     width: 640px
@@ -17,7 +17,7 @@
 
 .title
     margin: 0
-    font-size: variables.$fontSizeTitleH2
+    font-size: var(--font-size-h2)
     font-weight: 600
     color: var(--text-color-primary)
     display: flex
@@ -29,7 +29,7 @@
     grid-template-columns: max-content 1fr
     gap: 8px 16px
     margin: 0
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
 
     dt
         color: var(--text-color-secondary)
@@ -51,7 +51,7 @@
 
 .sectionLabel
     margin: 0
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 500
     color: var(--text-color-secondary)
     text-transform: uppercase

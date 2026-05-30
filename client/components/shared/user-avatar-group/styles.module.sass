@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .avatarsGroup
     display: flex
@@ -19,12 +19,12 @@
         justify-content: center
         align-items: center
         border: .5px solid var(--body-background)
-        font-size: variables.$fontSizeCaption
+        font-size: var(--font-size-caption)
         z-index: 1
 
     .totalCountText
         margin-left: 15px !important
-        font-size: variables.$fontSizeParagraph
+        font-size: var(--font-size-paragraph)
 
         @media only screen and (max-width: variables.$mobileMaxWidth)
             display: none

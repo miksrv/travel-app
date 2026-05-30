@@ -1,26 +1,58 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .component
     display: flex
-    flex-direction: row
-    align-items: flex-end
-    gap: 10px
+    flex-direction: column
+    gap: 12px
 
-    & > div
-        flex: 1
-        min-width: 0
-        margin-bottom: 0
+.sectionHeader
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding-top: 4px
 
-    @media (max-width: variables.$mobileMaxWidth)
-        overflow-x: auto
-        flex-wrap: nowrap
-        padding-bottom: 8px
-        gap: 8px
-        -webkit-overflow-scrolling: touch
+.sectionTitle
+    font-size: var(--font-size-small)
+    font-weight: 600
+    text-transform: uppercase
+    letter-spacing: 0.06em
+    color: var(--text-color-secondary)
 
-        & > div
-            min-width: 160px
-            flex-shrink: 0
+.resetButton
+    @include variables.buttonReset
+    font-size: var(--font-size-small)
+    color: var(--link-color)
 
-        & > div:first-child
-            min-width: 200px
+    &:hover
+        color: var(--link-color-hover)
+
+.toggles
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+.toggleRow
+    @include variables.buttonReset
+    display: flex
+    align-items: center
+    width: 100%
+    padding: 8px 10px
+    border-radius: 6px
+    color: var(--text-color-primary)
+    font-size: var(--font-size)
+
+    &:hover
+        background: var(--menu-background-hover)
+
+.toggleRowActive
+    background: var(--color-main-background)
+    color: var(--color-main)
+    font-weight: 500
+
+    &:hover
+        background: var(--color-main-background)
+
+.toggleLabel
+    @include variables.truncate
+    flex: 1
+    text-align: left

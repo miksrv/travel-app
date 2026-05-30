@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .wikipediaMarker
     background: none !important
@@ -57,7 +57,7 @@
 
         .title
             margin: 0
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
             font-weight: 600
             line-height: 1.3
 

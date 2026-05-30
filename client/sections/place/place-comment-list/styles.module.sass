@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .commentList
     .loginAction
@@ -32,7 +32,7 @@
                     margin-bottom: 0
 
                 .info
-                    font-size: variables.$fontSizeHeadline
+                    font-size: var(--font-size-headline)
                     color: var(--text-color-secondary)
                     display: flex
                     align-items: center
@@ -62,7 +62,7 @@
             margin-bottom: 6px
             border-radius: var(--border-radius)
             background: var(--input-background-color)
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
             color: var(--text-color-secondary)
 
             strong

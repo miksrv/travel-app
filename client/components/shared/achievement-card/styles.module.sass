@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .achievementCard
     position: relative
@@ -39,7 +39,7 @@
 
 .cardTitle
     font-weight: 500
-    font-size: variables.$fontSizeTitleH2
+    font-size: var(--font-size-h2)
     color: var(--text-color-primary)
     margin: 0 0 4px
     white-space: nowrap
@@ -47,12 +47,12 @@
     text-overflow: ellipsis
 
 .tierChip
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 500
     border-radius: 10px
 
 .cardDescription
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     color: var(--text-color-secondary)
     margin: 0
     line-height: 1.4
@@ -63,7 +63,7 @@
 .progressLabel
     display: flex
     justify-content: space-between
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     margin-bottom: 4px
 
@@ -83,7 +83,7 @@
     display: flex
     align-items: center
     gap: 6px
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--color-green)
 
     svg
@@ -91,7 +91,7 @@
         height: 14px
 
 .xpBonus
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     display: flex
     align-items: center
@@ -136,7 +136,7 @@
     border: var(--input-border)
     border-radius: var(--border-radius)
     padding: 6px 10px
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     white-space: nowrap
     box-shadow: var(--popout-shadow)
     pointer-events: none
@@ -164,7 +164,7 @@
     align-items: center
     padding: 4px 14px
     border-radius: 14px
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 500
     cursor: pointer
     border: 1px solid var(--input-border-color)
@@ -184,7 +184,7 @@
     margin-bottom: 20px
 
 .categoryGroupTitle
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     font-weight: 500
     color: var(--text-color-secondary)
     text-transform: uppercase
@@ -201,7 +201,7 @@
     display: flex
     align-items: center
     gap: 12px
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     color: var(--color-main)
 
     svg
@@ -266,16 +266,16 @@
 
 .modalTitle
     margin: 0
-    font-size: variables.$fontSizeTitleH1
+    font-size: var(--font-size-h1)
     color: var(--text-color-primary)
 
 .modalDescription
     margin: 0
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     color: var(--text-color-secondary)
     line-height: 1.5
 
 .modalMeta
     margin: 0
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)

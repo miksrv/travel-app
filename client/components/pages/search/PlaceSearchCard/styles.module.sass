@@ -1,4 +1,4 @@
-@use '../../../../styles/variables' as variables
+@use '../../../../styles/mixins' as variables
 
 .card
     display: flex
@@ -38,7 +38,7 @@
 
 .title
     font-weight: 600
-    font-size: variables.$fontSizeParagraph
+    font-size: var(--font-size-paragraph)
     color: var(--text-color-primary)
     overflow: hidden
     display: -webkit-box
@@ -62,13 +62,13 @@
     margin-top: auto
 
 .author
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
 
 .metaItem
     display: flex
     align-items: center
     gap: 3px
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     color: var(--text-color-secondary)
     white-space: nowrap
 

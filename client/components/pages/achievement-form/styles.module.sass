@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .formGrid
     display: flex
@@ -23,7 +23,7 @@
     gap: 6px
 
 .label
-    font-size: variables.$fontSizeCaption
+    font-size: var(--font-size-caption)
     font-weight: 500
     color: var(--input-label-color)
 

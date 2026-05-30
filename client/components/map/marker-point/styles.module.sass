@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .markerPointPopup
     padding: 10px
@@ -34,7 +34,7 @@
                 display: flex
 
             .title
-                font-size: variables.$fontSizeHeadline
+                font-size: var(--font-size-headline)
                 font-weight: 300
                 white-space: pre
                 text-overflow: ellipsis

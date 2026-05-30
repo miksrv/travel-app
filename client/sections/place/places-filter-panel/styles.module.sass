@@ -1,26 +1,120 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .component
     display: flex
-    flex-direction: row
-    align-items: flex-end
-    gap: 10px
+    flex-direction: column
+    gap: 12px
 
-    & > div
-        flex: 1
-        min-width: 0
-        margin-bottom: 0
+.scopeToggle
+    display: grid
+    grid-template-columns: 1fr 1fr
+    gap: 8px
 
-    @media (max-width: variables.$mobileMaxWidth)
-        overflow-x: auto
-        flex-wrap: nowrap
-        padding-bottom: 8px
-        gap: 8px
-        -webkit-overflow-scrolling: touch
+.scopeButton
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    gap: 8px
 
-        & > div
-            min-width: 160px
-            flex-shrink: 0
+.scopeLabel
+    @include variables.truncate
 
-        & > div:first-child
-            min-width: 200px
+.scopeCount
+    display: inline-flex
+    align-items: center
+    justify-content: center
+    min-width: 24px
+    padding: 0 6px
+    height: 18px
+    border-radius: 9px
+    background: var(--color-main-background)
+    color: var(--color-main)
+    font-size: var(--font-size-small)
+    font-weight: 600
+
+.scopeCountActive
+    background: rgba(255, 255, 255, 0.22)
+    color: #fff
+
+.sectionHeader
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding-top: 4px
+
+.sectionTitle
+    font-size: var(--font-size-small)
+    font-weight: 600
+    text-transform: uppercase
+    letter-spacing: 0.06em
+    color: var(--text-color-secondary)
+
+.resetButton
+    @include variables.buttonReset
+    font-size: var(--font-size-small)
+    color: var(--link-color)
+
+    &:hover
+        color: var(--link-color-hover)
+
+.categoriesGroup
+    display: flex
+    flex-direction: column
+    gap: 4px
+
+.categoriesTitle
+    font-size: var(--font-size)
+    font-weight: 600
+    color: var(--text-color-primary)
+    padding: 4px 0
+
+.categoryList
+    list-style: none
+    margin: 0
+    padding: 0
+    display: flex
+    flex-direction: column
+
+.categoryRow
+    @include variables.buttonReset
+    display: flex
+    align-items: center
+    gap: 8px
+    width: 100%
+    padding: 6px 8px
+    border-radius: 6px
+    color: var(--text-color-primary)
+    font-size: var(--font-size)
+
+    &:hover
+        background: var(--menu-background-hover)
+
+.categoryRowActive
+    background: var(--color-main-background)
+    color: var(--color-main)
+    font-weight: 500
+
+    &:hover
+        background: var(--color-main-background)
+
+.categoryIcon
+    width: 20px
+    height: 20px
+    object-fit: contain
+    flex-shrink: 0
+
+.categoryName
+    @include variables.truncate
+    flex: 1
+    min-width: 0
+    text-align: left
+
+.categoryCount
+    color: var(--text-color-secondary)
+    font-size: var(--font-size-small)
+    font-variant-numeric: tabular-nums
+    margin-left: auto
+    flex-shrink: 0
+
+.categoryRowActive .categoryCount
+    color: var(--color-main)

@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .headerPanel
     position: absolute
@@ -119,7 +119,7 @@
             margin-bottom: 5px
 
         .address
-            font-size: variables.$fontSizeHeadline
+            font-size: var(--font-size-headline)
             opacity: .8
             color: #FFF
 

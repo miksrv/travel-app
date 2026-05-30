@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .snackbar
     position: fixed
@@ -13,7 +13,7 @@
 
     .notification
         border-radius: var(--border-radius)
-        box-shadow: variables.$boxShadow4
+        box-shadow: var(--shadow-4)
         padding: 10px 6px 10px 12px
 
         &.unread
@@ -105,7 +105,7 @@
                 max-width: 195px
 
         .datetime
-            font-size: variables.$fontSizeCaption
+            font-size: var(--font-size-caption)
             color: var(--text-color-secondary)
 
     .closeButton

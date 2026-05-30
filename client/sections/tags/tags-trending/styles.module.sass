@@ -1,4 +1,4 @@
-@use '../../../styles/variables' as variables
+@use '../../../styles/mixins' as variables
 
 .strip
     display: flex
@@ -35,13 +35,13 @@
 
         .cardTitle
             font-weight: 600
-            font-size: variables.$fontSizeParagraph
+            font-size: var(--font-size-paragraph)
             overflow: hidden
             text-overflow: ellipsis
             white-space: nowrap
 
         .cardCount
-            font-size: variables.$fontSizeCaption
+            font-size: var(--font-size-caption)
             color: var(--text-color-secondary)
             margin-top: 2px
 
