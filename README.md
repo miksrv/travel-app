@@ -21,8 +21,7 @@
 ```
 geometki/
 ├── client/   # Next.js 16 web application (TypeScript)
-├── server/   # CodeIgniter 4 REST API (PHP 8.2)
-└── mobile/   # Expo / React Native mobile app
+└── server/   # CodeIgniter 4 REST API (PHP 8.2)
 ```
 
 ## Prerequisites
