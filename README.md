@@ -28,7 +28,7 @@ geometki/
 
 | Component | Requirement |
 |-----------|-------------|
-| Node.js   | >= 20.11.0  |
+| Node.js   | >= 22.11.0  |
 | Yarn      | 4.9.2       |
 | PHP       | >= 8.2      |
 | MySQL     | 5.7+        |
