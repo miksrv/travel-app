@@ -30,9 +30,20 @@ interface UsersPageProps {
     search: string | null
     sort: string
     order: string
+    withAvatar: boolean
+    withPlaces: boolean
 }
 
-const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPage, search, sort, order }) => {
+const UsersPage: NextPage<UsersPageProps> = ({
+    usersList,
+    usersCount,
+    currentPage,
+    search,
+    sort,
+    order,
+    withAvatar,
+    withPlaces
+}) => {
     const { t, i18n } = useTranslation()
 
     const router = useRouter()
@@ -41,7 +52,9 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         search: search ?? undefined,
-        sort: sort !== DEFAULT_SORT ? sort : undefined
+        sort: sort !== DEFAULT_SORT ? sort : undefined,
+        withAvatar: withAvatar ? '1' : undefined,
+        withPlaces: withPlaces ? '1' : undefined
     }
 
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
@@ -51,19 +64,51 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
         [currentPage, i18n.language]
     )
 
+    const pushFilter = useCallback(
+        async (next: UsersFilterType, resetPage = false) => {
+            const update: UsersFilterType = {
+                order: next.order && next.order !== DEFAULT_ORDER ? next.order : undefined,
+                page: resetPage ? undefined : next.page && next.page !== 1 ? next.page : undefined,
+                search: next.search || undefined,
+                sort: next.sort && next.sort !== DEFAULT_SORT ? next.sort : undefined,
+                withAvatar: next.withAvatar,
+                withPlaces: next.withPlaces
+            }
+            return await router.push('/users' + encodeQueryData(update))
+        },
+        [router]
+    )
+
     const handleChangeFilter = useCallback(
         async (key: keyof UsersFilterType, value: string | undefined) => {
-            const filter = { ...initialFilter, [key]: value }
-            if (key !== 'page') {
-                filter.page = undefined
-            }
-            return await router.push('/users' + encodeQueryData(filter))
+            const next = { ...initialFilter, [key]: value }
+            const changesScope = key !== 'page' && key !== 'sort' && key !== 'order'
+            return await pushFilter(next, changesScope && currentPage !== 1)
         },
-        [initialFilter, router]
+        [initialFilter, currentPage, pushFilter]
+    )
+
+    const handleResetAll = async () => {
+        await router.push('/users')
+    }
+
+    const filterPanel = (
+        <UsersFilterPanel
+            search={search ?? undefined}
+            sort={sort}
+            order={order}
+            withAvatar={withAvatar}
+            withPlaces={withPlaces}
+            onChange={handleChangeFilter}
+            onResetAll={handleResetAll}
+        />
     )
 
     return (
-        <AppLayout>
+        <AppLayout
+            sidebar={filterPanel}
+            sidebarTitle={t('filters')}
+        >
             <Head>
                 {generateNextSeo({
                     title: title,
@@ -96,15 +141,6 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                 currentPage={t('users')}
             />
 
-            <Container style={{ padding: '10px' }}>
-                <UsersFilterPanel
-                    search={search ?? undefined}
-                    sort={sort}
-                    order={order}
-                    onChange={handleChangeFilter}
-                />
-            </Container>
-
             <UsersList users={usersList} />
 
             <Container className={'paginationContainer'}>
@@ -118,6 +154,7 @@ const UsersPage: NextPage<UsersPageProps> = ({ usersList, usersCount, currentPag
                     captionPrevPage={t('prev-page')}
                     totalItemsCount={usersCount}
                     perPage={USERS_PER_PAGE}
+                    urlParam={initialFilter}
                     linkPart={'users'}
                 />
             </Container>
@@ -131,9 +168,11 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const cookies = context.req.cookies
             const locale = (context.locale ?? 'en') as ApiType.Locale
             const currentPage = parseInt(context.query.page as string, 10) || 1
-            const search = (context.query.search as string) || null
+            const search = ((context.query.search as string) || '').trim() || null
             const sort = (context.query.sort as string) || DEFAULT_SORT
             const order = (context.query.order as string) || DEFAULT_ORDER
+            const withAvatar = (context.query.withAvatar as string) === '1'
+            const withPlaces = (context.query.withPlaces as string) === '1'
             const translations = await serverSideTranslations(locale)
 
             hydrateAuthFromCookies(store, cookies)
@@ -145,7 +184,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     offset: (currentPage - 1) * USERS_PER_PAGE,
                     order: order as 'ASC' | 'DESC',
                     search: search ?? undefined,
-                    sort: sort as ApiType.Users.UserSortFields
+                    sort: sort as ApiType.Users.UserSortFields,
+                    withAvatar: withAvatar ? '1' : undefined,
+                    withPlaces: withPlaces ? '1' : undefined
                 })
             )
 
@@ -159,7 +200,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     search,
                     sort,
                     usersCount: usersList?.count ?? 0,
-                    usersList: usersList?.items ?? []
+                    usersList: usersList?.items ?? [],
+                    withAvatar,
+                    withPlaces
                 }
             }
         }

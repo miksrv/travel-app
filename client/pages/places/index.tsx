@@ -26,7 +26,6 @@ const DEFAULT_SORT = ApiType.SortFields.Trending
 const DEFAULT_ORDER = ApiType.SortOrders.DESC
 const POST_PER_PAGE = 21
 
-// TODO: Rename categoriesData to categoriesList
 interface PlacesPageProps {
     categoriesData: ApiModel.Category[]
     locationType: ApiType.LocationTypes | null
@@ -35,8 +34,11 @@ interface PlacesPageProps {
     region: number | null
     district: number | null
     locality: number | null
+    /** Comma-joined category names (may be empty string for none). */
     category: string | null
     tag: string | null
+    search: string | null
+    bookmarksUser: string | null
     lat: number | null
     lon: number | null
     sort: ApiType.SortFieldsType
@@ -56,6 +58,8 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     locality,
     category,
     tag,
+    search,
+    bookmarksUser,
     lat,
     lon,
     sort,
@@ -68,7 +72,12 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
 
     const router = useRouter()
 
+    const selectedCategories = useMemo(() => (category ? category.split(',').filter(Boolean) : []), [category])
+
+    const bookmarksOnly = !!bookmarksUser
+
     const initialFilter: PlacesFilterType = {
+        bookmarks: bookmarksOnly ? '1' : undefined,
         category: category ?? undefined,
         country: country ?? undefined,
         district: district ?? undefined,
@@ -78,6 +87,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         order: order !== DEFAULT_ORDER ? order : undefined,
         page: currentPage !== 1 ? currentPage : undefined,
         region: region ?? undefined,
+        search: search ?? undefined,
         sort: sort !== DEFAULT_SORT ? sort : undefined,
         tag: tag ?? undefined
     }
@@ -85,55 +95,57 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const canonicalUrl = SITE_LINK + (i18n.language === 'en' ? 'en/' : '')
     const canonicalPage = `${canonicalUrl}places${encodeQueryData({
         ...initialFilter,
+        bookmarks: undefined,
         lat: undefined,
         lon: undefined,
         order: undefined,
+        search: undefined,
         sort: undefined
     })}`
 
-    const handleChangeFilter = useCallback(
-        async (key: keyof PlacesFilterType, value: string | number | undefined) => {
-            const filter = { ...initialFilter, [key]: value }
-            const update = {
-                category: filter.category ?? undefined,
-                country: filter.country ?? undefined,
-                district: filter.district ?? undefined,
-                lat: filter.lat ?? undefined,
-                locality: filter.locality ?? undefined,
-                lon: filter.lon ?? undefined,
-                order: filter.order !== DEFAULT_ORDER ? filter.order : undefined,
-                page: filter.page !== 1 ? filter.page : undefined,
-                region: filter.region ?? undefined,
-                sort: filter.sort !== DEFAULT_SORT ? filter.sort : undefined,
-                tag: filter.tag ?? undefined
+    const pushFilter = useCallback(
+        async (next: PlacesFilterType, resetPage = false) => {
+            const update: PlacesFilterType = {
+                bookmarks: next.bookmarks,
+                category: next.category || undefined,
+                country: next.country,
+                district: next.district,
+                lat: next.lat,
+                locality: next.locality,
+                lon: next.lon,
+                order: next.order && next.order !== DEFAULT_ORDER ? next.order : undefined,
+                page: resetPage ? undefined : next.page && next.page !== 1 ? next.page : undefined,
+                region: next.region,
+                search: next.search || undefined,
+                sort: next.sort && next.sort !== DEFAULT_SORT ? next.sort : undefined,
+                tag: next.tag
             }
-
-            if (
-                (filter.category !== category ||
-                    filter.country !== country ||
-                    filter.district !== district ||
-                    filter.region !== region ||
-                    filter.locality !== locality) &&
-                currentPage !== 1
-            ) {
-                update.page = undefined
-            }
-
             return await router.push('/places' + encodeQueryData(update))
         },
-        [category, country, currentPage, district, initialFilter, locality, order, region, router, sort, tag]
+        [router]
+    )
+
+    const handleChangeFilter = useCallback(
+        async (key: keyof PlacesFilterType, value: string | number | undefined) => {
+            const next = { ...initialFilter, [key]: value }
+            const changesScope =
+                key === 'category' ||
+                key === 'country' ||
+                key === 'district' ||
+                key === 'region' ||
+                key === 'locality' ||
+                key === 'bookmarks' ||
+                key === 'search'
+            return await pushFilter(next, changesScope && currentPage !== 1)
+        },
+        [initialFilter, currentPage, pushFilter]
     )
 
     const handleClearLocationFilter = async () => {
-        const filter = {
-            ...initialFilter,
-            country: undefined,
-            district: undefined,
-            locality: undefined,
-            region: undefined
-        }
-
-        return await router.push('/places' + encodeQueryData(filter))
+        return await pushFilter(
+            { ...initialFilter, country: undefined, district: undefined, locality: undefined, region: undefined },
+            currentPage !== 1
+        )
     }
 
     const handleChangeLocation = async (location?: ApiModel.AddressItem) => {
@@ -144,7 +156,26 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
     }
 
-    const currentCategory = categoriesData.find(({ name }) => name === category)?.title
+    const handleChangeCategories = async (next: string[]) => {
+        await handleChangeFilter('category', next.length ? next.join(',') : undefined)
+    }
+
+    const handleChangeSearch = async (value: string) => {
+        await handleChangeFilter('search', value || undefined)
+    }
+
+    const handleChangeBookmarksOnly = async (value: boolean) => {
+        await handleChangeFilter('bookmarks', value ? '1' : undefined)
+    }
+
+    const handleResetAll = async () => {
+        await router.push('/places')
+    }
+
+    const currentCategory =
+        selectedCategories.length === 1
+            ? categoriesData.find(({ name }) => name === selectedCategories[0])?.title
+            : undefined
 
     const title = useMemo(() => {
         const titleTag = tag ? ` #${tag}` : ''
@@ -178,14 +209,14 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     const breadcrumbsLinks = useMemo(() => {
         const breadcrumbs = []
 
-        if (category || locationType || tag || currentPage > 1) {
+        if (currentCategory || locationType || tag || currentPage > 1) {
             breadcrumbs.push({
                 link: '/places',
                 text: t('interesting-places')
             })
         }
 
-        if (locationType && category) {
+        if (locationType && currentCategory) {
             breadcrumbs.push({
                 link: `/places?${locationType}=${locationData?.id}`,
                 text: locationData?.name ?? ''
@@ -193,9 +224,9 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         }
 
         return breadcrumbs
-    }, [category, locationData, locationType, tag, currentPage])
+    }, [currentCategory, locationData, locationType, tag, currentPage])
 
-    const breadCrumbCurrent = category
+    const breadCrumbCurrent = currentCategory
         ? currentCategory
         : locationType
           ? locationData?.name
@@ -230,10 +261,34 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
         ]
     }
 
-    const isGeoFiltered = !!(lat || lon || sort !== DEFAULT_SORT || order !== DEFAULT_ORDER)
+    const isGeoFiltered = !!(lat || lon || sort !== DEFAULT_SORT || order !== DEFAULT_ORDER || search || bookmarksOnly)
+
+    const filterPanel = (
+        <PlaceFilterPanel
+            sort={sort}
+            order={order}
+            categories={selectedCategories}
+            search={search ?? undefined}
+            bookmarksOnly={bookmarksOnly}
+            location={
+                locationData && locationType
+                    ? { id: locationData.id, name: locationData.name, type: locationType }
+                    : undefined
+            }
+            onChange={handleChangeFilter}
+            onChangeLocation={handleChangeLocation}
+            onChangeCategories={handleChangeCategories}
+            onChangeSearch={handleChangeSearch}
+            onChangeBookmarksOnly={handleChangeBookmarksOnly}
+            onResetAll={handleResetAll}
+        />
+    )
 
     return (
-        <AppLayout>
+        <AppLayout
+            sidebar={filterPanel}
+            sidebarTitle={t('filters')}
+        >
             <Head>
                 {generateNextSeo({
                     title: title,
@@ -269,7 +324,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 scriptKey={'places-list'}
                 data={placesList.map((place) => PlaceSchema(place, SITE_LINK))}
             />
-            {!isGeoFiltered && (category || tag) && (
+            {!isGeoFiltered && (currentCategory || tag) && (
                 <JsonLdScript
                     scriptKey={'places-item-list'}
                     data={{
@@ -292,21 +347,6 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
                 links={breadcrumbsLinks || []}
                 currentPage={breadCrumbCurrent}
             />
-
-            <Container style={{ padding: '10px' }}>
-                <PlaceFilterPanel
-                    sort={sort}
-                    order={order}
-                    category={category}
-                    location={
-                        locationData && locationType
-                            ? { id: locationData.id, name: locationData.name, type: locationType }
-                            : undefined
-                    }
-                    onChange={handleChangeFilter}
-                    onChangeLocation={handleChangeLocation}
-                />
-            </Container>
 
             {placesList?.length ? (
                 <>
@@ -348,18 +388,29 @@ export const getServerSideProps = wrapper.getServerSideProps(
             const locality = parseInt(context.query.locality as string, 10) || null
 
             const currentPage = parseInt(context.query.page as string, 10) || 1
-            const category = (context.query.category as string) || null
+            const rawCategory = (context.query.category as string) || null
 
             const lat = parseFloat(context.query.lat as string) || null
             const lon = parseFloat(context.query.lon as string) || null
 
             const tag = (context.query.tag as string) || null
+            const search = ((context.query.search as string) || '').trim() || null
+            const bookmarksParam = (context.query.bookmarks as string) || null
+
             const sort =
                 (context.query.sort as ApiType.SortFieldsType) ||
                 (cookies[AUTH_COOKIES.TOKEN] ? ApiType.SortFields.Recommended : DEFAULT_SORT)
             const order = (context.query.order as ApiType.SortOrdersType) || DEFAULT_ORDER
 
             hydrateAuthFromCookies(store, cookies)
+
+            const authState = store.getState().auth
+
+            let bookmarksUser: string | null = null
+            if (bookmarksParam === '1' && authState.isAuth) {
+                const { data: authData } = await store.dispatch(API.endpoints.authGetMe.initiate())
+                bookmarksUser = authData?.user?.id ?? null
+            }
 
             const translations = await serverSideTranslations(locale)
 
@@ -389,15 +440,29 @@ export const getServerSideProps = wrapper.getServerSideProps(
                 return { notFound: true }
             }
 
-            const { data: categoriesData } = await store.dispatch(API.endpoints.categoriesGetList.initiate())
+            const { data: categoriesData } = await store.dispatch(
+                API.endpoints.categoriesGetList.initiate({ places: true, counts: true })
+            )
 
-            if (!!category && !categoriesData?.items?.find(({ name }) => name === category)) {
+            // Normalise and validate selected categories against the known list.
+            const knownNames = new Set((categoriesData?.items ?? []).map((c) => c.name))
+            const selectedCategories = rawCategory
+                ? rawCategory
+                      .split(',')
+                      .map((s) => s.trim())
+                      .filter((c) => c && knownNames.has(c as ApiModel.Categories))
+                : []
+
+            if (rawCategory && rawCategory.split(',').length === 1 && selectedCategories.length === 0) {
                 return { notFound: true }
             }
 
+            const categoryParam: string | null = selectedCategories.length ? selectedCategories.join(',') : null
+
             const { data: placesList } = await store.dispatch(
                 API.endpoints.placesGetList.initiate({
-                    category,
+                    bookmarkUser: bookmarksUser ?? undefined,
+                    category: categoryParam,
                     country,
                     district,
                     lat,
@@ -407,6 +472,8 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     offset: (currentPage - 1) * POST_PER_PAGE,
                     order: order,
                     region,
+                    search: search ?? undefined,
+                    searchScope: search ? 'title' : undefined,
                     sort: sort,
                     tag
                 })
@@ -417,8 +484,9 @@ export const getServerSideProps = wrapper.getServerSideProps(
             return {
                 props: {
                     ...translations,
+                    bookmarksUser,
                     categoriesData: categoriesData?.items ?? [],
-                    category,
+                    category: categoryParam,
                     country,
                     currentPage,
                     district,
@@ -431,6 +499,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     placesCount: placesList?.count ?? 0,
                     placesList: placesList?.items ?? [],
                     region,
+                    search,
                     sort,
                     tag
                 }
