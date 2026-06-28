@@ -57,19 +57,23 @@ class PlacesContent {
      * than content matches and boosts popular places (views) and locale affinity.
      *
      * @param string $term
+     * @param bool   $titleOnly When true, restricts the search to the title field
+     *                          only (used by the places list filter UI).
      * @return void
      */
-    public function search(string $term): void {
+    public function search(string $term, bool $titleOnly = false): void {
         $this->search = $term;
 
         if (mb_strlen($term) <= 3) {
             // FULLTEXT requires at least 3-4 characters depending on ft_min_word_len;
             // fall back to LIKE for short terms to avoid missing results.
-            $data = $this->model
-                ->like('title', $term)
-                ->orLike('content', $term)
-                ->orderBy('created_at', 'DESC')
-                ->findAll();
+            $query = $this->model->like('title', $term);
+
+            if (!$titleOnly) {
+                $query->orLike('content', $term);
+            }
+
+            $data = $query->orderBy('created_at', 'DESC')->findAll();
 
             $this->_prepareOutput($data);
             return;
@@ -94,43 +98,65 @@ class PlacesContent {
             $booleanQuery = '"' . $term . '" ' . implode('* ', $words) . '*';
         }
 
-        $sql = "
-            SELECT
-                pc.place_id,
-                pc.title,
-                pc.content,
-                pc.user_id,
-                pc.locale,
-                pc.created_at,
-                pc.updated_at,
-                (
-                    CASE WHEN pc.locale = ? THEN 2 ELSE 1 END
-                    *
+        if ($titleOnly) {
+            $sql = "
+                SELECT
+                    pc.place_id,
+                    pc.title,
+                    pc.content,
+                    pc.user_id,
+                    pc.locale,
+                    pc.created_at,
+                    pc.updated_at,
                     (
-                        MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE) * 10 +
-                        MATCH(pc.content) AGAINST (? IN BOOLEAN MODE) * 1
-                    )
-                    *
-                    (1 + LOG(1 + COALESCE(p.views, 0) / 1000))
-                ) AS final_score
-            FROM places_content pc
-            JOIN places p ON p.id = pc.place_id AND p.deleted_at IS NULL
-            WHERE
-                MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE)
-                OR MATCH(pc.content) AGAINST (? IN BOOLEAN MODE)
-            GROUP BY pc.place_id
-            ORDER BY final_score DESC
-        ";
+                        CASE WHEN pc.locale = ? THEN 2 ELSE 1 END
+                        *
+                        MATCH(pc.title) AGAINST (? IN BOOLEAN MODE) * 10
+                        *
+                        (1 + LOG(1 + COALESCE(p.views, 0) / 1000))
+                    ) AS final_score
+                FROM places_content pc
+                JOIN places p ON p.id = pc.place_id AND p.deleted_at IS NULL
+                WHERE MATCH(pc.title) AGAINST (? IN BOOLEAN MODE)
+                GROUP BY pc.place_id
+                ORDER BY final_score DESC
+            ";
 
-        $result = $db->query($sql, [
-            $locale,
-            $booleanQuery,
-            $booleanQuery,
-            $booleanQuery,
-            $booleanQuery,
-        ]);
+            $params = [$locale, $booleanQuery, $booleanQuery];
+        } else {
+            $sql = "
+                SELECT
+                    pc.place_id,
+                    pc.title,
+                    pc.content,
+                    pc.user_id,
+                    pc.locale,
+                    pc.created_at,
+                    pc.updated_at,
+                    (
+                        CASE WHEN pc.locale = ? THEN 2 ELSE 1 END
+                        *
+                        (
+                            MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE) * 10 +
+                            MATCH(pc.content) AGAINST (? IN BOOLEAN MODE) * 1
+                        )
+                        *
+                        (1 + LOG(1 + COALESCE(p.views, 0) / 1000))
+                    ) AS final_score
+                FROM places_content pc
+                JOIN places p ON p.id = pc.place_id AND p.deleted_at IS NULL
+                WHERE
+                    MATCH(pc.title)   AGAINST (? IN BOOLEAN MODE)
+                    OR MATCH(pc.content) AGAINST (? IN BOOLEAN MODE)
+                GROUP BY pc.place_id
+                ORDER BY final_score DESC
+            ";
 
-        $data = $result->getResult();
+            $params = [$locale, $booleanQuery, $booleanQuery, $booleanQuery, $booleanQuery];
+        }
+
+        $result = $db->query($sql, $params);
+        $data   = $result->getResult();
 
         $this->_prepareOutput($data);
     }
