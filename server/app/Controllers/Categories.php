@@ -3,8 +3,10 @@
 namespace App\Controllers;
 
 use App\Libraries\PlaceFormatterLibrary;
+use App\Libraries\SessionLibrary;
 use App\Models\CategoryModel;
 use App\Models\PlacesModel;
+use App\Models\UsersBookmarksModel;
 use CodeIgniter\HTTP\ResponseInterface;
 use CodeIgniter\RESTful\ResourceController;
 
@@ -28,21 +30,28 @@ class Categories extends ResourceController
     /**
      * Return all categories, optionally enriched with place counts.
      *
-     * GET /categories — optional query param: places (boolean).
+     * GET /categories — optional query params:
+     *   - places  (boolean): include per-category place counts.
+     *   - counts  (boolean): include the total places count plus the current
+     *                        user's bookmarks count (when authenticated). Used
+     *                        by the places list filter sidebar.
      *
      * @return ResponseInterface
      */
     public function list(): ResponseInterface
     {
         $places = $this->request->getGet('places', FILTER_VALIDATE_BOOLEAN) ?? false;
+        $counts = $this->request->getGet('counts', FILTER_VALIDATE_BOOLEAN) ?? false;
         $locale = $this->request->getLocale();
         $data   = $this->model
             ->select("name, title_$locale as title" . ($places ? ", content_$locale as content" : ''))
             ->orderBy("title_$locale", 'ASC')
             ->findAll();
 
+        $response = ['items' => $data ?: []];
+
         if (empty($data)) {
-            return $this->respond(['items' => []]);
+            return $this->respond($response);
         }
 
         if ($places) {
@@ -53,7 +62,20 @@ class Categories extends ResourceController
             }
         }
 
-        return $this->respond(['items' => $data]);
+        if ($counts) {
+            $placesModel       = new PlacesModel();
+            $response['count'] = $placesModel->countAllResults();
+
+            $session = new SessionLibrary();
+            if ($session->isAuth && $session->user) {
+                $bookmarksModel = new UsersBookmarksModel();
+                $response['bookmarksCount'] = $bookmarksModel
+                    ->where('user_id', $session->user->id)
+                    ->countAllResults();
+            }
+        }
+
+        return $this->respond($response);
     }
 
     /**
