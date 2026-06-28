@@ -132,9 +132,13 @@ class Places extends ResourceController
         // Load translate library
         $placeContent = new PlacesContent(350);
 
-        // When searching, we search by criteria in the translation array to return object IDs
+        // When searching, we search by criteria in the translation array to return object IDs.
+        // The list filter UI passes ?searchScope=title to restrict matches to place titles only;
+        // the global Search controller uses the default (title + content) full-text mode.
         if ($search) {
-            $placeContent->search($search);
+            $searchScope = $this->request->getGet('searchScope', FILTER_SANITIZE_SPECIAL_CHARS);
+            $titleOnly   = $searchScope === 'title';
+            $placeContent->search($search, $titleOnly);
 
             // At the same time, if we did not find anything based on the search conditions,
             // we immediately return an empty array and do not execute the code further
@@ -797,6 +801,13 @@ class Places extends ResourceController
         $offset   = abs($this->request->getGet('offset', FILTER_SANITIZE_NUMBER_INT) ?? 0);
         $category = $this->request->getGet('category', FILTER_SANITIZE_SPECIAL_CHARS);
 
+        // Allow a comma-separated list of categories (used by the filter sidebar UI).
+        $categories = [];
+        if (is_string($category) && str_contains($category, ',')) {
+            $categories = array_values(array_filter(array_map('trim', explode(',', $category))));
+            $category   = null;
+        }
+
         if (!$this->coordinatesAvailable) {
             $sortingFields = array_diff($sortingFields, ['distance']);
         }
@@ -819,6 +830,10 @@ class Places extends ResourceController
 
         if ($category) {
             $placesModel->where(['places.category' => $category]);
+        }
+
+        if (!empty($categories)) {
+            $placesModel->whereIn('places.category', $categories);
         }
 
         if ($author) {
