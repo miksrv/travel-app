@@ -54,20 +54,30 @@ class Users extends ResourceController
         $sort  = in_array($sortRaw, $allowedSortFields, true) ? $sortRaw : 'activity_at';
         $order = in_array($orderRaw, ['ASC', 'DESC'], true) ? $orderRaw : 'DESC';
 
+        $withAvatar = filter_var($this->request->getGet('withAvatar'), FILTER_VALIDATE_BOOLEAN);
+        $withPlaces = filter_var($this->request->getGet('withPlaces'), FILTER_VALIDATE_BOOLEAN);
+
         $userLevels = new LevelsLibrary();
         $usersModel = new UsersModel();
 
-        if ($search !== '') {
-            $usersModel->like('name', $search);
-        }
+        $applyFilters = static function ($model) use ($search, $withAvatar, $withPlaces): void {
+            if ($search !== '') {
+                $model->like('name', $search);
+            }
+            if ($withAvatar) {
+                $model->where('avatar IS NOT NULL', null, false);
+                $model->where("avatar != ''");
+            }
+            if ($withPlaces) {
+                $model->where('EXISTS (SELECT 1 FROM places WHERE places.user_id = users.id)', null, false);
+            }
+        };
 
+        $applyFilters($usersModel);
         $totalCount = $usersModel->countAllResults(false);
 
-        if ($search !== '') {
-            $usersModel->like('name', $search);
-        }
-
-        $usersData  = $usersModel
+        $applyFilters($usersModel);
+        $usersData = $usersModel
             ->select('id, name, avatar, created_at, activity_at, updated_at, level, experience, reputation')
             ->orderBy($sort, $order)
             ->findAll(min($limit, 40), $offset);
