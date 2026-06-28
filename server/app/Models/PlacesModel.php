@@ -192,6 +192,7 @@ class PlacesModel extends ApplicationBaseModel
             'places.id, places.lat, places.lon, places.category,
             places.rating, places.views, places.photos, places.comments, places.bookmarks,
             places.updated_at as updated,
+            places.visit_radius_m, places.verification_exempt,
             places.country_id, places.region_id, places.district_id, places.locality_id,
             places.address_ru, places.address_en,
             users.id as user_id, users.name as user_name, users.avatar as user_avatar,
