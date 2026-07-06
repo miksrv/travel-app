@@ -98,6 +98,8 @@
     "input_website-placeholder": "Ссылка на вашу страницу в социальной сети",
     "input_name-placeholder": "Введите свое имя",
     "input_password": "Пароль",
+    "sign-in-with-magic-link": "Войти по ссылке на email",
+    "magic-link-sent": "Письмо со ссылкой для входа отправлено на {{email}}. Проверьте почту.",
     "input_old-password": "Текущий пароль",
     "input_old-password-placeholder": "Введите свой текущий пароль на сайте",
     "input_new-password": "Придумайте новый пароль",

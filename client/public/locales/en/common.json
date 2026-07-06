@@ -98,6 +98,8 @@
     "input_website-placeholder": "Link to your social network page",
     "input_name-placeholder": "Enter your name",
     "input_password": "Password",
+    "sign-in-with-magic-link": "Sign in with an email link",
+    "magic-link-sent": "A sign-in link has been sent to {{email}}. Check your inbox.",
     "input_old-password": "Current password",
     "input_old-password-placeholder": "Enter your current password on the site",
     "input_new-password": "Create a new password",

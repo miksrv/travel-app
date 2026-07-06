@@ -25,3 +25,20 @@ export interface PostRegistrationRequest {
     email?: string
     password?: string
 }
+
+export interface PostMagicLinkRequest {
+    email: string
+    returnPath?: string
+}
+
+export interface PostMagicLinkRequestResponse {
+    sent: boolean
+}
+
+export interface PostMagicLinkVerifyRequest {
+    token: string
+}
+
+export interface MagicLinkVerifyResponse extends LoginResponse {
+    isNewUser?: boolean
+}

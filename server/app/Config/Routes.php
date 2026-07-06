@@ -135,8 +135,13 @@ $routes->group('auth', static function ($routes) {
     $routes->get('vk', 'Auth::vk');
     $routes->post('login', 'Auth::login');
     $routes->post('registration', 'Auth::registration');
+    $routes->post('magic-link', 'Auth::requestMagicLink');
+    $routes->post('magic-link/verify', 'Auth::verifyMagicLink');
 
     $routes->options('(:alphanum)', static function () {});
+    // 'magic-link' contains a hyphen, which (:alphanum) does not match.
+    $routes->options('magic-link', static function () {});
+    $routes->options('magic-link/verify', static function () {});
 });
 
 /** Search Controller **/
