@@ -4,11 +4,13 @@ namespace App\Controllers;
 
 use App\Entities\UserEntity;
 use App\Libraries\AvatarLibrary;
+use App\Libraries\EmailLibrary;
 use App\Libraries\GoogleClient;
 use App\Libraries\LevelsLibrary;
 use App\Libraries\SessionLibrary;
 use App\Libraries\VkClient;
 use App\Libraries\YandexClient;
+use App\Models\MagicLinkTokensModel;
 use App\Models\UsersModel;
 use CodeIgniter\Files\File;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -275,6 +277,127 @@ class Auth extends ResourceController
 
 
     /**
+     * Requests a passwordless login link by email. Always responds with the
+     * same generic success shape regardless of whether the email is
+     * registered, malformed-but-valid, or currently rate-limited — this
+     * endpoint must never reveal account existence.
+     *
+     * POST /auth/magic-link
+     *
+     * @return ResponseInterface
+     */
+    public function requestMagicLink(): ResponseInterface
+    {
+        if ($this->session->isAuth) {
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
+        }
+
+        $rules = [
+            'email' => 'required|valid_email|max_length[255]',
+        ];
+
+        $input = $this->getRequestInput($this->request);
+
+        if (!$this->validateRequest($input, $rules)) {
+            return $this->failValidationErrors($this->validator->getErrors());
+        }
+
+        $email      = strtolower(trim($input['email']));
+        $returnPath = $this->sanitizeReturnPath($input['returnPath'] ?? null);
+        $ip         = $this->request->getIPAddress();
+
+        $tokenModel = new MagicLinkTokensModel();
+
+        if (!$tokenModel->isRateLimited($email, $ip)) {
+            $rawToken = $tokenModel->createToken($email, $returnPath, $ip);
+
+            $siteUrl = rtrim(getenv('app.siteUrl'), '/');
+            $link    = $siteUrl . '/auth?token=' . $rawToken . ($returnPath !== null ? '&return=' . rawurlencode($returnPath) : '');
+
+            try {
+                $subject = lang('Auth.magicLinkEmailSubject');
+                $body    = '<div style="font-family:Arial,Helvetica,sans-serif;max-width:640px;margin:0 auto;color:#1b1f27;">'
+                    . '<h2 style="margin:0 0 12px;">' . esc(lang('Auth.magicLinkEmailTitle')) . '</h2>'
+                    . '<p style="margin:0 0 16px;line-height:1.5;">' . esc(lang('Auth.magicLinkEmailIntro')) . '</p>'
+                    . '<p style="margin:0 0 16px;"><a href="' . esc($link) . '" style="display:inline-block;background:#3b82f6;color:#fff;padding:12px 24px;border-radius:8px;text-decoration:none;font-weight:bold;">'
+                    . esc(lang('Auth.magicLinkEmailButton')) . '</a></p>'
+                    . '<p style="margin:0 0 12px;color:#656d76;font-size:13px;line-height:1.5;">' . esc(lang('Auth.magicLinkEmailExpiry')) . '</p>'
+                    . '<p style="margin:0;color:#656d76;font-size:13px;line-height:1.5;">' . esc(lang('Auth.magicLinkEmailFooter')) . '</p>'
+                    . '</div>';
+
+                (new EmailLibrary())->send($email, $subject, $body);
+            } catch (Throwable $e) {
+                log_message('error', '[Auth] Failed to send magic link email: {exception}', ['exception' => $e]);
+            }
+        }
+
+        return $this->respond(['sent' => true]);
+    }
+
+
+    /**
+     * Verifies a magic-link token and logs the user in, creating the account
+     * on first use. Deliberately does not enforce the OAuth auth_type
+     * mismatch check from `serviceAuth()` — proving mailbox ownership is
+     * treated as strictly stronger than any OAuth provider's email claim.
+     *
+     * POST /auth/magic-link/verify
+     *
+     * @throws ReflectionException
+     *
+     * @return ResponseInterface
+     */
+    public function verifyMagicLink(): ResponseInterface
+    {
+        if ($this->session->isAuth) {
+            return $this->failForbidden(lang('Auth.alreadyAuthorized'));
+        }
+
+        $input = $this->getRequestInput($this->request);
+        $token = $input['token'] ?? null;
+
+        if (empty($token)) {
+            return $this->failValidationErrors(lang('Auth.magicLinkInvalidOrExpired'));
+        }
+
+        $claim = (new MagicLinkTokensModel())->consumeToken($token);
+
+        if (!$claim) {
+            return $this->failValidationErrors(lang('Auth.magicLinkInvalidOrExpired'));
+        }
+
+        [$userData, $isNewUser] = (new UsersModel())->findOrCreateByEmail($claim['email'], AUTH_TYPE_EMAIL);
+
+        try {
+            $this->session->authorization($userData);
+        } catch (Throwable $e) {
+            log_message('error', '{exception}', ['exception' => $e]);
+            return $this->failServerError(lang('Auth.registrationError'));
+        }
+
+        return $this->responseAuth($isNewUser);
+    }
+
+
+    /**
+     * Keeps only a same-origin relative path (no scheme/host), to prevent an
+     * attacker-supplied returnPath from being embedded in the emailed link
+     * and used as an open redirect.
+     *
+     * @param string|null $returnPath
+     * @return string|null
+     */
+    private function sanitizeReturnPath(?string $returnPath): ?string
+    {
+        if (empty($returnPath) || !str_starts_with($returnPath, '/') || str_contains($returnPath, '://')) {
+            return null;
+        }
+
+        return $returnPath;
+    }
+
+
+    /**
      * Return the current session status and user data.
      *
      * GET /auth/me — refreshes the JWT token when it is within 5 minutes of expiry.
@@ -480,15 +603,26 @@ class Auth extends ResourceController
     /**
      * Build the standard authentication success response with session, user, and token.
      *
+     * @param bool $isNewUser Set when the account was just created via the
+     *                        magic-link flow; adds `isNewUser` to the response
+     *                        so the frontend can route accordingly. Omitted
+     *                        (false) by every other caller, so their response
+     *                        shape is unchanged.
      * @return ResponseInterface
      */
-    protected function responseAuth(): ResponseInterface
+    protected function responseAuth(bool $isNewUser = false): ResponseInterface
     {
-        return $this->respond([
+        $response = [
             'session' => $this->session->id,
             'auth'    => $this->session->isAuth,
             'user'    => $this->session->user,
             'token'   => generateAuthToken($this->session->user->email),
-        ]);
+        ];
+
+        if ($isNewUser) {
+            $response['isNewUser'] = true;
+        }
+
+        return $this->respond($response);
     }
 }

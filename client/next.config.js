@@ -14,6 +14,11 @@ const nextConfig = {
                 protocol: 'https'
             },
             {
+                hostname: 'geometki.com',
+                port: '',
+                protocol: 'https'
+            },
+            {
                 hostname: 'miksoft.pro',
                 port: '',
                 protocol: 'https'

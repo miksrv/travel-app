@@ -29,15 +29,31 @@ const AuthPage: NextPage<object> = () => {
 
     const service = searchParams?.get('service')
     const code = searchParams?.get('code')
+    const token = searchParams?.get('token')
+    const returnQueryParam = searchParams?.get('return')
 
     const [isProcessing, setIsProcessing] = useState<boolean>(false)
+    const [sendRequest, setSendRequest] = useState<boolean>(false)
+    const [isMagicProcessing, setIsMagicProcessing] = useState<boolean>(false)
+    const [sendMagicRequest, setSendMagicRequest] = useState<boolean>(false)
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
     const [serviceLogin, { data, error, isLoading, isError, isSuccess }] = API.useAuthLoginServiceMutation()
 
+    const [
+        verifyMagicLink,
+        {
+            data: magicData,
+            error: magicError,
+            isLoading: isMagicLoading,
+            isError: isMagicError,
+            isSuccess: isMagicSuccess
+        }
+    ] = API.useAuthVerifyMagicLinkMutation()
+
     useEffect(() => {
-        if (isAuth) {
+        if (isAuth && !data && !magicData) {
             void router.push('/')
         }
     }, [isAuth])
@@ -60,17 +76,52 @@ const AuthPage: NextPage<object> = () => {
     }, [data])
 
     useEffect(() => {
-        if (code && service) {
-            void serviceLogin({
-                code,
-                service: service as ApiType.AuthService,
-                state: searchParams?.get('state') ?? undefined,
-                device_id: searchParams?.get('device_id') ?? undefined
-            })
-        } else {
-            void router.push('/')
+        if (magicData?.auth === true && !isMagicProcessing) {
+            setIsMagicProcessing(true)
+            dispatch(login(magicData))
+
+            const isValidReturn =
+                typeof returnQueryParam === 'string' &&
+                returnQueryParam.startsWith('/') &&
+                !returnQueryParam.includes('://')
+
+            void router.push(isValidReturn ? returnQueryParam : '/')
         }
+    }, [magicData])
+
+    useEffect(() => {
+        if (token || sendRequest) {
+            return
+        }
+
+        if (!code || !service) {
+            void router.push('/')
+
+            return
+        }
+
+        setSendRequest(true)
+
+        void serviceLogin({
+            code,
+            service: service as ApiType.AuthService,
+            state: searchParams?.get('state') ?? undefined,
+            device_id: searchParams?.get('device_id') ?? undefined
+        })
     }, [])
+
+    useEffect(() => {
+        if (!token || sendMagicRequest) {
+            return
+        }
+
+        setSendMagicRequest(true)
+        void verifyMagicLink({ token })
+    }, [token])
+
+    const showError = token ? isMagicError && magicError : error
+    const showSpinner = token ? isMagicLoading || isMagicSuccess : isLoading || isSuccess
+    const showHomeButton = token ? isMagicError : isError
 
     return (
         <>
@@ -86,20 +137,20 @@ const AuthPage: NextPage<object> = () => {
                 <div className={'wrapper'}>
                     <Container>
                         <h1 className={'header'}>{t('authorization-on-site')}</h1>
-                        {error && (
+                        {showError && (
                             <Message
                                 type={'error'}
                                 title={t('notification_error')}
                             >
-                                {getErrorMessage(error)}
+                                {getErrorMessage(token ? magicError : error)}
                             </Message>
                         )}
-                        {(isLoading || isSuccess) && (
+                        {showSpinner && (
                             <div className={'loaderWrapper'}>
                                 <Spinner />
                             </div>
                         )}
-                        {isError && (
+                        {showHomeButton && (
                             <Button
                                 style={{ marginTop: 20 }}
                                 link={'/'}

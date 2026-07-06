@@ -125,6 +125,12 @@ jest.mock('@/api', () => ({
             .mockReturnValue([
                 jest.fn().mockResolvedValue({ data: {} }),
                 { data: undefined, isLoading: false, isSuccess: false }
+            ]),
+        useAuthRequestMagicLinkMutation: jest
+            .fn()
+            .mockReturnValue([
+                jest.fn().mockResolvedValue({ data: { sent: false } }),
+                { data: undefined, isLoading: false, isSuccess: false, error: undefined }
             ])
     },
     ApiType: {}
@@ -195,10 +201,11 @@ describe('LoginForm', () => {
             expect(screen.getByText('Регистрация')).toBeInTheDocument()
         })
 
-        it('renders social login buttons (VK, Google, Yandex)', () => {
+        it('renders social login buttons (VK, Yandex) and the magic-link button', () => {
             renderWithStore(<LoginForm />)
             const buttons = screen.getAllByRole('button')
-            expect(buttons.length).toBeGreaterThanOrEqual(3)
+            expect(buttons.length).toBeGreaterThanOrEqual(5)
+            expect(screen.getByText('Войти по ссылке на email')).toBeInTheDocument()
         })
     })
 

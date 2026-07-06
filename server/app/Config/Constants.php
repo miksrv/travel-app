@@ -121,3 +121,4 @@ const AUTH_TYPE_NATIVE = 'native';
 const AUTH_TYPE_GOOGLE = 'google';
 const AUTH_TYPE_YANDEX = 'yandex';
 const AUTH_TYPE_VK = 'vk';
+const AUTH_TYPE_EMAIL = 'email';

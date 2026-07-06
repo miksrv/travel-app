@@ -11,7 +11,8 @@ import { login } from '@/app/authSlice'
 import { useAppDispatch } from '@/app/store'
 import { LOCAL_STORAGE } from '@/config/constants'
 import useLocalStorage from '@/hooks/useLocalStorage'
-import googleLogo from '@/public/images/google-logo.png'
+// Google login is hidden from the UI (RU legal requirement) but kept in code — see block below.
+// import googleLogo from '@/public/images/google-logo.png'
 import vkLogo from '@/public/images/vk-logo.png'
 import yandexLogo from '@/public/images/yandex-logo.png'
 import { isApiValidationErrors } from '@/utils/api'
@@ -39,6 +40,17 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
 
     const [authLoginService, { data: serviceData, isLoading: serviceLoading, isSuccess: serviceSuccess }] =
         API.useAuthLoginServiceMutation()
+
+    const [requestMagicLink, { data: magicLinkData, isLoading: magicLinkLoading, error: magicLinkError }] =
+        API.useAuthRequestMagicLinkMutation()
+
+    const magicLinkValidationErrors = useMemo(
+        () =>
+            isApiValidationErrors<ApiType.Auth.PostMagicLinkRequest>(magicLinkError)
+                ? magicLinkError.messages
+                : undefined,
+        [magicLinkError]
+    )
 
     const validationErrors = useMemo(
         () => (isApiValidationErrors<ApiType.Auth.PostRegistrationRequest>(error) ? error.messages : undefined),
@@ -80,17 +92,42 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
         await authLoginService({ service })
     }
 
+    const handleMagicLinkButton = async () => {
+        if (!validateEmail(formData?.email) || !formData?.email) {
+            setFormErrors({
+                ...formErrors,
+                email: t('error_email-incorrect', { defaultValue: 'Введенный email адрес не корректный' })
+            })
+            return
+        }
+
+        const isValidReturnPath = router.asPath.startsWith('/') && !router.asPath.includes('://')
+
+        setReturnPath(router.asPath)
+
+        await requestMagicLink({
+            email: formData.email,
+            returnPath: isValidReturnPath ? router.asPath : undefined
+        })
+    }
+
     const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
         if (event.key === 'Enter') {
             await handleLoginButton()
         }
     }
 
-    const loadingForm = nativeLoading || nativeSuccess || serviceLoading || serviceSuccess
+    const loadingForm = nativeLoading || nativeSuccess || serviceLoading || serviceSuccess || magicLinkLoading
 
     useEffect(() => {
         setFormErrors(validationErrors)
     }, [error])
+
+    useEffect(() => {
+        if (magicLinkValidationErrors) {
+            setFormErrors({ ...formErrors, ...magicLinkValidationErrors })
+        }
+    }, [magicLinkError])
 
     useEffect(() => {
         dispatch(login(authData))
@@ -106,6 +143,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
             window.location.href = serviceData.redirect
         }
     }, [serviceData?.redirect])
+
+    if (magicLinkData?.sent) {
+        return (
+            <div className={styles.loginForm}>
+                <Message type={'success'}>
+                    {t('magic-link-sent', {
+                        defaultValue: 'Письмо со ссылкой для входа отправлено на {{email}}. Проверьте почту.',
+                        email: formData?.email
+                    })}
+                </Message>
+            </div>
+        )
+    }
 
     return (
         <div className={styles.loginForm}>
@@ -123,6 +173,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
                     />
                 </Button>
 
+                {/* Google login hidden from the UI (RU legal requirement). Code kept intact for a quick revert.
                 <Button
                     mode={'outline'}
                     disabled={loadingForm}
@@ -135,6 +186,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
                         alt={''}
                     />
                 </Button>
+                */}
 
                 <Button
                     mode={'outline'}
@@ -186,6 +238,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onClickRegistration, onSuc
                     onKeyDown={handleKeyPress}
                     onChange={handleChange}
                 />
+            </div>
+
+            <div className={styles.formElement}>
+                <Button
+                    mode={'secondary'}
+                    style={{ width: '100%' }}
+                    loading={magicLinkLoading}
+                    disabled={loadingForm || !validateEmail(formData?.email)}
+                    onClick={handleMagicLinkButton}
+                >
+                    {t('sign-in-with-magic-link', { defaultValue: 'Войти по ссылке на email' })}
+                </Button>
             </div>
 
             <div className={styles.actions}>

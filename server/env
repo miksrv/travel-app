@@ -22,6 +22,7 @@ CI_ENVIRONMENT = production
 
 app.geocoder.yandexKey = ''
 app.baseURL = ''
+app.siteUrl = 'http://localhost:3000'
 
 # app.forceGlobalSecureRequests = false
 # app.CSPEnabled = false

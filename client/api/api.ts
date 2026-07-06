@@ -163,6 +163,28 @@ export const API = createApi({
             }),
             transformErrorResponse: extractErrorData
         }),
+        authRequestMagicLink: builder.mutation<
+            ApiType.Auth.PostMagicLinkRequestResponse,
+            ApiType.Auth.PostMagicLinkRequest
+        >({
+            query: (body) => ({
+                body,
+                method: 'POST',
+                url: 'auth/magic-link'
+            }),
+            transformErrorResponse: extractErrorData
+        }),
+        authVerifyMagicLink: builder.mutation<
+            ApiType.Auth.MagicLinkVerifyResponse,
+            ApiType.Auth.PostMagicLinkVerifyRequest
+        >({
+            query: (body) => ({
+                body,
+                method: 'POST',
+                url: 'auth/magic-link/verify'
+            }),
+            transformErrorResponse: extractErrorMessage
+        }),
 
         /** Controller: Bookmarks **/
         bookmarksGetPlace: builder.query<ApiType.Bookmarks.CheckResponse, ApiType.Bookmarks.Request>({
