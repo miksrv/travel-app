@@ -1,0 +1,170 @@
+@use '../../../styles/mixins' as variables
+
+.scrollableContent
+    margin-top: 10px
+
+    @media only screen and (min-width: #{variables.$mobileMaxWidth + 1})
+        height: 460px
+        overflow-y: auto
+        padding-right: 4px
+
+.activityItem
+    display: flex
+    align-items: center
+    gap: 10px
+    padding: 0 0
+
+    &:not(:last-child)
+        border-bottom: .5px solid var(--input-border-color)
+        padding-bottom: 12px
+        margin-bottom: 12px
+
+    .left
+        flex: 1
+        min-width: 0
+
+    .header
+        display: grid
+        column-gap: 10px
+        row-gap: 4px
+        grid-template-columns: auto auto 1fr
+        grid-template-areas: "avatar nameAction pointLink" "avatar time time"
+        align-items: center
+
+    .userAvatar
+        grid-area: avatar
+
+    .nameAction
+        grid-area: nameAction
+        display: flex
+        flex-wrap: wrap
+        align-items: center
+        gap: 4px
+        min-width: 0
+        line-height: 1.4
+
+    blockquote
+        margin: 10px 0 0
+
+    .diffBadge
+        display: inline-block
+        font-size: 10px
+        font-weight: 600
+        padding: 0 5px
+        border-radius: 10px
+        line-height: 18px
+        flex-shrink: 0
+
+        &.diffPos
+            color: var(--color-green)
+            background: var(--color-green-background)
+
+        &.diffNeg
+            color: var(--color-red)
+            background: var(--color-red-background)
+
+    .pointLink
+        grid-area: pointLink
+        min-width: 0
+        overflow: hidden
+        white-space: nowrap
+        text-overflow: ellipsis
+
+        &:hover
+            text-decoration: underline
+
+    .time
+        grid-area: time
+        display: block
+        color: var(--text-color-secondary)
+        font-size: var(--font-size-small)
+
+    .content
+        margin: 6px 0
+
+    .ratingInline
+        margin-top: 6px
+
+        svg
+            width: 16px !important
+            height: 16px !important
+        li
+            height: 16px !important
+
+    .photos
+        display: flex
+        flex-wrap: nowrap
+        gap: 5px
+        flex-shrink: 0
+
+        &.compactPhotos
+            .photoThumb
+                width: 64px
+                height: 64px
+
+    .photoThumbBtn
+        position: relative
+        background: none
+        border: none
+        padding: 0
+        cursor: pointer
+        border-radius: 4px
+        overflow: hidden
+        line-height: 0
+
+    .photoOverlay
+        position: absolute
+        inset: 0
+        background: rgba(0, 0, 0, 0.55)
+        display: flex
+        align-items: center
+        justify-content: center
+        color: #ffffff
+        font-weight: 600
+        font-size: var(--font-size-paragraph)
+        line-height: 1.2
+        border-radius: 4px
+        pointer-events: none
+
+    .photoThumb
+        width: 80px
+        height: 80px
+        object-fit: cover
+        display: block
+        border-radius: 4px
+
+    .bottomBar
+        display: flex
+        justify-content: space-between
+        align-items: center
+
+    .viewCounter
+        display: flex
+        font-size: var(--font-size-caption)
+        color: var(--text-color-secondary)
+        align-items: center
+        flex-shrink: 0
+
+        svg
+            width: 16px
+            height: 16px
+            fill: var(--icon-color-secondary)
+            margin-right: 5px
+
+    &.compact
+        align-items: flex-start
+
+    @media only screen and (max-width: variables.$mobileMaxWidth)
+        flex-wrap: wrap
+
+        .photos
+            width: 100%
+            flex-shrink: 1
+
+        .header
+            grid-template-columns: auto 1fr
+            grid-template-areas: "avatar nameAction" "pointLink pointLink" "time time"
+
+        .pointLink
+            width: 100%
+            max-width: 100%
