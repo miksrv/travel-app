@@ -202,7 +202,8 @@ export const AppBar: React.FC<AppBarProps> = ({ fullSize, transparent }) => {
                     <Button
                         mode={'primary'}
                         link={'/places/create'}
-                        label={t('add-place_button', { defaultValue: '+ Добавить' })}
+                        label={t('add-place_button', { defaultValue: 'Добавить' })}
+                        icon={'PlusCircle'}
                         className={styles.addButton}
                     />
                 </div>

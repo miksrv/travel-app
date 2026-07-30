@@ -100,7 +100,7 @@ export const AppLayout: React.FC<AppLayoutProps> = ({
                                             <Icon name={'Close'} />
                                         </button>
                                     </div>
-                                    {sidebar}
+                                    <div className={styles.sidebarBody}>{sidebar}</div>
                                 </Container>
                             </aside>
 

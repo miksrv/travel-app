@@ -10,13 +10,13 @@
 .main
     max-width: var(--content-max-width)
     margin: 0 auto
-    padding-top: 66px
+    padding-top: 50px
     padding-left: var(--content-padding-desktop)
     padding-right: var(--content-padding-desktop)
     padding-bottom: 20px
     display: flex
     flex-direction: column
-    gap: 15px
+    gap: var(--content-gap)
 
     @media only screen and (max-width: variables.$mobileMaxWidth)
         padding-top: 58px
@@ -65,14 +65,17 @@
     @media (min-width: 769px)
         flex-direction: row
         align-items: flex-start
-        gap: 20px
+        gap: var(--content-gap)
 
 .sidebar
-    width: 320px
+    width: 300px
     flex-shrink: 0
     position: sticky
     top: 66px
     align-self: flex-start
+    height: calc(100vh - 86px)
+    display: flex
+    flex-direction: column
 
     @media (max-width: variables.$mobileMaxWidth)
         position: fixed
@@ -83,7 +86,7 @@
         z-index: 400
         transform: translateX(-100%)
         transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)
-        overflow-y: auto
+        overflow: hidden
         pointer-events: none
 
 .sidebarOpen
@@ -93,16 +96,20 @@
 
 .sidebarContainer
     padding: 12px !important
+    display: flex
+    flex-direction: column
+    height: 100%
+    overflow: hidden
 
     @media (max-width: variables.$mobileMaxWidth)
         border-radius: 0 !important
         box-shadow: none !important
-        min-height: 100vh
 
 .sidebarHeader
     display: flex
     align-items: center
     justify-content: space-between
+    flex-shrink: 0
     margin-bottom: 10px
 
 .sidebarTitle
@@ -111,6 +118,13 @@
     color: var(--text-color-secondary)
     text-transform: uppercase
     letter-spacing: 0.04em
+
+.sidebarBody
+    flex: 1
+    min-height: 0
+    display: flex
+    flex-direction: column
+    overflow: hidden
 
 .sidebarClose
     display: none
@@ -137,4 +151,4 @@
     min-width: 0
     display: flex
     flex-direction: column
-    gap: 15px
+    gap: var(--content-gap)
