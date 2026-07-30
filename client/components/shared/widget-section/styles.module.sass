@@ -1,0 +1,52 @@
+@use '../../../styles/mixins' as variables
+
+.section
+    display: flex
+    flex-direction: column
+    gap: 8px
+
+.header
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 12px
+
+.title
+    margin: 0
+    font-size: var(--font-size-h2)
+    font-weight: 500
+    color: var(--text-color-primary)
+
+.extraRow
+    display: flex
+    align-items: center
+    justify-content: space-between
+    gap: 12px
+
+.extra
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 8px
+    overflow-x: auto
+    min-width: 0
+
+    @media (max-width: variables.$mobileMaxWidth)
+        flex-wrap: nowrap
+        margin: 0 calc(-1 * var(--content-padding-mobile))
+        padding: 0 var(--content-padding-mobile)
+
+.action
+    flex-shrink: 0
+    color: var(--link-color)
+    font-size: var(--font-size-paragraph)
+    text-decoration: none
+    white-space: nowrap
+    background: none
+    border: none
+    padding: 0
+    cursor: pointer
+    font-family: inherit
+
+    &:hover
+        text-decoration: underline
