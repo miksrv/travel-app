@@ -1,0 +1,110 @@
+@use '../../../styles/mixins' as variables
+
+.commentList
+    .loginAction
+        margin-top: 5px
+        display: flex
+        justify-content: center
+
+    .commentItem
+        display: flex
+        margin-bottom: 5px
+
+        &.answer
+            margin-left: 40px
+
+        .block
+            margin-top: 5px
+            display: flex
+            align-items: flex-start
+            width: 100%
+
+            &:hover
+                .content
+                    .info
+                        .answerButton
+                            opacity: 1
+
+            .content
+                margin-left: 10px
+                width: 100%
+
+                p
+                    margin-bottom: 0
+
+                .info
+                    font-size: var(--font-size-headline)
+                    color: var(--text-color-secondary)
+                    display: flex
+                    align-items: center
+
+                    .answerButton
+                        opacity: 0
+                        margin-left: 10px
+                        padding: 0
+                        height: auto
+                        line-height: normal
+                        min-height: 0
+                        background: none
+                        transition: opacity .3s
+
+                        &.answerButtonActive
+                            opacity: 1
+                            color: var(--text-color-secondary)
+
+    .commentForm
+        margin-top: 5px
+
+        .replyingTo
+            display: flex
+            align-items: center
+            justify-content: space-between
+            padding: 4px 6px 4px 10px
+            margin-bottom: 6px
+            border-radius: var(--border-radius)
+            background: var(--input-background-color)
+            font-size: var(--font-size-headline)
+            color: var(--text-color-secondary)
+
+            strong
+                color: var(--text-color-primary)
+
+            .replyingToCancel
+                padding: 0
+                height: 20px
+                min-height: 0
+                width: 20px
+                min-width: 0
+                color: var(--text-color-secondary)
+                background: none
+
+                &:hover
+                    color: var(--text-color-primary)
+
+        .commentFormRow
+            display: flex
+            align-items: flex-start
+
+        .userAvatar
+            margin-right: 10px
+            margin-top: -2px
+
+        .submitButton
+            margin-left: 5px
+
+        .textarea
+            flex: 1
+            font-family: var(--font-family), serif
+            font-size: var(--font-size)
+
+    .formSection
+        margin-top: 15px
+
+    .loginContainer
+        margin-top: 5px
+        padding: 10px 10px 0 10px
+        text-align: center
+        color: var(--text-color-secondary)
+
+        &.topBorder
+            border-top: var(--container-border-separator)
