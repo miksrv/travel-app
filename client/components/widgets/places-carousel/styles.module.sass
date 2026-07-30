@@ -1,0 +1,18 @@
+@use '../../../styles/mixins' as variables
+
+.filters
+    display: flex
+    flex-wrap: wrap
+    align-items: center
+    gap: 8px
+    overflow-x: auto
+    min-width: 0
+
+    @media (max-width: variables.$mobileMaxWidth)
+        flex-wrap: nowrap
+        margin: 0 calc(-1 * var(--content-padding-mobile))
+        padding: 0 var(--content-padding-mobile)
+
+.filterChip
+    flex-shrink: 0
+    white-space: nowrap
