@@ -11,8 +11,9 @@ import { generateNextSeo } from 'next-seo/pages'
 import { API, ApiModel, ApiType } from '@/api'
 import { setLocale } from '@/app/applicationSlice'
 import { wrapper } from '@/app/store'
-import { AppLayout, PageHeader, UsersList } from '@/components/shared'
+import { AppLayout, PageHeader } from '@/components/shared'
 import { Pagination } from '@/components/ui'
+import { UsersList } from '@/components/widgets'
 import { SITE_LINK } from '@/config/env'
 import { UsersFilterPanel, UsersFilterType } from '@/sections/user'
 import { encodeQueryData } from '@/utils/helpers'
@@ -105,10 +106,7 @@ const UsersPage: NextPage<UsersPageProps> = ({
     )
 
     return (
-        <AppLayout
-            sidebar={filterPanel}
-            sidebarTitle={t('filters')}
-        >
+        <AppLayout sidebar={filterPanel}>
             <Head>
                 {generateNextSeo({
                     title: title,
