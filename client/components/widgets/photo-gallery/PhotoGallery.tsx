@@ -197,8 +197,6 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
         </li>
     )
 
-    const hasHeader = !!title || !!action || !!(actionLabel && (actionHref || onActionClick))
-
     return (
         <WidgetSection
             title={title}
@@ -220,7 +218,7 @@ export const PhotoGallery: React.FC<PhotoGalleryProps> = ({
 
                 {!isEmptyPhotoList && (
                     <>
-                        <ul className={cn(styles.photoGallery, hasHeader && styles.marginTop)}>
+                        <ul className={styles.photoGallery}>
                             {onPhotoUploadClick && (
                                 <li className={cn(styles.photoItem, styles.photoUpload)}>
                                     <ImageUploader onClick={onPhotoUploadClick} />
