@@ -1,6 +1,4 @@
 export { PlaceActionBar } from './place-action-bar'
-export { PlaceActivity } from './place-activity'
-export { PlaceCommentList } from './place-comment-list'
 export { PlaceCoverEditor } from './place-cover-editor'
 export { PlaceDescription } from './place-description'
 export { PlaceForm } from './place-form'
