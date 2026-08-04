@@ -8,19 +8,29 @@ import { NextButton, PrevButton, usePrevNextButtons } from './CarouselButtons'
 
 import styles from './styles.module.sass'
 
+/**
+ * Generic embla-based slider. Currently used inside PlacesCarousel
+ * (components/widgets/places-carousel), which renders it on the home page
+ * ("Popular places" section) and on the place detail page ("Nearby places" section).
+ */
 interface CarouselProps {
     options?: EmblaOptionsType
+    /** Number of slides visible at once on desktop widths (mobile always shows one). Defaults to 3. */
+    slidesPerView?: number
     children?: React.ReactNode
 }
 
-export const Carousel: React.FC<CarouselProps> = ({ options, children }) => {
+export const Carousel: React.FC<CarouselProps> = ({ options, slidesPerView, children }) => {
     const { t } = useTranslation()
     const [emblaRef, emblaApi] = useEmblaCarousel(options)
 
     const { prevBtnDisabled, nextBtnDisabled, onPrevButtonClick, onNextButtonClick } = usePrevNextButtons(emblaApi)
 
     return (
-        <div className={styles.carousel}>
+        <div
+            className={styles.carousel}
+            style={slidesPerView ? ({ '--slides-per-view': slidesPerView } as React.CSSProperties) : undefined}
+        >
             <div
                 ref={emblaRef}
                 className={styles.viewport}
