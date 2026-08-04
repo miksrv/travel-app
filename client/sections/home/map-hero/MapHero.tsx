@@ -33,44 +33,46 @@ export const MapHero: React.FC<MapHeroProps> = ({ stats }) => {
             />
 
             <div className={styles.heroContent}>
-                <h1 className={styles.heroTitle}>{t('hero-title')}</h1>
-                <p className={styles.heroSubtitle}>{t('hero-subtitle')}</p>
-                <p className={styles.heroDescription}>{t('hero-description')}</p>
+                <div className={styles.heroInner}>
+                    <h1 className={styles.heroTitle}>{t('hero-title')}</h1>
+                    <p className={styles.heroSubtitle}>{t('hero-subtitle')}</p>
+                    <p className={styles.heroDescription}>{t('hero-description')}</p>
 
-                <div className={styles.heroActions}>
-                    <Button
-                        mode={'primary'}
-                        size={'large'}
-                        link={'/places/create'}
-                    >
-                        {t('hero-cta-add')}
-                        <Icon name={'PlusCircle'} />
-                    </Button>
-                    <Button
-                        mode={'secondary'}
-                        size={'large'}
-                        link={'/map'}
-                    >
-                        {t('hero-cta-explore')}
-                        <Icon name={'Compass'} />
-                    </Button>
-                </div>
-
-                <div className={styles.heroStats}>
-                    {STAT_ITEMS.map(({ icon, key, labelKey }) => (
-                        <div
-                            key={key}
-                            className={styles.statItem}
+                    <div className={styles.heroActions}>
+                        <Button
+                            mode={'primary'}
+                            size={'large'}
+                            link={'/places/create'}
+                            icon={'PlusCircle'}
                         >
-                            <div className={styles.statIcon}>
-                                <Icon name={icon as Parameters<typeof Icon>[0]['name']} />
+                            {t('hero-cta-add')}
+                        </Button>
+                        <Button
+                            mode={'secondary'}
+                            size={'large'}
+                            link={'/map'}
+                            icon={'Compass'}
+                        >
+                            {t('hero-cta-explore')}
+                        </Button>
+                    </div>
+
+                    <div className={styles.heroStats}>
+                        {STAT_ITEMS.map(({ icon, key, labelKey }) => (
+                            <div
+                                key={key}
+                                className={styles.statItem}
+                            >
+                                <div className={styles.statIcon}>
+                                    <Icon name={icon as Parameters<typeof Icon>[0]['name']} />
+                                </div>
+                                <div className={styles.statText}>
+                                    <span className={styles.statValue}>{stats ? formatNumber(stats[key]) : '—'}</span>
+                                    <span className={styles.statLabel}>{t(labelKey)}</span>
+                                </div>
                             </div>
-                            <div className={styles.statText}>
-                                <span className={styles.statValue}>{stats ? formatNumber(stats[key]) : '—'}</span>
-                                <span className={styles.statLabel}>{t(labelKey)}</span>
-                            </div>
-                        </div>
-                    ))}
+                        ))}
+                    </div>
                 </div>
             </div>
         </section>

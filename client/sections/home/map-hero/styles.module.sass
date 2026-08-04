@@ -5,9 +5,9 @@ $appBarHeightMobile: 58px
 
 .hero
     position: relative
-    width: 100%
+    width: 100vw
     min-height: 460px
-    margin-top: calc(-1 * #{$appBarHeight})
+    margin: calc(-1 * #{$appBarHeight}) calc(50% - 50vw) 20px
     display: flex
     align-items: stretch
 
@@ -38,14 +38,22 @@ $appBarHeightMobile: 58px
     position: relative
     z-index: 1
     display: flex
+    width: 100%
+    max-width: var(--content-max-width)
+    margin: 0 auto
+    padding: calc(#{$appBarHeight} + 56px) var(--content-padding-desktop) 40px var(--content-padding-desktop)
+
+    @media (max-width: variables.$mobileMaxWidth)
+        padding: calc(#{$appBarHeightMobile} + 28px) var(--content-padding-mobile) 24px var(--content-padding-mobile)
+
+.heroInner
+    display: flex
     flex-direction: column
     gap: 20px
-    padding: calc(#{$appBarHeight} + 56px) 0 40px 8px
-    max-width: 520px
+    max-width: 580px
     width: 100%
 
     @media (max-width: variables.$mobileMaxWidth)
-        padding: calc(#{$appBarHeightMobile} + 28px) 0 24px 4px
         max-width: 100%
         gap: 14px
 
@@ -91,14 +99,13 @@ $appBarHeightMobile: 58px
             margin-right: -5px
 
 .heroStats
-    display: grid
-    grid-template-columns: repeat(4, minmax(0, 1fr))
-    gap: 16px
+    display: flex
+    flex-wrap: wrap
+    gap: 14px
     margin-top: 20px
 
     @media (max-width: variables.$mobileMaxWidth)
-        grid-template-columns: repeat(2, 1fr)
-        gap: 10px
+        gap: 12px 16px
 
 .statItem
     display: flex
@@ -110,16 +117,17 @@ $appBarHeightMobile: 58px
     display: flex
     align-items: center
     justify-content: center
-    width: 36px
-    height: 36px
-    border-radius: 8px
-    background: var(--color-main-hover)
     flex-shrink: 0
 
     svg
-        fill: var(--color-contrast)
-        width: 18px
-        height: 18px
+        fill: var(--text-color-primary)
+        width: 28px
+        height: 28px
+
+    @media (max-width: variables.$mobileMaxWidth)
+        svg
+            width: 24px
+            height: 24px
 
 .statText
     display: flex
@@ -137,5 +145,3 @@ $appBarHeightMobile: 58px
     color: var(--text-color-secondary)
     line-height: 1.2
     white-space: nowrap
-    overflow: hidden
-    text-overflow: ellipsis
