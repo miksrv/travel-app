@@ -3,7 +3,7 @@
 .pageLayout
     display: grid
     grid-template-columns: 1fr 300px
-    gap: 0 8px
+    gap: var(--content-gap)
     align-items: flex-start
 
     @media only screen and (max-width: variables.$mobileMaxWidth)
@@ -13,22 +13,15 @@
     min-width: 0
     display: flex
     flex-direction: column
-    gap: 8px
+    gap: var(--content-gap)
 
 .sidebar
     min-width: 0
     display: flex
     flex-direction: column
-    gap: 8px
+    gap: var(--content-gap)
     position: sticky
     top: 60px
 
     @media only screen and (max-width: variables.$mobileMaxWidth)
         position: static
-        margin-top: 10px
-
-.nearPlaces
-    display: flex
-    flex-direction: column
-    gap: 8px
-    margin-top: -4px

@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { Button, Container } from 'simple-react-ui-kit'
 
 import { GetServerSidePropsResult, NextPage } from 'next'
 import dynamic from 'next/dynamic'
@@ -12,20 +11,11 @@ import { generateNextSeo } from 'next-seo/pages'
 import { API, ApiModel, ApiType } from '@/api'
 import { openAuthDialog, setLocale } from '@/app/applicationSlice'
 import { useAppDispatch, useAppSelector, wrapper } from '@/app/store'
-import { AppLayout, PhotoGallery, PlacesListItem } from '@/components/shared'
-import { ConfirmationDialog } from '@/components/shared/confirmation-dialog'
-import { Carousel } from '@/components/ui'
+import { AppLayout } from '@/components/shared'
+import { ActivityFeed, CommentList, PhotoGallery, PlacesCarousel } from '@/components/widgets'
 import { IMG_HOST, SITE_LINK } from '@/config/env'
 import { useConfirmLeave } from '@/hooks/useConfirmLeave'
-import {
-    PlaceActionBar,
-    PlaceActivity,
-    PlaceCommentList,
-    PlaceDescription,
-    PlaceHero,
-    PlaceInfoSidebar,
-    PlaceVisited
-} from '@/sections/place'
+import { PlaceActionBar, PlaceDescription, PlaceHero, PlaceInfoSidebar, PlaceVisited } from '@/sections/place'
 import { formatDateISO, formatDateUTC, removeMarkdown, truncateText } from '@/utils/helpers'
 import { buildHreflangTags } from '@/utils/seo'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
@@ -45,7 +35,16 @@ const PhotoUploader = dynamic(
     { ssr: false }
 )
 
+const ConfirmationDialog = dynamic(
+    () =>
+        import('@/components/shared/confirmation-dialog/ConfirmationDialog').then((m) => ({
+            default: m.ConfirmationDialog
+        })),
+    { ssr: false }
+)
+
 const NEAR_PLACES_COUNT = 10
+const ACTIVITY_LIMIT = 10
 
 interface PlacePageProps {
     ratingCount: number
@@ -62,15 +61,50 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
     const inputFileRef = useRef<HTMLInputElement>(null)
 
     const [coverEditorOpen, setCoverEditorOpen] = useState<boolean>(false)
+    const [coverEditorLoaded, setCoverEditorLoaded] = useState<boolean>(false)
     const [coverHash, setCoverHash] = useState<number | undefined>()
     const [localPhotos, setLocalPhotos] = useState<ApiModel.Photo[]>(photoList ?? [])
     const [uploadingPhotos, setUploadingPhotos] = useState<string[]>()
+    const [photoUploaderLoaded, setPhotoUploaderLoaded] = useState<boolean>(false)
+    const pendingUploadClickRef = useRef(false)
     const [descriptionEditorOpen, setDescriptionEditorOpen] = useState(false)
     const {
         isOpen: leaveDialogOpen,
         handleConfirm: handleLeaveConfirm,
         handleCancel: handleLeaveCancel
     } = useConfirmLeave(descriptionEditorOpen)
+    const [leaveDialogLoaded, setLeaveDialogLoaded] = useState<boolean>(false)
+
+    useEffect(() => {
+        if (leaveDialogOpen) {
+            setLeaveDialogLoaded(true)
+        }
+    }, [leaveDialogOpen])
+
+    useEffect(() => {
+        if (photoUploaderLoaded && pendingUploadClickRef.current) {
+            pendingUploadClickRef.current = false
+            inputFileRef?.current?.click()
+        }
+    }, [photoUploaderLoaded])
+
+    const [activityOffset, setActivityOffset] = useState(0)
+    const [activityItems, setActivityItems] = useState<ApiModel.Activity[]>([])
+
+    const {
+        data: activityData,
+        isLoading: activityLoading,
+        isFetching: activityFetching
+    } = API.useActivityGetListQuery(
+        { place: place?.id, limit: ACTIVITY_LIMIT, offset: activityOffset },
+        { skip: !place?.id }
+    )
+
+    useEffect(() => {
+        if (activityData?.items) {
+            setActivityItems((prev) => (activityOffset === 0 ? activityData.items : [...prev, ...activityData.items]))
+        }
+    }, [activityData])
 
     const isAuth = useAppSelector((state) => state.auth.isAuth)
 
@@ -87,6 +121,7 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
             return
         }
 
+        setCoverEditorLoaded(true)
         setCoverEditorOpen(true)
     }
 
@@ -95,6 +130,12 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
 
         if (!isAuth) {
             dispatch(openAuthDialog())
+            return
+        }
+
+        if (!photoUploaderLoaded) {
+            pendingUploadClickRef.current = true
+            setPhotoUploaderLoaded(true)
         } else {
             inputFileRef?.current?.click()
         }
@@ -270,25 +311,28 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                         title={t('photos')}
                         photos={localPhotos}
                         uploadingPhotos={uploadingPhotos}
-                        action={
-                            <Button
-                                mode={'link'}
-                                onClick={handleUploadPhotoClick}
-                            >
-                                {t('upload-photo')}
-                            </Button>
-                        }
+                        actionLabel={t('upload-photo')}
+                        onActionClick={handleUploadPhotoClick}
                     />
 
-                    <Container title={t('comments-title')}>
-                        <PlaceCommentList placeId={place?.id} />
-                    </Container>
-
-                    <PlaceActivity
+                    <CommentList
+                        title={t('comments-title')}
                         placeId={place?.id}
-                        hidePlaceName={true}
-                        hideCover={true}
                     />
+
+                    {(activityLoading || activityItems.length > 0) && (
+                        <ActivityFeed
+                            title={t('activity')}
+                            activities={activityItems}
+                            loading={activityLoading}
+                            compact={true}
+                            hidePlaceName={true}
+                            hideCover={true}
+                            onShowMore={() => setActivityOffset((prev) => prev + ACTIVITY_LIMIT)}
+                            hasMore={activityData?.has_more}
+                            loadingMore={activityFetching}
+                        />
+                    )}
                 </div>
 
                 <aside className={styles.sidebar}>
@@ -297,53 +341,43 @@ const PlacePage: NextPage<PlacePageProps> = ({ ratingCount, place, photoList, ne
                 </aside>
             </div>
 
-            {!!nearPlaces?.length && (
-                <div className={styles.nearPlaces}>
-                    <Carousel options={{ dragFree: true, loop: true }}>
-                        {nearPlaces.map((nearPlace) => (
-                            <PlacesListItem
-                                t={t}
-                                key={nearPlace.id}
-                                place={nearPlace}
-                            />
-                        ))}
-                    </Carousel>
+            <PlacesCarousel
+                title={t('nearby-places-title', 'Места рядом')}
+                places={nearPlaces ?? undefined}
+                actionHref={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
+                actionLabel={t('all-places-nearby')}
+                actionNoIndex={true}
+            />
 
-                    <Button
-                        size={'medium'}
-                        mode={'secondary'}
-                        noIndex={true}
-                        stretched={true}
-                        link={`/places?lat=${place?.lat}&lon=${place?.lon}&sort=distance&order=ASC`}
-                    >
-                        {t('all-places-nearby')}
-                    </Button>
-                </div>
+            {coverEditorLoaded && (
+                <PlaceCoverEditor
+                    placeId={place?.id}
+                    open={coverEditorOpen}
+                    onClose={() => setCoverEditorOpen(false)}
+                    onSaveCover={handleSaveCover}
+                />
             )}
 
-            <PlaceCoverEditor
-                placeId={place?.id}
-                open={coverEditorOpen}
-                onClose={() => setCoverEditorOpen(false)}
-                onSaveCover={handleSaveCover}
-            />
+            {photoUploaderLoaded && (
+                <PhotoUploader
+                    placeId={place?.id}
+                    fileInputRef={inputFileRef}
+                    onSelectFiles={setUploadingPhotos}
+                    onUploadPhoto={(photo) => {
+                        setLocalPhotos([photo, ...localPhotos])
+                    }}
+                />
+            )}
 
-            <PhotoUploader
-                placeId={place?.id}
-                fileInputRef={inputFileRef}
-                onSelectFiles={setUploadingPhotos}
-                onUploadPhoto={(photo) => {
-                    setLocalPhotos([photo, ...localPhotos])
-                }}
-            />
-
-            <ConfirmationDialog
-                open={leaveDialogOpen}
-                message={t('unsaved-changes-message')}
-                confirmLabel={t('leave-without-saving')}
-                onConfirm={handleLeaveConfirm}
-                onCancel={handleLeaveCancel}
-            />
+            {leaveDialogLoaded && (
+                <ConfirmationDialog
+                    open={leaveDialogOpen}
+                    message={t('unsaved-changes-message')}
+                    confirmLabel={t('leave-without-saving')}
+                    onConfirm={handleLeaveConfirm}
+                    onCancel={handleLeaveCancel}
+                />
+            )}
         </AppLayout>
     )
 }

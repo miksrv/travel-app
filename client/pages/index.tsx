@@ -1,9 +1,7 @@
 import React from 'react'
-import { Button } from 'simple-react-ui-kit'
 
 import type { GetServerSidePropsResult, NextPage } from 'next'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useTranslation } from 'next-i18next/pages'
 import { serverSideTranslations } from 'next-i18next/pages/serverSideTranslations'
 import { JsonLdScript } from 'next-seo'
@@ -12,10 +10,10 @@ import { generateNextSeo } from 'next-seo/pages'
 import { API, ApiModel, ApiType } from '@/api'
 import { setLocale } from '@/app/applicationSlice'
 import { wrapper } from '@/app/store'
-import { ActivityList, AppLayout, PlacesListItem, UsersList } from '@/components/shared'
-import { Carousel } from '@/components/ui'
+import { AppLayout } from '@/components/shared'
+import { ActivityFeed, UsersList } from '@/components/widgets'
 import { SITE_LINK } from '@/config/env'
-import { MapHero, PopularCategories } from '@/sections/home'
+import { MapHero, PopularCategories, PopularPlaces } from '@/sections/home'
 import { PlaceSchema, UserSchema } from '@/utils/schema'
 import { buildHreflangTags } from '@/utils/seo'
 import { hydrateAuthFromCookies } from '@/utils/serverSideAuth'
@@ -99,38 +97,17 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
 
             <MapHero stats={stats} />
 
-            <Carousel options={{ dragFree: true, loop: true }}>
-                {placesList.map((place) => (
-                    <PlacesListItem
-                        t={t}
-                        key={place.id}
-                        place={place}
-                    />
-                ))}
-            </Carousel>
-
-            <Button
-                size={'medium'}
-                mode={'secondary'}
-                link={'/places'}
-                stretched={true}
-                label={t('all-geotags')}
-            />
+            <PopularPlaces places={placesList} />
 
             <div className={styles.twoColumns}>
-                <ActivityList
+                <ActivityFeed
                     scrollable={true}
                     compact={true}
                     title={t('activity-feed')}
                     activities={activityList}
-                    action={
-                        <Link
-                            href={'/activity'}
-                            title={t('news-feed')}
-                        >
-                            {t('all')}
-                        </Link>
-                    }
+                    actionHref={'/activity'}
+                    actionLabel={t('all')}
+                    actionTitle={t('news-feed')}
                 />
 
                 <UsersList
@@ -138,14 +115,9 @@ const IndexPage: NextPage<IndexPageProps> = ({ placesList, usersList, activityLi
                     scrollable={true}
                     title={t('active-users')}
                     users={usersList}
-                    action={
-                        <Link
-                            href={'/users'}
-                            title={t('all-users')}
-                        >
-                            {t('all')}
-                        </Link>
-                    }
+                    actionHref={'/users'}
+                    actionLabel={t('all')}
+                    actionTitle={t('all-users')}
                 />
             </div>
 
@@ -175,7 +147,7 @@ export const getServerSideProps = wrapper.getServerSideProps(
                     API.endpoints.placesGetList.initiate({
                         limit: 6,
                         order: ApiType.SortOrders.DESC,
-                        sort: ApiType.SortFields.ViewsWeek
+                        sort: ApiType.SortFields.Trending
                     })
                 ),
                 store.dispatch(API.endpoints.usersGetList.initiate({ limit: 15 })),
