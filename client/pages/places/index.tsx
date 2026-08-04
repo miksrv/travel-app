@@ -285,10 +285,7 @@ const PlacesPage: NextPage<PlacesPageProps> = ({
     )
 
     return (
-        <AppLayout
-            sidebar={filterPanel}
-            sidebarTitle={t('filters')}
-        >
+        <AppLayout sidebar={filterPanel}>
             <Head>
                 {generateNextSeo({
                     title: title,
