@@ -86,13 +86,21 @@ class PlaceFormatterLibrary
     /**
      * Return cover paths if the cover file exists, otherwise null.
      *
+     * In the development environment the on-disk check is skipped, since local
+     * setups don't store the actual cover files and the UI loads images from
+     * production regardless.
+     *
      * @param string $placeId
      * @param int    $photosCount
      * @return array|null
      */
     public function formatCover(string $placeId, int $photosCount): ?array
     {
-        if ($photosCount && file_exists(UPLOAD_PHOTOS . $placeId . '/cover.jpg')) {
+        $coverExists = ENVIRONMENT === 'development'
+            ? (bool) $photosCount
+            : ($photosCount && file_exists(UPLOAD_PHOTOS . $placeId . '/cover.jpg'));
+
+        if ($coverExists) {
             return [
                 'full'    => PATH_PHOTOS . $placeId . '/cover.jpg',
                 'preview' => PATH_PHOTOS . $placeId . '/cover_preview.jpg',
