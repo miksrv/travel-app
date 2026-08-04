@@ -1,8 +1,6 @@
 import React from 'react'
 import { Button } from 'simple-react-ui-kit'
 
-import { useTranslation } from 'next-i18next/pages'
-
 import { ApiModel } from '@/api'
 import { PlacesListItem } from '@/components/shared/places-list'
 import { WidgetSection } from '@/components/shared/widget-section'
@@ -41,8 +39,6 @@ export const PlacesCarousel: React.FC<PlacesCarouselProps> = ({
     actionNoIndex,
     filters
 }) => {
-    const { t } = useTranslation()
-
     if (!places?.length) {
         return null
     }
@@ -78,7 +74,6 @@ export const PlacesCarousel: React.FC<PlacesCarouselProps> = ({
             >
                 {places.map((place) => (
                     <PlacesListItem
-                        t={t}
                         key={place.id}
                         place={place}
                     />

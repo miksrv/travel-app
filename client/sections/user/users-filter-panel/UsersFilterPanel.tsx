@@ -89,14 +89,6 @@ export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({
 
     return (
         <div className={styles.component}>
-            <Input
-                icon={'Search'}
-                clearable={true}
-                placeholder={t('search-by-name')}
-                value={searchInput}
-                onChange={handleSearchInputChange}
-            />
-
             <div className={styles.sectionHeader}>
                 <span className={styles.sectionTitle}>{t('filters')}</span>
                 {hasActiveFilters && (
@@ -109,6 +101,28 @@ export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({
                     </button>
                 )}
             </div>
+
+            <Input
+                icon={'Search'}
+                clearable={true}
+                placeholder={t('search-by-name')}
+                value={searchInput}
+                onChange={handleSearchInputChange}
+            />
+
+            <Select
+                placeholder={t('sorting')}
+                options={sortOptions}
+                value={sort}
+                onSelect={handleChangeSort}
+            />
+
+            <Select
+                placeholder={t('order')}
+                options={orderOptions}
+                value={order}
+                onSelect={handleChangeOrder}
+            />
 
             <div
                 className={styles.toggles}
@@ -132,20 +146,6 @@ export const UsersFilterPanel: React.FC<UsersFilterPanelProps> = ({
                     <span className={styles.toggleLabel}>{t('with-places')}</span>
                 </button>
             </div>
-
-            <Select
-                placeholder={t('sorting')}
-                options={sortOptions}
-                value={sort}
-                onSelect={handleChangeSort}
-            />
-
-            <Select
-                placeholder={t('order')}
-                options={orderOptions}
-                value={order}
-                onSelect={handleChangeOrder}
-            />
         </div>
     )
 }
