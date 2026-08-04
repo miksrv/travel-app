@@ -68,21 +68,16 @@ jest.mock('@/utils/helpers', () => ({
     timeAgo: jest.fn().mockReturnValue('2 часа назад')
 }))
 
-jest.mock('@/components/shared/category-badge', () => ({
-    CategoryBadge: ({ category, className }: any) => (
-        <div
-            data-testid={'category-badge'}
-            data-category={category?.name}
-            className={className}
-        />
-    )
-}))
-
 jest.mock('@/components/shared/user-avatar', () => ({
     UserAvatar: () => null
 }))
 
-const mockT = (key: string, opts?: Record<string, unknown>) => opts?.defaultValue ?? key
+jest.mock('next-i18next/pages', () => ({
+    useTranslation: () => ({
+        t: (key: string, opts?: Record<string, unknown>) => opts?.defaultValue ?? key,
+        i18n: { language: 'ru' }
+    })
+}))
 
 const mockPlace: ApiModel.Place = {
     id: 'p1',
@@ -102,121 +97,66 @@ const mockPlace: ApiModel.Place = {
 describe('PlacesListItem', () => {
     describe('rendering', () => {
         it('renders an article element', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getByRole('article')).toBeInTheDocument()
         })
 
         it('renders the place title', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getAllByTitle('Cool Cave').length).toBeGreaterThan(0)
         })
 
         it('renders a link to the place', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             const links = screen.getAllByRole('link')
             const placeLinks = links.filter((l) => (l as HTMLAnchorElement).href.includes('/places/p1'))
             expect(placeLinks.length).toBeGreaterThan(0)
         })
 
         it('renders the place title in a heading', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent('Cool Cave')
         })
 
         it('renders the cover image when cover is provided', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             const images = document.querySelectorAll('img')
             expect(images.length).toBeGreaterThan(0)
         })
 
-        it('renders the category badge when category is provided', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
-            expect(screen.getByTestId('category-badge')).toBeInTheDocument()
+        it('renders the category icon when category is provided', () => {
+            render(<PlacesListItem place={mockPlace} />)
+            expect(screen.getByAltText('Caves')).toBeInTheDocument()
         })
 
         it('renders the address links', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getByText('Russia')).toBeInTheDocument()
         })
     })
 
     describe('rating', () => {
         it('renders rating value when rating is present', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getByText('4.5')).toBeInTheDocument()
         })
 
         it('does not render rating value when rating is 0', () => {
             const placeWithoutRating = { ...mockPlace, rating: 0 }
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={placeWithoutRating}
-                />
-            )
+            render(<PlacesListItem place={placeWithoutRating} />)
             expect(screen.queryByText('4.5')).not.toBeInTheDocument()
         })
     })
 
     describe('distance', () => {
         it('renders distance value when distance is present', () => {
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={mockPlace}
-                />
-            )
+            render(<PlacesListItem place={mockPlace} />)
             expect(screen.getByText(/1\.2/)).toBeInTheDocument()
         })
 
         it('does not render distance value when distance is 0', () => {
             const placeWithoutDistance = { ...mockPlace, distance: 0 }
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={placeWithoutDistance}
-                />
-            )
+            render(<PlacesListItem place={placeWithoutDistance} />)
             expect(screen.queryByText(/1\.2/)).not.toBeInTheDocument()
         })
     })
@@ -224,12 +164,7 @@ describe('PlacesListItem', () => {
     describe('empty content', () => {
         it('still renders article when content is empty', () => {
             const placeNoContent = { ...mockPlace, content: '' }
-            render(
-                <PlacesListItem
-                    t={mockT as any}
-                    place={placeNoContent}
-                />
-            )
+            render(<PlacesListItem place={placeNoContent} />)
             expect(screen.getByRole('article')).toBeInTheDocument()
         })
     })

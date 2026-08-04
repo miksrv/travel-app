@@ -24,7 +24,6 @@ export const PlacesList: React.FC<PlacesListProps> = ({ places, loading }) => {
                 <section className={styles.placeListContainer}>
                     {places.map((place) => (
                         <PlacesListItem
-                            t={t}
                             key={place.id}
                             place={place}
                         />

@@ -6,15 +6,19 @@
     margin: -5px -5px
 
 .placesListItem
+    position: relative
     border-radius: var(--border-radius)
     overflow: hidden
     flex-basis: calc(33.3333% - 10px)
     margin: 5px
+    height: 230px
     background: var(--container-background)
+    background-image: url('/images/no-image.svg')
+    background-position: center
+    background-repeat: no-repeat
+    background-size: 100%
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04)
     transition: box-shadow 0.2s ease
-    display: flex
-    flex-direction: column
 
     &:hover
         box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08), 0 2px 4px rgba(0, 0, 0, 0.04)
@@ -22,28 +26,11 @@
     @media only screen and (max-width: variables.$mobileMaxWidth)
         flex-basis: 100%
 
-.photoWrapper
-    position: relative
-    width: 100%
-    height: 170px
-    background: var(--container-background)
-    background-image: url('/images/no-image.svg')
-    background-position: center
-    background-repeat: no-repeat
-    background-size: cover
-    overflow: hidden
-
 .photoLink
-    display: block
     position: absolute
     inset: 0
-
-.categoryOverlay
-    position: absolute
-    top: 8px
-    left: 8px
-    z-index: 1
-    pointer-events: none
+    z-index: 0
+    display: block
 
 .photo
     width: 100%
@@ -54,27 +41,70 @@
 .placesListItem:hover .photo
     transform: scale(1.04)
 
-.content
-    padding: 10px 12px 12px
-    display: flex
-    flex-direction: column
-    flex: 1
+.topOverlay
+    position: absolute
+    top: 0
+    left: 0
+    right: 0
+    z-index: 1
+    padding: 10px 12px 20px
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.35) 0%, rgba(0, 0, 0, 0) 100%)
+    pointer-events: none
+
+    a
+        pointer-events: auto
+
+.authorOverlay
+    pointer-events: auto
+
+    a, span
+        color: #FFF !important
+
+        &:hover
+            color: rgba(255, 255, 255, 0.85) !important
+            text-decoration: underline
+
+    div > div
+        color: rgba(255, 255, 255, 0.65) !important
+
+.bottomOverlay
+    position: absolute
+    bottom: 0
+    left: 0
+    right: 0
+    z-index: 1
+    padding: 20px 12px 10px
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.65) 0%, rgba(0, 0, 0, 0) 100%)
+    pointer-events: none
+
+    a
+        pointer-events: auto
+
+.categoryOverlay
+    position: absolute
+    top: 8px
+    right: 8px
+    z-index: 1
+    pointer-events: none
+    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5))
 
 .title
-    margin: 0 0 4px
+    margin: 0
     font-size: var(--font-size-h2)
     font-weight: 600
-    white-space: nowrap
+    display: -webkit-box
+    -webkit-line-clamp: 2
+    -webkit-box-orient: vertical
     overflow: hidden
-    text-overflow: ellipsis
     line-height: 1.35
 
     a
-        color: var(--text-color-primary)
+        color: #FFF
         text-decoration: none
+        pointer-events: auto
 
         &:hover
-            color: var(--color-main)
+            color: rgba(255, 255, 255, 0.85)
             text-decoration: none
 
 .address
@@ -82,43 +112,32 @@
     text-overflow: ellipsis
     overflow: hidden
     font-size: var(--font-size-caption)
-    color: var(--text-color-secondary)
-    margin-bottom: 6px
+    color: rgba(255, 255, 255, 0.65)
+    margin-bottom: 8px
 
     a
-        color: var(--text-color-secondary)
+        color: rgba(255, 255, 255, 0.65)
+        pointer-events: auto
 
         &:hover
-            color: var(--text-color-primary)
-
-.footer
-    display: flex
-    align-items: flex-end
-    justify-content: space-between
-    gap: 8px
-    margin-top: auto
-    padding-top: 8px
-    border-top: var(--container-border-separator)
-
-.author
-    flex-shrink: 1
-    min-width: 0
+            color: #FFF
 
 .statsRow
     display: flex
     align-items: center
-    gap: 8px
-    flex-shrink: 0
+    gap: 10px
+    padding-top: 7px
+    border-top: 1px solid rgba(255, 255, 255, 0.2)
 
 .stat
     display: flex
     align-items: center
-    gap: 3px
+    gap: 4px
     font-size: var(--font-size-caption)
-    color: var(--text-color-secondary)
+    color: rgba(255, 255, 255, 0.85)
 
     svg
         width: 13px
         height: 13px
-        fill: var(--icon-color-primary)
+        fill: rgba(255, 255, 255, 0.75)
         flex-shrink: 0
