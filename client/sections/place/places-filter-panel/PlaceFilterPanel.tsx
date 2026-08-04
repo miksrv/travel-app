@@ -185,14 +185,6 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
 
     return (
         <div className={styles.component}>
-            <Input
-                icon={'Search'}
-                clearable={true}
-                placeholder={t('search-places-placeholder')}
-                value={searchInput}
-                onChange={handleSearchInputChange}
-            />
-
             {isAuth && (
                 <div
                     className={styles.scopeToggle}
@@ -241,8 +233,45 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
                 )}
             </div>
 
+            <Input
+                icon={'Search'}
+                clearable={true}
+                placeholder={t('search-places-placeholder')}
+                value={searchInput}
+                onChange={handleSearchInputChange}
+            />
+
+            <Select
+                searchable={true}
+                clearable={true}
+                icon={'Point'}
+                loading={addressLoading}
+                placeholder={t('filter-by-location')}
+                notFoundCaption={t('nothing-found')}
+                options={locationOptions}
+                value={location?.id && location?.type ? `${location.type}:${location.id}` : undefined}
+                onSearch={handleSearchLocation}
+                onSelect={handleChangeLocation}
+            />
+
+            <Select
+                placeholder={t('sorting-geotags')}
+                options={sortOptions}
+                value={sort}
+                onSelect={handleChangeSort}
+            />
+
+            {sort !== ApiType.SortFields.Recommended && (
+                <Select
+                    placeholder={t('sorting-order')}
+                    options={orderOptions}
+                    value={order}
+                    onSelect={handleChangeOrder}
+                />
+            )}
+
             <div className={styles.categoriesGroup}>
-                <div className={styles.categoriesTitle}>{t('categories')}</div>
+                <div className={styles.sectionTitle}>{t('categories')}</div>
                 <ul className={styles.categoryList}>
                     {categoryData?.items?.map((item) => {
                         const active = pendingCategories.includes(item.name)
@@ -271,34 +300,6 @@ export const PlaceFilterPanel: React.FC<PlaceFilterPanelProps> = ({
                     })}
                 </ul>
             </div>
-
-            <Select
-                searchable={true}
-                clearable={true}
-                loading={addressLoading}
-                placeholder={t('filter-by-location')}
-                notFoundCaption={t('nothing-found')}
-                options={locationOptions}
-                value={location?.id && location?.type ? `${location.type}:${location.id}` : undefined}
-                onSearch={handleSearchLocation}
-                onSelect={handleChangeLocation}
-            />
-
-            <Select
-                placeholder={t('sorting-geotags')}
-                options={sortOptions}
-                value={sort}
-                onSelect={handleChangeSort}
-            />
-
-            {sort !== ApiType.SortFields.Recommended && (
-                <Select
-                    placeholder={t('sorting-order')}
-                    options={orderOptions}
-                    value={order}
-                    onSelect={handleChangeOrder}
-                />
-            )}
         </div>
     )
 }
